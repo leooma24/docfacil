@@ -38,35 +38,65 @@
         </div>
     </div>
 
-    {{-- History toggle --}}
+    {{-- History drawer button --}}
     <div style="margin-bottom:1rem;">
-        <button wire:click="toggleHistory" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:{{ $showHistory ? '#f0fdfa' : '#f3f4f6' }};border:1px solid {{ $showHistory ? '#14b8a6' : '#e5e7eb' }};border-radius:0.75rem;font-size:0.8rem;font-weight:600;color:{{ $showHistory ? '#0d9488' : '#6b7280' }};cursor:pointer;">
+        <button wire:click="toggleHistory" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:0.75rem;font-size:0.8rem;font-weight:600;color:#6b7280;cursor:pointer;">
             <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            {{ $showHistory ? 'Ocultar historial' : 'Ver historial del paciente' }}
-            @if(!$showHistory && count($this->patientHistory) > 0)
+            Ver historial
+            @if(count($this->patientHistory) > 0)
             <span style="background:#0d9488;color:white;border-radius:9999px;padding:0 0.5rem;font-size:0.7rem;">{{ count($this->patientHistory) }}</span>
             @endif
         </button>
     </div>
 
+    {{-- History drawer (slides from right) --}}
     @if($showHistory)
-    <div style="background:white;border:1px solid #e5e7eb;border-radius:1rem;margin-bottom:1.5rem;overflow:hidden;" class="dark:bg-gray-800 dark:border-gray-700">
-        <div style="padding:0.75rem 1rem;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-weight:700;font-size:0.875rem;" class="dark:bg-gray-700 dark:border-gray-600">
-            Historial de consultas ({{ count($this->patientHistory) }})
-        </div>
-        @forelse($this->patientHistory as $record)
-        <div style="padding:0.75rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.8rem;" class="dark:border-gray-700">
-            <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
-                <span style="font-weight:700;">{{ $record['date'] }}</span>
-                <span style="color:#6b7280;font-size:0.75rem;">{{ $record['doctor'] }}</span>
+    <div style="position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;" wire:click.self="toggleHistory">
+        {{-- Backdrop --}}
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.3);"></div>
+        {{-- Drawer panel --}}
+        <div style="position:absolute;top:0;right:0;bottom:0;width:400px;max-width:90vw;background:white;box-shadow:-4px 0 25px rgba(0,0,0,0.1);overflow-y:auto;" class="dark:bg-gray-800">
+            {{-- Header --}}
+            <div style="padding:1.25rem;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:10;" class="dark:bg-gray-800 dark:border-gray-700">
+                <div>
+                    <div style="font-weight:800;font-size:1rem;">Historial clinico</div>
+                    <div style="font-size:0.75rem;color:#6b7280;">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }} — {{ count($this->patientHistory) }} consultas</div>
+                </div>
+                <button wire:click="toggleHistory" style="width:32px;height:32px;background:#f3f4f6;border:none;border-radius:0.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;" class="dark:bg-gray-700">
+                    <svg style="width:18px;height:18px;color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
-            @if($record['complaint'])<div style="color:#6b7280;"><strong>Motivo:</strong> {{ $record['complaint'] }}</div>@endif
-            @if($record['diagnosis'])<div><strong>Dx:</strong> {{ $record['diagnosis'] }}</div>@endif
-            @if($record['treatment'])<div style="color:#6b7280;"><strong>Tx:</strong> {{ $record['treatment'] }}</div>@endif
+            {{-- Records --}}
+            @forelse($this->patientHistory as $record)
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid #f3f4f6;" class="dark:border-gray-700">
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                    <span style="font-weight:700;font-size:0.875rem;color:#0d9488;">{{ $record['date'] }}</span>
+                    <span style="color:#9ca3af;font-size:0.75rem;">{{ $record['doctor'] }}</span>
+                </div>
+                @if($record['complaint'])
+                <div style="font-size:0.8rem;color:#6b7280;margin-bottom:0.25rem;">
+                    <strong style="color:#374151;">Motivo:</strong> {{ $record['complaint'] }}
+                </div>
+                @endif
+                @if($record['diagnosis'])
+                <div style="font-size:0.8rem;margin-bottom:0.25rem;">
+                    <strong>Dx:</strong> {{ $record['diagnosis'] }}
+                </div>
+                @endif
+                @if($record['treatment'])
+                <div style="font-size:0.8rem;color:#6b7280;">
+                    <strong style="color:#374151;">Tx:</strong> {{ $record['treatment'] }}
+                </div>
+                @endif
+            </div>
+            @empty
+            <div style="padding:3rem;text-align:center;">
+                <svg style="width:48px;height:48px;color:#d1d5db;margin:0 auto 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div style="font-weight:600;color:#6b7280;">Primera consulta</div>
+                <div style="font-size:0.8rem;color:#9ca3af;">No hay historial previo</div>
+            </div>
+            @endforelse
         </div>
-        @empty
-        <div style="padding:2rem;text-align:center;color:#9ca3af;">Primera consulta de este paciente</div>
-        @endforelse
     </div>
     @endif
 
