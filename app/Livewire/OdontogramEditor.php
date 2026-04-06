@@ -40,9 +40,11 @@ class OdontogramEditor extends Component
             ];
         }
 
-        // Load existing data
+        // Load existing data (scoped to user's clinic)
         if ($odontogramId) {
-            $odontogram = Odontogram::with('teeth')->find($odontogramId);
+            $odontogram = Odontogram::with('teeth')
+                ->where('clinic_id', auth()->user()->clinic_id)
+                ->find($odontogramId);
             if ($odontogram) {
                 foreach ($odontogram->teeth as $tooth) {
                     $this->teeth[$tooth->tooth_number] = [

@@ -18,20 +18,20 @@
     <meta property="og:type" content="website">
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@@context": "https://schema.org",
+        "@@type": "SoftwareApplication",
         "name": "DocFácil",
         "description": "Software para consultorios médicos y dentales.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "url": "{{ url('/') }}",
         "offers": [
-            { "@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Gratis" },
-            { "@type": "Offer", "price": "149", "priceCurrency": "MXN", "name": "Plan Básico" },
-            { "@type": "Offer", "price": "299", "priceCurrency": "MXN", "name": "Plan Profesional" },
-            { "@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Clínica" }
+            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Gratis" },
+            { "@@type": "Offer", "price": "149", "priceCurrency": "MXN", "name": "Plan Básico" },
+            { "@@type": "Offer", "price": "299", "priceCurrency": "MXN", "name": "Plan Profesional" },
+            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Clínica" }
         ],
-        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
+        "aggregateRating": { "@@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
     }
     </script>
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -73,6 +73,7 @@
                 <a href="#problema" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Por qué</a>
                 <a href="#features" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Funciones</a>
                 <a href="#pricing" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Precios</a>
+                <a href="#contacto" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Contacto</a>
                 <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Iniciar sesion</a>
                 <a href="{{ url('/doctor/register') }}" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
                     Prueba gratis
@@ -86,6 +87,7 @@
         <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
             <a href="#features" class="block py-2 text-gray-600">Funciones</a>
             <a href="#pricing" class="block py-2 text-gray-600">Precios</a>
+            <a href="#contacto" class="block py-2 text-gray-600">Contacto</a>
             <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesion</a>
             <a href="{{ url('/doctor/register') }}" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
         </div>
@@ -395,6 +397,129 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </section>
+
+    {{-- Contact --}}
+    <section id="contacto" class="py-24 bg-gradient-to-b from-white to-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                {{-- Info --}}
+                <div data-animate>
+                    <span class="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full mb-4 border border-teal-100">CONTACTO</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
+                        Quieres saber mas?<br>
+                        <span class="text-teal-600">Hablemos.</span>
+                    </h2>
+                    <p class="mt-4 text-gray-600 leading-relaxed">
+                        Dejanos tus datos y un asesor te contactara para mostrarte como DocFacil puede transformar tu consultorio. Sin compromiso.
+                    </p>
+
+                    <div class="mt-10 space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">WhatsApp / Telefono</div>
+                                <a href="https://wa.me/526682493398" target="_blank" class="text-teal-600 hover:text-teal-700 transition font-medium">668 249 3398</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">Email</div>
+                                <span class="text-gray-600">contacto@docfacil.com</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">Horario de atencion</div>
+                                <span class="text-gray-600">Lunes a Viernes, 9:00 - 18:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Form --}}
+                <div data-animate>
+                    @if(session('contact_success'))
+                    <div class="bg-teal-50 border border-teal-200 rounded-2xl p-8 text-center">
+                        <div class="text-5xl mb-4">&#10003;</div>
+                        <h3 class="text-xl font-bold text-teal-800 mb-2">Mensaje enviado!</h3>
+                        <p class="text-teal-700">Gracias por tu interes. Te contactaremos pronto.</p>
+                    </div>
+                    @else
+                    <form action="{{ route('contact.store') }}" method="POST" class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 space-y-5">
+                        @csrf
+                        {{-- Honeypot anti-bot --}}
+                        <div style="position:absolute;left:-9999px" aria-hidden="true">
+                            <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre *</label>
+                                <input type="text" name="name" required value="{{ old('name') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="Dr. Juan Perez">
+                                @error('name') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email *</label>
+                                <input type="email" name="email" required value="{{ old('email') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="doctor@email.com">
+                                @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Telefono / WhatsApp</label>
+                                <input type="tel" name="phone" value="{{ old('phone') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="668 123 4567">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Ciudad</label>
+                                <input type="text" name="city" value="{{ old('city') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="Ej: CDMX, Guadalajara">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre del consultorio</label>
+                                <input type="text" name="clinic_name" value="{{ old('clinic_name') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="Consultorio Dental Sonrisas">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Especialidad</label>
+                                <input type="text" name="specialty" value="{{ old('specialty') }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                    placeholder="Odontologia, Medicina General...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mensaje (opcional)</label>
+                            <textarea name="message" rows="3"
+                                class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                placeholder="Cuentanos que necesitas o preguntanos lo que quieras...">{{ old('message') }}</textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition-all hover:-translate-y-0.5 text-base">
+                            Enviar mensaje
+                        </button>
+                        <p class="text-xs text-gray-400 text-center">Te contactaremos en menos de 24 horas. Sin spam.</p>
+                    </form>
+                    @endif
+                </div>
             </div>
         </div>
     </section>

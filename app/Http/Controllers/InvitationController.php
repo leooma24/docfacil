@@ -37,7 +37,7 @@ class InvitationController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
-        $user = User::create([
+        $user = User::forceCreate([
             'name' => $invitation->name,
             'email' => $invitation->email,
             'password' => Hash::make($validated['password']),

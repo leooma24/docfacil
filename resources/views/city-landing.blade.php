@@ -14,19 +14,19 @@
     <style>body { font-family: 'Inter', sans-serif; }</style>
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@@context": "https://schema.org",
+        "@@type": "SoftwareApplication",
         "name": "DocFácil",
         "description": "Software para consultorios médicos y dentales en {{ $city }}",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "offers": {
-            "@type": "Offer",
+            "@@type": "Offer",
             "price": "0",
             "priceCurrency": "MXN"
         },
         "areaServed": {
-            "@type": "City",
+            "@@type": "City",
             "name": "{{ $city }}"
         }
     }

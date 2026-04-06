@@ -15,6 +15,11 @@ use Filament\Tables\Table;
 
 class AppointmentResource extends Resource
 {
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
     protected static ?string $model = Appointment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';

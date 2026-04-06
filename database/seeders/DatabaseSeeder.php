@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Super Admin
-        $admin = User::create([
+        $admin = User::forceCreate([
             'name' => 'Admin DocFácil',
             'email' => 'admin@docfacil.com',
             'password' => bcrypt('password'),
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Doctor de prueba
-        $doctorUser = User::create([
+        $doctorUser = User::forceCreate([
             'name' => 'Dr. Juan Pérez',
             'email' => 'doctor@docfacil.com',
             'password' => bcrypt('password'),

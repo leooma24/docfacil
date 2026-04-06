@@ -11,9 +11,15 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class MedicalRecordResource extends Resource
 {
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
     protected static ?string $model = MedicalRecord::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
@@ -103,6 +109,8 @@ class MedicalRecordResource extends Resource
                             ->image()
                             ->directory('medical-records')
                             ->maxFiles(10)
+                            ->maxSize(5120)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->reorderable(),
                     ]),
             ]);

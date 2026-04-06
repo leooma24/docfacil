@@ -26,7 +26,6 @@ class PacientePanelProvider extends PanelProvider
             ->id('paciente')
             ->path('paciente')
             ->login()
-            ->registration()
             ->brandName('DocFácil - Portal Paciente')
             ->brandLogo(asset('images/logo_doc_facil.png'))
             ->brandLogoHeight('3rem')

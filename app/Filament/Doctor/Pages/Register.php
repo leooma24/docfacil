@@ -51,10 +51,10 @@ class Register extends BaseRegister
         ]);
 
         // Create user
-        $user = $this->getUserModel()::create([
+        $user = $this->getUserModel()::forceCreate([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => $data['password'],
+            'password' => bcrypt($data['password']),
             'role' => 'doctor',
             'clinic_id' => $clinic->id,
         ]);

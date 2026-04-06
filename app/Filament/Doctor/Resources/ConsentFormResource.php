@@ -15,6 +15,11 @@ use Filament\Tables\Table;
 
 class ConsentFormResource extends Resource
 {
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
     protected static ?string $model = ConsentForm::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
@@ -81,6 +86,8 @@ class ConsentFormResource extends Resource
                             ->label('Firma del paciente')
                             ->image()
                             ->directory('signatures')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->helperText('El paciente puede firmar en la tablet/teléfono y subir la imagen.'),
                     ]),
             ]);

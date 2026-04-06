@@ -11,9 +11,15 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class OdontogramResource extends Resource
 {
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
     protected static ?string $model = Odontogram::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cursor-arrow-ripple';
