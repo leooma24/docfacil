@@ -190,7 +190,11 @@
         box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1) !important;
     }
 
-    /* Login page */
+    /* Login page - invert white logo back to visible */
+    .fi-simple-layout img {
+        filter: brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(500%) hue-rotate(140deg) !important;
+    }
+
     .fi-simple-layout {
         background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #f0fdfa 100%) !important;
     }
