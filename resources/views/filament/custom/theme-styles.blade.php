@@ -39,7 +39,7 @@
     }
 
     .fi-sidebar-item:hover {
-        background: rgba(255, 255, 255, 0.08) !important;
+        background: rgba(255, 255, 255, 0.06) !important;
         border-radius: 0.5rem;
     }
 
@@ -48,16 +48,16 @@
         color: #ffffff !important;
     }
 
-    /* Active item - highlighted */
+    /* Active item - subtle, blends with sidebar */
     .fi-sidebar-item.fi-active {
-        background: rgba(20, 184, 166, 0.25) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
         border-radius: 0.5rem;
-        border-left: 3px solid #14b8a6 !important;
+        border-left: 3px solid #5eead4 !important;
     }
 
     .fi-sidebar-item.fi-active .fi-sidebar-item-label {
         color: #ffffff !important;
-        font-weight: 700 !important;
+        font-weight: 600 !important;
     }
 
     .fi-sidebar-item.fi-active .fi-sidebar-item-icon {
