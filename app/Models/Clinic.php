@@ -12,7 +12,7 @@ class Clinic extends Model
         'name', 'slug', 'phone', 'email', 'address',
         'city', 'state', 'zip_code', 'logo', 'plan',
         'trial_ends_at', 'is_active',
-        'is_beta', 'is_founder', 'founder_price',
+        'is_beta', 'beta_tier', 'is_founder', 'founder_price',
         'beta_starts_at', 'beta_ends_at', 'beta_notes',
         'show_as_case_study', 'case_study_logo', 'case_study_testimonial',
         'onboarding_status',

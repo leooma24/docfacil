@@ -75,14 +75,44 @@ class ClinicResource extends Resource
                             ->schema([
                                 Forms\Components\Toggle::make('is_beta')
                                     ->label('Es beta tester')
-                                    ->helperText('6 meses gratis del Plan Profesional')
+                                    ->reactive(),
+                                Forms\Components\Select::make('beta_tier')
+                                    ->label('Nivel de beta')
+                                    ->options([
+                                        'founder' => 'Fundador — 6 meses gratis, $149/mes después',
+                                        'early_adopter' => 'Early Adopter — 3 meses gratis, $199/mes después',
+                                        'extended_trial' => 'Trial Extendido — 1 mes gratis, precio normal',
+                                    ])
+                                    ->visible(fn (Forms\Get $get) => $get('is_beta'))
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                        if ($state) {
-                                            $set('plan', 'profesional');
-                                            $set('beta_starts_at', now()->toDateTimeString());
-                                            $set('beta_ends_at', now()->addMonths(6)->toDateTimeString());
-                                        }
+                                        match ($state) {
+                                            'founder' => (function () use ($set) {
+                                                $set('plan', 'profesional');
+                                                $set('is_founder', true);
+                                                $set('founder_price', 149);
+                                                $set('beta_starts_at', now()->toDateTimeString());
+                                                $set('beta_ends_at', now()->addMonths(6)->toDateTimeString());
+                                                $set('trial_ends_at', now()->addMonths(6)->toDateTimeString());
+                                            })(),
+                                            'early_adopter' => (function () use ($set) {
+                                                $set('plan', 'profesional');
+                                                $set('is_founder', true);
+                                                $set('founder_price', 199);
+                                                $set('beta_starts_at', now()->toDateTimeString());
+                                                $set('beta_ends_at', now()->addMonths(3)->toDateTimeString());
+                                                $set('trial_ends_at', now()->addMonths(3)->toDateTimeString());
+                                            })(),
+                                            'extended_trial' => (function () use ($set) {
+                                                $set('plan', 'profesional');
+                                                $set('is_founder', false);
+                                                $set('founder_price', null);
+                                                $set('beta_starts_at', now()->toDateTimeString());
+                                                $set('beta_ends_at', now()->addMonth()->toDateTimeString());
+                                                $set('trial_ends_at', now()->addMonth()->toDateTimeString());
+                                            })(),
+                                            default => null,
+                                        };
                                     }),
                                 Forms\Components\Select::make('onboarding_status')
                                     ->label('Estado de onboarding')
@@ -145,16 +175,20 @@ class ClinicResource extends Resource
                         'success' => 'profesional',
                         'primary' => 'clinica',
                     ]),
-                Tables\Columns\IconColumn::make('is_beta')
+                Tables\Columns\BadgeColumn::make('beta_tier')
                     ->label('Beta')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-beaker')
-                    ->trueColor('warning'),
-                Tables\Columns\IconColumn::make('is_founder')
-                    ->label('Fundador')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-star')
-                    ->trueColor('success'),
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'founder' => 'Fundador',
+                        'early_adopter' => 'Early Adopter',
+                        'extended_trial' => 'Trial Ext.',
+                        default => '-',
+                    })
+                    ->colors([
+                        'success' => 'founder',
+                        'info' => 'early_adopter',
+                        'warning' => 'extended_trial',
+                    ])
+                    ->placeholder('-'),
                 Tables\Columns\BadgeColumn::make('onboarding_status')
                     ->label('Onboarding')
                     ->formatStateUsing(fn ($state) => match ($state) {
@@ -202,18 +236,43 @@ class ClinicResource extends Resource
                     ->icon('heroicon-o-beaker')
                     ->color('warning')
                     ->visible(fn (Clinic $record) => !$record->is_beta)
-                    ->requiresConfirmation()
-                    ->modalDescription('Se activará Plan Profesional gratis por 6 meses')
-                    ->action(function (Clinic $record) {
+                    ->form([
+                        Forms\Components\Select::make('tier')
+                            ->label('Nivel de beta')
+                            ->options([
+                                'founder' => 'Fundador — 6 meses gratis, $149/mes después',
+                                'early_adopter' => 'Early Adopter — 3 meses gratis, $199/mes después',
+                                'extended_trial' => 'Trial Extendido — 1 mes gratis, precio normal',
+                            ])
+                            ->required()
+                            ->default('founder'),
+                    ])
+                    ->action(function (Clinic $record, array $data) {
+                        $config = match ($data['tier']) {
+                            'founder' => ['months' => 6, 'price' => 149, 'is_founder' => true],
+                            'early_adopter' => ['months' => 3, 'price' => 199, 'is_founder' => true],
+                            'extended_trial' => ['months' => 1, 'price' => null, 'is_founder' => false],
+                        };
+
                         $record->update([
                             'is_beta' => true,
-                            'is_founder' => true,
-                            'founder_price' => 149,
+                            'beta_tier' => $data['tier'],
+                            'is_founder' => $config['is_founder'],
+                            'founder_price' => $config['price'],
                             'plan' => 'profesional',
                             'beta_starts_at' => now(),
-                            'beta_ends_at' => now()->addMonths(6),
-                            'trial_ends_at' => now()->addMonths(6),
+                            'beta_ends_at' => now()->addMonths($config['months']),
+                            'trial_ends_at' => now()->addMonths($config['months']),
                         ]);
+
+                        // Send welcome email
+                        $owner = $record->users()->where('role', 'doctor')->first();
+                        if ($owner) {
+                            try {
+                                \Illuminate\Support\Facades\Mail::to($owner->email)
+                                    ->send(new \App\Mail\BetaActivatedMail($record, $owner->name));
+                            } catch (\Exception $e) {}
+                        }
                     }),
             ])
             ->defaultSort('created_at', 'desc');
