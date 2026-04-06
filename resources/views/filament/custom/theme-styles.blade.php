@@ -1,36 +1,46 @@
 <style>
     /* ===== DOCFACIL CUSTOM THEME ===== */
 
-    /* Sidebar gradient background */
+    /* Sidebar - dark teal gradient for maximum contrast */
     .fi-sidebar {
-        background: linear-gradient(180deg, #0f766e 0%, #0d9488 30%, #14b8a6 100%) !important;
+        background: linear-gradient(180deg, #042f2e 0%, #064e3b 40%, #065f46 100%) !important;
     }
 
     .fi-sidebar .fi-sidebar-header {
-        border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        padding: 1rem !important;
     }
 
-    /* Sidebar nav items - white text */
-    .fi-sidebar .fi-sidebar-nav-groups {
-        --c-50: 240 249 255;
-        --c-100: 224 242 254;
-        --c-200: 186 230 253;
-        --c-300: 125 211 252;
-        --c-400: 56 189 248;
-        --c-500: 14 165 233;
-        --c-600: 2 132 199;
-        --c-700: 3 105 161;
-        --c-800: 7 89 133;
-        --c-900: 12 74 110;
+    /* Logo in sidebar bigger */
+    .fi-sidebar .fi-sidebar-header img {
+        height: 2.5rem !important;
     }
 
+    /* Sidebar collapse button */
+    .fi-sidebar-close-btn,
+    .fi-sidebar-open-btn {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .fi-sidebar-close-btn:hover,
+    .fi-sidebar-open-btn:hover {
+        color: #ffffff !important;
+    }
+
+    /* Sidebar nav items */
     .fi-sidebar-item-label {
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
         font-weight: 500 !important;
+        font-size: 0.875rem !important;
     }
 
     .fi-sidebar-item-icon {
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .fi-sidebar-item:hover {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0.5rem;
     }
 
     .fi-sidebar-item:hover .fi-sidebar-item-label,
@@ -38,45 +48,58 @@
         color: #ffffff !important;
     }
 
-    .fi-sidebar-item.fi-active .fi-sidebar-item-label,
-    .fi-sidebar-item.fi-active .fi-sidebar-item-icon {
-        color: #ffffff !important;
-    }
-
+    /* Active item - highlighted */
     .fi-sidebar-item.fi-active {
-        background: rgba(255, 255, 255, 0.15) !important;
+        background: rgba(20, 184, 166, 0.25) !important;
         border-radius: 0.5rem;
+        border-left: 3px solid #14b8a6 !important;
     }
 
+    .fi-sidebar-item.fi-active .fi-sidebar-item-label {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    .fi-sidebar-item.fi-active .fi-sidebar-item-icon {
+        color: #5eead4 !important;
+    }
+
+    /* Group labels */
     .fi-sidebar-group-label {
-        color: rgba(255, 255, 255, 0.5) !important;
+        color: rgba(255, 255, 255, 0.35) !important;
         font-size: 0.65rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.08em !important;
+        letter-spacing: 0.1em !important;
+        font-weight: 700 !important;
     }
 
-    /* Top bar - clean white with subtle shadow */
+    /* Group collapse button */
+    .fi-sidebar-group-collapse-button {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    /* Top bar - clean */
     .fi-topbar {
         background: #ffffff !important;
         border-bottom: none !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
     }
 
-    /* Main content background - subtle warm gray */
+    /* Main content area */
     .fi-main {
         background: #f8fafb !important;
     }
 
-    /* Cards and sections - rounded with subtle shadows */
+    /* Cards - modern rounded */
     .fi-section,
     .fi-ta-ctn {
         border-radius: 1rem !important;
         border: 1px solid #e5e7eb !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
         overflow: hidden;
     }
 
-    /* Stats widget cards */
+    /* Stats cards - interactive */
     .fi-wi-stats-overview-stat {
         border-radius: 1rem !important;
         border: 1px solid #e5e7eb !important;
@@ -85,35 +108,35 @@
 
     .fi-wi-stats-overview-stat:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
+        border-color: #14b8a6 !important;
     }
 
-    /* Buttons - more rounded and vibrant */
+    /* Buttons */
     .fi-btn {
         border-radius: 0.75rem !important;
         font-weight: 600 !important;
-        transition: all 0.2s ease !important;
+        transition: all 0.15s ease !important;
     }
 
     .fi-btn:hover {
         transform: translateY(-1px) !important;
     }
 
-    /* Table rows - hover effect */
+    /* Table rows */
     .fi-ta-row:hover {
         background: #f0fdfa !important;
     }
 
-    /* Badges - more rounded */
+    /* Badges */
     .fi-badge {
         border-radius: 9999px !important;
         font-weight: 600 !important;
     }
 
-    /* Form inputs - softer borders */
+    /* Form inputs */
     .fi-input, .fi-select, textarea, select {
         border-radius: 0.75rem !important;
-        border-color: #d1d5db !important;
         transition: all 0.15s ease !important;
     }
 
@@ -122,7 +145,7 @@
         box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1) !important;
     }
 
-    /* Login page customization */
+    /* Login page */
     .fi-simple-layout {
         background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #f0fdfa 100%) !important;
     }
@@ -138,19 +161,8 @@
         letter-spacing: -0.02em !important;
     }
 
-    /* Navigation collapse button */
-    .fi-sidebar-close-btn,
-    .fi-sidebar-open-btn {
-        color: rgba(255, 255, 255, 0.7) !important;
-    }
-
-    /* Modal styling */
+    /* Modal */
     .fi-modal-content {
-        border-radius: 1rem !important;
-    }
-
-    /* Notification styling */
-    .fi-no-notification {
         border-radius: 1rem !important;
     }
 
@@ -159,19 +171,9 @@
         border-radius: 1rem !important;
     }
 
-    /* Breadcrumbs */
-    .fi-breadcrumbs {
-        font-size: 0.8rem !important;
-    }
-
-    /* Smooth transitions for everything */
-    * {
-        transition-duration: 0.15s;
-    }
-
-    /* Dark mode adjustments */
+    /* Dark mode */
     .dark .fi-sidebar {
-        background: linear-gradient(180deg, #064e45 0%, #0d5e54 30%, #0f766e 100%) !important;
+        background: linear-gradient(180deg, #022c22 0%, #042f2e 40%, #064e3b 100%) !important;
     }
 
     .dark .fi-main {
