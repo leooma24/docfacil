@@ -385,9 +385,6 @@
                 <a href="{{ route('filament.doctor.pages.dashboard') }}" style="color:#6b7280;font-size:0.8rem;text-decoration:none;">&larr; Volver al dashboard</a>
             </div>
         </div>
-            </div>
-        </div>
-        @endif
     </div>
     @endif
 </x-filament-panels::page>
