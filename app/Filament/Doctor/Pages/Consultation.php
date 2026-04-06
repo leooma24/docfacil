@@ -107,9 +107,60 @@ class Consultation extends Page implements HasForms
         }
     }
 
+    public function walkinForm(Forms\Form $form): Forms\Form
+    {
+        $clinicId = auth()->user()->clinic_id;
+
+        return $form
+            ->schema([
+                Forms\Components\Select::make('walkin_patient_id')
+                    ->label('Paciente')
+                    ->options(
+                        \App\Models\Patient::where('clinic_id', $clinicId)
+                            ->get()
+                            ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '')])
+                    )
+                    ->searchable()
+                    ->required()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('first_name')
+                            ->label('Nombre')
+                            ->required(),
+                        Forms\Components\TextInput::make('last_name')
+                            ->label('Apellidos')
+                            ->required(),
+                        Forms\Components\TextInput::make('phone')
+                            ->label('Teléfono')
+                            ->tel(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email')
+                            ->email(),
+                    ])
+                    ->createOptionUsing(function (array $data) use ($clinicId): int {
+                        $data['clinic_id'] = $clinicId;
+                        return \App\Models\Patient::create($data)->id;
+                    }),
+                Forms\Components\Select::make('walkin_service_id')
+                    ->label('Servicio')
+                    ->options(
+                        Service::where('clinic_id', $clinicId)
+                            ->where('is_active', true)
+                            ->get()
+                            ->mapWithKeys(fn ($s) => [$s->id => "{$s->name} — \${$s->price}"])
+                    )
+                    ->searchable(),
+            ])
+            ->statePath('data');
+    }
+
+    public ?array $data = [];
+
     public function startWalkIn(): void
     {
-        if (empty($this->walkin_patient_id)) {
+        $patientId = $this->data['walkin_patient_id'] ?? $this->walkin_patient_id ?? null;
+        $serviceId = $this->data['walkin_service_id'] ?? $this->walkin_service_id ?? null;
+
+        if (empty($patientId)) {
             return;
         }
 
@@ -119,8 +170,8 @@ class Consultation extends Page implements HasForms
         $this->appointment = Appointment::create([
             'clinic_id' => $clinicId,
             'doctor_id' => $doctor?->id ?? 1,
-            'patient_id' => $this->walkin_patient_id,
-            'service_id' => $this->walkin_service_id ?: null,
+            'patient_id' => $patientId,
+            'service_id' => $serviceId ?: null,
             'starts_at' => now(),
             'ends_at' => now()->addMinutes(30),
             'status' => 'in_progress',
