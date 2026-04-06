@@ -38,6 +38,38 @@
         </div>
     </div>
 
+    {{-- History toggle --}}
+    <div style="margin-bottom:1rem;">
+        <button wire:click="toggleHistory" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:{{ $showHistory ? '#f0fdfa' : '#f3f4f6' }};border:1px solid {{ $showHistory ? '#14b8a6' : '#e5e7eb' }};border-radius:0.75rem;font-size:0.8rem;font-weight:600;color:{{ $showHistory ? '#0d9488' : '#6b7280' }};cursor:pointer;">
+            <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            {{ $showHistory ? 'Ocultar historial' : 'Ver historial del paciente' }}
+            @if(!$showHistory && count($this->patientHistory) > 0)
+            <span style="background:#0d9488;color:white;border-radius:9999px;padding:0 0.5rem;font-size:0.7rem;">{{ count($this->patientHistory) }}</span>
+            @endif
+        </button>
+    </div>
+
+    @if($showHistory)
+    <div style="background:white;border:1px solid #e5e7eb;border-radius:1rem;margin-bottom:1.5rem;overflow:hidden;" class="dark:bg-gray-800 dark:border-gray-700">
+        <div style="padding:0.75rem 1rem;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-weight:700;font-size:0.875rem;" class="dark:bg-gray-700 dark:border-gray-600">
+            Historial de consultas ({{ count($this->patientHistory) }})
+        </div>
+        @forelse($this->patientHistory as $record)
+        <div style="padding:0.75rem 1rem;border-bottom:1px solid #f3f4f6;font-size:0.8rem;" class="dark:border-gray-700">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;">
+                <span style="font-weight:700;">{{ $record['date'] }}</span>
+                <span style="color:#6b7280;font-size:0.75rem;">{{ $record['doctor'] }}</span>
+            </div>
+            @if($record['complaint'])<div style="color:#6b7280;"><strong>Motivo:</strong> {{ $record['complaint'] }}</div>@endif
+            @if($record['diagnosis'])<div><strong>Dx:</strong> {{ $record['diagnosis'] }}</div>@endif
+            @if($record['treatment'])<div style="color:#6b7280;"><strong>Tx:</strong> {{ $record['treatment'] }}</div>@endif
+        </div>
+        @empty
+        <div style="padding:2rem;text-align:center;color:#9ca3af;">Primera consulta de este paciente</div>
+        @endforelse
+    </div>
+    @endif
+
     {{-- Steps indicator --}}
     @php
     $stepLabels = [1 => 'Signos vitales', 2 => 'Diagnostico', 3 => 'Receta', 4 => 'Cobro', 5 => 'Siguiente cita'];

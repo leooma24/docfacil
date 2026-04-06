@@ -193,6 +193,33 @@ class Consultation extends Page implements HasForms
         $this->currentStep = 6;
     }
 
+    public bool $showHistory = false;
+
+    public function toggleHistory(): void
+    {
+        $this->showHistory = !$this->showHistory;
+    }
+
+    public function getPatientHistoryProperty(): array
+    {
+        if (!$this->appointment) return [];
+
+        return MedicalRecord::where('patient_id', $this->appointment->patient_id)
+            ->where('clinic_id', auth()->user()->clinic_id)
+            ->with('doctor.user')
+            ->orderBy('visit_date', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(fn ($r) => [
+                'date' => $r->visit_date->format('d/m/Y'),
+                'doctor' => $r->doctor?->user?->name ?? '',
+                'complaint' => $r->chief_complaint ?? '',
+                'diagnosis' => $r->diagnosis ?? '',
+                'treatment' => $r->treatment ?? '',
+            ])
+            ->toArray();
+    }
+
     public function getServicesProperty(): array
     {
         return Service::where('clinic_id', auth()->user()->clinic_id)
