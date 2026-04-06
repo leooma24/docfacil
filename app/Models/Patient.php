@@ -5,9 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Patient extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['first_name', 'last_name', 'phone', 'email', 'allergies', 'medical_notes'])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $eventName) => "Paciente {$eventName}");
+    }
+
     protected $fillable = [
         'clinic_id', 'first_name', 'last_name', 'email', 'phone',
         'birth_date', 'gender', 'address', 'allergies',

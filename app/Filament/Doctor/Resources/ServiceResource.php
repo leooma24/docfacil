@@ -28,6 +28,21 @@ class ServiceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Servicios';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'category'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'Precio' => '$' . number_format($record->price, 0),
+            'Categoría' => $record->category ?? '-',
+        ];
+    }
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form

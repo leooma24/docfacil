@@ -5,9 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class MedicalRecord extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['diagnosis', 'treatment', 'chief_complaint'])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $eventName) => "Expediente {$eventName}");
+    }
+
     protected $fillable = [
         'clinic_id', 'patient_id', 'doctor_id', 'appointment_id',
         'visit_date', 'chief_complaint', 'diagnosis', 'treatment',

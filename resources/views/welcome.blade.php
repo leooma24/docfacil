@@ -241,21 +241,25 @@
     <section id="features" class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-animate>
-                <span class="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full mb-4">8 MODULOS INCLUIDOS</span>
+                <span class="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full mb-4">12+ MODULOS INCLUIDOS</span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Todo lo que tu consultorio necesita</h2>
                 <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Cada funcion fue disenada pensando en el dia a dia real de un doctor o dentista</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" data-animate>
                 @php
                 $features = [
-                    ['icon' => '📅', 'title' => 'Agenda de citas', 'desc' => 'Calendario visual con drag & drop. Configura horarios por doctor y duracion por servicio.', 'color' => 'teal'],
-                    ['icon' => '👥', 'title' => 'Pacientes', 'desc' => 'Ficha completa: datos, alergias, tipo de sangre, notas medicas. Todo en un clic.', 'color' => 'blue'],
-                    ['icon' => '📋', 'title' => 'Expediente clinico', 'desc' => 'Diagnosticos, tratamientos, signos vitales, radiografias. Historial completo por paciente.', 'color' => 'purple'],
-                    ['icon' => '📱', 'title' => 'WhatsApp automatico', 'desc' => 'Recordatorio 24hrs antes. Manual con un clic. Tus pacientes llegan puntuales.', 'color' => 'green'],
-                    ['icon' => '📝', 'title' => 'Recetas PDF', 'desc' => 'Genera recetas profesionales con tu nombre, cedula, medicamentos y firma digital.', 'color' => 'orange'],
-                    ['icon' => '💳', 'title' => 'Cobros y pagos', 'desc' => 'Registra pagos, metodos, pendientes. El precio del servicio se llena automatico.', 'color' => 'pink'],
-                    ['icon' => '🦷', 'title' => 'Odontograma', 'desc' => 'Diagrama dental interactivo con 13 condiciones. Exclusivo para dentistas.', 'color' => 'cyan'],
-                    ['icon' => '📊', 'title' => 'Reportes', 'desc' => 'Ingresos, citas, pacientes atendidos, servicios top. Dashboard con graficas en tiempo real.', 'color' => 'indigo'],
+                    ['icon' => '📅', 'title' => 'Agenda de citas', 'desc' => 'Calendario visual con horarios por doctor. Configura duracion por servicio. Citas de hoy en un clic.'],
+                    ['icon' => '👥', 'title' => 'Perfil 360 del paciente', 'desc' => 'Historial, recetas, pagos, citas y odontograma en una sola pantalla. Vista completa de cada paciente.'],
+                    ['icon' => '📋', 'title' => 'Expediente clinico', 'desc' => 'Diagnosticos, tratamientos, signos vitales, radiografias. Historial completo con auditoria de cambios.'],
+                    ['icon' => '📱', 'title' => 'WhatsApp automatico', 'desc' => 'Recordatorio 24hrs antes. Manual con un clic. Reduce inasistencias hasta un 40%.'],
+                    ['icon' => '📝', 'title' => 'Recetas PDF', 'desc' => 'Genera recetas profesionales con cedula, medicamentos, dosis y firma. Descarga o envia por WhatsApp.'],
+                    ['icon' => '💳', 'title' => 'Cobros y pagos', 'desc' => 'Registra pagos, metodos, pendientes. Alertas de cobros vencidos. Reportes de ingresos en tiempo real.'],
+                    ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => 'Diagrama dental con 13 condiciones. Click para marcar. Se muestra solo si eres dentista.'],
+                    ['icon' => '🔍', 'title' => 'Buscador global Ctrl+K', 'desc' => 'Busca pacientes, servicios o citas al instante. Acceso rapido desde cualquier pantalla.'],
+                    ['icon' => '✍️', 'title' => 'Firma digital', 'desc' => 'El paciente firma consentimientos con el dedo en tablet o celular. Guardado seguro con IP y fecha.'],
+                    ['icon' => '🔔', 'title' => 'Notificaciones', 'desc' => 'Alertas de citas, pagos pendientes, pacientes inactivos. Todo en tu panel sin buscar.'],
+                    ['icon' => '📊', 'title' => 'Reportes y graficas', 'desc' => 'Ingresos diarios/mensuales, servicios top, citas perdidas. Dashboard con datos en tiempo real.'],
+                    ['icon' => '🩺', 'title' => 'Flujo de consulta guiado', 'desc' => 'Wizard paso a paso: signos vitales, diagnostico, receta, cobro y siguiente cita. Todo en 2 minutos.'],
                 ];
                 @endphp
                 @foreach($features as $i => $feature)
@@ -602,10 +606,11 @@
             <div class="space-y-2" id="faq-buttons">
                 <button onclick="askFaq(0)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Que es DocFacil?</button>
                 <button onclick="askFaq(1)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Cuanto cuesta?</button>
-                <button onclick="askFaq(2)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Como funcionan los recordatorios?</button>
-                <button onclick="askFaq(3)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo probarlo gratis?</button>
-                <button onclick="askFaq(4)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Mis datos estan seguros?</button>
-                <button onclick="askFaq(5)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Funciona para dentistas?</button>
+                <button onclick="askFaq(2)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Para que especialidades sirve?</button>
+                <button onclick="askFaq(4)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Que es el flujo de consulta?</button>
+                <button onclick="askFaq(5)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Los pacientes pueden firmar digital?</button>
+                <button onclick="askFaq(6)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Mis datos estan seguros?</button>
+                <button onclick="askFaq(8)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo probarlo sin registrarme?</button>
             </div>
         </div>
     </div>
@@ -649,12 +654,15 @@ window.addEventListener('scroll', () => {
 
 // Chatbot
 const faqs = [
-    { q: 'Que es DocFacil?', a: 'DocFacil es un software 100% en linea para gestionar consultorios medicos y dentales. Incluye agenda de citas, expedientes clinicos, recetas PDF, cobros, reportes y mas. Todo desde tu navegador, sin instalar nada.' },
-    { q: 'Cuanto cuesta?', a: 'Tenemos un plan gratuito para siempre (1 doctor, 30 pacientes). Los planes de pago van desde $149/mes con citas ilimitadas. Sin compromisos, cancela cuando quieras.' },
-    { q: 'Como funcionan los recordatorios?', a: 'Enviamos recordatorios automaticos por WhatsApp 24 horas antes de cada cita. Tambien puedes enviar recordatorios manuales con un clic. Reduce inasistencias hasta un 40%!' },
-    { q: 'Puedo probarlo gratis?', a: 'Si! Tienes 15 dias de prueba gratuita con TODAS las funciones. No necesitas tarjeta de credito. Solo registrate y empieza a usarlo.' },
-    { q: 'Mis datos estan seguros?', a: 'Tus datos estan protegidos con encriptacion SSL, backups automaticos diarios y cumplimos con las normas de proteccion de datos de salud. Tu informacion nunca se comparte con terceros.' },
-    { q: 'Funciona para dentistas?', a: 'Fue disenado especialmente para dentistas! Incluye odontograma interactivo, catalogo de servicios dentales, consentimientos informados y recetas personalizadas.' },
+    { q: 'Que es DocFacil?', a: 'DocFacil es un software 100% en linea para gestionar consultorios medicos y dentales. Incluye agenda, expedientes, recetas PDF, cobros, odontograma, firma digital, notificaciones y mas. Todo desde tu navegador.' },
+    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Planes desde $149/mes con citas ilimitadas y WhatsApp. 15 dias de prueba gratis con TODAS las funciones. Sin tarjeta de credito.' },
+    { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia, cardiologia y mas. El sistema se adapta a tu especialidad: los dentistas ven odontograma, los pediatras ven curvas de crecimiento, etc.' },
+    { q: 'Como funcionan los recordatorios?', a: 'Enviamos recordatorios automaticos por WhatsApp 24hrs antes de cada cita. Tambien puedes enviar manualmente con un clic. Reduce inasistencias hasta un 40% desde el primer mes.' },
+    { q: 'Que es el flujo de consulta?', a: 'Un wizard paso a paso que guia al doctor: signos vitales, diagnostico, receta, cobro y siguiente cita. Todo en una sola pantalla, en 2 minutos. Se crea el expediente, la receta y el pago automaticamente.' },
+    { q: 'Los pacientes pueden firmar digital?', a: 'Si! El paciente firma consentimientos informados con el dedo en tu tablet o celular. Se guarda con fecha, hora e IP. Genera PDF legal descargable.' },
+    { q: 'Mis datos estan seguros?', a: 'Encriptacion SSL, backups automaticos, historial de cambios (quien edito que y cuando), y cumplimos con normas de proteccion de datos de salud. Tu informacion nunca se comparte.' },
+    { q: 'Puedo tener varios doctores?', a: 'Si! Invita doctores a tu consultorio por email. Cada uno con su agenda, sus pacientes y su perfil. Desde el plan Profesional ($299/mes) hasta 3 doctores.' },
+    { q: 'Puedo probarlo sin registrarme?', a: 'Si! Haz clic en "Ver demo en vivo" y explora el sistema con datos reales. Sin registro, sin compromiso. Cuando estes listo, crea tu cuenta gratis.' },
 ];
 
 function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }

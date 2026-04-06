@@ -4,9 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Appointment extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['status', 'starts_at', 'notes'])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $eventName) => "Cita {$eventName}");
+    }
+
     protected $fillable = [
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',

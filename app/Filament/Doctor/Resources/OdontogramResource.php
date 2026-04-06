@@ -6,6 +6,7 @@ use App\Filament\Doctor\Resources\OdontogramResource\Pages;
 use App\Models\Doctor;
 use App\Models\Odontogram;
 use App\Models\Patient;
+use App\Services\SpecialtyService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +16,16 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OdontogramResource extends Resource
 {
+    public static function shouldRegisterNavigation(): bool
+    {
+        return SpecialtyService::currentDoctorCanSee('odontogram');
+    }
+
+    public static function canAccess(): bool
+    {
+        return SpecialtyService::currentDoctorCanSee('odontogram');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
