@@ -222,21 +222,16 @@ class AppointmentResource extends Resource
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
                     ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
-                    ->requiresConfirmation()
-                    ->modalDescription('¿Enviar recordatorio por WhatsApp al paciente?')
-                    ->action(function (Appointment $record) {
-                        $whatsapp = app(\App\Services\WhatsAppService::class);
-                        $success = $whatsapp->sendAppointmentReminder(
-                            to: $record->patient->phone,
-                            patientName: $record->patient->full_name,
-                            doctorName: $record->doctor->user->name ?? '',
-                            dateTime: $record->starts_at->translatedFormat('l d \d\e F, H:i') . ' hrs',
-                            clinicName: $record->clinic->name ?? 'DocFácil',
-                        );
-                        if ($success) {
-                            $record->update(['reminder_sent' => true]);
-                        }
-                    }),
+                    ->url(function (Appointment $record) {
+                        $phone = preg_replace('/\D/', '', $record->patient->phone);
+                        if (strlen($phone) === 10) $phone = '52' . $phone;
+                        $clinicName = $record->clinic->name ?? 'DocFácil';
+                        $date = $record->starts_at->translatedFormat('l d \d\e F');
+                        $time = $record->starts_at->format('H:i');
+                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n📅 {$date}\n🕐 {$time} hrs\n👨‍⚕️ {$record->doctor->user->name}\n\nSi necesitas reagendar, responde este mensaje. ¡Te esperamos!");
+                        return "https://wa.me/{$phone}?text={$msg}";
+                    })
+                    ->openUrlInNewTab(),
                 Tables\Actions\Action::make('reschedule')
                     ->label('Re-agendar')
                     ->icon('heroicon-o-arrow-path')

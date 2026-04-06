@@ -79,18 +79,15 @@ class TodayAppointments extends BaseWidget
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
                     ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
-                    ->requiresConfirmation()
-                    ->action(function (Appointment $record) {
-                        $whatsapp = app(WhatsAppService::class);
-                        $whatsapp->sendAppointmentReminder(
-                            $record->patient->phone,
-                            $record->patient->full_name,
-                            $record->doctor->user->name ?? '',
-                            $record->starts_at->translatedFormat('H:i') . ' hrs',
-                            $record->clinic->name ?? 'DocFácil',
-                        );
-                        $record->update(['reminder_sent' => true]);
-                    }),
+                    ->url(function (Appointment $record) {
+                        $phone = preg_replace('/\D/', '', $record->patient->phone);
+                        if (strlen($phone) === 10) $phone = '52' . $phone;
+                        $clinicName = $record->clinic->name ?? 'DocFácil';
+                        $time = $record->starts_at->format('H:i');
+                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita hoy a las *{$time} hrs* en *{$clinicName}*. ¡Te esperamos!");
+                        return "https://wa.me/{$phone}?text={$msg}";
+                    })
+                    ->openUrlInNewTab(),
                 Tables\Actions\Action::make('no_show')
                     ->label('No asistió')
                     ->icon('heroicon-o-x-circle')
