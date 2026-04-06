@@ -16,8 +16,10 @@
         background: transparent !important;
     }
 
-    .fi-sidebar .fi-sidebar-header img {
-        height: 2.5rem !important;
+    .fi-sidebar .fi-sidebar-header img,
+    .fi-sidebar img {
+        height: 3.5rem !important;
+        max-height: 3.5rem !important;
     }
 
     /* Collapse button */
