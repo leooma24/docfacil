@@ -366,9 +366,7 @@
     <div style="max-width:560px;margin:0 auto;">
         <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1.25rem;padding:2rem;">
             <div style="text-align:center;margin-bottom:1.5rem;">
-                <div style="width:56px;height:56px;background:#ccfbf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
-                    <svg style="width:28px;height:28px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                </div>
+                <div style="font-size:3rem;margin-bottom:0.5rem;">🩺</div>
                 <div style="font-weight:800;font-size:1.25rem;">Iniciar consulta</div>
                 <div style="font-size:0.8rem;color:#6b7280;margin-top:0.25rem;">Busca un paciente o crea uno nuevo con el boton +</div>
             </div>
