@@ -85,15 +85,12 @@ class CalendarWidget extends FullCalendarWidget
 
                 return EventData::make()
                     ->id($appointment->id)
-                    ->title($patientName . ($service ? " · {$service}" : ''))
+                    ->title($patientName . ($service ? " · {$service}" : '') . ($doctor ? " — {$doctor}" : ''))
                     ->start($appointment->starts_at)
                     ->end($appointment->ends_at)
                     ->backgroundColor($bg)
                     ->borderColor($border)
-                    ->textColor($text)
-                    ->extendedProp('doctor', $doctor)
-                    ->extendedProp('status', $appointment->status)
-                    ->extendedProp('phone', $appointment->patient?->phone ?? '');
+                    ->textColor($text);
             })
             ->toArray();
     }
@@ -189,11 +186,7 @@ class CalendarWidget extends FullCalendarWidget
                 el.style.borderLeftWidth = '3px';
                 el.style.cursor = 'pointer';
 
-                // Tooltip with details
-                const doctor = event.extendedProps?.doctor || '';
-                const status = event.extendedProps?.status || '';
-                const statusLabel = {scheduled:'Programada',confirmed:'Confirmada',in_progress:'En consulta',completed:'Completada',cancelled:'Cancelada',no_show:'No asistió'}[status] || status;
-                el.setAttribute('title', `${event.title}\n👨‍⚕️ ${doctor}\n📋 ${statusLabel}`);
+                el.setAttribute('title', event.title);
             }
         JS;
     }
