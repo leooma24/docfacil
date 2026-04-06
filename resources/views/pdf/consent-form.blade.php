@@ -102,7 +102,7 @@
 
         {{-- Content --}}
         <div class="content">
-            {!! $consent->content !!}
+            {!! strip_tags($consent->content, '<p><br><ul><ol><li><strong><em><u><h1><h2><h3><h4><table><tr><td><th>') !!}
         </div>
 
         {{-- Risks --}}

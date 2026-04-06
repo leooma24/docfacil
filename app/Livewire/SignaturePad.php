@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class SignaturePad extends Component
 {
+    #[Locked]
     public ?int $consentFormId = null;
     public ?string $signatureData = null;
     public bool $signed = false;

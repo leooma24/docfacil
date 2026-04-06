@@ -204,7 +204,7 @@ class Consultation extends Page implements HasForms
     public function updatedPaymentServiceId($value): void
     {
         if ($value) {
-            $service = Service::find($value);
+            $service = Service::where('clinic_id', auth()->user()->clinic_id)->find($value);
             if ($service) {
                 $this->payment_amount = (string) $service->price;
             }

@@ -16,6 +16,11 @@ use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    protected function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return Appointment::query()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static ?string $navigationLabel = 'Calendario';
