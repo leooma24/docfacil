@@ -54,7 +54,7 @@ class AlertsWidget extends Widget
 
         // Tomorrow appointments without reminder
         $noReminder = Appointment::where('clinic_id', $clinicId)
-            ->whereDate('starts_at', tomorrow())
+            ->whereDate('starts_at', now()->addDay())
             ->where('reminder_sent', false)
             ->whereIn('status', ['scheduled', 'confirmed'])
             ->count();
