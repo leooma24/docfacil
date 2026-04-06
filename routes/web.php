@@ -14,6 +14,15 @@ Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contact.store')
     ->middleware('throttle:5,1');
 
+Route::get('/demo', function () {
+    $user = \App\Models\User::where('email', 'demo@docfacil.com')->first();
+    if ($user) {
+        auth()->login($user);
+        return redirect('/doctor');
+    }
+    return redirect('/');
+})->middleware('throttle:10,1')->name('demo');
+
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
 
