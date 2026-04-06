@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Programa Beta — DocFácil</title>
     <meta name="description" content="Únete al programa beta de DocFácil. 6 meses gratis del Plan Profesional a cambio de tu retroalimentación.">
+    <meta property="og:title" content="Programa Beta — DocFácil | 6 meses gratis">
+    <meta property="og:description" content="Buscamos 5 doctores para probar nuestro software de consultorios GRATIS por 6 meses. Agenda, expedientes, recetas PDF, WhatsApp y más.">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:url" content="https://docfacil.tu-app.co/beta">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DocFácil">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Programa Beta — DocFácil | 6 meses gratis">
+    <meta name="twitter:description" content="Software para consultorios médicos y dentales. 6 meses gratis a cambio de tu retroalimentación.">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />

@@ -7,6 +7,11 @@
     <meta name="description" content="El mejor software para consultorios médicos y dentales en {{ $city }}, {{ $state }}. Agenda citas, expedientes clínicos, recetas PDF y recordatorios WhatsApp. Prueba gratis 15 días.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <meta property="og:title" content="Software para Consultorios en {{ $city }} — DocFácil">
+    <meta property="og:description" content="El mejor software para consultorios médicos y dentales en {{ $city }}. Prueba gratis 15 días.">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:url" content="{{ url("/software-dental/{$slug}") }}">
+    <meta property="og:type" content="website">
     <link rel="canonical" href="{{ url("/software-dental/{$slug}") }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />
