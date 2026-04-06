@@ -50,6 +50,9 @@ class Consultation extends Page implements HasForms
     public ?string $new_phone = '';
     public ?string $new_email = '';
 
+    // Search
+    public string $patientSearch = '';
+
     // Step 1: Vital signs
     public ?string $blood_pressure = '';
     public ?string $heart_rate = '';
@@ -157,10 +160,21 @@ class Consultation extends Page implements HasForms
 
     public function getPatientsListProperty(): array
     {
-        return \App\Models\Patient::where('clinic_id', auth()->user()->clinic_id)
-            ->orderBy('first_name')
+        $query = \App\Models\Patient::where('clinic_id', auth()->user()->clinic_id);
+
+        if (!empty($this->patientSearch)) {
+            $search = $this->patientSearch;
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->orderBy('first_name')
+            ->limit(50)
             ->get()
-            ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}"])
+            ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '')])
             ->toArray();
     }
 
