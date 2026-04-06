@@ -35,7 +35,7 @@
             </div>
 
             <p style="text-align: center;">
-                <a href="{{ url('/doctor') }}" class="btn">Ir a mi consultorio</a>
+                <a href="{{ url('/doctor') }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Ir a mi consultorio</a>
             </p>
 
             <p>Si tienes dudas, responde este correo y te ayudamos.</p>

@@ -37,7 +37,7 @@
             </div>
 
             <p style="text-align: center;">
-                <a href="https://wa.me/526682493398?text={{ urlencode('Hola, quiero activar mi plan de fundador en DocFacil. Mi consultorio: ' . $clinic->name) }}" class="btn">Activar plan por WhatsApp</a>
+                <a href="https://wa.me/526682493398?text={{ urlencode('Hola, quiero activar mi plan de fundador en DocFacil. Mi consultorio: ' . $clinic->name) }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Activar plan por WhatsApp</a>
             </p>
 
             <p>— El equipo de DocFacil</p>

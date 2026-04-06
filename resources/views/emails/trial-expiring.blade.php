@@ -29,7 +29,7 @@
             <p>Planes desde <strong>$149/mes</strong> con citas ilimitadas y recordatorios WhatsApp.</p>
 
             <p style="text-align: center;">
-                <a href="{{ url('/doctor') }}" class="btn">Actualizar mi plan</a>
+                <a href="{{ url('/doctor') }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Actualizar mi plan</a>
             </p>
 
             <p>— El equipo de DocFácil</p>

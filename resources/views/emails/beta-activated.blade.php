@@ -34,7 +34,7 @@
             </div>
 
             <p style="text-align: center;">
-                <a href="https://docfacil.tu-app.co/doctor" class="btn">Ir a mi consultorio</a>
+                <a href="https://docfacil.tu-app.co/doctor" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Ir a mi consultorio</a>
             </p>
 
             <p>Si tienes dudas, respondenos por WhatsApp al <strong>668 249 3398</strong>.</p>

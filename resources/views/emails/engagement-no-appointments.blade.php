@@ -62,7 +62,7 @@
         </table>
 
         <p style="text-align:center;margin-top:24px;">
-            <a href="https://docfacil.tu-app.co/doctor" class="btn">Agendar primera cita &rarr;</a>
+            <a href="https://docfacil.tu-app.co/doctor" style="display:inline-block;background:linear-gradient(135deg,#0d9488,#0891b2);color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Agendar primera cita &rarr;</a>
         </p>
 
         <div class="divider"></div>

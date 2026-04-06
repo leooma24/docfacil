@@ -29,7 +29,7 @@
             <p>Activa hoy y obtén un <strong>20% de descuento</strong> en tu primer mes.</p>
 
             <p style="text-align: center;">
-                <a href="{{ url('/doctor') }}" class="btn">Activar mi plan ahora</a>
+                <a href="{{ url('/doctor') }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Activar mi plan ahora</a>
             </p>
 
             <p>— El equipo de DocFácil</p>
