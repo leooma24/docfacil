@@ -61,6 +61,7 @@ class DoctorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\VerifyClinicPlan::class,
+                \App\Http\Middleware\DemoMode::class,
             ]);
     }
 }
