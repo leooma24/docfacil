@@ -21,11 +21,8 @@ class CalendarWidget extends FullCalendarWidget
         return Appointment::query()->where('clinic_id', auth()->user()->clinic_id);
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
-
-    protected static ?string $navigationLabel = 'Calendario';
-
-    protected static ?int $navigationSort = -1;
+    // Only rendered inside CalendarPage, not on dashboard
+    protected static bool $isDiscovered = false;
 
     public Model|string|null $model = Appointment::class;
 
@@ -68,27 +65,35 @@ class CalendarWidget extends FullCalendarWidget
             ->with(['patient', 'doctor.user', 'service'])
             ->get()
             ->map(function (Appointment $appointment) {
-                $color = match ($appointment->status) {
-                    'scheduled' => '#f59e0b',
-                    'confirmed' => '#3b82f6',
-                    'in_progress' => '#8b5cf6',
-                    'completed' => '#10b981',
-                    'cancelled' => '#ef4444',
-                    'no_show' => '#6b7280',
-                    default => '#14b8a6',
+                // Soft pastel colors with darker border
+                [$bg, $border, $text] = match ($appointment->status) {
+                    'scheduled' => ['#fef3c7', '#f59e0b', '#92400e'],
+                    'confirmed' => ['#dbeafe', '#3b82f6', '#1e3a8a'],
+                    'in_progress' => ['#ede9fe', '#8b5cf6', '#4c1d95'],
+                    'completed' => ['#d1fae5', '#10b981', '#064e3b'],
+                    'cancelled' => ['#fde2e2', '#f87171', '#7f1d1d'],
+                    'no_show' => ['#e5e7eb', '#9ca3af', '#374151'],
+                    default => ['#ccfbf1', '#14b8a6', '#134e4a'],
                 };
 
                 $patientName = $appointment->patient
                     ? "{$appointment->patient->first_name} {$appointment->patient->last_name}"
                     : 'Sin paciente';
 
+                $service = $appointment->service?->name ?? '';
+                $doctor = $appointment->doctor?->user?->name ?? '';
+
                 return EventData::make()
                     ->id($appointment->id)
-                    ->title($patientName . ($appointment->service ? " - {$appointment->service->name}" : ''))
+                    ->title($patientName . ($service ? " · {$service}" : ''))
                     ->start($appointment->starts_at)
                     ->end($appointment->ends_at)
-                    ->backgroundColor($color)
-                    ->borderColor($color);
+                    ->backgroundColor($bg)
+                    ->borderColor($border)
+                    ->textColor($text)
+                    ->extendedProp('doctor', $doctor)
+                    ->extendedProp('status', $appointment->status)
+                    ->extendedProp('phone', $appointment->patient?->phone ?? '');
             })
             ->toArray();
     }
@@ -176,9 +181,26 @@ class CalendarWidget extends FullCalendarWidget
     {
         return <<<'JS'
             function({ event, el }) {
-                el.setAttribute('title', event.title);
+                // Rounded corners and better styling
+                el.style.borderRadius = '8px';
+                el.style.padding = '2px 6px';
+                el.style.fontSize = '0.8rem';
+                el.style.fontWeight = '500';
+                el.style.borderLeftWidth = '3px';
+                el.style.cursor = 'pointer';
+
+                // Tooltip with details
+                const doctor = event.extendedProps?.doctor || '';
+                const status = event.extendedProps?.status || '';
+                const statusLabel = {scheduled:'Programada',confirmed:'Confirmada',in_progress:'En consulta',completed:'Completada',cancelled:'Cancelada',no_show:'No asistió'}[status] || status;
+                el.setAttribute('title', `${event.title}\n👨‍⚕️ ${doctor}\n📋 ${statusLabel}`);
             }
         JS;
+    }
+
+    public function onEventClick(array $event): void
+    {
+        $this->redirect(route('filament.doctor.pages.consultation', ['appointment' => $event['id']]));
     }
 
     public function onEventDrop(array $event, array $oldEvent, array $relatedEvents, array $delta, ?array $oldResource, ?array $newResource): bool

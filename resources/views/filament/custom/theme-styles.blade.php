@@ -221,6 +221,68 @@
         border-radius: 1rem !important;
     }
 
+    /* FullCalendar styling */
+    .fc .fc-timegrid-slot {
+        height: 3rem !important;
+    }
+
+    .fc .fc-event {
+        border-radius: 8px !important;
+        border-left-width: 3px !important;
+        padding: 2px 6px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .fc .fc-col-header-cell {
+        padding: 0.75rem 0 !important;
+        font-weight: 600 !important;
+        text-transform: capitalize !important;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        text-transform: capitalize !important;
+    }
+
+    .fc .fc-button {
+        border-radius: 0.5rem !important;
+        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.75rem !important;
+    }
+
+    .fc .fc-button-primary {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        color: #374151 !important;
+    }
+
+    .fc .fc-button-primary:hover {
+        background: #e5e7eb !important;
+    }
+
+    .fc .fc-button-primary.fc-button-active {
+        background: #0d9488 !important;
+        border-color: #0d9488 !important;
+        color: white !important;
+    }
+
+    .fc .fc-today-button {
+        background: #14b8a6 !important;
+        border-color: #14b8a6 !important;
+        color: white !important;
+    }
+
+    .fc .fc-day-today {
+        background: rgba(20, 184, 166, 0.04) !important;
+    }
+
+    .fc .fc-timegrid-now-indicator-line {
+        border-color: #ef4444 !important;
+        border-width: 2px !important;
+    }
+
     /* Widget cards */
     .fi-wi-chart {
         border-radius: 1rem !important;
