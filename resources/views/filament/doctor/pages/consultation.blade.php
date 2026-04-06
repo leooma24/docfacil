@@ -362,9 +362,92 @@
     @endif
 
     @else
-    <div class="text-center py-12">
-        <p class="text-gray-500">No se encontro la cita. Regresa al dashboard.</p>
-        <a href="{{ route('filament.doctor.pages.dashboard') }}" class="mt-4 inline-block px-6 py-2 bg-teal-600 text-white rounded-lg">Ir al dashboard</a>
+    {{-- Walk-in: No appointment, select or create patient --}}
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-8 max-w-2xl mx-auto">
+        <div style="text-align:center;margin-bottom:2rem;">
+            <div style="width:64px;height:64px;background:#ccfbf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                <svg style="width:32px;height:32px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            </div>
+            <h2 style="font-size:1.5rem;font-weight:800;">Iniciar consulta</h2>
+            <p style="color:#6b7280;font-size:0.875rem;margin-top:0.25rem;">Selecciona un paciente o registra uno nuevo</p>
+        </div>
+
+        @if(!$showNewPatientForm)
+        {{-- Select existing patient --}}
+        <div style="margin-bottom:1.5rem;">
+            <label style="display:block;font-size:0.875rem;font-weight:600;margin-bottom:0.5rem;">Paciente</label>
+            <select wire:model="walkin_patient_id" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:0.75rem;font-size:0.875rem;">
+                <option value="">Buscar paciente...</option>
+                @foreach($this->patientsList as $id => $name)
+                <option value="{{ $id }}">{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+            <label style="display:block;font-size:0.875rem;font-weight:600;margin-bottom:0.5rem;">Servicio (opcional)</label>
+            <select wire:model="walkin_service_id" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:0.75rem;font-size:0.875rem;">
+                <option value="">Seleccionar servicio...</option>
+                @foreach($this->services as $id => $name)
+                <option value="{{ $id }}">{{ $name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;">
+            <button wire:click="startWalkIn" style="flex:1;padding:0.75rem;background:#0d9488;color:white;border:none;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;" {{ empty($walkin_patient_id) ? 'disabled' : '' }}>
+                Iniciar consulta
+            </button>
+            <button wire:click="$set('showNewPatientForm', true)" style="flex:1;padding:0.75rem;background:#3b82f6;color:white;border:none;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;">
+                Paciente nuevo
+            </button>
+        </div>
+
+        @else
+        {{-- Quick new patient form --}}
+        <div style="border:2px solid #14b8a6;border-radius:1rem;padding:1.5rem;margin-bottom:1rem;">
+            <div style="font-weight:700;font-size:1rem;margin-bottom:1rem;color:#0d9488;">Registrar paciente nuevo</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div>
+                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.25rem;">Nombre *</label>
+                    <input type="text" wire:model="new_first_name" placeholder="Juan" style="width:100%;padding:0.625rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.25rem;">Apellidos *</label>
+                    <input type="text" wire:model="new_last_name" placeholder="Perez Garcia" style="width:100%;padding:0.625rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.25rem;">Telefono</label>
+                    <input type="tel" wire:model="new_phone" placeholder="55 1234 5678" style="width:100%;padding:0.625rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.25rem;">Email</label>
+                    <input type="email" wire:model="new_email" placeholder="correo@email.com" style="width:100%;padding:0.625rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;">
+                </div>
+            </div>
+            <div style="margin-top:1rem;">
+                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.25rem;">Servicio (opcional)</label>
+                <select wire:model="walkin_service_id" style="width:100%;padding:0.625rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;">
+                    <option value="">Seleccionar servicio...</option>
+                    @foreach($this->services as $id => $name)
+                    <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
+                <button wire:click="createQuickPatient" style="flex:1;padding:0.75rem;background:#0d9488;color:white;border:none;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;">
+                    Registrar e iniciar consulta
+                </button>
+                <button wire:click="$set('showNewPatientForm', false)" style="padding:0.75rem 1.5rem;background:#f3f4f6;color:#374151;border:none;border-radius:0.75rem;font-weight:600;font-size:0.875rem;cursor:pointer;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+        @endif
+
+        <div style="text-align:center;margin-top:1.5rem;">
+            <a href="{{ route('filament.doctor.pages.dashboard') }}" style="color:#6b7280;font-size:0.8rem;text-decoration:none;">← Volver al dashboard</a>
+        </div>
     </div>
     @endif
 </x-filament-panels::page>

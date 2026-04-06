@@ -27,7 +27,9 @@ class Consultation extends Page implements HasForms
 
     protected static ?string $slug = 'consultation';
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = true;
+
+    protected static ?int $navigationSort = -1;
 
     protected static string $view = 'filament.doctor.pages.consultation';
 
@@ -35,6 +37,18 @@ class Consultation extends Page implements HasForms
     public int $currentStep = 1;
     public bool $completed = false;
     public ?int $savedPrescriptionId = null;
+    public bool $isWalkIn = false;
+    public bool $showNewPatientForm = false;
+
+    // Walk-in patient selection
+    public ?string $walkin_patient_id = null;
+    public ?string $walkin_service_id = null;
+
+    // New patient quick form
+    public ?string $new_first_name = '';
+    public ?string $new_last_name = '';
+    public ?string $new_phone = '';
+    public ?string $new_email = '';
 
     // Step 1: Vital signs
     public ?string $blood_pressure = '';
@@ -72,7 +86,9 @@ class Consultation extends Page implements HasForms
         }
 
         if (!$this->appointment) {
-            $this->redirect(route('filament.doctor.pages.dashboard'));
+            // Walk-in mode: no appointment, create one on the fly
+            $this->isWalkIn = true;
+            $this->currentStep = 0; // Step 0 = select/create patient
             return;
         }
 
@@ -86,6 +102,66 @@ class Consultation extends Page implements HasForms
             $this->payment_service_id = (string) $this->appointment->service_id;
             $this->payment_amount = (string) $this->appointment->service->price;
         }
+    }
+
+    public function startWalkIn(): void
+    {
+        if (empty($this->walkin_patient_id)) {
+            return;
+        }
+
+        $clinicId = auth()->user()->clinic_id;
+        $doctor = auth()->user()->doctor;
+
+        $this->appointment = Appointment::create([
+            'clinic_id' => $clinicId,
+            'doctor_id' => $doctor?->id ?? 1,
+            'patient_id' => $this->walkin_patient_id,
+            'service_id' => $this->walkin_service_id ?: null,
+            'starts_at' => now(),
+            'ends_at' => now()->addMinutes(30),
+            'status' => 'in_progress',
+        ]);
+
+        $this->appointment->load(['patient', 'doctor.user', 'service', 'clinic']);
+
+        if ($this->appointment->service) {
+            $this->payment_service_id = (string) $this->appointment->service_id;
+            $this->payment_amount = (string) $this->appointment->service->price;
+        }
+
+        $this->isWalkIn = false;
+        $this->currentStep = 1;
+    }
+
+    public function createQuickPatient(): void
+    {
+        if (empty($this->new_first_name) || empty($this->new_last_name)) {
+            return;
+        }
+
+        $patient = \App\Models\Patient::create([
+            'clinic_id' => auth()->user()->clinic_id,
+            'first_name' => $this->new_first_name,
+            'last_name' => $this->new_last_name,
+            'phone' => $this->new_phone ?: null,
+            'email' => $this->new_email ?: null,
+        ]);
+
+        $this->walkin_patient_id = (string) $patient->id;
+        $this->showNewPatientForm = false;
+
+        // Auto-start the walk-in
+        $this->startWalkIn();
+    }
+
+    public function getPatientsListProperty(): array
+    {
+        return \App\Models\Patient::where('clinic_id', auth()->user()->clinic_id)
+            ->orderBy('first_name')
+            ->get()
+            ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}"])
+            ->toArray();
     }
 
     public function nextStep(): void

@@ -24,5 +24,11 @@
             </div>
             <span style="font-size:0.875rem;font-weight:700;color:#4c1d95;">Nueva receta</span>
         </a>
+        <a href="{{ route('filament.doctor.pages.consultation') }}" style="flex:1;min-width:140px;display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:0.75rem;text-decoration:none;">
+            <div style="width:36px;height:36px;background:#f59e0b;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg style="width:20px;height:20px;" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span style="font-size:0.875rem;font-weight:700;color:#92400e;">Consulta rapida</span>
+        </a>
     </div>
 </x-filament-widgets::widget>
