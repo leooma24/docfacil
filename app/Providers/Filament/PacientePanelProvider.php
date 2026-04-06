@@ -34,6 +34,8 @@ class PacientePanelProvider extends PanelProvider
                 'primary' => Color::Teal,
             ])
             ->font('Inter')
+            ->sidebarCollapsibleOnDesktop()
+            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
             ->discoverResources(in: app_path('Filament/Paciente/Resources'), for: 'App\\Filament\\Paciente\\Resources')
             ->discoverPages(in: app_path('Filament/Paciente/Pages'), for: 'App\\Filament\\Paciente\\Pages')
             ->pages([

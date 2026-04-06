@@ -35,6 +35,8 @@ class DoctorPanelProvider extends PanelProvider
                 'primary' => Color::Teal,
             ])
             ->font('Inter')
+            ->sidebarCollapsibleOnDesktop()
+            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
             ->discoverResources(in: app_path('Filament/Doctor/Resources'), for: 'App\\Filament\\Doctor\\Resources')
             ->discoverPages(in: app_path('Filament/Doctor/Pages'), for: 'App\\Filament\\Doctor\\Pages')
             ->pages([
