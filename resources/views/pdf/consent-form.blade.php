@@ -152,7 +152,7 @@
 
         {{-- Footer --}}
         <div class="footer">
-            Documento generado por DocFácil | {{ now()->format('d/m/Y H:i') }} | Folio: CI-{{ str_pad($consent->id, 6, '0', STR_PAD_LEFT) }}
+            Documento generado por DocFácil | docfacil.tu-app.co | {{ now()->format('d/m/Y H:i') }} | Folio: CI-{{ str_pad($consent->id, 6, '0', STR_PAD_LEFT) }}
         </div>
     </div>
 </body>

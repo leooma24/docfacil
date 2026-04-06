@@ -84,7 +84,7 @@ class TodayAppointments extends BaseWidget
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         $clinicName = $record->clinic->name ?? 'DocFácil';
                         $time = $record->starts_at->format('H:i');
-                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita hoy a las *{$time} hrs* en *{$clinicName}*. ¡Te esperamos!");
+                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita hoy a las *{$time} hrs* en *{$clinicName}*. ¡Te esperamos!\n\n_Enviado desde DocFácil_ 👉 https://docfacil.tu-app.co");
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),

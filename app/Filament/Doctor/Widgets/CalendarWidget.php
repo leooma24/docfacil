@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Doctor\Pages;
+namespace App\Filament\Doctor\Widgets;
 
 use App\Models\Appointment;
 use App\Models\Doctor;

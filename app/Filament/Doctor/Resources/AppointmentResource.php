@@ -228,7 +228,7 @@ class AppointmentResource extends Resource
                         $clinicName = $record->clinic->name ?? 'DocFácil';
                         $date = $record->starts_at->translatedFormat('l d \d\e F');
                         $time = $record->starts_at->format('H:i');
-                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n📅 {$date}\n🕐 {$time} hrs\n👨‍⚕️ {$record->doctor->user->name}\n\nSi necesitas reagendar, responde este mensaje. ¡Te esperamos!");
+                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n📅 {$date}\n🕐 {$time} hrs\n👨‍⚕️ {$record->doctor->user->name}\n\nSi necesitas reagendar, responde este mensaje. ¡Te esperamos!\n\n_Enviado desde DocFácil_ 👉 https://docfacil.tu-app.co");
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),

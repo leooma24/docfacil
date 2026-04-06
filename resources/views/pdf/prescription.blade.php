@@ -131,7 +131,7 @@
 
         {{-- Footer --}}
         <div class="footer">
-            Receta generada por DocFácil | {{ now()->format('d/m/Y H:i') }} | Este documento no es válido sin firma del médico
+            Receta generada por DocFácil | docfacil.tu-app.co | {{ now()->format('d/m/Y H:i') }} | Este documento no es válido sin firma del médico
         </div>
     </div>
 </body>

@@ -43,7 +43,7 @@
             <p>— El equipo de DocFácil</p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.
+            &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.<br><a href="https://docfacil.tu-app.co" style="color:#14b8a6;">docfacil.tu-app.co</a> — Software para consultorios médicos y dentales
         </div>
     </div>
 </body>
