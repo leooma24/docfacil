@@ -20,9 +20,31 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'clinic_id',
+        'referral_code',
     ];
 
     protected $guarded = ['role'];
+
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (empty($user->referral_code) && in_array($user->role, ['doctor', null])) {
+                $user->referral_code = self::generateReferralCode($user->name);
+            }
+        });
+    }
+
+    private static function generateReferralCode(?string $name): string
+    {
+        $base = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'DOC'), 0, 6));
+        $code = $base . rand(100, 999);
+
+        while (self::where('referral_code', $code)->exists()) {
+            $code = $base . rand(100, 999);
+        }
+
+        return $code;
+    }
 
     protected $hidden = [
         'password',

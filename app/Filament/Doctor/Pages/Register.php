@@ -36,6 +36,12 @@ class Register extends BaseRegister
                             ->label('Teléfono del consultorio')
                             ->tel()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('referral_code')
+                            ->label('Código de referido (opcional)')
+                            ->placeholder('Ej: DRGARCIA123')
+                            ->maxLength(20)
+                            ->default(request()->query('ref'))
+                            ->helperText('Si un colega te invitó, pon su código y ambos reciben 15 días gratis extra'),
                     ]),
             ]);
     }
@@ -76,6 +82,11 @@ class Register extends BaseRegister
             'source' => 'landing',
             'status' => 'trial',
         ]);
+
+        // Process referral if code provided
+        if (!empty($data['referral_code'])) {
+            \App\Models\Referral::processReferral($user, $data['referral_code']);
+        }
 
         // Send welcome email
         try {
