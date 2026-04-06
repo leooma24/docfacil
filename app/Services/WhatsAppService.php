@@ -13,8 +13,8 @@ class WhatsAppService
 
     public function __construct()
     {
-        $this->token = config('services.whatsapp.token', '');
-        $this->phoneNumberId = config('services.whatsapp.phone_number_id', '');
+        $this->token = config('services.whatsapp.token') ?? '';
+        $this->phoneNumberId = config('services.whatsapp.phone_number_id') ?? '';
         $this->apiUrl = "https://graph.facebook.com/v21.0/{$this->phoneNumberId}/messages";
     }
 
