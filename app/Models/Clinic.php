@@ -12,13 +12,23 @@ class Clinic extends Model
         'name', 'slug', 'phone', 'email', 'address',
         'city', 'state', 'zip_code', 'logo', 'plan',
         'trial_ends_at', 'is_active',
+        'is_beta', 'is_founder', 'founder_price',
+        'beta_starts_at', 'beta_ends_at', 'beta_notes',
+        'show_as_case_study', 'case_study_logo', 'case_study_testimonial',
+        'onboarding_status',
     ];
 
     protected function casts(): array
     {
         return [
             'trial_ends_at' => 'datetime',
+            'beta_starts_at' => 'datetime',
+            'beta_ends_at' => 'datetime',
             'is_active' => 'boolean',
+            'is_beta' => 'boolean',
+            'is_founder' => 'boolean',
+            'show_as_case_study' => 'boolean',
+            'founder_price' => 'decimal:2',
         ];
     }
 
