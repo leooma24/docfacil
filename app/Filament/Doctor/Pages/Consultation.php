@@ -107,50 +107,57 @@ class Consultation extends Page implements HasForms
         }
     }
 
-    public function walkinForm(Forms\Form $form): Forms\Form
+    protected function getForms(): array
+    {
+        return [
+            'walkinForm' => $this->makeForm()
+                ->schema($this->getWalkinFormSchema())
+                ->statePath('data'),
+        ];
+    }
+
+    protected function getWalkinFormSchema(): array
     {
         $clinicId = auth()->user()->clinic_id;
 
-        return $form
-            ->schema([
-                Forms\Components\Select::make('walkin_patient_id')
-                    ->label('Paciente')
-                    ->options(
-                        \App\Models\Patient::where('clinic_id', $clinicId)
-                            ->get()
-                            ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '')])
-                    )
-                    ->searchable()
-                    ->required()
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('first_name')
-                            ->label('Nombre')
-                            ->required(),
-                        Forms\Components\TextInput::make('last_name')
-                            ->label('Apellidos')
-                            ->required(),
-                        Forms\Components\TextInput::make('phone')
-                            ->label('Teléfono')
-                            ->tel(),
-                        Forms\Components\TextInput::make('email')
-                            ->label('Email')
-                            ->email(),
-                    ])
-                    ->createOptionUsing(function (array $data) use ($clinicId): int {
-                        $data['clinic_id'] = $clinicId;
-                        return \App\Models\Patient::create($data)->id;
-                    }),
-                Forms\Components\Select::make('walkin_service_id')
-                    ->label('Servicio')
-                    ->options(
-                        Service::where('clinic_id', $clinicId)
-                            ->where('is_active', true)
-                            ->get()
-                            ->mapWithKeys(fn ($s) => [$s->id => "{$s->name} — \${$s->price}"])
-                    )
-                    ->searchable(),
-            ])
-            ->statePath('data');
+        return [
+            Forms\Components\Select::make('walkin_patient_id')
+                ->label('Paciente')
+                ->options(
+                    \App\Models\Patient::where('clinic_id', $clinicId)
+                        ->get()
+                        ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '')])
+                )
+                ->searchable()
+                ->required()
+                ->createOptionForm([
+                    Forms\Components\TextInput::make('first_name')
+                        ->label('Nombre')
+                        ->required(),
+                    Forms\Components\TextInput::make('last_name')
+                        ->label('Apellidos')
+                        ->required(),
+                    Forms\Components\TextInput::make('phone')
+                        ->label('Teléfono')
+                        ->tel(),
+                    Forms\Components\TextInput::make('email')
+                        ->label('Email')
+                        ->email(),
+                ])
+                ->createOptionUsing(function (array $data) use ($clinicId): int {
+                    $data['clinic_id'] = $clinicId;
+                    return \App\Models\Patient::create($data)->id;
+                }),
+            Forms\Components\Select::make('walkin_service_id')
+                ->label('Servicio')
+                ->options(
+                    Service::where('clinic_id', $clinicId)
+                        ->where('is_active', true)
+                        ->get()
+                        ->mapWithKeys(fn ($s) => [$s->id => "{$s->name} — \${$s->price}"])
+                )
+                ->searchable(),
+        ];
     }
 
     public ?array $data = [];
