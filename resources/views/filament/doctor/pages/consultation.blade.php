@@ -39,32 +39,31 @@
     </div>
 
     {{-- Steps indicator --}}
-    <div class="flex items-center justify-center gap-2 mb-8">
+    @php
+    $stepLabels = [1 => 'Signos vitales', 2 => 'Diagnostico', 3 => 'Receta', 4 => 'Cobro', 5 => 'Siguiente cita'];
+    @endphp
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:2rem;flex-wrap:wrap;">
+        @foreach($stepLabels as $num => $label)
         @php
-        $steps = [
-            1 => ['label' => 'Signos vitales', 'icon' => 'heroicon-o-heart'],
-            2 => ['label' => 'Diagnóstico', 'icon' => 'heroicon-o-clipboard-document-check'],
-            3 => ['label' => 'Receta', 'icon' => 'heroicon-o-document-text'],
-            4 => ['label' => 'Cobro', 'icon' => 'heroicon-o-banknotes'],
-            5 => ['label' => 'Siguiente cita', 'icon' => 'heroicon-o-calendar'],
-        ];
+            $isActive = $currentStep === $num;
+            $isDone = $currentStep > $num;
+            $btnBg = $isActive ? '#0d9488' : ($isDone ? '#ccfbf1' : '#f3f4f6');
+            $btnColor = $isActive ? 'white' : ($isDone ? '#0f766e' : '#9ca3af');
+            $circleBg = $isActive ? 'white' : ($isDone ? '#0d9488' : '#d1d5db');
+            $circleColor = $isActive ? '#0d9488' : ($isDone ? 'white' : 'white');
         @endphp
-        @foreach($steps as $num => $step)
-        <button wire:click="goToStep({{ $num }})" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-            {{ $currentStep === $num ? 'bg-teal-600 text-white shadow-lg' : ($currentStep > $num ? 'bg-teal-100 text-teal-700' : 'bg-gray-100 text-gray-500') }}
-            hover:opacity-90">
-            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                {{ $currentStep === $num ? 'bg-white text-teal-600' : ($currentStep > $num ? 'bg-teal-600 text-white' : 'bg-gray-300 text-white') }}">
-                @if($currentStep > $num)
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <button wire:click="goToStep({{ $num }})" style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:0.5rem;font-size:0.875rem;font-weight:600;border:none;cursor:pointer;background:{{ $btnBg }};color:{{ $btnColor }};{{ $isActive ? 'box-shadow:0 4px 12px rgba(13,148,136,0.3);' : '' }}">
+            <span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;background:{{ $circleBg }};color:{{ $circleColor }};">
+                @if($isDone)
+                    <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                 @else
                     {{ $num }}
                 @endif
             </span>
-            <span class="hidden sm:inline">{{ $step['label'] }}</span>
+            <span>{{ $label }}</span>
         </button>
         @if($num < 5)
-        <div class="w-8 h-0.5 {{ $currentStep > $num ? 'bg-teal-500' : 'bg-gray-200' }}"></div>
+        <div style="width:2rem;height:2px;background:{{ $isDone ? '#14b8a6' : '#e5e7eb' }};"></div>
         @endif
         @endforeach
     </div>
@@ -272,27 +271,27 @@
 
     @if(!$completed)
     {{-- Navigation buttons --}}
-    <div class="flex items-center justify-between mt-6">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;">
         <div>
             @if($currentStep > 1)
-            <button wire:click="prevStep" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition">
+            <button wire:click="prevStep" style="padding:0.625rem 1.5rem;background:#f3f4f6;color:#374151;border:none;border-radius:0.75rem;font-weight:600;font-size:0.875rem;cursor:pointer;">
                 &larr; Anterior
             </button>
             @endif
         </div>
-        <div class="flex gap-3">
+        <div style="display:flex;gap:0.75rem;">
             @if($currentStep < 5)
-            <button wire:click="nextStep" class="px-6 py-2.5 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition">
+            <button wire:click="nextStep" style="padding:0.625rem 1.5rem;background:#0d9488;color:white;border:none;border-radius:0.75rem;font-weight:600;font-size:0.875rem;cursor:pointer;">
                 Siguiente &rarr;
             </button>
             @endif
             @if($currentStep === 5)
-            <button wire:click="saveAndComplete" class="px-8 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg font-bold hover:shadow-lg transition">
+            <button wire:click="saveAndComplete" style="padding:0.625rem 2rem;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border:none;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;box-shadow:0 4px 12px rgba(13,148,136,0.3);">
                 Completar consulta
             </button>
             @endif
             @if($currentStep >= 2)
-            <button wire:click="saveAndComplete" class="px-6 py-2.5 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition text-sm">
+            <button wire:click="saveAndComplete" style="padding:0.625rem 1.5rem;background:#1f2937;color:white;border:none;border-radius:0.75rem;font-weight:600;font-size:0.8rem;cursor:pointer;">
                 Guardar y terminar
             </button>
             @endif
