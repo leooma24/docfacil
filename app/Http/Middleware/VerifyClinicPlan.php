@@ -22,41 +22,54 @@ class VerifyClinicPlan
             abort(403, 'Tu consultorio ha sido desactivado. Contacta soporte.');
         }
 
-        // Block expired trials
-        if ($clinic->plan === 'free' && $clinic->trial_ends_at && $clinic->trial_ends_at->isPast()) {
-            if ($request->routeIs('*.create', '*.edit', '*.store', '*.update')) {
-                abort(403, 'Tu prueba gratuita ha expirado. Actualiza tu plan para continuar usando DocFácil.');
-            }
+        // Allow access to the upgrade page itself
+        if ($request->routeIs('filament.doctor.pages.upgrade')) {
+            return $next($request);
         }
 
-        // Plan limits - BLOCK, not warn
+        // Check if plan/trial/beta has expired
+        $isExpired = false;
+
+        // Free plan with expired trial
+        if ($clinic->plan === 'free' && $clinic->trial_ends_at && $clinic->trial_ends_at->isPast()) {
+            $isExpired = true;
+        }
+
+        // Beta tester with expired beta
+        if ($clinic->is_beta && $clinic->beta_ends_at && $clinic->beta_ends_at->isPast()) {
+            $isExpired = true;
+        }
+
+        // Redirect to upgrade page on write operations if expired
+        if ($isExpired && $request->routeIs('*.create', '*.edit', '*.store', '*.update')) {
+            return redirect()->route('filament.doctor.pages.upgrade');
+        }
+
+        // Plan limits - BLOCK
         $limits = $this->getPlanLimits($clinic->plan);
 
-        if ($limits) {
-            // Patient limit
+        if ($limits && !$isExpired) {
             if ($limits['patients'] && $request->routeIs('*.patients.create')) {
                 $patientCount = $clinic->patients()->count();
                 if ($patientCount >= $limits['patients']) {
-                    abort(403, "Has alcanzado el límite de {$limits['patients']} pacientes en tu plan. Actualiza para continuar.");
+                    return redirect()->route('filament.doctor.pages.upgrade');
                 }
             }
 
-            // Appointment limit
             if ($limits['appointments'] && $request->routeIs('*.appointments.create')) {
                 $monthlyAppointments = $clinic->appointments()
                     ->whereMonth('starts_at', now()->month)
                     ->whereYear('starts_at', now()->year)
                     ->count();
                 if ($monthlyAppointments >= $limits['appointments']) {
-                    abort(403, "Has alcanzado el límite de {$limits['appointments']} citas/mes en tu plan. Actualiza para continuar.");
+                    return redirect()->route('filament.doctor.pages.upgrade');
                 }
             }
 
-            // Doctor limit
             if ($limits['doctors'] && $request->routeIs('*.doctor-invitations.create')) {
                 $doctorCount = $clinic->doctors()->count();
                 if ($doctorCount >= $limits['doctors']) {
-                    abort(403, "Tu plan permite máximo {$limits['doctors']} doctor(es). Actualiza para invitar más.");
+                    return redirect()->route('filament.doctor.pages.upgrade');
                 }
             }
         }
