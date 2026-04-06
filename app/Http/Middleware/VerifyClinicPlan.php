@@ -22,9 +22,14 @@ class VerifyClinicPlan
             abort(403, 'Tu consultorio ha sido desactivado. Contacta soporte.');
         }
 
-        // Allow access to the upgrade page itself
-        if ($request->routeIs('filament.doctor.pages.upgrade')) {
+        // Allow access to special pages
+        if ($request->routeIs('filament.doctor.pages.upgrade', 'filament.doctor.pages.onboarding')) {
             return $next($request);
+        }
+
+        // Redirect new doctors to onboarding
+        if ($clinic->onboarding_status === 'pending' && !$request->routeIs('filament.doctor.pages.onboarding')) {
+            return redirect()->route('filament.doctor.pages.onboarding');
         }
 
         // Check if plan/trial/beta has expired
