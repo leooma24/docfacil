@@ -33,6 +33,8 @@ class Consultation extends Page implements HasForms
 
     public ?Appointment $appointment = null;
     public int $currentStep = 1;
+    public bool $completed = false;
+    public ?int $savedPrescriptionId = null;
 
     // Step 1: Vital signs
     public ?string $blood_pressure = '';
@@ -182,13 +184,13 @@ class Consultation extends Page implements HasForms
         // Mark appointment as completed
         $this->appointment->update(['status' => 'completed']);
 
-        Notification::make()
-            ->title('Consulta completada')
-            ->body("Expediente guardado para {$this->appointment->patient->full_name}")
-            ->success()
-            ->send();
+        // Store prescription ID for PDF download
+        if (isset($prescription)) {
+            $this->savedPrescriptionId = $prescription->id;
+        }
 
-        $this->redirect(route('filament.doctor.pages.dashboard'));
+        $this->completed = true;
+        $this->currentStep = 6;
     }
 
     public function getServicesProperty(): array

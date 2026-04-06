@@ -237,6 +237,28 @@ class AppointmentResource extends Resource
                             $record->update(['reminder_sent' => true]);
                         }
                     }),
+                Tables\Actions\Action::make('reschedule')
+                    ->label('Re-agendar')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed']))
+                    ->form([
+                        Forms\Components\DateTimePicker::make('new_date')
+                            ->label('Nueva fecha y hora')
+                            ->required()
+                            ->native(false)
+                            ->displayFormat('d/m/Y H:i')
+                            ->minutesStep(15)
+                            ->default(fn (Appointment $record) => $record->starts_at),
+                    ])
+                    ->action(function (Appointment $record, array $data) {
+                        $duration = $record->starts_at->diffInMinutes($record->ends_at);
+                        $newStart = \Carbon\Carbon::parse($data['new_date']);
+                        $record->update([
+                            'starts_at' => $newStart,
+                            'ends_at' => $newStart->copy()->addMinutes($duration),
+                        ]);
+                    }),
                 Tables\Actions\Action::make('cancel')
                     ->label('Cancelar')
                     ->icon('heroicon-o-x-circle')

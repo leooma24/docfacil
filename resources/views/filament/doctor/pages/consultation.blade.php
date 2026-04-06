@@ -212,8 +212,65 @@
         </div>
         @endif
 
+        {{-- Step 6: Summary --}}
+        @if($currentStep === 6 && $completed)
+        <div class="text-center py-6">
+            <div style="width:64px;height:64px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                <svg style="width:32px;height:32px;color:#059669;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Consulta completada</h3>
+            <p class="text-gray-500 mb-8">Expediente de {{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }} guardado correctamente.</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 text-sm">
+                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="text-gray-500 text-xs">Diagnostico</div>
+                    <div class="font-medium mt-1">{{ $diagnosis ?: 'No registrado' }}</div>
+                </div>
+                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="text-gray-500 text-xs">Medicamentos</div>
+                    <div class="font-medium mt-1">{{ count($medications) }} recetados</div>
+                </div>
+                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="text-gray-500 text-xs">Cobro</div>
+                    <div class="font-medium mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) : 'Sin cobro' }}</div>
+                </div>
+                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="text-gray-500 text-xs">Siguiente cita</div>
+                    <div class="font-medium mt-1">{{ $next_appointment_date ? \Carbon\Carbon::parse($next_appointment_date)->format('d/m/Y H:i') : 'No agendada' }}</div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3">
+                @if($savedPrescriptionId)
+                <a href="{{ route('filament.doctor.resources.prescriptions.edit', $savedPrescriptionId) }}"
+                    style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;background:#8b5cf6;color:white;border-radius:0.75rem;font-weight:600;font-size:0.875rem;text-decoration:none;">
+                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Ver / Imprimir receta
+                </a>
+                @endif
+                <a href="{{ route('filament.doctor.pages.patient-profile', ['patient' => $appointment->patient_id]) }}"
+                    style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;background:#3b82f6;color:white;border-radius:0.75rem;font-weight:600;font-size:0.875rem;text-decoration:none;">
+                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Ver perfil paciente
+                </a>
+                @if($appointment->patient->phone)
+                <a href="https://wa.me/52{{ preg_replace('/\D/', '', $appointment->patient->phone) }}" target="_blank"
+                    style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;background:#22c55e;color:white;border-radius:0.75rem;font-weight:600;font-size:0.875rem;text-decoration:none;">
+                    <svg style="width:18px;height:18px;" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                    Enviar receta por WhatsApp
+                </a>
+                @endif
+                <a href="{{ route('filament.doctor.pages.dashboard') }}"
+                    style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;background:#374151;color:white;border-radius:0.75rem;font-weight:600;font-size:0.875rem;text-decoration:none;">
+                    Siguiente paciente
+                </a>
+            </div>
+        </div>
+        @endif
+
     </div>
 
+    @if(!$completed)
     {{-- Navigation buttons --}}
     <div class="flex items-center justify-between mt-6">
         <div>
@@ -241,10 +298,11 @@
             @endif
         </div>
     </div>
+    @endif
 
     @else
     <div class="text-center py-12">
-        <p class="text-gray-500">No se encontró la cita. Regresa al dashboard.</p>
+        <p class="text-gray-500">No se encontro la cita. Regresa al dashboard.</p>
         <a href="{{ route('filament.doctor.pages.dashboard') }}" class="mt-4 inline-block px-6 py-2 bg-teal-600 text-white rounded-lg">Ir al dashboard</a>
     </div>
     @endif

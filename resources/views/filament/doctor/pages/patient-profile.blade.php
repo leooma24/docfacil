@@ -32,6 +32,11 @@
                     WhatsApp
                 </a>
                 @endif
+                <a href="{{ route('filament.doctor.resources.appointments.create') }}?patient={{ $patient->id }}"
+                    class="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Agendar cita
+                </a>
                 <a href="{{ route('filament.doctor.resources.patients.edit', $patient->id) }}"
                     class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
                     Editar datos
