@@ -156,7 +156,27 @@ class Consultation extends Page implements HasForms
                         ->get()
                         ->mapWithKeys(fn ($s) => [$s->id => "{$s->name} — \${$s->price}"])
                 )
-                ->searchable(),
+                ->searchable()
+                ->createOptionForm([
+                    Forms\Components\TextInput::make('name')
+                        ->label('Nombre del servicio')
+                        ->required(),
+                    Forms\Components\TextInput::make('price')
+                        ->label('Precio')
+                        ->numeric()
+                        ->prefix('$')
+                        ->required(),
+                    Forms\Components\TextInput::make('duration_minutes')
+                        ->label('Duración (minutos)')
+                        ->numeric()
+                        ->default(30),
+                    Forms\Components\TextInput::make('category')
+                        ->label('Categoría'),
+                ])
+                ->createOptionUsing(function (array $data) use ($clinicId): int {
+                    $data['clinic_id'] = $clinicId;
+                    return Service::create($data)->id;
+                }),
         ];
     }
 
