@@ -11,5 +11,8 @@ Schedule::command('docfacil:send-engagement')->dailyAt('10:00');
 // Send appointment reminders daily at 8am
 Schedule::command('docfacil:send-reminders')->dailyAt('08:00');
 
+// Send prospect pipeline emails every hour (max 10 per run)
+Schedule::command('docfacil:send-prospect-emails')->hourly();
+
 // Backups daily at 3am
 Schedule::command('backup:run')->dailyAt('03:00');

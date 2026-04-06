@@ -10,7 +10,7 @@ class Prospect extends Model
     protected $fillable = [
         'name', 'email', 'phone', 'clinic_name', 'city',
         'specialty', 'source', 'status', 'notes',
-        'contacted_at', 'converted_at',
+        'contacted_at', 'converted_at', 'address',
     ];
 
     protected function casts(): array
