@@ -170,6 +170,46 @@ class AppointmentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('start_consultation')
+                    ->label('Consulta')
+                    ->icon('heroicon-o-play-circle')
+                    ->color('primary')
+                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consultation', ['appointment' => $record->id]))
+                    ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress'])),
+                Tables\Actions\Action::make('charge')
+                    ->label('Cobrar')
+                    ->icon('heroicon-o-banknotes')
+                    ->color('success')
+                    ->visible(fn (Appointment $record) => in_array($record->status, ['completed', 'in_progress']))
+                    ->form([
+                        Forms\Components\TextInput::make('amount')
+                            ->label('Monto')
+                            ->numeric()
+                            ->prefix('$')
+                            ->required()
+                            ->default(fn (Appointment $record) => $record->service?->price),
+                        Forms\Components\Select::make('payment_method')
+                            ->label('Método de pago')
+                            ->options([
+                                'cash' => 'Efectivo',
+                                'card' => 'Tarjeta',
+                                'transfer' => 'Transferencia',
+                            ])
+                            ->default('cash')
+                            ->required(),
+                    ])
+                    ->action(function (Appointment $record, array $data) {
+                        \App\Models\Payment::create([
+                            'clinic_id' => auth()->user()->clinic_id,
+                            'patient_id' => $record->patient_id,
+                            'appointment_id' => $record->id,
+                            'service_id' => $record->service_id,
+                            'amount' => $data['amount'],
+                            'payment_method' => $data['payment_method'],
+                            'status' => 'paid',
+                            'payment_date' => now()->toDateString(),
+                        ]);
+                    }),
                 Tables\Actions\Action::make('complete')
                     ->label('Completar')
                     ->icon('heroicon-o-check-circle')
