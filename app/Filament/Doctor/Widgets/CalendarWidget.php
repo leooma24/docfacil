@@ -14,7 +14,7 @@ use Saade\FilamentFullCalendar\Data\EventData;
 use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
-class Calendar extends FullCalendarWidget
+class CalendarWidget extends FullCalendarWidget
 {
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
