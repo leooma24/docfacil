@@ -127,6 +127,11 @@ class PatientResource extends Resource
                     ->label('Activo'),
             ])
             ->actions([
+                Tables\Actions\Action::make('profile')
+                    ->label('Ver perfil')
+                    ->icon('heroicon-o-user-circle')
+                    ->color('primary')
+                    ->url(fn ($record) => route('filament.doctor.pages.patient-profile', ['patient' => $record->id])),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

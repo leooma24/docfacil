@@ -42,9 +42,13 @@ class DoctorPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Doctor/Widgets'), for: 'App\\Filament\\Doctor\\Widgets')
             ->widgets([
+                \App\Filament\Doctor\Widgets\QuickActions::class,
                 \App\Filament\Doctor\Widgets\StatsOverview::class,
+                \App\Filament\Doctor\Widgets\TodayAppointments::class,
                 \App\Filament\Doctor\Widgets\AppointmentsChart::class,
                 \App\Filament\Doctor\Widgets\IncomeChart::class,
+                \App\Filament\Doctor\Widgets\PendingPayments::class,
+                \App\Filament\Doctor\Widgets\AlertsWidget::class,
                 \App\Filament\Doctor\Widgets\TopServicesChart::class,
             ])
             ->middleware([

@@ -65,10 +65,18 @@ class OdontogramEditor extends Component
 
     public function applyTool(int $toothNumber): void
     {
-        $this->teeth[$toothNumber]['condition'] = $this->activeTool;
+        // If a tool other than 'healthy' is selected, apply it
+        // Otherwise just select the tooth for viewing/editing
+        if ($this->activeTool !== 'healthy') {
+            $this->teeth[$toothNumber]['condition'] = $this->activeTool;
+            $this->selectedCondition = $this->activeTool;
+            $this->dispatch('teeth-updated', teeth: $this->teeth);
+        } else {
+            $this->selectedCondition = $this->teeth[$toothNumber]['condition'] ?? 'healthy';
+        }
+
         $this->selectedTooth = $toothNumber;
-        $this->selectedCondition = $this->activeTool;
-        $this->dispatch('teeth-updated', teeth: $this->teeth);
+        $this->toothNotes = $this->teeth[$toothNumber]['notes'] ?? '';
     }
 
     public function updateTooth(): void
