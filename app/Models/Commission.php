@@ -36,9 +36,9 @@ class Commission extends Model
 
     /**
      * Planes que califican para comisión.
-     * Básico NO paga comisión (margen muy fino).
+     * Gratis y Básico NO pagan comisión (margen insuficiente).
      */
-    public const COMMISSIONABLE_PLANS = ['profesional', 'clinica', 'enterprise'];
+    public const COMMISSIONABLE_PLANS = ['profesional', 'clinica'];
 
     public function user(): BelongsTo
     {
@@ -76,9 +76,10 @@ class Commission extends Model
     public static function monthlyPriceForPlan(string $plan): int
     {
         return match ($plan) {
+            'free' => 0,
+            'basico' => 149,
             'profesional' => 299,
-            'clinica' => 599,
-            'enterprise' => 999,
+            'clinica' => 499,
             default => 0,
         };
     }
