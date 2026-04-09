@@ -590,7 +590,12 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-800 pt-8 text-center">
+            <div class="border-t border-gray-800 pt-8 text-center space-y-3">
+                <div class="flex items-center justify-center gap-4 text-sm">
+                    <a href="/privacidad" class="text-gray-400 hover:text-teal-400 transition">Aviso de Privacidad</a>
+                    <span class="text-gray-700">&middot;</span>
+                    <a href="/terminos" class="text-gray-400 hover:text-teal-400 transition">Términos y Condiciones</a>
+                </div>
                 <p class="text-sm text-gray-600">&copy; {{ date('Y') }} DocFacil. Todos los derechos reservados.</p>
             </div>
         </div>

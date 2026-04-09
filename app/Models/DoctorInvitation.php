@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class DoctorInvitation extends Model
 {
+    use BelongsToClinic;
     protected $fillable = [
         'clinic_id', 'invited_by', 'email', 'name',
         'specialty', 'token', 'status',

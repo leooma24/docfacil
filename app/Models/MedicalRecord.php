@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToClinic;
+use App\Models\Concerns\Lockable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class MedicalRecord extends Model
 {
-    use LogsActivity;
+    use LogsActivity, BelongsToClinic, Lockable;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -32,6 +34,7 @@ class MedicalRecord extends Model
             'visit_date' => 'date',
             'vital_signs' => 'array',
             'attachments' => 'array',
+            'locked_at' => 'datetime',
         ];
     }
 

@@ -32,6 +32,11 @@ class Register extends BaseRegister
                             ->label('Especialidad')
                             ->placeholder('Ej: Odontología, Medicina General, Pediatría')
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('license_number')
+                            ->label('Cédula profesional')
+                            ->required()
+                            ->helperText('Obligatoria por NOM-004-SSA3-2012 para emitir recetas y expedientes')
+                            ->maxLength(50),
                         Forms\Components\TextInput::make('clinic_phone')
                             ->label('Teléfono del consultorio')
                             ->tel()
@@ -42,6 +47,17 @@ class Register extends BaseRegister
                             ->maxLength(20)
                             ->default(request()->query('ref'))
                             ->helperText('Si un colega te invitó, pon su código y ambos reciben 15 días gratis extra'),
+                    ]),
+                Forms\Components\Checkbox::make('terms_accepted')
+                    ->label(new \Illuminate\Support\HtmlString(
+                        'He leído y acepto los <a href="/terminos" target="_blank" class="text-teal-600 underline">Términos y Condiciones</a> ' .
+                        'y el <a href="/privacidad" target="_blank" class="text-teal-600 underline">Aviso de Privacidad</a>. ' .
+                        'Me comprometo a obtener el consentimiento expreso de mis pacientes antes de cargar sus datos.'
+                    ))
+                    ->accepted()
+                    ->required()
+                    ->validationMessages([
+                        'accepted' => 'Debes aceptar los Términos y el Aviso de Privacidad para registrarte.',
                     ]),
             ]);
     }
@@ -63,6 +79,7 @@ class Register extends BaseRegister
             'password' => bcrypt($data['password']),
             'role' => 'doctor',
             'clinic_id' => $clinic->id,
+            'terms_accepted_at' => now(), // LFPDPPP art. 9
         ]);
 
         // Create doctor profile
@@ -70,6 +87,7 @@ class Register extends BaseRegister
             'user_id' => $user->id,
             'clinic_id' => $clinic->id,
             'specialty' => $data['specialty'] ?? null,
+            'license_number' => $data['license_number'],
         ]);
 
         // Create prospect for CRM tracking

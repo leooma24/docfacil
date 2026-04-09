@@ -10,6 +10,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/privacidad', 'legal.privacidad')->name('legal.privacy');
+Route::view('/terminos', 'legal.terminos')->name('legal.terms');
+
 Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contact.store')
     ->middleware('throttle:5,1');

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToClinic;
+use App\Models\Concerns\Lockable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Prescription extends Model
 {
+    use BelongsToClinic, Lockable;
+
     protected $fillable = [
         'clinic_id', 'patient_id', 'doctor_id', 'medical_record_id',
         'prescription_date', 'diagnosis', 'notes',
@@ -17,6 +21,7 @@ class Prescription extends Model
     {
         return [
             'prescription_date' => 'date',
+            'locked_at' => 'datetime',
         ];
     }
 
