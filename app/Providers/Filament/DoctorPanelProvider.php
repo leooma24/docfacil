@@ -28,7 +28,7 @@ class DoctorPanelProvider extends PanelProvider
             ->login(\App\Filament\Doctor\Pages\Login::class)
             ->registration(\App\Filament\Doctor\Pages\Register::class)
             ->brandName('DocFácil')
-            ->brandLogo(asset('images/logo_doc_facil.png'))
+            ->brandLogo(asset('images/logo_doc_facil_white.png'))
             ->brandLogoHeight('3rem')
             ->favicon(asset('favicon-32x32.png'))
             ->colors([

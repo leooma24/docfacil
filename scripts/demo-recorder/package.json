@@ -1,0 +1,11 @@
+{
+  "name": "docfacil-demo-recorder",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "record": "node record.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}
