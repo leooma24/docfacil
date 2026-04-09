@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Clinic;
+use Database\Seeders\DemoSalesSeeder;
 use Database\Seeders\DemoSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -52,8 +53,11 @@ class DemoReset extends Command
             }
         });
 
-        $this->info('Reseeding demo...');
+        $this->info('Reseeding demo doctor...');
         (new DemoSeeder())->run();
+
+        $this->info('Reseeding demo sales rep...');
+        (new DemoSalesSeeder())->run();
 
         $this->info('Demo reset complete.');
 
