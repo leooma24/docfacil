@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('DocFácil Admin')
-            ->brandLogo(asset('images/logo_doc_facil_white.png'))
+            ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')
             ->favicon(asset('favicon-32x32.png'))
             ->colors([
