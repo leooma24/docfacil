@@ -2,9 +2,12 @@
 
 namespace App\Observers;
 
+use App\Mail\CommissionEarnedMail;
 use App\Models\Clinic;
 use App\Models\Commission;
 use App\Models\Prospect;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ClinicObserver
 {
@@ -61,7 +64,7 @@ class ClinicObserver
         // dos procesos lleguen aquí concurrentemente, solo uno insertará.
         // El otro caerá en QueryException que atrapamos silenciosamente.
         try {
-            Commission::create([
+            $commission = Commission::create([
                 'user_id' => $clinic->sold_by_user_id,
                 'clinic_id' => $clinic->id,
                 'prospect_id' => Prospect::where('converted_clinic_id', $clinic->id)->value('id'),
@@ -71,12 +74,30 @@ class ClinicObserver
                 'status' => 'pending',
                 'earned_at' => now(),
             ]);
+
+            // Notificar al vendedor por email (no bloquear si falla)
+            $this->notifyCommissionEarned($commission);
         } catch (\Illuminate\Database\QueryException $e) {
             // 23000 = integrity constraint violation (duplicate key)
-            // Ignorar silenciosamente: ya existe la comisión para este tier.
             if ($e->getCode() !== '23000') {
                 throw $e;
             }
+        }
+    }
+
+    private function notifyCommissionEarned(Commission $commission): void
+    {
+        try {
+            $commission->load(['user', 'clinic']);
+            if ($commission->user && $commission->user->email) {
+                Mail::to($commission->user->email)->send(new CommissionEarnedMail($commission));
+            }
+        } catch (\Throwable $e) {
+            // No bloquear la creación de comisión si el email falla
+            Log::warning('No se pudo enviar email de comisión ganada', [
+                'commission_id' => $commission->id,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

@@ -65,11 +65,13 @@ class Register extends BaseRegister
     protected function handleRegistration(array $data): \Illuminate\Database\Eloquent\Model
     {
         // Detectar si viene de un vendedor via ?vnd=CODIGO
+        // Validamos formato del código para evitar enumeración con SQL caro:
+        // el formato real es VND-XXXXX## (4-20 chars alfanuméricos con guion).
         $salesRep = null;
         $vndCode = request()->query('vnd');
-        if ($vndCode) {
+        if ($vndCode && is_string($vndCode) && preg_match('/^VND-[A-Z0-9]{3,16}$/i', $vndCode)) {
             $salesRep = \App\Models\User::where('role', 'sales')
-                ->where('sales_rep_code', $vndCode)
+                ->where('sales_rep_code', strtoupper($vndCode))
                 ->where('is_active_sales_rep', true)
                 ->first();
         }

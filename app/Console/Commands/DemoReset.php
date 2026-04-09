@@ -19,6 +19,10 @@ class DemoReset extends Command
     {
         $this->info('Resetting demo data...');
 
+        // Limpiar primero las clínicas ficticias del vendedor demo (evita huérfanos
+        // que sobreviven entre corridas porque no pertenecen a la clínica principal).
+        DB::table('clinics')->where('slug', 'like', 'demo-sales-%')->delete();
+
         DB::transaction(function () {
             $clinics = Clinic::where('slug', 'clinica-dental-sonrisas-cdmx')->get();
 

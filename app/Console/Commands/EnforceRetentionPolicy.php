@@ -46,6 +46,9 @@ class EnforceRetentionPolicy extends Command
             'payments' => Payment::withoutGlobalScopes()
                 ->where('payment_date', '<', $cutoff)
                 ->count(),
+            'commissions' => \DB::table('commissions')
+                ->where('earned_at', '<', $cutoff)
+                ->count(),
         ];
 
         $this->table(['Tabla', 'Registros candidatos'], collect($reports)->map(
@@ -78,6 +81,7 @@ class EnforceRetentionPolicy extends Command
             ->where('starts_at', '<', $cutoff)
             ->whereIn('status', ['completed', 'no_show', 'cancelled'])
             ->delete();
+        DB::table('commissions')->where('earned_at', '<', $cutoff)->delete();
 
         $this->info("Borrado completado. Registros eliminados conforme a política de retención.");
         return self::SUCCESS;
