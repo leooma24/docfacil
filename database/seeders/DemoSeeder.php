@@ -32,6 +32,7 @@ class DemoSeeder extends Seeder
             'zip_code' => '03100',
             'plan' => 'profesional',
             'trial_ends_at' => now()->addDays(30),
+            'onboarding_status' => 'completed',
         ]);
 
         // =============================================
