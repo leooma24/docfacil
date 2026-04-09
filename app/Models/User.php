@@ -21,6 +21,9 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'clinic_id',
         'referral_code',
+        'commission_rate_percent',
+        'is_active_sales_rep',
+        'sales_rep_code',
     ];
 
     protected $guarded = ['role'];
@@ -30,6 +33,10 @@ class User extends Authenticatable implements FilamentUser
         static::creating(function (User $user) {
             if (empty($user->referral_code) && in_array($user->role, ['doctor', null])) {
                 $user->referral_code = self::generateReferralCode($user->name);
+            }
+
+            if (empty($user->sales_rep_code) && $user->role === 'sales') {
+                $user->sales_rep_code = self::generateSalesRepCode($user->name);
             }
         });
     }
@@ -41,6 +48,18 @@ class User extends Authenticatable implements FilamentUser
 
         while (self::where('referral_code', $code)->exists()) {
             $code = $base . rand(100, 999);
+        }
+
+        return $code;
+    }
+
+    private static function generateSalesRepCode(?string $name): string
+    {
+        $base = 'VND-' . strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'VENTAS'), 0, 5));
+        $code = $base . rand(10, 99);
+
+        while (self::where('sales_rep_code', $code)->exists()) {
+            $code = $base . rand(10, 99);
         }
 
         return $code;
@@ -60,6 +79,8 @@ class User extends Authenticatable implements FilamentUser
             'two_factor_secret' => 'encrypted',
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
+            'commission_rate_percent' => 'decimal:2',
+            'is_active_sales_rep' => 'boolean',
         ];
     }
 
@@ -74,6 +95,7 @@ class User extends Authenticatable implements FilamentUser
             'admin' => $this->role === 'super_admin',
             'doctor' => in_array($this->role, ['doctor', 'staff']),
             'paciente' => $this->role === 'patient',
+            'ventas' => $this->role === 'sales' && $this->is_active_sales_rep,
             default => false,
         };
     }
@@ -101,5 +123,30 @@ class User extends Authenticatable implements FilamentUser
     public function patient(): HasOne
     {
         return $this->hasOne(Patient::class);
+    }
+
+    public function soldClinics(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Clinic::class, 'sold_by_user_id');
+    }
+
+    public function commissions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Commission::class);
+    }
+
+    public function assignedProspects(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Prospect::class, 'assigned_to_sales_rep_id');
+    }
+
+    public function scopeSalesReps($q)
+    {
+        return $q->where('role', 'sales');
+    }
+
+    public function isSalesRep(): bool
+    {
+        return $this->role === 'sales';
     }
 }

@@ -231,6 +231,45 @@ class ClinicResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('mark_first_payment')
+                        ->label('Marcar 1er pago recibido')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->color('success')
+                        ->visible(fn (Clinic $r) => $r->sold_by_user_id && !$r->first_payment_received_at)
+                        ->requiresConfirmation()
+                        ->action(function (Clinic $record) {
+                            $record->update(['first_payment_received_at' => now()]);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Primer pago marcado — comisión generada')
+                                ->success()->send();
+                        }),
+                    Tables\Actions\Action::make('mark_second_payment')
+                        ->label('Marcar 2do pago recibido')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->color('success')
+                        ->visible(fn (Clinic $r) => $r->first_payment_received_at && !$r->second_payment_received_at && !$r->cancelled_at)
+                        ->requiresConfirmation()
+                        ->action(function (Clinic $record) {
+                            $record->update(['second_payment_received_at' => now()]);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Segundo pago marcado — comisión generada')
+                                ->success()->send();
+                        }),
+                    Tables\Actions\Action::make('cancel_clinic')
+                        ->label('Cancelar clínica')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->visible(fn (Clinic $r) => !$r->cancelled_at)
+                        ->requiresConfirmation()
+                        ->modalDescription('Si la clínica fue vendida en <90 días, las comisiones quedarán en clawback.')
+                        ->action(function (Clinic $record) {
+                            $record->update(['cancelled_at' => now(), 'is_active' => false]);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Clínica cancelada')
+                                ->warning()->send();
+                        }),
+                ])->label('Ventas')->icon('heroicon-o-banknotes')->color('primary'),
                 Tables\Actions\Action::make('activate_beta')
                     ->label('Activar Beta')
                     ->icon('heroicon-o-beaker')

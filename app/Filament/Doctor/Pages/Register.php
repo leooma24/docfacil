@@ -64,12 +64,24 @@ class Register extends BaseRegister
 
     protected function handleRegistration(array $data): \Illuminate\Database\Eloquent\Model
     {
+        // Detectar si viene de un vendedor via ?vnd=CODIGO
+        $salesRep = null;
+        $vndCode = request()->query('vnd');
+        if ($vndCode) {
+            $salesRep = \App\Models\User::where('role', 'sales')
+                ->where('sales_rep_code', $vndCode)
+                ->where('is_active_sales_rep', true)
+                ->first();
+        }
+
         // Create clinic
         $clinic = Clinic::create([
             'name' => $data['clinic_name'],
             'phone' => $data['clinic_phone'] ?? null,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
+            'sold_by_user_id' => $salesRep?->id,
+            'sold_at' => $salesRep ? now() : null,
         ]);
 
         // Create user
@@ -90,16 +102,28 @@ class Register extends BaseRegister
             'license_number' => $data['license_number'],
         ]);
 
-        // Create prospect for CRM tracking
-        Prospect::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['clinic_phone'] ?? null,
-            'clinic_name' => $data['clinic_name'],
-            'specialty' => $data['specialty'] ?? null,
-            'source' => 'landing',
-            'status' => 'trial',
-        ]);
+        // Create/update prospect for CRM tracking
+        $existingProspect = Prospect::where('email', $data['email'])->first();
+        if ($existingProspect) {
+            $existingProspect->update([
+                'status' => 'converted',
+                'converted_at' => now(),
+                'converted_clinic_id' => $clinic->id,
+            ]);
+        } else {
+            Prospect::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['clinic_phone'] ?? null,
+                'clinic_name' => $data['clinic_name'],
+                'specialty' => $data['specialty'] ?? null,
+                'source' => $salesRep ? 'prospecting' : 'landing',
+                'status' => 'converted',
+                'converted_at' => now(),
+                'converted_clinic_id' => $clinic->id,
+                'assigned_to_sales_rep_id' => $salesRep?->id,
+            ]);
+        }
 
         // Process referral if code provided
         if (!empty($data['referral_code'])) {

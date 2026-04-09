@@ -16,6 +16,8 @@ class Clinic extends Model
         'beta_starts_at', 'beta_ends_at', 'beta_notes',
         'show_as_case_study', 'case_study_logo', 'case_study_testimonial',
         'onboarding_status',
+        'sold_by_user_id', 'sold_at',
+        'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
     ];
 
     protected function casts(): array
@@ -29,6 +31,10 @@ class Clinic extends Model
             'is_founder' => 'boolean',
             'show_as_case_study' => 'boolean',
             'founder_price' => 'decimal:2',
+            'sold_at' => 'datetime',
+            'first_payment_received_at' => 'datetime',
+            'second_payment_received_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 
@@ -64,5 +70,15 @@ class Clinic extends Model
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function soldBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'sold_by_user_id');
+    }
+
+    public function commissions(): HasMany
+    {
+        return $this->hasMany(Commission::class);
     }
 }
