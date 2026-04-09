@@ -56,7 +56,16 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'terms_accepted_at' => 'datetime',
+            'two_factor_secret' => 'encrypted',
+            'two_factor_enabled' => 'boolean',
+            'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function hasTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_enabled && $this->two_factor_confirmed_at !== null;
     }
 
     public function canAccessPanel(Panel $panel): bool

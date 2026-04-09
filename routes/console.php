@@ -19,3 +19,7 @@ Schedule::command('backup:run')->dailyAt('03:00');
 
 // Reset demo clinic daily at 4am (lets visitors create/edit freely during the day)
 Schedule::command('app:demo-reset')->dailyAt('04:00');
+
+// Auditoría de retención legal (LFPDPPP + NOM-004): reporte semanal,
+// solo informativo. El borrado efectivo se hace manualmente con --force.
+Schedule::command('app:retention-report')->weekly()->sundays()->at('05:00');
