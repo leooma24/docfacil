@@ -25,9 +25,10 @@ class ClinicObserver
             $this->createCommission($clinic, 'second');
         }
 
-        // Clawback: cancelación dentro de 90 días
+        // Clawback: cancelación dentro de 90 días desde la venta.
+        // Comparamos directo con addDays para evitar ambigüedades de signo en diffInDays.
         if ($clinic->wasChanged('cancelled_at') && $clinic->cancelled_at) {
-            if ($clinic->sold_at && $clinic->cancelled_at->diffInDays($clinic->sold_at) < 90) {
+            if ($clinic->sold_at && $clinic->cancelled_at->lessThan($clinic->sold_at->copy()->addDays(90))) {
                 $this->clawback($clinic);
             }
         }
