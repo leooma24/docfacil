@@ -104,65 +104,44 @@ class DemoSalesSeeder extends Seeder
         // CLÍNICAS VENDIDAS (3 con distintos estados de pago)
         // =============================================
 
-        // Clínica 1: Ambos pagos recibidos (2 comisiones pagadas — histórico positivo)
-        $clinic1 = new Clinic();
-        $clinic1->forceFill([
-            'name' => 'Clínica Dental Ejemplo 1',
-            'slug' => 'demo-sales-clinic-1-' . rand(1000, 9999),
-            'plan' => 'profesional',
-            'trial_ends_at' => now()->addDays(15),
-            'onboarding_status' => 'completed',
-            'sold_by_user_id' => $rep->id,
-            'sold_at' => now()->subDays(45),
-            'first_payment_received_at' => now()->subDays(40),
-            'second_payment_received_at' => now()->subDays(15),
-        ])->save();
+        // Helper: crea clínica + marca pagos vía update() para que el observer dispare
+        $makeClinic = function (string $name, string $plan, int $daysSold, ?int $daysFirstPayment, ?int $daysSecondPayment) use ($rep) {
+            $clinic = new Clinic();
+            $clinic->forceFill([
+                'name' => $name,
+                'slug' => 'demo-sales-' . strtolower(preg_replace('/[^a-z0-9]/i', '-', $name)) . '-' . rand(1000, 9999),
+                'plan' => $plan,
+                'trial_ends_at' => now()->addDays(15),
+                'onboarding_status' => 'completed',
+                'sold_by_user_id' => $rep->id,
+                'sold_at' => now()->subDays($daysSold),
+            ])->save();
 
-        // Marcar comisiones como pagadas (el observer ya las creó al setear los timestamps)
+            // Los updates separados SÍ disparan el observer
+            if ($daysFirstPayment !== null) {
+                $clinic->update(['first_payment_received_at' => now()->subDays($daysFirstPayment)]);
+            }
+            if ($daysSecondPayment !== null) {
+                $clinic->update(['second_payment_received_at' => now()->subDays($daysSecondPayment)]);
+            }
+
+            return $clinic;
+        };
+
+        // Clínica 1: Ambos pagos recibidos + comisiones marcadas como pagadas (histórico positivo)
+        $clinic1 = $makeClinic('Clínica Dental Ejemplo 1', 'profesional', 45, 40, 15);
         Commission::where('clinic_id', $clinic1->id)->update([
             'status' => 'paid',
             'paid_at' => now()->subDays(10),
         ]);
 
-        // Clínica 2: Solo primer pago recibido (1 comisión pending, esperando segunda)
-        $clinic2 = new Clinic();
-        $clinic2->forceFill([
-            'name' => 'Consultorio Médico Ejemplo 2',
-            'slug' => 'demo-sales-clinic-2-' . rand(1000, 9999),
-            'plan' => 'profesional',
-            'trial_ends_at' => now()->addDays(15),
-            'onboarding_status' => 'completed',
-            'sold_by_user_id' => $rep->id,
-            'sold_at' => now()->subDays(12),
-            'first_payment_received_at' => now()->subDays(8),
-        ])->save();
-        // La comisión ya está en 'pending' por default del observer
+        // Clínica 2: Solo primer pago → 1 comisión pending
+        $makeClinic('Consultorio Médico Ejemplo 2', 'profesional', 12, 8, null);
 
-        // Clínica 3: Vendida pero sin pagos todavía (sin comisiones aún — pending first payment)
-        $clinic3 = new Clinic();
-        $clinic3->forceFill([
-            'name' => 'Ortodoncia Especializada Ejemplo 3',
-            'slug' => 'demo-sales-clinic-3-' . rand(1000, 9999),
-            'plan' => 'profesional',
-            'trial_ends_at' => now()->addDays(15),
-            'onboarding_status' => 'completed',
-            'sold_by_user_id' => $rep->id,
-            'sold_at' => now()->subDays(3),
-        ])->save();
+        // Clínica 3: Vendida pero sin pagos todavía → 0 comisiones (esperando pago)
+        $makeClinic('Ortodoncia Especializada Ejemplo 3', 'profesional', 3, null, null);
 
-        // Clínica 4: Plan Clínica con primer pago — comisión más grande ($898.50)
-        $clinic4 = new Clinic();
-        $clinic4->forceFill([
-            'name' => 'Centro Médico Grande Ejemplo 4',
-            'slug' => 'demo-sales-clinic-4-' . rand(1000, 9999),
-            'plan' => 'clinica',
-            'trial_ends_at' => now()->addDays(15),
-            'onboarding_status' => 'completed',
-            'sold_by_user_id' => $rep->id,
-            'sold_at' => now()->subDays(20),
-            'first_payment_received_at' => now()->subDays(15),
-            'second_payment_received_at' => now()->subDays(2),
-        ])->save();
-        // Ambas quedan pending (recién ganadas, el admin aún no las marca paid)
+        // Clínica 4: Plan Clínica con ambos pagos → 2 comisiones grandes ($898.50 c/u)
+        $makeClinic('Centro Médico Grande Ejemplo 4', 'clinica', 20, 15, 2);
     }
 }
