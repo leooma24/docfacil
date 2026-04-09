@@ -16,3 +16,6 @@ Schedule::command('docfacil:send-prospect-emails')->hourly();
 
 // Backups daily at 3am
 Schedule::command('backup:run')->dailyAt('03:00');
+
+// Reset demo clinic daily at 4am (lets visitors create/edit freely during the day)
+Schedule::command('app:demo-reset')->dailyAt('04:00');

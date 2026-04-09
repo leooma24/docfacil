@@ -25,10 +25,10 @@ class DoctorPanelProvider extends PanelProvider
         return $panel
             ->id('doctor')
             ->path('doctor')
-            ->login()
+            ->login(\App\Filament\Doctor\Pages\Login::class)
             ->registration(\App\Filament\Doctor\Pages\Register::class)
             ->brandName('DocFácil')
-            ->brandLogo(asset('images/logo_doc_facil_white.png'))
+            ->brandLogo(asset('images/logo_doc_facil.png'))
             ->brandLogoHeight('3rem')
             ->favicon(asset('favicon-32x32.png'))
             ->colors([
@@ -73,7 +73,6 @@ class DoctorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\VerifyClinicPlan::class,
-                \App\Http\Middleware\DemoMode::class,
             ]);
     }
 }

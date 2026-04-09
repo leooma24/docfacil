@@ -15,12 +15,11 @@ Route::post('/contacto', [ContactController::class, 'store'])
     ->middleware('throttle:5,1');
 
 Route::get('/demo', function () {
-    $user = \App\Models\User::where('email', 'demo@docfacil.com')->first();
-    if ($user) {
-        auth()->login($user);
-        return redirect('/doctor');
-    }
-    return redirect('/');
+    session()->flash('demo_credentials', [
+        'email' => 'demo@docfacil.com',
+        'password' => 'demo2026',
+    ]);
+    return redirect('/doctor/login');
 })->middleware('throttle:10,1')->name('demo');
 
 Route::get('/beta', function () {
