@@ -16,9 +16,14 @@ class Clinic extends Model
         'beta_starts_at', 'beta_ends_at', 'beta_notes',
         'show_as_case_study', 'case_study_logo', 'case_study_testimonial',
         'onboarding_status',
-        'sold_by_user_id', 'sold_at',
+        'sold_at',
         'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
     ];
+
+    // Nota: sold_by_user_id NO está en $fillable a propósito.
+    // Solo puede asignarse via forceFill() en Register.php cuando viene ?vnd=
+    // o mediante el admin con un código dedicado. Esto evita que un form admin
+    // cualquiera reasigne comisiones de un vendedor a otro.
 
     protected function casts(): array
     {

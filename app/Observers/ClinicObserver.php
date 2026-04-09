@@ -8,6 +8,22 @@ use App\Models\Prospect;
 
 class ClinicObserver
 {
+    /**
+     * Bloquea reasignación de sold_by_user_id post-creación.
+     * Una clínica vendida no puede cambiar de vendedor dueño —
+     * eso evita manipulación de comisiones de otros vendedores.
+     */
+    public function updating(Clinic $clinic): void
+    {
+        if ($clinic->isDirty('sold_by_user_id')
+            && $clinic->getOriginal('sold_by_user_id') !== null) {
+            throw new \LogicException(
+                'sold_by_user_id es inmutable una vez asignado. ' .
+                'Contacta al admin si necesitas transferir la venta.'
+            );
+        }
+    }
+
     public function updated(Clinic $clinic): void
     {
         // Tier 1: primer pago recibido
@@ -36,26 +52,32 @@ class ClinicObserver
 
     private function createCommission(Clinic $clinic, string $tier): void
     {
-        // Evitar duplicados
-        if (Commission::where('clinic_id', $clinic->id)->where('tier', $tier)->exists()) {
-            return;
-        }
-
         // Plan debe calificar
         if (!in_array($clinic->plan, Commission::COMMISSIONABLE_PLANS)) {
             return;
         }
 
-        Commission::create([
-            'user_id' => $clinic->sold_by_user_id,
-            'clinic_id' => $clinic->id,
-            'prospect_id' => Prospect::where('converted_clinic_id', $clinic->id)->value('id'),
-            'tier' => $tier,
-            'amount' => Commission::halfAmount($clinic->plan),
-            'plan_at_sale' => $clinic->plan,
-            'status' => 'pending',
-            'earned_at' => now(),
-        ]);
+        // Atomicidad: el unique index (clinic_id, tier) garantiza que aunque
+        // dos procesos lleguen aquí concurrentemente, solo uno insertará.
+        // El otro caerá en QueryException que atrapamos silenciosamente.
+        try {
+            Commission::create([
+                'user_id' => $clinic->sold_by_user_id,
+                'clinic_id' => $clinic->id,
+                'prospect_id' => Prospect::where('converted_clinic_id', $clinic->id)->value('id'),
+                'tier' => $tier,
+                'amount' => Commission::halfAmount($clinic->plan),
+                'plan_at_sale' => $clinic->plan,
+                'status' => 'pending',
+                'earned_at' => now(),
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // 23000 = integrity constraint violation (duplicate key)
+            // Ignorar silenciosamente: ya existe la comisión para este tier.
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+        }
     }
 
     private function clawback(Clinic $clinic): void

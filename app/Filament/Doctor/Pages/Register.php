@@ -74,15 +74,16 @@ class Register extends BaseRegister
                 ->first();
         }
 
-        // Create clinic
-        $clinic = Clinic::create([
+        // Create clinic (sold_by_user_id NO está en fillable — requiere forceFill)
+        $clinic = new Clinic();
+        $clinic->forceFill([
             'name' => $data['clinic_name'],
             'phone' => $data['clinic_phone'] ?? null,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
             'sold_by_user_id' => $salesRep?->id,
             'sold_at' => $salesRep ? now() : null,
-        ]);
+        ])->save();
 
         // Create user
         $user = $this->getUserModel()::forceCreate([

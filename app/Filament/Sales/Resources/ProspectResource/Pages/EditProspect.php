@@ -16,4 +16,18 @@ class EditProspect extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    /**
+     * Defensa en profundidad: incluso si el front manda assigned_to_sales_rep_id
+     * vía request manipulado, lo removemos antes de persistir. El getEloquentQuery
+     * del Resource ya bloquea acceso a registros ajenos, pero un update dirigido
+     * podría intentar reasignar. Esto lo previene.
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        unset($data['assigned_to_sales_rep_id']);
+        unset($data['converted_clinic_id']);
+        unset($data['converted_at']);
+        return $data;
+    }
 }
