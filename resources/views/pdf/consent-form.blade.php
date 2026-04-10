@@ -133,7 +133,11 @@
             <div class="sig-row">
                 <div class="sig-col">
                     @if($consent->signature)
-                    <img src="{{ storage_path('app/public/' . $consent->signature) }}" style="max-height: 50px; margin-bottom: 5px;">
+                        @if(str_starts_with($consent->signature, 'data:image'))
+                        <img src="{{ $consent->signature }}" style="max-height: 80px; margin-bottom: 5px;">
+                        @else
+                        <img src="{{ storage_path('app/public/' . $consent->signature) }}" style="max-height: 80px; margin-bottom: 5px;">
+                        @endif
                     @endif
                     <div class="sig-line">
                         <div class="sig-name">{{ $consent->patient->first_name }} {{ $consent->patient->last_name }}</div>
