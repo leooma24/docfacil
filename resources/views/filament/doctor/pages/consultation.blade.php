@@ -95,30 +95,32 @@
     $stepLabels = [1 => 'Signos vitales', 2 => 'Diagnóstico', 3 => 'Receta', 4 => 'Cobro', 5 => 'Sig. cita'];
     $stepShort  = [1 => 'Vitales', 2 => 'Dx', 3 => 'Rx', 4 => 'Cobro', 5 => 'Cita'];
     @endphp
-    <div class="flex items-center justify-center gap-1 md:gap-2 mb-4 md:mb-8 flex-wrap">
-        @foreach($stepLabels as $num => $label)
-        @php
-            $isActive = $currentStep === $num;
-            $isDone = $currentStep > $num;
-        @endphp
-        <button wire:click="goToStep({{ $num }})"
-            class="flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-semibold border-none cursor-pointer transition-all
-            {{ $isActive ? 'bg-teal-600 text-white shadow-md' : ($isDone ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-400') }}">
-            <span class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold
-                {{ $isActive ? 'bg-white text-teal-600' : ($isDone ? 'bg-teal-600 text-white' : 'bg-gray-300 dark:bg-gray-600 text-white') }}">
-                @if($isDone)
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                @else
-                    {{ $num }}
-                @endif
-            </span>
-            <span class="hidden sm:inline">{{ $label }}</span>
-            <span class="sm:hidden">{{ $stepShort[$num] }}</span>
-        </button>
-        @if($num < 5)
-        <div class="w-3 md:w-8 h-0.5 {{ $isDone ? 'bg-teal-400' : 'bg-gray-200 dark:bg-gray-600' }} hidden sm:block"></div>
-        @endif
-        @endforeach
+    <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 mb-4 md:mb-8 scrollbar-hide">
+        <div class="flex items-center justify-start md:justify-center gap-2 md:gap-2 min-w-max md:min-w-0">
+            @foreach($stepLabels as $num => $label)
+            @php
+                $isActive = $currentStep === $num;
+                $isDone = $currentStep > $num;
+            @endphp
+            <button wire:click="goToStep({{ $num }})"
+                class="flex items-center gap-1.5 md:gap-2 px-3 md:px-3 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold border-none cursor-pointer transition-all whitespace-nowrap shrink-0
+                {{ $isActive ? 'bg-teal-600 text-white shadow-md' : ($isDone ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-400') }}">
+                <span class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold shrink-0
+                    {{ $isActive ? 'bg-white text-teal-600' : ($isDone ? 'bg-teal-600 text-white' : 'bg-gray-300 dark:bg-gray-600 text-white') }}">
+                    @if($isDone)
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                    @else
+                        {{ $num }}
+                    @endif
+                </span>
+                <span class="hidden sm:inline">{{ $label }}</span>
+                <span class="sm:hidden">{{ $stepShort[$num] }}</span>
+            </button>
+            @if($num < 5)
+            <div class="w-4 md:w-8 h-0.5 shrink-0 {{ $isDone ? 'bg-teal-400' : 'bg-gray-200 dark:bg-gray-600' }}"></div>
+            @endif
+            @endforeach
+        </div>
     </div>
 
     {{-- Step content --}}
