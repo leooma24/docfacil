@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PaymentResource extends Resource
 {
+    protected static ?string $slug = 'cobros';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

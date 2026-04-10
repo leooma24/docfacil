@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 
 class AppointmentResource extends Resource
 {
+    protected static ?string $slug = 'citas';
+
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
@@ -174,7 +176,7 @@ class AppointmentResource extends Resource
                     ->label('Consulta')
                     ->icon('heroicon-o-play-circle')
                     ->color('primary')
-                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consultation', ['appointment' => $record->id]))
+                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress'])),
                 Tables\Actions\Action::make('charge')
                     ->label('Cobrar')

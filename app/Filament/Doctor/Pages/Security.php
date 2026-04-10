@@ -15,7 +15,7 @@ class Security extends Page
 
     protected static ?string $title = 'Seguridad de la cuenta';
 
-    protected static ?string $slug = 'security';
+    protected static ?string $slug = 'seguridad';
 
     protected static string $view = 'filament.doctor.pages.security';
 

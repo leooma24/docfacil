@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OdontogramResource extends Resource
 {
+    protected static ?string $slug = 'odontogramas';
+
     public static function shouldRegisterNavigation(): bool
     {
         return SpecialtyService::currentDoctorCanSee('odontogram');

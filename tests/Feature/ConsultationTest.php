@@ -85,7 +85,7 @@ class ConsultationTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $response = $this->get('/doctor/consultation');
+        $response = $this->get('/doctor/consulta');
         $response->assertStatus(200);
     }
 
@@ -113,7 +113,7 @@ class ConsultationTest extends TestCase
 
         $this->actingAs($this->user);
 
-        $response = $this->get('/doctor/consultation?appointment=' . $appointment->id);
+        $response = $this->get('/doctor/consulta?appointment=' . $appointment->id);
         $response->assertStatus(200);
     }
 
@@ -295,7 +295,7 @@ class ConsultationTest extends TestCase
         $appointment = $this->createAppointment();
 
         $this->actingAs($this->user);
-        $response = $this->get('/doctor/consultation?appointment=' . $appointment->id);
+        $response = $this->get('/doctor/consulta?appointment=' . $appointment->id);
         $response->assertStatus(200);
 
         // Verify the appointment was loaded and marked in progress

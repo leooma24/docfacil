@@ -59,7 +59,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/consultation')
+                ->visit('/doctor/consulta')
                 ->waitForText('Consulta', 10)
                 ->pause(2000); // Let Livewire/Alpine settle
 
@@ -96,7 +96,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user, $appointment) {
             $browser->loginAs($user)
-                ->visit('/doctor/consultation?appointment=' . $appointment->id)
+                ->visit('/doctor/consulta?appointment=' . $appointment->id)
                 ->waitForText('Consulta', 10)
                 ->pause(2000);
 
@@ -110,7 +110,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/patients')
+                ->visit('/doctor/pacientes')
                 ->waitForText('Pacientes', 10)
                 ->pause(1000);
 
@@ -124,7 +124,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/appointments')
+                ->visit('/doctor/citas')
                 ->waitForText('Citas', 10)
                 ->pause(1000);
 
@@ -138,7 +138,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/services')
+                ->visit('/doctor/servicios')
                 ->waitForText('Servicios', 10)
                 ->pause(1000);
 
@@ -152,7 +152,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/medical-records')
+                ->visit('/doctor/expediente-clinico')
                 ->waitForText('Expediente', 10)
                 ->pause(1000);
 
@@ -166,7 +166,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/prescriptions')
+                ->visit('/doctor/recetas')
                 ->waitForText('Recetas', 10)
                 ->pause(1000);
 
@@ -180,7 +180,7 @@ class DoctorPanelTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
-                ->visit('/doctor/payments')
+                ->visit('/doctor/cobros')
                 ->waitForText('Cobros', 10)
                 ->pause(1000);
 

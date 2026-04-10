@@ -12,7 +12,7 @@ class Upgrade extends Page
 
     protected static ?string $title = 'Actualizar Plan';
 
-    protected static ?string $slug = 'upgrade';
+    protected static ?string $slug = 'actualizar-plan';
 
     protected static bool $shouldRegisterNavigation = true;
 

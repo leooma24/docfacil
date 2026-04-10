@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('filament.doctor.pages.consultation', ['appointment' => $next->id]) }}"
+                <a href="{{ route('filament.doctor.pages.consulta', ['appointment' => $next->id]) }}"
                     class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm no-underline transition" style="background:white;color:#0f766e;">
                     <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
                     Iniciar consulta
@@ -32,7 +32,7 @@
                     WhatsApp
                 </a>
                 @endif
-                <a href="{{ route('filament.doctor.pages.patient-profile', ['patient' => $next->patient->id]) }}"
+                <a href="{{ route('filament.doctor.pages.perfil-paciente', ['patient' => $next->patient->id]) }}"
                     class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-xl font-semibold text-sm no-underline transition" style="background:rgba(255,255,255,0.2);">
                     Ver perfil
                 </a>

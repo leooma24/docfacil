@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 
 class ConsentFormResource extends Resource
 {
+    protected static ?string $slug = 'consentimientos';
+
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

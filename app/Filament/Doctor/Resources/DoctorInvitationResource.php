@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DoctorInvitationResource extends Resource
 {
+    protected static ?string $slug = 'invitar-doctores';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

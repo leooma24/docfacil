@@ -35,7 +35,7 @@ class SecurityTest extends TestCase
         ]);
 
         // Demo user trying to create a patient should be blocked
-        $response = $this->actingAs($demo)->post('/doctor/patients', [
+        $response = $this->actingAs($demo)->post('/doctor/pacientes', [
             'first_name' => 'Test',
             'last_name' => 'Patient',
         ]);

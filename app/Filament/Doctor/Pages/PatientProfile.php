@@ -16,7 +16,7 @@ class PatientProfile extends Page
 
     protected static ?string $title = 'Perfil del Paciente';
 
-    protected static ?string $slug = 'patient-profile';
+    protected static ?string $slug = 'perfil-paciente';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -32,7 +32,7 @@ class PatientProfile extends Page
             ->find($patientId);
 
         if (!$this->patient) {
-            $this->redirect(route('filament.doctor.resources.patients.index'));
+            $this->redirect(route('filament.doctor.resources.pacientes.index'));
         }
     }
 

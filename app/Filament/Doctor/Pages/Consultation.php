@@ -25,7 +25,7 @@ class Consultation extends Page implements HasForms
 
     protected static ?string $title = 'Flujo de Consulta';
 
-    protected static ?string $slug = 'consultation';
+    protected static ?string $slug = 'consulta';
 
     protected static bool $shouldRegisterNavigation = true;
 

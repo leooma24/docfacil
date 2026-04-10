@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PatientResource extends Resource
 {
+    protected static ?string $slug = 'pacientes';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
@@ -52,7 +54,7 @@ class PatientResource extends Resource
 
     public static function getGlobalSearchResultUrl(\Illuminate\Database\Eloquent\Model $record): string
     {
-        return route('filament.doctor.pages.patient-profile', ['patient' => $record->id]);
+        return route('filament.doctor.pages.perfil-paciente', ['patient' => $record->id]);
     }
 
     public static function form(Form $form): Form
@@ -156,7 +158,7 @@ class PatientResource extends Resource
                     ->label('Ver perfil')
                     ->icon('heroicon-o-user-circle')
                     ->color('primary')
-                    ->url(fn ($record) => route('filament.doctor.pages.patient-profile', ['patient' => $record->id])),
+                    ->url(fn ($record) => route('filament.doctor.pages.perfil-paciente', ['patient' => $record->id])),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

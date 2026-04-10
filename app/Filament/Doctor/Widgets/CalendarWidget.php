@@ -193,7 +193,7 @@ class CalendarWidget extends FullCalendarWidget
 
     public function onEventClick(array $event): void
     {
-        $this->redirect(route('filament.doctor.pages.consultation', ['appointment' => $event['id']]));
+        $this->redirect(route('filament.doctor.pages.consulta', ['appointment' => $event['id']]));
     }
 
     public function onEventDrop(array $event, array $oldEvent, array $relatedEvents, array $delta, ?array $oldResource, ?array $newResource): bool

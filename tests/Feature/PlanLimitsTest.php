@@ -39,8 +39,8 @@ class PlanLimitsTest extends TestCase
             'trial_ends_at' => now()->subDay(),
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor/patients/create');
-        $response->assertRedirect(route('filament.doctor.pages.upgrade'));
+        $response = $this->actingAs($user)->get('/doctor/pacientes/create');
+        $response->assertRedirect(route('filament.doctor.pages.actualizar-plan'));
     }
 
     public function test_active_trial_allows_access(): void
@@ -49,7 +49,7 @@ class PlanLimitsTest extends TestCase
             'trial_ends_at' => now()->addDays(10),
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor/patients');
+        $response = $this->actingAs($user)->get('/doctor/pacientes');
         $response->assertStatus(200);
     }
 
@@ -62,15 +62,15 @@ class PlanLimitsTest extends TestCase
             'trial_ends_at' => now()->subDay(),
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor/patients/create');
-        $response->assertRedirect(route('filament.doctor.pages.upgrade'));
+        $response = $this->actingAs($user)->get('/doctor/pacientes/create');
+        $response->assertRedirect(route('filament.doctor.pages.actualizar-plan'));
     }
 
     public function test_upgrade_page_loads(): void
     {
         $user = $this->createDoctor();
 
-        $response = $this->actingAs($user)->get('/doctor/upgrade');
+        $response = $this->actingAs($user)->get('/doctor/actualizar-plan');
         $response->assertStatus(200);
         $response->assertSee('Actualizar Plan');
     }
@@ -82,6 +82,6 @@ class PlanLimitsTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get('/doctor');
-        $response->assertRedirect(route('filament.doctor.pages.onboarding'));
+        $response->assertRedirect(route('filament.doctor.pages.configuracion'));
     }
 }

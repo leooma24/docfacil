@@ -66,14 +66,14 @@ class TodayAppointments extends BaseWidget
                     ->label('Iniciar consulta')
                     ->icon('heroicon-o-play-circle')
                     ->color('primary')
-                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consultation', ['appointment' => $record->id]))
+                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed'])),
                 Tables\Actions\Action::make('in_progress')
                     ->label('En consulta')
                     ->icon('heroicon-o-clock')
                     ->color('info')
                     ->visible(fn (Appointment $record) => $record->status === 'in_progress')
-                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consultation', ['appointment' => $record->id])),
+                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id])),
                 Tables\Actions\Action::make('whatsapp')
                     ->label('WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')

@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PrescriptionResource extends Resource
 {
+    protected static ?string $slug = 'recetas';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

@@ -14,7 +14,7 @@ class Onboarding extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $slug = 'onboarding';
+    protected static ?string $slug = 'configuracion';
 
     protected static ?string $title = 'Configurar mi consultorio';
 

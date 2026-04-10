@@ -55,7 +55,7 @@
         </div>
 
         <p style="text-align:center;margin-top:24px;">
-            <a href="https://docfacil.tu-app.co/doctor/consultation" style="display:inline-block;background:linear-gradient(135deg,#0d9488,#0891b2);color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Registrar primer paciente &rarr;</a>
+            <a href="https://docfacil.tu-app.co/doctor/consulta" style="display:inline-block;background:linear-gradient(135deg,#0d9488,#0891b2);color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Registrar primer paciente &rarr;</a>
         </p>
 
         <div class="divider"></div>

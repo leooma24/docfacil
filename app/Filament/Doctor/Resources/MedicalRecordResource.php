@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MedicalRecordResource extends Resource
 {
+    protected static ?string $slug = 'expediente-clinico';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

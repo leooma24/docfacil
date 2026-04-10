@@ -42,7 +42,7 @@ class MultiTenancyTest extends TestCase
         Patient::create(['clinic_id' => $clinicB->id, 'first_name' => 'Patient', 'last_name' => 'B']);
 
         // Doctor A page loads
-        $response = $this->actingAs($userA)->get('/doctor/patients');
+        $response = $this->actingAs($userA)->get('/doctor/pacientes');
         $response->assertStatus(200);
 
         // Verify via query scoping that doctor A only sees their patients
@@ -73,7 +73,7 @@ class MultiTenancyTest extends TestCase
 
         $patientB = Patient::create(['clinic_id' => $clinicB->id, 'first_name' => 'Secret', 'last_name' => 'Patient']);
 
-        $response = $this->actingAs($userA)->get("/doctor/patients/{$patientB->id}/edit");
+        $response = $this->actingAs($userA)->get("/doctor/pacientes/{$patientB->id}/edit");
         $response->assertStatus(404);
     }
 }

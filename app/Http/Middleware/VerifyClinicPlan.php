@@ -23,13 +23,13 @@ class VerifyClinicPlan
         }
 
         // Allow access to special pages
-        if ($request->routeIs('filament.doctor.pages.upgrade', 'filament.doctor.pages.onboarding')) {
+        if ($request->routeIs('filament.doctor.pages.actualizar-plan', 'filament.doctor.pages.configuracion')) {
             return $next($request);
         }
 
         // Redirect new doctors to onboarding
-        if ($clinic->onboarding_status === 'pending' && !$request->routeIs('filament.doctor.pages.onboarding')) {
-            return redirect()->route('filament.doctor.pages.onboarding');
+        if ($clinic->onboarding_status === 'pending' && !$request->routeIs('filament.doctor.pages.configuracion')) {
+            return redirect()->route('filament.doctor.pages.configuracion');
         }
 
         // Check if plan/trial/beta has expired
@@ -47,7 +47,7 @@ class VerifyClinicPlan
 
         // Redirect to upgrade page on write operations if expired
         if ($isExpired && $request->routeIs('*.create', '*.edit', '*.store', '*.update')) {
-            return redirect()->route('filament.doctor.pages.upgrade');
+            return redirect()->route('filament.doctor.pages.actualizar-plan');
         }
 
         // Plan limits - BLOCK
@@ -57,7 +57,7 @@ class VerifyClinicPlan
             if ($limits['patients'] && $request->routeIs('*.patients.create')) {
                 $patientCount = $clinic->patients()->count();
                 if ($patientCount >= $limits['patients']) {
-                    return redirect()->route('filament.doctor.pages.upgrade');
+                    return redirect()->route('filament.doctor.pages.actualizar-plan');
                 }
             }
 
@@ -67,14 +67,14 @@ class VerifyClinicPlan
                     ->whereYear('starts_at', now()->year)
                     ->count();
                 if ($monthlyAppointments >= $limits['appointments']) {
-                    return redirect()->route('filament.doctor.pages.upgrade');
+                    return redirect()->route('filament.doctor.pages.actualizar-plan');
                 }
             }
 
             if ($limits['doctors'] && $request->routeIs('*.doctor-invitations.create')) {
                 $doctorCount = $clinic->doctors()->count();
                 if ($doctorCount >= $limits['doctors']) {
-                    return redirect()->route('filament.doctor.pages.upgrade');
+                    return redirect()->route('filament.doctor.pages.actualizar-plan');
                 }
             }
         }
