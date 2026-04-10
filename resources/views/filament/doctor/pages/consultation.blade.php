@@ -3,6 +3,7 @@
         /* Consultation responsive overrides */
         .vitals-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
         .meds-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+        .meds-grid .med-wide { grid-column: span 1; }
         .pay-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
         .next-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
         .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
@@ -22,6 +23,7 @@
         @media (min-width: 640px) {
             .vitals-grid { grid-template-columns: repeat(2, 1fr); }
             .meds-grid { grid-template-columns: repeat(2, 1fr); }
+            .meds-grid .med-wide { grid-column: span 2; }
             .pay-grid { grid-template-columns: repeat(2, 1fr); }
             .next-grid { grid-template-columns: repeat(2, 1fr); }
             .steps-bar { justify-content: center; }
@@ -38,6 +40,7 @@
         @media (min-width: 1024px) {
             .vitals-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
             .meds-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+            .meds-grid .med-wide { grid-column: span 1; }
             .pay-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
             .summary-grid { grid-template-columns: repeat(4, 1fr); }
             .steps-bar { margin-bottom: 2rem; gap: 0.5rem; }
@@ -238,11 +241,11 @@
                     <button wire:click="$set('medications', {{ json_encode(collect($medications)->forget($i)->values()->toArray()) }})" class="text-red-500 text-xs hover:text-red-700">Quitar</button>
                 </div>
                 <div class="meds-grid">
-                    <input type="text" wire:model="medications.{{ $i }}.medication" placeholder="Medicamento" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm" style="grid-column: span 2;">
+                    <input type="text" wire:model="medications.{{ $i }}.medication" placeholder="Medicamento" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                     <input type="text" wire:model="medications.{{ $i }}.dosage" placeholder="Dosis (500mg)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.frequency" placeholder="Cada 8 horas" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.duration" placeholder="7 días" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
-                    <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm" style="grid-column: span 2;">
+                    <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
             </div>
             @endforeach
