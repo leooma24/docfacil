@@ -341,7 +341,7 @@
             </button>
             @endif
             @if($currentStep === 5)
-            <button wire:click="saveAndComplete" class="w-full sm:w-auto px-6 py-3 md:py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl font-bold text-sm cursor-pointer shadow-md hover:shadow-lg transition">
+            <button wire:click="saveAndComplete" class="w-full sm:w-auto px-6 py-3 md:py-2.5 text-white rounded-xl font-bold text-sm cursor-pointer shadow-md hover:shadow-lg transition" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
                 Completar consulta
             </button>
             @endif
@@ -367,7 +367,7 @@
             {{ $this->walkinForm }}
 
             <div class="mt-4 md:mt-6">
-                <button wire:click="startWalkIn" class="w-full py-3.5 md:py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl font-bold text-sm md:text-base cursor-pointer shadow-md hover:shadow-lg transition">
+                <button wire:click="startWalkIn" class="w-full py-3.5 md:py-3 text-white rounded-xl font-bold text-sm md:text-base cursor-pointer shadow-md hover:shadow-lg transition" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
                     Iniciar consulta &rarr;
                 </button>
             </div>
