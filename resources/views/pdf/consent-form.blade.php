@@ -5,98 +5,117 @@
     <title>Consentimiento Informado #{{ $consent->id }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 12px; color: #333; }
-        .header { border-bottom: 3px solid #14b8a6; padding-bottom: 15px; margin-bottom: 20px; }
-        .header-title { font-size: 22px; font-weight: bold; color: #14b8a6; }
-        .header-subtitle { font-size: 10px; color: #666; margin-top: 2px; }
-        .doctor-info .name { font-size: 14px; font-weight: bold; color: #111; margin-top: 8px; }
-        .doctor-info .detail { font-size: 10px; color: #555; }
-        .clinic-info { float: right; text-align: right; font-size: 10px; color: #555; }
-        .title { font-size: 18px; font-weight: bold; text-align: center; margin: 20px 0; color: #111; text-transform: uppercase; }
-        .patient-box { background: #f9fafb; padding: 12px; border-radius: 6px; margin-bottom: 20px; }
-        .patient-box .label { font-size: 10px; color: #666; text-transform: uppercase; }
-        .patient-box .value { font-size: 13px; font-weight: bold; color: #111; }
-        .procedure-box { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 10px; margin-bottom: 20px; }
-        .procedure-label { font-size: 10px; color: #0d9488; text-transform: uppercase; font-weight: bold; }
-        .content { margin: 20px 0; line-height: 1.8; font-size: 11px; }
-        .content ul { margin-left: 20px; }
-        .content li { margin-bottom: 5px; }
-        .risks-box { margin: 15px 0; padding: 10px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; }
-        .risks-label { font-size: 10px; color: #dc2626; text-transform: uppercase; font-weight: bold; }
-        .alternatives-box { margin: 15px 0; padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; }
-        .alternatives-label { font-size: 10px; color: #2563eb; text-transform: uppercase; font-weight: bold; }
-        .signatures { margin-top: 60px; }
-        .sig-row { overflow: hidden; }
-        .sig-col { float: left; width: 45%; text-align: center; }
-        .sig-col + .sig-col { float: right; }
-        .sig-line { border-top: 1px solid #333; margin-top: 60px; padding-top: 5px; }
-        .sig-name { font-weight: bold; font-size: 12px; }
-        .sig-detail { font-size: 10px; color: #666; }
-        .footer { position: fixed; bottom: 20px; left: 0; right: 0; text-align: center; font-size: 9px; color: #999; border-top: 1px solid #e5e7eb; padding-top: 10px; }
-        .signed-badge { display: inline-block; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-top: 10px; }
-        table.info-table { width: 100%; }
-        table.info-table td { padding: 3px 10px 3px 0; }
+        body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 11px; color: #333; line-height: 1.4; }
+        .page { padding: 25px 35px; }
+
+        /* Header */
+        .header-table { width: 100%; margin-bottom: 12px; }
+        .header-table td { vertical-align: top; }
+        .brand { font-size: 18px; font-weight: bold; color: #14b8a6; }
+        .brand-sub { font-size: 8px; color: #999; text-transform: uppercase; letter-spacing: 2px; }
+        .doc-name { font-size: 14px; font-weight: bold; color: #111; margin-top: 6px; }
+        .doc-detail { font-size: 9px; color: #666; }
+        .clinic-name { font-size: 10px; font-weight: bold; color: #333; }
+        .clinic-detail { font-size: 9px; color: #777; }
+        .header-line { border: none; border-top: 3px solid #14b8a6; margin-bottom: 15px; }
+
+        /* Title */
+        .title { font-size: 16px; font-weight: bold; text-align: center; margin: 15px 0; color: #111; text-transform: uppercase; }
+
+        /* Patient */
+        .patient-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .patient-table td { padding: 7px 10px; vertical-align: top; border: 1px solid #e5e7eb; }
+        .patient-table .label { font-size: 8px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 2px; }
+        .patient-table .value { font-size: 12px; font-weight: bold; color: #111; }
+
+        /* Procedure */
+        .procedure-box { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 8px 12px; margin-bottom: 15px; }
+        .section-label { font-size: 9px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; display: block; margin-bottom: 3px; }
+        .procedure-label { color: #0d9488; }
+        .procedure-value { font-size: 12px; font-weight: bold; color: #111; }
+
+        /* Content */
+        .content { margin: 15px 0; line-height: 1.7; font-size: 11px; }
+        .content ul, .content ol { margin-left: 18px; }
+        .content li { margin-bottom: 4px; }
+
+        /* Risks */
+        .risks-box { margin: 12px 0; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; }
+        .risks-label { color: #dc2626; }
+
+        /* Alternatives */
+        .alt-box { margin: 12px 0; padding: 8px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; }
+        .alt-label { color: #2563eb; }
+
+        .section-text { font-size: 11px; color: #333; margin-top: 3px; }
+
+        /* Signed badge */
+        .signed-badge { display: inline-block; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+
+        /* Signatures */
+        .sig-table { width: 100%; margin-top: 40px; }
+        .sig-table td { width: 45%; text-align: center; vertical-align: bottom; padding: 0 15px; }
+        .sig-table td.spacer { width: 10%; }
+        .sig-line { border-top: 1px solid #333; padding-top: 5px; }
+        .sig-name { font-weight: bold; font-size: 11px; }
+        .sig-detail { font-size: 9px; color: #666; }
+        .sig-img { max-height: 70px; margin-bottom: 5px; }
+
+        /* Footer */
+        .footer { position: fixed; bottom: 15px; left: 35px; right: 35px; text-align: center; font-size: 7px; color: #ccc; border-top: 1px solid #eee; padding-top: 5px; }
     </style>
 </head>
 <body>
-    <div style="padding: 30px;">
+    <div class="page">
+
         {{-- Header --}}
-        <div class="header">
-            <div style="overflow: hidden;">
-                <div style="float: left;">
-                    <div class="header-title">DocFácil</div>
-                    <div class="header-subtitle">CONSENTIMIENTO INFORMADO</div>
-                    <div class="doctor-info">
-                        <div class="name">{{ $consent->doctor->user->name ?? '' }}</div>
-                        <div class="detail">{{ $consent->doctor->specialty ?? '' }}</div>
-                        <div class="detail">Céd. Prof. {{ $consent->doctor->license_number ?? '' }}</div>
-                    </div>
-                </div>
-                @if($consent->doctor->clinic)
-                <div class="clinic-info">
-                    <strong>{{ $consent->doctor->clinic->name }}</strong><br>
-                    {{ $consent->doctor->clinic->address ?? '' }}<br>
-                    {{ $consent->doctor->clinic->city ?? '' }}, {{ $consent->doctor->clinic->state ?? '' }}<br>
-                    Tel: {{ $consent->doctor->clinic->phone ?? '' }}
-                </div>
-                @endif
-            </div>
-        </div>
+        <table class="header-table">
+            <tr>
+                <td style="width:55%;">
+                    <div class="brand">DocFácil</div>
+                    <div class="brand-sub">Consentimiento Informado</div>
+                    <div class="doc-name">{{ $consent->doctor->user->name ?? '' }}</div>
+                    <div class="doc-detail">{{ $consent->doctor->specialty ?? '' }}</div>
+                    <div class="doc-detail">Céd. Prof. {{ $consent->doctor->license_number ?? '' }}</div>
+                </td>
+                <td style="width:45%; text-align:right;">
+                    @if($consent->doctor->clinic)
+                    <div class="clinic-name">{{ $consent->doctor->clinic->name }}</div>
+                    <div class="clinic-detail">{{ $consent->doctor->clinic->address ?? '' }}</div>
+                    <div class="clinic-detail">{{ $consent->doctor->clinic->city ?? '' }}{{ $consent->doctor->clinic->state ? ', ' . $consent->doctor->clinic->state : '' }}</div>
+                    <div class="clinic-detail">Tel: {{ $consent->doctor->clinic->phone ?? '' }}</div>
+                    @endif
+                </td>
+            </tr>
+        </table>
+        <hr class="header-line">
 
         {{-- Title --}}
         <div class="title">{{ $consent->title }}</div>
 
-        {{-- Patient Info --}}
-        <div class="patient-box">
-            <table class="info-table">
-                <tr>
-                    <td>
-                        <span class="label">Paciente</span><br>
-                        <span class="value">{{ $consent->patient->first_name }} {{ $consent->patient->last_name }}</span>
-                    </td>
-                    <td>
-                        <span class="label">Fecha</span><br>
-                        <span class="value">{{ $consent->created_at->format('d/m/Y') }}</span>
-                    </td>
-                    <td>
-                        <span class="label">Edad</span><br>
-                        <span class="value">
-                            @if($consent->patient->birth_date)
-                                {{ $consent->patient->birth_date->age }} años
-                            @else
-                                -
-                            @endif
-                        </span>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        {{-- Patient --}}
+        <table class="patient-table">
+            <tr>
+                <td style="width:50%;">
+                    <span class="label">Paciente</span>
+                    <span class="value">{{ $consent->patient->first_name }} {{ $consent->patient->last_name }}</span>
+                </td>
+                <td style="width:25%;">
+                    <span class="label">Fecha</span>
+                    <span class="value">{{ $consent->created_at->format('d/m/Y') }}</span>
+                </td>
+                <td style="width:25%;">
+                    <span class="label">Edad</span>
+                    <span class="value">@if($consent->patient->birth_date){{ $consent->patient->birth_date->age }} años @else — @endif</span>
+                </td>
+            </tr>
+        </table>
 
         {{-- Procedure --}}
         @if($consent->procedure_name)
         <div class="procedure-box">
-            <div class="procedure-label">Procedimiento</div>
-            <div style="margin-top: 4px; font-size: 13px; font-weight: bold;">{{ $consent->procedure_name }}</div>
+            <span class="section-label procedure-label">Procedimiento</span>
+            <span class="procedure-value">{{ $consent->procedure_name }}</span>
         </div>
         @endif
 
@@ -108,56 +127,57 @@
         {{-- Risks --}}
         @if($consent->risks)
         <div class="risks-box">
-            <div class="risks-label">Riesgos del procedimiento</div>
-            <div style="margin-top: 4px;">{{ $consent->risks }}</div>
+            <span class="section-label risks-label">Riesgos del procedimiento</span>
+            <div class="section-text">{{ $consent->risks }}</div>
         </div>
         @endif
 
         {{-- Alternatives --}}
         @if($consent->alternatives)
-        <div class="alternatives-box">
-            <div class="alternatives-label">Alternativas al tratamiento</div>
-            <div style="margin-top: 4px;">{{ $consent->alternatives }}</div>
+        <div class="alt-box">
+            <span class="section-label alt-label">Alternativas al tratamiento</span>
+            <div class="section-text">{{ $consent->alternatives }}</div>
         </div>
         @endif
 
         {{-- Signed badge --}}
         @if($consent->signed_at)
-        <div style="text-align: center; margin: 20px 0;">
+        <div style="text-align: center; margin: 18px 0;">
             <span class="signed-badge">FIRMADO DIGITALMENTE — {{ $consent->signed_at->format('d/m/Y H:i') }}</span>
         </div>
         @endif
 
         {{-- Signatures --}}
-        <div class="signatures">
-            <div class="sig-row">
-                <div class="sig-col">
+        <table class="sig-table">
+            <tr>
+                <td>
                     @if($consent->signature)
                         @if(str_starts_with($consent->signature, 'data:image'))
-                        <img src="{{ $consent->signature }}" style="max-height: 80px; margin-bottom: 5px;">
+                        <img src="{{ $consent->signature }}" class="sig-img">
                         @else
-                        <img src="{{ storage_path('app/public/' . $consent->signature) }}" style="max-height: 80px; margin-bottom: 5px;">
+                        <img src="{{ storage_path('app/public/' . $consent->signature) }}" class="sig-img">
                         @endif
                     @endif
                     <div class="sig-line">
                         <div class="sig-name">{{ $consent->patient->first_name }} {{ $consent->patient->last_name }}</div>
                         <div class="sig-detail">Paciente</div>
                     </div>
-                </div>
-                <div class="sig-col">
-                    <div class="sig-line">
+                </td>
+                <td class="spacer"></td>
+                <td>
+                    <div class="sig-line" style="margin-top: 75px;">
                         <div class="sig-name">{{ $consent->doctor->user->name ?? '' }}</div>
                         <div class="sig-detail">{{ $consent->doctor->specialty ?? 'Médico tratante' }}</div>
                         <div class="sig-detail">Céd. Prof. {{ $consent->doctor->license_number ?? '' }}</div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
 
-        {{-- Footer --}}
-        <div class="footer">
-            Documento generado por DocFácil | docfacil.tu-app.co | {{ now()->format('d/m/Y H:i') }} | Folio: CI-{{ str_pad($consent->id, 6, '0', STR_PAD_LEFT) }}
-        </div>
+    </div>
+
+    <div class="footer">
+        Documento generado por DocFácil | docfacil.tu-app.co | {{ now()->format('d/m/Y H:i') }} | Folio: CI-{{ str_pad($consent->id, 6, '0', STR_PAD_LEFT) }}
     </div>
 </body>
 </html>
