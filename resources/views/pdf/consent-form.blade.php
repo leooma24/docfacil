@@ -20,7 +20,7 @@
         .header-line { border: none; border-top: 3px solid #14b8a6; margin-bottom: 15px; }
 
         /* Title */
-        .title { font-size: 16px; font-weight: bold; text-align: center; margin: 15px 0; color: #111; text-transform: uppercase; }
+        .title { font-size: 13px; font-weight: bold; text-align: center; margin: 10px 0; color: #111; text-transform: uppercase; }
 
         /* Patient */
         .patient-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
@@ -29,31 +29,31 @@
         .patient-table .value { font-size: 12px; font-weight: bold; color: #111; }
 
         /* Procedure */
-        .procedure-box { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 8px 12px; margin-bottom: 15px; }
+        .procedure-box { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 6px 10px; margin-bottom: 10px; }
         .section-label { font-size: 9px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; display: block; margin-bottom: 3px; }
         .procedure-label { color: #0d9488; }
-        .procedure-value { font-size: 12px; font-weight: bold; color: #111; }
+        .procedure-value { font-size: 11px; font-weight: bold; color: #111; }
 
         /* Content */
-        .content { margin: 15px 0; line-height: 1.7; font-size: 11px; }
+        .content { margin: 10px 0; line-height: 1.5; font-size: 10px; }
         .content ul, .content ol { margin-left: 18px; }
         .content li { margin-bottom: 4px; }
 
         /* Risks */
-        .risks-box { margin: 12px 0; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; }
+        .risks-box { margin: 8px 0; padding: 6px 10px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; }
         .risks-label { color: #dc2626; }
 
         /* Alternatives */
-        .alt-box { margin: 12px 0; padding: 8px 12px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; }
+        .alt-box { margin: 8px 0; padding: 6px 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; }
         .alt-label { color: #2563eb; }
 
-        .section-text { font-size: 11px; color: #333; margin-top: 3px; }
+        .section-text { font-size: 10px; color: #333; margin-top: 2px; }
 
         /* Signed badge */
         .signed-badge { display: inline-block; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 4px; font-size: 10px; font-weight: bold; }
 
         /* Signatures */
-        .sig-table { width: 100%; margin-top: 40px; }
+        .sig-table { width: 100%; margin-top: 25px; }
         .sig-table td { width: 45%; text-align: center; vertical-align: bottom; padding: 0 15px; }
         .sig-table td.spacer { width: 10%; }
         .sig-line { border-top: 1px solid #333; padding-top: 5px; }
@@ -165,7 +165,7 @@
                 </td>
                 <td class="spacer"></td>
                 <td>
-                    <div class="sig-line" style="margin-top: 75px;">
+                    <div class="sig-line" style="margin-top: 50px;">
                         <div class="sig-name">{{ $consent->doctor->user->name ?? '' }}</div>
                         <div class="sig-detail">{{ $consent->doctor->specialty ?? 'Médico tratante' }}</div>
                         <div class="sig-detail">Céd. Prof. {{ $consent->doctor->license_number ?? '' }}</div>
