@@ -84,13 +84,17 @@ class ConsentFormResource extends Resource
                     ]),
                 Forms\Components\Section::make('Firma Digital')
                     ->schema([
-                        Forms\Components\FileUpload::make('signature')
+                        \Saade\FilamentAutograph\Forms\Components\SignaturePad::make('signature')
                             ->label('Firma del paciente')
-                            ->image()
-                            ->directory('signatures')
-                            ->maxSize(2048)
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->helperText('El paciente puede firmar en la tablet/teléfono y subir la imagen.'),
+                            ->helperText('El paciente firma aquí con el dedo o mouse.')
+                            ->dotSize(2.0)
+                            ->lineMinWidth(0.5)
+                            ->lineMaxWidth(2.5)
+                            ->throttle(16)
+                            ->backgroundColor('rgb(255,255,255)')
+                            ->penColor('rgb(0,0,0)')
+                            ->exportPenColor('rgb(0,0,0)')
+                            ->exportBackgroundColor('rgb(255,255,255)'),
                     ]),
             ]);
     }
