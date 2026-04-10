@@ -341,28 +341,28 @@
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-2 md:gap-3">
+            <div class="action-btns" style="margin-top:1.5rem;">
                 @if($savedPrescriptionId)
                 <a href="{{ route('filament.doctor.resources.prescriptions.edit', $savedPrescriptionId) }}"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-3 md:py-2.5 bg-purple-500 text-white rounded-xl font-semibold text-sm no-underline hover:bg-purple-600 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    style="background:#8b5cf6;color:white;">
+                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     Ver / Imprimir receta
                 </a>
                 @endif
                 <a href="{{ route('filament.doctor.pages.patient-profile', ['patient' => $appointment->patient_id]) }}"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-3 md:py-2.5 bg-blue-500 text-white rounded-xl font-semibold text-sm no-underline hover:bg-blue-600 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    style="background:#3b82f6;color:white;">
+                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     Ver perfil
                 </a>
                 @if($appointment->patient->phone)
                 <a href="https://wa.me/52{{ preg_replace('/\D/', '', $appointment->patient->phone) }}" target="_blank"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-3 md:py-2.5 bg-green-500 text-white rounded-xl font-semibold text-sm no-underline hover:bg-green-600 transition">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                    style="background:#22c55e;color:white;">
+                    <svg style="width:18px;height:18px;" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                     WhatsApp
                 </a>
                 @endif
                 <a href="{{ route('filament.doctor.pages.dashboard') }}"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-3 md:py-2.5 bg-gray-700 text-white rounded-xl font-semibold text-sm no-underline hover:bg-gray-800 transition">
+                    style="background:#374151;color:white;">
                     Siguiente paciente
                 </a>
             </div>
