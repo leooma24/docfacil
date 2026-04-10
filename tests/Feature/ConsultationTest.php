@@ -549,6 +549,137 @@ class ConsultationTest extends TestCase
             ->assertSet('isWalkIn', true);
     }
 
+    // ── E2E: flujo completo crear paciente + servicio + consulta ──
+
+    public function test_e2e_create_patient_inline_and_complete_consultation(): void
+    {
+        // Doctor abre consulta sin paciente ni servicio existente
+        // Crea paciente inline via createQuickPatient, luego completa toda la consulta
+        Livewire::actingAs($this->user)
+            ->test(Consultation::class)
+            ->assertSet('isWalkIn', true)
+            ->assertSet('currentStep', 0)
+            // Crea paciente nuevo inline
+            ->set('new_first_name', 'Nuevo')
+            ->set('new_last_name', 'Paciente')
+            ->set('new_phone', '5550001111')
+            ->set('new_email', 'nuevo@test.com')
+            ->call('createQuickPatient')
+            ->assertSet('isWalkIn', false)
+            ->assertSet('currentStep', 1);
+
+        // Verificar que se creó el paciente y la cita
+        $this->assertDatabaseHas('patients', [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5550001111',
+            'email' => 'nuevo@test.com',
+            'clinic_id' => $this->clinic->id,
+        ]);
+        $this->assertDatabaseCount('appointments', 1);
+        $this->assertDatabaseHas('appointments', [
+            'status' => 'in_progress',
+            'clinic_id' => $this->clinic->id,
+        ]);
+    }
+
+    public function test_e2e_select_patient_and_service_then_complete(): void
+    {
+        // Flujo completo: seleccionar paciente existente + servicio, walkin, consulta, pago
+        Livewire::actingAs($this->user)
+            ->test(Consultation::class)
+            ->assertSet('isWalkIn', true)
+            // Selecciona paciente y servicio existentes
+            ->set('data.walkin_patient_id', (string) $this->patient->id)
+            ->set('data.walkin_service_id', (string) $this->service->id)
+            ->call('startWalkIn')
+            ->assertSet('currentStep', 1)
+            // Step 1: Signos vitales
+            ->set('blood_pressure', '120/80')
+            ->set('heart_rate', '72')
+            ->set('temperature', '36.5')
+            ->set('weight', '68')
+            ->call('nextStep')
+            ->assertSet('currentStep', 2)
+            // Step 2: Diagnóstico
+            ->set('chief_complaint', 'Dolor de garganta')
+            ->set('diagnosis', 'Faringitis')
+            ->set('treatment', 'Antibiótico + antiinflamatorio')
+            ->set('medical_notes', 'Sin alergias conocidas')
+            ->call('nextStep')
+            ->assertSet('currentStep', 3)
+            // Step 3: Receta
+            ->set('medications', [
+                ['medication' => 'Azitromicina', 'dosage' => '500mg', 'frequency' => 'Cada 24h', 'duration' => '3 días', 'instructions' => 'En ayunas'],
+                ['medication' => 'Ibuprofeno', 'dosage' => '400mg', 'frequency' => 'Cada 8h', 'duration' => '5 días', 'instructions' => 'Con alimentos'],
+            ])
+            ->set('prescription_notes', 'Regresar si persiste la fiebre')
+            ->call('nextStep')
+            ->assertSet('currentStep', 4)
+            // Step 4: Cobro
+            ->assertSet('payment_amount', (string) $this->service->price)
+            ->set('payment_method', 'card')
+            ->call('nextStep')
+            ->assertSet('currentStep', 5)
+            // Step 5: Siguiente cita
+            ->set('next_appointment_date', now()->addDays(7)->format('Y-m-d H:i:s'))
+            ->set('next_appointment_service_id', (string) $this->service->id)
+            // Guardar y completar
+            ->call('saveAndComplete')
+            ->assertSet('completed', true)
+            ->assertSet('currentStep', 6);
+
+        // Verificar todo el flujo en BD
+        $this->assertDatabaseCount('appointments', 2); // walkin + próxima
+        $this->assertDatabaseHas('appointments', ['status' => 'completed']);
+        $this->assertDatabaseHas('appointments', ['status' => 'scheduled']);
+
+        $this->assertDatabaseCount('medical_records', 1);
+        $this->assertDatabaseHas('medical_records', [
+            'chief_complaint' => 'Dolor de garganta',
+            'diagnosis' => 'Faringitis',
+        ]);
+
+        $record = MedicalRecord::first();
+        $vitals = $record->vital_signs;
+        $this->assertEquals('120/80', $vitals['blood_pressure']);
+        $this->assertEquals('72', $vitals['heart_rate']);
+
+        $this->assertDatabaseCount('prescriptions', 1);
+        $this->assertDatabaseCount('prescription_items', 2);
+        $this->assertDatabaseHas('prescription_items', ['medication' => 'Azitromicina']);
+        $this->assertDatabaseHas('prescription_items', ['medication' => 'Ibuprofeno']);
+
+        $this->assertDatabaseCount('payments', 1);
+        $this->assertDatabaseHas('payments', [
+            'payment_method' => 'card',
+            'status' => 'paid',
+        ]);
+    }
+
+    public function test_e2e_walkin_with_service_prefills_payment(): void
+    {
+        // Verifica que al seleccionar servicio en walk-in, el pago se pre-llena
+        Livewire::actingAs($this->user)
+            ->test(Consultation::class)
+            ->set('data.walkin_patient_id', (string) $this->patient->id)
+            ->set('data.walkin_service_id', (string) $this->service->id)
+            ->call('startWalkIn')
+            ->assertSet('payment_service_id', (string) $this->service->id)
+            ->assertSet('payment_amount', (string) $this->service->price);
+    }
+
+    public function test_e2e_walkin_without_service_has_empty_payment(): void
+    {
+        // Walk-in sin servicio: pago vacío
+        Livewire::actingAs($this->user)
+            ->test(Consultation::class)
+            ->set('data.walkin_patient_id', (string) $this->patient->id)
+            ->call('startWalkIn')
+            ->assertSet('payment_service_id', null)
+            ->assertSet('payment_amount', '');
+    }
+
     public function test_patient_search_only_returns_own_clinic(): void
     {
         $otherClinic = Clinic::create(['name' => 'Other Clinic', 'onboarding_status' => 'completed']);
