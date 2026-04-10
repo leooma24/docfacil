@@ -59,7 +59,7 @@
         .sig-line { border-top: 1px solid #333; padding-top: 5px; }
         .sig-name { font-weight: bold; font-size: 11px; }
         .sig-detail { font-size: 9px; color: #666; }
-        .sig-img { max-height: 70px; margin-bottom: 5px; }
+        .sig-img { max-height: 50px; max-width: 200px; margin-bottom: 5px; }
 
         /* Footer */
         .footer { position: fixed; bottom: 15px; left: 35px; right: 35px; text-align: center; font-size: 7px; color: #ccc; border-top: 1px solid #eee; padding-top: 5px; }
