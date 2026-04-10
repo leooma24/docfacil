@@ -1,8 +1,54 @@
 <x-filament-panels::page>
+    <style>
+        /* Consultation responsive overrides */
+        .vitals-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        .meds-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+        .pay-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        .next-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+        .steps-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 1rem; padding-bottom: 0.25rem; }
+        .steps-bar::-webkit-scrollbar { display: none; }
+        .step-btn { display: flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
+        .step-circle { width: 1.25rem; height: 1.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 700; flex-shrink: 0; }
+        .step-divider { width: 1rem; height: 2px; flex-shrink: 0; }
+        .nav-buttons { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+        .nav-buttons > div { display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-btn { width: 100%; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; text-align: center; }
+        .header-layout { display: flex; flex-direction: column; gap: 0.75rem; }
+        .header-info { display: flex; align-items: center; gap: 0.75rem; }
+        .header-meta { text-align: left; font-size: 0.75rem; }
+        .action-btns { display: flex; flex-direction: column; gap: 0.5rem; }
+        .action-btns a { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; text-decoration: none; text-align: center; }
+        @media (min-width: 640px) {
+            .vitals-grid { grid-template-columns: repeat(2, 1fr); }
+            .meds-grid { grid-template-columns: repeat(2, 1fr); }
+            .pay-grid { grid-template-columns: repeat(2, 1fr); }
+            .next-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-bar { justify-content: center; }
+            .step-btn { padding: 0.5rem 0.875rem; font-size: 0.8125rem; }
+            .step-divider { width: 2rem; }
+            .nav-buttons { flex-direction: row; justify-content: space-between; align-items: center; }
+            .nav-buttons > div { flex-direction: row; }
+            .nav-btn { width: auto; }
+            .header-layout { flex-direction: row; align-items: center; justify-content: space-between; }
+            .header-meta { text-align: right; }
+            .action-btns { flex-direction: row; }
+            .action-btns a { width: auto; }
+        }
+        @media (min-width: 1024px) {
+            .vitals-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+            .meds-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+            .pay-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+            .summary-grid { grid-template-columns: repeat(4, 1fr); }
+            .steps-bar { margin-bottom: 2rem; gap: 0.5rem; }
+            .step-btn { padding: 0.5rem 0.75rem; font-size: 0.875rem; gap: 0.5rem; }
+            .step-circle { width: 1.5rem; height: 1.5rem; font-size: 0.75rem; }
+        }
+    </style>
     @if($appointment)
     {{-- Patient Header --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-4 md:p-6 mb-4 md:mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border mb-4" style="padding:1rem;">
+        <div class="header-layout">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 md:w-14 md:h-14 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center shrink-0">
                     <span class="text-base md:text-xl font-bold text-teal-700 dark:text-teal-300">
@@ -95,29 +141,27 @@
     $stepLabels = [1 => 'Signos vitales', 2 => 'Diagnóstico', 3 => 'Receta', 4 => 'Cobro', 5 => 'Sig. cita'];
     $stepShort  = [1 => 'Vitales', 2 => 'Dx', 3 => 'Rx', 4 => 'Cobro', 5 => 'Cita'];
     @endphp
-    <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 mb-4 md:mb-8 scrollbar-hide">
-        <div class="flex items-center justify-start md:justify-center gap-2 md:gap-2 min-w-max md:min-w-0">
+    <div>
+        <div class="steps-bar">
             @foreach($stepLabels as $num => $label)
             @php
                 $isActive = $currentStep === $num;
                 $isDone = $currentStep > $num;
             @endphp
             <button wire:click="goToStep({{ $num }})"
-                class="flex items-center gap-1.5 md:gap-2 px-3 md:px-3 py-2 md:py-2 rounded-lg text-xs md:text-sm font-semibold border-none cursor-pointer transition-all whitespace-nowrap shrink-0
-                {{ $isActive ? 'bg-teal-600 text-white shadow-md' : ($isDone ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-400') }}">
-                <span class="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold shrink-0
-                    {{ $isActive ? 'bg-white text-teal-600' : ($isDone ? 'bg-teal-600 text-white' : 'bg-gray-300 dark:bg-gray-600 text-white') }}">
+                class="step-btn"
+                style="background:{{ $isActive ? '#0d9488' : ($isDone ? '#ccfbf1' : '#f3f4f6') }};color:{{ $isActive ? 'white' : ($isDone ? '#0f766e' : '#9ca3af') }};{{ $isActive ? 'box-shadow:0 4px 12px rgba(13,148,136,0.3);' : '' }}">
+                <span class="step-circle" style="background:{{ $isActive ? 'white' : ($isDone ? '#0d9488' : '#d1d5db') }};color:{{ $isActive ? '#0d9488' : ($isDone ? 'white' : 'white') }};">
                     @if($isDone)
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                     @else
                         {{ $num }}
                     @endif
                 </span>
-                <span class="hidden sm:inline">{{ $label }}</span>
-                <span class="sm:hidden">{{ $stepShort[$num] }}</span>
+                <span>{{ $stepShort[$num] }}</span>
             </button>
             @if($num < 5)
-            <div class="w-4 md:w-8 h-0.5 shrink-0 {{ $isDone ? 'bg-teal-400' : 'bg-gray-200 dark:bg-gray-600' }}"></div>
+            <div class="step-divider" style="background:{{ $isDone ? '#14b8a6' : '#e5e7eb' }};"></div>
             @endif
             @endforeach
         </div>
@@ -130,7 +174,7 @@
         @if($currentStep === 1)
         <h3 class="text-base md:text-lg font-bold mb-2 md:mb-4">Signos Vitales</h3>
         <p class="text-xs md:text-sm text-gray-500 mb-4 md:mb-6">Opcional. Registra los signos vitales del paciente.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div class="vitals-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Presión arterial</label>
                 <input type="text" wire:model="blood_pressure" placeholder="120/80" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm">
@@ -193,12 +237,12 @@
                     <span class="font-medium text-xs md:text-sm">Medicamento {{ $i + 1 }}</span>
                     <button wire:click="$set('medications', {{ json_encode(collect($medications)->forget($i)->values()->toArray()) }})" class="text-red-500 text-xs hover:text-red-700">Quitar</button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-                    <input type="text" wire:model="medications.{{ $i }}.medication" placeholder="Medicamento" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm sm:col-span-2 lg:col-span-1">
+                <div class="meds-grid">
+                    <input type="text" wire:model="medications.{{ $i }}.medication" placeholder="Medicamento" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm" style="grid-column: span 2;">
                     <input type="text" wire:model="medications.{{ $i }}.dosage" placeholder="Dosis (500mg)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.frequency" placeholder="Cada 8 horas" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.duration" placeholder="7 días" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
-                    <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm sm:col-span-2">
+                    <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm" style="grid-column: span 2;">
                 </div>
             </div>
             @endforeach
@@ -217,7 +261,7 @@
         @if($currentStep === 4)
         <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">Cobro</h3>
         <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">Registra el pago de esta consulta.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        <div class="pay-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Servicio</label>
                 <select wire:model.live="payment_service_id" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm">
@@ -249,7 +293,7 @@
         @if($currentStep === 5)
         <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">Siguiente Cita</h3>
         <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+        <div class="next-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha y hora</label>
                 <input type="datetime-local" wire:model="next_appointment_date" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm">
@@ -275,7 +319,7 @@
             <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-1 md:mb-2">Consulta completada</h3>
             <p class="text-sm text-gray-500 mb-6 md:mb-8">Expediente de {{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }} guardado.</p>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 mb-6 md:mb-8 text-xs md:text-sm">
+            <div class="summary-grid" style="margin-bottom:1.5rem;font-size:0.8125rem;">
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-[10px] md:text-xs">Diagnóstico</div>
                     <div class="font-medium mt-0.5 md:mt-1 truncate">{{ $diagnosis ?: 'No registrado' }}</div>
@@ -326,27 +370,27 @@
 
     @if(!$completed)
     {{-- Navigation buttons --}}
-    <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2 md:gap-3 mt-4 md:mt-6">
+    <div class="nav-buttons">
         <div>
             @if($currentStep > 1)
-            <button wire:click="prevStep" class="w-full sm:w-auto px-5 py-3 md:py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-semibold text-sm cursor-pointer hover:bg-gray-200 transition">
+            <button wire:click="prevStep" class="nav-btn" style="background:#f3f4f6;color:#374151;">
                 &larr; Anterior
             </button>
             @endif
         </div>
-        <div class="flex flex-col sm:flex-row gap-2">
+        <div>
             @if($currentStep < 5)
-            <button wire:click="nextStep" class="w-full sm:w-auto px-5 py-3 md:py-2.5 bg-teal-600 text-white rounded-xl font-semibold text-sm cursor-pointer hover:bg-teal-700 transition">
+            <button wire:click="nextStep" class="nav-btn" style="background:#0d9488;color:white;">
                 Siguiente &rarr;
             </button>
             @endif
             @if($currentStep === 5)
-            <button wire:click="saveAndComplete" class="w-full sm:w-auto px-6 py-3 md:py-2.5 text-white rounded-xl font-bold text-sm cursor-pointer shadow-md hover:shadow-lg transition" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
+            <button wire:click="saveAndComplete" class="nav-btn" style="background:linear-gradient(135deg,#0d9488,#0891b2);color:white;font-weight:700;box-shadow:0 4px 12px rgba(13,148,136,0.3);">
                 Completar consulta
             </button>
             @endif
             @if($currentStep >= 2)
-            <button wire:click="saveAndComplete" class="w-full sm:w-auto px-5 py-3 md:py-2.5 bg-gray-800 text-white rounded-xl font-semibold text-xs md:text-sm cursor-pointer hover:bg-gray-900 transition">
+            <button wire:click="saveAndComplete" class="nav-btn" style="background:#1f2937;color:white;font-size:0.8rem;">
                 Guardar y terminar
             </button>
             @endif
