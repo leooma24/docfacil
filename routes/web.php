@@ -67,3 +67,10 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 });
+
+Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
+    abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);
+    $prescription->load(['patient', 'doctor.user', 'doctor.clinic', 'items']);
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.prescription', ['prescription' => $prescription]);
+    return $pdf->stream("receta-{$prescription->id}.pdf");
+})->middleware('auth')->name('prescription.pdf');
