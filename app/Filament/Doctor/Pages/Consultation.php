@@ -123,12 +123,22 @@ class Consultation extends Page implements HasForms
         return [
             Forms\Components\Select::make('walkin_patient_id')
                 ->label('Paciente')
-                ->options(
-                    \App\Models\Patient::where('clinic_id', $clinicId)
+                ->searchable()
+                ->getSearchResultsUsing(function (string $search) use ($clinicId): array {
+                    return \App\Models\Patient::where('clinic_id', $clinicId)
+                        ->where(fn ($q) => $q
+                            ->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                        )
+                        ->limit(50)
                         ->get()
                         ->mapWithKeys(fn ($p) => [$p->id => "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '')])
+                        ->toArray();
+                })
+                ->getOptionLabelUsing(fn ($value): ?string =>
+                    ($p = \App\Models\Patient::find($value)) ? "{$p->first_name} {$p->last_name}" . ($p->phone ? " — {$p->phone}" : '') : null
                 )
-                ->searchable()
                 ->required()
                 ->createOptionForm([
                     Forms\Components\TextInput::make('first_name')
@@ -180,7 +190,10 @@ class Consultation extends Page implements HasForms
         ];
     }
 
-    public ?array $data = [];
+    public ?array $data = [
+        'walkin_patient_id' => null,
+        'walkin_service_id' => null,
+    ];
 
     public function startWalkIn(): void
     {
