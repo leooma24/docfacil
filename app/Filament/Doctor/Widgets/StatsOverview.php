@@ -10,6 +10,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends BaseWidget
 {
+    protected static ?int $sort = 0;
     protected function getStats(): array
     {
         $clinicId = auth()->user()->clinic_id;
