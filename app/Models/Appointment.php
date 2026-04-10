@@ -23,6 +23,7 @@ class Appointment extends Model
     protected $fillable = [
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',
+        'consultation_data',
     ];
 
     protected function casts(): array
@@ -31,6 +32,7 @@ class Appointment extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'reminder_sent' => 'boolean',
+            'consultation_data' => 'array',
         ];
     }
 

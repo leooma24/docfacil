@@ -81,17 +81,28 @@ class Consultation extends Page implements HasForms
     public function mount(): void
     {
         $appointmentId = request('appointment');
+        $clinicId = auth()->user()->clinic_id;
+        $doctorId = auth()->user()->doctor?->id;
 
         if ($appointmentId) {
             $this->appointment = Appointment::with(['patient', 'doctor.user', 'service', 'clinic'])
-                ->where('clinic_id', auth()->user()->clinic_id)
+                ->where('clinic_id', $clinicId)
                 ->find($appointmentId);
         }
 
+        // Auto-resume: if no appointment specified, check for in_progress appointment
+        if (!$this->appointment && $doctorId) {
+            $this->appointment = Appointment::with(['patient', 'doctor.user', 'service', 'clinic'])
+                ->where('clinic_id', $clinicId)
+                ->where('doctor_id', $doctorId)
+                ->where('status', 'in_progress')
+                ->latest('starts_at')
+                ->first();
+        }
+
         if (!$this->appointment) {
-            // Walk-in mode: no appointment, create one on the fly
             $this->isWalkIn = true;
-            $this->currentStep = 0; // Step 0 = select/create patient
+            $this->currentStep = 0;
             return;
         }
 
@@ -100,10 +111,31 @@ class Consultation extends Page implements HasForms
             $this->appointment->update(['status' => 'in_progress']);
         }
 
-        // Pre-fill payment amount from service
-        if ($this->appointment->service) {
-            $this->payment_service_id = (string) $this->appointment->service_id;
-            $this->payment_amount = (string) $this->appointment->service->price;
+        // Restore saved consultation state if available
+        $saved = $this->appointment->consultation_data;
+        if ($saved) {
+            $this->currentStep = $saved['currentStep'] ?? 1;
+            $this->blood_pressure = $saved['blood_pressure'] ?? '';
+            $this->heart_rate = $saved['heart_rate'] ?? '';
+            $this->temperature = $saved['temperature'] ?? '';
+            $this->weight = $saved['weight'] ?? '';
+            $this->chief_complaint = $saved['chief_complaint'] ?? '';
+            $this->diagnosis = $saved['diagnosis'] ?? '';
+            $this->treatment = $saved['treatment'] ?? '';
+            $this->medical_notes = $saved['medical_notes'] ?? '';
+            $this->medications = $saved['medications'] ?? [];
+            $this->prescription_notes = $saved['prescription_notes'] ?? '';
+            $this->payment_service_id = $saved['payment_service_id'] ?? null;
+            $this->payment_amount = $saved['payment_amount'] ?? '';
+            $this->payment_method = $saved['payment_method'] ?? 'cash';
+            $this->next_appointment_date = $saved['next_appointment_date'] ?? null;
+            $this->next_appointment_service_id = $saved['next_appointment_service_id'] ?? null;
+        } else {
+            // Pre-fill payment amount from service
+            if ($this->appointment->service) {
+                $this->payment_service_id = (string) $this->appointment->service_id;
+                $this->payment_amount = (string) $this->appointment->service->price;
+            }
         }
     }
 
@@ -273,16 +305,47 @@ class Consultation extends Page implements HasForms
     public function nextStep(): void
     {
         $this->currentStep = min($this->currentStep + 1, 5);
+        $this->saveConsultationState();
     }
 
     public function prevStep(): void
     {
         $this->currentStep = max($this->currentStep - 1, 1);
+        $this->saveConsultationState();
     }
 
     public function goToStep(int $step): void
     {
         $this->currentStep = $step;
+        $this->saveConsultationState();
+    }
+
+    protected function saveConsultationState(): void
+    {
+        if (!$this->appointment || $this->completed) {
+            return;
+        }
+
+        $this->appointment->update([
+            'consultation_data' => [
+                'currentStep' => $this->currentStep,
+                'blood_pressure' => $this->blood_pressure,
+                'heart_rate' => $this->heart_rate,
+                'temperature' => $this->temperature,
+                'weight' => $this->weight,
+                'chief_complaint' => $this->chief_complaint,
+                'diagnosis' => $this->diagnosis,
+                'treatment' => $this->treatment,
+                'medical_notes' => $this->medical_notes,
+                'medications' => $this->medications,
+                'prescription_notes' => $this->prescription_notes,
+                'payment_service_id' => $this->payment_service_id,
+                'payment_amount' => $this->payment_amount,
+                'payment_method' => $this->payment_method,
+                'next_appointment_date' => $this->next_appointment_date,
+                'next_appointment_service_id' => $this->next_appointment_service_id,
+            ],
+        ]);
     }
 
     public function saveAndComplete(): void
@@ -363,8 +426,8 @@ class Consultation extends Page implements HasForms
             ]);
         }
 
-        // Mark appointment as completed
-        $this->appointment->update(['status' => 'completed']);
+        // Mark appointment as completed and clear saved state
+        $this->appointment->update(['status' => 'completed', 'consultation_data' => null]);
 
         // Store prescription ID for PDF download
         if (isset($prescription)) {
