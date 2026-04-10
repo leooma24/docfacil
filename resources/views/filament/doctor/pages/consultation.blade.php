@@ -366,7 +366,7 @@
 
             {{ $this->walkinForm }}
 
-            <div class="mt-4 md:mt-6">
+            <div style="margin-top:1.5rem;">
                 <button wire:click="startWalkIn" class="w-full py-3.5 md:py-3 text-white rounded-xl font-bold text-sm md:text-base cursor-pointer shadow-md hover:shadow-lg transition" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
                     Iniciar consulta &rarr;
                 </button>
