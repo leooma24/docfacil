@@ -124,6 +124,7 @@ class Consultation extends Page implements HasForms
             Forms\Components\Select::make('walkin_patient_id')
                 ->label('Paciente')
                 ->searchable()
+                ->preload()
                 ->getSearchResultsUsing(function (string $search) use ($clinicId): array {
                     return \App\Models\Patient::where('clinic_id', $clinicId)
                         ->where(fn ($q) => $q
