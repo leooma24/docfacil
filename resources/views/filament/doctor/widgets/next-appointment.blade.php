@@ -1,7 +1,7 @@
 <x-filament-widgets::widget>
     @php $next = $this->getNextAppointment(); @endphp
     @if($next)
-    <div class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl p-4 md:p-6 text-white">
+    <div class="rounded-2xl p-4 md:p-6 text-white" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="flex items-center gap-3 md:gap-4">
                 <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-full flex items-center justify-center shrink-0">
