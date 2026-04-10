@@ -140,12 +140,7 @@
         </div>
         @endif
 
-        {{-- Signed badge --}}
-        @if($consent->signed_at)
-        <div style="text-align: center; margin: 18px 0;">
-            <span class="signed-badge">FIRMADO DIGITALMENTE — {{ $consent->signed_at->format('d/m/Y H:i') }}</span>
-        </div>
-        @endif
+        {{-- Signed badge removed: signature image is shown instead --}}
 
         {{-- Signatures --}}
         <table class="sig-table">
