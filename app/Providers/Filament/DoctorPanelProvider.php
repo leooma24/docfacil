@@ -42,6 +42,7 @@ class DoctorPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
             ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
+            ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat'))
             ->discoverResources(in: app_path('Filament/Doctor/Resources'), for: 'App\\Filament\\Doctor\\Resources')
             ->discoverPages(in: app_path('Filament/Doctor/Pages'), for: 'App\\Filament\\Doctor\\Pages')
             ->pages([

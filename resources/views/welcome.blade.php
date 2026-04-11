@@ -44,6 +44,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
@@ -310,6 +311,92 @@
                 @endforeach
             </div>
         </div>
+    </section>
+
+    {{-- ROI Calculator --}}
+    <section id="roi" class="py-20 bg-gradient-to-br from-teal-50 to-cyan-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10" data-animate>
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full shadow-sm mb-4">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Calculadora de ROI</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">¿Cuánto dinero te hará ganar DocFácil?</h2>
+                <p class="mt-3 text-lg text-gray-600">Llena 3 datos y descubre tu ahorro mensual real.</p>
+            </div>
+
+            <div x-data="roiCalc()" class="bg-white rounded-3xl shadow-2xl shadow-teal-100/50 p-8 md:p-10">
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Pacientes al mes</label>
+                        <input type="number" x-model.number="patients" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">$ por consulta</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-3 text-2xl font-bold text-gray-400">$</span>
+                            <input type="number" x-model.number="pricePerVisit" min="0" class="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Hrs/semana en admin</label>
+                        <input type="number" x-model.number="adminHours" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white">
+                    <div class="text-center mb-6">
+                        <div class="text-sm font-semibold uppercase tracking-wider opacity-80">Con DocFácil ganas/ahorras al mes</div>
+                        <div class="text-5xl md:text-6xl font-extrabold mt-2" x-text="'$' + totalSavings.toLocaleString('es-MX')"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+                            <div class="font-bold" x-text="'$' + timeSavings.toLocaleString('es-MX')"></div>
+                            <div class="opacity-80 text-xs mt-1">Ahorro de tiempo<br><span x-text="(adminHours * 0.6).toFixed(0) + ' hrs/semana'"></span> liberadas</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+                            <div class="font-bold" x-text="'$' + retentionGain.toLocaleString('es-MX')"></div>
+                            <div class="opacity-80 text-xs mt-1">Retención de pacientes<br>WhatsApp reduce no-shows</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-xl p-4">
+                            <div class="font-bold" x-text="'$' + aiGain.toLocaleString('es-MX')"></div>
+                            <div class="opacity-80 text-xs mt-1">IA + dictado<br>Atiendes más pacientes</div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6 pt-6 border-t border-white/20">
+                        <div class="text-sm opacity-90">DocFácil Pro cuesta $499/mes</div>
+                        <div class="text-2xl font-extrabold mt-1">
+                            ROI: paga DocFácil <span x-text="(totalSavings / 499).toFixed(1)"></span>x
+                        </div>
+                        <a href="#pricing" class="inline-block mt-4 px-8 py-3 bg-white text-teal-700 rounded-xl font-bold hover:scale-105 transition-transform">Empezar gratis →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function roiCalc() {
+                return {
+                    patients: 80,
+                    pricePerVisit: 600,
+                    adminHours: 10,
+                    get timeSavings() {
+                        // 60% reducción en horas admin, valoradas a la tarifa/hora del doctor
+                        const hourlyRate = this.pricePerVisit / 0.5; // asume 30min por consulta
+                        return Math.round(this.adminHours * 0.6 * 4 * hourlyRate);
+                    },
+                    get retentionGain() {
+                        // WhatsApp recordatorios reducen ~8% no-shows, cada cita vale X
+                        return Math.round(this.patients * 0.08 * this.pricePerVisit);
+                    },
+                    get aiGain() {
+                        // Dictado inteligente ahorra ~5 min por consulta = 1 paciente extra por día
+                        return Math.round(20 * this.pricePerVisit * 0.15);
+                    },
+                    get totalSavings() {
+                        return this.timeSavings + this.retentionGain + this.aiGain;
+                    },
+                };
+            }
+        </script>
     </section>
 
     {{-- Pricing --}}

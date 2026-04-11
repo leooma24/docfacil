@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,11 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 });
+
+// Demo mode for sales reps - creates a temporary clinic with fake data
+Route::get('/demo-vendedor', [DemoModeController::class, 'start'])
+    ->middleware('throttle:10,60')
+    ->name('demo.vendedor');
 
 // Public check-in for patients
 Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])

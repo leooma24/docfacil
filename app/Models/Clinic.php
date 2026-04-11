@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class Clinic extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'phone', 'email', 'address',
+        'name', 'slug', 'phone', 'email', 'address', 'country',
         'city', 'state', 'zip_code', 'logo', 'plan',
         'trial_ends_at', 'is_active',
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',
@@ -18,6 +18,7 @@ class Clinic extends Model
         'onboarding_status',
         'sold_at',
         'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
+        'is_demo', 'demo_expires_at',
     ];
 
     // Nota: sold_by_user_id NO está en $fillable a propósito.
@@ -40,6 +41,8 @@ class Clinic extends Model
             'first_payment_received_at' => 'datetime',
             'second_payment_received_at' => 'datetime',
             'cancelled_at' => 'datetime',
+            'is_demo' => 'boolean',
+            'demo_expires_at' => 'datetime',
         ];
     }
 
