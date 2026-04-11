@@ -113,6 +113,42 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 
+    {{-- AI Message Generator --}}
+    <div style="background:white;border:1px solid #e5e7eb;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <svg style="width:16px;height:16px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span style="font-size:12px;font-weight:700;color:#374151;">Generar mensaje de WhatsApp con IA</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button wire:click="generateMessage('reminder')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">📅 Recordatorio</button>
+            <button wire:click="generateMessage('followup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">💬 Seguimiento</button>
+            <button wire:click="generateMessage('birthday')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🎂 Cumpleaños</button>
+            <button wire:click="generateMessage('promotion')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🎁 Oferta de regreso</button>
+            <button wire:click="generateMessage('payment')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">💰 Pago pendiente</button>
+            <button wire:click="generateMessage('checkup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🔍 Revisión</button>
+        </div>
+
+        <div wire:loading wire:target="generateMessage" style="margin-top:10px;padding:10px;background:#f9fafb;border-radius:8px;font-size:12px;color:#6b7280;">
+            ✨ Generando mensaje con IA...
+        </div>
+
+        @if($generatedMessage)
+        <div wire:loading.remove wire:target="generateMessage" style="margin-top:12px;padding:12px 14px;background:#f0fdfa;border:1px solid #5eead4;border-radius:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div style="font-size:10px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Mensaje generado</div>
+                <button wire:click="closeMessage" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;">✕</button>
+            </div>
+            <div style="font-size:13px;color:#1f2937;line-height:1.6;white-space:pre-wrap;padding:10px 12px;background:white;border-radius:8px;border:1px solid #e5e7eb;">{{ $generatedMessage }}</div>
+            @if($patient->phone)
+            <a href="{{ $this->whatsappUrl }}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 14px;background:#22c55e;color:white;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;">
+                <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                Enviar por WhatsApp
+            </a>
+            @endif
+        </div>
+        @endif
+    </div>
+
     {{-- Tabs --}}
     <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 mb-4 md:mb-6 scrollbar-hide">
         <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 min-w-max md:min-w-0">

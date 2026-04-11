@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -74,6 +75,11 @@ Route::middleware('throttle:10,1')->group(function () {
 Route::get('/demo-vendedor', [DemoModeController::class, 'start'])
     ->middleware('throttle:10,60')
     ->name('demo.vendedor');
+
+// WhatsApp webhook (Meta will call these)
+Route::get('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'verify']);
+Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
 // Public check-in for patients
 Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])

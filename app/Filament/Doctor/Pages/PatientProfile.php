@@ -27,6 +27,9 @@ class PatientProfile extends Page
     public string $activeTab = 'info';
     public ?string $aiSummary = null;
     public bool $loadingSummary = false;
+    public ?string $generatedMessage = null;
+    public bool $generatingMessage = false;
+    public string $messageType = 'reminder';
 
     public function mount(): void
     {
@@ -57,6 +60,27 @@ class PatientProfile extends Page
         if (!$this->patient) return;
         app(PatientAISummaryService::class)->invalidate($this->patient);
         $this->loadAiSummary();
+    }
+
+    public function generateMessage(string $type): void
+    {
+        if (!$this->patient) return;
+        $this->messageType = $type;
+        $this->generatingMessage = true;
+        $this->generatedMessage = app(\App\Services\PatientMessageAIService::class)->generate($this->patient, $type);
+        $this->generatingMessage = false;
+    }
+
+    public function getWhatsappUrlProperty(): ?string
+    {
+        if (!$this->patient?->phone || !$this->generatedMessage) return null;
+        $phone = preg_replace('/\D/', '', $this->patient->phone);
+        return "https://wa.me/52{$phone}?text=" . urlencode($this->generatedMessage);
+    }
+
+    public function closeMessage(): void
+    {
+        $this->generatedMessage = null;
     }
 
     public function getAppointmentsProperty()
