@@ -127,33 +127,99 @@
         }
         .dark .cal-container .fc-toolbar-title { color: #f0fdfa !important; }
 
-        .cal-container .fc-button {
+        /* Toolbar layout */
+        .cal-container .fc-header-toolbar {
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+            margin-bottom: 18px !important;
+            padding: 4px !important;
+        }
+        .cal-container .fc-toolbar-chunk {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        /* All buttons base */
+        .cal-container .fc-button,
+        .cal-container .fc-button-primary,
+        .cal-container button.fc-button {
             background: linear-gradient(135deg, #3b82f6, #0891b2) !important;
+            background-color: #3b82f6 !important;
             border: none !important;
             border-radius: 10px !important;
-            padding: 8px 14px !important;
+            padding: 9px 16px !important;
             font-weight: 700 !important;
             font-size: 0.78rem !important;
             text-transform: capitalize !important;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
             transition: all 0.2s !important;
+            color: white !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+            margin: 0 4px !important;
         }
-        .cal-container .fc-button:hover {
+        .cal-container .fc-button:focus,
+        .cal-container .fc-button:active {
+            outline: none !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4), 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+        }
+        .cal-container .fc-button:hover:not(:disabled) {
             transform: translateY(-1px);
+            color: white !important;
             box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35) !important;
         }
+
+        /* Active view button (e.g. Semana selected) */
         .cal-container .fc-button-active,
-        .cal-container .fc-button-primary:not(:disabled).fc-button-active {
+        .cal-container .fc-button-primary.fc-button-active,
+        .cal-container button.fc-button-active {
             background: linear-gradient(135deg, #0d9488, #0891b2) !important;
+            background-color: #0d9488 !important;
+            color: white !important;
             box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4), inset 0 1px 0 rgba(255,255,255,0.2) !important;
         }
+
+        /* Today button (orange) */
         .cal-container .fc-today-button {
             background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            background-color: #f59e0b !important;
+            color: white !important;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35) !important;
         }
+        .cal-container .fc-today-button:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+            color: white !important;
+        }
+
+        /* Prev/next arrows */
         .cal-container .fc-prev-button,
         .cal-container .fc-next-button {
-            padding: 8px 10px !important;
+            padding: 9px 12px !important;
+            min-width: 38px !important;
+        }
+        .cal-container .fc-icon {
+            color: white !important;
+        }
+
+        /* Button groups (rounded pill) */
+        .cal-container .fc-button-group {
+            display: inline-flex !important;
+            gap: 6px !important;
+            background: transparent !important;
+        }
+        .cal-container .fc-button-group .fc-button {
+            border-radius: 10px !important;
+            margin: 0 !important;
+        }
+
+        /* Fix text visibility in all states */
+        .cal-container .fc-button span,
+        .cal-container .fc-button .fc-icon,
+        .cal-container button.fc-button * {
+            color: white !important;
         }
 
         .cal-container .fc-col-header-cell {
