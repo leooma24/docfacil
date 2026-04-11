@@ -47,7 +47,83 @@
             .step-btn { padding: 0.5rem 0.75rem; font-size: 0.875rem; gap: 0.5rem; }
             .step-circle { width: 1.5rem; height: 1.5rem; font-size: 0.75rem; }
         }
+
+        /* Voice dictation mic button */
+        .field-with-mic { display: flex; gap: 0.375rem; align-items: stretch; }
+        .field-with-mic > .field-main { flex: 1; min-width: 0; }
+        .mic-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; min-width: 2.25rem; border-radius: 0.5rem; border: 1px solid #d1d5db; background: #f9fafb; cursor: pointer; flex-shrink: 0; transition: all 0.15s; color: #6b7280; align-self: flex-end; height: 2.5rem; }
+        .mic-btn:hover { background: #f3f4f6; color: #0d9488; }
+        .mic-btn.recording { background: #dc2626; border-color: #dc2626; color: #fff; animation: micPulse 1.2s infinite; }
+        .mic-btn svg { width: 1.1rem; height: 1.1rem; }
+        @keyframes micPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.55); } 50% { box-shadow: 0 0 0 8px rgba(220,38,38,0); } }
     </style>
+
+    <script>
+        window.voiceDictation = function () {
+            return {
+                recognition: null,
+                activeKey: null,
+                supported: true,
+                init() {
+                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SR) { this.supported = false; return; }
+                    this.recognition = new SR();
+                    this.recognition.lang = 'es-MX';
+                    this.recognition.continuous = true;
+                    this.recognition.interimResults = false;
+                    this.recognition.onresult = (event) => {
+                        if (!this.activeKey) return;
+                        let transcript = '';
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            if (event.results[i].isFinal) transcript += event.results[i][0].transcript;
+                        }
+                        if (!transcript) return;
+                        const key = this.activeKey;
+                        const current = this.$wire.get(key) || '';
+                        const separator = current && !current.endsWith(' ') ? ' ' : '';
+                        this.$wire.set(key, (current + separator + transcript.trim()).trim(), false);
+                    };
+                    this.recognition.onend = () => {
+                        if (this.activeKey) {
+                            // Was stopped externally — restart to keep continuous until user stops
+                            // But only if it wasn't a manual stop
+                            this.activeKey = null;
+                        }
+                    };
+                    this.recognition.onerror = (e) => {
+                        console.warn('Dictation error:', e.error);
+                        this.activeKey = null;
+                    };
+                },
+                toggle(key) {
+                    if (!this.supported) {
+                        alert('Tu navegador no soporta dictado por voz. Usa Chrome o Edge.');
+                        return;
+                    }
+                    if (this.activeKey === key) {
+                        this.stop();
+                        return;
+                    }
+                    if (this.activeKey) this.stop();
+                    this.activeKey = key;
+                    try {
+                        this.recognition.start();
+                    } catch (e) {
+                        // Already started; restart
+                        this.recognition.stop();
+                        setTimeout(() => this.recognition.start(), 100);
+                    }
+                },
+                stop() {
+                    if (this.recognition) this.recognition.stop();
+                    this.activeKey = null;
+                },
+            };
+        };
+    </script>
+
+    <div x-data="voiceDictation()">
+
     @if($appointment)
     {{-- Patient Header --}}
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border mb-4" style="padding:1rem;">
@@ -212,19 +288,43 @@
         <div class="space-y-3 md:space-y-4">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de consulta</label>
-                <textarea wire:model="chief_complaint" rows="2" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
+                <div class="field-with-mic">
+                    <textarea wire:model="chief_complaint" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
+                    <button type="button" class="mic-btn" :class="{ recording: activeKey === 'chief_complaint' }" @click="toggle('chief_complaint')" title="Dictar por voz">
+                        <svg x-show="activeKey !== 'chief_complaint'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                        <svg x-show="activeKey === 'chief_complaint'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                    </button>
+                </div>
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diagnóstico</label>
-                <textarea wire:model="diagnosis" rows="3" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Diagnóstico clínico..."></textarea>
+                <div class="field-with-mic">
+                    <textarea wire:model="diagnosis" rows="3" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Diagnóstico clínico..."></textarea>
+                    <button type="button" class="mic-btn" :class="{ recording: activeKey === 'diagnosis' }" @click="toggle('diagnosis')" title="Dictar por voz">
+                        <svg x-show="activeKey !== 'diagnosis'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                        <svg x-show="activeKey === 'diagnosis'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                    </button>
+                </div>
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tratamiento realizado</label>
-                <textarea wire:model="treatment" rows="3" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Tratamiento aplicado hoy..."></textarea>
+                <div class="field-with-mic">
+                    <textarea wire:model="treatment" rows="3" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Tratamiento aplicado hoy..."></textarea>
+                    <button type="button" class="mic-btn" :class="{ recording: activeKey === 'treatment' }" @click="toggle('treatment')" title="Dictar por voz">
+                        <svg x-show="activeKey !== 'treatment'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                        <svg x-show="activeKey === 'treatment'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                    </button>
+                </div>
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notas adicionales</label>
-                <textarea wire:model="medical_notes" rows="2" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Observaciones..."></textarea>
+                <div class="field-with-mic">
+                    <textarea wire:model="medical_notes" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Observaciones..."></textarea>
+                    <button type="button" class="mic-btn" :class="{ recording: activeKey === 'medical_notes' }" @click="toggle('medical_notes')" title="Dictar por voz">
+                        <svg x-show="activeKey !== 'medical_notes'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                        <svg x-show="activeKey === 'medical_notes'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
         @endif
@@ -256,7 +356,13 @@
         </div>
         <div class="mt-3 md:mt-4">
             <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notas de la receta</label>
-            <textarea wire:model="prescription_notes" rows="2" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Indicaciones generales..."></textarea>
+            <div class="field-with-mic">
+                <textarea wire:model="prescription_notes" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Indicaciones generales..."></textarea>
+                <button type="button" class="mic-btn" :class="{ recording: activeKey === 'prescription_notes' }" @click="toggle('prescription_notes')" title="Dictar por voz">
+                    <svg x-show="activeKey !== 'prescription_notes'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                    <svg x-show="activeKey === 'prescription_notes'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                </button>
+            </div>
         </div>
         @endif
 
@@ -442,4 +548,6 @@
         </div>
     </div>
     @endif
+
+    </div>{{-- /x-data voiceDictation --}}
 </x-filament-panels::page>
