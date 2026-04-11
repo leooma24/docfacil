@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InvitationController;
@@ -67,6 +68,14 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 });
+
+// Public check-in for patients
+Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])
+    ->middleware('throttle:20,1')
+    ->name('checkin.show');
+Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('checkin.store');
 
 Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
     abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);
