@@ -120,6 +120,69 @@
                 },
             };
         };
+
+        window.liveConsultation = function () {
+            return {
+                listening: false,
+                processing: false,
+                transcript: '',
+                recognition: null,
+                init() {
+                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SR) return;
+                    this.recognition = new SR();
+                    this.recognition.lang = 'es-MX';
+                    this.recognition.continuous = true;
+                    this.recognition.interimResults = true;
+                    this.recognition.onresult = (event) => {
+                        let finalText = '';
+                        let interim = '';
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            const t = event.results[i][0].transcript;
+                            if (event.results[i].isFinal) finalText += t + ' ';
+                            else interim += t;
+                        }
+                        if (finalText) this.transcript += finalText;
+                        // Show interim in display but only save final
+                    };
+                    this.recognition.onerror = (e) => {
+                        console.warn('Live consult error:', e.error);
+                    };
+                    this.recognition.onend = () => {
+                        if (this.listening) {
+                            // Auto-restart for continuous listening
+                            try { this.recognition.start(); } catch (e) {}
+                        }
+                    };
+                },
+                async toggle() {
+                    if (!this.recognition) {
+                        alert('Tu navegador no soporta transcripción por voz. Usa Chrome o Edge.');
+                        return;
+                    }
+                    if (this.listening) {
+                        // Stop and process
+                        this.listening = false;
+                        try { this.recognition.stop(); } catch (e) {}
+                        if (!this.transcript.trim()) {
+                            alert('No se grabó audio. Intenta de nuevo.');
+                            return;
+                        }
+                        this.processing = true;
+                        await this.$wire.set('fullDictation', this.transcript, false);
+                        await this.$wire.call('processFullDictation');
+                        this.processing = false;
+                        this.transcript = '';
+                    } else {
+                        this.transcript = '';
+                        this.listening = true;
+                        try { this.recognition.start(); } catch (e) {
+                            console.warn(e);
+                        }
+                    }
+                },
+            };
+        };
     </script>
 
     <div x-data="voiceDictation()">
@@ -285,6 +348,40 @@
         {{-- Step 2: Diagnosis --}}
         @if($currentStep === 2)
         <h3 class="text-base md:text-lg font-bold mb-2 md:mb-4">Diagnóstico y Tratamiento</h3>
+
+        {{-- LIVE CONSULTATION MODE --}}
+        <div x-data="liveConsultation()" style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:14px;padding:16px 18px;margin-bottom:16px;color:white;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div :class="listening ? 'live-pulse' : ''" style="width:36px;height:36px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-size:13px;font-weight:800;">🔴 Modo Consulta en Vivo</div>
+                        <div style="font-size:11px;opacity:0.75;">La IA escucha toda la consulta y llena todo automáticamente</div>
+                    </div>
+                </div>
+                <button type="button" @click="toggle" x-text="listening ? '⏹ Detener y procesar' : '▶ Iniciar escucha'"
+                    :style="listening ? 'background:#dc2626;' : 'background:linear-gradient(135deg,#10b981,#059669);'"
+                    style="padding:10px 18px;color:white;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;"></button>
+            </div>
+
+            <div x-show="listening" x-cloak style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.05);border-radius:8px;max-height:120px;overflow-y:auto;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.6;margin-bottom:4px;">Transcribiendo...</div>
+                <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.5;"></div>
+            </div>
+
+            <div x-show="processing" x-cloak style="margin-top:12px;padding:10px 12px;background:rgba(13,148,136,0.2);border-radius:8px;display:flex;align-items:center;gap:8px;">
+                <div style="width:8px;height:8px;background:#0d9488;border-radius:50%;animation:pulse 1s infinite;"></div>
+                <span style="font-size:12px;">✨ La IA está estructurando tu consulta...</span>
+            </div>
+
+            <input type="hidden" wire:model="fullDictation" x-ref="dictationField">
+        </div>
+        <style>
+            .live-pulse { animation: livePulse 1.2s infinite; }
+            @keyframes livePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); } }
+        </style>
 
         {{-- AI Smart Dictation --}}
         <div style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1.5px solid #5eead4;border-radius:14px;padding:14px 16px;margin-bottom:16px;">

@@ -155,6 +155,71 @@ class CalendarWidget extends FullCalendarWidget
     protected function headerActions(): array
     {
         return [
+            \Filament\Actions\Action::make('magic_slot')
+                ->label('✨ Slot mágico')
+                ->color('info')
+                ->tooltip('La IA encuentra los mejores horarios disponibles')
+                ->form([
+                    Forms\Components\Select::make('duration')
+                        ->label('Duración de la cita')
+                        ->options([
+                            15 => '15 minutos',
+                            30 => '30 minutos',
+                            45 => '45 minutos',
+                            60 => '1 hora',
+                            90 => '1 hora 30 min',
+                        ])
+                        ->default(30)
+                        ->required(),
+                        Forms\Components\Select::make('days_ahead')
+                            ->label('Buscar en los próximos')
+                            ->options([
+                                3 => '3 días',
+                                7 => '7 días',
+                                14 => '14 días',
+                                30 => '30 días',
+                            ])
+                            ->default(7)
+                            ->required(),
+                ])
+                ->action(function (array $data) {
+                    $doctor = auth()->user()->doctor;
+                    if (!$doctor) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('No tienes perfil de doctor')
+                            ->danger()
+                            ->send();
+                        return;
+                    }
+
+                    $slots = app(\App\Services\SmartSchedulerAIService::class)
+                        ->findBestSlots(
+                            auth()->user()->clinic_id,
+                            $doctor->id,
+                            (int) $data['duration'],
+                            (int) $data['days_ahead']
+                        );
+
+                    if (empty($slots)) {
+                        \Filament\Notifications\Notification::make()
+                            ->title('No hay slots disponibles')
+                            ->body('Tu agenda está muy llena. Intenta con más días o menor duración.')
+                            ->warning()
+                            ->send();
+                        return;
+                    }
+
+                    $body = collect($slots)
+                        ->map(fn ($s, $i) => ($i + 1) . '. ' . $s['label'])
+                        ->implode("\n");
+
+                    \Filament\Notifications\Notification::make()
+                        ->title('✨ Mejores slots disponibles')
+                        ->body($body)
+                        ->success()
+                        ->persistent()
+                        ->send();
+                }),
             Actions\CreateAction::make()
                 ->label('Nueva cita')
                 ->mutateFormDataUsing(function (array $data): array {
