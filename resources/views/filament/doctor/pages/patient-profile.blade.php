@@ -1,79 +1,113 @@
 <x-filament-panels::page>
+<style>
+    .pp-hero { position: relative; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%); border-radius: 1.5rem; padding: 28px 32px; color: white; overflow: hidden; margin-bottom: 20px; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.4); }
+    .pp-hero::before { content: ''; position: absolute; top: -80px; right: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%); border-radius: 50%; pointer-events: none; }
+    .pp-hero::after { content: ''; position: absolute; bottom: -100px; left: -40px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%); border-radius: 50%; pointer-events: none; }
+    .pp-hero-content { position: relative; z-index: 1; }
+    .pp-hero-top { display: flex; flex-direction: column; gap: 16px; }
+    @media (min-width: 768px) { .pp-hero-top { flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; } }
+    .pp-avatar { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+    .pp-avatar span { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; color: white; }
+    .pp-identity { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .pp-name { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 0; color: white !important; -webkit-text-fill-color: white !important; background: none !important; }
+    .pp-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; font-size: 0.78rem; opacity: 0.9; margin-top: 6px; }
+    .pp-meta-item { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; background: rgba(255,255,255,0.15); border-radius: 999px; backdrop-filter: blur(8px); }
+    .pp-meta-blood { background: rgba(220,38,38,0.35) !important; font-weight: 700; }
+    .pp-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pp-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.82rem; text-decoration: none; transition: all 0.2s; }
+    .pp-btn-primary { background: white; color: #0f766e; box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+    .pp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.18); }
+    .pp-btn-ghost { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px); }
+    .pp-btn-ghost:hover { background: rgba(255,255,255,0.25); }
+    .pp-btn svg { width: 15px; height: 15px; }
+
+    .pp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+    @media (min-width: 768px) { .pp-stats { grid-template-columns: repeat(5, 1fr); } }
+    .pp-stat { background: rgba(255,255,255,0.15); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 14px 16px; }
+    .pp-stat-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.78; }
+    .pp-stat-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; line-height: 1.1; color: white; }
+    .pp-stat-value-sm { font-size: 0.95rem; font-weight: 700; margin-top: 6px; line-height: 1.2; }
+
+    .pp-allergies { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 12px 16px; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.35); backdrop-filter: blur(10px); border-radius: 12px; font-size: 0.82rem; font-weight: 600; }
+    .pp-allergies svg { width: 18px; height: 18px; flex-shrink: 0; }
+</style>
+
 @if($patient)
-    {{-- Patient Header Card --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-4 md:p-6 mb-4 md:mb-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg shrink-0">
-                    <span class="text-lg md:text-2xl font-bold text-white">
-                        {{ substr($patient->first_name, 0, 1) }}{{ substr($patient->last_name, 0, 1) }}
-                    </span>
-                </div>
-                <div class="min-w-0">
-                    <h2 class="text-lg md:text-2xl font-bold text-gray-900 dark:text-white truncate">{{ $patient->first_name }} {{ $patient->last_name }}</h2>
-                    <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs md:text-sm text-gray-500 mt-0.5">
-                        @if($patient->birth_date)
-                        <span>{{ $patient->birth_date->age }} años ({{ $patient->birth_date->format('d/m/Y') }})</span>
-                        @endif
-                        @if($patient->gender)
-                        <span>{{ $patient->gender === 'male' ? 'Masculino' : ($patient->gender === 'female' ? 'Femenino' : 'Otro') }}</span>
-                        @endif
-                        @if($patient->blood_type)
-                        <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-medium text-[10px] md:text-xs">{{ $patient->blood_type }}</span>
-                        @endif
+    {{-- HERO PATIENT HEADER --}}
+    <div class="pp-hero">
+        <div class="pp-hero-content">
+            <div class="pp-hero-top">
+                <div class="pp-identity">
+                    <div class="pp-avatar">
+                        <span>{{ substr($patient->first_name, 0, 1) }}{{ substr($patient->last_name, 0, 1) }}</span>
+                    </div>
+                    <div style="min-width:0;">
+                        <h2 class="pp-name">{{ $patient->first_name }} {{ $patient->last_name }}</h2>
+                        <div class="pp-meta">
+                            @if($patient->birth_date)
+                            <span class="pp-meta-item">🎂 {{ $patient->birth_date->age }} años · {{ $patient->birth_date->format('d/m/Y') }}</span>
+                            @endif
+                            @if($patient->gender)
+                            <span class="pp-meta-item">{{ $patient->gender === 'male' ? '♂ Masculino' : ($patient->gender === 'female' ? '♀ Femenino' : '⚥ Otro') }}</span>
+                            @endif
+                            @if($patient->blood_type)
+                            <span class="pp-meta-item pp-meta-blood">🩸 {{ $patient->blood_type }}</span>
+                            @endif
+                            @if($patient->phone)
+                            <span class="pp-meta-item">📞 {{ $patient->phone }}</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex flex-wrap gap-2 pl-15 md:pl-0">
-                @if($patient->phone)
-                <a href="https://wa.me/52{{ preg_replace('/\D/', '', $patient->phone) }}" target="_blank"
-                    class="px-3 md:px-4 py-2.5 md:py-2 bg-green-500 text-white rounded-lg text-xs md:text-sm font-medium hover:bg-green-600 transition flex items-center gap-1.5 no-underline">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                    WhatsApp
-                </a>
-                @endif
-                <a href="{{ route('filament.doctor.resources.citas.create') }}?patient={{ $patient->id }}"
-                    class="px-3 md:px-4 py-2.5 md:py-2 bg-teal-500 text-white rounded-lg text-xs md:text-sm font-medium hover:bg-teal-600 transition flex items-center gap-1.5 no-underline">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    Agendar
-                </a>
-                <a href="{{ route('filament.doctor.resources.pacientes.edit', $patient->id) }}"
-                    class="px-3 md:px-4 py-2.5 md:py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs md:text-sm font-medium hover:bg-gray-200 transition no-underline">
-                    Editar
-                </a>
-            </div>
-        </div>
 
-        {{-- Quick stats --}}
-        <div class="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4 mt-4 md:mt-6 pt-4 md:pt-6 border-t">
-            <div class="text-center">
-                <div class="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">{{ $this->stats['total_visits'] }}</div>
-                <div class="text-[10px] md:text-xs text-gray-500">Consultas</div>
+                <div class="pp-actions">
+                    @if($patient->phone)
+                    <a href="https://wa.me/52{{ preg_replace('/\D/', '', $patient->phone) }}" target="_blank" class="pp-btn pp-btn-primary" style="background:#22c55e;color:white;">
+                        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                        WhatsApp
+                    </a>
+                    @endif
+                    <a href="{{ route('filament.doctor.resources.citas.create') }}?patient={{ $patient->id }}" class="pp-btn pp-btn-primary">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Agendar
+                    </a>
+                    <a href="{{ route('filament.doctor.resources.pacientes.edit', $patient->id) }}" class="pp-btn pp-btn-ghost">
+                        Editar
+                    </a>
+                </div>
             </div>
-            <div class="text-center">
-                <div class="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">{{ $this->stats['total_appointments'] }}</div>
-                <div class="text-[10px] md:text-xs text-gray-500">Citas</div>
-            </div>
-            <div class="text-center">
-                <div class="text-lg md:text-2xl font-bold text-teal-600">${{ number_format($this->stats['total_paid'], 0) }}</div>
-                <div class="text-[10px] md:text-xs text-gray-500">Pagado</div>
-            </div>
-            <div class="text-center hidden md:block">
-                <div class="text-2xl font-bold {{ $this->stats['pending'] > 0 ? 'text-amber-500' : 'text-gray-400' }}">${{ number_format($this->stats['pending'], 0) }}</div>
-                <div class="text-xs text-gray-500">Pendiente</div>
-            </div>
-            <div class="text-center hidden md:block">
-                <div class="text-sm font-bold text-gray-900 dark:text-white">{{ $this->stats['last_visit'] ? \Carbon\Carbon::parse($this->stats['last_visit'])->format('d/m/Y') : 'Sin visitas' }}</div>
-                <div class="text-xs text-gray-500">Ultima visita</div>
-            </div>
-        </div>
 
-        @if($patient->allergies)
-        <div class="mt-3 md:mt-4 p-2.5 md:p-3 bg-red-50 dark:bg-red-950 border border-red-200 rounded-lg flex items-center gap-2">
-            <svg class="w-4 h-4 md:w-5 md:h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-            <span class="text-xs md:text-sm text-red-700 dark:text-red-300 font-medium">Alergias: {{ $patient->allergies }}</span>
+            {{-- STATS GRID --}}
+            <div class="pp-stats">
+                <div class="pp-stat">
+                    <div class="pp-stat-label">Consultas</div>
+                    <div class="pp-stat-value">{{ $this->stats['total_visits'] }}</div>
+                </div>
+                <div class="pp-stat">
+                    <div class="pp-stat-label">Citas totales</div>
+                    <div class="pp-stat-value">{{ $this->stats['total_appointments'] }}</div>
+                </div>
+                <div class="pp-stat">
+                    <div class="pp-stat-label">Total pagado</div>
+                    <div class="pp-stat-value">${{ number_format($this->stats['total_paid'], 0) }}</div>
+                </div>
+                <div class="pp-stat">
+                    <div class="pp-stat-label">Pendiente</div>
+                    <div class="pp-stat-value" style="{{ $this->stats['pending'] > 0 ? 'color:#fbbf24;' : 'opacity:0.6;' }}">${{ number_format($this->stats['pending'], 0) }}</div>
+                </div>
+                <div class="pp-stat">
+                    <div class="pp-stat-label">Última visita</div>
+                    <div class="pp-stat-value-sm">{{ $this->stats['last_visit'] ? \Carbon\Carbon::parse($this->stats['last_visit'])->format('d/m/Y') : 'Sin visitas' }}</div>
+                </div>
+            </div>
+
+            @if($patient->allergies)
+            <div class="pp-allergies">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                <span>⚠️ Alergias: {{ $patient->allergies }}</span>
+            </div>
+            @endif
         </div>
-        @endif
     </div>
 
     {{-- AI Summary Card --}}
@@ -85,7 +119,7 @@
                 </div>
                 <div>
                     <div style="font-size:11px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Resumen IA</div>
-                    <div style="font-size:10px;color:#64748b;">Generado por Claude</div>
+                    <div style="font-size:10px;color:#64748b;">Generado por IA</div>
                 </div>
             </div>
             <button wire:click="refreshAiSummary" wire:loading.attr="disabled" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:white;border:1px solid #99f6e4;border-radius:8px;font-size:11px;color:#0f766e;cursor:pointer;font-weight:600;">

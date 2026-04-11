@@ -34,9 +34,9 @@
         "url": "{{ url('/') }}",
         "offers": [
             { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free" },
-            { "@@type": "Offer", "price": "249", "priceCurrency": "MXN", "name": "Plan Básico" },
-            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Pro" },
-            { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Clínica" }
+            { "@@type": "Offer", "price": "299", "priceCurrency": "MXN", "name": "Plan Básico" },
+            { "@@type": "Offer", "price": "599", "priceCurrency": "MXN", "name": "Plan Pro" },
+            { "@@type": "Offer", "price": "1199", "priceCurrency": "MXN", "name": "Plan Clínica" }
         ],
         "aggregateRating": { "@@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
     }
@@ -109,22 +109,21 @@
         <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl animate-blob" style="animation-delay:6s"></div>
 
         <div class="max-w-5xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 text-sm font-semibold rounded-full mb-8 animate-fade-up border border-teal-100">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-50 via-cyan-50 to-purple-50 text-teal-700 text-sm font-bold rounded-full mb-8 animate-fade-up border border-teal-200 shadow-sm">
                 <span class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
-                +500 consultorios ya usan DocFacil
+                ✨ El unico software medico con IA en Mexico
             </div>
 
             <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-up delay-100">
-                Deja de perder tiempo<br>
-                <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-600 bg-clip-text text-transparent animate-gradient">
-                    con el papeleo
+                Habla y la IA<br>
+                <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-purple-600 bg-clip-text text-transparent animate-gradient">
+                    llena tu expediente
                 </span>
             </h1>
 
             <p class="mt-8 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Mientras tu sigues con libretas, hojas de Excel y notas perdidas,
-                <strong class="text-gray-900">tus pacientes esperan un consultorio moderno</strong>.
-                Automatiza tu consultorio en minutos.
+                Dicta tu consulta y la IA escribe diagnostico, tratamiento, receta y notas automaticamente.
+                <strong class="text-gray-900">Ahorra 5 minutos por paciente.</strong> Deja el papeleo al asistente IA.
             </p>
 
             <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-300">
@@ -249,29 +248,45 @@
     <section id="features" class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-animate>
-                <span class="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full mb-4">12+ MODULOS INCLUIDOS</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Todo lo que tu consultorio necesita</h2>
-                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Cada funcion fue disenada pensando en el dia a dia real de un doctor o dentista</p>
+                <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-xs font-bold rounded-full mb-4 shadow-lg shadow-teal-200">
+                    ✨ 20+ FUNCIONES CON IA INTEGRADA
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-gray-900" style="letter-spacing:-0.025em;">El unico software medico con IA <span style="background:linear-gradient(135deg,#0d9488,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">de verdad</span></h2>
+                <p class="mt-5 text-lg text-gray-600 max-w-2xl mx-auto">Ningun competidor en Mexico tiene esto. La IA escucha tu consulta, escribe expedientes, sugiere diagnosticos y predice tu negocio.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" data-animate>
                 @php
                 $features = [
-                    ['icon' => '📅', 'title' => 'Agenda de citas', 'desc' => 'Calendario visual con horarios por doctor. Configura duracion por servicio. Citas de hoy en un clic.'],
-                    ['icon' => '👥', 'title' => 'Perfil 360 del paciente', 'desc' => 'Historial, recetas, pagos, citas y odontograma en una sola pantalla. Vista completa de cada paciente.'],
-                    ['icon' => '📋', 'title' => 'Expediente clinico', 'desc' => 'Diagnosticos, tratamientos, signos vitales, radiografias. Historial completo con auditoria de cambios.'],
-                    ['icon' => '📱', 'title' => 'WhatsApp automatico', 'desc' => 'Recordatorio 24hrs antes. Manual con un clic. Reduce inasistencias hasta un 40%.'],
-                    ['icon' => '📝', 'title' => 'Recetas PDF', 'desc' => 'Genera recetas profesionales con cedula, medicamentos, dosis y firma. Descarga o envia por WhatsApp.'],
-                    ['icon' => '💳', 'title' => 'Cobros y pagos', 'desc' => 'Registra pagos, metodos, pendientes. Alertas de cobros vencidos. Reportes de ingresos en tiempo real.'],
-                    ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => 'Diagrama dental con 13 condiciones. Click para marcar. Se muestra solo si eres dentista.'],
-                    ['icon' => '🔍', 'title' => 'Buscador global Ctrl+K', 'desc' => 'Busca pacientes, servicios o citas al instante. Acceso rapido desde cualquier pantalla.'],
-                    ['icon' => '✍️', 'title' => 'Firma digital', 'desc' => 'El paciente firma consentimientos con el dedo en tablet o celular. Guardado seguro con IP y fecha.'],
-                    ['icon' => '🔔', 'title' => 'Notificaciones', 'desc' => 'Alertas de citas, pagos pendientes, pacientes inactivos. Todo en tu panel sin buscar.'],
-                    ['icon' => '📊', 'title' => 'Reportes y graficas', 'desc' => 'Ingresos diarios/mensuales, servicios top, citas perdidas. Dashboard con datos en tiempo real.'],
-                    ['icon' => '🩺', 'title' => 'Flujo de consulta guiado', 'desc' => 'Wizard paso a paso: signos vitales, diagnostico, receta, cobro y siguiente cita. Todo en 2 minutos.'],
+                    // IA features (highlight)
+                    ['icon' => '🎤', 'title' => 'Dictado inteligente con IA', 'desc' => 'Habla tu consulta normal y la IA llena automaticamente el diagnostico, tratamiento, receta y notas. Ahorra 5 minutos por paciente.', 'ai' => true],
+                    ['icon' => '🧠', 'title' => 'Resumen IA del paciente', 'desc' => 'Al abrir un paciente, la IA te da un resumen narrativo: edad, visitas, diagnosticos previos, alertas importantes. En 2 segundos entiendes todo.', 'ai' => true],
+                    ['icon' => '💡', 'title' => 'Sugerencias de Dx con IA', 'desc' => 'Escribes el motivo de consulta y la IA sugiere 3 diagnosticos probables con tratamiento y medicamento. Un clic y se llena.', 'ai' => true],
+                    ['icon' => '📋', 'title' => 'Consentimientos con IA', 'desc' => 'Escribes el nombre del procedimiento y la IA genera el consentimiento completo con riesgos y alternativas. Listo en 5 segundos.', 'ai' => true],
+                    ['icon' => '📊', 'title' => 'Analisis IA del consultorio', 'desc' => 'La IA analiza tus datos y te dice que hacer: oportunidades de ingreso, pacientes en riesgo, cobros pendientes. Como tener un consultor.', 'ai' => true],
+                    ['icon' => '🔮', 'title' => 'Metricas predictivas', 'desc' => 'Predice tus ingresos del proximo mes, detecta pacientes que se van a ir, sugiere cuando subir precios. Inteligencia de negocio real.', 'ai' => true],
+                    ['icon' => '🤖', 'title' => 'Chatbot IA flotante', 'desc' => 'Un boton en cualquier pagina. Le preguntas "cuanto facture este mes" o "que citas tengo manana" y responde con datos reales.', 'ai' => true],
+                    ['icon' => '💬', 'title' => 'Autoresponder WhatsApp IA', 'desc' => 'Los pacientes mandan WhatsApp y la IA responde en tu nombre sobre citas, recetas, indicaciones. Sin recepcionista.', 'ai' => true],
+                    // Practical
+                    ['icon' => '📱', 'title' => 'Recordatorios automaticos', 'desc' => 'Recordatorio 24h y 2h antes por WhatsApp. Seguimiento si no asistio. Reduce inasistencias hasta 40%.'],
+                    ['icon' => '📱', 'title' => 'Check-in con QR', 'desc' => 'Pegas un QR en recepcion, el paciente escanea y llena sus datos desde su celular. Cero papeleo.'],
+                    ['icon' => '💳', 'title' => 'Cobro por WhatsApp', 'desc' => 'Al terminar la consulta, boton para enviar monto y link de pago al paciente por WhatsApp. Cobras mas rapido.'],
+                    ['icon' => '⌨️', 'title' => 'Command Palette (Ctrl+K)', 'desc' => 'Oprime Ctrl+K en cualquier pagina y escribe lo que quieres hacer. Navega toda la app con teclado.'],
+                    ['icon' => '🗓️', 'title' => 'Slot magico en agenda', 'desc' => 'Dile "busca 30min manana" y la IA te da los mejores horarios considerando tu agenda, hora de comida y preferencias.'],
+                    ['icon' => '📝', 'title' => 'Recetas PDF profesionales', 'desc' => 'Genera recetas con tu cedula, clinica, medicamentos y firma digital. Descarga o manda por WhatsApp.'],
+                    ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => 'Diagrama dental completo con 13 condiciones. Perfecto para dentistas. Compartible con el paciente.'],
+                    ['icon' => '✍️', 'title' => 'Firma digital pad', 'desc' => 'El paciente firma consentimientos con el dedo en tablet o celular. Legalmente valido con timestamp.'],
+                    ['icon' => '👥', 'title' => 'Portal del paciente', 'desc' => 'Cada paciente puede ver sus citas, recetas, pagos e historial. Acceso con su numero de telefono.'],
+                    ['icon' => '📊', 'title' => 'Dashboard con graficas', 'desc' => 'Ingresos, pacientes, citas de hoy, cobros pendientes. Todo visible al entrar. Datos en tiempo real.'],
+                    ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, citas sin confirmar, cumpleanos. Nada se te escapa.'],
+                    ['icon' => '🏥', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Maneja varios doctores y sucursales desde un solo panel. Comisiones entre doctores incluidas.'],
                 ];
                 @endphp
                 @foreach($features as $i => $feature)
-                <div class="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-100/50 transition-all duration-300 hover:-translate-y-2 animate-fade-up" style="animation-delay:{{ $i * 0.08 }}s">
+                @php $isAi = $feature['ai'] ?? false; @endphp
+                <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $isAi ? 'bg-gradient-to-br from-teal-50 via-cyan-50 to-purple-50 border-2 border-teal-200 hover:border-teal-400 hover:shadow-2xl hover:shadow-teal-200/50' : 'bg-white border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-100/50' }}" style="animation-delay:{{ $i * 0.05 }}s">
+                    @if($isAi)
+                    <span class="absolute top-3 right-3 px-2 py-0.5 bg-gradient-to-r from-teal-600 to-purple-600 text-white text-[10px] font-bold rounded-full shadow">✨ IA</span>
+                    @endif
                     <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">{{ $feature['icon'] }}</div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $feature['title'] }}</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">{{ $feature['desc'] }}</p>
@@ -410,9 +425,9 @@
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Basico', 'price' => '249', 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Dictado por voz', 'Resumen IA del paciente', 'Sugerencias de Dx con IA'], 'cta' => 'Probar 14 dias', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '499', 'subtitle' => 'por mes', 'features' => ['3 doctores', 'Pacientes ilimitados', 'Dictado inteligente con IA', 'Consentimientos con IA', 'Analisis IA del consultorio', 'Cobro por WhatsApp', 'Check-in con QR'], 'cta' => 'Probar 14 dias', 'popular' => true],
-                    ['name' => 'Clinica', 'price' => '999', 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Basico', 'price' => '299', 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Cobro por WhatsApp', 'Recordatorios automaticos', 'Check-in con QR', 'Dictado por voz'], 'cta' => 'Probar 14 dias', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '599', 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Basico +', 'Dictado inteligente con IA', 'Consentimientos con IA', 'Analisis IA del consultorio', 'Sugerencias de diagnostico', 'Command Palette (Ctrl+K)', 'Chatbot IA', 'Metricas predictivas'], 'cta' => 'Probar 14 dias', 'popular' => true],
+                    ['name' => 'Clinica', 'price' => '1,199', 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Comisiones entre doctores', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -705,11 +720,12 @@
             <div class="space-y-2" id="faq-buttons">
                 <button onclick="askFaq(0)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Que es DocFacil?</button>
                 <button onclick="askFaq(1)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Cuanto cuesta?</button>
-                <button onclick="askFaq(2)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Para que especialidades sirve?</button>
-                <button onclick="askFaq(4)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Que es el flujo de consulta?</button>
-                <button onclick="askFaq(5)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Los pacientes pueden firmar digital?</button>
-                <button onclick="askFaq(6)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Mis datos estan seguros?</button>
-                <button onclick="askFaq(8)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo probarlo sin registrarme?</button>
+                <button onclick="askFaq(2)" class="block w-full text-left px-3 py-2.5 bg-gradient-to-r from-teal-50 to-purple-50 hover:from-teal-100 hover:to-purple-100 rounded-xl text-xs transition border border-teal-200 font-semibold">✨ Como funciona la IA de dictado?</button>
+                <button onclick="askFaq(4)" class="block w-full text-left px-3 py-2.5 bg-gradient-to-r from-teal-50 to-purple-50 hover:from-teal-100 hover:to-purple-100 rounded-xl text-xs transition border border-teal-200 font-semibold">✨ Como funciona el chatbot IA?</button>
+                <button onclick="askFaq(5)" class="block w-full text-left px-3 py-2.5 bg-gradient-to-r from-teal-50 to-purple-50 hover:from-teal-100 hover:to-purple-100 rounded-xl text-xs transition border border-teal-200 font-semibold">✨ Que es el analisis predictivo?</button>
+                <button onclick="askFaq(7)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Como funcionan los recordatorios?</button>
+                <button onclick="askFaq(6)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Para que especialidades sirve?</button>
+                <button onclick="askFaq(12)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo probar gratis?</button>
             </div>
         </div>
     </div>
@@ -753,15 +769,19 @@ window.addEventListener('scroll', () => {
 
 // Chatbot
 const faqs = [
-    { q: 'Que es DocFacil?', a: 'DocFacil es un software 100% en linea para gestionar consultorios medicos y dentales. Incluye agenda, expedientes, recetas PDF, cobros, odontograma, firma digital, notificaciones y mas. Todo desde tu navegador.' },
-    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Planes desde $249/mes con IA integrada (dictado, resumen de paciente, sugerencias de diagnostico). 14 dias de prueba gratis con TODAS las funciones. Sin tarjeta de credito.' },
-    { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia, cardiologia y mas. El sistema se adapta a tu especialidad: los dentistas ven odontograma, los pediatras ven curvas de crecimiento, etc.' },
-    { q: 'Como funcionan los recordatorios?', a: 'Enviamos recordatorios automaticos por WhatsApp 24hrs antes de cada cita. Tambien puedes enviar manualmente con un clic. Reduce inasistencias hasta un 40% desde el primer mes.' },
-    { q: 'Que es el flujo de consulta?', a: 'Un wizard paso a paso que guia al doctor: signos vitales, diagnostico, receta, cobro y siguiente cita. Todo en una sola pantalla, en 2 minutos. Se crea el expediente, la receta y el pago automaticamente.' },
-    { q: 'Los pacientes pueden firmar digital?', a: 'Si! El paciente firma consentimientos informados con el dedo en tu tablet o celular. Se guarda con fecha, hora e IP. Genera PDF legal descargable.' },
-    { q: 'Mis datos estan seguros?', a: 'Encriptacion SSL, backups automaticos, historial de cambios (quien edito que y cuando), y cumplimos con normas de proteccion de datos de salud. Tu informacion nunca se comparte.' },
-    { q: 'Puedo tener varios doctores?', a: 'Si! Invita doctores a tu consultorio por email. Cada uno con su agenda, sus pacientes y su perfil. Desde el plan Pro ($499/mes) hasta 3 doctores, o plan Clinica para doctores ilimitados.' },
-    { q: 'Puedo probarlo sin registrarme?', a: 'Si! Haz clic en "Ver demo en vivo" y explora el sistema con datos reales. Sin registro, sin compromiso. Cuando estes listo, crea tu cuenta gratis.' },
+    { q: 'Que es DocFacil?', a: 'DocFacil es el unico software medico en Mexico con IA integrada. Incluye agenda, expedientes, recetas PDF, cobros, odontograma, firma digital y mas. Lo diferencial: dictado inteligente, sugerencias de diagnostico, consentimientos automaticos, chatbot IA y analisis predictivo del consultorio. Todo desde tu navegador.' },
+    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Basico $299/mes con WhatsApp automatico, dictado por voz y PDFs profesionales. Pro $599/mes con TODA la IA (dictado inteligente, diagnosticos, consentimientos, chatbot, metricas predictivas). Clinica $1,199 para multi-doctor. 14 dias gratis con todas las funciones. Sin tarjeta.' },
+    { q: 'Como funciona la IA de dictado?', a: 'Oprimes un boton, hablas normal con el paciente y la IA escucha toda la consulta. Al terminar, llena automaticamente el motivo, diagnostico, tratamiento, receta con dosis y notas. Pasas de 5 minutos tecleando a 30 segundos revisando. Es el unico software medico en Mexico con esto.' },
+    { q: 'Que es Command Palette?', a: 'Oprime Ctrl+K en cualquier pagina y escribe lo que quieres hacer: buscar un paciente, agendar cita, generar receta o hacer preguntas como "cuanto facture este mes". La IA entiende y te lleva directo. Como Linear o Notion, pero para tu consultorio.' },
+    { q: 'Como funciona el chatbot IA?', a: 'Es un boton flotante que siempre esta disponible. Le preguntas "que citas tengo manana", "cuanto llevo cobrado este mes", "genera un mensaje para Juan Perez" y responde con datos reales de tu consultorio. Es como tener a ChatGPT conectado a tu clinica.' },
+    { q: 'Que es el analisis predictivo?', a: 'La IA analiza 6 meses de datos y te da predicciones accionables: cuanto vas a facturar, que pacientes se van a ir, cuando subir precios, que servicios son mas rentables. Es como tener un consultor de negocio 24/7.' },
+    { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia y mas. El sistema se adapta: los dentistas ven odontograma, todos ven dictado IA, sugerencias de diagnostico y chatbot. La IA entiende terminologia medica en espanol mexicano.' },
+    { q: 'Como funcionan los recordatorios?', a: 'Automaticos por WhatsApp: 24hrs antes con confirmacion, 2hrs antes como reminder y seguimiento si no asistio. Reduce inasistencias hasta 40%. Plus: tus pacientes pueden escribirte a WhatsApp y la IA responde en tu nombre sobre citas, recetas e indicaciones.' },
+    { q: 'Como ayuda la IA en las recetas?', a: 'Escribes el sintoma y la IA sugiere 3 diagnosticos probables con su tratamiento y medicamento (dosis, frecuencia, duracion). Un clic y se llena todo. Tambien genera consentimientos informados completos en 5 segundos solo con el nombre del procedimiento.' },
+    { q: 'Los pacientes pueden firmar digital?', a: 'Si! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Los consentimientos pueden ser generados por IA en 5 segundos escribiendo solo el procedimiento.' },
+    { q: 'Mis datos estan seguros?', a: 'Encriptacion SSL, backups automaticos diarios, historial de cambios por usuario, separacion por clinica (tus datos nunca se cruzan con otra clinica). Cumplimos normas de proteccion de datos de salud en Mexico.' },
+    { q: 'Puedo tener varios doctores?', a: 'Si! Desde el plan Pro ($599/mes) hasta 3 doctores, o plan Clinica ($1,199) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
+    { q: 'Puedo probarlo sin registrarme?', a: 'Si! Hay un modo demo que crea una clinica temporal con 35 pacientes falsos, 60 citas historicas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
 ];
 
 function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }

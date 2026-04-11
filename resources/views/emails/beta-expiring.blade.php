@@ -30,8 +30,8 @@
             <div class="founder">
                 <strong>Tu precio de fundador de por vida:</strong>
                 <p style="margin: 10px 0;">
-                    <span style="text-decoration: line-through; color: #999;">$499/mes</span>
-                    <span style="font-size: 24px; font-weight: bold; color: #0d9488; margin-left: 10px;">${{ number_format($clinic->founder_price ?? 249, 0) }}/mes</span>
+                    <span style="text-decoration: line-through; color: #999;">$599/mes</span>
+                    <span style="font-size: 24px; font-weight: bold; color: #0d9488; margin-left: 10px;">${{ number_format($clinic->founder_price ?? 299, 0) }}/mes</span>
                 </p>
                 <p style="font-size: 13px; color: #666;">50% de descuento permanente por ser beta tester fundador.</p>
             </div>

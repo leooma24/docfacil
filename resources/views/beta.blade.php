@@ -83,7 +83,7 @@
                         </div>
                         <div>
                             <div style="font-weight:700;color:#111;">Precio de fundador de por vida</div>
-                            <div style="font-size:0.8rem;color:#6b7280;">Cuando decidas pagar: $249/mes en vez de $499 (50% descuento permanente).</div>
+                            <div style="font-size:0.8rem;color:#6b7280;">Cuando decidas pagar: $299/mes en vez de $599 (50% descuento permanente).</div>
                         </div>
                     </div>
                 </div>
