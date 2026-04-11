@@ -92,4 +92,22 @@ class VerifyClinicPlan
             default => ['doctors' => 1, 'patients' => 30, 'appointments' => 20],
         };
     }
+
+    /**
+     * Feature gates per plan. Use Plan::hasFeature($plan, 'ai_dictation').
+     */
+    public static function planHasFeature(string $plan, string $feature): bool
+    {
+        $features = [
+            'free' => [],
+            'basico' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions'],
+            'profesional' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions',
+                'smart_dictation', 'ai_consent_templates', 'ai_insights', 'whatsapp_payment', 'qr_checkin',
+                'patient_portal', 'multi_doctor'],
+            'clinica' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions',
+                'smart_dictation', 'ai_consent_templates', 'ai_insights', 'whatsapp_payment', 'qr_checkin',
+                'patient_portal', 'multi_doctor', 'unlimited_doctors', 'multi_branch', 'priority_support'],
+        ];
+        return in_array($feature, $features[$plan] ?? []);
+    }
 }

@@ -33,10 +33,10 @@
         "operatingSystem": "Web",
         "url": "{{ url('/') }}",
         "offers": [
-            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Gratis" },
-            { "@@type": "Offer", "price": "149", "priceCurrency": "MXN", "name": "Plan Básico" },
-            { "@@type": "Offer", "price": "299", "priceCurrency": "MXN", "name": "Plan Profesional" },
-            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Clínica" }
+            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free" },
+            { "@@type": "Offer", "price": "249", "priceCurrency": "MXN", "name": "Plan Básico" },
+            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Pro" },
+            { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Clínica" }
         ],
         "aggregateRating": { "@@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
     }
@@ -322,10 +322,10 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php
                 $plans = [
-                    ['name' => 'Gratis', 'price' => '0', 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Basico', 'price' => '149', 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'WhatsApp automatico'], 'cta' => 'Probar 15 dias', 'popular' => false],
-                    ['name' => 'Profesional', 'price' => '299', 'subtitle' => 'por mes', 'features' => ['3 doctores', 'Pacientes ilimitados', 'Recetas PDF', 'Reportes completos', 'Odontograma'], 'cta' => 'Probar 15 dias', 'popular' => true],
-                    ['name' => 'Clinica', 'price' => '499', 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Soporte prioritario', 'Consentimientos PDF', 'Todo incluido'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Free', 'price' => '0', 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
+                    ['name' => 'Basico', 'price' => '249', 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Dictado por voz', 'Resumen IA del paciente', 'Sugerencias de Dx con IA'], 'cta' => 'Probar 14 dias', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '499', 'subtitle' => 'por mes', 'features' => ['3 doctores', 'Pacientes ilimitados', 'Dictado inteligente con IA', 'Consentimientos con IA', 'Analisis IA del consultorio', 'Cobro por WhatsApp', 'Check-in con QR'], 'cta' => 'Probar 14 dias', 'popular' => true],
+                    ['name' => 'Clinica', 'price' => '999', 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -667,13 +667,13 @@ window.addEventListener('scroll', () => {
 // Chatbot
 const faqs = [
     { q: 'Que es DocFacil?', a: 'DocFacil es un software 100% en linea para gestionar consultorios medicos y dentales. Incluye agenda, expedientes, recetas PDF, cobros, odontograma, firma digital, notificaciones y mas. Todo desde tu navegador.' },
-    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Planes desde $149/mes con citas ilimitadas y WhatsApp. 15 dias de prueba gratis con TODAS las funciones. Sin tarjeta de credito.' },
+    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Planes desde $249/mes con IA integrada (dictado, resumen de paciente, sugerencias de diagnostico). 14 dias de prueba gratis con TODAS las funciones. Sin tarjeta de credito.' },
     { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia, cardiologia y mas. El sistema se adapta a tu especialidad: los dentistas ven odontograma, los pediatras ven curvas de crecimiento, etc.' },
     { q: 'Como funcionan los recordatorios?', a: 'Enviamos recordatorios automaticos por WhatsApp 24hrs antes de cada cita. Tambien puedes enviar manualmente con un clic. Reduce inasistencias hasta un 40% desde el primer mes.' },
     { q: 'Que es el flujo de consulta?', a: 'Un wizard paso a paso que guia al doctor: signos vitales, diagnostico, receta, cobro y siguiente cita. Todo en una sola pantalla, en 2 minutos. Se crea el expediente, la receta y el pago automaticamente.' },
     { q: 'Los pacientes pueden firmar digital?', a: 'Si! El paciente firma consentimientos informados con el dedo en tu tablet o celular. Se guarda con fecha, hora e IP. Genera PDF legal descargable.' },
     { q: 'Mis datos estan seguros?', a: 'Encriptacion SSL, backups automaticos, historial de cambios (quien edito que y cuando), y cumplimos con normas de proteccion de datos de salud. Tu informacion nunca se comparte.' },
-    { q: 'Puedo tener varios doctores?', a: 'Si! Invita doctores a tu consultorio por email. Cada uno con su agenda, sus pacientes y su perfil. Desde el plan Profesional ($299/mes) hasta 3 doctores.' },
+    { q: 'Puedo tener varios doctores?', a: 'Si! Invita doctores a tu consultorio por email. Cada uno con su agenda, sus pacientes y su perfil. Desde el plan Pro ($499/mes) hasta 3 doctores, o plan Clinica para doctores ilimitados.' },
     { q: 'Puedo probarlo sin registrarme?', a: 'Si! Haz clic en "Ver demo en vivo" y explora el sistema con datos reales. Sin registro, sin compromiso. Cuando estes listo, crea tu cuenta gratis.' },
 ];
 

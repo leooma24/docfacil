@@ -26,7 +26,7 @@
                 <strong>No pierdas tu información.</strong> Actualiza tu plan para seguir gestionando tu consultorio sin interrupciones.
             </div>
 
-            <p>Planes desde <strong>$149/mes</strong> con citas ilimitadas y recordatorios WhatsApp.</p>
+            <p>Planes desde <strong>$249/mes</strong> con IA integrada, citas ilimitadas y recordatorios WhatsApp.</p>
 
             <p style="text-align: center;">
                 <a href="{{ url('/doctor') }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Actualizar mi plan</a>
