@@ -11,6 +11,68 @@ class ConsultationAIService
      * Parse a raw dictation transcript from the doctor and extract structured data:
      * chief_complaint, diagnosis, treatment, medical_notes, medications[]
      */
+    /**
+     * Given a chief complaint, suggest 3 probable diagnoses with
+     * standard treatments and medications. Cached 24h per unique input.
+     */
+    public function suggestDiagnoses(string $chiefComplaint): ?array
+    {
+        $complaint = trim($chiefComplaint);
+        if (strlen($complaint) < 8) return null;
+
+        $cacheKey = 'ai_dx_suggestions:' . md5(strtolower($complaint));
+
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addHours(24), function () use ($complaint) {
+            return $this->generateSuggestions($complaint);
+        });
+    }
+
+    protected function generateSuggestions(string $complaint): ?array
+    {
+        $system = "Eres un asistente médico experto que sugiere diagnósticos probables en español. "
+            . "Recibes el motivo de consulta de un paciente y devuelves EXACTAMENTE 3 diagnósticos más probables con su tratamiento estándar y medicamento recomendado. "
+            . "Responde en JSON con esta estructura EXACTA:\n"
+            . '{"suggestions":[{"diagnosis":"diagnóstico corto","treatment":"tratamiento estándar","medication":{"medication":"nombre","dosage":"dosis","frequency":"frecuencia","duration":"duración","instructions":"indicaciones"}}]}' . "\n\n"
+            . "Reglas:\n"
+            . "- Máximo 3 sugerencias, ordenadas de más a menos probable\n"
+            . "- El diagnóstico debe ser BREVE (5-8 palabras)\n"
+            . "- El tratamiento debe ser el estándar médico (1-2 oraciones)\n"
+            . "- Incluye el medicamento más común para ese diagnóstico\n"
+            . "- Usa terminología médica mexicana estándar\n"
+            . "- Contexto: clínicas dentales y consulta médica general\n"
+            . "- RESPONDE SOLO CON EL JSON, sin texto extra ni markdown";
+
+        $user = "MOTIVO DE CONSULTA:\n\"{$complaint}\"\n\nJSON:";
+
+        try {
+            $result = $this->callAi($system, $user);
+            if (!$result) return null;
+
+            $json = $this->extractJson($result);
+            if (!$json) return null;
+
+            $data = json_decode($json, true);
+            if (!is_array($data) || empty($data['suggestions'])) return null;
+
+            return array_slice(array_map(function ($s) {
+                return [
+                    'diagnosis' => (string) ($s['diagnosis'] ?? ''),
+                    'treatment' => (string) ($s['treatment'] ?? ''),
+                    'medication' => [
+                        'medication' => (string) ($s['medication']['medication'] ?? ''),
+                        'dosage' => (string) ($s['medication']['dosage'] ?? ''),
+                        'frequency' => (string) ($s['medication']['frequency'] ?? ''),
+                        'duration' => (string) ($s['medication']['duration'] ?? ''),
+                        'instructions' => (string) ($s['medication']['instructions'] ?? ''),
+                    ],
+                ];
+            }, $data['suggestions']), 0, 3);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Suggestions AI exception', ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
     public function structureDictation(string $transcript): ?array
     {
         if (empty(trim($transcript))) {

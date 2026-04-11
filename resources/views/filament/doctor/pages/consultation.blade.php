@@ -317,12 +317,48 @@
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de consulta</label>
                 <div class="field-with-mic">
-                    <textarea wire:model="chief_complaint" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
+                    <textarea wire:model.live.debounce.1500ms="chief_complaint" wire:change="fetchDxSuggestions" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
                     <button type="button" class="mic-btn" :class="{ recording: activeKey === 'chief_complaint' }" @click="toggle('chief_complaint')" title="Dictar por voz">
                         <svg x-show="activeKey !== 'chief_complaint'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
                         <svg x-show="activeKey === 'chief_complaint'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
                     </button>
                 </div>
+
+                {{-- AI Diagnosis Suggestions --}}
+                <div wire:loading wire:target="fetchDxSuggestions" style="margin-top:10px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdfa;border:1px dashed #5eead4;border-radius:10px;font-size:12px;color:#0f766e;">
+                    <div style="width:8px;height:8px;background:#0d9488;border-radius:50%;animation:pulse 1s infinite;"></div>
+                    <span>IA analizando el motivo...</span>
+                </div>
+
+                @if(!empty($dxSuggestions))
+                <div wire:loading.remove wire:target="fetchDxSuggestions" style="margin-top:10px;background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1.5px solid #5eead4;border-radius:12px;padding:12px 14px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <svg style="width:14px;height:14px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            <span style="font-size:11px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Sugerencias IA</span>
+                        </div>
+                        <button wire:click="dismissSuggestions" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:11px;padding:2px 6px;">✕</button>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;">
+                        @foreach($dxSuggestions as $i => $sug)
+                        <button type="button" wire:click="applySuggestion({{ $i }})" style="text-align:left;background:white;border:1px solid #d1fae5;border-radius:8px;padding:10px 12px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:3px;" onmouseover="this.style.borderColor='#0d9488';this.style.boxShadow='0 2px 8px rgba(13,148,136,0.15)';" onmouseout="this.style.borderColor='#d1fae5';this.style.boxShadow='none';">
+                            <div style="display:flex;align-items:center;gap:6px;">
+                                <span style="background:#0d9488;color:white;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">{{ $i + 1 }}</span>
+                                <span style="font-weight:700;color:#111;font-size:13px;">{{ $sug['diagnosis'] }}</span>
+                            </div>
+                            <div style="font-size:11px;color:#4b5563;margin-left:24px;">
+                                <strong style="color:#0f766e;">Tx:</strong> {{ $sug['treatment'] }}
+                                @if(!empty($sug['medication']['medication']))
+                                <br>
+                                <strong style="color:#0f766e;">Rx:</strong> {{ $sug['medication']['medication'] }} {{ $sug['medication']['dosage'] }}
+                                @endif
+                            </div>
+                        </button>
+                        @endforeach
+                    </div>
+                    <div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center;">Haz click en una sugerencia para aplicarla</div>
+                </div>
+                @endif
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diagnóstico</label>

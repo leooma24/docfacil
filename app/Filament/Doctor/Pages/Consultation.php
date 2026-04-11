@@ -323,6 +323,47 @@ class Consultation extends Page implements HasForms
 
     public ?string $fullDictation = '';
     public bool $processingDictation = false;
+    public array $dxSuggestions = [];
+    public bool $loadingSuggestions = false;
+
+    public function fetchDxSuggestions(): void
+    {
+        if (strlen(trim($this->chief_complaint)) < 10) {
+            $this->dxSuggestions = [];
+            return;
+        }
+        $this->loadingSuggestions = true;
+        $suggestions = app(ConsultationAIService::class)->suggestDiagnoses($this->chief_complaint);
+        $this->dxSuggestions = $suggestions ?? [];
+        $this->loadingSuggestions = false;
+    }
+
+    public function applySuggestion(int $index): void
+    {
+        if (!isset($this->dxSuggestions[$index])) return;
+
+        $s = $this->dxSuggestions[$index];
+        $this->diagnosis = $s['diagnosis'] ?? '';
+        $this->treatment = $s['treatment'] ?? '';
+
+        if (!empty($s['medication']['medication'])) {
+            $this->medications = array_merge($this->medications ?? [], [$s['medication']]);
+        }
+
+        $this->dxSuggestions = [];
+        $this->saveConsultationState();
+
+        Notification::make()
+            ->title('✨ Sugerencia aplicada')
+            ->body('Revisa y ajusta si es necesario.')
+            ->success()
+            ->send();
+    }
+
+    public function dismissSuggestions(): void
+    {
+        $this->dxSuggestions = [];
+    }
 
     public function processFullDictation(): void
     {
