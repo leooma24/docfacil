@@ -12,8 +12,12 @@ class AssistantChat extends Component
     public array $messages = [];
     public bool $thinking = false;
 
+    public bool $aiEnabled = false;
+
     public function mount(): void
     {
+        $this->aiEnabled = \App\Services\AI::enabled();
+
         $this->messages = [
             [
                 'role' => 'assistant',

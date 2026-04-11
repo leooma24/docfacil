@@ -1,4 +1,7 @@
 <div>
+    @if(!$aiEnabled)
+        {{-- AI disabled globally, hide widget --}}
+    @else
     <style>
         .chat-fab { position: fixed; bottom: 24px; right: 24px; z-index: 9999; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #0d9488, #0891b2 50%, #7c3aed); border: none; cursor: pointer; box-shadow: 0 12px 35px rgba(13,148,136,0.45), inset 0 1px 0 rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
         .chat-fab:hover { transform: scale(1.12) translateY(-2px); box-shadow: 0 16px 40px rgba(13,148,136,0.6), inset 0 1px 0 rgba(255,255,255,0.4); }
@@ -113,4 +116,5 @@
             if (body) body.scrollTop = body.scrollHeight;
         });
     </script>
+    @endif
 </div>

@@ -17,6 +17,8 @@ class ConsultationAIService
      */
     public function suggestDiagnoses(string $chiefComplaint): ?array
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         $complaint = trim($chiefComplaint);
         if (strlen($complaint) < 8) return null;
 
@@ -75,6 +77,8 @@ class ConsultationAIService
 
     public function structureDictation(string $transcript): ?array
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         if (empty(trim($transcript))) {
             return null;
         }

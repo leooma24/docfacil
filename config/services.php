@@ -48,6 +48,8 @@ return [
     ],
 
     'ai' => [
+        'enabled' => env('AI_ENABLED', false),
+        'max_daily_cost_usd' => env('AI_MAX_DAILY_COST_USD', 5),
         'provider' => env('AI_PROVIDER', 'deepseek'),
         'anthropic' => [
             'key' => env('ANTHROPIC_API_KEY'),

@@ -15,6 +15,10 @@ class PatientAISummaryService
      */
     public function summarize(Patient $patient): ?string
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) {
+            return null;
+        }
+
         $cacheKey = $this->cacheKey($patient);
 
         return Cache::remember($cacheKey, now()->addHours(6), function () use ($patient) {

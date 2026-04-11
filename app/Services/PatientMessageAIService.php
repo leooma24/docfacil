@@ -20,6 +20,8 @@ class PatientMessageAIService
 
     public function generate(Patient $patient, string $type, ?string $extra = null): ?string
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         $typeLabel = self::TYPES[$type] ?? 'Mensaje general';
         $context = $this->buildContext($patient);
 

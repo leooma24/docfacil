@@ -14,6 +14,8 @@ class ClinicInsightsAIService
 {
     public function getInsights(int $clinicId): ?array
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         // Cache 6 hours (stats don't change that fast)
         return Cache::remember("clinic_insights:{$clinicId}:" . now()->format('Y-m-d-H'), now()->addHours(6), function () use ($clinicId) {
             return $this->generateInsights($clinicId);

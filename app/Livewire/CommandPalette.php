@@ -127,6 +127,10 @@ class CommandPalette extends Component
     public function askAi(): void
     {
         if (empty(trim($this->query))) return;
+        if (!\App\Services\AI::enabled()) {
+            $this->aiAnswer = 'La asistencia IA está desactivada temporalmente.';
+            return;
+        }
 
         $this->askingAi = true;
         $clinicId = auth()->user()->clinic_id;

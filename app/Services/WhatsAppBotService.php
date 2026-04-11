@@ -17,6 +17,8 @@ class WhatsAppBotService
      */
     public function handleIncoming(string $fromPhone, string $messageText): ?string
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         $phone = preg_replace('/\D/', '', $fromPhone);
         $last10 = substr($phone, -10);
 

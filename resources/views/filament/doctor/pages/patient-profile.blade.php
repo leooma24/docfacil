@@ -110,6 +110,7 @@
         </div>
     </div>
 
+    @if(config('services.ai.enabled'))
     {{-- AI Summary Card --}}
     <div wire:init="loadAiSummary" style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1px solid #99f6e4;border-radius:14px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
@@ -142,11 +143,13 @@
             @endif
         </div>
     </div>
+    @endif {{-- AI Summary Card --}}
     <style>
         @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 
+    @if(config('services.ai.enabled'))
     {{-- AI Message Generator --}}
     <div style="background:white;border:1px solid #e5e7eb;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
@@ -182,6 +185,7 @@
         </div>
         @endif
     </div>
+    @endif {{-- AI Message Generator --}}
 
     {{-- Tabs --}}
     <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 mb-4 md:mb-6 scrollbar-hide">

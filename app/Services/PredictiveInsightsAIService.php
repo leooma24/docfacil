@@ -13,6 +13,8 @@ class PredictiveInsightsAIService
 {
     public function getPredictions(int $clinicId): ?array
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         return Cache::remember("predictive_insights:{$clinicId}:" . now()->format('Y-m-d'), now()->addHours(12), function () use ($clinicId) {
             return $this->generate($clinicId);
         });

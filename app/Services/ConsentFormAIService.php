@@ -14,6 +14,8 @@ class ConsentFormAIService
      */
     public function generateTemplate(string $procedureName, ?string $specialty = null): ?array
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         $key = trim($procedureName);
         if (strlen($key) < 4) return null;
 

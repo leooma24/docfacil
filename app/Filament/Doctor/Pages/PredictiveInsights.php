@@ -21,6 +21,16 @@ class PredictiveInsights extends Page
 
     protected static string $view = 'filament.doctor.pages.predictive-insights';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return (bool) config('services.ai.enabled', false);
+    }
+
+    public static function canAccess(): bool
+    {
+        return (bool) config('services.ai.enabled', false);
+    }
+
     public ?array $insights = null;
     public bool $loading = false;
 

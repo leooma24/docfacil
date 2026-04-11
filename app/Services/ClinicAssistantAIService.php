@@ -18,6 +18,8 @@ class ClinicAssistantAIService
      */
     public function ask(int $clinicId, string $question, array $history = []): ?string
     {
+        if (!\App\Services\AI::enabled() || \App\Services\AI::dailyLimitReached()) return null;
+
         $context = $this->buildContext($clinicId);
 
         $system = "Eres el asistente IA de DocFácil, una app para consultorios médicos/dentales en México. "

@@ -13,6 +13,11 @@ class AIInsightsWidget extends Widget
 
     protected static string $view = 'filament.doctor.widgets.ai-insights';
 
+    public static function canView(): bool
+    {
+        return (bool) config('services.ai.enabled', false);
+    }
+
     public function getInsights(): ?array
     {
         return app(ClinicInsightsAIService::class)->getInsights(auth()->user()->clinic_id);

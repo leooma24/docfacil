@@ -411,8 +411,9 @@
             <span class="step-title-icon">🔬</span>
             <span class="step-title-text">Diagnóstico y Tratamiento</span>
         </div>
-        <p class="step-subtitle">Usa la IA para llenar todo automáticamente o escribe manual.</p>
+        <p class="step-subtitle">{{ config('services.ai.enabled') ? 'Usa la IA para llenar todo automáticamente o escribe manual.' : 'Registra el diagnóstico, tratamiento y notas.' }}</p>
 
+        @if(config('services.ai.enabled'))
         {{-- LIVE CONSULTATION MODE --}}
         <div x-data="liveConsultation()" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#4c1d95 100%);border-radius:16px;padding:18px 20px;margin-bottom:16px;color:white;position:relative;overflow:hidden;box-shadow:0 12px 32px -8px rgba(15,23,42,0.5);">
             <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(239,68,68,0.25),transparent 70%);border-radius:50%;pointer-events:none;"></div>
@@ -484,18 +485,20 @@
                 </button>
             </div>
         </div>
+        @endif {{-- config('services.ai.enabled') for step 2 AI cards --}}
 
         <div class="space-y-3 md:space-y-4">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de consulta</label>
                 <div class="field-with-mic">
-                    <textarea wire:model.live.debounce.1500ms="chief_complaint" wire:change="fetchDxSuggestions" rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
+                    <textarea wire:model{{ config('services.ai.enabled') ? '.live.debounce.1500ms' : '' }}="chief_complaint" @if(config('services.ai.enabled')) wire:change="fetchDxSuggestions" @endif rows="2" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="¿Por qué viene el paciente?"></textarea>
                     <button type="button" class="mic-btn" :class="{ recording: activeKey === 'chief_complaint' }" @click="toggle('chief_complaint')" title="Dictar por voz">
                         <svg x-show="activeKey !== 'chief_complaint'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
                         <svg x-show="activeKey === 'chief_complaint'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
                     </button>
                 </div>
 
+                @if(config('services.ai.enabled'))
                 {{-- AI Diagnosis Suggestions --}}
                 <div wire:loading wire:target="fetchDxSuggestions" style="margin-top:10px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdfa;border:1px dashed #5eead4;border-radius:10px;font-size:12px;color:#0f766e;">
                     <div style="width:8px;height:8px;background:#0d9488;border-radius:50%;animation:pulse 1s infinite;"></div>
@@ -531,6 +534,7 @@
                     <div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center;">Haz click en una sugerencia para aplicarla</div>
                 </div>
                 @endif
+                @endif {{-- config('services.ai.enabled') for Dx suggestions --}}
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Diagnóstico</label>
