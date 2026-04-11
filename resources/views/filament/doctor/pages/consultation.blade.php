@@ -188,53 +188,74 @@
     <div x-data="voiceDictation()">
 
     @if($appointment)
-    {{-- Patient Header --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border mb-4" style="padding:1rem;">
-        <div class="header-layout">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 md:w-14 md:h-14 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center shrink-0">
-                    <span class="text-base md:text-xl font-bold text-teal-700 dark:text-teal-300">
-                        {{ substr($appointment->patient->first_name, 0, 1) }}{{ substr($appointment->patient->last_name, 0, 1) }}
-                    </span>
+    <style>
+        .cons-hero { position: relative; border-radius: 1.5rem; padding: 1.5rem 1.75rem; overflow: hidden; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%); color: white; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.5), inset 0 1px 0 rgba(255,255,255,0.2); margin-bottom: 1.25rem; }
+        .cons-hero::before { content: ''; position: absolute; top: -80px; right: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%); border-radius: 50%; pointer-events: none; }
+        .cons-hero::after { content: ''; position: absolute; bottom: -80px; left: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%); border-radius: 50%; pointer-events: none; }
+        .cons-hero-grain { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0); background-size: 20px 20px; pointer-events: none; }
+        .cons-hero-body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 14px; }
+        @media (min-width: 768px) { .cons-hero-body { flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; } }
+        .cons-hero-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+        .cons-avatar { width: 60px; height: 60px; border-radius: 18px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        .cons-avatar span { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: white; }
+        .cons-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; font-weight: 700; }
+        .cons-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; margin-top: 2px; color: white !important; -webkit-text-fill-color: white !important; background: none !important; }
+        .cons-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.72rem; margin-top: 6px; }
+        .cons-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; backdrop-filter: blur(8px); font-weight: 600; }
+        .cons-chip-alert { background: rgba(239,68,68,0.35); border-color: rgba(239,68,68,0.5); }
+        .cons-right { display: flex; align-items: center; gap: 8px; padding-left: 72px; }
+        @media (min-width: 768px) { .cons-right { padding-left: 0; text-align: right; flex-direction: column; align-items: flex-end; gap: 6px; } }
+        .cons-time { font-size: 0.72rem; opacity: 0.85; }
+        .cons-service { font-size: 0.82rem; font-weight: 700; }
+        .cons-history-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.28); border-radius: 10px; color: white; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .cons-history-btn:hover { background: rgba(255,255,255,0.28); transform: translateY(-1px); }
+        .cons-history-count { background: #fbbf24; color: #78350f; padding: 1px 7px; border-radius: 999px; font-size: 0.65rem; font-weight: 800; }
+    </style>
+
+    {{-- Patient Hero Header --}}
+    <div class="cons-hero">
+        <div class="cons-hero-grain"></div>
+        <div class="cons-hero-body">
+            <div class="cons-hero-left">
+                <div class="cons-avatar">
+                    <span>{{ substr($appointment->patient->first_name, 0, 1) }}{{ substr($appointment->patient->last_name, 0, 1) }}</span>
                 </div>
-                <div class="min-w-0">
-                    <h2 class="text-base md:text-xl font-bold text-gray-900 dark:text-white truncate">
-                        {{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}
-                    </h2>
-                    <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs md:text-sm text-gray-500">
+                <div style="min-width:0;flex:1;">
+                    <div class="cons-label">🩺 En consulta</div>
+                    <h2 class="cons-name">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</h2>
+                    <div class="cons-meta">
                         @if($appointment->patient->birth_date)
-                        <span>{{ $appointment->patient->birth_date->age }} años</span>
+                        <span class="cons-chip">🎂 {{ $appointment->patient->birth_date->age }} años</span>
                         @endif
                         @if($appointment->patient->phone)
-                        <span>{{ $appointment->patient->phone }}</span>
+                        <span class="cons-chip">📞 {{ $appointment->patient->phone }}</span>
                         @endif
                         @if($appointment->patient->blood_type)
-                        <span class="font-medium text-red-600">{{ $appointment->patient->blood_type }}</span>
+                        <span class="cons-chip" style="background:rgba(220,38,38,0.4);border-color:rgba(220,38,38,0.5);">🩸 {{ $appointment->patient->blood_type }}</span>
+                        @endif
+                        @if($appointment->patient->allergies)
+                        <span class="cons-chip cons-chip-alert">⚠️ {{ Str::limit($appointment->patient->allergies, 40) }}</span>
                         @endif
                     </div>
-                    @if($appointment->patient->allergies)
-                    <div class="text-xs text-red-500 font-medium mt-0.5 truncate">Alergias: {{ $appointment->patient->allergies }}</div>
-                    @endif
                 </div>
             </div>
-            <div class="text-left sm:text-right text-xs md:text-sm pl-14 sm:pl-0">
-                <div class="text-gray-500">{{ $appointment->starts_at->translatedFormat('l d M, H:i') }}</div>
-                @if($appointment->service)
-                <div class="font-medium text-teal-600">{{ $appointment->service->name }}</div>
-                @endif
+
+            <div class="cons-right">
+                <div>
+                    <div class="cons-time">{{ $appointment->starts_at->translatedFormat('l d M, H:i') }}</div>
+                    @if($appointment->service)
+                    <div class="cons-service">{{ $appointment->service->name }}</div>
+                    @endif
+                </div>
+                <button wire:click="toggleHistory" type="button" class="cons-history-btn">
+                    <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Historial
+                    @if(count($this->patientHistory) > 0)
+                    <span class="cons-history-count">{{ count($this->patientHistory) }}</span>
+                    @endif
+                </button>
             </div>
         </div>
-    </div>
-
-    {{-- History drawer button --}}
-    <div class="mb-3 md:mb-4">
-        <button wire:click="toggleHistory" class="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-200 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Historial
-            @if(count($this->patientHistory) > 0)
-            <span class="bg-teal-600 text-white rounded-full px-2 text-xs">{{ count($this->patientHistory) }}</span>
-            @endif
-        </button>
     </div>
 
     {{-- History drawer --}}
@@ -280,42 +301,81 @@
 
     {{-- Steps indicator --}}
     @php
-    $stepLabels = [1 => 'Signos vitales', 2 => 'Diagnóstico', 3 => 'Receta', 4 => 'Cobro', 5 => 'Sig. cita'];
-    $stepShort  = [1 => 'Vitales', 2 => 'Dx', 3 => 'Rx', 4 => 'Cobro', 5 => 'Cita'];
+    $stepConfig = [
+        1 => ['label' => 'Signos vitales', 'short' => 'Vitales', 'icon' => '❤️', 'color' => '#ef4444', 'colorDark' => '#dc2626'],
+        2 => ['label' => 'Diagnóstico', 'short' => 'Dx', 'icon' => '🔬', 'color' => '#0d9488', 'colorDark' => '#0f766e'],
+        3 => ['label' => 'Receta', 'short' => 'Rx', 'icon' => '💊', 'color' => '#8b5cf6', 'colorDark' => '#7c3aed'],
+        4 => ['label' => 'Cobro', 'short' => 'Cobro', 'icon' => '💰', 'color' => '#f59e0b', 'colorDark' => '#d97706'],
+        5 => ['label' => 'Siguiente cita', 'short' => 'Cita', 'icon' => '📅', 'color' => '#3b82f6', 'colorDark' => '#2563eb'],
+    ];
     @endphp
-    <div>
-        <div class="steps-bar">
-            @foreach($stepLabels as $num => $label)
+    <style>
+        .v2-steps-wrap { margin-bottom: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 4px 2px; }
+        .v2-steps-wrap::-webkit-scrollbar { display: none; }
+        .v2-steps-container { display: flex; align-items: center; justify-content: flex-start; gap: 8px; min-width: max-content; }
+        @media (min-width: 768px) { .v2-steps-container { justify-content: center; min-width: 0; } }
+        .v2-step { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 14px; font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
+        .v2-step-active { color: white; transform: scale(1.05); }
+        .v2-step-done { background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.3); color: #0f766e; }
+        .v2-step-pending { background: rgba(243, 244, 246, 0.9); border: 1px solid rgba(229, 231, 235, 1); color: #9ca3af; }
+        .v2-step-circle { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; flex-shrink: 0; }
+        .v2-step-icon { font-size: 1rem; }
+        .v2-step-divider { width: 18px; height: 2px; flex-shrink: 0; border-radius: 2px; }
+        @media (min-width: 768px) { .v2-step-divider { width: 28px; } }
+    </style>
+
+    <div class="v2-steps-wrap">
+        <div class="v2-steps-container">
+            @foreach($stepConfig as $num => $cfg)
             @php
                 $isActive = $currentStep === $num;
                 $isDone = $currentStep > $num;
             @endphp
-            <button wire:click="goToStep({{ $num }})"
-                class="step-btn"
-                style="background:{{ $isActive ? '#0d9488' : ($isDone ? '#ccfbf1' : '#f3f4f6') }};color:{{ $isActive ? 'white' : ($isDone ? '#0f766e' : '#9ca3af') }};{{ $isActive ? 'box-shadow:0 4px 12px rgba(13,148,136,0.3);' : '' }}">
-                <span class="step-circle" style="background:{{ $isActive ? 'white' : ($isDone ? '#0d9488' : '#d1d5db') }};color:{{ $isActive ? '#0d9488' : ($isDone ? 'white' : 'white') }};">
+            <button wire:click="goToStep({{ $num }})" type="button"
+                class="v2-step {{ $isActive ? 'v2-step-active' : ($isDone ? 'v2-step-done' : 'v2-step-pending') }}"
+                @if($isActive)
+                    style="background: linear-gradient(135deg, {{ $cfg['color'] }}, {{ $cfg['colorDark'] }}); box-shadow: 0 8px 20px -4px {{ $cfg['color'] }}66, inset 0 1px 0 rgba(255,255,255,0.2);"
+                @endif>
+                <span class="v2-step-circle"
+                    style="{{ $isActive ? 'background: rgba(255,255,255,0.3); color: white; border: 1.5px solid rgba(255,255,255,0.5);' : ($isDone ? 'background: #0d9488; color: white;' : 'background: #d1d5db; color: white;') }}">
                     @if($isDone)
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                        <svg style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"/></svg>
                     @else
                         {{ $num }}
                     @endif
                 </span>
-                <span>{{ $stepShort[$num] }}</span>
+                <span class="v2-step-icon">{{ $cfg['icon'] }}</span>
+                <span class="hidden sm:inline">{{ $cfg['label'] }}</span>
+                <span class="sm:hidden">{{ $cfg['short'] }}</span>
             </button>
             @if($num < 5)
-            <div class="step-divider" style="background:{{ $isDone ? '#14b8a6' : '#e5e7eb' }};"></div>
+            <div class="v2-step-divider" style="background: {{ $isDone ? '#14b8a6' : '#e5e7eb' }};"></div>
             @endif
             @endforeach
         </div>
     </div>
 
     {{-- Step content --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-4 md:p-6">
+    <style>
+        .step-card { background: white; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 2px rgba(13,148,136,0.05); border: 1px solid rgba(229, 231, 235, 0.8); position: relative; overflow: hidden; }
+        .dark .step-card { background: rgba(15, 23, 42, 0.6); border-color: rgba(94, 234, 212, 0.15); }
+        .step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--step-accent, #0d9488), var(--step-accent-2, #0891b2)); }
+        .step-title { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .step-title-icon { font-size: 1.6rem; }
+        .step-title-text { font-size: 1.25rem; font-weight: 800; color: #111; letter-spacing: -0.015em; }
+        .dark .step-title-text { color: #f3f4f6; }
+        .step-subtitle { font-size: 0.82rem; color: #6b7280; margin-bottom: 18px; }
+    </style>
+
+    <div class="step-card" style="--step-accent: {{ $stepConfig[$currentStep]['color'] ?? '#0d9488' }}; --step-accent-2: {{ $stepConfig[$currentStep]['colorDark'] ?? '#0891b2' }};">
 
         {{-- Step 1: Vital Signs --}}
         @if($currentStep === 1)
-        <h3 class="text-base md:text-lg font-bold mb-2 md:mb-4">Signos Vitales</h3>
-        <p class="text-xs md:text-sm text-gray-500 mb-4 md:mb-6">Opcional. Registra los signos vitales del paciente.</p>
+        <div class="step-title">
+            <span class="step-title-icon">❤️</span>
+            <span class="step-title-text">Signos Vitales</span>
+        </div>
+        <p class="step-subtitle">Opcional. Registra los signos vitales del paciente.</p>
         <div class="vitals-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Presión arterial</label>
@@ -347,33 +407,43 @@
 
         {{-- Step 2: Diagnosis --}}
         @if($currentStep === 2)
-        <h3 class="text-base md:text-lg font-bold mb-2 md:mb-4">Diagnóstico y Tratamiento</h3>
+        <div class="step-title">
+            <span class="step-title-icon">🔬</span>
+            <span class="step-title-text">Diagnóstico y Tratamiento</span>
+        </div>
+        <p class="step-subtitle">Usa la IA para llenar todo automáticamente o escribe manual.</p>
 
         {{-- LIVE CONSULTATION MODE --}}
-        <div x-data="liveConsultation()" style="background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:14px;padding:16px 18px;margin-bottom:16px;color:white;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div :class="listening ? 'live-pulse' : ''" style="width:36px;height:36px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+        <div x-data="liveConsultation()" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#4c1d95 100%);border-radius:16px;padding:18px 20px;margin-bottom:16px;color:white;position:relative;overflow:hidden;box-shadow:0 12px 32px -8px rgba(15,23,42,0.5);">
+            <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(239,68,68,0.25),transparent 70%);border-radius:50%;pointer-events:none;"></div>
+            <div style="position:absolute;bottom:-80px;left:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%);border-radius:50%;pointer-events:none;"></div>
+            <div style="position:relative;z-index:1;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div :class="listening ? 'live-pulse' : ''" style="width:44px;height:44px;background:linear-gradient(135deg,#ef4444,#dc2626);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 20px rgba(239,68,68,0.4);">
+                            <svg style="width:22px;height:22px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.7;font-weight:700;">⭐ Feature exclusivo</div>
+                            <div style="font-size:15px;font-weight:800;letter-spacing:-0.01em;margin-top:2px;">Modo Consulta en Vivo</div>
+                            <div style="font-size:11px;opacity:0.8;margin-top:2px;">La IA escucha toda la consulta y llena todo automáticamente</div>
+                        </div>
                     </div>
-                    <div>
-                        <div style="font-size:13px;font-weight:800;">🔴 Modo Consulta en Vivo</div>
-                        <div style="font-size:11px;opacity:0.75;">La IA escucha toda la consulta y llena todo automáticamente</div>
-                    </div>
+                    <button type="button" @click="toggle" x-text="listening ? '⏹ Detener y procesar' : '▶ Iniciar escucha'"
+                        :style="listening ? 'background:linear-gradient(135deg,#dc2626,#991b1b);box-shadow:0 8px 20px rgba(220,38,38,0.4);' : 'background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 8px 20px rgba(16,185,129,0.4);'"
+                        style="padding:12px 20px;color:white;border:none;border-radius:12px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap;transition:transform 0.2s;"
+                        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"></button>
                 </div>
-                <button type="button" @click="toggle" x-text="listening ? '⏹ Detener y procesar' : '▶ Iniciar escucha'"
-                    :style="listening ? 'background:#dc2626;' : 'background:linear-gradient(135deg,#10b981,#059669);'"
-                    style="padding:10px 18px;color:white;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;"></button>
-            </div>
 
-            <div x-show="listening" x-cloak style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.05);border-radius:8px;max-height:120px;overflow-y:auto;">
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.6;margin-bottom:4px;">Transcribiendo...</div>
-                <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.5;"></div>
-            </div>
+                <div x-show="listening" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;max-height:120px;overflow-y:auto;">
+                    <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;">🎤 Transcribiendo...</div>
+                    <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.6;"></div>
+                </div>
 
-            <div x-show="processing" x-cloak style="margin-top:12px;padding:10px 12px;background:rgba(13,148,136,0.2);border-radius:8px;display:flex;align-items:center;gap:8px;">
-                <div style="width:8px;height:8px;background:#0d9488;border-radius:50%;animation:pulse 1s infinite;"></div>
-                <span style="font-size:12px;">✨ La IA está estructurando tu consulta...</span>
+                <div x-show="processing" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,0.25);border:1px solid rgba(13,148,136,0.4);border-radius:10px;display:flex;align-items:center;gap:10px;">
+                    <div style="width:10px;height:10px;background:#5eead4;border-radius:50%;animation:pulse 1s infinite;"></div>
+                    <span style="font-size:12px;font-weight:600;">✨ La IA está estructurando tu consulta...</span>
+                </div>
             </div>
 
             <input type="hidden" wire:model="fullDictation" x-ref="dictationField">
@@ -384,16 +454,19 @@
         </style>
 
         {{-- AI Smart Dictation --}}
-        <div style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1.5px solid #5eead4;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                <div style="width:28px;height:28px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:16px;height:16px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        <div style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 50%,#faf5ff 100%);border:1.5px solid #5eead4;border-radius:16px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(13,148,136,0.15),transparent 70%);border-radius:50%;pointer-events:none;"></div>
+            <div style="position:relative;z-index:1;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 16px rgba(13,148,136,0.35);">
+                        <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:10px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;">✨ Con IA</div>
+                        <div style="font-size:14px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">Dictado inteligente</div>
+                        <div style="font-size:11px;color:#64748b;margin-top:1px;">Escribe o dicta lo que pasó en la consulta y la IA llena todo</div>
+                    </div>
                 </div>
-                <div>
-                    <div style="font-size:12px;color:#0f766e;font-weight:700;">Dictado inteligente</div>
-                    <div style="font-size:10px;color:#64748b;">Dicta toda la consulta y la IA llena los campos automáticamente</div>
-                </div>
-            </div>
             <div class="field-with-mic">
                 <textarea wire:model="fullDictation" rows="3" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Ej: Paciente con dolor en molar superior derecho, veo caries profunda, voy a aplicar resina, recetar ibuprofeno 400mg cada 8 horas por 5 días..."></textarea>
                 <button type="button" class="mic-btn" :class="{ recording: activeKey === 'fullDictation' }" @click="toggle('fullDictation')" title="Dictar por voz">
@@ -401,13 +474,15 @@
                     <svg x-show="activeKey === 'fullDictation'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
                 </button>
             </div>
-            <button wire:click="processFullDictation" wire:loading.attr="disabled" wire:target="processFullDictation"
-                style="margin-top:10px;width:100%;padding:10px 16px;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-                <svg wire:loading.remove wire:target="processFullDictation" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                <svg wire:loading wire:target="processFullDictation" style="width:16px;height:16px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                <span wire:loading.remove wire:target="processFullDictation">Procesar con IA</span>
-                <span wire:loading wire:target="processFullDictation">Analizando...</span>
-            </button>
+                <button wire:click="processFullDictation" wire:loading.attr="disabled" wire:target="processFullDictation"
+                    style="margin-top:12px;width:100%;padding:12px 16px;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border:none;border-radius:12px;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 20px rgba(13,148,136,0.35);transition:transform 0.2s;"
+                    onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <svg wire:loading.remove wire:target="processFullDictation" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <svg wire:loading wire:target="processFullDictation" style="width:16px;height:16px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span wire:loading.remove wire:target="processFullDictation">✨ Procesar con IA</span>
+                    <span wire:loading wire:target="processFullDictation">Analizando...</span>
+                </button>
+            </div>
         </div>
 
         <div class="space-y-3 md:space-y-4">
@@ -492,8 +567,11 @@
 
         {{-- Step 3: Prescription --}}
         @if($currentStep === 3)
-        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">Receta Médica</h3>
-        <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">Opcional. Agrega medicamentos si es necesario.</p>
+        <div class="step-title">
+            <span class="step-title-icon">💊</span>
+            <span class="step-title-text">Receta Médica</span>
+        </div>
+        <p class="step-subtitle">Opcional. Agrega medicamentos si es necesario.</p>
         <div class="space-y-3">
             @foreach($medications as $i => $med)
             <div class="p-3 md:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border">
@@ -529,8 +607,11 @@
 
         {{-- Step 4: Payment --}}
         @if($currentStep === 4)
-        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">Cobro</h3>
-        <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">Registra el pago de esta consulta.</p>
+        <div class="step-title">
+            <span class="step-title-icon">💰</span>
+            <span class="step-title-text">Cobro</span>
+        </div>
+        <p class="step-subtitle">Registra el pago de esta consulta.</p>
         <div class="pay-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Servicio</label>
@@ -583,8 +664,11 @@
 
         {{-- Step 5: Next appointment --}}
         @if($currentStep === 5)
-        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">Siguiente Cita</h3>
-        <p class="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
+        <div class="step-title">
+            <span class="step-title-icon">📅</span>
+            <span class="step-title-text">Siguiente Cita</span>
+        </div>
+        <p class="step-subtitle">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
         <div class="next-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha y hora</label>
