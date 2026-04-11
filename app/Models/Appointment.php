@@ -24,6 +24,7 @@ class Appointment extends Model
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',
         'consultation_data',
+        'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
     ];
 
     protected function casts(): array
@@ -33,6 +34,10 @@ class Appointment extends Model
             'ends_at' => 'datetime',
             'reminder_sent' => 'boolean',
             'consultation_data' => 'array',
+            'reminder_24h_sent_at' => 'datetime',
+            'reminder_2h_sent_at' => 'datetime',
+            'followup_sent_at' => 'datetime',
+            'confirmed_at' => 'datetime',
         ];
     }
 

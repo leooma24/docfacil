@@ -10,45 +10,122 @@ class SendAppointmentReminders extends Command
 {
     protected $signature = 'docfacil:send-reminders';
 
-    protected $description = 'Send WhatsApp reminders for appointments in the next 24 hours';
+    protected $description = 'Send WhatsApp reminders: 24h before, 2h before, and follow-up for missed appointments';
 
     public function handle(WhatsAppService $whatsapp): int
     {
-        $appointments = Appointment::with(['patient', 'doctor.user', 'clinic'])
-            ->where('reminder_sent', false)
-            ->whereIn('status', ['scheduled', 'confirmed'])
-            ->whereBetween('starts_at', [now(), now()->addHours(24)])
-            ->get();
+        $sent24h = $this->send24hReminders($whatsapp);
+        $sent2h = $this->send2hReminders($whatsapp);
+        $sentFollowup = $this->sendFollowups($whatsapp);
 
-        $sent = 0;
-
-        foreach ($appointments as $appointment) {
-            $phone = $appointment->patient->phone;
-
-            if (empty($phone)) {
-                $this->line("Skip: {$appointment->patient->full_name} - no phone");
-                continue;
-            }
-
-            $success = $whatsapp->sendAppointmentReminder(
-                to: $phone,
-                patientName: $appointment->patient->full_name,
-                doctorName: $appointment->doctor->user->name ?? '',
-                dateTime: $appointment->starts_at->translatedFormat('l d \d\e F, H:i') . ' hrs',
-                clinicName: $appointment->clinic->name ?? 'DocFácil',
-            );
-
-            if ($success) {
-                $appointment->update(['reminder_sent' => true]);
-                $sent++;
-                $this->line("Sent: {$appointment->patient->full_name} ({$phone})");
-            } else {
-                $this->error("Failed: {$appointment->patient->full_name} ({$phone})");
-            }
-        }
-
-        $this->info("Reminders sent: {$sent}/{$appointments->count()}");
+        $this->info("24h reminders: {$sent24h}");
+        $this->info("2h reminders: {$sent2h}");
+        $this->info("Follow-ups: {$sentFollowup}");
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Send reminder 24 hours before appointment (between 20 and 28 hours window).
+     */
+    protected function send24hReminders(WhatsAppService $whatsapp): int
+    {
+        $appointments = Appointment::with(['patient', 'doctor.user', 'clinic', 'service'])
+            ->whereNull('reminder_24h_sent_at')
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->whereBetween('starts_at', [now()->addHours(20), now()->addHours(28)])
+            ->get();
+
+        $count = 0;
+        foreach ($appointments as $appt) {
+            $phone = $appt->patient->phone;
+            if (empty($phone)) continue;
+
+            $name = $appt->patient->first_name;
+            $clinic = $appt->clinic->name ?? 'tu clínica';
+            $service = $appt->service->name ?? 'consulta';
+            $date = $appt->starts_at->translatedFormat('l d \d\e F');
+            $time = $appt->starts_at->format('H:i');
+
+            $message = "🏥 *Recordatorio de cita*\n\n"
+                . "Hola *{$name}*, te recordamos tu cita en *{$clinic}*:\n\n"
+                . "📅 {$date}\n"
+                . "🕐 {$time} hrs\n"
+                . "💊 {$service}\n\n"
+                . "Responde *SÍ* para confirmar o *NO* si no podrás asistir.\n\n"
+                . "¡Te esperamos!";
+
+            if ($whatsapp->sendMessage($phone, $message)) {
+                $appt->update(['reminder_24h_sent_at' => now(), 'reminder_sent' => true]);
+                $count++;
+                $this->line("24h sent: {$name}");
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Send short reminder 2 hours before appointment (between 1 and 3 hours window).
+     */
+    protected function send2hReminders(WhatsAppService $whatsapp): int
+    {
+        $appointments = Appointment::with(['patient', 'clinic'])
+            ->whereNull('reminder_2h_sent_at')
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->whereBetween('starts_at', [now()->addHours(1), now()->addHours(3)])
+            ->get();
+
+        $count = 0;
+        foreach ($appointments as $appt) {
+            $phone = $appt->patient->phone;
+            if (empty($phone)) continue;
+
+            $name = $appt->patient->first_name;
+            $time = $appt->starts_at->format('H:i');
+            $clinic = $appt->clinic->name ?? 'tu clínica';
+
+            $message = "👋 Hola *{$name}*, tu cita en *{$clinic}* es en *{$time} hrs* (aprox. 2 horas).\n\n"
+                . "¡Te esperamos! Si tuviste un imprevisto, avísanos por este medio.";
+
+            if ($whatsapp->sendMessage($phone, $message)) {
+                $appt->update(['reminder_2h_sent_at' => now()]);
+                $count++;
+                $this->line("2h sent: {$name}");
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Send follow-up to patients who didn't show up.
+     */
+    protected function sendFollowups(WhatsAppService $whatsapp): int
+    {
+        $appointments = Appointment::with(['patient', 'clinic'])
+            ->whereNull('followup_sent_at')
+            ->where('status', 'no_show')
+            ->where('starts_at', '>=', now()->subDays(3))
+            ->where('starts_at', '<', now()->subHours(2))
+            ->get();
+
+        $count = 0;
+        foreach ($appointments as $appt) {
+            $phone = $appt->patient->phone;
+            if (empty($phone)) continue;
+
+            $name = $appt->patient->first_name;
+            $clinic = $appt->clinic->name ?? 'tu clínica';
+
+            $message = "Hola *{$name}*, notamos que no pudiste asistir a tu cita en *{$clinic}*.\n\n"
+                . "¿Todo bien? Si quieres, podemos reagendarla para el día que te acomode.\n\n"
+                . "Responde este mensaje y te ayudamos a encontrar un nuevo horario. 😊";
+
+            if ($whatsapp->sendMessage($phone, $message)) {
+                $appt->update(['followup_sent_at' => now()]);
+                $count++;
+                $this->line("Followup sent: {$name}");
+            }
+        }
+        return $count;
     }
 }

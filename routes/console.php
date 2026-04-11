@@ -8,8 +8,8 @@ Schedule::command('docfacil:send-trial-emails')->dailyAt('09:00');
 // Send engagement emails daily at 10am
 Schedule::command('docfacil:send-engagement')->dailyAt('10:00');
 
-// Send appointment reminders daily at 8am
-Schedule::command('docfacil:send-reminders')->dailyAt('08:00');
+// Send appointment reminders every hour (handles 24h, 2h, and follow-ups)
+Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
 
 // Send prospect pipeline emails every hour (max 10 per run)
 Schedule::command('docfacil:send-prospect-emails')->hourly();
