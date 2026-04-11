@@ -36,9 +36,9 @@ class Commission extends Model
 
     /**
      * Planes que califican para comisión.
-     * Gratis y Básico NO pagan comisión (margen insuficiente).
+     * Solo el plan Free NO paga. Todos los planes de pago (Básico, Pro, Clínica) sí pagan.
      */
-    public const COMMISSIONABLE_PLANS = ['profesional', 'clinica'];
+    public const COMMISSIONABLE_PLANS = ['basico', 'profesional', 'clinica'];
 
     public function user(): BelongsTo
     {
@@ -85,14 +85,16 @@ class Commission extends Model
     }
 
     /**
-     * Mitad de la comisión 3× para un plan.
-     * Retorna 0 si el plan no califica.
+     * Mitad de la comisión 1.5× para un plan.
+     * Total = 1.5 × precio mensual (se paga en 2 exhibiciones: 50% en 1er pago + 50% en 2do).
+     * Retorna 0 si el plan no califica (Free).
      */
     public static function halfAmount(string $plan): float
     {
         if (!in_array($plan, self::COMMISSIONABLE_PLANS)) {
             return 0;
         }
-        return round(self::monthlyPriceForPlan($plan) * 3 / 2, 2);
+        // Total 1.5x la mensualidad / 2 = 0.75x por mitad
+        return round(self::monthlyPriceForPlan($plan) * 0.75, 2);
     }
 }

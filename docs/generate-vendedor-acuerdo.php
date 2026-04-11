@@ -47,7 +47,7 @@ $sections = [
     ['1. Esquema de comisión', [
         'La comisión por cada nueva clínica vendida es de 1.5× la primera mensualidad del plan contratado.',
         'Ejemplo: plan Pro $599/mes → comisión total $898.50 por venta.',
-        'Solo aplican los planes Pro y Clínica. Los planes Free y Básico NO pagan comisión.',
+        'Aplica a todos los planes de pago: Básico, Pro y Clínica. El plan Free NO paga comisión.',
     ]],
     ['2. Pago en dos exhibiciones (split 50/50)', [
         '50% (primera mitad) se paga cuando la clínica realiza su PRIMER pago real al sistema.',
@@ -155,7 +155,7 @@ $calc->setCellValue('E4', '=IFERROR(VLOOKUP(B4,Planes!A4:B7,2,FALSE),0)');
 $calc->getStyle('E4')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 
 $calc->setCellValue('D5', 'Comisión total por venta (1.5×)');
-$calc->setCellValue('E5', '=IF(OR(B4="Free",B4="Básico"),0,E4*1.5)');
+$calc->setCellValue('E5', '=IF(B4="Free",0,E4*1.5)');
 $calc->getStyle('E5')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 $calc->getStyle('E5')->getFont()->setBold(true);
 
@@ -215,12 +215,14 @@ $calc->getStyle("A{$r}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColo
 $r += 2;
 
 $examples = [
+    'Si vendes 5 Básico al mes → 60 × $448.50 = $26,910/año',
     'Si vendes 1 Pro al mes → 12 × $898.50 = $10,782/año',
     'Si vendes 5 Pro al mes → 60 × $898.50 = $53,910/año',
     'Si vendes 10 Pro al mes → 120 × $898.50 = $107,820/año',
     'Si vendes 3 Pro + 1 Clínica al mes → (3×$898.50 + 1×$1,798.50) × 12 = $54,126/año',
     'Si vendes 5 Clínica al mes → 60 × $1,798.50 = $107,910/año 🚀',
-    'Nota: los planes Free ($0) y Básico ($299) NO pagan comisión — margen insuficiente.',
+    'Mix realista (5 Básico + 3 Pro + 1 Clínica/mes) → ($2,242.50 + $2,695.50 + $1,798.50) × 12 = $80,838/año',
+    'Nota: solo el plan Free ($0) NO paga comisión. Todos los planes de pago califican.',
 ];
 foreach ($examples as $ex) {
     $calc->setCellValue("A{$r}", '  ✓  ' . $ex);
@@ -406,7 +408,7 @@ $pl->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 
 $planes = [
     ['Free', 0, 0, 0, 'NO'],
-    ['Básico', 299, 0, 0, 'NO'],
+    ['Básico', 299, 448.50, 224.25, 'SÍ'],
     ['Pro', 599, 898.50, 449.25, 'SÍ'],
     ['Clínica', 1199, 1798.50, 899.25, 'SÍ'],
 ];

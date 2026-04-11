@@ -98,10 +98,10 @@ $ws->getStyle('A3:F3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 $ws->getRowDimension(3)->setRowHeight(25);
 
 $planes = [
-    ['FREE', '$0', '—', '1', '30', 'Doctores curiosos. Gancho para conversión.'],
-    ['BÁSICO', '$299', '$149 (50% off)', '1', '200', 'Doctores individuales que buscan eficiencia básica.'],
-    ['PRO ⭐', '$599', '$299 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Incluye TODA la IA.'],
-    ['CLÍNICA', '$1,199', '$599 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas con 4+ doctores. Multi-sucursal.'],
+    ['FREE', '$0', '—', '1', '30', 'Doctores curiosos. Sin comisión. Gancho para conversión.'],
+    ['BÁSICO', '$299', '$149 (50% off)', '1', '200', 'Doctores individuales. Comisión: $448.50 por venta.'],
+    ['PRO ⭐', '$599', '$299 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. TODA la IA. Comisión: $898.50 por venta.'],
+    ['CLÍNICA', '$1,199', '$599 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $1,798.50 por venta.'],
 ];
 
 $row = 4;
@@ -122,9 +122,9 @@ foreach ($planes as $p) {
 // Comisiones nota
 $row += 2;
 $ws->mergeCells("A{$row}:F{$row}");
-$ws->setCellValue("A{$row}", '⚠️ IMPORTANTE: Las comisiones solo se pagan por planes PRO y CLÍNICA (NO Free ni Básico)');
-$ws->getStyle("A{$row}")->getFont()->setBold(true)->setSize(12)->getColor()->setRGB('DC2626');
-$ws->getStyle("A{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('FEE2E2');
+$ws->setCellValue("A{$row}", '✅ TODOS los planes de pago (Básico, Pro y Clínica) pagan comisión. Solo el plan Free NO.');
+$ws->getStyle("A{$row}")->getFont()->setBold(true)->setSize(12)->getColor()->setRGB('065F46');
+$ws->getStyle("A{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('D1FAE5');
 $ws->getRowDimension($row)->setRowHeight(25);
 
 for ($c = 'A'; $c <= 'F'; $c++) {
@@ -490,7 +490,7 @@ $ws->getRowDimension(6)->setRowHeight(25);
 
 $coms = [
     ['Free', '$0', '$0', 'Sin comisión'],
-    ['Básico', '$299', '$0', 'Sin comisión'],
+    ['Básico', '$299', '$448.50', '$224.25 + $224.25'],
     ['Pro ⭐', '$599', '$898.50', '$449.25 + $449.25'],
     ['Clínica', '$1,199', '$1,798.50', '$899.25 + $899.25'],
 ];
@@ -519,9 +519,10 @@ $row += 2;
 
 $metas = [
     ['Nivel', 'Ventas/mes', 'Mix', 'Comisión aproximada'],
-    ['Starter', '3 Pro', '3 x $898', '$2,695'],
-    ['Medium', '5 Pro + 1 Clínica', '5x$898 + 1x$1,798', '$6,290'],
-    ['Top', '10 Pro + 2 Clínica', '10x$898 + 2x$1,798', '$12,580'],
+    ['Starter', '3 Básico + 2 Pro', '3x$448.50 + 2x$898.50', '$3,142.50'],
+    ['Medium', '5 Pro + 1 Clínica', '5x$898.50 + 1x$1,798.50', '$6,291'],
+    ['Top', '10 Pro + 2 Clínica', '10x$898.50 + 2x$1,798.50', '$12,582'],
+    ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$16,618.50'],
 ];
 
 foreach ($metas as $i => $m) {
