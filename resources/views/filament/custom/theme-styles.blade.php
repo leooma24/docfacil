@@ -287,4 +287,365 @@
     .fi-wi-chart {
         border-radius: 1rem !important;
     }
+
+    /* ========================================
+       🎨 GLASSMORPHISM MEDICAL THEME v2
+       ======================================== */
+
+    /* Body background with organic blobs */
+    .fi-main,
+    .fi-layout > div:not(.fi-sidebar) {
+        position: relative;
+    }
+
+    .fi-main::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.08) 0%, transparent 45%),
+            radial-gradient(circle at 85% 75%, rgba(8, 145, 178, 0.08) 0%, transparent 45%),
+            radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .fi-main > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Main content padding */
+    .fi-main {
+        background: linear-gradient(180deg, #f8fafc 0%, #f0fdfa 100%) !important;
+    }
+
+    .dark .fi-main {
+        background: linear-gradient(180deg, #0f172a 0%, #042f2e 100%) !important;
+    }
+
+    .dark .fi-main::before {
+        background:
+            radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 85% 75%, rgba(8, 145, 178, 0.10) 0%, transparent 45%),
+            radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 45%);
+    }
+
+    /* Page headers - bigger and lighter */
+    .fi-page-header-heading,
+    .fi-header-heading,
+    h1.fi-header-heading {
+        font-size: 1.875rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        background: linear-gradient(135deg, #0f172a 0%, #0d9488 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dark .fi-page-header-heading,
+    .dark .fi-header-heading {
+        background: linear-gradient(135deg, #f0fdfa 0%, #5eead4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* ====== GLASS CARDS ====== */
+    .fi-section,
+    .fi-wi-stats-overview-stat,
+    .fi-fo-section,
+    .fi-wi-widget .fi-section {
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.02),
+            0 8px 30px rgba(13, 148, 136, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+        border-radius: 1.25rem !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .dark .fi-section,
+    .dark .fi-wi-stats-overview-stat,
+    .dark .fi-fo-section {
+        background: rgba(15, 23, 42, 0.6) !important;
+        border: 1px solid rgba(94, 234, 212, 0.15) !important;
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.3),
+            0 8px 30px rgba(13, 148, 136, 0.15) !important;
+    }
+
+    .fi-section:hover,
+    .fi-wi-stats-overview-stat:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.02),
+            0 12px 40px rgba(13, 148, 136, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    }
+
+    /* ====== STATS OVERVIEW (big numbers) ====== */
+    .fi-wi-stats-overview-stat-value {
+        font-size: 2.5rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.03em !important;
+        background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1 !important;
+    }
+
+    .fi-wi-stats-overview-stat-label {
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em !important;
+        color: #64748b !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .fi-wi-stats-overview-stat-description {
+        font-size: 0.75rem !important;
+        color: #94a3b8 !important;
+    }
+
+    .fi-wi-stats-overview-stat-icon {
+        background: linear-gradient(135deg, rgba(13,148,136,0.1), rgba(8,145,178,0.1)) !important;
+        border-radius: 0.75rem !important;
+        padding: 0.5rem !important;
+        color: #0d9488 !important;
+    }
+
+    /* ====== BUTTONS - Modern gradient ====== */
+    .fi-btn-color-primary,
+    button.fi-btn.fi-color-primary,
+    .fi-ac-btn-action.fi-color-primary {
+        background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%) !important;
+        border: none !important;
+        box-shadow:
+            0 4px 14px rgba(13, 148, 136, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+        font-weight: 600 !important;
+        transition: all 0.2s !important;
+    }
+
+    .fi-btn-color-primary:hover,
+    button.fi-btn.fi-color-primary:hover {
+        transform: translateY(-1px);
+        box-shadow:
+            0 6px 20px rgba(13, 148, 136, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .fi-btn {
+        border-radius: 0.75rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s !important;
+    }
+
+    /* ====== INPUTS - Floating style ====== */
+    .fi-input,
+    input[type="text"].fi-input,
+    input[type="email"].fi-input,
+    input[type="number"].fi-input,
+    input[type="password"].fi-input,
+    input[type="tel"].fi-input,
+    textarea.fi-input,
+    select.fi-input {
+        background: rgba(255, 255, 255, 0.6) !important;
+        backdrop-filter: blur(10px);
+        border: 1.5px solid rgba(13, 148, 136, 0.15) !important;
+        border-radius: 0.75rem !important;
+        transition: all 0.2s !important;
+    }
+
+    .fi-input:focus,
+    input.fi-input:focus,
+    textarea.fi-input:focus,
+    select.fi-input:focus {
+        background: white !important;
+        border-color: #0d9488 !important;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1) !important;
+    }
+
+    .dark .fi-input {
+        background: rgba(15, 23, 42, 0.5) !important;
+        border-color: rgba(94, 234, 212, 0.2) !important;
+    }
+
+    /* ====== TABLES - Glass rows ====== */
+    .fi-ta-table {
+        background: transparent !important;
+    }
+
+    .fi-ta-header-cell {
+        background: rgba(240, 253, 250, 0.5) !important;
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.15) !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #0f766e !important;
+    }
+
+    .dark .fi-ta-header-cell {
+        background: rgba(6, 78, 59, 0.4) !important;
+        color: #5eead4 !important;
+    }
+
+    .fi-ta-row {
+        transition: all 0.15s !important;
+    }
+
+    .fi-ta-row:hover {
+        background: rgba(240, 253, 250, 0.5) !important;
+        backdrop-filter: blur(10px);
+    }
+
+    /* ====== TOPBAR - glass ====== */
+    .fi-topbar,
+    .fi-topbar > div {
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(13, 148, 136, 0.1) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    }
+
+    .dark .fi-topbar,
+    .dark .fi-topbar > div {
+        background: rgba(15, 23, 42, 0.7) !important;
+        border-bottom: 1px solid rgba(94, 234, 212, 0.1) !important;
+    }
+
+    /* ====== SEARCH BAR in topbar ====== */
+    .fi-global-search {
+        background: rgba(240, 253, 250, 0.5) !important;
+        border: 1px solid rgba(13, 148, 136, 0.15) !important;
+        border-radius: 0.875rem !important;
+        backdrop-filter: blur(8px);
+    }
+
+    /* ====== BADGES - rounded + subtle glow ====== */
+    .fi-badge {
+        border-radius: 999px !important;
+        font-weight: 600 !important;
+        padding: 0.25rem 0.75rem !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* ====== MODAL - glass with strong blur ====== */
+    .fi-modal-window,
+    [role="dialog"].fi-modal-window {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(30px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow:
+            0 25px 50px -12px rgba(0, 0, 0, 0.25),
+            0 0 0 1px rgba(13, 148, 136, 0.05) !important;
+        border-radius: 1.5rem !important;
+    }
+
+    .fi-modal-close-overlay {
+        background: rgba(15, 23, 42, 0.4) !important;
+        backdrop-filter: blur(8px);
+    }
+
+    /* ====== SIDEBAR NAV ITEMS - subtle glow on hover ====== */
+    .fi-sidebar-item-button {
+        border-radius: 0.75rem !important;
+        transition: all 0.2s !important;
+    }
+
+    .fi-sidebar-item.fi-active .fi-sidebar-item-button {
+        background: linear-gradient(135deg, rgba(13,148,136,0.4), rgba(8,145,178,0.3)) !important;
+        box-shadow:
+            0 4px 12px rgba(13, 148, 136, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* ====== NOTIFICATIONS ====== */
+    .fi-no-notification {
+        backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1px solid rgba(13, 148, 136, 0.15) !important;
+        border-radius: 1rem !important;
+        box-shadow: 0 12px 40px rgba(13, 148, 136, 0.15) !important;
+    }
+
+    /* ====== PAGE TRANSITIONS ====== */
+    .fi-main > div {
+        animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ====== SCROLLBAR ====== */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(13, 148, 136, 0.2);
+        border-radius: 10px;
+        transition: background 0.2s;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(13, 148, 136, 0.4);
+    }
+
+    /* ====== DASHBOARD BENTO GRID ====== */
+    .fi-dashboard-page .fi-wi {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fi-dashboard-page .fi-wi:hover {
+        transform: translateY(-3px) scale(1.005);
+    }
+
+    /* ====== ICONS - Larger and more prominent ====== */
+    .fi-page-header-actions .fi-btn svg {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+
+    /* Mobile polish */
+    @media (max-width: 768px) {
+        .fi-wi-stats-overview-stat-value {
+            font-size: 2rem !important;
+        }
+        .fi-page-header-heading {
+            font-size: 1.5rem !important;
+        }
+        .fi-section {
+            border-radius: 1rem !important;
+        }
+    }
+
+    /* Remove body background since .fi-main handles it */
+    body {
+        background: transparent !important;
+    }
 </style>
