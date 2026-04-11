@@ -64,7 +64,48 @@ class ConsentFormResource extends Resource
                         Forms\Components\TextInput::make('procedure_name')
                             ->label('Procedimiento')
                             ->placeholder('Ej: Extracción de tercer molar')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->suffixAction(
+                                \Filament\Forms\Components\Actions\Action::make('generate_with_ai')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->label('Generar con IA')
+                                    ->tooltip('La IA generará título, contenido, riesgos y alternativas automáticamente')
+                                    ->color('info')
+                                    ->action(function (Forms\Set $set, Forms\Get $get) {
+                                        $procedure = $get('procedure_name');
+                                        if (empty($procedure)) {
+                                            \Filament\Notifications\Notification::make()
+                                                ->title('Escribe primero el procedimiento')
+                                                ->warning()
+                                                ->send();
+                                            return;
+                                        }
+
+                                        $specialty = auth()->user()->doctor?->specialty;
+                                        $template = app(\App\Services\ConsentFormAIService::class)
+                                            ->generateTemplate($procedure, $specialty);
+
+                                        if (!$template) {
+                                            \Filament\Notifications\Notification::make()
+                                                ->title('No se pudo generar el consentimiento')
+                                                ->body('Verifica la configuración de IA.')
+                                                ->danger()
+                                                ->send();
+                                            return;
+                                        }
+
+                                        $set('title', $template['title']);
+                                        $set('content', $template['content']);
+                                        $set('risks', $template['risks']);
+                                        $set('alternatives', $template['alternatives']);
+
+                                        \Filament\Notifications\Notification::make()
+                                            ->title('✨ Consentimiento generado')
+                                            ->body('Revisa y ajusta antes de guardar.')
+                                            ->success()
+                                            ->send();
+                                    })
+                            ),
                     ]),
                 Forms\Components\Section::make('Contenido del Documento')
                     ->schema([
