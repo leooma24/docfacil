@@ -8,6 +8,7 @@ use App\Models\Odontogram;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Prescription;
+use App\Services\PatientAISummaryService;
 use Filament\Pages\Page;
 
 class PatientProfile extends Page
@@ -24,6 +25,8 @@ class PatientProfile extends Page
 
     public ?Patient $patient = null;
     public string $activeTab = 'info';
+    public ?string $aiSummary = null;
+    public bool $loadingSummary = false;
 
     public function mount(): void
     {
@@ -39,6 +42,21 @@ class PatientProfile extends Page
     public function setTab(string $tab): void
     {
         $this->activeTab = $tab;
+    }
+
+    public function loadAiSummary(): void
+    {
+        if (!$this->patient) return;
+        $this->loadingSummary = true;
+        $this->aiSummary = app(PatientAISummaryService::class)->summarize($this->patient);
+        $this->loadingSummary = false;
+    }
+
+    public function refreshAiSummary(): void
+    {
+        if (!$this->patient) return;
+        app(PatientAISummaryService::class)->invalidate($this->patient);
+        $this->loadAiSummary();
     }
 
     public function getAppointmentsProperty()

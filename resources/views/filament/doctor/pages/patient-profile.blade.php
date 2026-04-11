@@ -76,6 +76,43 @@
         @endif
     </div>
 
+    {{-- AI Summary Card --}}
+    <div wire:init="loadAiSummary" style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1px solid #99f6e4;border-radius:14px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:16px;height:16px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:11px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Resumen IA</div>
+                    <div style="font-size:10px;color:#64748b;">Generado por Claude</div>
+                </div>
+            </div>
+            <button wire:click="refreshAiSummary" wire:loading.attr="disabled" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:white;border:1px solid #99f6e4;border-radius:8px;font-size:11px;color:#0f766e;cursor:pointer;font-weight:600;">
+                <svg wire:loading.remove wire:target="refreshAiSummary" style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <svg wire:loading wire:target="refreshAiSummary" style="width:12px;height:12px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Actualizar
+            </button>
+        </div>
+
+        <div wire:loading wire:target="loadAiSummary,refreshAiSummary" style="display:flex;align-items:center;gap:8px;color:#64748b;font-size:13px;padding:4px 0;">
+            <div style="width:10px;height:10px;background:#0d9488;border-radius:50%;animation:pulse 1.2s infinite;"></div>
+            Analizando historial del paciente...
+        </div>
+
+        <div wire:loading.remove wire:target="loadAiSummary,refreshAiSummary">
+            @if($aiSummary)
+                <p style="font-size:13px;line-height:1.6;color:#1f2937;margin:0;">{{ $aiSummary }}</p>
+            @else
+                <p style="font-size:13px;color:#94a3b8;font-style:italic;margin:0;">No se pudo generar el resumen. Verifica la configuración de IA.</p>
+            @endif
+        </div>
+    </div>
+    <style>
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+
     {{-- Tabs --}}
     <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 mb-4 md:mb-6 scrollbar-hide">
         <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 min-w-max md:min-w-0">
