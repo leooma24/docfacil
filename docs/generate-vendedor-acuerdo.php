@@ -45,14 +45,14 @@ $acuerdo->getRowDimension($row)->setRowHeight(40);
 $row += 2;
 $sections = [
     ['1. Esquema de comisión', [
-        'La comisión por cada nueva clínica vendida es de 3× la primera mensualidad del plan contratado.',
-        'Ejemplo: plan Profesional $299/mes → comisión total $897 por venta.',
-        'Solo aplican los planes Profesional, Clínica y Enterprise. El plan Básico NO paga comisión.',
+        'La comisión por cada nueva clínica vendida es de 1.5× la primera mensualidad del plan contratado.',
+        'Ejemplo: plan Pro $599/mes → comisión total $898.50 por venta.',
+        'Solo aplican los planes Pro y Clínica. Los planes Free y Básico NO pagan comisión.',
     ]],
     ['2. Pago en dos exhibiciones (split 50/50)', [
         '50% (primera mitad) se paga cuando la clínica realiza su PRIMER pago real al sistema.',
         '50% (segunda mitad) se paga cuando la clínica realiza su SEGUNDO pago mensual.',
-        'Ejemplo Profesional: $448.50 al 1er pago + $448.50 al 2do pago = $897 total.',
+        'Ejemplo Pro: $449.25 al 1er pago + $449.25 al 2do pago = $898.50 total.',
         'Si la clínica NO hace el 2do pago, la segunda mitad no se paga.',
     ]],
     ['3. Clawback (devolución de comisión)', [
@@ -147,15 +147,15 @@ $validation->setAllowBlank(false);
 $validation->setShowInputMessage(true);
 $validation->setShowErrorMessage(true);
 $validation->setShowDropDown(true);
-$validation->setFormula1('"Básico,Profesional,Clínica"');
+$validation->setFormula1('"Básico,Pro,Clínica"');
 
 // Valores derivados (tabla de lookup de precios)
 $calc->setCellValue('D4', 'Precio mensual');
-$calc->setCellValue('E4', '=IFERROR(VLOOKUP(B4,Planes!A4:B6,2,FALSE),0)');
+$calc->setCellValue('E4', '=IFERROR(VLOOKUP(B4,Planes!A4:B7,2,FALSE),0)');
 $calc->getStyle('E4')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 
-$calc->setCellValue('D5', 'Comisión total por venta (3×)');
-$calc->setCellValue('E5', '=IF(OR(B4="Básico"),0,E4*3)');
+$calc->setCellValue('D5', 'Comisión total por venta (1.5×)');
+$calc->setCellValue('E5', '=IF(OR(B4="Free",B4="Básico"),0,E4*1.5)');
 $calc->getStyle('E5')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 $calc->getStyle('E5')->getFont()->setBold(true);
 
@@ -215,12 +215,12 @@ $calc->getStyle("A{$r}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColo
 $r += 2;
 
 $examples = [
-    'Si vendes 1 Profesional al mes → 12 × $897 = $10,764/año',
-    'Si vendes 5 Profesional al mes → 60 × $897 = $53,820/año',
-    'Si vendes 10 Profesional al mes → 120 × $897 = $107,640/año',
-    'Si vendes 3 Profesional + 1 Clínica al mes → (3×$897 + 1×$1,497) × 12 = $50,256/año',
-    'Si vendes 5 Clínica al mes → 60 × $1,497 = $89,820/año 🚀',
-    'Nota: el plan Básico ($149) NO paga comisión — margen insuficiente.',
+    'Si vendes 1 Pro al mes → 12 × $898.50 = $10,782/año',
+    'Si vendes 5 Pro al mes → 60 × $898.50 = $53,910/año',
+    'Si vendes 10 Pro al mes → 120 × $898.50 = $107,820/año',
+    'Si vendes 3 Pro + 1 Clínica al mes → (3×$898.50 + 1×$1,798.50) × 12 = $54,126/año',
+    'Si vendes 5 Clínica al mes → 60 × $1,798.50 = $107,910/año 🚀',
+    'Nota: los planes Free ($0) y Básico ($299) NO pagan comisión — margen insuficiente.',
 ];
 foreach ($examples as $ex) {
     $calc->setCellValue("A{$r}", '  ✓  ' . $ex);
@@ -398,16 +398,17 @@ $pl->getStyle('A1')->getFont()->getColor()->setRGB('FFFFFF');
 
 $pl->setCellValue('A3', 'Plan');
 $pl->setCellValue('B3', 'Precio mensual');
-$pl->setCellValue('C3', 'Comisión total (3×)');
+$pl->setCellValue('C3', 'Comisión total (1.5×)');
 $pl->setCellValue('D3', 'Por mitad (50%)');
 $pl->setCellValue('E3', '¿Califica?');
 $pl->getStyle('A3:E3')->getFont()->setBold(true);
 $pl->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('E1F5EE');
 
 $planes = [
-    ['Básico', 149, 0, 0, 'NO'],
-    ['Profesional', 299, 897, 448.5, 'SÍ'],
-    ['Clínica', 499, 1497, 748.5, 'SÍ'],
+    ['Free', 0, 0, 0, 'NO'],
+    ['Básico', 299, 0, 0, 'NO'],
+    ['Pro', 599, 898.50, 449.25, 'SÍ'],
+    ['Clínica', 1199, 1798.50, 899.25, 'SÍ'],
 ];
 $r = 4;
 foreach ($planes as $p) {
@@ -432,7 +433,7 @@ $pl->getColumnDimension('E')->setWidth(14);
 $pl->setCellValue('A9', 'NOTA: Solo los planes Profesional, Clínica y Enterprise pagan comisión.');
 $pl->mergeCells('A9:E9');
 $pl->getStyle('A9')->getFont()->setItalic(true);
-$pl->setCellValue('A10', 'La comisión es 3× la mensualidad, dividida en 2 pagos (al 1er y al 2do pago del cliente).');
+$pl->setCellValue('A10', 'La comisión es 1.5× la mensualidad, dividida en 2 pagos (al 1er y al 2do pago del cliente).');
 $pl->mergeCells('A10:E10');
 $pl->getStyle('A10')->getFont()->setItalic(true);
 
