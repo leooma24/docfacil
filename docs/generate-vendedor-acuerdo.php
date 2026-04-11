@@ -46,13 +46,13 @@ $row += 2;
 $sections = [
     ['1. Esquema de comisión', [
         'La comisión por cada nueva clínica vendida es de 1.5× la primera mensualidad del plan contratado.',
-        'Ejemplo: plan Pro $599/mes → comisión total $898.50 por venta.',
+        'Ejemplo: plan Pro $299/mes → comisión total $448.50 por venta.',
         'Aplica a todos los planes de pago: Básico, Pro y Clínica. El plan Free NO paga comisión.',
     ]],
     ['2. Pago en dos exhibiciones (split 50/50)', [
         '50% (primera mitad) se paga cuando la clínica realiza su PRIMER pago real al sistema.',
         '50% (segunda mitad) se paga cuando la clínica realiza su SEGUNDO pago mensual.',
-        'Ejemplo Pro: $449.25 al 1er pago + $449.25 al 2do pago = $898.50 total.',
+        'Ejemplo Pro: $224.25 al 1er pago + $224.25 al 2do pago = $448.50 total.',
         'Si la clínica NO hace el 2do pago, la segunda mitad no se paga.',
     ]],
     ['3. Clawback (devolución de comisión)', [
@@ -408,9 +408,9 @@ $pl->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 
 $planes = [
     ['Free', 0, 0, 0, 'NO'],
-    ['Básico', 299, 448.50, 224.25, 'SÍ'],
-    ['Pro', 599, 898.50, 449.25, 'SÍ'],
-    ['Clínica', 1199, 1798.50, 899.25, 'SÍ'],
+    ['Básico', 149, 223.50, 111.75, 'SÍ'],
+    ['Pro', 299, 448.50, 224.25, 'SÍ'],
+    ['Clínica', 499, 748.50, 374.25, 'SÍ'],
 ];
 $r = 4;
 foreach ($planes as $p) {
@@ -432,7 +432,7 @@ $pl->getColumnDimension('D')->setWidth(18);
 $pl->getColumnDimension('E')->setWidth(14);
 
 // Notas
-$pl->setCellValue('A9', 'NOTA: Solo los planes Profesional, Clínica y Enterprise pagan comisión.');
+$pl->setCellValue('A9', 'NOTA: Todos los planes de pago (Básico, Pro, Clínica) pagan comisión. Solo el plan Free NO paga.');
 $pl->mergeCells('A9:E9');
 $pl->getStyle('A9')->getFont()->setItalic(true);
 $pl->setCellValue('A10', 'La comisión es 1.5× la mensualidad, dividida en 2 pagos (al 1er y al 2do pago del cliente).');

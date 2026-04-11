@@ -77,9 +77,9 @@ class Commission extends Model
     {
         return match ($plan) {
             'free' => 0,
-            'basico' => 299,
-            'profesional' => 599,
-            'clinica' => 1199,
+            'basico' => 149,
+            'profesional' => 299,
+            'clinica' => 499,
             default => 0,
         };
     }

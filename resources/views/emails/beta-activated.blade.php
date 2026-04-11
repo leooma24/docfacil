@@ -26,9 +26,9 @@
                 <strong>Lo que incluye tu beta:</strong>
                 <ul>
                     <li>Plan Pro completo — <strong>6 meses gratis</strong></li>
-                    <li>IA integrada: dictado inteligente, sugerencias de diagnóstico, consentimientos automáticos</li>
-                    <li>Cobro por WhatsApp + Check-in con QR + Análisis del consultorio</li>
-                    <li>Precio de fundador de por vida: <strong>$299/mes</strong> (cuando decidas pagar)</li>
+                    <li>Agenda, expedientes, recetas PDF, odontograma y portal del paciente</li>
+                    <li>Cobro por WhatsApp + Check-in con QR + recordatorios automáticos</li>
+                    <li>Precio de fundador de por vida: <strong>$149/mes</strong> (cuando decidas pagar)</li>
                 </ul>
                 <p>Tu beta vence el: <strong>{{ $clinic->beta_ends_at?->format('d/m/Y') }}</strong></p>
             </div>

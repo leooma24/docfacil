@@ -36,7 +36,7 @@ $ws->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)
 $ws->getRowDimension(1)->setRowHeight(60);
 
 $ws->mergeCells('A2:F2');
-$ws->setCellValue('A2', 'El único software médico con IA de verdad en México');
+$ws->setCellValue('A2', 'Software para consultorios médicos y dentales en México');
 $ws->getStyle('A2')->getFont()->setBold(true)->setSize(14)->getColor()->setRGB($CYAN);
 $ws->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 $ws->getRowDimension(2)->setRowHeight(25);
@@ -47,13 +47,12 @@ $toc = [
     ['ÍNDICE DEL KIT', ''],
     ['1. Planes y Precios', 'Tabla completa con todos los planes, precios y features'],
     ['2. Features por Plan', 'Comparativa detallada de qué incluye cada plan'],
-    ['3. Features con IA', '12 features con Inteligencia Artificial'],
-    ['4. Competencia', 'Comparativa vs SimplyBook, Abysmed, Doctoralia, iPraxis'],
-    ['5. Script de Venta', 'Argumentos clave y respuestas a objeciones'],
-    ['6. Calculadora ROI', 'Hoja interactiva para calcular ahorro del doctor'],
-    ['7. Comisiones', 'Cuánto ganas por cada venta (50% primer pago, 50% segundo)'],
-    ['8. Links y Demos', 'URLs importantes: demo, landing, WhatsApp soporte'],
-    ['9. Checklist de Venta', 'Pasos para cerrar un cliente'],
+    ['3. Competencia', 'Comparativa vs SimplyBook, Abysmed, Doctoralia, iPraxis'],
+    ['4. Script de Venta', 'Argumentos clave y respuestas a objeciones'],
+    ['5. Calculadora ROI', 'Hoja interactiva para calcular ahorro del doctor'],
+    ['6. Comisiones', 'Cuánto ganas por cada venta (50% primer pago, 50% segundo)'],
+    ['7. Links y Demos', 'URLs importantes: demo, landing, WhatsApp soporte'],
+    ['8. Checklist de Venta', 'Pasos para cerrar un cliente'],
 ];
 
 $row = 4;
@@ -99,9 +98,9 @@ $ws->getRowDimension(3)->setRowHeight(25);
 
 $planes = [
     ['FREE', '$0', '—', '1', '30', 'Doctores curiosos. Sin comisión. Gancho para conversión.'],
-    ['BÁSICO', '$299', '$149 (50% off)', '1', '200', 'Doctores individuales. Comisión: $448.50 por venta.'],
-    ['PRO ⭐', '$599', '$299 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. TODA la IA. Comisión: $898.50 por venta.'],
-    ['CLÍNICA', '$1,199', '$599 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $1,798.50 por venta.'],
+    ['BÁSICO', '$149', '$74 (50% off)', '1', '200', 'Doctores individuales. Comisión: $223.50 por venta.'],
+    ['PRO ⭐', '$299', '$149 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Odontograma + Portal + Multi-doctor. Comisión: $448.50 por venta.'],
+    ['CLÍNICA', '$499', '$249 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $748.50 por venta.'],
 ];
 
 $row = 4;
@@ -148,9 +147,9 @@ $ws->getRowDimension(1)->setRowHeight(40);
 
 $ws->setCellValue('A3', 'Feature');
 $ws->setCellValue('B3', 'Free');
-$ws->setCellValue('C3', 'Básico $299');
-$ws->setCellValue('D3', 'Pro $599');
-$ws->setCellValue('E3', 'Clínica $1,199');
+$ws->setCellValue('C3', 'Básico $149');
+$ws->setCellValue('D3', 'Pro $299');
+$ws->setCellValue('E3', 'Clínica $499');
 $ws->getStyle('A3:E3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
 $ws->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($DARK);
 $ws->getStyle('A3:E3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -162,29 +161,22 @@ $features = [
     ['📅 Citas por mes', '20', 'Ilimitadas', 'Ilimitadas', 'Ilimitadas'],
     ['👨‍⚕️ Doctores', '1', '1', '3', 'Ilimitados'],
     ['🏢 Multi-sucursal', '❌', '❌', '❌', '✅'],
+    ['', '', '', '', ''],
+    ['════ ESENCIALES ════', '', '', '', ''],
     ['📄 Recetas PDF profesionales', '❌', '✅', '✅', '✅'],
     ['📱 Recordatorios WhatsApp', '❌', '✅', '✅', '✅'],
     ['💬 Cobro por WhatsApp', '❌', '✅', '✅', '✅'],
     ['📲 Check-in con QR', '❌', '✅', '✅', '✅'],
-    ['🎤 Dictado por voz', '❌', '✅', '✅', '✅'],
-    ['✍️ Firma digital', '❌', '✅', '✅', '✅'],
-    ['🦷 Odontograma', '❌', '✅', '✅', '✅'],
+    ['📋 Expediente clínico completo', '✅', '✅', '✅', '✅'],
     ['', '', '', '', ''],
-    ['════ FEATURES CON IA ════', '', '', '', ''],
-    ['🤖 Dictado inteligente con IA', '❌', '❌', '✅', '✅'],
-    ['🧠 Resumen IA del paciente', '❌', '❌', '✅', '✅'],
-    ['💡 Sugerencias de diagnóstico IA', '❌', '❌', '✅', '✅'],
-    ['📋 Consentimientos con IA', '❌', '❌', '✅', '✅'],
-    ['📊 Análisis IA del consultorio', '❌', '❌', '✅', '✅'],
-    ['🔮 Métricas predictivas', '❌', '❌', '✅', '✅'],
-    ['💬 Chatbot IA flotante', '❌', '❌', '✅', '✅'],
-    ['🎙️ Modo consulta en vivo', '❌', '❌', '✅', '✅'],
-    ['⌨️ Command Palette (Ctrl+K)', '❌', '❌', '✅', '✅'],
-    ['🗓️ Slot mágico en calendario', '❌', '❌', '✅', '✅'],
-    ['💬 Autoresponder WhatsApp IA', '❌', '❌', '✅', '✅'],
-    ['📝 Generador mensajes por paciente', '❌', '❌', '✅', '✅'],
+    ['════ PRO ════', '', '', '', ''],
+    ['🦷 Odontograma interactivo', '❌', '❌', '✅', '✅'],
+    ['✍️ Firma digital', '❌', '❌', '✅', '✅'],
+    ['📋 Consentimientos digitales', '❌', '❌', '✅', '✅'],
+    ['👥 Portal del paciente', '❌', '❌', '✅', '✅'],
+    ['📊 Reportes avanzados', '❌', '❌', '✅', '✅'],
     ['', '', '', '', ''],
-    ['════ PREMIUM ════', '', '', '', ''],
+    ['════ CLÍNICA ════', '', '', '', ''],
     ['📈 Reportes por doctor', '❌', '❌', '❌', '✅'],
     ['💰 Comisiones entre doctores', '❌', '❌', '❌', '✅'],
     ['⭐ Soporte prioritario', '❌', '❌', '❌', '✅'],
@@ -216,62 +208,9 @@ $ws->getColumnDimension('C')->setWidth(16);
 $ws->getColumnDimension('D')->setWidth(16);
 $ws->getColumnDimension('E')->setWidth(18);
 
-/* ========== HOJA 4: FEATURES CON IA ========== */
-$s->createSheet()->setTitle('Features IA');
-$ws = $s->getSheet(3);
-
-$ws->mergeCells('A1:D1');
-$ws->setCellValue('A1', '🤖 FEATURES CON INTELIGENCIA ARTIFICIAL');
-$ws->getStyle('A1')->getFont()->setBold(true)->setSize(20)->getColor()->setRGB('FFFFFF');
-$ws->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($PURPLE);
-$ws->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-$ws->getRowDimension(1)->setRowHeight(40);
-
-$ws->setCellValue('A3', 'Feature');
-$ws->setCellValue('B3', 'Qué hace');
-$ws->setCellValue('C3', 'Ahorro al doctor');
-$ws->setCellValue('D3', 'Pitch killer');
-$ws->getStyle('A3:D3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
-$ws->getStyle('A3:D3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($DARK);
-$ws->getRowDimension(3)->setRowHeight(25);
-
-$ai = [
-    ['Dictado inteligente', 'Habla toda la consulta y la IA llena diagnóstico, tratamiento, receta y notas automáticamente.', '5 min/paciente', '"Doctor, deja de teclear. Habla y yo escribo."'],
-    ['Resumen IA paciente', 'Al abrir un paciente, la IA te da un resumen narrativo en 2 segundos.', '30 seg/paciente', '"Entiende al paciente en 2 segundos sin leer 5 pantallas."'],
-    ['Sugerencias Dx', 'Escribes el motivo y la IA sugiere 3 diagnósticos con tratamiento y medicamento.', 'Consultas difíciles', '"Es como tener un residente experto al lado."'],
-    ['Consentimientos IA', 'Escribes el procedimiento y la IA genera el consentimiento completo en 5 segundos.', '20 min/consentimiento', '"De 20 minutos a 5 segundos."'],
-    ['Análisis consultorio', 'La IA analiza tus datos y sugiere acciones: qué pacientes recuperar, cuándo subir precios, etc.', '—', '"Como tener un consultor de negocio 24/7."'],
-    ['Métricas predictivas', 'Predice ingresos, detecta pacientes que se van, sugiere precios óptimos.', '—', '"DocFácil te dice qué va a pasar en 2 semanas."'],
-    ['Chatbot IA flotante', 'Pregunta lo que sea: "cuánto facturé", "quién tiene cita mañana". Responde con datos reales.', '20 clicks/día', '"En lugar de navegar menús, le preguntas."'],
-    ['Modo consulta en vivo', 'La IA escucha toda la consulta (doctor+paciente) y llena el expediente al final.', '5 min/paciente', '"Tú atiendes, la IA escribe."'],
-    ['Command Palette', 'Ctrl+K en cualquier pantalla. Escribe lo que quieres hacer y aparece.', '50 clicks/día', '"Como Linear o Notion, pero para tu consultorio."'],
-    ['Slot mágico calendario', 'Dile "busca 30min mañana" y la IA te da los mejores horarios.', 'Reagendado más rápido', '"Nunca más tetris mental con la agenda."'],
-    ['Autoresponder WhatsApp', 'Pacientes te escriben y la IA responde en tu nombre sobre citas, recetas, etc.', 'Recepcionista virtual', '"Tu clínica contesta WhatsApp 24/7 sin contratar a nadie."'],
-    ['Generador mensajes', 'Botón para generar mensaje perfecto para cada paciente: recordatorio, seguimiento, cumpleaños, etc.', '10 min/mensaje', '"Retén pacientes sin escribir tú."'],
-];
-
-$row = 4;
-foreach ($ai as $f) {
-    foreach ($f as $i => $val) {
-        $col = chr(65 + $i);
-        $ws->setCellValue("{$col}{$row}", $val);
-    }
-    $ws->getStyle("A{$row}")->getFont()->setBold(true)->getColor()->setRGB($PURPLE);
-    $ws->getStyle("D{$row}")->getFont()->setItalic(true)->getColor()->setRGB($TEAL);
-    $ws->getStyle("A{$row}:D{$row}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $ws->getStyle("A{$row}:D{$row}")->getAlignment()->setWrapText(true)->setVertical(Alignment::VERTICAL_TOP);
-    $ws->getRowDimension($row)->setRowHeight(50);
-    $row++;
-}
-
-$ws->getColumnDimension('A')->setWidth(25);
-$ws->getColumnDimension('B')->setWidth(50);
-$ws->getColumnDimension('C')->setWidth(25);
-$ws->getColumnDimension('D')->setWidth(50);
-
-/* ========== HOJA 5: COMPETENCIA ========== */
+/* ========== HOJA 4: COMPETENCIA ========== */
 $s->createSheet()->setTitle('vs Competencia');
-$ws = $s->getSheet(4);
+$ws = $s->getSheet(3);
 
 $ws->mergeCells('A1:G1');
 $ws->setCellValue('A1', '⚔️ DOCFÁCIL vs COMPETENCIA');
@@ -280,7 +219,7 @@ $ws->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->
 $ws->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 $ws->getRowDimension(1)->setRowHeight(40);
 
-$headers = ['Software', 'Precio /mes', 'IA', 'Dictado', 'WhatsApp', 'Recetas PDF', 'Nube'];
+$headers = ['Software', 'Precio /mes', 'Odontograma', 'Firma digital', 'WhatsApp', 'Recetas PDF', 'Nube'];
 foreach ($headers as $i => $h) {
     $col = chr(65 + $i);
     $ws->setCellValue("{$col}3", $h);
@@ -290,11 +229,11 @@ $ws->getStyle('A3:G3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 $ws->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 $compet = [
-    ['DocFácil PRO ⭐', '$599', '✅✅✅ 12 features', '✅', '✅ Automático', '✅', '✅'],
+    ['DocFácil PRO ⭐', '$299', '✅', '✅', '✅ Automático', '✅', '✅'],
     ['SimplyBook.me', '$800+', '❌', '❌', '⚠️ Básico', '⚠️', '✅'],
-    ['Abysmed', '$1,200+', '❌', '❌', '❌', '✅', '✅'],
+    ['Abysmed', '$1,200+', '✅', '⚠️', '❌', '✅', '✅'],
     ['Doctoralia', '$1,500+', '❌', '❌', '⚠️ Básico', '❌', '✅'],
-    ['iPraxis', '$700', '❌', '❌', '❌', '✅', '❌ Local'],
+    ['iPraxis', '$700', '✅', '❌', '❌', '✅', '❌ Local'],
 ];
 
 $row = 4;
@@ -314,7 +253,7 @@ foreach ($compet as $c) {
 
 $row += 2;
 $ws->mergeCells("A{$row}:G{$row}");
-$ws->setCellValue("A{$row}", '💡 KEY INSIGHT: Eres el MÁS BARATO Y tienes las ÚNICAS features con IA del mercado mexicano.');
+$ws->setCellValue("A{$row}", '💡 KEY INSIGHT: Eres el MÁS BARATO con odontograma, firma digital y WhatsApp automático del mercado mexicano.');
 $ws->getStyle("A{$row}")->getFont()->setBold(true)->setSize(14)->getColor()->setRGB($TEAL);
 $ws->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 $ws->getRowDimension($row)->setRowHeight(30);
@@ -325,9 +264,9 @@ for ($c = 'A'; $c <= 'G'; $c++) {
 $ws->getColumnDimension('A')->setWidth(20);
 $ws->getColumnDimension('C')->setWidth(20);
 
-/* ========== HOJA 6: SCRIPT DE VENTA ========== */
+/* ========== HOJA 5: SCRIPT DE VENTA ========== */
 $s->createSheet()->setTitle('Script de Venta');
-$ws = $s->getSheet(5);
+$ws = $s->getSheet(4);
 
 $ws->mergeCells('A1:B1');
 $ws->setCellValue('A1', '📞 SCRIPT DE VENTA + OBJECIONES');
@@ -338,27 +277,28 @@ $ws->getRowDimension(1)->setRowHeight(40);
 
 $script = [
     ['APERTURA', ''],
-    ['Saludo inicial', '"Hola Dr./Dra. [Nombre], soy [Tu nombre] de DocFácil. Te contacto porque somos el único software médico en México con Inteligencia Artificial integrada. ¿Tienes 3 minutos para ver cómo le ahorramos 2 horas al día a doctores como tú?"'],
+    ['Saludo inicial', '"Hola Dr./Dra. [Nombre], soy [Tu nombre] de DocFácil. Te contacto porque ayudamos a doctores como tú a organizar su consultorio, recordar citas por WhatsApp automático y ahorrar 2 horas al día. ¿Tienes 3 minutos?"'],
     ['', ''],
     ['DOLOR', ''],
-    ['Pregunta clave', '"Doctor, ¿cuánto tiempo al día pasas tecleando expedientes en vez de atender pacientes?"'],
+    ['Pregunta clave', '"Doctor, ¿cuánto tiempo al día pasas organizando citas en libreta o Excel?"'],
     ['Pregunta 2', '"¿Cuántos pacientes se te van porque no se enteran que tienen cita?"'],
     ['Pregunta 3', '"¿Cobras efectivo o pierdes ventas porque el paciente no trae dinero?"'],
     ['', ''],
     ['DEMO', ''],
-    ['Punto 1', 'Muestra DICTADO INTELIGENTE: "Mira, oprimo grabar, hablo normal y la IA me llena todo: diagnóstico, tratamiento, receta."'],
-    ['Punto 2', 'Muestra CHATBOT IA: "Ctrl+K, le pregunto cuánto facturé este mes y me responde con datos reales."'],
-    ['Punto 3', 'Muestra RECORDATORIOS: "Cada cita genera recordatorio automático 24h y 2h antes por WhatsApp."'],
-    ['Punto 4', 'Muestra COBRO WhatsApp: "Al terminar la consulta, un click y el paciente recibe el cobro."'],
+    ['Punto 1', 'Muestra AGENDA: "Aquí ves tu agenda del mes, arrastras citas para reagendar, bloqueas horarios con un clic."'],
+    ['Punto 2', 'Muestra RECORDATORIOS: "Cada cita genera recordatorio automático 24h y 2h antes por WhatsApp."'],
+    ['Punto 3', 'Muestra RECETAS PDF: "Al terminar la consulta, un clic y se genera receta con tu cédula, membrete y firma."'],
+    ['Punto 4', 'Muestra COBRO WhatsApp: "Al terminar la consulta, un clic y el paciente recibe el cobro."'],
+    ['Punto 5', 'Muestra ODONTOGRAMA/EXPEDIENTE: "Todo el historial clínico del paciente en una pantalla, con alertas de alergias y antecedentes."'],
     ['', ''],
     ['CIERRE', ''],
-    ['Frase de cierre', '"Doctor, por $599 al mes estás ganando 2 horas al día = $10,000 extra al mes. DocFácil se paga 16 veces."'],
+    ['Frase de cierre', '"Doctor, por $299 al mes ahorras 2 horas al día y recuperas 8 pacientes que antes no llegaban = $4,800 extra al mes. DocFácil se paga 16 veces."'],
     ['Call to action', '"Te doy 14 días gratis con todas las features. Sin tarjeta. ¿A qué hora te puedo ayudar a configurarlo?"'],
     ['', ''],
     ['OBJECIONES', ''],
-    ['"Es caro"', '"Doctor, ¿cuánto cobras por consulta? ¿$500? DocFácil Pro cuesta MENOS de 1 consulta y te ahorra 40 pacientes al mes en tiempo. Se paga 40 veces."'],
-    ['"No soy tecnológico"', '"Por eso la IA. No tienes que aprender nada. Literalmente hablas y la app escribe. Si sabes usar WhatsApp, sabes usar DocFácil."'],
-    ['"Ya tengo software"', '"¿Tiene IA que escribe expedientes? ¿Tiene chatbot que responde preguntas? ¿Predice tus ingresos? Somos los únicos. Pruébalo 14 días gratis sin cancelar lo actual."'],
+    ['"Es caro"', '"Doctor, ¿cuánto cobras por consulta? ¿$500? DocFácil Pro cuesta MENOS de 1 consulta al mes y te ahorra 8 pacientes en recordatorios WhatsApp. Se paga 16 veces."'],
+    ['"No soy tecnológico"', '"Por eso lo diseñamos simple. Si sabes usar WhatsApp, sabes usar DocFácil. Te acompañamos en la configuración inicial sin costo."'],
+    ['"Ya tengo software"', '"¿Es en la nube o instalado en una sola compu? ¿Manda recordatorios WhatsApp automáticos? ¿Tiene portal del paciente? Pruébalo 14 días gratis sin cancelar lo actual."'],
     ['"Mis datos están seguros?"', '"Absolutamente. Encriptación SSL, backups automáticos diarios, tus datos están separados de otras clínicas. Cumplimos con todas las normas mexicanas."'],
     ['"Y si no me gusta?"', '"Cancelas cuando quieras, sin penalización. Primeros 14 días son gratis sin tarjeta. Solo pagas si te gusta."'],
     ['"Necesito pensarlo"', '"Entiendo doctor. Te activo los 14 días gratis ya, pruébalo con tus pacientes de mañana, si no te gusta, no pasa nada. ¿Cuál es tu WhatsApp?"'],
@@ -385,9 +325,9 @@ foreach ($script as [$k, $v]) {
 $ws->getColumnDimension('A')->setWidth(25);
 $ws->getColumnDimension('B')->setWidth(90);
 
-/* ========== HOJA 7: CALCULADORA ROI ========== */
+/* ========== HOJA 6: CALCULADORA ROI ========== */
 $s->createSheet()->setTitle('Calculadora ROI');
-$ws = $s->getSheet(6);
+$ws = $s->getSheet(5);
 
 $ws->mergeCells('A1:C1');
 $ws->setCellValue('A1', '💸 CALCULADORA DE ROI (edita las celdas amarillas)');
@@ -430,36 +370,32 @@ $ws->setCellValue('A10', 'Retención por WhatsApp (reduce 8% no-shows)');
 $ws->setCellValue('B10', '=B4*0.08*B5');
 $ws->setCellValue('C10', 'Citas que se salvan x precio');
 
-$ws->setCellValue('A11', 'Extra por dictado IA (atiendes más pacientes)');
-$ws->setCellValue('B11', '=20*B5*0.15');
-$ws->setCellValue('C11', '1 paciente extra al día x precio');
+$ws->setCellValue('A11', 'TOTAL AHORRO/MES');
+$ws->setCellValue('B11', '=B9+B10');
+$ws->setCellValue('C11', 'Total mensual ganado con DocFácil');
+$ws->getStyle('A11:C11')->getFont()->setBold(true)->setSize(14);
+$ws->getStyle('A11:C11')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($LIGHT_BG);
 
-$ws->setCellValue('A12', 'TOTAL AHORRO/MES');
-$ws->setCellValue('B12', '=B9+B10+B11');
-$ws->setCellValue('C12', 'Total mensual ganado con DocFácil');
-$ws->getStyle('A12:C12')->getFont()->setBold(true)->setSize(14);
-$ws->getStyle('A12:C12')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($LIGHT_BG);
-
-$ws->getStyle('B9:B12')->getNumberFormat()->setFormatCode('"$"#,##0');
-$ws->getStyle('A9:C12')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$ws->getStyle('B9:B11')->getNumberFormat()->setFormatCode('"$"#,##0');
+$ws->getStyle('A9:C11')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 // ROI
-$ws->setCellValue('A14', 'Precio DocFácil Pro');
-$ws->setCellValue('B14', 599);
-$ws->getStyle('B14')->getNumberFormat()->setFormatCode('"$"#,##0');
+$ws->setCellValue('A13', 'Precio DocFácil Pro');
+$ws->setCellValue('B13', 299);
+$ws->getStyle('B13')->getNumberFormat()->setFormatCode('"$"#,##0');
 
-$ws->setCellValue('A15', 'ROI (cuántas veces paga DocFácil)');
-$ws->setCellValue('B15', '=B12/B14');
-$ws->getStyle('B15')->getNumberFormat()->setFormatCode('0.0"x"');
-$ws->getStyle('A15:B15')->getFont()->setBold(true)->setSize(16)->getColor()->setRGB($TEAL);
+$ws->setCellValue('A14', 'ROI (cuántas veces paga DocFácil)');
+$ws->setCellValue('B14', '=B11/B13');
+$ws->getStyle('B14')->getNumberFormat()->setFormatCode('0.0"x"');
+$ws->getStyle('A14:B14')->getFont()->setBold(true)->setSize(16)->getColor()->setRGB($TEAL);
 
 $ws->getColumnDimension('A')->setWidth(40);
 $ws->getColumnDimension('B')->setWidth(18);
 $ws->getColumnDimension('C')->setWidth(45);
 
-/* ========== HOJA 8: COMISIONES ========== */
+/* ========== HOJA 7: COMISIONES ========== */
 $s->createSheet()->setTitle('Comisiones');
-$ws = $s->getSheet(7);
+$ws = $s->getSheet(6);
 
 $ws->mergeCells('A1:D1');
 $ws->setCellValue('A1', '💰 ESQUEMA DE COMISIONES');
@@ -469,7 +405,7 @@ $ws->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)
 $ws->getRowDimension(1)->setRowHeight(40);
 
 $ws->mergeCells('A3:D3');
-$ws->setCellValue('A3', '🎯 GANAS 1.5 MENSUALIDADES POR CADA CLIENTE PRO o CLÍNICA');
+$ws->setCellValue('A3', '🎯 GANAS 1.5 MENSUALIDADES POR CADA CLIENTE DE PAGO (Básico, Pro o Clínica)');
 $ws->getStyle('A3')->getFont()->setBold(true)->setSize(13)->getColor()->setRGB($TEAL);
 $ws->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -490,9 +426,9 @@ $ws->getRowDimension(6)->setRowHeight(25);
 
 $coms = [
     ['Free', '$0', '$0', 'Sin comisión'],
-    ['Básico', '$299', '$448.50', '$224.25 + $224.25'],
-    ['Pro ⭐', '$599', '$898.50', '$449.25 + $449.25'],
-    ['Clínica', '$1,199', '$1,798.50', '$899.25 + $899.25'],
+    ['Básico', '$149', '$223.50', '$111.75 + $111.75'],
+    ['Pro ⭐', '$299', '$448.50', '$224.25 + $224.25'],
+    ['Clínica', '$499', '$748.50', '$374.25 + $374.25'],
 ];
 
 $row = 7;
@@ -519,10 +455,10 @@ $row += 2;
 
 $metas = [
     ['Nivel', 'Ventas/mes', 'Mix', 'Comisión aproximada'],
-    ['Starter', '3 Básico + 2 Pro', '3x$448.50 + 2x$898.50', '$3,142.50'],
-    ['Medium', '5 Pro + 1 Clínica', '5x$898.50 + 1x$1,798.50', '$6,291'],
-    ['Top', '10 Pro + 2 Clínica', '10x$898.50 + 2x$1,798.50', '$12,582'],
-    ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$16,618.50'],
+    ['Starter', '3 Básico + 2 Pro', '3x$223.50 + 2x$448.50', '$1,567.50'],
+    ['Medium', '5 Pro + 1 Clínica', '5x$448.50 + 1x$748.50', '$2,991'],
+    ['Top', '10 Pro + 2 Clínica', '10x$448.50 + 2x$748.50', '$5,982'],
+    ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$7,843.50'],
 ];
 
 foreach ($metas as $i => $m) {
@@ -544,9 +480,9 @@ $ws->getColumnDimension('B')->setWidth(22);
 $ws->getColumnDimension('C')->setWidth(28);
 $ws->getColumnDimension('D')->setWidth(25);
 
-/* ========== HOJA 9: LINKS Y DEMOS ========== */
+/* ========== HOJA 8: LINKS Y DEMOS ========== */
 $s->createSheet()->setTitle('Links y Recursos');
-$ws = $s->getSheet(8);
+$ws = $s->getSheet(7);
 
 $ws->mergeCells('A1:B1');
 $ws->setCellValue('A1', '🔗 LINKS IMPORTANTES');
@@ -580,9 +516,9 @@ foreach ($links as [$label, $url]) {
 $ws->getColumnDimension('A')->setWidth(40);
 $ws->getColumnDimension('B')->setWidth(60);
 
-/* ========== HOJA 10: CHECKLIST DE VENTA ========== */
+/* ========== HOJA 9: CHECKLIST DE VENTA ========== */
 $s->createSheet()->setTitle('Checklist');
-$ws = $s->getSheet(9);
+$ws = $s->getSheet(8);
 
 $ws->mergeCells('A1:C1');
 $ws->setCellValue('A1', '✅ CHECKLIST PARA CERRAR UNA VENTA');
@@ -596,8 +532,8 @@ $checklist = [
     ['☐', 'Abrir demo-vendedor', 'Tener la sesión demo lista en otra pestaña'],
     ['☐', 'Contacto inicial', 'Llamada o WhatsApp al doctor (NO email frío)'],
     ['☐', 'Romper el hielo', 'Hacer pregunta sobre su dolor (tiempo, no-shows, cobros)'],
-    ['☐', 'Demo en vivo', 'Mostrar dictado IA + chatbot IA + recordatorios'],
-    ['☐', 'Cotización', 'Mostrar Plan Pro $599 con 50% descuento = $299 de por vida (fundador)'],
+    ['☐', 'Demo en vivo', 'Mostrar agenda + recordatorios WhatsApp + recetas PDF + cobro por WhatsApp'],
+    ['☐', 'Cotización', 'Mostrar Plan Pro $299 con 50% descuento = $149 de por vida (fundador)'],
     ['☐', 'Objeciones', 'Usar respuestas del script (hoja "Script de Venta")'],
     ['☐', 'Ofrecer trial 14 días', 'Sin tarjeta de crédito, sin compromiso'],
     ['☐', 'Crear cuenta en su presencia', 'Registrarlo en docfacil.tu-app.co/doctor/register?vnd=TU_CODIGO'],
@@ -631,5 +567,5 @@ $outputPath = __DIR__ . '/DocFacil-Kit-Vendedor-2026.xlsx';
 $writer->save($outputPath);
 
 echo "✅ Excel generado: {$outputPath}\n";
-echo "📊 10 hojas con toda la información para cerrar ventas\n";
+echo "📊 9 hojas con toda la información para cerrar ventas\n";
 echo "🚀 Listo para compartir con vendedores\n";

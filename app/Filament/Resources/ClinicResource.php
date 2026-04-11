@@ -51,9 +51,9 @@ class ClinicResource extends Resource
                                     ->label('Plan actual')
                                     ->options([
                                         'free' => 'Free - Gratis',
-                                        'basico' => 'Básico - $299/mes',
-                                        'profesional' => 'Pro - $599/mes',
-                                        'clinica' => 'Clínica - $1,199/mes',
+                                        'basico' => 'Básico - $149/mes',
+                                        'profesional' => 'Pro - $299/mes',
+                                        'clinica' => 'Clínica - $499/mes',
                                     ])
                                     ->default('free'),
                                 Forms\Components\DateTimePicker::make('trial_ends_at')->label('Trial termina')->native(false),
@@ -66,7 +66,7 @@ class ClinicResource extends Resource
                                     ->label('Precio fundador (mensual)')
                                     ->numeric()
                                     ->prefix('$')
-                                    ->placeholder('299')
+                                    ->placeholder('149')
                                     ->visible(fn (Forms\Get $get) => $get('is_founder')),
                             ]),
                         Forms\Components\Tabs\Tab::make('Programa Beta')
@@ -79,8 +79,8 @@ class ClinicResource extends Resource
                                 Forms\Components\Select::make('beta_tier')
                                     ->label('Nivel de beta')
                                     ->options([
-                                        'founder' => 'Fundador — 6 meses gratis, $299/mes después',
-                                        'early_adopter' => 'Early Adopter — 3 meses gratis, $399/mes después',
+                                        'founder' => 'Fundador — 6 meses gratis, $149/mes después',
+                                        'early_adopter' => 'Early Adopter — 3 meses gratis, $199/mes después',
                                         'extended_trial' => 'Trial Extendido — 1 mes gratis, precio normal',
                                     ])
                                     ->visible(fn (Forms\Get $get) => $get('is_beta'))
@@ -90,7 +90,7 @@ class ClinicResource extends Resource
                                             'founder' => (function () use ($set) {
                                                 $set('plan', 'profesional');
                                                 $set('is_founder', true);
-                                                $set('founder_price', 299);
+                                                $set('founder_price', 149);
                                                 $set('beta_starts_at', now()->toDateTimeString());
                                                 $set('beta_ends_at', now()->addMonths(6)->toDateTimeString());
                                                 $set('trial_ends_at', now()->addMonths(6)->toDateTimeString());
@@ -98,7 +98,7 @@ class ClinicResource extends Resource
                                             'early_adopter' => (function () use ($set) {
                                                 $set('plan', 'profesional');
                                                 $set('is_founder', true);
-                                                $set('founder_price', 399);
+                                                $set('founder_price', 199);
                                                 $set('beta_starts_at', now()->toDateTimeString());
                                                 $set('beta_ends_at', now()->addMonths(3)->toDateTimeString());
                                                 $set('trial_ends_at', now()->addMonths(3)->toDateTimeString());
@@ -286,8 +286,8 @@ class ClinicResource extends Resource
                         Forms\Components\Select::make('tier')
                             ->label('Nivel de beta')
                             ->options([
-                                'founder' => 'Fundador — 6 meses gratis, $299/mes después',
-                                'early_adopter' => 'Early Adopter — 3 meses gratis, $399/mes después',
+                                'founder' => 'Fundador — 6 meses gratis, $149/mes después',
+                                'early_adopter' => 'Early Adopter — 3 meses gratis, $199/mes después',
                                 'extended_trial' => 'Trial Extendido — 1 mes gratis, precio normal',
                             ])
                             ->required()
@@ -295,8 +295,8 @@ class ClinicResource extends Resource
                     ])
                     ->action(function (Clinic $record, array $data) {
                         $config = match ($data['tier']) {
-                            'founder' => ['months' => 6, 'price' => 299, 'is_founder' => true],
-                            'early_adopter' => ['months' => 3, 'price' => 399, 'is_founder' => true],
+                            'founder' => ['months' => 6, 'price' => 149, 'is_founder' => true],
+                            'early_adopter' => ['months' => 3, 'price' => 199, 'is_founder' => true],
                             'extended_trial' => ['months' => 1, 'price' => null, 'is_founder' => false],
                         };
 
