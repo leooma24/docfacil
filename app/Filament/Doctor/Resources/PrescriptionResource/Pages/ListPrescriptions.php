@@ -31,7 +31,7 @@ class ListPrescriptions extends ListRecords
         $total = (clone $base)->count();
         $today = (clone $base)->whereDate('created_at', today())->count();
         $month = (clone $base)->where('created_at', '>=', now()->startOfMonth())->count();
-        $withPdf = (clone $base)->whereNotNull('pdf_path')->count();
+        $uniquePatients = (clone $base)->distinct('patient_id')->count('patient_id');
 
         return [
             'title'    => 'Recetas',
@@ -44,7 +44,7 @@ class ListPrescriptions extends ListRecords
                 ['label' => '💊 Total',           'value' => number_format($total)],
                 ['label' => '✨ Hoy',             'value' => $today],
                 ['label' => '📅 Este mes',        'value' => $month],
-                ['label' => '📄 Con PDF',         'value' => number_format($withPdf)],
+                ['label' => '👥 Pacientes',       'value' => number_format($uniquePatients)],
             ],
         ];
     }

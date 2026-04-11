@@ -28,12 +28,12 @@ class ListPayments extends ListRecords
         $clinicId = auth()->user()->clinic_id;
         $base = Payment::where('clinic_id', $clinicId);
 
-        $today = (clone $base)->where('status', 'paid')->whereDate('paid_at', today())->sum('amount');
+        $today = (clone $base)->where('status', 'paid')->whereDate('payment_date', today())->sum('amount');
         $month = (clone $base)->where('status', 'paid')
-            ->where('paid_at', '>=', now()->startOfMonth())->sum('amount');
+            ->where('payment_date', '>=', now()->startOfMonth())->sum('amount');
         $pending = (clone $base)->where('status', 'pending')->sum('amount');
         $countMonth = (clone $base)->where('status', 'paid')
-            ->where('paid_at', '>=', now()->startOfMonth())->count();
+            ->where('payment_date', '>=', now()->startOfMonth())->count();
 
         return [
             'title'    => 'Cobros',
