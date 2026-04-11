@@ -36,7 +36,7 @@ class PatientAISummaryService
 
     protected function generateSummary(Patient $patient): ?string
     {
-        $provider = config('services.ai.provider', 'openai');
+        $provider = config('services.ai.provider', 'deepseek');
         $context = $this->buildPatientContext($patient);
 
         $systemPrompt = "Eres un asistente médico que resume historiales de pacientes en español para dentistas y médicos ocupados. "
@@ -50,8 +50,8 @@ class PatientAISummaryService
         try {
             return match ($provider) {
                 'anthropic' => $this->callAnthropic($systemPrompt, $userPrompt),
-                'deepseek' => $this->callOpenAiCompatible($systemPrompt, $userPrompt, 'deepseek'),
-                default => $this->callOpenAiCompatible($systemPrompt, $userPrompt, 'openai'),
+                'openai' => $this->callOpenAiCompatible($systemPrompt, $userPrompt, 'openai'),
+                default => $this->callOpenAiCompatible($systemPrompt, $userPrompt, 'deepseek'),
             };
         } catch (\Throwable $e) {
             Log::error('AI summary exception', ['error' => $e->getMessage(), 'provider' => $provider]);

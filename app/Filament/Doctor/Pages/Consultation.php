@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Prescription;
 use App\Models\PrescriptionItem;
 use App\Models\Service;
+use App\Services\ConsultationAIService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -318,6 +319,57 @@ class Consultation extends Page implements HasForms
     {
         $this->currentStep = $step;
         $this->saveConsultationState();
+    }
+
+    public ?string $fullDictation = '';
+    public bool $processingDictation = false;
+
+    public function processFullDictation(): void
+    {
+        if (empty(trim($this->fullDictation))) {
+            Notification::make()
+                ->title('Primero dicta algo')
+                ->danger()
+                ->send();
+            return;
+        }
+
+        $this->processingDictation = true;
+
+        try {
+            $parsed = app(ConsultationAIService::class)->structureDictation($this->fullDictation);
+
+            if (!$parsed) {
+                Notification::make()
+                    ->title('No se pudo procesar el dictado')
+                    ->body('Verifica la configuración de IA o intenta de nuevo.')
+                    ->danger()
+                    ->send();
+                return;
+            }
+
+            // Only fill fields that came back non-empty, don't overwrite good data with ''
+            if ($parsed['chief_complaint']) $this->chief_complaint = $parsed['chief_complaint'];
+            if ($parsed['diagnosis']) $this->diagnosis = $parsed['diagnosis'];
+            if ($parsed['treatment']) $this->treatment = $parsed['treatment'];
+            if ($parsed['medical_notes']) $this->medical_notes = $parsed['medical_notes'];
+
+            if (!empty($parsed['medications'])) {
+                // Merge with existing medications (append)
+                $this->medications = array_merge($this->medications ?? [], $parsed['medications']);
+            }
+
+            $this->fullDictation = '';
+            $this->saveConsultationState();
+
+            Notification::make()
+                ->title('✨ Dictado procesado')
+                ->body('Se llenaron los campos automáticamente. Revisa antes de guardar.')
+                ->success()
+                ->send();
+        } finally {
+            $this->processingDictation = false;
+        }
     }
 
     protected function saveConsultationState(): void

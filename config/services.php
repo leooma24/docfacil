@@ -46,7 +46,7 @@ return [
     ],
 
     'ai' => [
-        'provider' => env('AI_PROVIDER', 'openai'),
+        'provider' => env('AI_PROVIDER', 'deepseek'),
         'anthropic' => [
             'key' => env('ANTHROPIC_API_KEY'),
             'model' => env('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001'),

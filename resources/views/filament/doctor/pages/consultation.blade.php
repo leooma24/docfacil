@@ -285,6 +285,34 @@
         {{-- Step 2: Diagnosis --}}
         @if($currentStep === 2)
         <h3 class="text-base md:text-lg font-bold mb-2 md:mb-4">Diagnóstico y Tratamiento</h3>
+
+        {{-- AI Smart Dictation --}}
+        <div style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1.5px solid #5eead4;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                <div style="width:28px;height:28px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:16px;height:16px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:12px;color:#0f766e;font-weight:700;">Dictado inteligente</div>
+                    <div style="font-size:10px;color:#64748b;">Dicta toda la consulta y la IA llena los campos automáticamente</div>
+                </div>
+            </div>
+            <div class="field-with-mic">
+                <textarea wire:model="fullDictation" rows="3" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Ej: Paciente con dolor en molar superior derecho, veo caries profunda, voy a aplicar resina, recetar ibuprofeno 400mg cada 8 horas por 5 días..."></textarea>
+                <button type="button" class="mic-btn" :class="{ recording: activeKey === 'fullDictation' }" @click="toggle('fullDictation')" title="Dictar por voz">
+                    <svg x-show="activeKey !== 'fullDictation'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
+                    <svg x-show="activeKey === 'fullDictation'" x-cloak fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                </button>
+            </div>
+            <button wire:click="processFullDictation" wire:loading.attr="disabled" wire:target="processFullDictation"
+                style="margin-top:10px;width:100%;padding:10px 16px;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <svg wire:loading.remove wire:target="processFullDictation" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <svg wire:loading wire:target="processFullDictation" style="width:16px;height:16px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span wire:loading.remove wire:target="processFullDictation">Procesar con IA</span>
+                <span wire:loading wire:target="processFullDictation">Analizando...</span>
+            </button>
+        </div>
+
         <div class="space-y-3 md:space-y-4">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de consulta</label>
