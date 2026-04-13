@@ -58,6 +58,20 @@ class ProspectResource extends Resource
                         ->label('Siguiente seguimiento'),
                     Forms\Components\Textarea::make('notes')->label('Notas')->columnSpanFull()->rows(3),
                 ]),
+            Forms\Components\Section::make('Seguimiento de venta')
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    Forms\Components\DateTimePicker::make('demo_scheduled_at')
+                        ->label('Demo agendada'),
+                    Forms\Components\DateTimePicker::make('demo_completed_at')
+                        ->label('Demo realizada'),
+                    Forms\Components\CheckboxList::make('objections_faced')
+                        ->label('Objeciones que puso')
+                        ->options(\App\Models\Prospect::OBJECTION_CATALOG)
+                        ->columns(2)
+                        ->columnSpanFull(),
+                ]),
         ]);
     }
 
@@ -235,15 +249,66 @@ class ProspectResource extends Resource
                     })
                     ->openUrlInNewTab(),
 
-                // Ver objeciones comunes
-                Tables\Actions\Action::make('objections')
-                    ->label('Objeciones')
+                // Agendar demo
+                Tables\Actions\Action::make('schedule_demo')
+                    ->label('Demo')
+                    ->icon('heroicon-o-computer-desktop')
+                    ->color('primary')
+                    ->visible(fn (Prospect $r) => !$r->demo_completed_at && !in_array($r->status, ['converted', 'lost']))
+                    ->form([
+                        Forms\Components\DateTimePicker::make('demo_at')
+                            ->label('¿Cuándo es la demo?')
+                            ->required()
+                            ->default(now()->addDay()->setHour(13)->setMinute(0)),
+                    ])
+                    ->action(function (Prospect $record, array $data) {
+                        $record->update([
+                            'demo_scheduled_at' => $data['demo_at'],
+                            'status' => $record->status === 'new' ? 'contacted' : $record->status,
+                        ]);
+                        Notification::make()->title('Demo agendada para ' . $record->demo_scheduled_at->format('d/m H:i'))->success()->send();
+                    }),
+
+                // Registrar objeciones rápido
+                Tables\Actions\Action::make('log_objection')
+                    ->label('Objeción')
                     ->icon('heroicon-o-shield-exclamation')
                     ->color('warning')
+                    ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
+                    ->form([
+                        Forms\Components\CheckboxList::make('objections')
+                            ->label('¿Qué objeciones puso?')
+                            ->options(\App\Models\Prospect::OBJECTION_CATALOG)
+                            ->columns(2),
+                    ])
+                    ->action(function (Prospect $record, array $data) {
+                        $existing = $record->objections_faced ?? [];
+                        $merged = array_unique(array_merge($existing, $data['objections'] ?? []));
+                        $record->update(['objections_faced' => array_values($merged)]);
+                        Notification::make()->title(count($data['objections'] ?? []) . ' objeciones registradas')->success()->send();
+                    })
+                    ->after(function () {
+                        // Show the objections modal as help
+                    }),
+
+                // Ver playbook de objeciones
+                Tables\Actions\Action::make('objections_help')
+                    ->label('Respuestas')
+                    ->icon('heroicon-o-light-bulb')
+                    ->color('gray')
                     ->modalHeading('Respuestas a objeciones comunes')
                     ->modalDescription('Copia la respuesta que necesites. Tono natural, no vendedor.')
                     ->modalSubmitAction(false)
                     ->modalContent(view('filament.sales.objections-modal')),
+
+                // Generar propuesta PDF
+                Tables\Actions\Action::make('proposal')
+                    ->label('Propuesta')
+                    ->icon('heroicon-o-document-text')
+                    ->color('info')
+                    ->visible(fn (Prospect $r) => in_array($r->status, ['interested', 'trial']))
+                    ->url(fn (Prospect $r) => route('sales.proposal.pdf', $r))
+                    ->openUrlInNewTab(),
 
                 Tables\Actions\EditAction::make(),
             ])

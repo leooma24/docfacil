@@ -3,6 +3,7 @@
 namespace App\Filament\Sales\Widgets;
 
 use App\Models\Commission;
+use App\Models\Prospect;
 use App\Models\User;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\DB;
@@ -11,29 +12,58 @@ class LeaderboardWidget extends Widget
 {
     protected static string $view = 'filament.sales.widgets.leaderboard';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function getRanking(): array
     {
+        $month = now()->month;
+        $year = now()->year;
+
         return User::where('role', 'sales')
-            ->leftJoin('commissions', function ($j) {
-                $j->on('commissions.user_id', '=', 'users.id')
-                  ->whereMonth('commissions.earned_at', now()->month)
-                  ->whereYear('commissions.earned_at', now()->year);
-            })
-            ->select('users.id', 'users.name', DB::raw('COUNT(DISTINCT commissions.clinic_id) as closed'), DB::raw('COALESCE(SUM(commissions.amount), 0) as total'))
-            ->groupBy('users.id', 'users.name')
-            ->orderByDesc('closed')
-            ->orderByDesc('total')
-            ->limit(5)
             ->get()
-            ->map(fn ($u, $i) => [
-                'position' => $i + 1,
-                'name' => $u->name,
-                'closed' => (int) $u->closed,
-                'total' => (float) $u->total,
-                'is_me' => $u->id === auth()->id(),
-            ])
+            ->map(function ($user) use ($month, $year) {
+                $prospects = Prospect::where('assigned_to_sales_rep_id', $user->id);
+
+                $contacts = (clone $prospects)
+                    ->whereMonth('contacted_at', $month)->whereYear('contacted_at', $year)
+                    ->count();
+
+                $demos = (clone $prospects)
+                    ->whereNotNull('demo_completed_at')
+                    ->whereMonth('demo_completed_at', $month)->whereYear('demo_completed_at', $year)
+                    ->count();
+
+                $conversions = (clone $prospects)
+                    ->where('status', 'converted')
+                    ->whereMonth('converted_at', $month)->whereYear('converted_at', $year)
+                    ->count();
+
+                $commissionTotal = Commission::where('user_id', $user->id)
+                    ->whereMonth('earned_at', $month)->whereYear('earned_at', $year)
+                    ->sum('amount');
+
+                $activeProspects = (clone $prospects)
+                    ->whereNotIn('status', ['converted', 'lost'])
+                    ->count();
+
+                $convRate = $contacts > 0 ? round(($conversions / $contacts) * 100) : 0;
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'contacts' => $contacts,
+                    'demos' => $demos,
+                    'conversions' => $conversions,
+                    'commission' => (float) $commissionTotal,
+                    'active' => $activeProspects,
+                    'conv_rate' => $convRate,
+                    'is_me' => $user->id === auth()->id(),
+                ];
+            })
+            ->sortByDesc('conversions')
+            ->sortByDesc('commission')
+            ->values()
+            ->take(10)
             ->toArray();
     }
 }

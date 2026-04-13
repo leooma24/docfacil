@@ -41,6 +41,7 @@ class SalesPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Sales/Widgets'), for: 'App\\Filament\\Sales\\Widgets')
             ->widgets([
+                \App\Filament\Sales\Widgets\PendingFollowupsWidget::class,
                 \App\Filament\Sales\Widgets\MyStatsWidget::class,
                 \App\Filament\Sales\Widgets\LeaderboardWidget::class,
             ])

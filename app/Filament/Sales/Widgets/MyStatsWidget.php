@@ -17,41 +17,55 @@ class MyStatsWidget extends BaseWidget
             ->whereNotIn('status', ['lost', 'converted'])
             ->count();
 
+        $contactsToday = Prospect::where('assigned_to_sales_rep_id', $userId)
+            ->whereDate('last_followup_at', today())
+            ->count();
+
+        $demosThisWeek = Prospect::where('assigned_to_sales_rep_id', $userId)
+            ->whereNotNull('demo_completed_at')
+            ->where('demo_completed_at', '>=', now()->startOfWeek())
+            ->count();
+
         $convertedThisMonth = Prospect::where('assigned_to_sales_rep_id', $userId)
             ->where('status', 'converted')
             ->whereMonth('converted_at', now()->month)
             ->whereYear('converted_at', now()->year)
             ->count();
 
+        $pendingFollowups = Prospect::where('assigned_to_sales_rep_id', $userId)
+            ->whereNotIn('status', ['converted', 'lost'])
+            ->where(function ($q) {
+                $q->where(function ($q2) {
+                    $q2->whereNotNull('next_contact_at')->where('next_contact_at', '<=', now());
+                })->orWhere(function ($q2) {
+                    $q2->where('contact_day', 0)->where('status', 'new');
+                });
+            })
+            ->count();
+
         $pendingAmount = Commission::where('user_id', $userId)
             ->where('status', 'pending')
             ->sum('amount');
 
-        $paidThisMonth = Commission::where('user_id', $userId)
-            ->where('status', 'paid')
-            ->whereMonth('paid_at', now()->month)
-            ->whereYear('paid_at', now()->year)
-            ->sum('amount');
-
         return [
-            Stat::make('Prospectos activos', $activeProspects)
-                ->description('Sin contar perdidos ni convertidos')
-                ->icon('heroicon-o-funnel')
+            Stat::make('Contactos hoy', $contactsToday)
+                ->description('Meta: 8/día')
+                ->icon('heroicon-o-phone-arrow-up-right')
+                ->color($contactsToday >= 8 ? 'success' : ($contactsToday >= 4 ? 'warning' : 'danger')),
+
+            Stat::make('Seguimientos pendientes', $pendingFollowups)
+                ->description($pendingFollowups > 0 ? 'Requieren acción' : 'Al corriente')
+                ->icon('heroicon-o-clock')
+                ->color($pendingFollowups > 0 ? 'danger' : 'success'),
+
+            Stat::make('Demos esta semana', $demosThisWeek)
+                ->description('Pipeline activo: ' . $activeProspects)
+                ->icon('heroicon-o-computer-desktop')
                 ->color('info'),
 
-            Stat::make('Conversiones este mes', $convertedThisMonth)
-                ->description(now()->translatedFormat('F Y'))
-                ->icon('heroicon-o-check-badge')
-                ->color('success'),
-
-            Stat::make('Comisiones pendientes', '$' . number_format($pendingAmount, 2))
-                ->description('Por cobrar')
-                ->icon('heroicon-o-clock')
-                ->color('warning'),
-
-            Stat::make('Pagadas este mes', '$' . number_format($paidThisMonth, 2))
-                ->description(now()->translatedFormat('F Y'))
-                ->icon('heroicon-o-banknotes')
+            Stat::make('Cierres del mes', $convertedThisMonth)
+                ->description('Comisiones pendientes: $' . number_format($pendingAmount))
+                ->icon('heroicon-o-trophy')
                 ->color('success'),
         ];
     }

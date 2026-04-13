@@ -67,6 +67,8 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+Route::get('/sales/proposal/{prospect}/pdf', [\App\Http\Controllers\ProposalPdfController::class, '__invoke'])
+    ->middleware('auth')->name('sales.proposal.pdf');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitation.accept');
