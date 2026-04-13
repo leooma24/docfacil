@@ -43,7 +43,6 @@ class SalesPanelProvider extends PanelProvider
             ->widgets([
                 \App\Filament\Sales\Widgets\PendingFollowupsWidget::class,
                 \App\Filament\Sales\Widgets\MyStatsWidget::class,
-                \App\Filament\Sales\Widgets\LeaderboardWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
