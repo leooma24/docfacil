@@ -173,6 +173,120 @@
             <div class="sp-tip sp-tip-warn">⚡ Todas las objeciones están en el botón "Objeciones" de cada prospecto en el listado.</div>
         </div>
 
+        {{-- SECUENCIAS POR TIPO --}}
+        <div class="sp-card sp-card-purple sp-full">
+            <div class="sp-card-title">📬 Secuencias de contacto por tipo</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
+                <div style="background:#f5f3ff;border:1px solid #e9d5ff;border-radius:12px;padding:16px;">
+                    <div style="font-weight:800;color:#6d28d9;font-size:0.9rem;margin-bottom:8px;">❄️ Contacto frío (no te conoce)</div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#ede9fe;color:#6d28d9;width:24px;height:24px;font-size:0.65rem;">D1</div>
+                        <div class="sp-step-text">Pregunta de dolor + ofrece demo. <strong>No vendas aún.</strong></div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#ede9fe;color:#6d28d9;width:24px;height:24px;font-size:0.65rem;">D3</div>
+                        <div class="sp-step-text">Dato ROI (8-12 citas recuperadas = $4,000+/mes).</div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#ede9fe;color:#6d28d9;width:24px;height:24px;font-size:0.65rem;">D7</div>
+                        <div class="sp-step-text">"Último mensaje. Le dejo link." No insistas más.</div>
+                    </div>
+                </div>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;">
+                    <div style="font-weight:800;color:#15803d;font-size:0.9rem;margin-bottom:8px;">🤝 Contacto cálido (ya te conoce)</div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#dcfce7;color:#15803d;width:24px;height:24px;font-size:0.65rem;">D1</div>
+                        <div class="sp-step-text">"Nos vimos en [lugar/evento], le mostré DocFácil. ¿Le gustó?"</div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#dcfce7;color:#15803d;width:24px;height:24px;font-size:0.65rem;">D4</div>
+                        <div class="sp-step-text">Comparte caso de éxito o ROI concreto de un doctor similar.</div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#dcfce7;color:#15803d;width:24px;height:24px;font-size:0.65rem;">D8</div>
+                        <div class="sp-step-text">Oferta directa: "¿Agendamos 15 min para configurarlo juntos?"</div>
+                    </div>
+                </div>
+                <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px;">
+                    <div style="font-weight:800;color:#92400e;font-size:0.9rem;margin-bottom:8px;">🔄 Referido (te lo recomendaron)</div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#fef9c3;color:#92400e;width:24px;height:24px;font-size:0.65rem;">D1</div>
+                        <div class="sp-step-text">"El Dr. [nombre] me sugirió contactarlo. Usa DocFácil y le va muy bien."</div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#fef9c3;color:#92400e;width:24px;height:24px;font-size:0.65rem;">D4</div>
+                        <div class="sp-step-text">Follow-up con demo o link de registro directo.</div>
+                    </div>
+                    <div class="sp-step" style="border:none;padding:4px 0;">
+                        <div class="sp-step-num" style="background:#fef9c3;color:#92400e;width:24px;height:24px;font-size:0.65rem;">D10</div>
+                        <div class="sp-step-text">"Le preguntó al Dr. [nombre] y le dijo que sí funciona. ¿Lo probamos?"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-tip" style="margin-top:14px;">💡 <strong>Framework LAER para objeciones:</strong> Escucha → Reconoce → Explora → Responde. Nunca contradigas al doctor directamente.</div>
+        </div>
+
+        {{-- PIPELINE VISUAL --}}
+        <div class="sp-card sp-card-blue sp-full">
+            <div class="sp-card-title">📊 Pipeline — Flujo del prospecto al cliente</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;">
+                @php
+                $stages = [
+                    ['label' => 'Nuevo', 'color' => '#94a3b8', 'desc' => 'En la base, sin contactar'],
+                    ['label' => 'Contactado', 'color' => '#3b82f6', 'desc' => 'Ya hablaste con él'],
+                    ['label' => 'Interesado', 'color' => '#f59e0b', 'desc' => 'Quiere saber más / demo'],
+                    ['label' => 'En trial', 'color' => '#8b5cf6', 'desc' => 'Se registró, probando'],
+                    ['label' => 'Convertido ✓', 'color' => '#10b981', 'desc' => 'Pagó = comisión'],
+                ];
+                @endphp
+                @foreach($stages as $i => $s)
+                <div style="flex:1;min-width:120px;background:{{ $s['color'] }}18;border:2px solid {{ $s['color'] }}40;border-radius:12px;padding:12px;text-align:center;">
+                    <div style="font-size:0.7rem;font-weight:800;color:{{ $s['color'] }};text-transform:uppercase;letter-spacing:0.08em;">{{ $s['label'] }}</div>
+                    <div style="font-size:0.7rem;color:#64748b;margin-top:2px;">{{ $s['desc'] }}</div>
+                </div>
+                @if($i < count($stages) - 1)
+                <div style="display:flex;align-items:center;color:#cbd5e1;font-size:1.2rem;">→</div>
+                @endif
+                @endforeach
+            </div>
+            <div class="sp-tip">Usa el botón <strong>"Avanzar"</strong> en cada prospecto para moverlo por el pipeline. Al llegar a "Convertido" se genera tu comisión automáticamente.</div>
+        </div>
+
+        {{-- LINK DE REGISTRO --}}
+        <div class="sp-card sp-card-green">
+            <div class="sp-card-title">🔗 Tu link personalizado</div>
+            @php $code = auth()->user()->sales_rep_code ?? 'TU-CODIGO'; @endphp
+            <div style="background:#0f172a;color:#5eead4;padding:14px 18px;border-radius:10px;font-family:monospace;font-size:0.85rem;word-break:break-all;">
+                https://docfacil.tu-app.co/doctor/register?vnd={{ $code }}
+            </div>
+            <div class="sp-tip" style="margin-top:10px;">Cuando un doctor se registra con tu link, la venta se te atribuye automáticamente. Cópialo y mándalo por WhatsApp con el botón "Link registro" de cada prospecto.</div>
+        </div>
+
+        {{-- MEETING PREP --}}
+        <div class="sp-card sp-card-amber">
+            <div class="sp-card-title">📋 Checklist pre-visita</div>
+            <div class="sp-step">
+                <div class="sp-step-num" style="background:#fef3c7;color:#92400e;">☐</div>
+                <div class="sp-step-text"><strong>Investigar:</strong> ¿Especialidad? ¿Cuántas sillas/consultorios? ¿Tiene redes sociales?</div>
+            </div>
+            <div class="sp-step">
+                <div class="sp-step-num" style="background:#fef3c7;color:#92400e;">☐</div>
+                <div class="sp-step-text"><strong>Demo lista:</strong> Abrir docfacil.tu-app.co/demo en tu celular. Tener WiFi/datos.</div>
+            </div>
+            <div class="sp-step">
+                <div class="sp-step-num" style="background:#fef3c7;color:#92400e;">☐</div>
+                <div class="sp-step-text"><strong>Propuesta:</strong> Tener el PDF de propuesta descargado por si lo pide.</div>
+            </div>
+            <div class="sp-step">
+                <div class="sp-step-num" style="background:#fef3c7;color:#92400e;">☐</div>
+                <div class="sp-step-text"><strong>Objeciones:</strong> Repasar las top 5 antes de entrar. Las respuestas están en tu panel.</div>
+            </div>
+            <div class="sp-step">
+                <div class="sp-step-num" style="background:#fef3c7;color:#92400e;">☐</div>
+                <div class="sp-step-text"><strong>Cierre:</strong> Tener tu link de registro listo para mandarlo ahí mismo por WhatsApp.</div>
+            </div>
+        </div>
+
         {{-- TIPS --}}
         <div class="sp-card sp-card-teal sp-full">
             <div class="sp-card-title">⭐ Tips del vendedor estrella</div>
@@ -183,6 +297,8 @@
                 <div class="sp-tip">💰 <strong>Nunca digas el precio primero.</strong> Primero el dolor, luego la demo, y al final "son $149/mes".</div>
                 <div class="sp-tip">🔄 <strong>Regla de 3:</strong> Si no responde al 3er mensaje (Día 7), espera 7 días más. No insistas antes.</div>
                 <div class="sp-tip">📊 <strong>Meta diaria:</strong> 5 contactos nuevos + 3 follow-ups = 8 actividades. Haz esto y llegas a 50 en 12 semanas.</div>
+                <div class="sp-tip">🎪 <strong>Post-visita:</strong> Manda WhatsApp de agradecimiento + link demo EL MISMO DÍA. No al día siguiente.</div>
+                <div class="sp-tip">📞 <strong>Secretaria es tu aliada:</strong> "¿Me podría pasar al doctor solo 3 minutos? Le quiero mostrar algo que le va a ahorrar tiempo."</div>
             </div>
         </div>
     </div>

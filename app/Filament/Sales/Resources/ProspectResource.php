@@ -310,6 +310,99 @@ class ProspectResource extends Resource
                     ->url(fn (Prospect $r) => route('sales.proposal.pdf', $r))
                     ->openUrlInNewTab(),
 
+                // Avanzar estado del pipeline
+                Tables\Actions\Action::make('advance_status')
+                    ->label(fn (Prospect $r) => match ($r->status) {
+                        'new' => 'Contactado',
+                        'contacted' => 'Interesado',
+                        'interested' => 'En trial',
+                        'trial' => 'Convertido ✓',
+                        default => 'Avanzar',
+                    })
+                    ->icon(fn (Prospect $r) => $r->status === 'trial' ? 'heroicon-o-check-badge' : 'heroicon-o-chevron-double-right')
+                    ->color(fn (Prospect $r) => match ($r->status) {
+                        'trial' => 'success',
+                        'interested' => 'primary',
+                        default => 'gray',
+                    })
+                    ->visible(fn (Prospect $r) => in_array($r->status, ['new', 'contacted', 'interested', 'trial']))
+                    ->requiresConfirmation()
+                    ->modalDescription(fn (Prospect $r) => match ($r->status) {
+                        'new' => '¿Ya contactaste a este prospecto?',
+                        'contacted' => '¿El prospecto mostró interés real?',
+                        'interested' => '¿El prospecto inició su trial / se registró?',
+                        'trial' => '¿El prospecto se convirtió en cliente? Esto genera la comisión.',
+                    })
+                    ->action(function (Prospect $record) {
+                        $next = match ($record->status) {
+                            'new' => 'contacted',
+                            'contacted' => 'interested',
+                            'interested' => 'trial',
+                            'trial' => 'converted',
+                        };
+
+                        $update = ['status' => $next];
+                        if ($next === 'contacted') $update['contacted_at'] = $record->contacted_at ?? now();
+                        if ($next === 'converted') $update['converted_at'] = now();
+
+                        $record->update($update);
+
+                        $label = match ($next) {
+                            'contacted' => 'Contactado',
+                            'interested' => 'Interesado',
+                            'trial' => 'En trial',
+                            'converted' => 'Convertido ✓',
+                        };
+
+                        Notification::make()->title("Prospecto movido a: {$label}")->success()->send();
+                    }),
+
+                // Marcar como perdido
+                Tables\Actions\Action::make('mark_lost')
+                    ->label('Perdido')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
+                    ->requiresConfirmation()
+                    ->modalDescription('¿Marcar este prospecto como perdido? Se puede reactivar después.')
+                    ->form([
+                        Forms\Components\Textarea::make('lost_reason')
+                            ->label('¿Por qué se perdió? (opcional)')
+                            ->rows(2)
+                            ->placeholder('Ej: Ya tiene software, no le interesó, presupuesto...'),
+                    ])
+                    ->action(function (Prospect $record, array $data) {
+                        $update = ['status' => 'lost'];
+                        if (!empty($data['lost_reason'])) {
+                            $note = '[' . now()->format('d/m') . ' · PERDIDO] ' . $data['lost_reason'];
+                            $update['notes'] = trim(($record->notes ? $record->notes . "\n" : '') . $note);
+                        }
+                        $record->update($update);
+                        Notification::make()->title('Prospecto marcado como perdido')->warning()->send();
+                    }),
+
+                // Enviar link de registro con código del vendedor
+                Tables\Actions\Action::make('send_register_link')
+                    ->label('Link registro')
+                    ->icon('heroicon-o-link')
+                    ->color('success')
+                    ->visible(fn (Prospect $r) => !empty($r->phone) && in_array($r->status, ['interested', 'trial']))
+                    ->url(function (Prospect $record) {
+                        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
+                        if (strlen($phone) === 10) $phone = '52' . $phone;
+
+                        $code = auth()->user()->sales_rep_code ?? '';
+                        $name = explode(' ', trim($record->name))[0] ?? '';
+                        $registerUrl = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
+
+                        $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias, sin meter tarjeta:\n\n"
+                            . "{$registerUrl}\n\n"
+                            . "Se registra en 2 minutos. Si necesita ayuda con la configuracion, me avisa y lo acompano paso a paso.";
+
+                        return "https://wa.me/{$phone}?text=" . urlencode($msg);
+                    })
+                    ->openUrlInNewTab(),
+
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
