@@ -83,15 +83,6 @@ class AlertsWidget extends Widget
             ];
         }
 
-        if (empty($alerts)) {
-            $alerts[] = [
-                'type' => 'success',
-                'icon' => 'heroicon-o-check-circle',
-                'title' => 'Todo en orden',
-                'desc' => 'No hay alertas pendientes.',
-            ];
-        }
-
         return $alerts;
     }
 }
