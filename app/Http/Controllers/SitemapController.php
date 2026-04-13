@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\BlogController;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
     private array $cities = [
+        'culiacan' => 'Culiacán',
         'cdmx' => 'Ciudad de México',
         'guadalajara' => 'Guadalajara',
         'monterrey' => 'Monterrey',
@@ -22,6 +24,8 @@ class SitemapController extends Controller
         'toluca' => 'Toluca',
         'hermosillo' => 'Hermosillo',
         'saltillo' => 'Saltillo',
+        'mazatlan' => 'Mazatlán',
+        'los-mochis' => 'Los Mochis',
     ];
 
     public function index()
@@ -30,7 +34,12 @@ class SitemapController extends Controller
             ['loc' => url('/'), 'priority' => '1.0', 'changefreq' => 'weekly'],
             ['loc' => url('/doctor/login'), 'priority' => '0.8', 'changefreq' => 'monthly'],
             ['loc' => url('/doctor/register'), 'priority' => '0.9', 'changefreq' => 'monthly'],
+            ['loc' => url('/blog'), 'priority' => '0.8', 'changefreq' => 'weekly'],
         ];
+
+        foreach (BlogController::articles() as $slug => $article) {
+            $urls[] = ['loc' => url("/blog/{$slug}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
+        }
 
         foreach ($this->cities as $slug => $name) {
             $urls[] = ['loc' => url("/software-dental/{$slug}"), 'priority' => '0.7', 'changefreq' => 'monthly'];

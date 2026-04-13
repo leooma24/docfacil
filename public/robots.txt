@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Disallow: /doctor/
+Disallow: /admin/
+Disallow: /ventas/
+Disallow: /paciente/
+Allow: /doctor/login
+Allow: /doctor/register
+
+Sitemap: https://docfacil.tu-app.co/sitemap.xml
