@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProspectResource\Pages;
 use App\Models\Prospect;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -89,6 +90,13 @@ class ProspectResource extends Resource
                     ->placeholder('Sin teléfono'),
                 Tables\Columns\TextColumn::make('clinic_name')->label('Consultorio')->searchable()->toggleable(),
                 Tables\Columns\TextColumn::make('city')->label('Ciudad')->sortable()->toggleable(),
+                Tables\Columns\BadgeColumn::make('assignedSalesRep.name')
+                    ->label('Asignado a')
+                    ->placeholder('Sin asignar')
+                    ->color(fn ($state) => $state ? 'success' : 'gray')
+                    ->icon(fn ($state) => $state ? 'heroicon-o-user' : 'heroicon-o-user-minus')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('specialty')->label('Especialidad')->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\BadgeColumn::make('source')
                     ->label('Fuente')
@@ -158,6 +166,13 @@ class ProspectResource extends Resource
                 Tables\Filters\Filter::make('no_email')
                     ->label('Sin email (solo WhatsApp)')
                     ->query(fn ($query) => $query->whereNull('email')->whereNotNull('phone')),
+                Tables\Filters\SelectFilter::make('assigned_to_sales_rep_id')
+                    ->label('Asignado a')
+                    ->options(fn () => User::where('role', 'sales')->pluck('name', 'id')->toArray())
+                    ->placeholder('Todos'),
+                Tables\Filters\Filter::make('unassigned')
+                    ->label('Sin asignar')
+                    ->query(fn ($query) => $query->whereNull('assigned_to_sales_rep_id')),
             ])
             ->actions([
                 // WhatsApp button — opens wa.me with pre-filled beta invite message
