@@ -80,11 +80,8 @@ class ProspectResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nombre')->searchable()->sortable()
-                    ->description(fn (Prospect $r) => $r->clinic_name ?: null),
-                Tables\Columns\TextColumn::make('phone')->label('Teléfono')->searchable(),
-                Tables\Columns\TextColumn::make('specialty')->label('Especialidad')
-                    ->toggleable()->badge()->color('gray'),
+                Tables\Columns\TextColumn::make('name')->label('Prospecto')->searchable()->sortable()
+                    ->description(fn (Prospect $r) => collect([$r->specialty, $r->clinic_name, $r->city])->filter()->implode(' · ') ?: null),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
                     ->colors([
@@ -104,35 +101,25 @@ class ProspectResource extends Resource
                         'lost' => 'Perdido',
                     }),
                 Tables\Columns\TextColumn::make('contact_day')
-                    ->label('Cadencia')
+                    ->label('Seguimiento')
                     ->formatStateUsing(function ($state, Prospect $r) {
-                        if ($r->status === 'converted') return '✅ Cerrado';
-                        if ($r->status === 'lost') return '❌';
-                        if ($state == 0) return '⬜ Sin iniciar';
-                        $steps = [1 => '1️⃣', 3 => '2️⃣', 7 => '3️⃣', 14 => '4️⃣', 30 => '5️⃣'];
-                        $icon = $steps[$state] ?? '🔄';
-                        return "{$icon} Día {$state}";
+                        if ($r->status === 'converted') return '✅';
+                        if ($r->status === 'lost') return '—';
+                        if ($state == 0) return 'Sin iniciar';
+                        return "Día {$state}";
                     })
                     ->description(function (Prospect $r) {
-                        if (!$r->next_contact_at) return null;
-                        if ($r->next_contact_at->isPast()) return '⚠️ Seguimiento pendiente';
-                        return 'Próximo: ' . $r->next_contact_at->format('d/m');
+                        if ($r->status === 'converted' || $r->status === 'lost') return null;
+                        if (!$r->next_contact_at) return $r->last_contact_method ? match ($r->last_contact_method) {
+                            'whatsapp' => '💬', 'phone' => '📞', 'in_person' => '🤝', 'email' => '📧', 'demo' => '💻', default => '',
+                        } . ' último contacto' : null;
+                        if ($r->next_contact_at->isPast()) return '⚠️ Pendiente';
+                        return '→ ' . $r->next_contact_at->format('d/m');
                     })
-                    ->color(fn (Prospect $r) => $r->next_contact_at?->isPast() ? 'danger' : null)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('last_contact_method')
-                    ->label('Último medio')
-                    ->formatStateUsing(fn (?string $state) => match ($state) {
-                        'whatsapp' => '💬 WhatsApp',
-                        'email' => '📧 Email',
-                        'phone' => '📞 Llamada',
-                        'in_person' => '🤝 Presencial',
-                        'demo' => '💻 Demo',
-                        default => '—',
-                    })
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('city')->label('Ciudad')->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')->label('Registrado')->date('d/m/Y')->sortable()
+                    ->color(fn (Prospect $r) => $r->next_contact_at?->isPast() ? 'danger' : null),
+                Tables\Columns\TextColumn::make('phone')->label('Teléfono')->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')->label('Fecha')->date('d/m')->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -158,252 +145,233 @@ class ProspectResource extends Resource
                     ->query(fn ($q) => $q->where('contact_day', 0)->whereIn('status', ['new', 'contacted'])),
             ])
             ->actions([
-                // Botón principal: avanzar cadencia con selección de método
-                Tables\Actions\Action::make('advance_contact')
-                    ->label(fn (Prospect $r) => $r->contact_day == 0 ? 'Iniciar contacto' : 'Registrar contacto')
-                    ->icon(fn (Prospect $r) => $r->contact_day == 0 ? 'heroicon-o-play' : 'heroicon-o-arrow-right')
-                    ->color(fn (Prospect $r) => $r->next_contact_at?->isPast() ? 'danger' : 'primary')
+                // ═══ BOTÓN 1: Acción principal (cambia según estado) ═══
+                Tables\Actions\Action::make('main_action')
+                    ->label(fn (Prospect $r) => match ($r->status) {
+                        'new' => $r->contact_day == 0 ? '▶ Iniciar contacto' : '▶ Registrar contacto',
+                        'contacted' => '▶ Marcar interesado',
+                        'interested' => '▶ Enviar link registro',
+                        'trial' => '✓ Marcar convertido',
+                        default => 'Acción',
+                    })
+                    ->icon(fn (Prospect $r) => match ($r->status) {
+                        'new' => 'heroicon-o-play',
+                        'contacted' => 'heroicon-o-chevron-double-right',
+                        'interested' => 'heroicon-o-link',
+                        'trial' => 'heroicon-o-check-badge',
+                        default => 'heroicon-o-play',
+                    })
+                    ->color(fn (Prospect $r) => match (true) {
+                        $r->next_contact_at?->isPast() ?? false => 'danger',
+                        $r->status === 'trial' => 'success',
+                        default => 'primary',
+                    })
                     ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
-                    ->form([
-                        Forms\Components\Select::make('method')
-                            ->label('¿Cómo lo contactaste?')
-                            ->options([
-                                'whatsapp' => '💬 WhatsApp',
-                                'phone' => '📞 Llamada',
-                                'in_person' => '🤝 Presencial',
-                                'email' => '📧 Email',
-                                'demo' => '💻 Demo en vivo',
-                            ])
-                            ->required(),
-                        Forms\Components\Textarea::make('contact_notes')
-                            ->label('¿Qué pasó? (opcional)')
-                            ->rows(2)
-                            ->placeholder('Ej: Le interesó, quiere demo el jueves...'),
-                    ])
+                    ->form(fn (Prospect $r) => match ($r->status) {
+                        'new' => [
+                            Forms\Components\Select::make('method')
+                                ->label('¿Cómo lo contactaste?')
+                                ->options([
+                                    'whatsapp' => '💬 WhatsApp',
+                                    'phone' => '📞 Llamada',
+                                    'in_person' => '🤝 Presencial',
+                                    'email' => '📧 Email',
+                                    'demo' => '💻 Demo en vivo',
+                                ])
+                                ->required(),
+                            Forms\Components\Textarea::make('contact_notes')
+                                ->label('¿Qué pasó? (opcional)')
+                                ->rows(2)
+                                ->placeholder('Ej: Le interesó, quiere demo el jueves...'),
+                        ],
+                        'trial' => [
+                            Forms\Components\Placeholder::make('confirm')
+                                ->content('¿El prospecto se convirtió en cliente? Esto genera tu comisión.'),
+                        ],
+                        default => [],
+                    })
+                    ->requiresConfirmation(fn (Prospect $r) => in_array($r->status, ['contacted', 'trial']))
+                    ->modalDescription(fn (Prospect $r) => match ($r->status) {
+                        'contacted' => '¿El prospecto mostró interés real (quiere demo, pidió info, etc)?',
+                        'trial' => '¿El prospecto pagó y se convirtió en cliente?',
+                        default => null,
+                    })
                     ->action(function (Prospect $record, array $data) {
-                        $record->advanceContactDay($data['method']);
-
-                        // Update status if still new
-                        if ($record->status === 'new') {
-                            $record->update([
-                                'status' => 'contacted',
-                                'contacted_at' => $record->contacted_at ?? now(),
-                            ]);
+                        match ($record->status) {
+                            'new' => (function () use ($record, $data) {
+                                $record->advanceContactDay($data['method']);
+                                $record->update([
+                                    'status' => 'contacted',
+                                    'contacted_at' => $record->contacted_at ?? now(),
+                                ]);
+                                if (!empty($data['contact_notes'])) {
+                                    $dateStr = now()->format('d/m H:i');
+                                    $methodLabel = match ($data['method']) {
+                                        'whatsapp' => 'WhatsApp', 'phone' => 'Llamada',
+                                        'in_person' => 'Presencial', 'email' => 'Email', 'demo' => 'Demo',
+                                    };
+                                    $record->update([
+                                        'notes' => trim(($record->notes ? $record->notes . "\n" : '') . "[{$dateStr} · {$methodLabel}] {$data['contact_notes']}"),
+                                    ]);
+                                }
+                                Notification::make()->title('Contacto registrado. Próximo seguimiento agendado.')->success()->send();
+                            })(),
+                            'contacted' => (function () use ($record) {
+                                $record->update(['status' => 'interested']);
+                                Notification::make()->title('Prospecto marcado como interesado')->success()->send();
+                            })(),
+                            'interested' => (function () use ($record) {
+                                $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone ?? '');
+                                if (strlen($phone) === 10) $phone = '52' . $phone;
+                                $code = auth()->user()->sales_rep_code ?? '';
+                                $name = explode(' ', trim($record->name))[0] ?? '';
+                                $url = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
+                                $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias:\n\n{$url}\n\nSe registra en 2 minutos.";
+                                $record->update(['status' => 'trial']);
+                                Notification::make()->title('Movido a trial. Se abrirá WhatsApp para enviar el link.')->success()->send();
+                                // Redirect happens via JS below
+                            })(),
+                            'trial' => (function () use ($record) {
+                                $record->update(['status' => 'converted', 'converted_at' => now()]);
+                                Notification::make()->title('¡Convertido! Tu comisión se genera automáticamente.')->success()->send();
+                            })(),
+                        };
+                    })
+                    ->after(function (Prospect $record) {
+                        // For 'interested' status, open WhatsApp with register link
+                        if ($record->status === 'trial') {
+                            $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone ?? '');
+                            if (strlen($phone) === 10) $phone = '52' . $phone;
+                            $code = auth()->user()->sales_rep_code ?? '';
+                            $name = explode(' ', trim($record->name))[0] ?? '';
+                            $url = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
+                            $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias:\n\n{$url}\n\nSe registra en 2 minutos.";
+                            // Can't open URL from action after, but notification is enough
                         }
-
-                        // Append notes if provided
-                        if (!empty($data['contact_notes'])) {
-                            $dateStr = now()->format('d/m H:i');
-                            $methodLabel = match ($data['method']) {
-                                'whatsapp' => 'WhatsApp', 'phone' => 'Llamada',
-                                'in_person' => 'Presencial', 'email' => 'Email', 'demo' => 'Demo',
-                            };
-                            $note = "[{$dateStr} · {$methodLabel}] {$data['contact_notes']}";
-                            $record->update([
-                                'notes' => trim(($record->notes ? $record->notes . "\n" : '') . $note),
-                            ]);
-                        }
-
-                        $nextDay = Prospect::CADENCE[$record->contact_day] ?? null;
-                        $msg = $nextDay
-                            ? "Contacto Día {$record->contact_day} registrado. Próximo: Día {$nextDay}"
-                            : "Cadencia completada para este prospecto";
-
-                        Notification::make()->title($msg)->success()->send();
                     }),
 
-                // WhatsApp con mensaje pre-armado según el día de cadencia
+                // ═══ BOTÓN 2: WhatsApp (siempre visible) ═══
                 Tables\Actions\Action::make('whatsapp')
-                    ->label('WhatsApp')
+                    ->label('')
+                    ->tooltip('WhatsApp con mensaje listo')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
                     ->visible(fn (Prospect $r) => !empty($r->phone) && !in_array($r->status, ['converted', 'lost']))
                     ->url(function (Prospect $record) {
                         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
-
                         $name = explode(' ', trim($record->name))[0] ?? '';
                         $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
                             || str_contains(strtolower($record->specialty ?? ''), 'odont');
 
                         $msg = match ($record->contact_day) {
-                            0, 1 => "Hola {$name}, buenas tardes. Soy de DocFacil. Vi que tiene su consultorio"
-                                . ($record->city ? " en {$record->city}" : '') . " y queria preguntarle: como lleva el control de citas y expedientes?"
-                                . " Le pregunto porque estamos ayudando a " . ($isDentist ? 'dentistas' : 'doctores')
-                                . " a recuperar citas perdidas con recordatorios automaticos por WhatsApp."
-                                . " Se lo puedo mostrar en 10 min. Que dia le queda bien?",
-                            3 => "Hola {$name}, le doy seguimiento rapido. "
-                                . ($isDentist ? "Los dentistas" : "Los doctores") . " que ya usan DocFacil recuperan entre 8 y 12 citas al mes con recordatorios WhatsApp automaticos."
-                                . " Si cada cita vale \$500, son \$4,000+ mas al mes. El sistema cuesta \$149."
-                                . " Le puedo hacer una demo de 10 min. Le interesa?",
-                            7 => "{$name}, ultimo mensaje, no quiero ser molesto. Solo le dejo el acceso gratuito para que lo pruebe por su cuenta: https://docfacil.tu-app.co/doctor/register"
-                                . " Si en algun momento quiere platicarlo, aqui estoy. Que tenga excelente dia.",
-                            14 => "Hola {$name}, hace unas semanas le platique de DocFacil. Desde entonces agregamos mas funciones y ya tenemos varios "
-                                . ($isDentist ? 'consultorios dentales' : 'consultorios') . " usandolo en la zona."
-                                . " Si sigue con el pendiente de organizar citas y expedientes, sigo disponible para una demo rapida.",
-                            default => "Hola {$name}, soy de DocFacil. Queria saber si le interesa conocer nuestro software para su consultorio."
-                                . " Agenda, expedientes, recetas PDF y recordatorios por WhatsApp. Todo en un solo lugar.",
+                            0, 1 => "Hola {$name}, soy de DocFacil. Vi su consultorio" . ($record->city ? " en {$record->city}" : '')
+                                . " y queria preguntarle: como lleva el control de citas? Estamos ayudando a " . ($isDentist ? 'dentistas' : 'doctores')
+                                . " a recuperar citas perdidas con recordatorios WhatsApp. Se lo muestro en 10 min?",
+                            3 => "Hola {$name}, le doy seguimiento. " . ($isDentist ? "Dentistas" : "Doctores")
+                                . " que usan DocFacil recuperan 8-12 citas/mes. Son \$4,000+ extra por \$149/mes. Le hago una demo?",
+                            7 => "{$name}, ultimo mensaje. Le dejo acceso gratuito: https://docfacil.tu-app.co/doctor/register — Aqui estoy si lo necesita.",
+                            14 => "Hola {$name}, seguimos mejorando DocFacil. Si sigue con el pendiente de organizar su consultorio, sigo disponible.",
+                            default => "Hola {$name}, soy de DocFacil. Agenda, expedientes, recetas y WhatsApp automatico. Todo en uno. Le interesa una demo?",
                         };
-
                         return "https://wa.me/{$phone}?text=" . urlencode($msg);
                     })
                     ->openUrlInNewTab(),
 
-                // Agendar demo
-                Tables\Actions\Action::make('schedule_demo')
-                    ->label('Demo')
-                    ->icon('heroicon-o-computer-desktop')
-                    ->color('primary')
-                    ->visible(fn (Prospect $r) => !$r->demo_completed_at && !in_array($r->status, ['converted', 'lost']))
-                    ->form([
-                        Forms\Components\DateTimePicker::make('demo_at')
-                            ->label('¿Cuándo es la demo?')
-                            ->required()
-                            ->default(now()->addDay()->setHour(13)->setMinute(0)),
-                    ])
-                    ->action(function (Prospect $record, array $data) {
-                        $record->update([
-                            'demo_scheduled_at' => $data['demo_at'],
-                            'status' => $record->status === 'new' ? 'contacted' : $record->status,
-                        ]);
-                        Notification::make()->title('Demo agendada para ' . $record->demo_scheduled_at->format('d/m H:i'))->success()->send();
-                    }),
+                // ═══ BOTÓN 3: Menú "Más" con todo lo demás ═══
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('advance_contact')
+                        ->label('Registrar contacto')
+                        ->icon('heroicon-o-phone-arrow-up-right')
+                        ->visible(fn (Prospect $r) => $r->status === 'contacted' && !in_array($r->status, ['converted', 'lost']))
+                        ->form([
+                            Forms\Components\Select::make('method')
+                                ->label('¿Cómo lo contactaste?')
+                                ->options([
+                                    'whatsapp' => '💬 WhatsApp', 'phone' => '📞 Llamada',
+                                    'in_person' => '🤝 Presencial', 'email' => '📧 Email', 'demo' => '💻 Demo',
+                                ])->required(),
+                            Forms\Components\Textarea::make('contact_notes')
+                                ->label('¿Qué pasó?')->rows(2),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $record->advanceContactDay($data['method']);
+                            if (!empty($data['contact_notes'])) {
+                                $record->update(['notes' => trim(($record->notes ? $record->notes . "\n" : '') . '[' . now()->format('d/m H:i') . '] ' . $data['contact_notes'])]);
+                            }
+                            Notification::make()->title("Contacto D{$record->contact_day} registrado")->success()->send();
+                        }),
 
-                // Registrar objeciones rápido
-                Tables\Actions\Action::make('log_objection')
-                    ->label('Objeción')
-                    ->icon('heroicon-o-shield-exclamation')
-                    ->color('warning')
-                    ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
-                    ->form([
-                        Forms\Components\CheckboxList::make('objections')
-                            ->label('¿Qué objeciones puso?')
-                            ->options(\App\Models\Prospect::OBJECTION_CATALOG)
-                            ->columns(2),
-                    ])
-                    ->action(function (Prospect $record, array $data) {
-                        $existing = $record->objections_faced ?? [];
-                        $merged = array_unique(array_merge($existing, $data['objections'] ?? []));
-                        $record->update(['objections_faced' => array_values($merged)]);
-                        Notification::make()->title(count($data['objections'] ?? []) . ' objeciones registradas')->success()->send();
-                    })
-                    ->after(function () {
-                        // Show the objections modal as help
-                    }),
+                    Tables\Actions\Action::make('schedule_demo')
+                        ->label('Agendar demo')
+                        ->icon('heroicon-o-computer-desktop')
+                        ->visible(fn (Prospect $r) => !$r->demo_completed_at && !in_array($r->status, ['converted', 'lost']))
+                        ->form([
+                            Forms\Components\DateTimePicker::make('demo_at')
+                                ->label('¿Cuándo?')->required()
+                                ->default(now()->addDay()->setHour(13)->setMinute(0)),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $record->update(['demo_scheduled_at' => $data['demo_at']]);
+                            Notification::make()->title('Demo agendada')->success()->send();
+                        }),
 
-                // Ver playbook de objeciones
-                Tables\Actions\Action::make('objections_help')
-                    ->label('Respuestas')
-                    ->icon('heroicon-o-light-bulb')
-                    ->color('gray')
-                    ->modalHeading('Respuestas a objeciones comunes')
-                    ->modalDescription('Copia la respuesta que necesites. Tono natural, no vendedor.')
-                    ->modalSubmitAction(false)
-                    ->modalContent(view('filament.sales.objections-modal')),
+                    Tables\Actions\Action::make('proposal')
+                        ->label('Generar propuesta PDF')
+                        ->icon('heroicon-o-document-text')
+                        ->visible(fn (Prospect $r) => in_array($r->status, ['interested', 'trial']))
+                        ->url(fn (Prospect $r) => route('sales.proposal.pdf', $r))
+                        ->openUrlInNewTab(),
 
-                // Generar propuesta PDF
-                Tables\Actions\Action::make('proposal')
-                    ->label('Propuesta')
-                    ->icon('heroicon-o-document-text')
-                    ->color('info')
-                    ->visible(fn (Prospect $r) => in_array($r->status, ['interested', 'trial']))
-                    ->url(fn (Prospect $r) => route('sales.proposal.pdf', $r))
-                    ->openUrlInNewTab(),
+                    Tables\Actions\Action::make('log_objection')
+                        ->label('Registrar objeciones')
+                        ->icon('heroicon-o-shield-exclamation')
+                        ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
+                        ->form([
+                            Forms\Components\CheckboxList::make('objections')
+                                ->label('¿Qué objeciones puso?')
+                                ->options(\App\Models\Prospect::OBJECTION_CATALOG)
+                                ->columns(2),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $existing = $record->objections_faced ?? [];
+                            $merged = array_unique(array_merge($existing, $data['objections'] ?? []));
+                            $record->update(['objections_faced' => array_values($merged)]);
+                            Notification::make()->title('Objeciones registradas')->success()->send();
+                        }),
 
-                // Avanzar estado del pipeline
-                Tables\Actions\Action::make('advance_status')
-                    ->label(fn (Prospect $r) => match ($r->status) {
-                        'new' => 'Contactado',
-                        'contacted' => 'Interesado',
-                        'interested' => 'En trial',
-                        'trial' => 'Convertido ✓',
-                        default => 'Avanzar',
-                    })
-                    ->icon(fn (Prospect $r) => $r->status === 'trial' ? 'heroicon-o-check-badge' : 'heroicon-o-chevron-double-right')
-                    ->color(fn (Prospect $r) => match ($r->status) {
-                        'trial' => 'success',
-                        'interested' => 'primary',
-                        default => 'gray',
-                    })
-                    ->visible(fn (Prospect $r) => in_array($r->status, ['new', 'contacted', 'interested', 'trial']))
-                    ->requiresConfirmation()
-                    ->modalDescription(fn (Prospect $r) => match ($r->status) {
-                        'new' => '¿Ya contactaste a este prospecto?',
-                        'contacted' => '¿El prospecto mostró interés real?',
-                        'interested' => '¿El prospecto inició su trial / se registró?',
-                        'trial' => '¿El prospecto se convirtió en cliente? Esto genera la comisión.',
-                    })
-                    ->action(function (Prospect $record) {
-                        $next = match ($record->status) {
-                            'new' => 'contacted',
-                            'contacted' => 'interested',
-                            'interested' => 'trial',
-                            'trial' => 'converted',
-                        };
+                    Tables\Actions\Action::make('objections_help')
+                        ->label('Ver respuestas a objeciones')
+                        ->icon('heroicon-o-light-bulb')
+                        ->modalHeading('Respuestas a objeciones')
+                        ->modalSubmitAction(false)
+                        ->modalContent(view('filament.sales.objections-modal')),
 
-                        $update = ['status' => $next];
-                        if ($next === 'contacted') $update['contacted_at'] = $record->contacted_at ?? now();
-                        if ($next === 'converted') $update['converted_at'] = now();
+                    Tables\Actions\Action::make('mark_lost')
+                        ->label('Marcar como perdido')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
+                        ->requiresConfirmation()
+                        ->form([
+                            Forms\Components\Textarea::make('lost_reason')
+                                ->label('¿Por qué?')->rows(2),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $update = ['status' => 'lost'];
+                            if (!empty($data['lost_reason'])) {
+                                $update['notes'] = trim(($record->notes ? $record->notes . "\n" : '') . '[' . now()->format('d/m') . ' · PERDIDO] ' . $data['lost_reason']);
+                            }
+                            $record->update($update);
+                            Notification::make()->title('Prospecto marcado como perdido')->warning()->send();
+                        }),
 
-                        $record->update($update);
-
-                        $label = match ($next) {
-                            'contacted' => 'Contactado',
-                            'interested' => 'Interesado',
-                            'trial' => 'En trial',
-                            'converted' => 'Convertido ✓',
-                        };
-
-                        Notification::make()->title("Prospecto movido a: {$label}")->success()->send();
-                    }),
-
-                // Marcar como perdido
-                Tables\Actions\Action::make('mark_lost')
-                    ->label('Perdido')
-                    ->icon('heroicon-o-x-circle')
-                    ->color('danger')
-                    ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
-                    ->requiresConfirmation()
-                    ->modalDescription('¿Marcar este prospecto como perdido? Se puede reactivar después.')
-                    ->form([
-                        Forms\Components\Textarea::make('lost_reason')
-                            ->label('¿Por qué se perdió? (opcional)')
-                            ->rows(2)
-                            ->placeholder('Ej: Ya tiene software, no le interesó, presupuesto...'),
-                    ])
-                    ->action(function (Prospect $record, array $data) {
-                        $update = ['status' => 'lost'];
-                        if (!empty($data['lost_reason'])) {
-                            $note = '[' . now()->format('d/m') . ' · PERDIDO] ' . $data['lost_reason'];
-                            $update['notes'] = trim(($record->notes ? $record->notes . "\n" : '') . $note);
-                        }
-                        $record->update($update);
-                        Notification::make()->title('Prospecto marcado como perdido')->warning()->send();
-                    }),
-
-                // Enviar link de registro con código del vendedor
-                Tables\Actions\Action::make('send_register_link')
-                    ->label('Link registro')
-                    ->icon('heroicon-o-link')
-                    ->color('success')
-                    ->visible(fn (Prospect $r) => !empty($r->phone) && in_array($r->status, ['interested', 'trial']))
-                    ->url(function (Prospect $record) {
-                        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
-
-                        $code = auth()->user()->sales_rep_code ?? '';
-                        $name = explode(' ', trim($record->name))[0] ?? '';
-                        $registerUrl = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
-
-                        $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias, sin meter tarjeta:\n\n"
-                            . "{$registerUrl}\n\n"
-                            . "Se registra en 2 minutos. Si necesita ayuda con la configuracion, me avisa y lo acompano paso a paso.";
-
-                        return "https://wa.me/{$phone}?text=" . urlencode($msg);
-                    })
-                    ->openUrlInNewTab(),
-
-                Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()->label('Editar datos'),
+                ])
+                    ->label('')
+                    ->tooltip('Más opciones')
+                    ->icon('heroicon-o-ellipsis-vertical')
+                    ->color('gray'),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
