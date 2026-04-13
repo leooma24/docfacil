@@ -649,16 +649,25 @@
         background: transparent !important;
     }
 
-    /* Fix: ActionGroup dropdown gets hidden behind table rows with backdrop-filter */
+    /* Fix: ActionGroup dropdown hidden behind table rows (backdrop-filter stacking context) */
+    .fi-ta-ctn,
+    .fi-ta,
+    .fi-ta-table,
+    .fi-ta-row,
+    .fi-ta-cell,
     .fi-ta-actions-cell {
         overflow: visible !important;
     }
-    .fi-ac-group-dropdown,
     .fi-dropdown-panel,
-    [x-float-content] {
-        z-index: 50 !important;
+    .fi-ac-group-dropdown,
+    [x-float-content],
+    [x-ref="panel"] {
+        z-index: 999 !important;
+        position: relative !important;
     }
-    .fi-ta-row {
-        position: relative;
+    /* Remove backdrop-filter from rows to prevent stacking context issues */
+    .fi-ta-row:hover {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 </style>
