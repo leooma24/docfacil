@@ -45,14 +45,14 @@ $acuerdo->getRowDimension($row)->setRowHeight(40);
 $row += 2;
 $sections = [
     ['1. Esquema de comisión', [
-        'La comisión por cada nueva clínica vendida es de 1.5× la primera mensualidad del plan contratado.',
-        'Ejemplo: plan Pro $299/mes → comisión total $448.50 por venta.',
+        'La comisión por cada nueva clínica vendida es de 3× la primera mensualidad del plan contratado.',
+        'Ejemplo: plan Pro $299/mes → comisión total $897 por venta.',
         'Aplica a todos los planes de pago: Básico, Pro y Clínica. El plan Free NO paga comisión.',
     ]],
     ['2. Pago en dos exhibiciones (split 50/50)', [
         '50% (primera mitad) se paga cuando la clínica realiza su PRIMER pago real al sistema.',
         '50% (segunda mitad) se paga cuando la clínica realiza su SEGUNDO pago mensual.',
-        'Ejemplo Pro: $224.25 al 1er pago + $224.25 al 2do pago = $448.50 total.',
+        'Ejemplo Pro: $448.50 al 1er pago + $448.50 al 2do pago = $897 total.',
         'Si la clínica NO hace el 2do pago, la segunda mitad no se paga.',
     ]],
     ['3. Clawback (devolución de comisión)', [
@@ -154,8 +154,8 @@ $calc->setCellValue('D4', 'Precio mensual');
 $calc->setCellValue('E4', '=IFERROR(VLOOKUP(B4,Planes!A4:B7,2,FALSE),0)');
 $calc->getStyle('E4')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 
-$calc->setCellValue('D5', 'Comisión total por venta (1.5×)');
-$calc->setCellValue('E5', '=IF(B4="Free",0,E4*1.5)');
+$calc->setCellValue('D5', 'Comisión total por venta (3×)');
+$calc->setCellValue('E5', '=IF(B4="Free",0,E4*3)');
 $calc->getStyle('E5')->getNumberFormat()->setFormatCode('"$"#,##0.00');
 $calc->getStyle('E5')->getFont()->setBold(true);
 
@@ -215,7 +215,7 @@ $calc->getStyle("A{$r}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColo
 $r += 2;
 
 $examples = [
-    'Si vendes 5 Básico al mes → 60 × $448.50 = $26,910/año',
+    'Si vendes 5 Básico al mes → 60 × $447 = $26,820/año',
     'Si vendes 1 Pro al mes → 12 × $898.50 = $10,782/año',
     'Si vendes 5 Pro al mes → 60 × $898.50 = $53,910/año',
     'Si vendes 10 Pro al mes → 120 × $898.50 = $107,820/año',
@@ -400,7 +400,7 @@ $pl->getStyle('A1')->getFont()->getColor()->setRGB('FFFFFF');
 
 $pl->setCellValue('A3', 'Plan');
 $pl->setCellValue('B3', 'Precio mensual');
-$pl->setCellValue('C3', 'Comisión total (1.5×)');
+$pl->setCellValue('C3', 'Comisión total (3×)');
 $pl->setCellValue('D3', 'Por mitad (50%)');
 $pl->setCellValue('E3', '¿Califica?');
 $pl->getStyle('A3:E3')->getFont()->setBold(true);
@@ -408,9 +408,9 @@ $pl->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 
 $planes = [
     ['Free', 0, 0, 0, 'NO'],
-    ['Básico', 149, 223.50, 111.75, 'SÍ'],
-    ['Pro', 299, 448.50, 224.25, 'SÍ'],
-    ['Clínica', 499, 748.50, 374.25, 'SÍ'],
+    ['Básico', 149, 447, 223.50, 'SÍ'],
+    ['Pro', 299, 897, 448.50, 'SÍ'],
+    ['Clínica', 499, 1497, 748.50, 'SÍ'],
 ];
 $r = 4;
 foreach ($planes as $p) {
@@ -435,7 +435,7 @@ $pl->getColumnDimension('E')->setWidth(14);
 $pl->setCellValue('A9', 'NOTA: Todos los planes de pago (Básico, Pro, Clínica) pagan comisión. Solo el plan Free NO paga.');
 $pl->mergeCells('A9:E9');
 $pl->getStyle('A9')->getFont()->setItalic(true);
-$pl->setCellValue('A10', 'La comisión es 1.5× la mensualidad, dividida en 2 pagos (al 1er y al 2do pago del cliente).');
+$pl->setCellValue('A10', 'La comisión es 3× la mensualidad, dividida en 2 pagos (al 1er y al 2do pago del cliente).');
 $pl->mergeCells('A10:E10');
 $pl->getStyle('A10')->getFont()->setItalic(true);
 

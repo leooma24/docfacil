@@ -60,7 +60,7 @@ Defined in `routes/console.php`, cron runs every minute on prod:
 
 ### Pricing
 
-Plans: Free ($0), Básico ($149), Pro ($299), Clínica ($499). Commission: 1.5× monthly price, split 50/50 across first two payments. All paid plans are commissionable. Source of truth: `Commission::monthlyPriceForPlan()`.
+Plans: Free ($0), Básico ($149), Pro ($299), Clínica ($499). Commission: 3× monthly price, split 50/50 across first two payments. All paid plans are commissionable. Source of truth: `Commission::monthlyPriceForPlan()`.
 
 ## Testing
 

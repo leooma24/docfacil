@@ -85,8 +85,8 @@ class Commission extends Model
     }
 
     /**
-     * Mitad de la comisión 1.5× para un plan.
-     * Total = 1.5 × precio mensual (se paga en 2 exhibiciones: 50% en 1er pago + 50% en 2do).
+     * Mitad de la comisión 3× para un plan.
+     * Total = 3 × precio mensual (se paga en 2 exhibiciones: 50% en 1er pago + 50% en 2do).
      * Retorna 0 si el plan no califica (Free).
      */
     public static function halfAmount(string $plan): float
@@ -94,7 +94,7 @@ class Commission extends Model
         if (!in_array($plan, self::COMMISSIONABLE_PLANS)) {
             return 0;
         }
-        // Total 1.5x la mensualidad / 2 = 0.75x por mitad
-        return round(self::monthlyPriceForPlan($plan) * 0.75, 2);
+        // Total 3x la mensualidad / 2 = 1.5x por mitad
+        return round(self::monthlyPriceForPlan($plan) * 1.5, 2);
     }
 }

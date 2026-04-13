@@ -245,7 +245,7 @@ $summary->mergeCells('A1:F1');
 $summary->getStyle('A1')->getFont()->setBold(true)->setSize(16);
 $summary->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-$summary->setCellValue('A2', 'Parámetros: 3 vendedores × 10 ventas/mes · comisión 1.5× split 50/50 · churn 2.5% mensual');
+$summary->setCellValue('A2', 'Parámetros: 3 vendedores × 10 ventas/mes · comisión 3× split 50/50 · churn 2.5% mensual');
 $summary->mergeCells('A2:F2');
 $summary->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 $summary->getStyle('A2')->getFont()->setItalic(true);
@@ -332,7 +332,7 @@ createPlanSheet($spreadsheet, 'Básico', [
     'price'       => 149,
     'reps'        => 3,
     'sales_per_rep' => 10,
-    'multiplier'  => 1.5,
+    'multiplier'  => 3,
     'churn'       => 0.025,
     'op_cost'     => 25,
 ]);
@@ -342,7 +342,7 @@ createPlanSheet($spreadsheet, 'Profesional', [
     'price'       => 299,
     'reps'        => 3,
     'sales_per_rep' => 10,
-    'multiplier'  => 1.5,
+    'multiplier'  => 3,
     'churn'       => 0.025,
     'op_cost'     => 35,
 ]);
@@ -352,7 +352,7 @@ createPlanSheet($spreadsheet, 'Clínica', [
     'price'       => 499,
     'reps'        => 3,
     'sales_per_rep' => 10,
-    'multiplier'  => 1.5,
+    'multiplier'  => 3,
     'churn'       => 0.025,
     'op_cost'     => 45,
 ]);

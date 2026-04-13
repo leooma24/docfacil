@@ -98,9 +98,9 @@ $ws->getRowDimension(3)->setRowHeight(25);
 
 $planes = [
     ['FREE', '$0', '—', '1', '30', 'Doctores curiosos. Sin comisión. Gancho para conversión.'],
-    ['BÁSICO', '$149', '$74 (50% off)', '1', '200', 'Doctores individuales. Comisión: $223.50 por venta.'],
-    ['PRO ⭐', '$299', '$149 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Odontograma + Portal + Multi-doctor. Comisión: $448.50 por venta.'],
-    ['CLÍNICA', '$499', '$249 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $748.50 por venta.'],
+    ['BÁSICO', '$149', '$74 (50% off)', '1', '200', 'Doctores individuales. Comisión: $447 por venta.'],
+    ['PRO ⭐', '$299', '$149 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Odontograma + Portal + Multi-doctor. Comisión: $897 por venta.'],
+    ['CLÍNICA', '$499', '$249 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $1,497 por venta.'],
 ];
 
 $row = 4;
@@ -405,7 +405,7 @@ $ws->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)
 $ws->getRowDimension(1)->setRowHeight(40);
 
 $ws->mergeCells('A3:D3');
-$ws->setCellValue('A3', '🎯 GANAS 1.5 MENSUALIDADES POR CADA CLIENTE DE PAGO (Básico, Pro o Clínica)');
+$ws->setCellValue('A3', '🎯 GANAS 3 MENSUALIDADES POR CADA CLIENTE DE PAGO (Básico, Pro o Clínica)');
 $ws->getStyle('A3')->getFont()->setBold(true)->setSize(13)->getColor()->setRGB($TEAL);
 $ws->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -414,7 +414,7 @@ $ws->setCellValue('A4', 'Se paga 50% con el primer pago del cliente, 50% con el 
 $ws->getStyle('A4')->getFont()->setItalic(true)->getColor()->setRGB('64748B');
 $ws->getStyle('A4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-$headers = ['Plan', 'Precio cliente/mes', 'Comisión total (1.5x)', '½ primer pago + ½ segundo pago'];
+$headers = ['Plan', 'Precio cliente/mes', 'Comisión total (3x)', '½ primer pago + ½ segundo pago'];
 foreach ($headers as $i => $h) {
     $col = chr(65 + $i);
     $ws->setCellValue("{$col}6", $h);
@@ -426,9 +426,9 @@ $ws->getRowDimension(6)->setRowHeight(25);
 
 $coms = [
     ['Free', '$0', '$0', 'Sin comisión'],
-    ['Básico', '$149', '$223.50', '$111.75 + $111.75'],
-    ['Pro ⭐', '$299', '$448.50', '$224.25 + $224.25'],
-    ['Clínica', '$499', '$748.50', '$374.25 + $374.25'],
+    ['Básico', '$149', '$447', '$223.50 + $223.50'],
+    ['Pro ⭐', '$299', '$897', '$448.50 + $448.50'],
+    ['Clínica', '$499', '$1,497', '$748.50 + $748.50'],
 ];
 
 $row = 7;
@@ -455,9 +455,9 @@ $row += 2;
 
 $metas = [
     ['Nivel', 'Ventas/mes', 'Mix', 'Comisión aproximada'],
-    ['Starter', '3 Básico + 2 Pro', '3x$223.50 + 2x$448.50', '$1,567.50'],
-    ['Medium', '5 Pro + 1 Clínica', '5x$448.50 + 1x$748.50', '$2,991'],
-    ['Top', '10 Pro + 2 Clínica', '10x$448.50 + 2x$748.50', '$5,982'],
+    ['Starter', '3 Básico + 2 Pro', '3x$447 + 2x$897', '$3,135'],
+    ['Medium', '5 Pro + 1 Clínica', '5x$897 + 1x$1,497', '$5,982'],
+    ['Top', '10 Pro + 2 Clínica', '10x$897 + 2x$1,497', '$11,964'],
     ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$7,843.50'],
 ];
 

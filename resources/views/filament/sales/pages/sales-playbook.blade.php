@@ -84,17 +84,17 @@
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Básico</span>
-                <span class="sp-price-val">$149/mes · Comisión $223.50</span>
+                <span class="sp-price-val">$149/mes · Comisión $447</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Pro ⭐</span>
-                <span class="sp-price-val">$299/mes · Comisión $448.50</span>
+                <span class="sp-price-val">$299/mes · Comisión $897</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Clínica</span>
-                <span class="sp-price-val">$499/mes · Comisión $748.50</span>
+                <span class="sp-price-val">$499/mes · Comisión $1,497</span>
             </div>
-            <div class="sp-tip">Comisión = 1.5× mensualidad. 50% al 1er pago + 50% al 2do pago del cliente.</div>
+            <div class="sp-tip">Comisión = 3× mensualidad. 50% al 1er pago + 50% al 2do pago del cliente.</div>
         </div>
 
         {{-- SCRIPT DE VISITA --}}
