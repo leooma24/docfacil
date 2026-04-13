@@ -649,25 +649,8 @@
         background: transparent !important;
     }
 
-    /* Fix: ActionGroup dropdown hidden behind table rows (backdrop-filter stacking context) */
-    .fi-ta-ctn,
-    .fi-ta,
-    .fi-ta-table,
-    .fi-ta-row,
-    .fi-ta-cell,
-    .fi-ta-actions-cell {
-        overflow: visible !important;
-    }
-    .fi-dropdown-panel,
-    .fi-ac-group-dropdown,
-    [x-float-content],
-    [x-ref="panel"] {
+    /* Fix: ActionGroup dropdown z-index */
+    .fi-dropdown-panel {
         z-index: 999 !important;
-        position: relative !important;
-    }
-    /* Remove backdrop-filter from rows to prevent stacking context issues */
-    .fi-ta-row:hover {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
     }
 </style>
