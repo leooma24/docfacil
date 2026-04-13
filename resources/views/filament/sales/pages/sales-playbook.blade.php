@@ -252,6 +252,18 @@
             <div class="sp-tip">Usa el botón <strong>"Avanzar"</strong> en cada prospecto para moverlo por el pipeline. Al llegar a "Convertido" se genera tu comisión automáticamente.</div>
         </div>
 
+        {{-- ACUERDO DESCARGABLE --}}
+        <div class="sp-card sp-card-green">
+            <div class="sp-card-title">📄 Acuerdo de vendedor</div>
+            <div style="font-size:0.85rem;color:#374151;margin-bottom:12px;">Descarga, revisa y firma el acuerdo de comisiones antes de tu primera venta.</div>
+            <a href="/docs/acuerdo-vendedor.xlsx" download
+                style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:linear-gradient(135deg,#10b981,#059669);color:white;border-radius:12px;font-weight:800;font-size:0.85rem;text-decoration:none;box-shadow:0 6px 20px rgba(16,185,129,0.3);transition:transform 0.2s;"
+                onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Descargar acuerdo (Excel)
+            </a>
+        </div>
+
         {{-- LINK DE REGISTRO --}}
         <div class="sp-card sp-card-green">
             <div class="sp-card-title">🔗 Tu link personalizado</div>
