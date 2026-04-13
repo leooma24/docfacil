@@ -648,4 +648,17 @@
     body {
         background: transparent !important;
     }
+
+    /* Fix: ActionGroup dropdown gets hidden behind table rows with backdrop-filter */
+    .fi-ta-actions-cell {
+        overflow: visible !important;
+    }
+    .fi-ac-group-dropdown,
+    .fi-dropdown-panel,
+    [x-float-content] {
+        z-index: 50 !important;
+    }
+    .fi-ta-row {
+        position: relative;
+    }
 </style>
