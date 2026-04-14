@@ -16,6 +16,7 @@ class Prospect extends Model
         'last_followup_at', 'next_followup_at',
         'contact_day', 'last_contact_method', 'next_contact_at', 'outreach_started_at',
         'objections_faced', 'demo_scheduled_at', 'demo_completed_at',
+        'conversation_log', 'lead_score',
     ];
 
     protected function casts(): array
@@ -31,6 +32,8 @@ class Prospect extends Model
             'demo_completed_at' => 'datetime',
             'contact_day' => 'integer',
             'objections_faced' => 'array',
+            'conversation_log' => 'array',
+            'lead_score' => 'integer',
         ];
     }
 

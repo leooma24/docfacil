@@ -57,6 +57,8 @@ return [
         'enabled' => env('AI_ENABLED', false),
         'max_daily_cost_usd' => env('AI_MAX_DAILY_COST_USD', 5),
         'provider' => env('AI_PROVIDER', 'deepseek'),
+        'chatbot_enabled' => env('CHATBOT_ENABLED', true),
+        'chatbot_max_daily_cost_usd' => env('CHATBOT_MAX_DAILY_COST_USD', 2),
         'anthropic' => [
             'key' => env('ANTHROPIC_API_KEY'),
             'model' => env('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001'),

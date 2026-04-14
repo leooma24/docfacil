@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\NotifiesNewLead;
 use App\Models\Prospect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
+    use NotifiesNewLead;
+
     public function store(Request $request)
     {
         // --- Capa 1: Honeypot clásico ---
@@ -51,7 +53,7 @@ class ContactController extends Controller
             ]
         );
 
-        $this->notifyAdmin($prospect);
+        $this->notifyAdminNewLead($prospect);
 
         return back()->with('contact_success', true);
     }
@@ -99,41 +101,4 @@ class ContactController extends Controller
         return false;
     }
 
-    private function notifyAdmin(Prospect $prospect): void
-    {
-        $recipients = array_filter(array_map(
-            'trim',
-            explode(',', (string) config('services.notifications.emails', 'leooma24@gmail.com'))
-        ));
-        if (empty($recipients)) {
-            return;
-        }
-
-        $body = sprintf(
-            "Nuevo prospecto registrado desde el landing de DocFácil.\n\n" .
-                "Nombre: %s\nEmail: %s\nTeléfono: %s\nConsultorio: %s\nCiudad: %s\nEspecialidad: %s\n\nMensaje:\n%s\n\n" .
-                "Ver en admin: %s/admin/prospects/%d/edit",
-            $prospect->name,
-            $prospect->email,
-            $prospect->phone ?: '—',
-            $prospect->clinic_name ?: '—',
-            $prospect->city ?: '—',
-            $prospect->specialty ?: '—',
-            $prospect->notes ?: '(sin mensaje)',
-            rtrim(config('app.url'), '/'),
-            $prospect->id
-        );
-
-        try {
-            Mail::raw($body, function ($mail) use ($recipients, $prospect) {
-                $mail->to($recipients)
-                    ->subject("Nuevo lead landing: {$prospect->name}");
-            });
-        } catch (\Throwable $e) {
-            Log::warning('Error al notificar prospect por email', [
-                'prospect_id' => $prospect->id,
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
 }

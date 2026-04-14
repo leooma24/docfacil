@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>DocFácil — Software para Consultorios Médicos y Dentales</title>
     <meta name="description" content="Gestiona tu consultorio médico o dental de forma fácil. Agenda de citas, expedientes clínicos, recetas PDF, recordatorios WhatsApp y más.">
     <meta name="theme-color" content="#14b8a6">
@@ -773,5 +774,7 @@ function askFaq(index) {
     msgs.scrollTop = msgs.scrollHeight;
 }
 </script>
+
+<x-chatbot-widget />
 </body>
 </html>

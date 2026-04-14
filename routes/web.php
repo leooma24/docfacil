@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
@@ -19,6 +20,19 @@ Route::view('/terminos', 'legal.terminos')->name('legal.terms');
 Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contact.store')
     ->middleware('throttle:5,1');
+
+Route::post('/chatbot/message', [ChatbotController::class, 'message'])
+    ->name('chatbot.message')
+    ->middleware('throttle:20,1');
+Route::post('/chatbot/close', [ChatbotController::class, 'close'])
+    ->name('chatbot.close')
+    ->middleware('throttle:10,1');
+Route::post('/chatbot/create-account', [ChatbotController::class, 'createAccount'])
+    ->name('chatbot.createAccount')
+    ->middleware('throttle:5,60');
+Route::get('/chatbot/auto-login/{user}', [ChatbotController::class, 'autoLogin'])
+    ->name('chatbot.autoLogin')
+    ->middleware('signed');
 
 Route::get('/demo', function () {
     session()->flash('demo_credentials', [
