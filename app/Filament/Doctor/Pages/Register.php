@@ -44,6 +44,11 @@ class Register extends BaseRegister
                             ->tel()
                             ->default(request()->query('phone'))
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('city')
+                            ->label('Ciudad')
+                            ->placeholder('Ej: Culiacán')
+                            ->default(request()->query('city'))
+                            ->maxLength(255),
                         Forms\Components\TextInput::make('referral_code')
                             ->label('Código de referido (opcional)')
                             ->placeholder('Ej: DRGARCIA123')
@@ -84,6 +89,7 @@ class Register extends BaseRegister
         $clinic->forceFill([
             'name' => $data['clinic_name'],
             'phone' => $data['clinic_phone'] ?? null,
+            'city' => $data['city'] ?? null,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
             'sold_by_user_id' => $salesRep?->id,
@@ -111,11 +117,15 @@ class Register extends BaseRegister
         // Create/update prospect for CRM tracking
         $existingProspect = Prospect::where('email', $data['email'])->first();
         if ($existingProspect) {
-            $existingProspect->update([
+            $existingProspect->update(array_filter([
                 'status' => 'converted',
                 'converted_at' => now(),
                 'converted_clinic_id' => $clinic->id,
-            ]);
+                'phone' => $existingProspect->phone ?: ($data['clinic_phone'] ?? null),
+                'city' => $existingProspect->city ?: ($data['city'] ?? null),
+                'clinic_name' => $existingProspect->clinic_name ?: $data['clinic_name'],
+                'specialty' => $existingProspect->specialty ?: ($data['specialty'] ?? null),
+            ], fn ($v) => $v !== null));
         } else {
             Prospect::create([
                 'name' => $data['name'],
@@ -123,6 +133,7 @@ class Register extends BaseRegister
                 'phone' => $data['clinic_phone'] ?? null,
                 'clinic_name' => $data['clinic_name'],
                 'specialty' => $data['specialty'] ?? null,
+                'city' => $data['city'] ?? null,
                 'source' => $salesRep ? 'prospecting' : 'landing',
                 'status' => 'converted',
                 'converted_at' => now(),

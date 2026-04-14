@@ -112,6 +112,7 @@ class ChatbotController extends Controller
                 $clinic->forceFill([
                     'name' => $data['clinic_name'],
                     'phone' => $data['phone'] ?? null,
+                    'city' => $data['city'] ?? null,
                     'plan' => 'free',
                     'trial_ends_at' => now()->addDays(15),
                     'sold_by_user_id' => $salesRepId,
