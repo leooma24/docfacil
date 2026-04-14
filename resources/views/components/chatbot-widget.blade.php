@@ -261,11 +261,20 @@
                     });
                 } catch (e) { /* silent */ }
 
-                const params = new URLSearchParams({
-                    name: d.name || '',
-                    email: d.email || ''
-                });
+                const params = new URLSearchParams();
+                if (d.name) params.set('name', d.name);
+                if (d.email) params.set('email', d.email);
+                if (d.clinic_name) params.set('clinic_name', d.clinic_name);
+                if (d.specialty) params.set('specialty', d.specialty);
+                if (d.phone) params.set('phone', d.phone);
                 window.open('/doctor/register?' + params.toString(), '_blank');
+
+                this.tags = {};
+                this.messages.push({
+                    role: 'assistant',
+                    content: '¡Listo! Te abrí el registro en otra pestaña con tus datos pre-llenados. Cualquier duda, sigo aquí 🙂'
+                });
+                this.resetSession();
             },
 
             async finalizeHot() {
@@ -310,6 +319,15 @@
                     const el = this.$refs.scroll;
                     if (el) el.scrollTop = el.scrollHeight;
                 });
+            },
+
+            resetSession() {
+                this.hotMode = false;
+                this.termsAccepted = false;
+                this.createError = '';
+                const newSid = crypto.randomUUID ? crypto.randomUUID() : this.fallbackUUID();
+                sessionStorage.setItem('docfacil_chatbot_sid', newSid);
+                this.sessionId = newSid;
             },
         };
     }

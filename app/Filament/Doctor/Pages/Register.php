@@ -18,8 +18,8 @@ class Register extends BaseRegister
     {
         return $form
             ->schema([
-                $this->getNameFormComponent(),
-                $this->getEmailFormComponent(),
+                $this->getNameFormComponent()->default(request()->query('name')),
+                $this->getEmailFormComponent()->default(request()->query('email')),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
                 Forms\Components\Section::make('Datos del Consultorio')
@@ -27,10 +27,12 @@ class Register extends BaseRegister
                         Forms\Components\TextInput::make('clinic_name')
                             ->label('Nombre del consultorio')
                             ->required()
+                            ->default(request()->query('clinic_name'))
                             ->maxLength(255),
                         Forms\Components\TextInput::make('specialty')
                             ->label('Especialidad')
                             ->placeholder('Ej: Odontología, Medicina General, Pediatría')
+                            ->default(request()->query('specialty'))
                             ->maxLength(255),
                         Forms\Components\TextInput::make('license_number')
                             ->label('Cédula profesional')
@@ -40,6 +42,7 @@ class Register extends BaseRegister
                         Forms\Components\TextInput::make('clinic_phone')
                             ->label('Teléfono del consultorio')
                             ->tel()
+                            ->default(request()->query('phone'))
                             ->maxLength(255),
                         Forms\Components\TextInput::make('referral_code')
                             ->label('Código de referido (opcional)')
