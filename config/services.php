@@ -28,6 +28,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'notifications' => [
+        // Destinatarios para avisos internos (nuevos leads landing, etc.).
+        // CSV en NOTIFY_EMAILS. Cuando el dominio tenga buzón real, agregar admin@docfacil.com.
+        'emails' => env('NOTIFY_EMAILS', 'leooma24@gmail.com'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
