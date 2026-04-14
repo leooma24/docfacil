@@ -15,7 +15,7 @@
 | **Tipo de practica** | Consultorio dental privado, 1-2 sillas |
 | **Tamano** | 1 dentista titular, 0-1 asistente |
 | **Especialidad** | Odontologia general (limpieza, resinas, extracciones, endodoncia basica, protesis) |
-| **Ubicacion** | Zonas urbanas de Sinaloa: Culiacan, Mazatlan, Los Mochis, Guasave, Navolato |
+| **Ubicacion** | Zonas urbanas del noroeste: Sinaloa (Culiacan, Mazatlan, Los Mochis, Guasave, Navolato) y Sonora (Hermosillo, Ciudad Obregon) |
 | **Edad del doctor** | 28-45 anos (familiarizados con tecnologia, usan WhatsApp Business) |
 | **Facturacion mensual estimada** | $40,000 - $150,000 MXN |
 | **Como gestionan hoy** | Agenda en papel o Google Calendar, expedientes en folders fisicos, WhatsApp personal para recordatorios manuales |
@@ -62,7 +62,7 @@
 | **Tipo de practica** | Consultorio medico privado, 1 consultorio |
 | **Tamano** | 1 doctor, 0-1 recepcionista |
 | **Especialidad** | Medicina general, pediatria, ginecologia, dermatologia, nutricion |
-| **Ubicacion** | Mismas ciudades: Culiacan, Mazatlan, Los Mochis + ciudades medianas de Sinaloa |
+| **Ubicacion** | Mismas ciudades: Culiacan, Mazatlan, Los Mochis, Hermosillo, Ciudad Obregon + ciudades medianas de Sinaloa y Sonora |
 | **Edad del doctor** | 30-50 anos |
 | **Facturacion mensual** | $30,000 - $120,000 MXN |
 | **Como gestionan hoy** | Agenda en libreta, expedientes en Word/papel, recetas en recetario impreso |
