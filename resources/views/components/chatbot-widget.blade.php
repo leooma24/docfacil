@@ -2,9 +2,9 @@
 <div x-data="docfacilChatbot()" x-cloak>
     <!-- Burbuja flotante -->
     <button type="button" x-show="!open" @click="toggle()" aria-label="Abrir chat"
-        style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;"
+        style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;transition:transform .2s;"
         onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true" style="display:block;">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1zm4 0c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1zm4 0c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 1 .45 1 1z"/>
         </svg>
         <span x-show="hasUnread" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
