@@ -148,6 +148,10 @@
                 }
                 this.sessionId = sid;
 
+                this.$watch('messages', () => this.$nextTick(() => this.scrollBottom()));
+                this.$watch('typing', () => this.$nextTick(() => this.scrollBottom()));
+                this.$watch('tags', () => this.$nextTick(() => this.scrollBottom()));
+
                 setTimeout(() => {
                     if (!this.open && this.messages.length === 0) {
                         this.hasUnread = true;
@@ -302,8 +306,10 @@
             },
 
             scrollBottom() {
-                const el = this.$refs.scroll;
-                if (el) el.scrollTop = el.scrollHeight;
+                requestAnimationFrame(() => {
+                    const el = this.$refs.scroll;
+                    if (el) el.scrollTop = el.scrollHeight;
+                });
             },
         };
     }
