@@ -10,7 +10,7 @@
             <circle cx="12" cy="11" r="1.3" fill="#0d9488"/>
             <circle cx="16" cy="11" r="1.3" fill="#0d9488"/>
         </svg>
-        <span x-show="hasUnread" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
+        <span x-show="hasUnread" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
     </button>
 
     <!-- Panel -->
