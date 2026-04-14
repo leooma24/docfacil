@@ -1,4 +1,4 @@
-@if(config('services.ai.enabled') && config('services.ai.chatbot_enabled', true))
+@if(config('services.ai.chatbot_enabled', true))
 <div x-data="docfacilChatbot()" x-cloak>
     <!-- Burbuja flotante -->
     <button type="button" x-show="!open" @click="toggle()" aria-label="Abrir chat"

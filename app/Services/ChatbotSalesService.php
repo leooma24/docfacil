@@ -20,11 +20,11 @@ class ChatbotSalesService
      */
     public function respond(string $sessionId, string $userMessage): array
     {
-        if (!AI::enabled() || !config('services.ai.chatbot_enabled', true)) {
+        if (!config('services.ai.chatbot_enabled', true)) {
             return $this->disabled('chatbot_off');
         }
 
-        if (AI::dailyLimitReached() || $this->chatbotDailyLimitReached()) {
+        if ($this->chatbotDailyLimitReached()) {
             return $this->disabled('daily_limit');
         }
 
