@@ -2,9 +2,9 @@
 <div x-data="docfacilChatbot()" x-cloak>
     <!-- Burbuja flotante -->
     <button type="button" x-show="!open" @click="toggle()" aria-label="Abrir chat"
-        style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;display:grid;place-items:center;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
+        style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
         onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true" style="display:block;margin:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:block;">
             <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-3 4-3-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
             <circle cx="8" cy="11" r="1.3" fill="#0d9488"/>
             <circle cx="12" cy="11" r="1.3" fill="#0d9488"/>
