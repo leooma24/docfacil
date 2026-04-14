@@ -267,6 +267,7 @@
                 if (d.clinic_name) params.set('clinic_name', d.clinic_name);
                 if (d.specialty) params.set('specialty', d.specialty);
                 if (d.phone) params.set('phone', d.phone);
+                if (d.city) params.set('city', d.city);
                 window.open('/doctor/register?' + params.toString(), '_blank');
 
                 this.tags = {};
