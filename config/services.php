@@ -60,14 +60,15 @@ return [
             'secret' => env('STRIPE_WEBHOOK_SECRET'),
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
-        // IDs de los 6 precios creados en Stripe (3 planes x 2 ciclos)
+        // IDs de los 6 precios creados en Stripe (3 planes x 2 ciclos).
+        // Las keys usan el slug interno del plan (basico, profesional, clinica).
         'prices' => [
-            'basico_monthly'  => env('STRIPE_PRICE_BASICO_MONTHLY'),
-            'basico_annual'   => env('STRIPE_PRICE_BASICO_ANNUAL'),
-            'pro_monthly'     => env('STRIPE_PRICE_PRO_MONTHLY'),
-            'pro_annual'      => env('STRIPE_PRICE_PRO_ANNUAL'),
-            'clinica_monthly' => env('STRIPE_PRICE_CLINICA_MONTHLY'),
-            'clinica_annual'  => env('STRIPE_PRICE_CLINICA_ANNUAL'),
+            'basico_monthly'      => env('STRIPE_PRICE_BASICO_MONTHLY'),
+            'basico_annual'       => env('STRIPE_PRICE_BASICO_ANNUAL'),
+            'profesional_monthly' => env('STRIPE_PRICE_PRO_MONTHLY'),
+            'profesional_annual'  => env('STRIPE_PRICE_PRO_ANNUAL'),
+            'clinica_monthly'     => env('STRIPE_PRICE_CLINICA_MONTHLY'),
+            'clinica_annual'      => env('STRIPE_PRICE_CLINICA_ANNUAL'),
         ],
     ],
 

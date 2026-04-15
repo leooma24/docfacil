@@ -56,11 +56,13 @@
                     <div class="text-sm text-amber-800 dark:text-amber-300/80">El plan anual cuesta solo 10 meses (16.7% descuento).</div>
                 </div>
             </div>
-            <div class="inline-flex bg-white rounded-xl p-1 border border-amber-200 shadow-sm dark:bg-gray-900">
-                <button type="button" wire:click="setCycle('monthly')" class="px-4 py-2 rounded-lg text-sm font-bold transition {{ $cycle === 'monthly' ? 'bg-teal-600 text-white shadow' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300' }}">
+            <div style="display:inline-flex; background:#fff; border-radius:12px; padding:4px; border:1px solid #fde68a; box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+                <button type="button" wire:click="setCycle('monthly')"
+                        style="padding:8px 16px; border-radius:8px; font-size:14px; font-weight:700; border:none; cursor:pointer; {{ $cycle === 'monthly' ? 'background:#0d9488; color:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.1);' : 'background:transparent; color:#4b5563;' }}">
                     Mensual
                 </button>
-                <button type="button" wire:click="setCycle('annual')" class="px-4 py-2 rounded-lg text-sm font-bold transition {{ $cycle === 'annual' ? 'bg-teal-600 text-white shadow' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300' }}">
+                <button type="button" wire:click="setCycle('annual')"
+                        style="padding:8px 16px; border-radius:8px; font-size:14px; font-weight:700; border:none; cursor:pointer; {{ $cycle === 'annual' ? 'background:#0d9488; color:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.1);' : 'background:transparent; color:#4b5563;' }}">
                     Anual · 2 meses gratis
                 </button>
             </div>
