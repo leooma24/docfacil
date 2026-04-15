@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BriefPdfController;
+use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CityLandingController;
@@ -16,6 +18,12 @@ Route::get('/', function () {
 
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacy');
 Route::view('/terminos', 'legal.terminos')->name('legal.terms');
+
+// Marketing: brief y brochure
+Route::get('/brief.pdf', [BriefPdfController::class, 'download'])->name('brief.pdf');
+Route::get('/brief', [BriefPdfController::class, 'web'])->name('brief.web');
+Route::get('/brochure', [BrochureController::class, 'web'])->name('brochure.web');
+Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.pdf');
 
 Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contact.store')

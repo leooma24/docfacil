@@ -7,11 +7,32 @@
     <meta name="description" content="El mejor software para consultorios médicos y dentales en {{ $city }}, {{ $state }}. Agenda citas, expedientes clínicos, recetas PDF y recordatorios WhatsApp. Prueba gratis 15 días.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DocFácil">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+    {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:title" content="Software para Consultorios en {{ $city }} — DocFácil">
     <meta property="og:description" content="El mejor software para consultorios médicos y dentales en {{ $city }}. Prueba gratis 15 días.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DocFácil — Software para consultorios en {{ $city }}">
     <meta property="og:url" content="{{ url("/software-dental/{$slug}") }}">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DocFácil">
+    <meta property="og:locale" content="es_MX">
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Software para Consultorios en {{ $city }} — DocFácil">
+    <meta name="twitter:description" content="El mejor software para consultorios médicos y dentales en {{ $city }}. Prueba gratis 15 días.">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+
     <link rel="canonical" href="{{ url("/software-dental/{$slug}") }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800" rel="stylesheet" />

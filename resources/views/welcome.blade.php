@@ -12,18 +12,35 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="canonical" href="{{ url('/') }}">
+
+    {{-- iOS PWA --}}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DocFácil">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+    {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:title" content="DocFácil — Software para Consultorios Médicos y Dentales">
     <meta property="og:description" content="Gestiona tu consultorio de forma fácil. Agenda, expedientes, recetas PDF, WhatsApp y más.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DocFácil">
+    <meta property="og:locale" content="es_MX">
+
+    {{-- Twitter --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil — Software para Consultorios Médicos y Dentales">
     <meta name="twitter:description" content="Gestiona tu consultorio de forma fácil. Agenda, expedientes, recetas PDF, WhatsApp y más.">
     <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
@@ -41,6 +58,19 @@
         ],
         "aggregateRating": { "@@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
     }
+    </script>
+    {{-- Captura evento beforeinstallprompt temprano para que Alpine lo pueda leer --}}
+    <script>
+        window.__docfacilInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            window.__docfacilInstallPrompt = e;
+            window.dispatchEvent(new CustomEvent('docfacil-install-ready'));
+        });
+        window.addEventListener('appinstalled', () => {
+            window.__docfacilInstallPrompt = null;
+            window.dispatchEvent(new CustomEvent('docfacil-install-done'));
+        });
     </script>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
@@ -68,6 +98,7 @@
         .delay-500 { animation-delay:0.5s; }
         [data-animate] { opacity:0; }
         [data-animate].visible { opacity:1; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-white text-gray-900 antialiased overflow-x-hidden">
@@ -83,6 +114,30 @@
                 <a href="#features" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Funciones</a>
                 <a href="#pricing" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Precios</a>
                 <a href="#contacto" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Contacto</a>
+
+                {{-- Botón instalar app (solo aparece cuando el navegador soporta PWA install) --}}
+                <button
+                    x-data="{ show: !!window.__docfacilInstallPrompt, installing: false }"
+                    x-show="show"
+                    x-cloak
+                    x-on:docfacil-install-ready.window="show = true"
+                    x-on:docfacil-install-done.window="show = false"
+                    x-on:click="
+                        if (!window.__docfacilInstallPrompt) return;
+                        installing = true;
+                        window.__docfacilInstallPrompt.prompt();
+                        window.__docfacilInstallPrompt.userChoice.finally(() => {
+                            installing = false;
+                            window.__docfacilInstallPrompt = null;
+                            show = false;
+                        });
+                    "
+                    type="button"
+                    class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800 border border-teal-200 hover:border-teal-400 rounded-xl px-3 py-2 transition-all hover:bg-teal-50">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span x-text="installing ? 'Instalando...' : 'Instalar app'"></span>
+                </button>
+
                 <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Iniciar sesion</a>
                 <a href="{{ url('/doctor/register') }}" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
                     Prueba gratis
@@ -97,6 +152,24 @@
             <a href="#features" class="block py-2 text-gray-600">Funciones</a>
             <a href="#pricing" class="block py-2 text-gray-600">Precios</a>
             <a href="#contacto" class="block py-2 text-gray-600">Contacto</a>
+            <button
+                x-data="{ show: !!window.__docfacilInstallPrompt }"
+                x-show="show"
+                x-cloak
+                x-on:docfacil-install-ready.window="show = true"
+                x-on:docfacil-install-done.window="show = false"
+                x-on:click="
+                    if (!window.__docfacilInstallPrompt) return;
+                    window.__docfacilInstallPrompt.prompt();
+                    window.__docfacilInstallPrompt.userChoice.finally(() => {
+                        window.__docfacilInstallPrompt = null;
+                        show = false;
+                    });
+                "
+                type="button"
+                class="block w-full py-2 px-4 text-left text-teal-700 border border-teal-200 rounded-lg font-semibold">
+                📲 Instalar como app
+            </button>
             <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesion</a>
             <a href="{{ url('/doctor/register') }}" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
         </div>
@@ -652,6 +725,8 @@
                         <li><a href="#features" class="hover:text-teal-400 transition">Funciones</a></li>
                         <li><a href="#pricing" class="hover:text-teal-400 transition">Precios</a></li>
                         <li><a href="#comparison" class="hover:text-teal-400 transition">Comparativa</a></li>
+                        <li><a href="{{ route('brochure.web') }}" class="hover:text-teal-400 transition">Brochure</a></li>
+                        <li><a href="{{ route('brochure.pdf') }}" class="hover:text-teal-400 transition">📄 Descargar PDF</a></li>
                     </ul>
                 </div>
                 <div>

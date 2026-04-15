@@ -1,4 +1,4 @@
-const CACHE_NAME = 'docfacil-v1';
+const CACHE_NAME = 'docfacil-v2';
 const OFFLINE_URL = '/offline.html';
 
 const PRECACHE_URLS = [
@@ -6,8 +6,11 @@ const PRECACHE_URLS = [
     '/offline.html',
     '/images/logo_doc_facil.png',
     '/images/solo_logo.png',
+    '/images/og-image.png',
     '/favicon-32x32.png',
     '/android-chrome-192x192.png',
+    '/android-chrome-512x512.png',
+    '/apple-touch-icon.png',
 ];
 
 // Install
