@@ -84,17 +84,22 @@
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Básico</span>
-                <span class="sp-price-val">$149/mes · Comisión $447</span>
+                <span class="sp-price-val">$149/mes · $1,490/año · Comisión $447</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Pro ⭐</span>
-                <span class="sp-price-val">$299/mes · Comisión $897</span>
+                <span class="sp-price-val">$299/mes · $2,990/año · Comisión $897</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Clínica</span>
-                <span class="sp-price-val">$499/mes · Comisión $1,497</span>
+                <span class="sp-price-val">$499/mes · $4,990/año · Comisión $1,497</span>
             </div>
-            <div class="sp-tip">Comisión = 3× mensualidad. 50% al 1er pago + 50% al 2do pago del cliente.</div>
+            <div class="sp-tip">
+                <strong>Comisión = 3× mensualidad</strong> (igual para mensual o anual).<br>
+                🟢 <strong>Si vende anual:</strong> recibes el 100% de la comisión en <strong>un solo pago</strong>.<br>
+                🔵 <strong>Si vende mensual:</strong> 50% al 1er pago + 50% al 2do pago del cliente.<br>
+                💡 <strong>Anual te conviene</strong>: cobras toda la comisión de golpe y el cliente se queda 12 meses asegurados.
+            </div>
         </div>
 
         {{-- SCRIPT DE VISITA --}}

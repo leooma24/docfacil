@@ -469,17 +469,27 @@
     {{-- Pricing --}}
     <section id="pricing" class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-animate>
+            <div class="text-center mb-10" data-animate>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Invierte menos de lo que cuesta una consulta</h2>
                 <p class="mt-4 text-lg text-gray-600">Un plan que te ahorra horas cada semana. Empieza gratis.</p>
             </div>
+
+            {{-- Banner ahorro anual --}}
+            <div class="max-w-2xl mx-auto mb-10 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-4" data-animate>
+                <div class="text-3xl">💡</div>
+                <div class="flex-1">
+                    <div class="font-bold text-amber-900">Paga anual y ahorra 2 meses</div>
+                    <div class="text-sm text-amber-800">El plan anual cuesta solo 10 meses (16.7% de descuento).</div>
+                </div>
+            </div>
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php
                 $plans = [
-                    ['name' => 'Free', 'price' => '0', 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Basico', 'price' => '149', 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Cobro por WhatsApp', 'Recordatorios automaticos', 'Check-in con QR'], 'cta' => 'Probar 14 dias', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '299', 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Basico +', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario'], 'cta' => 'Probar 14 dias', 'popular' => true],
-                    ['name' => 'Clinica', 'price' => '499', 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Comisiones entre doctores', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
+                    ['name' => 'Basico', 'price' => '149', 'annual' => 1490, 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Cobro por WhatsApp', 'Recordatorios automaticos', 'Check-in con QR'], 'cta' => 'Probar 14 dias', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '299', 'annual' => 2990, 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Basico +', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario'], 'cta' => 'Probar 14 dias', 'popular' => true],
+                    ['name' => 'Clinica', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Comisiones entre doctores', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -493,7 +503,14 @@
                     <div class="mt-4 mb-1">
                         <span class="text-4xl font-extrabold text-gray-900">${{ $plan['price'] }}</span>
                     </div>
-                    <div class="text-sm text-gray-500 mb-6">{{ $plan['subtitle'] }}</div>
+                    <div class="text-sm text-gray-500 mb-2">{{ $plan['subtitle'] }}</div>
+                    @if($plan['annual'] > 0)
+                    <div class="mb-5 inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-md text-xs font-semibold text-emerald-700">
+                        o ${{ number_format($plan['annual']) }}/año · 2 meses gratis
+                    </div>
+                    @else
+                    <div class="mb-5 text-xs text-gray-400">sin tarjeta · sin compromiso</div>
+                    @endif
                     <ul class="space-y-3 mb-8">
                         @foreach($plan['features'] as $feature)
                         <li class="flex items-center gap-2 text-sm text-gray-600">
