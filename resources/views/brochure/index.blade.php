@@ -545,7 +545,8 @@
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach ($pages['plans'] as $p)
-            <div class="relative bg-white rounded-2xl p-7 border-2 {{ !empty($p['popular']) ? 'border-orange-500 shadow-2xl scale-105 z-10' : 'border-gray-200 hover:border-teal-300' }} transition">
+            @php $visible = array_slice($p['features'], 0, 4); $hidden = array_slice($p['features'], 4); @endphp
+            <div x-data="{ expanded: false }" class="relative flex flex-col bg-white rounded-2xl p-7 border-2 {{ !empty($p['popular']) ? 'border-orange-500 shadow-2xl scale-105 z-10' : 'border-gray-200 hover:border-teal-300' }} transition">
                 @if (!empty($p['popular']))
                 <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">★ POPULAR</span>
                 @endif
@@ -562,14 +563,32 @@
                 <div class="mb-4 text-xs text-gray-500">sin tarjeta · sin compromiso</div>
                 @endif
                 <p class="text-xs text-gray-500 mb-5 min-h-[40px]">{{ $p['ideal'] }}</p>
-                <ul class="space-y-2 mb-6">
-                    @foreach ($p['features'] as $feat)
+                <ul class="space-y-2 mb-4">
+                    @foreach ($visible as $feat)
                     <li class="text-sm flex items-start gap-2"><span class="text-teal-500 font-bold mt-0.5">✓</span> <span class="text-gray-700">{{ $feat }}</span></li>
                     @endforeach
+                    @if (count($hidden) > 0)
+                    <template x-if="expanded">
+                        <div class="space-y-2">
+                            @foreach ($hidden as $feat)
+                            <li class="text-sm flex items-start gap-2"><span class="text-teal-500 font-bold mt-0.5">✓</span> <span class="text-gray-700">{{ $feat }}</span></li>
+                            @endforeach
+                        </div>
+                    </template>
+                    @endif
                 </ul>
-                <a href="{{ $registerUrl }}" class="block text-center py-2.5 rounded-lg text-sm font-bold transition {{ !empty($p['popular']) ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-900 hover:bg-teal-500 hover:text-white' }}">
-                    {{ $p['price'] == 0 ? 'Empezar gratis' : 'Elegir plan' }}
-                </a>
+                <div class="mt-auto">
+                    @if (count($hidden) > 0)
+                    <button type="button" @click="expanded = !expanded" class="w-full mb-3 text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center justify-center gap-1">
+                        <span x-show="!expanded">Ver {{ count($hidden) }} features más</span>
+                        <span x-show="expanded" x-cloak>Ver menos</span>
+                        <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    @endif
+                    <a href="{{ $registerUrl }}" class="block text-center py-2.5 rounded-lg text-sm font-bold transition {{ !empty($p['popular']) ? 'bg-orange-500 text-white hover:bg-orange-600' : 'bg-gray-100 text-gray-900 hover:bg-teal-500 hover:text-white' }}">
+                        {{ $p['price'] == 0 ? 'Empezar gratis' : 'Elegir plan' }}
+                    </a>
+                </div>
             </div>
             @endforeach
         </div>

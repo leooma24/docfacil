@@ -432,6 +432,7 @@
 
     <table class="pricing-grid"><tr>
         @foreach ($pages['plans'] as $p)
+        @php $visible = array_slice($p['features'], 0, 4); $extraCount = max(0, count($p['features']) - 4); @endphp
         <td class="plan {{ !empty($p['popular']) ? 'popular' : '' }}">
             <h4>{{ $p['name'] }}{!! !empty($p['popular']) ? ' <span class="popular-badge">POPULAR</span>' : '' !!}</h4>
             <div class="price">${{ number_format($p['price']) }}<span style="font-size:9pt; font-weight:normal; color:#6b7280;">/mes</span></div>
@@ -442,9 +443,12 @@
             @endif
             <div class="ideal">{{ $p['ideal'] }}</div>
             <ul>
-                @foreach ($p['features'] as $feat)
+                @foreach ($visible as $feat)
                 <li>{{ $feat }}</li>
                 @endforeach
+                @if ($extraCount > 0)
+                <li style="color:#0d9488; font-weight:600; list-style:none; margin-left:-14px;">+ {{ $extraCount }} features más</li>
+                @endif
             </ul>
         </td>
         @endforeach

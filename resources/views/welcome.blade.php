@@ -493,7 +493,8 @@
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
-                <div class="relative bg-white rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $plan['popular'] ? 'border-2 border-teal-500 shadow-xl shadow-teal-100/50 scale-105' : 'border border-gray-200 hover:shadow-lg' }}" style="animation-delay:{{ $i * 0.1 }}s">
+                @php $visible = array_slice($plan['features'], 0, 4); $hidden = array_slice($plan['features'], 4); @endphp
+                <div x-data="{ expanded: false }" class="relative flex flex-col bg-white rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $plan['popular'] ? 'border-2 border-teal-500 shadow-xl shadow-teal-100/50 scale-105' : 'border border-gray-200 hover:shadow-lg' }}" style="animation-delay:{{ $i * 0.1 }}s">
                     @if($plan['popular'])
                     <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg">
                         Mas popular
@@ -511,17 +512,40 @@
                     @else
                     <div class="mb-5 text-xs text-gray-400">sin tarjeta · sin compromiso</div>
                     @endif
-                    <ul class="space-y-3 mb-8">
-                        @foreach($plan['features'] as $feature)
+
+                    <ul class="space-y-3 mb-4">
+                        @foreach($visible as $feature)
                         <li class="flex items-center gap-2 text-sm text-gray-600">
                             <svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                             {{ $feature }}
                         </li>
                         @endforeach
+                        @if(count($hidden) > 0)
+                        <template x-if="expanded">
+                            <div class="space-y-3">
+                                @foreach($hidden as $feature)
+                                <li class="flex items-center gap-2 text-sm text-gray-600">
+                                    <svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                    {{ $feature }}
+                                </li>
+                                @endforeach
+                            </div>
+                        </template>
+                        @endif
                     </ul>
-                    <a href="{{ url('/doctor/register') }}" class="block w-full text-center px-4 py-3 rounded-xl font-semibold transition-all {{ $plan['popular'] ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-teal-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                        {{ $plan['cta'] }}
-                    </a>
+
+                    <div class="mt-auto">
+                        @if(count($hidden) > 0)
+                        <button type="button" @click="expanded = !expanded" class="w-full mb-3 text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center justify-center gap-1">
+                            <span x-show="!expanded">Ver {{ count($hidden) }} features más</span>
+                            <span x-show="expanded" x-cloak>Ver menos</span>
+                            <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        @endif
+                        <a href="{{ url('/doctor/register') }}" class="block w-full text-center px-4 py-3 rounded-xl font-semibold transition-all {{ $plan['popular'] ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-teal-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                            {{ $plan['cta'] }}
+                        </a>
+                    </div>
                 </div>
                 @endforeach
             </div>
