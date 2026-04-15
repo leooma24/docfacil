@@ -2,7 +2,33 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>DocFácil — Brief</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DocFácil — Brief para consultorios médicos y dentales</title>
+    <meta name="description" content="Brief de DocFácil: agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros. Empieza gratis en 2 minutos.">
+
+    {{-- OpenGraph --}}
+    <meta property="og:title" content="DocFácil — Brief para consultorios médicos y dentales">
+    <meta property="og:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
+    <meta property="og:url" content="{{ url('/brief') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DocFácil">
+    <meta property="og:locale" content="es_MX">
+
+    {{-- Twitter --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DocFácil — Brief para consultorios">
+    <meta name="twitter:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros.">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="canonical" href="{{ url('/brief') }}">
+
     <style>
         @page { margin: 1.2cm; }
         * { box-sizing: border-box; }
