@@ -278,11 +278,17 @@
     </table>
 
     <h2>Planes y precios</h2>
+
+    <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 8.5pt;">
+        <strong style="color: #92400e;">💡 Paga anual y ahorra 2 meses</strong> <span style="color:#78350f;">— el plan anual cuesta solo 10 meses (16.7% de descuento).</span>
+    </div>
+
     <table class="pricing">
         <thead>
             <tr>
-                <th style="width:18%;">Plan</th>
-                <th style="width:18%;">Precio</th>
+                <th style="width:16%;">Plan</th>
+                <th style="width:20%;">Mensual</th>
+                <th style="width:22%;">Anual (2 meses gratis)</th>
                 <th>Ideal para</th>
             </tr>
         </thead>
@@ -290,22 +296,26 @@
             <tr>
                 <td><strong>Free</strong></td>
                 <td class="price-free">$0 / mes</td>
-                <td>1 doctor · hasta 30 pacientes · agenda básica · probar sin tarjeta</td>
+                <td style="color:#6b7280;">—</td>
+                <td>1 doctor · hasta 30 pacientes · sin tarjeta</td>
             </tr>
             <tr>
                 <td><strong>Básico</strong></td>
                 <td class="price">$149 / mes</td>
-                <td>1 doctor · 200 pacientes · WhatsApp · recetas PDF · check-in QR</td>
+                <td class="price" style="color:#059669;">$1,490 / año</td>
+                <td>1 doctor · 200 pacientes · WhatsApp · recetas PDF</td>
             </tr>
             <tr class="popular">
                 <td><strong>Pro ★</strong></td>
                 <td class="price">$299 / mes</td>
-                <td>3 doctores · pacientes ilimitados · odontograma · portal paciente · soporte prioritario</td>
+                <td class="price" style="color:#059669;">$2,990 / año</td>
+                <td>3 doctores · ilimitados · odontograma · portal paciente</td>
             </tr>
             <tr>
                 <td><strong>Clínica</strong></td>
                 <td class="price">$499 / mes</td>
-                <td>Doctores ilimitados · multi-sucursal · comisiones entre doctores · onboarding 1 a 1</td>
+                <td class="price" style="color:#059669;">$4,990 / año</td>
+                <td>Doctores ilimitados · multi-sucursal · comisiones</td>
             </tr>
         </tbody>
     </table>

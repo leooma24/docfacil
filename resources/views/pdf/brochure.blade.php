@@ -426,11 +426,20 @@
     <h2 class="section">Planes pensados para cada consultorio</h2>
     <p class="section-sub">Sin contratos. Sin tarjeta para probar. Cancela cuando quieras.</p>
 
+    <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 5px 10px; margin-bottom: 6px; font-size: 8.5pt; text-align: center;">
+        <strong style="color: #92400e;">💡 Paga anual y ahorra 2 meses</strong> <span style="color:#78350f;">(16.7% de descuento).</span>
+    </div>
+
     <table class="pricing-grid"><tr>
         @foreach ($pages['plans'] as $p)
         <td class="plan {{ !empty($p['popular']) ? 'popular' : '' }}">
             <h4>{{ $p['name'] }}{!! !empty($p['popular']) ? ' <span class="popular-badge">POPULAR</span>' : '' !!}</h4>
             <div class="price">${{ number_format($p['price']) }}<span style="font-size:9pt; font-weight:normal; color:#6b7280;">/mes</span></div>
+            @if ($p['annual'] > 0)
+            <div style="font-size:7.5pt; color:#059669; margin:-2px 0 4px 0; font-weight:600;">o ${{ number_format($p['annual']) }}/año · 2 meses gratis</div>
+            @else
+            <div style="font-size:7.5pt; color:#6b7280; margin:-2px 0 4px 0;">sin tarjeta · sin compromiso</div>
+            @endif
             <div class="ideal">{{ $p['ideal'] }}</div>
             <ul>
                 @foreach ($p['features'] as $feat)
@@ -440,7 +449,7 @@
         </td>
         @endforeach
     </tr></table>
-    <p style="font-size:8.5pt; color:#6b7280; margin-top:4px;">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso.</p>
+    <p style="font-size:8.5pt; color:#6b7280; margin-top:4px;">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso. Precios en pesos mexicanos.</p>
 
     <h2 class="section" style="font-size:14pt; margin-top:14px;">Vs. la competencia</h2>
     <table class="compare">

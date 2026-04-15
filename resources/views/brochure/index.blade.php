@@ -528,11 +528,21 @@
 {{-- PRECIOS --}}
 <section class="py-24 px-6 bg-white">
     <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-12">
+        <div class="text-center mb-8">
             <span class="inline-block text-xs font-bold text-teal-600 tracking-wider uppercase mb-3">Precios</span>
             <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Un plan para cada consultorio</h2>
             <p class="text-gray-600 text-lg">Sin contratos. Sin tarjeta para probar. Cancela cuando quieras.</p>
         </div>
+
+        {{-- Banner ahorro anual --}}
+        <div class="max-w-2xl mx-auto mb-10 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-4">
+            <div class="text-3xl">💡</div>
+            <div class="flex-1">
+                <div class="font-bold text-amber-900">Paga anual y ahorra 2 meses</div>
+                <div class="text-sm text-amber-800">El plan anual cuesta solo 10 meses. Equivale a un descuento del 16.7%.</div>
+            </div>
+        </div>
+
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             @foreach ($pages['plans'] as $p)
             <div class="relative bg-white rounded-2xl p-7 border-2 {{ !empty($p['popular']) ? 'border-orange-500 shadow-2xl scale-105 z-10' : 'border-gray-200 hover:border-teal-300' }} transition">
@@ -540,10 +550,17 @@
                 <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">★ POPULAR</span>
                 @endif
                 <h4 class="text-xl font-bold text-gray-900">{{ $p['name'] }}</h4>
-                <div class="my-4">
+                <div class="mt-4 mb-2">
                     <span class="text-5xl font-extrabold {{ !empty($p['popular']) ? 'text-orange-600' : 'text-teal-600' }}">${{ number_format($p['price']) }}</span>
                     <span class="text-gray-500 text-sm">/mes</span>
                 </div>
+                @if ($p['annual'] > 0)
+                <div class="mb-4 inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-md text-xs font-semibold text-emerald-700">
+                    o ${{ number_format($p['annual']) }}/año · 2 meses gratis
+                </div>
+                @else
+                <div class="mb-4 text-xs text-gray-500">sin tarjeta · sin compromiso</div>
+                @endif
                 <p class="text-xs text-gray-500 mb-5 min-h-[40px]">{{ $p['ideal'] }}</p>
                 <ul class="space-y-2 mb-6">
                     @foreach ($p['features'] as $feat)
@@ -556,7 +573,7 @@
             </div>
             @endforeach
         </div>
-        <p class="text-center text-sm text-gray-500 mt-8">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso.</p>
+        <p class="text-center text-sm text-gray-500 mt-8">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso. Precios en pesos mexicanos.</p>
     </div>
 </section>
 
