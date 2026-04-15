@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.10.1",
         "phpoffice/phpspreadsheet": "^5.5",
         "pragmarx/google2fa-qrcode": "^3.0",
+        "predis/predis": "^3.4",
         "saade/filament-autograph": "^3.2",
         "saade/filament-fullcalendar": "^3.2",
         "spatie/laravel-activitylog": "^4.12",
