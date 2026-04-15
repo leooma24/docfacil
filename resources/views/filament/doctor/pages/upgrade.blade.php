@@ -117,13 +117,17 @@
                     </button>
                     @endif
 
-                    {{-- CTAs --}}
-                    <button wire:click="checkout('{{ $plan['key'] }}', 'stripe')" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-teal-600 to-cyan-600 hover:shadow-lg hover:shadow-teal-200 transition flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    {{-- CTAs (styles inline para evitar que Tailwind v4 no compile gradient en prod) --}}
+                    <button wire:click="checkout('{{ $plan['key'] }}', 'stripe')" type="button"
+                            style="width:100%; padding:10px; border-radius:12px; font-size:14px; font-weight:700; color:#fff; background:linear-gradient(135deg,#0d9488,#06b6d4); display:flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;"
+                            onmouseover="this.style.opacity='0.92'" onmouseout="this.style.opacity='1'">
+                        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M6 19h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                         Pagar con tarjeta
                     </button>
-                    <button wire:click="checkout('{{ $plan['key'] }}', 'spei')" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                    <button wire:click="checkout('{{ $plan['key'] }}', 'spei')" type="button"
+                            style="width:100%; padding:10px; border-radius:12px; font-size:14px; font-weight:700; color:#374151; background:#f3f4f6; display:flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;"
+                            onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">
+                        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
                         Pagar por SPEI (transferencia)
                     </button>
                 </div>
