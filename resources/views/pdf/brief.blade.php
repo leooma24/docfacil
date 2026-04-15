@@ -33,7 +33,7 @@
         @page { margin: 1.2cm; }
         * { box-sizing: border-box; }
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             color: #1f2937;
             font-size: 10.5pt;
             line-height: 1.45;
