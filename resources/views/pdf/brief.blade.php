@@ -134,21 +134,21 @@
     <div class="row">
         <div class="col-2">
             <div class="pain-box">
-                <strong>📋 Agenda en papel o Excel</strong><br>
+                <strong>Agenda en papel o Excel</strong><br>
                 Pierdes citas, no puedes buscar rápido, y cada cambio cuesta tiempo.
             </div>
             <div class="pain-box">
-                <strong>📞 Pacientes que no llegan</strong><br>
+                <strong>Pacientes que no llegan</strong><br>
                 El 30% no se presenta. Son consultas perdidas que no vuelven.
             </div>
         </div>
         <div class="col-2">
             <div class="pain-box">
-                <strong>✍ Recetas a mano</strong><br>
+                <strong>Recetas a mano</strong><br>
                 Letra ilegible, sin copia, sin respaldo, riesgo de errores.
             </div>
             <div class="pain-box">
-                <strong>💸 No sabes cuánto ganas</strong><br>
+                <strong>No sabes cuánto ganas</strong><br>
                 Sin reportes, sin control de cobros pendientes, sin datos.
             </div>
         </div>
@@ -158,21 +158,21 @@
     <div class="row">
         <div class="col-2">
             <div class="solution-box">
-                <strong>📅 Agenda inteligente en la nube</strong><br>
+                <strong>Agenda inteligente en la nube</strong><br>
                 Multi-doctor, arrastrar y soltar, acceso desde cualquier dispositivo.
             </div>
             <div class="solution-box">
-                <strong>💬 Recordatorios WhatsApp automáticos</strong><br>
+                <strong>Recordatorios WhatsApp automáticos</strong><br>
                 Reduce inasistencias hasta 40%. 24h y 2h antes de la cita.
             </div>
         </div>
         <div class="col-2">
             <div class="solution-box">
-                <strong>📄 Recetas PDF profesionales</strong><br>
+                <strong>Recetas PDF profesionales</strong><br>
                 Con cédula, firma digital, descargables. El paciente las recibe por WhatsApp.
             </div>
             <div class="solution-box">
-                <strong>📊 Reportes en tiempo real</strong><br>
+                <strong>Reportes en tiempo real</strong><br>
                 Ingresos, cobros pendientes, pacientes activos, alertas inteligentes.
             </div>
         </div>
@@ -258,7 +258,7 @@
                 <td>1 doctor · 200 pacientes · WhatsApp · recetas PDF · check-in QR</td>
             </tr>
             <tr class="popular">
-                <td><strong>Pro ⭐</strong></td>
+                <td><strong>Pro ★</strong></td>
                 <td class="price">$299 / mes</td>
                 <td>3 doctores · pacientes ilimitados · odontograma · portal paciente · soporte prioritario</td>
             </tr>
@@ -281,9 +281,9 @@
                 </td>
                 <td class="info">
                     <strong>Omar Lerma · Fundador</strong>
-                    📱 <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)<br>
-                    ✉ <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a><br>
-                    🌐 <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
+                    <span style="display:inline-block; width:14px; font-weight:bold;">☎</span> <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)<br>
+                    <span style="display:inline-block; width:14px; font-weight:bold;">✉</span> <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a><br>
+                    <span style="display:inline-block; width:14px; font-weight:bold;">⌂</span> <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
                     <span style="opacity:0.9;">Demo en vivo · Onboarding gratuito</span>
                 </td>
             </tr>

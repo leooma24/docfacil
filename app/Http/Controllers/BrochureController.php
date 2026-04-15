@@ -20,7 +20,7 @@ class BrochureController extends Controller
             ->setPaper('letter', 'portrait')
             ->setOption('isHtml5ParserEnabled', true)
             ->setOption('isRemoteEnabled', true)
-            ->setOption('defaultFont', 'helvetica');
+            ->setOption('defaultFont', 'DejaVu Sans');
 
         return $request->boolean('view')
             ? $pdf->stream('DocFacil-Brochure.pdf')

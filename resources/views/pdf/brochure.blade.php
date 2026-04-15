@@ -144,15 +144,15 @@
 
     <div class="icp-grid">
         <div class="icp-card">
-            <h3>🦷 Consultorios dentales de 1 a 3 doctores</h3>
+            <h3><span style="display:inline-block; background:#0d9488; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">DENTAL</span> Consultorios dentales de 1 a 3 doctores</h3>
             <p>Odontólogos generales, ortodoncistas, endodoncistas. Consultorios que atienden 30-200 pacientes al mes y necesitan dejar el papel, Excel o la agenda de pared.</p>
         </div>
         <div class="icp-card">
-            <h3>🩺 Consultorios médicos generales y de especialidad</h3>
+            <h3><span style="display:inline-block; background:#0891b2; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">MÉDICO</span> Consultorios médicos generales y de especialidad</h3>
             <p>Médicos generales, pediatras, ginecólogos, dermatólogos. Consultorios que facturan entre $20K y $200K al mes y pierden tiempo en tareas administrativas.</p>
         </div>
         <div class="icp-card">
-            <h3>🏥 Clínicas pequeñas con varios doctores</h3>
+            <h3><span style="display:inline-block; background:#7c3aed; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">CLÍNICA</span> Clínicas pequeñas con varios doctores</h3>
             <p>Clínicas multidisciplinarias con 3-10 doctores que necesitan agenda compartida, comisiones entre doctores y reportes por profesional.</p>
         </div>
     </div>
@@ -160,20 +160,20 @@
     <h2 class="section" style="font-size:16pt; margin-top:20px;">4 dolores que vivimos todos los días</h2>
     <table class="pain-grid"><tr>
         <td class="pain-cell">
-            <strong>📋 Agenda caótica</strong>
+            <strong>Agenda caótica</strong>
             <span>Papel y Excel: pierdes citas, no buscas rápido, cada cambio pesa.</span>
         </td>
         <td class="pain-cell">
-            <strong>📞 Pacientes no llegan</strong>
+            <strong>Pacientes no llegan</strong>
             <span>El 30% no se presenta. Consultas perdidas que no regresan.</span>
         </td>
     </tr><tr>
         <td class="pain-cell">
-            <strong>✍ Recetas a mano</strong>
+            <strong>Recetas a mano</strong>
             <span>Letra ilegible, sin copia, sin respaldo. Riesgo legal y profesional.</span>
         </td>
         <td class="pain-cell">
-            <strong>💸 No sabes si ganas</strong>
+            <strong>No sabes si ganas</strong>
             <span>Sin reportes ni control de cobros. Decisiones a ojo.</span>
         </td>
     </tr></table>
@@ -194,11 +194,12 @@
     <p class="section-sub">No contrates 5 apps distintas. DocFácil integra todo el flujo del consultorio en una sola plataforma.</p>
 
     <table class="feat-grid">
-        @foreach (array_chunk($pages['features'], 2) as $row)
+        @foreach (array_chunk($pages['features'], 2) as $rowIdx => $row)
         <tr>
-            @foreach ($row as $f)
+            @foreach ($row as $colIdx => $f)
+            @php $num = str_pad($rowIdx * 2 + $colIdx + 1, 2, '0', STR_PAD_LEFT); @endphp
             <td class="feat-cell">
-                <span class="feat-icon">{{ $f['icon'] }}</span>
+                <span style="display:inline-block; background:#0d9488; color:white; font-weight:bold; font-size:10pt; padding:3px 8px; border-radius:6px; margin-bottom:6px;">{{ $num }}</span>
                 <strong>{{ $f['title'] }}</strong>
                 <p>{{ $f['desc'] }}</p>
             </td>
@@ -336,9 +337,9 @@
             </td>
             <td class="info">
                 <strong>Omar Lerma · Fundador</strong>
-                <div>📱 <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)</div>
-                <div>✉ <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a></div>
-                <div>🌐 <a href="{{ url('/') }}">docfacil.tu-app.co</a></div>
+                <div><span style="display:inline-block; width:16px; font-weight:bold;">☎</span> <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)</div>
+                <div><span style="display:inline-block; width:16px; font-weight:bold;">✉</span> <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a></div>
+                <div><span style="display:inline-block; width:16px; font-weight:bold;">⌂</span> <a href="{{ url('/') }}">docfacil.tu-app.co</a></div>
                 <div style="margin-top:6px; opacity:0.9;">Demo en vivo · Onboarding gratuito · Soporte por WhatsApp</div>
             </td>
         </tr></table>
