@@ -19,6 +19,10 @@ class Clinic extends Model
         'sold_at',
         'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
         'is_demo', 'demo_expires_at',
+        // Stripe / Cashier + ciclo de facturación
+        'stripe_id', 'pm_type', 'pm_last_four',
+        'billing_cycle', 'payment_method',
+        'plan_started_at', 'plan_ends_at', 'auto_renew',
     ];
 
     // Nota: sold_by_user_id NO está en $fillable a propósito.
@@ -43,6 +47,9 @@ class Clinic extends Model
             'cancelled_at' => 'datetime',
             'is_demo' => 'boolean',
             'demo_expires_at' => 'datetime',
+            'plan_started_at' => 'datetime',
+            'plan_ends_at' => 'datetime',
+            'auto_renew' => 'boolean',
         ];
     }
 
@@ -88,5 +95,47 @@ class Clinic extends Model
     public function commissions(): HasMany
     {
         return $this->hasMany(Commission::class);
+    }
+
+    public function speiPayments(): HasMany
+    {
+        return $this->hasMany(SpeiPayment::class);
+    }
+
+    /**
+     * Activa un plan por la duración del ciclo especificado.
+     * Usado tanto por Stripe (al recibir payment_succeeded) como por SPEI (al aprobar pago).
+     */
+    public function activatePlan(string $plan, string $billingCycle, string $paymentMethod): void
+    {
+        $days = $billingCycle === 'annual' ? 365 : 30;
+        $now = now();
+
+        // Si extiende un plan actual no expirado, se suma desde plan_ends_at, no desde hoy.
+        $from = ($this->plan_ends_at && $this->plan_ends_at->isFuture())
+            ? $this->plan_ends_at
+            : $now;
+
+        $this->update([
+            'plan' => $plan,
+            'billing_cycle' => $billingCycle,
+            'payment_method' => $paymentMethod,
+            'plan_started_at' => $this->plan_started_at ?? $now,
+            'plan_ends_at' => $from->copy()->addDays($days),
+            'is_active' => true,
+        ]);
+    }
+
+    public function planIsPaid(): bool
+    {
+        return in_array($this->plan, ['basico', 'profesional', 'clinica'], true);
+    }
+
+    public function planIsActive(): bool
+    {
+        if (!$this->planIsPaid()) {
+            return false;
+        }
+        return $this->plan_ends_at && $this->plan_ends_at->isFuture();
     }
 }

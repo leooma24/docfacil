@@ -22,18 +22,39 @@ class Upgrade extends Page
 
     protected static string $view = 'filament.doctor.pages.upgrade';
 
-    public function getClinic()
+    public string $billingCycle = 'monthly'; // 'monthly' | 'annual'
+
+    public function mount(): void
     {
-        return auth()->user()->clinic;
+        // Si ya pagan anual, que se vea preseleccionado
+        if ($this->getClinic()?->billing_cycle === 'annual') {
+            $this->billingCycle = 'annual';
+        }
+    }
+
+    public function setCycle(string $cycle): void
+    {
+        $this->billingCycle = in_array($cycle, ['monthly', 'annual'], true) ? $cycle : 'monthly';
+    }
+
+    public function getClinic(): ?\App\Models\Clinic
+    {
+        return auth()->user()?->clinic;
     }
 
     public function isExpired(): bool
     {
         $clinic = $this->getClinic();
-        if (!$clinic) return false;
+        if (!$clinic) {
+            return false;
+        }
 
-        if ($clinic->plan === 'free' && $clinic->trial_ends_at?->isPast()) return true;
-        if ($clinic->is_beta && $clinic->beta_ends_at?->isPast()) return true;
+        if ($clinic->plan === 'free' && $clinic->trial_ends_at?->isPast()) {
+            return true;
+        }
+        if ($clinic->is_beta && $clinic->beta_ends_at?->isPast()) {
+            return true;
+        }
 
         return false;
     }
@@ -46,5 +67,88 @@ class Upgrade extends Page
     public function getFounderPrice(): string
     {
         return number_format($this->getClinic()?->founder_price ?? 149, 0);
+    }
+
+    /**
+     * Planes disponibles con precio mensual/anual calculado desde el Commission model.
+     */
+    public function getPlans(): array
+    {
+        return [
+            [
+                'key' => 'basico',
+                'name' => 'Básico',
+                'monthly' => \App\Models\Commission::monthlyPriceForPlan('basico'),
+                'annual' => \App\Models\Commission::annualPriceForPlan('basico'),
+                'ideal' => 'Consultorios individuales que arrancan',
+                'features' => [
+                    '1 doctor',
+                    '200 pacientes',
+                    'Recordatorios WhatsApp',
+                    'Recetas PDF',
+                    'Check-in con QR',
+                    'Expediente clínico completo',
+                    'Cobro por WhatsApp',
+                ],
+            ],
+            [
+                'key' => 'profesional',
+                'name' => 'Pro',
+                'monthly' => \App\Models\Commission::monthlyPriceForPlan('profesional'),
+                'annual' => \App\Models\Commission::annualPriceForPlan('profesional'),
+                'ideal' => 'Consultorios establecidos',
+                'popular' => true,
+                'features' => [
+                    'Hasta 3 doctores',
+                    'Pacientes ilimitados',
+                    'Odontograma interactivo',
+                    'Portal del paciente',
+                    'Consentimientos digitales',
+                    'Reportes avanzados',
+                    'Soporte prioritario',
+                    'Todo lo del Básico',
+                ],
+            ],
+            [
+                'key' => 'clinica',
+                'name' => 'Clínica',
+                'monthly' => \App\Models\Commission::monthlyPriceForPlan('clinica'),
+                'annual' => \App\Models\Commission::annualPriceForPlan('clinica'),
+                'ideal' => 'Clínicas con varios doctores o sedes',
+                'features' => [
+                    'Doctores ilimitados',
+                    'Multi-sucursal',
+                    'Comisiones entre doctores',
+                    'Reportes por doctor',
+                    'Onboarding 1 a 1',
+                    'Soporte prioritario 24/7',
+                    'Todo lo del Pro',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Inicia el checkout. Por ahora redirige a una ruta nombrada que decide Stripe o SPEI.
+     */
+    public function checkout(string $plan, string $method): void
+    {
+        if (!in_array($plan, ['basico', 'profesional', 'clinica'], true)) {
+            return;
+        }
+
+        if ($method === 'spei') {
+            $this->redirectRoute('doctor.spei.checkout', [
+                'plan' => $plan,
+                'cycle' => $this->billingCycle,
+            ]);
+            return;
+        }
+
+        // Stripe: por ahora redirige al controller que crea la sesión (si está configurado)
+        $this->redirectRoute('stripe.checkout', [
+            'plan' => $plan,
+            'cycle' => $this->billingCycle,
+        ]);
     }
 }

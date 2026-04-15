@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Billing\StripeCheckoutController;
+use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
@@ -24,6 +26,19 @@ Route::get('/brief.pdf', [BriefPdfController::class, 'download'])->name('brief.p
 Route::get('/brief', [BriefPdfController::class, 'web'])->name('brief.web');
 Route::get('/brochure', [BrochureController::class, 'web'])->name('brochure.web');
 Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.pdf');
+
+// Billing: Stripe Checkout (autenticado) + webhook (sin CSRF)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/billing/stripe/checkout/{plan}/{cycle}', [StripeCheckoutController::class, 'checkout'])
+        ->name('stripe.checkout')
+        ->where('plan', 'basico|profesional|clinica')
+        ->where('cycle', 'monthly|annual');
+    Route::get('/billing/stripe/success', [StripeCheckoutController::class, 'success'])
+        ->name('stripe.checkout.success');
+});
+
+Route::post('/billing/stripe/webhook', [StripeWebhookController::class, 'handle'])
+    ->name('stripe.webhook');
 
 Route::post('/contacto', [ContactController::class, 'store'])
     ->name('contact.store')

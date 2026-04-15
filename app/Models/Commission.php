@@ -13,8 +13,8 @@ class Commission extends Model
 
     protected $fillable = [
         'user_id', 'clinic_id', 'prospect_id', 'tier',
-        'amount', 'plan_at_sale', 'status',
-        'earned_at', 'paid_at', 'notes',
+        'amount', 'plan_at_sale', 'billing_cycle', 'payment_method', 'payout_type',
+        'status', 'earned_at', 'paid_at', 'notes',
     ];
 
     protected function casts(): array
@@ -85,16 +85,98 @@ class Commission extends Model
     }
 
     /**
-     * Mitad de la comisión 3× para un plan.
-     * Total = 3 × precio mensual (se paga en 2 exhibiciones: 50% en 1er pago + 50% en 2do).
-     * Retorna 0 si el plan no califica (Free).
+     * Precio anual = mensual × 10 (2 meses gratis).
      */
-    public static function halfAmount(string $plan): float
+    public static function annualPriceForPlan(string $plan): int
+    {
+        $monthly = self::monthlyPriceForPlan($plan);
+        return $monthly > 0 ? $monthly * 10 : 0;
+    }
+
+    /**
+     * Precio total del ciclo elegido para un plan.
+     */
+    public static function priceForCycle(string $plan, string $cycle): int
+    {
+        return $cycle === 'annual'
+            ? self::annualPriceForPlan($plan)
+            : self::monthlyPriceForPlan($plan);
+    }
+
+    /**
+     * Comisión total 3× la mensualidad para un plan (igual para mensual o anual).
+     */
+    public static function totalCommissionForPlan(string $plan): float
     {
         if (!in_array($plan, self::COMMISSIONABLE_PLANS)) {
             return 0;
         }
-        // Total 3x la mensualidad / 2 = 1.5x por mitad
-        return round(self::monthlyPriceForPlan($plan) * 1.5, 2);
+        return round(self::monthlyPriceForPlan($plan) * 3, 2);
+    }
+
+    /**
+     * Mitad de la comisión 3× para un plan (se usa cuando el payout es split mensual).
+     */
+    public static function halfAmount(string $plan): float
+    {
+        return round(self::totalCommissionForPlan($plan) / 2, 2);
+    }
+
+    /**
+     * Crea las comisiones que le corresponden a un vendedor por una venta.
+     *
+     * - Ventas ANUALES → 1 sola comisión con tier='first' y payout_type='lump_sum' por el 100% (3× mensualidad).
+     * - Ventas MENSUALES → 2 comisiones tier 'first'/'second', payout_type='split', 50% cada una.
+     *
+     * Las comisiones quedan en status='pending' hasta que se confirme el pago del cliente.
+     */
+    public static function generateForSale(
+        Clinic $clinic,
+        int $userId,
+        string $plan,
+        string $billingCycle,
+        string $paymentMethod = 'stripe',
+        ?int $prospectId = null,
+    ): array {
+        if (!in_array($plan, self::COMMISSIONABLE_PLANS)) {
+            return [];
+        }
+
+        $common = [
+            'user_id' => $userId,
+            'clinic_id' => $clinic->id,
+            'prospect_id' => $prospectId,
+            'plan_at_sale' => $plan,
+            'billing_cycle' => $billingCycle,
+            'payment_method' => $paymentMethod,
+            'status' => 'pending',
+            'earned_at' => now(),
+        ];
+
+        if ($billingCycle === 'annual') {
+            $total = self::totalCommissionForPlan($plan);
+            return [self::create(array_merge($common, [
+                'tier' => 'first',
+                'amount' => $total,
+                'payout_type' => 'lump_sum',
+                'notes' => 'Pago único (venta anual)',
+            ]))];
+        }
+
+        $half = self::halfAmount($plan);
+        return [
+            self::create(array_merge($common, [
+                'tier' => 'first',
+                'amount' => $half,
+                'payout_type' => 'split',
+                'notes' => '50% - primer pago del cliente',
+            ])),
+            self::create(array_merge($common, [
+                'tier' => 'second',
+                'amount' => $half,
+                'payout_type' => 'split',
+                'notes' => '50% - segundo pago del cliente',
+            ])),
+        ];
     }
 }

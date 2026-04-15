@@ -3,148 +3,138 @@
         $clinic = $this->getClinic();
         $expired = $this->isExpired();
         $founder = $this->isFounder();
-        $founderPrice = $this->getFounderPrice();
+        $cycle = $this->billingCycle;
+        $plans = $this->getPlans();
     @endphp
 
-    <div style="max-width:900px;margin:0 auto;">
+    <div class="max-w-6xl mx-auto space-y-6">
 
-        {{-- Expired banner --}}
-        @if($expired)
-        <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #f59e0b;border-radius:1rem;padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:48px;height:48px;background:#f59e0b;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg style="width:24px;height:24px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        {{-- Banner expirado --}}
+        @if ($expired)
+        <div class="rounded-2xl p-5 border border-amber-300 bg-gradient-to-r from-amber-50 to-amber-100 flex items-center gap-4 dark:border-amber-700 dark:from-amber-900/20 dark:to-amber-800/20">
+            <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div>
-                <div style="font-weight:700;font-size:1rem;color:#92400e;">Tu {{ $clinic->is_beta ? 'periodo beta' : 'prueba gratuita' }} ha terminado</div>
-                <div style="font-size:0.875rem;color:#a16207;">Tus datos estan seguros. Activa un plan para seguir usando todas las funciones.</div>
+                <div class="font-bold text-amber-900 dark:text-amber-200">Tu {{ $clinic->is_beta ? 'período beta' : 'prueba gratuita' }} ha terminado</div>
+                <div class="text-sm text-amber-800 dark:text-amber-300">Tus datos están seguros. Activa un plan para seguir usando todas las funciones.</div>
             </div>
         </div>
         @endif
 
-        {{-- Current plan info --}}
-        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:1.5rem;margin-bottom:2rem;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
+        {{-- Info plan actual --}}
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between dark:bg-gray-900 dark:border-gray-700">
+            <div>
+                <div class="text-xs font-bold tracking-wider text-gray-500 dark:text-gray-400 uppercase">Tu plan actual</div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white capitalize">{{ $clinic->plan === 'profesional' ? 'Pro' : $clinic->plan }}</div>
+                @if ($clinic->plan_ends_at)
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {{ $clinic->plan_ends_at->isPast() ? 'Venció el' : 'Vence el' }} {{ $clinic->plan_ends_at->format('d/m/Y') }}
+                </div>
+                @elseif ($clinic->trial_ends_at)
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Trial {{ $clinic->trial_ends_at->isPast() ? 'venció el' : 'vence el' }} {{ $clinic->trial_ends_at->format('d/m/Y') }}
+                </div>
+                @endif
+            </div>
+            <div class="text-right space-x-2">
+                @if ($clinic->is_beta)
+                <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold dark:bg-amber-900/30 dark:text-amber-200">BETA</span>
+                @endif
+                @if ($founder)
+                <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold dark:bg-emerald-900/30 dark:text-emerald-200">FUNDADOR</span>
+                @endif
+            </div>
+        </div>
+
+        {{-- Toggle mensual/anual --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-2xl p-4 dark:from-amber-900/10 dark:via-orange-900/10 dark:to-amber-900/10 dark:border-amber-800">
+            <div class="flex items-center gap-3">
+                <div class="text-3xl">💡</div>
                 <div>
-                    <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;font-weight:700;">Tu plan actual</div>
-                    <div style="font-size:1.5rem;font-weight:800;color:#111;text-transform:capitalize;">{{ $clinic->plan }}</div>
-                </div>
-                <div style="text-align:right;">
-                    @if($clinic->is_beta)
-                    <span style="padding:0.375rem 0.75rem;background:#fef3c7;color:#92400e;border-radius:9999px;font-size:0.75rem;font-weight:700;">BETA TESTER</span>
-                    @endif
-                    @if($founder)
-                    <span style="padding:0.375rem 0.75rem;background:#d1fae5;color:#065f46;border-radius:9999px;font-size:0.75rem;font-weight:700;margin-left:0.5rem;">FUNDADOR</span>
-                    @endif
+                    <div class="font-bold text-amber-900 dark:text-amber-200">Paga anual y ahorra 2 meses</div>
+                    <div class="text-sm text-amber-800 dark:text-amber-300/80">El plan anual cuesta solo 10 meses (16.7% descuento).</div>
                 </div>
             </div>
-            @if($clinic->trial_ends_at)
-            <div style="font-size:0.8rem;color:#6b7280;margin-top:0.5rem;">
-                {{ $clinic->trial_ends_at->isPast() ? 'Vencio el' : 'Vence el' }} {{ $clinic->trial_ends_at->format('d/m/Y') }}
+            <div class="inline-flex bg-white rounded-xl p-1 border border-amber-200 shadow-sm dark:bg-gray-900">
+                <button type="button" wire:click="setCycle('monthly')" class="px-4 py-2 rounded-lg text-sm font-bold transition {{ $cycle === 'monthly' ? 'bg-teal-600 text-white shadow' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300' }}">
+                    Mensual
+                </button>
+                <button type="button" wire:click="setCycle('annual')" class="px-4 py-2 rounded-lg text-sm font-bold transition {{ $cycle === 'annual' ? 'bg-teal-600 text-white shadow' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-300' }}">
+                    Anual · 2 meses gratis
+                </button>
             </div>
-            @endif
         </div>
 
-        {{-- Founder discount banner --}}
-        @if($founder)
-        <div style="background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:1rem;padding:1.5rem;margin-bottom:2rem;color:white;">
-            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
-                <svg style="width:24px;height:24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                <div style="font-weight:700;font-size:1.1rem;">Precio de fundador de por vida</div>
-            </div>
-            <div style="font-size:0.9rem;opacity:0.9;">Como beta tester, tienes <strong>50% de descuento permanente</strong> en cualquier plan. Este precio no cambia nunca.</div>
-        </div>
-        @endif
-
-        {{-- Plans --}}
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+        {{-- Planes --}}
+        <div class="grid md:grid-cols-3 gap-5" x-data>
+            @foreach ($plans as $plan)
             @php
-            $plans = [
-                [
-                    'name' => 'Básico',
-                    'price' => $founder ? $founderPrice : '149',
-                    'original' => $founder ? '149' : null,
-                    'features' => [
-                        '1 doctor',
-                        '200 pacientes',
-                        'Citas ilimitadas',
-                        '📄 Recetas PDF profesionales',
-                        '💬 Cobro por WhatsApp',
-                        '🔔 Recordatorios automáticos WhatsApp',
-                        '📱 Check-in con QR',
-                        '📋 Expediente clínico completo',
-                    ],
-                    'popular' => false,
-                ],
-                [
-                    'name' => 'Pro',
-                    'price' => $founder ? (string)(intval($founderPrice) > 149 ? $founderPrice : '199') : '299',
-                    'original' => $founder ? '299' : null,
-                    'features' => [
-                        'Hasta 3 doctores',
-                        'Pacientes ilimitados',
-                        '✨ Todo lo del Básico +',
-                        '🦷 Odontograma interactivo',
-                        '✍️ Consentimientos digitales + firma',
-                        '👥 Portal del paciente',
-                        '📊 Reportes avanzados',
-                        '⭐ Soporte prioritario',
-                    ],
-                    'popular' => true,
-                ],
-                [
-                    'name' => 'Clínica',
-                    'price' => $founder ? (string)(intval($founderPrice) > 299 ? $founderPrice : '349') : '499',
-                    'original' => $founder ? '499' : null,
-                    'features' => [
-                        '🏥 Doctores ilimitados',
-                        '🏢 Multi-sucursal',
-                        '✨ Todo lo del Pro',
-                        '📈 Reportes por doctor',
-                        '💰 Comisiones entre doctores',
-                        '⭐ Soporte prioritario',
-                        '🎯 Onboarding 1 a 1',
-                    ],
-                    'popular' => false,
-                ],
-            ];
+                $price = $cycle === 'annual' ? $plan['annual'] : $plan['monthly'];
+                $subtitle = $cycle === 'annual' ? '/año' : '/mes';
+                $isPopular = !empty($plan['popular']);
+                $visible = array_slice($plan['features'], 0, 4);
+                $hidden = array_slice($plan['features'], 4);
             @endphp
+            <div x-data="{ expanded: false }" class="relative flex flex-col bg-white rounded-2xl p-6 border-2 transition {{ $isPopular ? 'border-teal-500 shadow-xl scale-[1.02]' : 'border-gray-200 hover:border-teal-300' }} dark:bg-gray-900 dark:border-gray-700">
+                @if ($isPopular)
+                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">★ RECOMENDADO</span>
+                @endif
 
-            @foreach($plans as $plan)
-            <div class="bg-white dark:bg-gray-800" style="border:{{ $plan['popular'] ? '2px solid #0d9488' : '1px solid #e5e7eb' }};border-radius:1.25rem;padding:1.5rem;position:relative;{{ $plan['popular'] ? 'box-shadow:0 8px 25px rgba(13,148,136,0.15);' : '' }}">
-                @if($plan['popular'])
-                <div style="position:absolute;top:-0.75rem;left:50%;transform:translateX(-50%);padding:0.25rem 1rem;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border-radius:9999px;font-size:0.7rem;font-weight:700;">RECOMENDADO</div>
-                @endif
-                <div style="font-weight:700;font-size:1rem;">{{ $plan['name'] }}</div>
-                <div style="margin-top:0.75rem;">
-                    @if($plan['original'])
-                    <span style="text-decoration:line-through;color:#9ca3af;font-size:1rem;">${{ $plan['original'] }}</span>
-                    @endif
-                    <span style="font-size:2.5rem;font-weight:800;">${{ $plan['price'] }}</span>
-                    <span style="color:#6b7280;">/mes</span>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $plan['name'] }}</h3>
+                <div class="mt-3 mb-1">
+                    <span class="text-4xl font-extrabold {{ $isPopular ? 'text-teal-600' : 'text-gray-900 dark:text-white' }}">${{ number_format($price) }}</span>
+                    <span class="text-gray-500 text-sm">{{ $subtitle }} MXN</span>
                 </div>
-                @if($founder)
-                <div style="font-size:0.75rem;color:#059669;font-weight:600;margin-top:0.25rem;">Precio de fundador</div>
+                @if ($cycle === 'annual')
+                <div class="mb-4 inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-200 rounded text-xs font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300">
+                    Equivale a ${{ number_format($plan['annual'] / 12) }}/mes
+                </div>
                 @endif
-                <ul style="margin-top:1rem;list-style:none;padding:0;">
-                    @foreach($plan['features'] as $feature)
-                    <li style="padding:0.375rem 0;font-size:0.85rem;color:#374151;display:flex;align-items:center;gap:0.5rem;">
-                        <svg style="width:16px;height:16px;color:#0d9488;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        {{ $feature }}
-                    </li>
+                <p class="text-xs text-gray-500 mb-4 min-h-[32px] dark:text-gray-400">{{ $plan['ideal'] }}</p>
+
+                <ul class="space-y-2 mb-4 text-sm">
+                    @foreach ($visible as $feat)
+                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold mt-0.5">✓</span> <span class="text-gray-700 dark:text-gray-300">{{ $feat }}</span></li>
                     @endforeach
+                    @if (count($hidden) > 0)
+                    <template x-if="expanded">
+                        <div class="space-y-2">
+                            @foreach ($hidden as $feat)
+                            <li class="flex items-start gap-2"><span class="text-teal-500 font-bold mt-0.5">✓</span> <span class="text-gray-700 dark:text-gray-300">{{ $feat }}</span></li>
+                            @endforeach
+                        </div>
+                    </template>
+                    @endif
                 </ul>
-                <a href="https://wa.me/526682493398?text={{ urlencode('Hola, quiero contratar el plan ' . $plan['name'] . ' de DocFácil' . ($founder ? ' con precio de fundador' : '') . '. Mi consultorio: ' . ($clinic->name ?? '')) }}"
-                    target="_blank"
-                    style="display:block;text-align:center;margin-top:1.25rem;padding:0.75rem;background:{{ $plan['popular'] ? 'linear-gradient(135deg,#0d9488,#0891b2)' : '#f3f4f6' }};color:{{ $plan['popular'] ? 'white' : '#374151' }};border-radius:0.75rem;font-weight:700;font-size:0.9rem;text-decoration:none;">
-                    Contratar por WhatsApp
-                </a>
+
+                <div class="mt-auto space-y-2">
+                    @if (count($hidden) > 0)
+                    <button type="button" @click="expanded = !expanded" class="w-full text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center justify-center gap-1">
+                        <span x-show="!expanded">Ver {{ count($hidden) }} features más</span>
+                        <span x-show="expanded" x-cloak>Ver menos</span>
+                        <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    @endif
+
+                    {{-- CTAs --}}
+                    <button wire:click="checkout('{{ $plan['key'] }}', 'stripe')" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-teal-600 to-cyan-600 hover:shadow-lg hover:shadow-teal-200 transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        Pagar con tarjeta
+                    </button>
+                    <button wire:click="checkout('{{ $plan['key'] }}', 'spei')" type="button" class="w-full py-2.5 rounded-xl text-sm font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                        Pagar por SPEI (transferencia)
+                    </button>
+                </div>
             </div>
             @endforeach
         </div>
 
-        <div style="text-align:center;margin-top:2rem;font-size:0.8rem;color:#9ca3af;">
-            Contactanos por WhatsApp al <a href="https://wa.me/526682493398" target="_blank" style="color:#0d9488;font-weight:600;">668 249 3398</a> para activar tu plan.
-            <br>Aceptamos transferencia, tarjeta o efectivo.
+        {{-- Métodos aceptados --}}
+        <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+            Aceptamos <strong>tarjeta de crédito/débito</strong> (Visa, Mastercard, AmEx) vía Stripe y <strong>transferencia SPEI</strong> con aprobación manual (1-24 hrs).
+            <br>¿Dudas? WhatsApp al <a href="https://wa.me/526682493398" target="_blank" class="text-teal-600 font-semibold hover:underline">668 249 3398</a>
         </div>
     </div>
 </x-filament-panels::page>

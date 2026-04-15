@@ -53,6 +53,34 @@ return [
         'access_token' => env('MERCADOPAGO_ACCESS_TOKEN'),
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook' => [
+            'secret' => env('STRIPE_WEBHOOK_SECRET'),
+            'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
+        ],
+        // IDs de los 6 precios creados en Stripe (3 planes x 2 ciclos)
+        'prices' => [
+            'basico_monthly'  => env('STRIPE_PRICE_BASICO_MONTHLY'),
+            'basico_annual'   => env('STRIPE_PRICE_BASICO_ANNUAL'),
+            'pro_monthly'     => env('STRIPE_PRICE_PRO_MONTHLY'),
+            'pro_annual'      => env('STRIPE_PRICE_PRO_ANNUAL'),
+            'clinica_monthly' => env('STRIPE_PRICE_CLINICA_MONTHLY'),
+            'clinica_annual'  => env('STRIPE_PRICE_CLINICA_ANNUAL'),
+        ],
+    ],
+
+    // Datos bancarios para pagos por SPEI (transferencia manual con aprobación)
+    'spei' => [
+        'enabled'   => env('SPEI_ENABLED', true),
+        'banco'     => env('SPEI_BANCO', 'BanBajío'),
+        'titular'   => env('SPEI_TITULAR', 'Omar Alonso Lerma Orduño'),
+        'clabe'     => env('SPEI_CLABE', '030743900001300398'),
+        // Correos que reciben notificación de nuevo SPEI pendiente de aprobación
+        'admin_emails' => env('SPEI_ADMIN_EMAILS', 'leooma24@gmail.com'),
+    ],
+
     'ai' => [
         'enabled' => env('AI_ENABLED', false),
         'max_daily_cost_usd' => env('AI_MAX_DAILY_COST_USD', 5),
