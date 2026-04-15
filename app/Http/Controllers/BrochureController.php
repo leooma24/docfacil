@@ -29,12 +29,34 @@ class BrochureController extends Controller
 
     private function viewData(string $mode): array
     {
+        $screenFiles = [
+            'dashboard'   => 'images/screenshots/01-dashboard.png',
+            'citas'       => 'images/screenshots/02-citas-lista.png',
+            'calendario'  => 'images/screenshots/03-calendario.png',
+            'pacientes'   => 'images/screenshots/04-pacientes.png',
+            'expediente'  => 'images/screenshots/05-expediente.png',
+            'recetas'     => 'images/screenshots/06-recetas.png',
+            'odontograma' => 'images/screenshots/07-odontograma-editor.png',
+            'cobros'      => 'images/screenshots/08-cobros.png',
+            'consulta'    => 'images/screenshots/09-consulta.png',
+            'servicios'   => 'images/screenshots/10-servicios.png',
+            'landing'     => 'images/screenshots/11-landing-hero.png',
+        ];
+
+        $screens = [];
+        foreach ($screenFiles as $key => $relPath) {
+            $screens[$key] = $mode === 'pdf'
+                ? public_path($relPath)
+                : asset($relPath);
+        }
+
         return [
             'mode' => $mode,
             'registerUrl' => url('/doctor/register?source=brochure'),
             'qrDataUri' => $this->qrCodeDataUri(url('/doctor/register?source=brochure-qr')),
             'whatsappLink' => 'https://wa.me/526682493398',
             'pages' => $this->buildPages(),
+            'screens' => $screens,
         ];
     }
 

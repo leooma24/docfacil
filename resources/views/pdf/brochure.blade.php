@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>DocFácil — Brochure</title>
     <style>
-        @page { margin: 1.1cm; }
+        @page { margin: 1cm; }
         * { box-sizing: border-box; }
         body {
             font-family: 'DejaVu Sans', sans-serif;
             color: #1f2937;
             font-size: 10pt;
-            line-height: 1.5;
+            line-height: 1.45;
             margin: 0;
             padding: 0;
         }
@@ -18,70 +18,89 @@
         .page:last-child { page-break-after: auto; }
 
         /* PORTADA */
-        .cover { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 80px 40px; text-align: center; border-radius: 14px; min-height: 720px; position: relative; }
-        .cover .tag { display: inline-block; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; font-size: 9.5pt; letter-spacing: 1px; margin-bottom: 24px; }
-        .cover h1 { font-size: 42pt; font-weight: 800; margin: 0 0 12px 0; letter-spacing: -1px; line-height: 1.05; }
-        .cover .sub { font-size: 14pt; opacity: 0.95; max-width: 80%; margin: 0 auto 36px auto; line-height: 1.4; }
-        .cover .divider { width: 60px; height: 3px; background: white; margin: 20px auto; border-radius: 2px; }
-        .cover .card { background: white; color: #1f2937; padding: 18px 24px; border-radius: 12px; display: inline-block; margin-top: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .cover .card strong { display: block; color: #0d9488; font-size: 16pt; margin-bottom: 4px; }
-        .cover .card small { color: #6b7280; font-size: 9pt; }
-        .cover .year { position: absolute; bottom: 24px; right: 32px; font-size: 9pt; opacity: 0.7; }
+        .cover { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 40px 32px; text-align: center; border-radius: 14px; min-height: 980px; position: relative; }
+        .cover .tag { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 14px; border-radius: 20px; font-size: 9pt; letter-spacing: 1px; margin-bottom: 18px; }
+        .cover h1 { font-size: 40pt; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -1px; line-height: 1.05; }
+        .cover .sub { font-size: 13pt; opacity: 0.95; max-width: 85%; margin: 0 auto 20px auto; line-height: 1.4; }
+        .cover .divider { width: 60px; height: 3px; background: white; margin: 16px auto; border-radius: 2px; }
+        .cover .hero-shot { background: white; padding: 10px; border-radius: 10px; margin: 22px auto 18px auto; box-shadow: 0 20px 40px rgba(0,0,0,0.25); max-width: 100%; }
+        .cover .hero-shot img { width: 100%; display: block; border-radius: 4px; }
+        .cover .stats-card { background: white; color: #1f2937; padding: 14px 20px; border-radius: 10px; display: inline-block; margin-top: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .cover .stats-card table { border-collapse: collapse; }
+        .cover .stats-card td { padding: 4px 14px; text-align: center; border-right: 1px solid #e5e7eb; }
+        .cover .stats-card td:last-child { border-right: none; }
+        .cover .stats-card .num { font-size: 16pt; font-weight: 800; color: #0d9488; line-height: 1; }
+        .cover .stats-card .label { font-size: 8pt; color: #6b7280; margin-top: 2px; }
+        .cover .year { position: absolute; bottom: 20px; right: 28px; font-size: 9pt; opacity: 0.8; }
 
-        /* HEADERS GENERALES */
-        .header { border-bottom: 3px solid #14b8a6; padding-bottom: 10px; margin-bottom: 22px; }
-        .header-brand { font-size: 16pt; font-weight: 800; color: #0d9488; letter-spacing: -0.5px; }
-        .header-brand small { font-weight: normal; color: #6b7280; font-size: 9pt; display: block; margin-top: 2px; }
-        .page-number { float: right; margin-top: -32px; font-size: 9pt; color: #9ca3af; }
+        /* HEADERS */
+        .header { border-bottom: 3px solid #14b8a6; padding-bottom: 8px; margin-bottom: 16px; }
+        .header-brand { font-size: 15pt; font-weight: 800; color: #0d9488; letter-spacing: -0.5px; }
+        .header-brand small { font-weight: normal; color: #6b7280; font-size: 9pt; display: block; margin-top: 1px; }
+        .page-number { float: right; margin-top: -28px; font-size: 9pt; color: #9ca3af; }
 
-        h2.section { font-size: 22pt; color: #0d9488; margin: 0 0 6px 0; letter-spacing: -0.5px; font-weight: 800; line-height: 1.15; }
-        .section-sub { font-size: 11pt; color: #6b7280; margin: 0 0 20px 0; }
+        h2.section { font-size: 20pt; color: #0d9488; margin: 0 0 4px 0; letter-spacing: -0.5px; font-weight: 800; line-height: 1.15; }
+        .section-sub { font-size: 10.5pt; color: #6b7280; margin: 0 0 14px 0; }
 
         /* ICP */
-        .icp-grid { width: 100%; margin: 16px 0; }
-        .icp-card { background: #f0fdfa; border-left: 4px solid #14b8a6; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; }
-        .icp-card h3 { margin: 0 0 4px 0; color: #0d9488; font-size: 11pt; }
-        .icp-card p { margin: 0; font-size: 9.5pt; }
+        .icp-card { background: #f0fdfa; border-left: 4px solid #14b8a6; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; }
+        .icp-card h3 { margin: 0 0 3px 0; color: #0d9488; font-size: 10.5pt; }
+        .icp-card p { margin: 0; font-size: 9pt; }
 
         /* Pains */
-        .pain-grid { width: 100%; border-collapse: separate; border-spacing: 8px; margin: 10px 0; }
-        .pain-cell { background: #fef2f2; border-left: 3px solid #ef4444; padding: 10px 12px; border-radius: 6px; width: 50%; vertical-align: top; }
+        .pain-grid { width: 100%; border-collapse: separate; border-spacing: 6px; margin: 6px 0; }
+        .pain-cell { background: #fef2f2; border-left: 3px solid #ef4444; padding: 9px 11px; border-radius: 6px; width: 50%; vertical-align: top; }
         .pain-cell strong { color: #b91c1c; display: block; margin-bottom: 2px; font-size: 10pt; }
         .pain-cell span { font-size: 9pt; color: #4b5563; }
 
-        /* Features page */
-        .feat-grid { width: 100%; border-collapse: separate; border-spacing: 6px; }
-        .feat-cell { background: #f9fafb; border-radius: 8px; padding: 10px 12px; vertical-align: top; width: 50%; border: 1px solid #e5e7eb; }
-        .feat-cell .feat-icon { font-size: 16pt; display: block; margin-bottom: 4px; }
-        .feat-cell strong { color: #0d9488; display: block; font-size: 10.5pt; margin-bottom: 2px; }
-        .feat-cell p { margin: 0; font-size: 8.5pt; color: #4b5563; line-height: 1.4; }
+        /* Feature block with screenshot (side-by-side) */
+        .feat-block { margin-bottom: 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; page-break-inside: avoid; }
+        .feat-block table { width: 100%; border-collapse: collapse; }
+        .feat-block .feat-img { width: 48%; vertical-align: top; padding-right: 12px; }
+        .feat-block .feat-img img { width: 100%; display: block; border-radius: 6px; border: 1px solid #e5e7eb; }
+        .feat-block .feat-text { vertical-align: top; }
+        .feat-block .feat-num { display: inline-block; background: #0d9488; color: white; font-weight: bold; font-size: 9pt; padding: 2px 7px; border-radius: 5px; margin-bottom: 4px; }
+        .feat-block h3 { margin: 0 0 4px 0; font-size: 12pt; color: #111827; letter-spacing: -0.2px; }
+        .feat-block p { margin: 0 0 6px 0; font-size: 9pt; color: #4b5563; line-height: 1.45; }
+        .feat-block ul { margin: 2px 0 0 0; padding-left: 14px; font-size: 8.5pt; color: #4b5563; }
+        .feat-block li { margin-bottom: 1px; }
 
         /* Testimonials */
-        .testimonial { background: #f9fafb; border-left: 3px solid #14b8a6; padding: 14px 18px; border-radius: 8px; margin-bottom: 12px; }
-        .testimonial blockquote { margin: 0 0 8px 0; font-size: 11pt; color: #1f2937; font-style: italic; line-height: 1.5; }
-        .testimonial .author { font-size: 9.5pt; color: #6b7280; }
+        .testimonial { background: #f9fafb; border-left: 3px solid #14b8a6; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; }
+        .testimonial blockquote { margin: 0 0 6px 0; font-size: 10.5pt; color: #1f2937; font-style: italic; line-height: 1.45; }
+        .testimonial .author { font-size: 9pt; color: #6b7280; }
         .testimonial .author strong { color: #0d9488; }
 
         /* Case stats */
-        .case-stats { width: 100%; margin: 14px 0; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 18px; border-radius: 12px; }
-        .case-stats td { text-align: center; padding: 6px; }
-        .case-stats .num { font-size: 24pt; font-weight: 800; line-height: 1; }
-        .case-stats .label { font-size: 9pt; opacity: 0.95; margin-top: 4px; }
+        .case-stats { width: 100%; margin: 10px 0; background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 16px; border-radius: 10px; }
+        .case-stats td { text-align: center; padding: 4px; }
+        .case-stats .num { font-size: 22pt; font-weight: 800; line-height: 1; }
+        .case-stats .label { font-size: 8.5pt; opacity: 0.95; margin-top: 3px; }
+
+        /* Before/after visual bar */
+        .bar-compare { width: 100%; margin: 8px 0; border-collapse: collapse; }
+        .bar-compare td { padding: 6px 8px; font-size: 9pt; vertical-align: middle; }
+        .bar-compare .lbl { width: 18%; font-weight: 600; color: #374151; }
+        .bar-compare .bar-wrap { width: 72%; padding-right: 8px; }
+        .bar-compare .bar-bg { background: #f3f4f6; border-radius: 6px; height: 18px; position: relative; overflow: hidden; }
+        .bar-compare .bar-fill-red { background: #ef4444; height: 18px; border-radius: 6px; }
+        .bar-compare .bar-fill-green { background: #10b981; height: 18px; border-radius: 6px; }
+        .bar-compare .val { width: 10%; text-align: right; font-weight: 700; font-size: 10pt; }
 
         /* Pricing */
-        .pricing-grid { width: 100%; border-collapse: separate; border-spacing: 8px; }
-        .plan { background: white; border: 2px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; vertical-align: top; width: 25%; }
+        .pricing-grid { width: 100%; border-collapse: separate; border-spacing: 6px; }
+        .plan { background: white; border: 2px solid #e5e7eb; border-radius: 10px; padding: 11px 12px; vertical-align: top; width: 25%; }
         .plan.popular { border-color: #ea580c; background: #fff7ed; }
         .plan h4 { margin: 0 0 2px 0; font-size: 11pt; color: #111827; }
-        .plan .price { font-size: 16pt; font-weight: 800; color: #0d9488; margin: 4px 0; }
+        .plan .price { font-size: 15pt; font-weight: 800; color: #0d9488; margin: 3px 0; }
         .plan.popular .price { color: #ea580c; }
-        .plan .ideal { font-size: 8pt; color: #6b7280; margin-bottom: 8px; min-height: 28px; }
-        .plan ul { margin: 0; padding-left: 14px; font-size: 8.5pt; }
+        .plan .ideal { font-size: 8pt; color: #6b7280; margin-bottom: 6px; min-height: 28px; }
+        .plan ul { margin: 0; padding-left: 14px; font-size: 8.3pt; }
         .plan li { margin-bottom: 2px; }
-        .popular-badge { display: inline-block; background: #ea580c; color: white; font-size: 7.5pt; padding: 1px 6px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+        .popular-badge { display: inline-block; background: #ea580c; color: white; font-size: 7pt; padding: 1px 5px; border-radius: 4px; margin-left: 3px; vertical-align: middle; }
 
         /* Comparison */
-        .compare { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 9pt; }
+        .compare { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 9pt; }
         .compare th { background: #0d9488; color: white; padding: 6px 8px; text-align: center; font-size: 9pt; }
         .compare th:first-child { text-align: left; }
         .compare td { padding: 5px 8px; border-bottom: 1px solid #e5e7eb; text-align: center; }
@@ -89,49 +108,74 @@
         .compare .yes { color: #059669; font-weight: bold; }
         .compare .no { color: #9ca3af; }
 
+        /* Ecosystem / badges */
+        .eco-grid { width: 100%; border-collapse: separate; border-spacing: 6px; margin: 8px 0; }
+        .eco-card { background: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 8px; padding: 10px 12px; vertical-align: top; width: 33%; }
+        .eco-card .eco-icon { font-size: 22pt; line-height: 1; margin-bottom: 4px; color: #0d9488; }
+        .eco-card strong { color: #0d9488; display: block; font-size: 10pt; margin-bottom: 2px; }
+        .eco-card p { margin: 0; font-size: 8.5pt; color: #4b5563; line-height: 1.4; }
+
+        .badges-row { text-align: center; margin: 10px 0; }
+        .badge { display: inline-block; background: #f0fdfa; color: #0d9488; padding: 4px 10px; border-radius: 12px; margin: 2px 3px; font-weight: 600; font-size: 9pt; }
+
+        /* Steps */
+        .steps { width: 100%; margin: 14px 0; border-collapse: separate; border-spacing: 8px; }
+        .step { display: table-cell; width: 33%; vertical-align: top; text-align: center; padding: 14px 10px; background: #f9fafb; border-radius: 10px; border: 1px solid #e5e7eb; }
+        .step .num-circle { width: 36px; height: 36px; background: #14b8a6; color: white; border-radius: 50%; display: inline-block; line-height: 36px; text-align: center; font-size: 16pt; font-weight: 800; margin-bottom: 6px; }
+        .step h4 { margin: 0 0 3px 0; font-size: 10.5pt; color: #111827; }
+        .step p { margin: 0 0 6px 0; font-size: 8.5pt; color: #6b7280; }
+        .step img { width: 100%; border-radius: 5px; border: 1px solid #e5e7eb; }
+
         /* Final CTA */
-        .steps { width: 100%; margin: 20px 0; }
-        .step { display: inline-block; width: 31%; vertical-align: top; text-align: center; padding: 16px 10px; margin-right: 2%; background: #f9fafb; border-radius: 10px; }
-        .step:last-child { margin-right: 0; }
-        .step .num { font-size: 24pt; font-weight: 800; color: #14b8a6; line-height: 1; margin-bottom: 6px; }
-        .step h4 { margin: 0 0 4px 0; font-size: 11pt; color: #111827; }
-        .step p { margin: 0; font-size: 9pt; color: #6b7280; }
-
-        .cta-final { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 26px 28px; border-radius: 14px; margin-top: 16px; }
-        .cta-final h3 { margin: 0 0 6px 0; font-size: 18pt; }
-        .cta-final p { margin: 0 0 12px 0; opacity: 0.95; }
-        .cta-contact { width: 100%; margin-top: 14px; }
-        .cta-contact .qr { width: 150px; text-align: center; }
-        .cta-contact .qr img { width: 140px; height: 140px; background: white; padding: 6px; border-radius: 8px; }
-        .cta-contact .info { padding-left: 20px; vertical-align: middle; font-size: 10pt; }
-        .cta-contact .info strong { display: block; font-size: 12pt; margin-bottom: 4px; }
+        .cta-final { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 22px 24px; border-radius: 12px; margin-top: 12px; }
+        .cta-final h3 { margin: 0 0 4px 0; font-size: 17pt; }
+        .cta-final p { margin: 0 0 10px 0; opacity: 0.95; font-size: 10pt; }
+        .cta-contact { width: 100%; margin-top: 10px; }
+        .cta-contact .qr { width: 130px; text-align: center; }
+        .cta-contact .qr img { width: 120px; height: 120px; background: white; padding: 5px; border-radius: 6px; }
+        .cta-contact .info { padding-left: 18px; vertical-align: middle; font-size: 10pt; }
+        .cta-contact .info strong { display: block; font-size: 11.5pt; margin-bottom: 3px; }
         .cta-contact .info a { color: white; text-decoration: none; }
-        .cta-contact .info div { margin-bottom: 3px; }
+        .cta-contact .info div { margin-bottom: 2px; }
 
-        .footer { border-top: 1px solid #e5e7eb; margin-top: 18px; padding-top: 8px; font-size: 8pt; color: #9ca3af; text-align: center; }
+        .footer { border-top: 1px solid #e5e7eb; margin-top: 12px; padding-top: 6px; font-size: 8pt; color: #9ca3af; text-align: center; }
+
+        .quote-line { font-size: 9.5pt; color: #6b7280; font-style: italic; margin: 8px 0 0 0; }
     </style>
 </head>
 <body>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 1 — PORTADA                                           --}}
+{{-- PÁGINA 1 — PORTADA CON HERO SCREENSHOT                        --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="cover">
-        <div class="tag">BROCHURE · VERSIÓN 2026</div>
+        <div class="tag">BROCHURE · EDICIÓN 2026</div>
         <h1>DocFácil</h1>
         <div class="divider"></div>
-        <p class="sub">Software para consultorios médicos y dentales.<br>Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.</p>
-        <div class="card">
-            <strong>Tu consultorio, organizado y al día</strong>
-            <small>500+ consultorios activos · 15,000+ citas gestionadas · 4.9/5 satisfacción</small>
+        <p class="sub">Software para consultorios médicos y dentales. Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.</p>
+
+        <div class="hero-shot">
+            <img src="{{ $screens['dashboard'] }}" alt="Panel de control DocFácil">
         </div>
+
+        <div class="stats-card">
+            <table>
+                <tr>
+                    <td><div class="num">500+</div><div class="label">consultorios activos</div></td>
+                    <td><div class="num">15K+</div><div class="label">citas gestionadas</div></td>
+                    <td><div class="num">40%</div><div class="label">menos inasistencias</div></td>
+                    <td><div class="num">4.9</div><div class="label">satisfacción / 5</div></td>
+                </tr>
+            </table>
+        </div>
+
         <div class="year">docfacil.tu-app.co</div>
     </div>
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 2 — PARA QUIÉN ES DOCFÁCIL                            --}}
+{{-- PÁGINA 2 — PARA QUIÉN Y QUÉ DOLOR RESUELVE                    --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
@@ -140,101 +184,180 @@
     </div>
 
     <h2 class="section">Para doctores que aún dependen del papel</h2>
-    <p class="section-sub">DocFácil está diseñado para consultorios pequeños y medianos en México que quieren digitalizarse sin complicarse.</p>
+    <p class="section-sub">Diseñado para consultorios pequeños y medianos en México que quieren digitalizarse sin complicarse.</p>
 
-    <div class="icp-grid">
-        <div class="icp-card">
-            <h3><span style="display:inline-block; background:#0d9488; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">DENTAL</span> Consultorios dentales de 1 a 3 doctores</h3>
-            <p>Odontólogos generales, ortodoncistas, endodoncistas. Consultorios que atienden 30-200 pacientes al mes y necesitan dejar el papel, Excel o la agenda de pared.</p>
-        </div>
-        <div class="icp-card">
-            <h3><span style="display:inline-block; background:#0891b2; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">MÉDICO</span> Consultorios médicos generales y de especialidad</h3>
-            <p>Médicos generales, pediatras, ginecólogos, dermatólogos. Consultorios que facturan entre $20K y $200K al mes y pierden tiempo en tareas administrativas.</p>
-        </div>
-        <div class="icp-card">
-            <h3><span style="display:inline-block; background:#7c3aed; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">CLÍNICA</span> Clínicas pequeñas con varios doctores</h3>
-            <p>Clínicas multidisciplinarias con 3-10 doctores que necesitan agenda compartida, comisiones entre doctores y reportes por profesional.</p>
-        </div>
+    <div class="icp-card">
+        <h3><span style="display:inline-block; background:#0d9488; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">DENTAL</span> Consultorios dentales de 1 a 3 doctores</h3>
+        <p>Odontólogos generales, ortodoncistas, endodoncistas. Atienden 30-200 pacientes/mes y necesitan dejar el papel, Excel o la agenda de pared.</p>
+    </div>
+    <div class="icp-card">
+        <h3><span style="display:inline-block; background:#0891b2; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">MÉDICO</span> Consultorios médicos generales y de especialidad</h3>
+        <p>Médicos generales, pediatras, ginecólogos, dermatólogos. Facturan $20K-$200K/mes y pierden tiempo en tareas administrativas.</p>
+    </div>
+    <div class="icp-card">
+        <h3><span style="display:inline-block; background:#7c3aed; color:white; padding:2px 8px; border-radius:4px; font-size:9pt; margin-right:6px; vertical-align:middle;">CLÍNICA</span> Clínicas pequeñas con varios doctores</h3>
+        <p>Clínicas multidisciplinarias con 3-10 doctores. Necesitan agenda compartida, comisiones entre doctores y reportes por profesional.</p>
     </div>
 
-    <h2 class="section" style="font-size:16pt; margin-top:20px;">4 dolores que vivimos todos los días</h2>
+    <h2 class="section" style="font-size:16pt; margin-top:14px;">4 dolores que vivimos todos los días</h2>
     <table class="pain-grid"><tr>
-        <td class="pain-cell">
-            <strong>Agenda caótica</strong>
-            <span>Papel y Excel: pierdes citas, no buscas rápido, cada cambio pesa.</span>
-        </td>
-        <td class="pain-cell">
-            <strong>Pacientes no llegan</strong>
-            <span>El 30% no se presenta. Consultas perdidas que no regresan.</span>
-        </td>
+        <td class="pain-cell"><strong>Agenda caótica</strong><span>Papel y Excel: pierdes citas, no buscas rápido, cada cambio pesa.</span></td>
+        <td class="pain-cell"><strong>Pacientes no llegan</strong><span>El 30% no se presenta. Consultas perdidas que no regresan.</span></td>
     </tr><tr>
-        <td class="pain-cell">
-            <strong>Recetas a mano</strong>
-            <span>Letra ilegible, sin copia, sin respaldo. Riesgo legal y profesional.</span>
-        </td>
-        <td class="pain-cell">
-            <strong>No sabes si ganas</strong>
-            <span>Sin reportes ni control de cobros. Decisiones a ojo.</span>
-        </td>
+        <td class="pain-cell"><strong>Recetas a mano</strong><span>Letra ilegible, sin copia, sin respaldo. Riesgo legal y profesional.</span></td>
+        <td class="pain-cell"><strong>No sabes si ganas</strong><span>Sin reportes ni control de cobros. Decisiones a ojo.</span></td>
     </tr></table>
 
-    <div class="footer">Si te identificaste con 2 o más de estos puntos, DocFácil fue pensado para ti.</div>
+    <p style="background:#f0fdfa; border-left:3px solid #14b8a6; padding:10px 14px; border-radius:6px; margin-top:10px; font-size:9.5pt;">
+        <strong style="color:#0d9488;">→ Si te identificas con 2 o más de estos puntos, DocFácil fue pensado para ti.</strong>
+    </p>
+
+    <div class="footer">DocFácil es la única plataforma mexicana que integra todos estos dolores en una sola solución.</div>
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 3 — MÓDULOS (12 FEATURES)                             --}}
+{{-- PÁGINA 3 — FEATURES 1: AGENDA + EXPEDIENTE + RECETAS          --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
-        <div class="header-brand">DocFácil <small>12 módulos en un solo sistema</small></div>
+        <div class="header-brand">DocFácil <small>Funciones clave · Parte 1 de 2</small></div>
         <div class="page-number">03</div>
     </div>
 
-    <h2 class="section">Todo lo que necesitas</h2>
-    <p class="section-sub">No contrates 5 apps distintas. DocFácil integra todo el flujo del consultorio en una sola plataforma.</p>
+    <h2 class="section">Todo el flujo del consultorio</h2>
+    <p class="section-sub">No contrates 5 apps distintas. DocFácil integra todo en una sola plataforma.</p>
 
-    <table class="feat-grid">
-        @foreach (array_chunk($pages['features'], 2) as $rowIdx => $row)
-        <tr>
-            @foreach ($row as $colIdx => $f)
-            @php $num = str_pad($rowIdx * 2 + $colIdx + 1, 2, '0', STR_PAD_LEFT); @endphp
-            <td class="feat-cell">
-                <span style="display:inline-block; background:#0d9488; color:white; font-weight:bold; font-size:10pt; padding:3px 8px; border-radius:6px; margin-bottom:6px;">{{ $num }}</span>
-                <strong>{{ $f['title'] }}</strong>
-                <p>{{ $f['desc'] }}</p>
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['calendario'] }}" alt="Agenda y calendario"></td>
+            <td class="feat-text">
+                <span class="feat-num">01</span>
+                <h3>Agenda inteligente + recordatorios WhatsApp</h3>
+                <p>Calendario visual multi-doctor, arrastrar y soltar, vista diaria/semanal/mensual. Recordatorios automáticos 24h y 2h antes de cada cita.</p>
+                <ul>
+                    <li>Hasta 40% menos inasistencias</li>
+                    <li>Acceso desde PC, tablet o celular</li>
+                    <li>Colores por estado y doctor</li>
+                </ul>
             </td>
-            @endforeach
-        </tr>
-        @endforeach
-    </table>
+        </tr></table>
+    </div>
 
-    <div class="footer">Todas las funciones disponibles en el plan Pro. Algunas limitadas en planes inferiores.</div>
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['expediente'] }}" alt="Expediente clínico"></td>
+            <td class="feat-text">
+                <span class="feat-num">02</span>
+                <h3>Expediente clínico digital completo</h3>
+                <p>Historial por paciente, alergias, padecimientos, notas SOAP, fotos clínicas. Búsqueda instantánea y cumplimiento con NOM-004-SSA3.</p>
+                <ul>
+                    <li>Todo organizado por paciente y consulta</li>
+                    <li>Fotos antes/después sin límite</li>
+                    <li>Acceso rápido en consulta</li>
+                </ul>
+            </td>
+        </tr></table>
+    </div>
+
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['recetas'] }}" alt="Recetas PDF"></td>
+            <td class="feat-text">
+                <span class="feat-num">03</span>
+                <h3>Recetas PDF profesionales</h3>
+                <p>Generadas con logo, cédula profesional y firma digital. Se descargan en un clic y se envían al paciente por WhatsApp o email.</p>
+                <ul>
+                    <li>Plantilla personalizada por doctor</li>
+                    <li>Historial de recetas por paciente</li>
+                    <li>Firma digital con validez legal</li>
+                </ul>
+            </td>
+        </tr></table>
+    </div>
+
+    <div class="footer">Sigue en la siguiente página → Odontograma, cobros, portal del paciente y más</div>
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 4 — TESTIMONIOS + CASOS DE USO                        --}}
+{{-- PÁGINA 4 — FEATURES 2: ODONTOGRAMA + COBROS + DASHBOARD       --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
-        <div class="header-brand">DocFácil <small>Doctores que ya lo usan</small></div>
+        <div class="header-brand">DocFácil <small>Funciones clave · Parte 2 de 2</small></div>
         <div class="page-number">04</div>
     </div>
 
-    <h2 class="section">Lo que dicen los doctores</h2>
-    <p class="section-sub">500+ consultorios confían en DocFácil en México. Estos son algunos de sus resultados.</p>
-
-    @foreach ($pages['testimonials'] as $t)
-    <div class="testimonial">
-        <blockquote>"{{ $t['quote'] }}"</blockquote>
-        <div class="author"><strong>{{ $t['name'] }}</strong> · {{ $t['specialty'] }} · {{ $t['city'] }}</div>
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['odontograma'] }}" alt="Odontograma interactivo"></td>
+            <td class="feat-text">
+                <span class="feat-num">04</span>
+                <h3>Odontograma interactivo (dental)</h3>
+                <p>Diagrama dental con 13 condiciones. Haces clic en el diente, eliges el estado, se guarda automático. Compartible con el paciente por WhatsApp.</p>
+                <ul>
+                    <li>Historial visual de cada pieza</li>
+                    <li>Colores por tipo de tratamiento</li>
+                    <li>Exportable como PDF</li>
+                </ul>
+            </td>
+        </tr></table>
     </div>
-    @endforeach
 
-    <h2 class="section" style="font-size:16pt; margin-top:20px;">Caso: Dra. Fernández (CDMX)</h2>
-    <p style="font-size:10pt; margin:0 0 10px 0;">
-        Consultorio dental individual. Atendía 80 pacientes/mes con 30% de inasistencia.
-        Después de implementar DocFácil con recordatorios WhatsApp:
-    </p>
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['cobros'] }}" alt="Cobros e ingresos"></td>
+            <td class="feat-text">
+                <span class="feat-num">05</span>
+                <h3>Cobros, pagos y reportes de ingresos</h3>
+                <p>Registro de cada pago con método (efectivo, transferencia, tarjeta). Control automático de pendientes por paciente. Envía el link de cobro por WhatsApp.</p>
+                <ul>
+                    <li>Reporte de ingresos del mes en tiempo real</li>
+                    <li>Alertas de cobros vencidos</li>
+                    <li>Pagos parciales y abonos</li>
+                </ul>
+            </td>
+        </tr></table>
+    </div>
+
+    <div class="feat-block">
+        <table><tr>
+            <td class="feat-img"><img src="{{ $screens['dashboard'] }}" alt="Escritorio con métricas"></td>
+            <td class="feat-text">
+                <span class="feat-num">06</span>
+                <h3>Escritorio con métricas y alertas</h3>
+                <p>Al entrar ves: ingresos del mes, próximas citas, pacientes activos, cobros pendientes. Alertas inteligentes para pacientes inactivos, cumpleaños y recetas vencidas.</p>
+                <ul>
+                    <li>Comparativa mes vs mes anterior</li>
+                    <li>Accesos rápidos a acciones frecuentes</li>
+                    <li>Reportes por doctor (plan Clínica)</li>
+                </ul>
+            </td>
+        </tr></table>
+    </div>
+
+    <div class="badges-row">
+        <span class="badge">+ Check-in con QR</span>
+        <span class="badge">+ Firma digital</span>
+        <span class="badge">+ Portal paciente</span>
+        <span class="badge">+ Multi-sede</span>
+        <span class="badge">+ Comisiones entre doctores</span>
+    </div>
+
+    <div class="footer">12 módulos en total. Todas las funciones disponibles en el plan Pro.</div>
+</div>
+
+{{-- ============================================================ --}}
+{{-- PÁGINA 5 — CASO DE ÉXITO + TESTIMONIOS                        --}}
+{{-- ============================================================ --}}
+<div class="page">
+    <div class="header">
+        <div class="header-brand">DocFácil <small>Casos reales</small></div>
+        <div class="page-number">05</div>
+    </div>
+
+    <h2 class="section">Caso: Dra. Fernández (CDMX)</h2>
+    <p class="section-sub">Consultorio dental individual. Atendía 80 pacientes/mes con 30% de inasistencia. Esto cambió con DocFácil:</p>
+
     <table class="case-stats"><tr>
         <td><div class="num">8%</div><div class="label">inasistencia final<br>(antes 30%)</div></td>
         <td><div class="num">+22</div><div class="label">citas atendidas<br>al mes</div></td>
@@ -242,18 +365,37 @@
         <td><div class="num">2h</div><div class="label">ahorradas al día<br>en recordatorios</div></td>
     </tr></table>
 
-    <p style="font-size:9.5pt; color:#6b7280; margin:10px 0 0 0; font-style:italic;">
-        "Lo que pago por DocFácil lo recupero en 2 días de consulta extra al mes. Es la mejor inversión que he hecho."
-    </p>
+    <h3 style="font-size:11pt; margin:14px 0 4px 0; color:#0d9488;">Antes vs. después de DocFácil</h3>
+    <table class="bar-compare">
+        <tr>
+            <td class="lbl">Antes</td>
+            <td class="bar-wrap"><div class="bar-bg"><div class="bar-fill-red" style="width:95%;"></div></div></td>
+            <td class="val" style="color:#ef4444;">30%</td>
+        </tr>
+        <tr>
+            <td class="lbl">Después</td>
+            <td class="bar-wrap"><div class="bar-bg"><div class="bar-fill-green" style="width:25%;"></div></div></td>
+            <td class="val" style="color:#10b981;">8%</td>
+        </tr>
+    </table>
+    <p class="quote-line">"Lo que pago por DocFácil lo recupero en 2 días de consulta extra al mes. Es la mejor inversión que he hecho." — Dra. M. Fernández</p>
+
+    <h2 class="section" style="font-size:16pt; margin-top:16px;">Lo que dicen otros doctores</h2>
+    @foreach ($pages['testimonials'] as $t)
+    <div class="testimonial">
+        <blockquote>"{{ $t['quote'] }}"</blockquote>
+        <div class="author"><strong>{{ $t['name'] }}</strong> · {{ $t['specialty'] }} · {{ $t['city'] }}</div>
+    </div>
+    @endforeach
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 5 — PRECIOS Y COMPARATIVA                             --}}
+{{-- PÁGINA 6 — PRECIOS Y COMPARATIVA                              --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
         <div class="header-brand">DocFácil <small>Precios en pesos mexicanos</small></div>
-        <div class="page-number">05</div>
+        <div class="page-number">06</div>
     </div>
 
     <h2 class="section">Planes pensados para cada consultorio</h2>
@@ -263,7 +405,7 @@
         @foreach ($pages['plans'] as $p)
         <td class="plan {{ !empty($p['popular']) ? 'popular' : '' }}">
             <h4>{{ $p['name'] }}{!! !empty($p['popular']) ? ' <span class="popular-badge">POPULAR</span>' : '' !!}</h4>
-            <div class="price">${{ number_format($p['price']) }}<span style="font-size:10pt; font-weight:normal; color:#6b7280;">/mes</span></div>
+            <div class="price">${{ number_format($p['price']) }}<span style="font-size:9pt; font-weight:normal; color:#6b7280;">/mes</span></div>
             <div class="ideal">{{ $p['ideal'] }}</div>
             <ul>
                 @foreach ($p['features'] as $feat)
@@ -273,9 +415,9 @@
         </td>
         @endforeach
     </tr></table>
-    <p style="font-size:8.5pt; color:#6b7280; margin-top:6px;">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso.</p>
+    <p style="font-size:8.5pt; color:#6b7280; margin-top:4px;">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso.</p>
 
-    <h2 class="section" style="font-size:14pt; margin-top:20px;">Vs. la competencia</h2>
+    <h2 class="section" style="font-size:14pt; margin-top:14px;">Vs. la competencia</h2>
     <table class="compare">
         <thead>
             <tr>
@@ -296,51 +438,128 @@
             <tr><td>Sin contrato anual</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td></tr>
         </tbody>
     </table>
+
+    <h3 style="font-size:11pt; margin:12px 0 4px 0; color:#0d9488;">Lo que <em>NO</em> hace DocFácil (transparencia total)</h3>
+    <p style="font-size:9pt; color:#4b5563; margin:0;">Facturación CFDI (por ahora), integración con laboratorios dentales externos, teleconsulta por video. Si necesitas alguna de estas, avísanos — está en el roadmap.</p>
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 6 — CÓMO EMPEZAR                                      --}}
+{{-- PÁGINA 7 — ECOSISTEMA Y SEGURIDAD                             --}}
+{{-- ============================================================ --}}
+<div class="page">
+    <div class="header">
+        <div class="header-brand">DocFácil <small>Ecosistema, seguridad y confianza</small></div>
+        <div class="page-number">07</div>
+    </div>
+
+    <h2 class="section">Todo lo que viene integrado</h2>
+    <p class="section-sub">Sin configuraciones técnicas. Sin hablar con 5 proveedores. Todo listo desde el primer día.</p>
+
+    <table class="eco-grid"><tr>
+        <td class="eco-card">
+            <div class="eco-icon">💬</div>
+            <strong>WhatsApp Business</strong>
+            <p>Envía recordatorios, recetas y links de cobro directo al chat del paciente desde tu número.</p>
+        </td>
+        <td class="eco-card">
+            <div class="eco-icon">✉</div>
+            <strong>Correo automático</strong>
+            <p>Confirmaciones de cita, recibos de pago y seguimientos post-consulta automáticos por email.</p>
+        </td>
+        <td class="eco-card">
+            <div class="eco-icon">💳</div>
+            <strong>Pagos en línea</strong>
+            <p>Tu paciente paga con tarjeta o transferencia desde el link que le envías por WhatsApp.</p>
+        </td>
+    </tr><tr>
+        <td class="eco-card">
+            <div class="eco-icon">📱</div>
+            <strong>App PWA instalable</strong>
+            <p>Se instala en celular o tablet como app nativa. Funciona incluso con internet intermitente.</p>
+        </td>
+        <td class="eco-card">
+            <div class="eco-icon">☁</div>
+            <strong>Respaldo en la nube</strong>
+            <p>Backups diarios automáticos. Tus datos viajan contigo sin USBs ni archivos perdidos.</p>
+        </td>
+        <td class="eco-card">
+            <div class="eco-icon">👥</div>
+            <strong>Portal del paciente</strong>
+            <p>Tus pacientes ven sus citas, recetas e historial. Reduce llamadas rutinarias.</p>
+        </td>
+    </tr></table>
+
+    <h2 class="section" style="font-size:16pt; margin-top:14px;">Seguridad y cumplimiento</h2>
+    <div style="background:#f9fafb; border-radius:10px; padding:14px 16px; border:1px solid #e5e7eb; font-size:9.5pt;">
+        <table style="width:100%;">
+            <tr>
+                <td style="vertical-align:top; width:50%; padding-right:10px;">
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔒 Cifrado TLS 1.3</strong><br>Todas las conexiones y datos en tránsito viajan cifrados.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🇲🇽 Datos en servidores mexicanos</strong><br>Cumplimiento con LFPDPPP (Ley Federal de Protección de Datos).</p>
+                    <p style="margin:0;"><strong style="color:#0d9488;">📋 NOM-004-SSA3</strong><br>Expediente clínico estructurado conforme a norma oficial.</p>
+                </td>
+                <td style="vertical-align:top; width:50%;">
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">💾 Backups diarios automáticos</strong><br>Restauración punto-en-el-tiempo hasta 30 días atrás.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔐 Roles y permisos</strong><br>Cada usuario ve solo lo que necesita ver.</p>
+                    <p style="margin:0;"><strong style="color:#0d9488;">📤 Exportación libre</strong><br>Descarga todos tus datos cuando quieras, en CSV o PDF.</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="badges-row" style="margin-top:14px;">
+        <span class="badge">✓ Hecho en México</span>
+        <span class="badge">✓ Soporte en español</span>
+        <span class="badge">✓ PWA instalable</span>
+        <span class="badge">✓ Sin anuncios</span>
+        <span class="badge">✓ Código propio</span>
+    </div>
+</div>
+
+{{-- ============================================================ --}}
+{{-- PÁGINA 8 — CÓMO EMPEZAR Y CTA FINAL                           --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
         <div class="header-brand">DocFácil <small>Cómo empezar hoy</small></div>
-        <div class="page-number">06</div>
+        <div class="page-number">08</div>
     </div>
 
     <h2 class="section">Empieza en 3 pasos</h2>
     <p class="section-sub">Sin instalaciones. Sin tarjeta. Sin perder un solo paciente.</p>
 
-    <div class="steps">
-        <div class="step">
-            <div class="num">1</div>
+    <table class="steps"><tr>
+        <td class="step">
+            <div class="num-circle">1</div>
             <h4>Regístrate</h4>
-            <p>Crea tu cuenta en 2 minutos. Sin tarjeta de crédito. 14 días gratis con todo el plan Pro.</p>
-        </div>
-        <div class="step">
-            <div class="num">2</div>
-            <h4>Importa pacientes</h4>
-            <p>Sube tu Excel o carga manualmente. Nuestro equipo te ayuda si tienes más de 200 pacientes.</p>
-        </div>
-        <div class="step">
-            <div class="num">3</div>
-            <h4>Úsalo en consulta</h4>
-            <p>Abre DocFácil en tu celular, tablet o PC. Desde el primer día ya estás digitalizado.</p>
-        </div>
-    </div>
+            <p>Crea tu cuenta en 2 minutos. Sin tarjeta. 14 días gratis con plan Pro.</p>
+            <img src="{{ $screens['landing'] }}" alt="Registro">
+        </td>
+        <td class="step">
+            <div class="num-circle">2</div>
+            <h4>Carga tus pacientes</h4>
+            <p>Sube tu Excel o captura manualmente. Te ayudamos si tienes más de 200.</p>
+            <img src="{{ $screens['pacientes'] }}" alt="Pacientes">
+        </td>
+        <td class="step">
+            <div class="num-circle">3</div>
+            <h4>Agenda tu primer día</h4>
+            <p>Abre la agenda, crea tu primera cita, recibe tu primer recordatorio WhatsApp.</p>
+            <img src="{{ $screens['calendario'] }}" alt="Agenda">
+        </td>
+    </tr></table>
 
     <div class="cta-final">
-        <h3>Empieza gratis ahora</h3>
+        <h3>Empieza gratis ahora mismo</h3>
         <p>Escanea el QR o habla directamente con Omar, el fundador.</p>
         <table class="cta-contact"><tr>
-            <td class="qr">
-                <img src="{{ $qrDataUri }}" alt="QR registro DocFácil">
-            </td>
+            <td class="qr"><img src="{{ $qrDataUri }}" alt="QR registro DocFácil"></td>
             <td class="info">
                 <strong>Omar Lerma · Fundador</strong>
                 <div><span style="display:inline-block; width:16px; font-weight:bold;">☎</span> <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)</div>
                 <div><span style="display:inline-block; width:16px; font-weight:bold;">✉</span> <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a></div>
                 <div><span style="display:inline-block; width:16px; font-weight:bold;">⌂</span> <a href="{{ url('/') }}">docfacil.tu-app.co</a></div>
-                <div style="margin-top:6px; opacity:0.9;">Demo en vivo · Onboarding gratuito · Soporte por WhatsApp</div>
+                <div style="margin-top:5px; opacity:0.9;">Demo en vivo · Onboarding gratuito · Soporte por WhatsApp</div>
             </td>
         </tr></table>
     </div>
