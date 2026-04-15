@@ -67,6 +67,10 @@ class StripeCheckoutController extends Controller
                     'sold_by_user_id' => (string) ($clinic->sold_by_user_id ?? ''),
                 ],
                 'locale' => 'es-419',
+                // Forzar MXN — sin esto Stripe hace conversión a USD para visitantes fuera de México
+                'adaptive_pricing' => ['enabled' => false],
+                // Restringir a México (misma razón)
+                'billing_address_collection' => 'auto',
             ]);
 
             return redirect()->away($session->url);
