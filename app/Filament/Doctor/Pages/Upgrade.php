@@ -138,17 +138,17 @@ class Upgrade extends Page
         }
 
         if ($method === 'spei') {
-            $this->redirectRoute('doctor.spei.checkout', [
+            $this->redirect(route('filament.doctor.pages.pago-spei', [
                 'plan' => $plan,
                 'cycle' => $this->billingCycle,
-            ]);
+            ]));
             return;
         }
 
-        // Stripe: por ahora redirige al controller que crea la sesión (si está configurado)
-        $this->redirectRoute('stripe.checkout', [
+        // Stripe: redirige al controller que crea la sesión de checkout
+        $this->redirect(route('stripe.checkout', [
             'plan' => $plan,
             'cycle' => $this->billingCycle,
-        ]);
+        ]));
     }
 }
