@@ -18,20 +18,25 @@
         .page:last-child { page-break-after: auto; }
 
         /* PORTADA */
-        .cover { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 40px 32px; text-align: center; border-radius: 14px; min-height: 980px; position: relative; }
-        .cover .tag { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 14px; border-radius: 20px; font-size: 9pt; letter-spacing: 1px; margin-bottom: 18px; }
-        .cover h1 { font-size: 40pt; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -1px; line-height: 1.05; }
-        .cover .sub { font-size: 13pt; opacity: 0.95; max-width: 85%; margin: 0 auto 20px auto; line-height: 1.4; }
-        .cover .divider { width: 60px; height: 3px; background: white; margin: 16px auto; border-radius: 2px; }
-        .cover .hero-shot { background: white; padding: 10px; border-radius: 10px; margin: 22px auto 18px auto; box-shadow: 0 20px 40px rgba(0,0,0,0.25); max-width: 100%; }
-        .cover .hero-shot img { width: 100%; display: block; border-radius: 4px; }
-        .cover .stats-card { background: white; color: #1f2937; padding: 14px 20px; border-radius: 10px; display: inline-block; margin-top: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .cover { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 20px 24px 18px 24px; text-align: center; border-radius: 10px; position: relative; }
+        .cover .tag { display: inline-block; background: rgba(255,255,255,0.22); padding: 3px 11px; border-radius: 16px; font-size: 8pt; letter-spacing: 1px; margin-bottom: 8px; }
+        .cover h1 { font-size: 30pt; font-weight: 800; margin: 0 0 4px 0; letter-spacing: -1px; line-height: 1; }
+        .cover .sub { font-size: 10.5pt; opacity: 0.95; max-width: 90%; margin: 0 auto 8px auto; line-height: 1.4; }
+        .cover .divider { width: 44px; height: 2px; background: white; margin: 6px auto; border-radius: 2px; }
+        .cover .hero-shot { background: white; padding: 5px; border-radius: 6px; margin: 8px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: block; width: 90%; }
+        .cover .hero-shot img { width: 100%; display: block; border-radius: 3px; max-height: 260pt; object-fit: cover; object-position: top left; }
+        .cover .value-props { width: 100%; margin: 8px 0 8px 0; border-collapse: collapse; }
+        .cover .value-props td { width: 33%; padding: 0 6px; vertical-align: top; text-align: center; }
+        .cover .value-props .vp-icon { font-size: 16pt; line-height: 1; margin-bottom: 3px; }
+        .cover .value-props .vp-title { font-size: 9.5pt; font-weight: 700; margin-bottom: 1px; }
+        .cover .value-props .vp-desc { font-size: 8pt; opacity: 0.92; line-height: 1.3; }
+        .cover .stats-card { background: white; color: #1f2937; padding: 8px 14px; border-radius: 7px; display: inline-block; margin-top: 6px; box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .cover .stats-card table { border-collapse: collapse; }
-        .cover .stats-card td { padding: 4px 14px; text-align: center; border-right: 1px solid #e5e7eb; }
+        .cover .stats-card td { padding: 2px 10px; text-align: center; border-right: 1px solid #e5e7eb; }
         .cover .stats-card td:last-child { border-right: none; }
-        .cover .stats-card .num { font-size: 16pt; font-weight: 800; color: #0d9488; line-height: 1; }
-        .cover .stats-card .label { font-size: 8pt; color: #6b7280; margin-top: 2px; }
-        .cover .year { position: absolute; bottom: 20px; right: 28px; font-size: 9pt; opacity: 0.8; }
+        .cover .stats-card .num { font-size: 13pt; font-weight: 800; color: #0d9488; line-height: 1; }
+        .cover .stats-card .label { font-size: 7pt; color: #6b7280; margin-top: 1px; }
+        .cover .cover-footer { margin-top: 10px; font-size: 8.5pt; opacity: 0.85; }
 
         /* HEADERS */
         .header { border-bottom: 3px solid #14b8a6; padding-bottom: 8px; margin-bottom: 16px; }
@@ -146,18 +151,38 @@
 <body>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 1 — PORTADA CON HERO SCREENSHOT                        --}}
+{{-- PÁGINA 1 — PORTADA                                            --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="cover">
         <div class="tag">BROCHURE · EDICIÓN 2026</div>
         <h1>DocFácil</h1>
         <div class="divider"></div>
-        <p class="sub">Software para consultorios médicos y dentales. Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.</p>
+        <p class="sub"><strong>Tu consultorio, organizado y al día.</strong><br>Software mexicano para consultorios médicos y dentales: agenda, expediente clínico, recetas PDF, recordatorios por WhatsApp y cobros — todo en un solo lugar.</p>
 
         <div class="hero-shot">
             <img src="{{ $screens['dashboard'] }}" alt="Panel de control DocFácil">
         </div>
+
+        <table class="value-props">
+            <tr>
+                <td>
+                    <div class="vp-icon">📅</div>
+                    <div class="vp-title">Menos inasistencias</div>
+                    <div class="vp-desc">Recordatorios WhatsApp automáticos bajan las faltas de 30% a 8%.</div>
+                </td>
+                <td>
+                    <div class="vp-icon">📋</div>
+                    <div class="vp-title">Todo digital, en la nube</div>
+                    <div class="vp-desc">Expedientes, recetas y cobros accesibles desde cualquier dispositivo.</div>
+                </td>
+                <td>
+                    <div class="vp-icon">💰</div>
+                    <div class="vp-title">Control de ingresos</div>
+                    <div class="vp-desc">Cobros, pendientes y reportes del consultorio en tiempo real.</div>
+                </td>
+            </tr>
+        </table>
 
         <div class="stats-card">
             <table>
@@ -170,7 +195,7 @@
             </table>
         </div>
 
-        <div class="year">docfacil.tu-app.co</div>
+        <div class="cover-footer">docfacil.tu-app.co · Omar Lerma, Fundador · 668 249 3398</div>
     </div>
 </div>
 
