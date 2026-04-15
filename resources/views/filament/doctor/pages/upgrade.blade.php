@@ -127,7 +127,7 @@
                         Pagar con tarjeta
                     </button>
                     <button wire:click="checkout('{{ $plan['key'] }}', 'spei')" type="button"
-                            style="width:100%; padding:10px; border-radius:12px; font-size:14px; font-weight:700; color:#374151; background:#f3f4f6; display:flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;"
+                            style="width:100%; margin-top:8px; padding:10px; border-radius:12px; font-size:14px; font-weight:700; color:#374151; background:#f3f4f6; display:flex; align-items:center; justify-content:center; gap:8px; border:none; cursor:pointer;"
                             onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">
                         <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
                         Pagar por SPEI (transferencia)
