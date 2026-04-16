@@ -188,15 +188,15 @@
             </div>
 
             <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-up delay-100">
-                Tu consultorio,<br>
+                Deja de perder<br>
                 <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-700 bg-clip-text text-transparent animate-gradient">
-                    organizado y al dia
-                </span>
+                    $15,000 al mes
+                </span><br>
+                <span class="text-gray-900">en citas que no llegan.</span>
             </h1>
 
             <p class="mt-8 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Deja de perder pacientes y dinero. Organiza tu consultorio, reduce inasistencias y
-                <strong class="text-gray-900">cóbrate más rápido</strong> — todo desde tu celular. Empieza gratis en 2 minutos.
+                Cada cita perdida son <strong class="text-gray-900">$600 que se van</strong>. DocFácil manda recordatorios por WhatsApp, organiza tu agenda y cobra por ti — <strong class="text-gray-900">sin que tú muevas un dedo</strong>. Empieza gratis en 2 minutos.
             </p>
 
             <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-300">
@@ -228,26 +228,34 @@
         </div>
     </section>
 
-    {{-- Badges de confianza --}}
+    {{-- Garantías de arranque --}}
     <section class="py-12 bg-gray-900">
         <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div data-animate class="animate-fade-up">
-                <div class="text-3xl mb-2">🎁</div>
+                <div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:#134e4a;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;color:#5eead4;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
                 <div class="text-sm font-bold text-white">Prueba gratis 15 días</div>
                 <div class="text-xs text-gray-400 mt-1">Todas las funciones del plan Pro</div>
             </div>
             <div data-animate class="animate-fade-up delay-100">
-                <div class="text-3xl mb-2">💳</div>
+                <div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:#134e4a;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;color:#5eead4;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                </div>
                 <div class="text-sm font-bold text-white">Sin tarjeta de crédito</div>
                 <div class="text-xs text-gray-400 mt-1">Solo tu correo para empezar</div>
             </div>
             <div data-animate class="animate-fade-up delay-200">
-                <div class="text-3xl mb-2">⚡</div>
+                <div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:#134e4a;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;color:#5eead4;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
                 <div class="text-sm font-bold text-white">Listo en 2 minutos</div>
                 <div class="text-xs text-gray-400 mt-1">Sin instalar nada</div>
             </div>
             <div data-animate class="animate-fade-up delay-300">
-                <div class="text-3xl mb-2">💬</div>
+                <div style="width:48px;height:48px;margin:0 auto 12px;border-radius:12px;background:#134e4a;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;color:#5eead4;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
                 <div class="text-sm font-bold text-white">Soporte por WhatsApp</div>
                 <div class="text-xs text-gray-400 mt-1">Directo con el fundador</div>
             </div>
@@ -272,10 +280,10 @@
                     </div>
                     @php
                     $pains = [
-                        ['title' => 'Agenda en papel o Excel', 'desc' => 'Pierdes citas, no puedes buscar rapido, se te olvidan los horarios y tus pacientes se van.'],
-                        ['title' => 'Pacientes que no llegan', 'desc' => 'No les recuerdas y el 30% no se presenta. Pierdes dinero y tiempo cada dia.'],
-                        ['title' => 'Recetas a mano', 'desc' => 'Letra ilegible, errores de dosis, sin registro digital. Tus pacientes merecen algo mejor.'],
-                        ['title' => 'No sabes cuanto ganas', 'desc' => 'Sin reportes claros. No sabes que servicio te deja mas, ni cuantos pacientes perdiste.'],
+                        ['title' => '$14,400/mes en citas perdidas', 'desc' => 'El 30% de tus pacientes no llega. En un consultorio de 80 pacientes/mes son 24 citas perdidas a $600 cada una. Dinero que se fue.'],
+                        ['title' => '10 horas a la semana en papeleo', 'desc' => 'Buscar expedientes, escribir recetas a mano, llamar uno por uno para confirmar citas. Tiempo que podrías estar con tu familia.'],
+                        ['title' => 'Recetas que se ven amateur', 'desc' => 'Letra ilegible, sin tu cédula impresa, sin logo. Los pacientes lo notan — y empiezan a compararte con clínicas grandes.'],
+                        ['title' => 'No sabes si ganas o pierdes', 'desc' => 'Sin reportes no sabes qué servicio te deja más, qué paciente ya no regresó ni cuánto te deben. Decides a ojo.'],
                     ];
                     @endphp
                     @foreach($pains as $i => $pain)
@@ -299,10 +307,10 @@
                     </div>
                     @php
                     $solutions = [
-                        ['title' => 'Agenda inteligente en la nube', 'desc' => 'Calendario visual, horarios por doctor, desde tu celular o computadora. Nunca pierdas una cita.'],
-                        ['title' => 'Recordatorios automáticos + un clic', 'desc' => 'Recordatorios por WhatsApp 24h y 2h antes (automáticos) o mándalos tú con un clic desde tu agenda. Reduce inasistencias 40%.'],
-                        ['title' => 'Recetas PDF profesionales', 'desc' => 'Con tu nombre, cedula, logo del consultorio. Descargables e imprimibles en segundos.'],
-                        ['title' => 'Reportes en tiempo real', 'desc' => 'Ingresos del mes, servicios mas solicitados, citas perdidas. Toma decisiones con datos, no con intuicion.'],
+                        ['title' => 'Recupera $11,500 al mes', 'desc' => 'WhatsApp automático 24h y 2h antes de cada cita baja las inasistencias de 30% a 8%. Recuperas 19 citas al mes = $11,520 que antes se iban.'],
+                        ['title' => 'Recuperas 8 horas a la semana', 'desc' => 'Agenda en la nube, expedientes digitales, recetas PDF en 10 segundos. El papeleo que te quitaba 2h/día se reduce a minutos.'],
+                        ['title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula, firma digital y logo del consultorio. Llegan al paciente por WhatsApp en un clic. Te ven como clínica grande.'],
+                        ['title' => 'Sabes cuánto ganas cada día', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes. Al entrar ves cómo va tu consultorio — sin adivinar.'],
                     ];
                     @endphp
                     @foreach($solutions as $i => $sol)
@@ -331,30 +339,57 @@
                 <h2 class="text-3xl sm:text-5xl font-extrabold text-gray-900" style="letter-spacing:-0.025em;">Funciones pensadas para <span style="background:linear-gradient(135deg,#0d9488,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">doctores reales</span></h2>
                 <p class="mt-5 text-lg text-gray-600 max-w-2xl mx-auto">Agenda, expedientes, recetas, WhatsApp, cobros y reportes. Todo lo que usas cada dia, en un mismo lugar y en espanol.</p>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" data-animate>
+            <div x-data="{ showMore: false }">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-animate>
                 @php
-                $features = [
-                    ['icon' => '🗓️', 'title' => 'Agenda inteligente', 'desc' => 'Calendario visual con drag & drop, horarios por doctor, bloqueos y vista diaria/semanal/mensual. Desde tu celular o compu.'],
-                    ['icon' => '📱', 'title' => 'Recordatorios automáticos + un clic', 'desc' => 'Recordatorios por WhatsApp automáticos 24h y 2h antes, o mándalos tú con un clic desde tu agenda. Seguimiento si no asistió. Reduce inasistencias hasta 40%.'],
-                    ['icon' => '📋', 'title' => 'Expedientes completos', 'desc' => 'Historial clinico, alergias, antecedentes, notas SOAP. Todo organizado y accesible en segundos.'],
-                    ['icon' => '📝', 'title' => 'Recetas PDF profesionales', 'desc' => 'Genera recetas con tu cedula, clinica, medicamentos y firma digital. Descarga o manda por WhatsApp.'],
-                    ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => 'Diagrama dental completo con 13 condiciones. Perfecto para dentistas. Compartible con el paciente.'],
-                    ['icon' => '💳', 'title' => 'Cobro por WhatsApp', 'desc' => 'Al terminar la consulta, boton para enviar monto y link de pago al paciente por WhatsApp. Cobras mas rapido.'],
-                    ['icon' => '📱', 'title' => 'Check-in con QR', 'desc' => 'Pegas un QR en recepcion, el paciente escanea y llena sus datos desde su celular. Cero papeleo.'],
-                    ['icon' => '✍️', 'title' => 'Firma digital', 'desc' => 'El paciente firma consentimientos con el dedo en tablet o celular. Legalmente valido con timestamp.'],
-                    ['icon' => '👥', 'title' => 'Portal del paciente', 'desc' => 'Cada paciente puede ver sus citas, recetas, pagos e historial. Acceso con su numero de telefono.'],
-                    ['icon' => '📊', 'title' => 'Dashboard con graficas', 'desc' => 'Ingresos, pacientes, citas de hoy, cobros pendientes. Todo visible al entrar. Datos en tiempo real.'],
-                    ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, citas sin confirmar, cumpleanos. Nada se te escapa.'],
-                    ['icon' => '🏥', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Maneja varios doctores y sucursales desde un solo panel. Comisiones entre doctores incluidas.'],
+                $featuresTop = [
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios WhatsApp automáticos 24h y 2h antes (o con un clic manual). Baja inasistencias de 30% a 8%.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y firma digital, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobras el mismo día', 'desc' => 'Al terminar la consulta, mandas monto + link de pago por WhatsApp. El paciente paga desde el celular antes de llegar a su casa.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Cumple NOM-004.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>', 'title' => 'Odontograma en 1 clic', 'desc' => 'Diagrama dental con 13 condiciones. El diente que sea, lo marcas con un clic y lo compartes con tu paciente por WhatsApp.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', 'title' => 'Sabes cuánto ganas', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes, pacientes activos. Al entrar lo ves — sin hojas de Excel.'],
+                ];
+                $featuresMore = [
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m0 14v1m-8-9H3m18 0h-1M5.636 5.636l-.707-.707m12.728 12.728l-.707-.707M5.636 18.364l-.707.707M18.364 5.636l.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>', 'title' => 'Check-in con QR', 'desc' => 'Un QR en recepción, el paciente llena sus datos desde su celular. Sin papel, sin filas.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma digital legal', 'desc' => 'El paciente firma consentimientos con el dedo. Válido con timestamp e IP.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas e historial desde su celular. Menos llamadas rutinarias para ti.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, cumpleaños, citas sin confirmar. Nada se te escapa.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Varios doctores o sucursales desde un panel. Comisiones entre doctores incluidas.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente NOM-004', 'desc' => 'Cumple con la norma mexicana. Diagnósticos, tratamientos, notas SOAP estructuradas.'],
                 ];
                 @endphp
-                @foreach($features as $i => $feature)
-                <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 animate-fade-up bg-white border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-100/50" style="animation-delay:{{ $i * 0.05 }}s">
-                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">{{ $feature['icon'] }}</div>
+
+                @foreach($featuresTop as $i => $feature)
+                <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 animate-fade-up bg-white border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-100/40" style="animation-delay:{{ $i * 0.05 }}s">
+                    <div style="width:48px;height:48px;border-radius:12px;background:#f0fdfa;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                        <svg style="width:24px;height:24px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">{!! $feature['svg'] !!}</svg>
+                    </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $feature['title'] }}</h3>
                     <p class="text-sm text-gray-600 leading-relaxed">{{ $feature['desc'] }}</p>
                 </div>
                 @endforeach
+
+                <template x-if="showMore">
+                    <div class="contents">
+                        @foreach($featuresMore as $feature)
+                        <div class="rounded-2xl p-6 bg-white border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-100/40 transition-all duration-300">
+                            <div style="width:48px;height:48px;border-radius:12px;background:#f0fdfa;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                                <svg style="width:24px;height:24px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">{!! $feature['svg'] !!}</svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $feature['title'] }}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $feature['desc'] }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </template>
+            </div>
+
+            <div class="text-center mt-8">
+                <button type="button" @click="showMore = !showMore" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-teal-500 text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition">
+                    <span x-text="showMore ? 'Ver menos' : 'Ver las 12 funciones completas →'">Ver las 12 funciones completas →</span>
+                </button>
+            </div>
             </div>
         </div>
     </section>
@@ -372,12 +407,12 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-animate>
                 @php
                 $shots = [
-                    ['file' => '01-dashboard.png', 'title' => 'Escritorio', 'desc' => 'Ingresos del mes, próximas citas y accesos rápidos.'],
-                    ['file' => '03-calendario.png', 'title' => 'Agenda visual', 'desc' => 'Arrastra citas, colores por estado, vista diaria/semanal/mensual.'],
-                    ['file' => '05-expediente.png', 'title' => 'Expediente clínico', 'desc' => 'Historial por paciente, alergias, notas SOAP, NOM-004.'],
-                    ['file' => '07-odontograma-editor.png', 'title' => 'Odontograma interactivo', 'desc' => 'Haces clic en el diente, eliges el estado, se guarda automático.'],
-                    ['file' => '08-cobros.png', 'title' => 'Cobros e ingresos', 'desc' => 'Pagos, pendientes y link SPEI por WhatsApp con un clic.'],
-                    ['file' => '06-recetas.png', 'title' => 'Recetas PDF', 'desc' => 'Con cédula, firma y logo. Envíalas al paciente por WhatsApp.'],
+                    ['file' => '01-dashboard.png', 'title' => 'Tu día en un vistazo', 'desc' => 'Ingresos, próximas citas y alertas. Sin abrir 5 archivos de Excel.'],
+                    ['file' => '03-calendario.png', 'title' => 'Arrastra y reagendas en 2 segundos', 'desc' => 'Agenda visual por día, semana o mes. Colores por estado.'],
+                    ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Cumple NOM-004.'],
+                    ['file' => '07-odontograma-editor.png', 'title' => 'El diente que sea, con 1 clic', 'desc' => '13 condiciones dentales. Se guarda solo y lo mandas al paciente por WhatsApp.'],
+                    ['file' => '08-cobros.png', 'title' => 'Cuánto te deben, listo para cobrar', 'desc' => 'Pendientes por paciente + link de pago por WhatsApp en un clic.'],
+                    ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, firma y logo. El paciente la recibe por WhatsApp.'],
                 ];
                 @endphp
                 @foreach ($shots as $i => $s)
@@ -402,33 +437,38 @@
     <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14" data-animate>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Tu consultorio, antes y después</h2>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">El mismo consultorio, $15K más al mes</h2>
+                <p class="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">Sin más marketing, sin más horas, sin más pacientes. Solo dejando de perder lo que hoy se escapa.</p>
             </div>
             <div class="grid md:grid-cols-2 gap-6" data-animate>
                 <div class="rounded-2xl p-8" style="background:linear-gradient(135deg,#fef2f2,#fee2e2); border:1px solid #fecaca;">
-                    <h3 class="font-extrabold text-red-900 text-xl mb-4 flex items-center gap-2">
-                        <span class="text-2xl">😩</span> Tu consultorio hoy
+                    <h3 class="font-extrabold text-red-900 text-xl mb-5 flex items-center gap-3">
+                        <span style="width:40px;height:40px;border-radius:10px;background:#fca5a5;display:inline-flex;align-items:center;justify-content:center;">
+                            <svg style="width:22px;height:22px;color:#7f1d1d;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </span>
+                        Tu consultorio hoy
                     </h3>
                     <ul class="space-y-3 text-red-900 text-sm">
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Agenda en papel o Excel — se te traspapelan citas</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> 30% de pacientes no llegan sin avisar</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Recetas a mano con letra ilegible</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> No sabes cuánto ganas ni cuánto te deben</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Expedientes en carpetas o Word sueltos</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Cobros que se te olvidan cobrar</li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span><strong>$14,400/mes</strong> en citas perdidas (30% no llegan)</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span><strong>10 horas/semana</strong> en papeleo y llamadas</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span>Cobros olvidados y pendientes que no cobras</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span>Recetas con letra ilegible que dan mala imagen</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span>Decides a ojo — no sabes qué servicio te deja más</span></li>
                     </ul>
                 </div>
                 <div class="rounded-2xl p-8" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1); border:1px solid #5eead4;">
-                    <h3 class="font-extrabold text-teal-900 text-xl mb-4 flex items-center gap-2">
-                        <span class="text-2xl">🎯</span> Con DocFácil
+                    <h3 class="font-extrabold text-teal-900 text-xl mb-5 flex items-center gap-3">
+                        <span style="width:40px;height:40px;border-radius:10px;background:#5eead4;display:inline-flex;align-items:center;justify-content:center;">
+                            <svg style="width:22px;height:22px;color:#134e4a;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </span>
+                        Tu consultorio con DocFácil
                     </h3>
                     <ul class="space-y-3 text-teal-900 text-sm">
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Agenda en la nube, accesible desde cualquier dispositivo</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> 8% de inasistencia (recordatorios WhatsApp)</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Recetas PDF profesionales con cédula y firma</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Reportes de ingresos en tiempo real</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Expediente digital completo, cumple NOM-004</li>
-                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Recordatorios automáticos de cobros pendientes</li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Recuperas $11,500/mes</strong> (inasistencia cae a 8%)</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Ahorras 8 horas/semana</strong> — papeleo en minutos</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Cobras por WhatsApp el mismo día de la consulta</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Recetas con cédula y firma — te ves como clínica grande</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Reportes en tiempo real — decides con datos</span></li>
                     </ul>
                 </div>
             </div>
@@ -448,16 +488,16 @@
                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m0 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.47-.01z"/></svg>
                 </div>
             </div>
-            <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">Una nota de Omar, fundador de DocFácil</h3>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">Un mensaje de Omar, fundador</h3>
             <p class="text-lg text-gray-600 leading-relaxed italic">
-                "Construí DocFácil porque vi a demasiados doctores perdiendo pacientes, tiempo y dinero por culpa del papel y el Excel. Si DocFácil no te ayuda en los primeros 30 días, te devuelvo tu dinero sin preguntas. Y cualquier duda, me escribes tú directamente por WhatsApp."
+                "Soy Omar Lerma. <strong class="not-italic text-gray-900">Desde Los Mochis, Sinaloa</strong>, construí DocFácil porque me cansé de ver a doctores perdiendo miles de pesos al mes en citas que no llegaban, en cobros que se olvidaban, en horas tirándose a buscar un expediente en papel. Si en los primeros 30 días DocFácil no te está ahorrando dinero y tiempo, <strong class="not-italic text-gray-900">te devuelvo tu dinero completo sin preguntas</strong>. Y si tienes cualquier duda, me escribes tú a mi celular."
             </p>
             <div class="mt-6 flex flex-col sm:flex-row gap-3 items-center justify-center">
                 <a href="https://wa.me/526682493398" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
                     Escríbeme: 668 249 3398
                 </a>
-                <span class="text-sm text-gray-500">— Omar Lerma, Fundador</span>
+                <span class="text-sm text-gray-500">— Omar Lerma, fundador de DocFácil</span>
             </div>
         </div>
     </section>
@@ -468,20 +508,22 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @php
                 $badges = [
-                    ['icon' => '🇲🇽', 'title' => 'Hecho en México'],
-                    ['icon' => '🔒', 'title' => 'Servidores en MX (LFPDPPP)'],
-                    ['icon' => '📋', 'title' => 'Cumple NOM-004-SSA3'],
-                    ['icon' => '🔐', 'title' => 'Cifrado TLS 1.3'],
-                    ['icon' => '💾', 'title' => 'Backups diarios'],
-                    ['icon' => '🚫', 'title' => 'Sin contratos forzosos'],
-                    ['icon' => '💬', 'title' => 'Soporte por WhatsApp'],
-                    ['icon' => '📱', 'title' => 'PWA instalable'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', 'title' => 'Hecho en México'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>', 'title' => 'Servidores en MX · LFPDPPP'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Cumple NOM-004-SSA3'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>', 'title' => 'Cifrado TLS 1.3'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>', 'title' => 'Backups diarios'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Sin contratos forzosos'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>', 'title' => 'Soporte por WhatsApp'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>', 'title' => 'PWA — instalable como app'],
                 ];
                 @endphp
                 @foreach ($badges as $i => $b)
-                <div class="bg-white rounded-xl p-4 text-center border border-gray-200 hover:border-teal-300 hover:shadow-sm transition animate-fade-up" style="animation-delay:{{ $i * 0.05 }}s">
-                    <div class="text-3xl mb-2">{{ $b['icon'] }}</div>
-                    <div class="text-xs font-bold text-gray-800">{{ $b['title'] }}</div>
+                <div class="bg-white rounded-xl p-5 text-center border border-gray-200 hover:border-teal-300 hover:shadow-sm transition animate-fade-up" style="animation-delay:{{ $i * 0.05 }}s">
+                    <div style="width:42px;height:42px;border-radius:10px;background:#f0fdfa;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                        <svg style="width:22px;height:22px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">{!! $b['svg'] !!}</svg>
+                    </div>
+                    <div class="text-xs font-bold text-gray-800 leading-tight">{{ $b['title'] }}</div>
                 </div>
                 @endforeach
             </div>
@@ -499,16 +541,16 @@
             <div x-data="{ open: 0 }" class="space-y-3">
                 @php
                 $landingFaqs = [
-                    ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes, 10 citas/mes). Básico $499/mes con recetas PDF, recordatorios WhatsApp y check-in QR. Pro $999/mes con multi-doctor, odontograma y portal del paciente. Clínica $1,999/mes para multi-sucursal. Paga anual y ahorra 2 meses.'],
-                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones ni letra chica. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos.'],
-                    ['q' => '¿Mis datos están seguros?', 'a' => 'Servidores en México, cifrado TLS 1.3, backups diarios automáticos, auditoría de accesos por usuario. Cumplimos LFPDPPP y NOM-004-SSA3.'],
-                    ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días: si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica.'],
-                    ['q' => '¿Puedo migrar mis pacientes de Excel?', 'a' => 'Sí. Te ayudamos con tu Excel o CSV en el onboarding gratuito. Si tienes más de 200 pacientes, alguien del equipo lo carga por ti.'],
-                    ['q' => '¿Funciona en celular?', 'a' => 'Sí, DocFácil es una PWA — se instala como app nativa en iPhone o Android sin App Store. También funciona en tablet y PC.'],
-                    ['q' => '¿Puedo usarlo en varios dispositivos?', 'a' => 'Sí, acceso simultáneo desde celular, tablet y PC. Los cambios se sincronizan en tiempo real.'],
-                    ['q' => '¿Hay capacitación?', 'a' => 'Plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos tutoriales y soporte directo por WhatsApp.'],
-                    ['q' => '¿Puedo agregar otros doctores o recepcionista?', 'a' => 'Sí, según el plan: Básico 1 doctor, Pro hasta 3, Clínica ilimitados. Recepcionistas adicionales incluidos sin costo extra.'],
-                    ['q' => '¿Emiten factura CFDI?', 'a' => 'Todavía no. Está en roadmap para Q3 2026. Por ahora puedes facturar manualmente desde tu sistema actual con los datos que DocFácil te muestra.'],
+                    ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para doctores, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Además te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. Tenemos doctores de 60+ años usándolo sin problema.'],
+                    ['q' => '¿Puedo migrar mis pacientes de Excel?', 'a' => 'Sí, y lo hacemos por ti. Subes tu archivo (Excel, CSV o una foto de tu libreta) y lo cargamos en tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas.'],
+                    ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días. Si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica. Tu riesgo es cero.'],
+                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos. Sin contratos forzosos.'],
+                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Servidores en México, cifrado TLS 1.3, backups diarios automáticos, auditoría de accesos por usuario. Cumplimos LFPDPPP y NOM-004-SSA3. Tus datos nunca se mezclan con otras clínicas.'],
+                    ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil se instala como app en iPhone o Android (PWA, sin pasar por App Store). Funciona incluso con internet intermitente — los cambios se sincronizan cuando vuelves a tener señal.'],
+                    ['q' => '¿Puedo usarlo con mi recepcionista/asistente?', 'a' => 'Sí, cada plan incluye al menos 1 cuenta de recepcionista sin costo adicional. Cada quien ve solo lo que necesita — tu asistente agenda y tú ves el expediente clínico.'],
+                    ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes). Básico $499/mes, Pro $999/mes, Clínica $1,999/mes. Paga anual y te ahorras 2 meses. Con garantía de 30 días: si no te sirve, te devolvemos tu dinero.'],
+                    ['q' => '¿Hay capacitación?', 'a' => 'Sí. El plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos cortos tutoriales y soporte directo por WhatsApp con el equipo (incluido el fundador).'],
+                    ['q' => '¿Emiten factura CFDI?', 'a' => 'Todavía no. Está en nuestro roadmap para Q3 2026. Por ahora puedes facturar manualmente desde tu sistema actual usando los datos que DocFácil te muestra.'],
                 ];
                 @endphp
                 @foreach ($landingFaqs as $i => $faq)
@@ -531,10 +573,10 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10" data-animate>
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full shadow-sm mb-4">
-                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Calculadora de ROI</span>
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Calcula tu pérdida actual</span>
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">¿Cuánto dinero te hará ganar DocFácil?</h2>
-                <p class="mt-3 text-lg text-gray-600">Llena 3 datos y descubre tu ahorro mensual real.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">¿Cuánto estás perdiendo cada mes?</h2>
+                <p class="mt-3 text-lg text-gray-600">Llena 3 datos y descubre el dinero que se te está yendo hoy sin que lo notes.</p>
             </div>
 
             <div x-data="roiCalc()" class="bg-white rounded-3xl shadow-2xl shadow-teal-100/50 p-8 md:p-10">
@@ -556,27 +598,27 @@
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl p-6 md:p-8 text-white">
+                <div class="bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl p-6 md:p-8 text-white">
                     <div class="text-center mb-6">
-                        <div class="text-sm font-semibold uppercase tracking-wider opacity-80">Con DocFácil ganas/ahorras al mes</div>
+                        <div class="text-sm font-semibold uppercase tracking-wider opacity-90">Lo que dejas de perder cada mes con DocFácil</div>
                         <div class="text-5xl md:text-6xl font-extrabold mt-2" x-text="'$' + totalSavings.toLocaleString('es-MX')"></div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div class="bg-white/10 backdrop-blur rounded-xl p-4">
                             <div class="font-bold" x-text="'$' + timeSavings.toLocaleString('es-MX')"></div>
-                            <div class="opacity-80 text-xs mt-1">Ahorro de tiempo<br><span x-text="(adminHours * 0.6).toFixed(0) + ' hrs/semana'"></span> liberadas</div>
+                            <div class="opacity-90 text-xs mt-1">Tiempo que recuperas<br><span x-text="(adminHours * 0.6).toFixed(0) + ' hrs/semana'"></span> para ver más pacientes o descansar</div>
                         </div>
                         <div class="bg-white/10 backdrop-blur rounded-xl p-4">
                             <div class="font-bold" x-text="'$' + retentionGain.toLocaleString('es-MX')"></div>
-                            <div class="opacity-80 text-xs mt-1">Retención de pacientes<br>WhatsApp reduce no-shows</div>
+                            <div class="opacity-90 text-xs mt-1">Citas que sí llegan<br>WhatsApp baja inasistencia de 30% a 8%</div>
                         </div>
                     </div>
                     <div class="text-center mt-6 pt-6 border-t border-white/20">
-                        <div class="text-sm opacity-90">DocFácil Pro cuesta $999/mes</div>
+                        <div class="text-sm opacity-95">DocFácil Pro cuesta $999/mes</div>
                         <div class="text-2xl font-extrabold mt-1">
-                            ROI: paga DocFácil <span x-text="(totalSavings / 999).toFixed(1)"></span>x
+                            Se paga <span x-text="(totalSavings / 999).toFixed(1)"></span>x solo en el primer mes
                         </div>
-                        <a href="#pricing" class="inline-block mt-4 px-8 py-3 bg-white text-teal-700 rounded-xl font-bold hover:scale-105 transition-transform">Empezar gratis →</a>
+                        <a href="#pricing" class="inline-block mt-4 px-8 py-3 bg-white text-red-700 rounded-xl font-bold hover:scale-105 transition-transform">Dejar de perder este dinero →</a>
                     </div>
                 </div>
             </div>
@@ -625,9 +667,9 @@
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp (auto + 1 clic)', 'Cobro por WhatsApp', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Portal del paciente', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario'], 'cta' => 'Probar 15 días', 'popular' => true],
-                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro +', 'Reportes por doctor', 'Comisiones entre doctores', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 24/7'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp (auto + 1 clic)', 'Cobro por WhatsApp', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Portal del paciente', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario'], 'cta' => 'Empezar con Pro →', 'popular' => true],
+                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro +', 'Reportes por doctor', 'Comisiones entre doctores', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 24/7'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -701,59 +743,74 @@
         </div>
     </section>
 
-    {{-- Comparison --}}
+    {{-- El costo real de no hacer nada --}}
     <section id="comparison" class="py-24">
         <div class="max-w-5xl mx-auto px-4" data-animate>
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">DocFacil vs la competencia</h2>
-                <p class="mt-4 text-lg text-gray-600">Mismas funciones (o mas), una fraccion del precio</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">"Me ha funcionado así toda la vida"</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Lo entendemos. Pero esto es lo que te cuesta cada mes seguir haciendo las cosas como siempre:</p>
             </div>
-            <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                 <table class="w-full text-sm">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="py-4 px-5 text-left text-gray-500 font-medium">Funcion</th>
-                            <th class="py-4 px-4 text-center"><img src="{{ asset('images/logo_doc_facil.png') }}" alt="DocFacil" class="h-7 mx-auto"></th>
-                            <th class="py-4 px-4 text-center text-gray-400 font-medium">Dentrix</th>
-                            <th class="py-4 px-4 text-center text-gray-400 font-medium">Eaglesoft</th>
-                            <th class="py-4 px-4 text-center text-gray-400 font-medium">DentalIntel</th>
+                    <thead>
+                        <tr class="border-b-2 border-gray-200">
+                            <th class="py-3 px-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Concepto</th>
+                            <th class="py-3 px-2 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Pérdida mensual</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-50">
-                        @php
-                        $comparisons = [
-                            ['Agenda de citas', true, true, true, true],
-                            ['Expediente clinico', true, true, true, false],
-                            ['Odontograma interactivo', true, true, true, false],
-                            ['Recetas PDF', true, false, false, false],
-                            ['Recordatorios WhatsApp', true, false, false, false],
-                            ['Consentimiento digital', true, false, true, false],
-                            ['Portal del paciente', true, false, false, true],
-                            ['100% web (sin instalar)', true, false, false, true],
-                            ['Soporte en espanol', true, false, false, false],
-                            ['Precio desde', '$499/mes MXN', 'USD $400', 'USD $350', 'USD $299'],
-                        ];
-                        @endphp
-                        @foreach($comparisons as $row)
-                        <tr class="hover:bg-teal-50/30 transition">
-                            <td class="py-3.5 px-5 font-medium text-gray-900">{{ $row[0] }}</td>
-                            @for($i = 1; $i <= 4; $i++)
-                            <td class="py-3.5 px-4 text-center">
-                                @if(is_bool($row[$i]))
-                                    @if($row[$i])
-                                    <span class="inline-flex w-6 h-6 bg-teal-100 rounded-full items-center justify-center"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span>
-                                    @else
-                                    <span class="inline-flex w-6 h-6 bg-gray-100 rounded-full items-center justify-center"><svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></span>
-                                    @endif
-                                @else
-                                    <span class="{{ $i === 1 ? 'font-bold text-teal-600' : 'text-gray-400' }}">{{ $row[$i] }}</span>
-                                @endif
+                    <tbody class="divide-y divide-gray-100">
+                        <tr>
+                            <td class="py-4 px-2">
+                                <div class="font-bold text-gray-900">Citas que no llegan (30%)</div>
+                                <div class="text-xs text-gray-500">24 citas no confirmadas × $600 promedio</div>
                             </td>
-                            @endfor
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$14,400</td>
                         </tr>
-                        @endforeach
+                        <tr>
+                            <td class="py-4 px-2">
+                                <div class="font-bold text-gray-900">Horas en papeleo administrativo</div>
+                                <div class="text-xs text-gray-500">10 hrs/semana × 4 semanas × costo de oportunidad</div>
+                            </td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$9,600</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-2">
+                                <div class="font-bold text-gray-900">Cobros que se te olvidan cobrar</div>
+                                <div class="text-xs text-gray-500">Pacientes que quedaron "te pago luego" y nunca regresaste</div>
+                            </td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$3,000</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-2">
+                                <div class="font-bold text-gray-900">Pacientes que se van por imagen</div>
+                                <div class="text-xs text-gray-500">Recetas a mano, agenda desorganizada = menos retención</div>
+                            </td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
+                        </tr>
+                        <tr class="border-t-2 border-gray-300 bg-red-50">
+                            <td class="py-5 px-2">
+                                <div class="font-extrabold text-gray-900 text-base">Total que estás perdiendo cada mes</div>
+                                <div class="text-xs text-gray-600 mt-0.5">Sin cambiar nada, sin "no hacer nada"</div>
+                            </td>
+                            <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">$29,000</td>
+                        </tr>
+                        <tr class="bg-teal-50">
+                            <td class="py-5 px-2">
+                                <div class="font-extrabold text-teal-900 text-base">Lo que pagas por DocFácil Pro</div>
+                                <div class="text-xs text-teal-700 mt-0.5">Menos del 4% de lo que pierdes hoy</div>
+                            </td>
+                            <td class="py-5 px-2 text-right font-extrabold text-teal-700 text-2xl">$999</td>
+                        </tr>
                     </tbody>
                 </table>
+
+                <div class="mt-6 text-center">
+                    <a href="#pricing" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition">
+                        Dejar de perder $29,000 al mes →
+                    </a>
+                    <p class="text-xs text-gray-500 mt-3">Con garantía de 30 días. Si no ves resultados, te devolvemos tu dinero.</p>
+                </div>
             </div>
         </div>
     </section>
