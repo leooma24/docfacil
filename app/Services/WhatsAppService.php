@@ -152,12 +152,22 @@ class WhatsAppService
 
     private function formatPhoneNumber(string $phone): string
     {
-        // Remove spaces, dashes, parentheses
-        $phone = preg_replace('/[\s\-\(\)\+]/', '', $phone);
+        // Quitar espacios, guiones, paréntesis, signo +
+        $phone = preg_replace('/[\s\-\(\)\+]/', '', (string) $phone);
 
-        // Add Mexico country code if not present
+        // 10 dígitos sin lada → agregar 52
         if (strlen($phone) === 10) {
             $phone = '52' . $phone;
+        }
+        // 11 dígitos empezando con 1 (formato legacy mexicano sin lada) → meter 52 antes
+        elseif (strlen($phone) === 11 && str_starts_with($phone, '1')) {
+            $phone = '52' . $phone;
+        }
+
+        // Normaliza el "1" móvil mexicano legacy: Meta WhatsApp espera 12 dígitos
+        // (52 + 10), no 13 (52 + 1 + 10). Strip del "1" extra después del 52.
+        if (strlen($phone) === 13 && str_starts_with($phone, '521')) {
+            $phone = '52' . substr($phone, 3);
         }
 
         return $phone;
