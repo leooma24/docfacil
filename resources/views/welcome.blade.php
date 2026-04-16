@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="scroll-behavior:smooth;">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,6 +77,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+        /* Offset del scroll para que el navbar fijo (h-20 = 80px) no tape el título de la sección */
+        section[id] { scroll-margin-top: 90px; }
         @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
@@ -112,6 +114,7 @@
                 <a href="#problema" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Por qué</a>
                 <a href="#features" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Funciones</a>
                 <a href="#pricing" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Precios</a>
+                <a href="#faq" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">FAQ</a>
                 <a href="#contacto" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Contacto</a>
 
                 {{-- Instalar app: texto sutil, solo aparece cuando PWA install está disponible --}}
@@ -150,6 +153,7 @@
         <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
             <a href="#features" class="block py-2 text-gray-600">Funciones</a>
             <a href="#pricing" class="block py-2 text-gray-600">Precios</a>
+            <a href="#faq" class="block py-2 text-gray-600">FAQ</a>
             <a href="#contacto" class="block py-2 text-gray-600">Contacto</a>
             <button
                 x-data="{ show: !!window.__docfacilInstallPrompt }"
@@ -175,19 +179,19 @@
     </nav>
 
     {{-- Hero con background animado --}}
-    <section class="relative pt-28 pb-14 sm:pt-32 sm:pb-24 px-4 overflow-hidden">
+    <section class="relative pt-24 pb-10 sm:pt-32 sm:pb-24 px-4 overflow-hidden">
         {{-- Animated blobs --}}
         <div class="absolute top-20 -left-40 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl animate-blob"></div>
         <div class="absolute top-40 -right-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-blob" style="animation-delay:3s"></div>
         <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl animate-blob" style="animation-delay:6s"></div>
 
         <div class="max-w-5xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 text-sm font-bold rounded-full mb-8 animate-fade-up border border-teal-200 shadow-sm">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 text-xs sm:text-sm font-bold rounded-full mb-5 sm:mb-8 animate-fade-up border border-teal-200 shadow-sm">
                 <span class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
                 Software medico para consultorios en Mexico
             </div>
 
-            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-fade-up delay-100">
+            <h1 class="text-[34px] sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] animate-fade-up delay-100">
                 Deja de perder<br>
                 <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-700 bg-clip-text text-transparent animate-gradient">
                     $15,000 al mes
@@ -195,11 +199,11 @@
                 <span class="text-gray-900">en citas que no llegan.</span>
             </h1>
 
-            <p class="mt-8 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
+            <p class="mt-5 sm:mt-8 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
                 Cada cita perdida son <strong class="text-gray-900">$600 que se van</strong>. DocFácil manda recordatorios por WhatsApp, organiza tu agenda y cobra por ti — <strong class="text-gray-900">sin que tú muevas un dedo</strong>. Empieza gratis en 2 minutos.
             </p>
 
-            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-300">
+            <div class="mt-7 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up delay-300">
                 <a href="{{ url('/doctor/register') }}" class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
                     Empieza gratis hoy
                     <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
@@ -710,10 +714,11 @@
                 @endphp
                 @foreach($plans as $i => $plan)
                 @php $visible = array_slice($plan['features'], 0, 4); $hidden = array_slice($plan['features'], 4); @endphp
-                <div x-data="{ expanded: false }" class="relative flex flex-col bg-white rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $plan['popular'] ? 'border-2 border-teal-500 shadow-xl shadow-teal-100/50 scale-105' : 'border border-gray-200 hover:shadow-lg' }}" style="animation-delay:{{ $i * 0.1 }}s">
+                <div x-data="{ expanded: false }" class="relative flex flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $plan['popular'] ? 'md:scale-110 md:-my-2 z-10' : '' }}" style="animation-delay:{{ $i * 0.1 }}s; {{ $plan['popular'] ? 'background:linear-gradient(180deg,#ffffff 0%,#f0fdfa 100%); border:3px solid #0d9488; box-shadow:0 25px 50px -12px rgba(13,148,136,0.35), 0 0 0 1px rgba(13,148,136,0.1);' : 'background:#fff; border:1px solid #e5e7eb;' }}">
                     @if($plan['popular'])
-                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-bold rounded-full shadow-lg">
-                        Mas popular
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-5 py-2 text-white text-xs font-extrabold rounded-full uppercase tracking-wider whitespace-nowrap" style="background:linear-gradient(135deg,#0d9488,#0891b2); box-shadow:0 10px 25px -5px rgba(13,148,136,0.5);">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        El más elegido
                     </div>
                     @endif
                     <h3 class="text-lg font-bold text-gray-900">{{ $plan['name'] }}</h3>
@@ -1107,6 +1112,86 @@ window.addEventListener('scroll', () => {
     lastScroll = scroll;
 });
 
+</script>
+
+{{-- Exit-intent modal: se dispara cuando el cursor sale por el borde superior (señal de cerrar tab).
+     Solo una vez por sesión. Se guarda flag en sessionStorage para no ser molesto. --}}
+<div id="exit-intent-modal"
+    style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity 0.25s;">
+    <div style="background:#fff;border-radius:20px;max-width:460px;width:100%;padding:32px 28px;position:relative;box-shadow:0 25px 70px -12px rgba(0,0,0,0.5);transform:scale(0.92);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);" id="exit-intent-card">
+        <button type="button" onclick="closeExitModal()" aria-label="Cerrar"
+            style="position:absolute;top:12px;right:12px;background:none;border:0;color:#9ca3af;cursor:pointer;padding:6px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div style="text-align:center;">
+            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3m0 3h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            </div>
+            <div style="font-size:13px;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Espera un momento</div>
+            <h3 style="font-size:24px;font-weight:800;color:#111827;line-height:1.25;margin-bottom:12px;">¿Te vas sin tu descuento?</h3>
+            <p style="font-size:15px;color:#4b5563;line-height:1.5;margin-bottom:22px;">Crea tu cuenta hoy y recibe <strong style="color:#0f766e;">20% off tu primer mes</strong> de cualquier plan pagado. Solo por hoy.</p>
+            <a href="{{ url('/doctor/register?promo=VUELVE20') }}" onclick="trackExitConvert()"
+                style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px;box-shadow:0 10px 25px -5px rgba(13,148,136,0.4);margin-bottom:10px;">
+                Sí, quiero mi 20% off →
+            </a>
+            <button type="button" onclick="closeExitModal()"
+                style="background:none;border:0;color:#9ca3af;font-size:13px;cursor:pointer;padding:8px;">
+                No gracias, prefiero pagar el precio completo
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'docfacil_exit_intent_shown';
+    const modal = document.getElementById('exit-intent-modal');
+    const card = document.getElementById('exit-intent-card');
+    if (!modal || sessionStorage.getItem(STORAGE_KEY)) return;
+
+    let shown = false;
+
+    function show() {
+        if (shown) return;
+        shown = true;
+        sessionStorage.setItem(STORAGE_KEY, '1');
+        modal.style.display = 'flex';
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+        });
+    }
+
+    // Desktop: mouse sale por arriba (señal de ir a cerrar la tab)
+    document.addEventListener('mouseleave', (e) => {
+        if (e.clientY <= 0 && window.scrollY > 300) show();
+    });
+
+    // Mobile: back button o visibilidad (proxy de "me voy")
+    // Solo después de 30s en página para no ser molesto al que rebota rápido
+    let mobileTimer = null;
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        mobileTimer = setTimeout(() => {
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') show();
+            }, { once: true });
+        }, 30000);
+    }
+})();
+
+function closeExitModal() {
+    const modal = document.getElementById('exit-intent-modal');
+    const card = document.getElementById('exit-intent-card');
+    if (!modal) return;
+    modal.style.opacity = '0';
+    card.style.transform = 'scale(0.92)';
+    setTimeout(() => modal.style.display = 'none', 250);
+}
+
+function trackExitConvert() {
+    // Hook analítico — por ahora solo log, luego se puede conectar a GA/Meta
+    try { console.log('[docfacil] exit-intent conversion'); } catch(e) {}
+}
 </script>
 
 <x-chatbot-widget />
