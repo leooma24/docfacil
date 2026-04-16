@@ -114,7 +114,7 @@
                 <a href="#pricing" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Precios</a>
                 <a href="#contacto" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Contacto</a>
 
-                {{-- Botón instalar app (solo aparece cuando el navegador soporta PWA install) --}}
+                {{-- Instalar app: texto sutil, solo aparece cuando PWA install está disponible --}}
                 <button
                     x-data="{ show: !!window.__docfacilInstallPrompt, installing: false }"
                     x-show="show"
@@ -132,12 +132,12 @@
                         });
                     "
                     type="button"
-                    class="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800 border border-teal-200 hover:border-teal-400 rounded-xl px-3 py-2 transition-all hover:bg-teal-50">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                    class="text-sm text-gray-500 hover:text-teal-600 transition font-medium">
                     <span x-text="installing ? 'Instalando...' : 'Instalar app'"></span>
                 </button>
 
-                <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-600 hover:text-teal-600 transition font-medium">Iniciar sesion</a>
+                <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-500 hover:text-teal-600 transition font-medium">Iniciar sesión</a>
+                {{-- CTA único primary — sin competencia visual en el nav --}}
                 <a href="{{ url('/doctor/register') }}" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
                     Prueba gratis
                 </a>
@@ -175,7 +175,7 @@
     </nav>
 
     {{-- Hero con background animado --}}
-    <section class="relative pt-32 pb-24 px-4 overflow-hidden">
+    <section class="relative pt-28 pb-14 sm:pt-32 sm:pb-24 px-4 overflow-hidden">
         {{-- Animated blobs --}}
         <div class="absolute top-20 -left-40 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl animate-blob"></div>
         <div class="absolute top-40 -right-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-blob" style="animation-delay:3s"></div>
@@ -263,7 +263,7 @@
     </section>
 
     {{-- Pain vs Solution --}}
-    <section id="problema" class="py-24">
+    <section id="problema" class="py-14 sm:py-24">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-animate>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 animate-fade-up">
@@ -330,7 +330,7 @@
     </section>
 
     {{-- Features --}}
-    <section id="features" class="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section id="features" class="py-14 sm:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-animate>
                 <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-xs font-bold rounded-full mb-4 shadow-lg shadow-teal-200">
@@ -395,7 +395,7 @@
     </section>
 
     {{-- Así se ve DocFácil trabajando (screenshots reales) --}}
-    <section class="py-24 bg-white">
+    <section class="py-14 sm:py-24 bg-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14" data-animate>
                 <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-teal-50 text-teal-700 text-xs font-bold rounded-full mb-4 border border-teal-100">
@@ -433,8 +433,10 @@
         </div>
     </section>
 
-    {{-- Antes vs Después --}}
-    <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
+    {{-- Antes vs Después — ELIMINADA en refactor UX: su mensaje está cubierto por la tabla
+         "Costo de no hacer nada" más abajo que muestra $29K/mes perdidos. Mantener ambas era duplicar. --}}
+    @if (false)
+    <section class="py-14 sm:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14" data-animate>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">El mismo consultorio, $15K más al mes</h2>
@@ -474,9 +476,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- Carta del fundador --}}
-    <section class="py-20 bg-white">
+    <section class="py-12 sm:py-20 bg-white">
         <div class="max-w-3xl mx-auto px-4 text-center" data-animate>
             <div class="inline-block relative mb-6">
                 @if (file_exists(public_path('images/founder-omar.jpg')))
@@ -507,21 +510,54 @@
         <div class="max-w-5xl mx-auto px-4" data-animate>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @php
+                // Cada badge con ícono y paleta únicos para que sean escaneables sin leer el texto.
                 $badges = [
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', 'title' => 'Hecho en México'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>', 'title' => 'Servidores en MX · LFPDPPP'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Cumple NOM-004-SSA3'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>', 'title' => 'Cifrado TLS 1.3'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>', 'title' => 'Backups diarios'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Sin contratos forzosos'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>', 'title' => 'Soporte por WhatsApp'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>', 'title' => 'PWA — instalable como app'],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>',
+                        'title' => 'Hecho en México',
+                        'bg' => '#fef2f2', 'color' => '#dc2626',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>',
+                        'title' => 'Servidores en MX · LFPDPPP',
+                        'bg' => '#eff6ff', 'color' => '#1d4ed8',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
+                        'title' => 'Cumple NOM-004-SSA3',
+                        'bg' => '#ecfdf5', 'color' => '#059669',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>',
+                        'title' => 'Cifrado TLS 1.3',
+                        'bg' => '#f0fdfa', 'color' => '#0d9488',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>',
+                        'title' => 'Backups diarios',
+                        'bg' => '#f5f3ff', 'color' => '#7c3aed',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>',
+                        'title' => 'Sin contratos forzosos',
+                        'bg' => '#fffbeb', 'color' => '#d97706',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>',
+                        'title' => 'Soporte por WhatsApp',
+                        'bg' => '#f0fdf4', 'color' => '#16a34a',
+                    ],
+                    [
+                        'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
+                        'title' => 'PWA · instalable como app',
+                        'bg' => '#eef2ff', 'color' => '#4f46e5',
+                    ],
                 ];
                 @endphp
                 @foreach ($badges as $i => $b)
-                <div class="bg-white rounded-xl p-5 text-center border border-gray-200 hover:border-teal-300 hover:shadow-sm transition animate-fade-up" style="animation-delay:{{ $i * 0.05 }}s">
-                    <div style="width:42px;height:42px;border-radius:10px;background:#f0fdfa;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
-                        <svg style="width:22px;height:22px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">{!! $b['svg'] !!}</svg>
+                <div class="bg-white rounded-xl p-5 text-center border border-gray-200 hover:border-gray-300 hover:shadow-md transition animate-fade-up" style="animation-delay:{{ $i * 0.05 }}s">
+                    <div style="width:44px;height:44px;border-radius:10px;background:{{ $b['bg'] }};display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                        <svg style="width:22px;height:22px;color:{{ $b['color'] }};" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">{!! $b['svg'] !!}</svg>
                     </div>
                     <div class="text-xs font-bold text-gray-800 leading-tight">{{ $b['title'] }}</div>
                 </div>
@@ -531,7 +567,7 @@
     </section>
 
     {{-- FAQ --}}
-    <section id="faq" class="py-24 bg-white">
+    <section id="faq" class="py-14 sm:py-24 bg-white">
         <div class="max-w-3xl mx-auto px-4" data-animate>
             <div class="text-center mb-12">
                 <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-teal-50 text-teal-700 text-xs font-bold rounded-full mb-4 border border-teal-100">PREGUNTAS FRECUENTES</span>
@@ -569,7 +605,7 @@
     </section>
 
     {{-- ROI Calculator --}}
-    <section id="roi" class="py-20 bg-gradient-to-br from-teal-50 to-cyan-50">
+    <section id="roi" class="py-12 sm:py-20 bg-gradient-to-br from-teal-50 to-cyan-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10" data-animate>
                 <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full shadow-sm mb-4">
@@ -647,7 +683,7 @@
     </section>
 
     {{-- Pricing --}}
-    <section id="pricing" class="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section id="pricing" class="py-14 sm:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10" data-animate>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Invierte menos de lo que cuesta una consulta</h2>
@@ -744,7 +780,7 @@
     </section>
 
     {{-- El costo real de no hacer nada --}}
-    <section id="comparison" class="py-24">
+    <section id="comparison" class="py-14 sm:py-24">
         <div class="max-w-5xl mx-auto px-4" data-animate>
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">"Me ha funcionado así toda la vida"</h2>
@@ -816,7 +852,7 @@
     </section>
 
     {{-- Contact --}}
-    <section id="contacto" class="py-24 bg-gradient-to-b from-white to-gray-50">
+    <section id="contacto" class="py-14 sm:py-24 bg-gradient-to-b from-white to-gray-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-16 items-start">
                 {{-- Info --}}
@@ -940,7 +976,7 @@
     </section>
 
     {{-- CTA Final --}}
-    <section class="py-24 relative overflow-hidden">
+    <section class="py-14 sm:py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-700 animate-gradient"></div>
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10" data-animate>
@@ -1010,8 +1046,18 @@
         </div>
     </footer>
 
-{{-- Chatbot FAQ --}}
-<div id="chatbot" class="fixed bottom-6 right-6 z-50">
+{{-- Sticky CTA mobile — aparece después del hero para reducir scroll fatigue.
+     Solo visible en pantallas chicas (md:hidden). --}}
+<div id="sticky-cta" class="md:hidden fixed bottom-0 left-0 right-0 z-40 px-3 pb-3 pt-2 bg-white/95 backdrop-blur-md border-t border-gray-200 opacity-0 pointer-events-none translate-y-full transition-all duration-300" style="box-shadow: 0 -4px 12px rgba(0,0,0,0.06);">
+    <a href="{{ url('/doctor/register') }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl shadow-lg">
+        <span>Empieza gratis</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    </a>
+    <p class="text-center text-xs text-gray-500 mt-1.5">Sin tarjeta · 15 días gratis · garantía 30 días</p>
+</div>
+
+{{-- Chatbot FAQ — oculto hasta que el usuario hace scroll 500px (evita tapar CTAs del hero) --}}
+<div id="chatbot" class="fixed bottom-20 md:bottom-6 right-3 md:right-6 z-50 opacity-0 pointer-events-none transition-opacity duration-300" style="visibility: hidden;">
     <div id="chat-window" class="hidden mb-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
         <div class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -1044,6 +1090,35 @@
 <script>
 // PWA
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
+
+// Chatbot + Sticky CTA mobile: ambos aparecen tras scrollear 500px para no tapar hero
+(function() {
+    const chatbot = document.getElementById('chatbot');
+    const stickyCta = document.getElementById('sticky-cta');
+
+    function update() {
+        const show = window.scrollY > 500;
+        if (chatbot) {
+            if (show) {
+                chatbot.style.visibility = 'visible';
+                chatbot.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                chatbot.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { if (window.scrollY <= 500) chatbot.style.visibility = 'hidden'; }, 300);
+            }
+        }
+        if (stickyCta) {
+            if (show) {
+                stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+            } else {
+                stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+            }
+        }
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+})();
 
 // Scroll animations
 const observer = new IntersectionObserver((entries) => {
