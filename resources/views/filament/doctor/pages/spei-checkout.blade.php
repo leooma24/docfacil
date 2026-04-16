@@ -5,7 +5,7 @@
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <div class="text-xs font-semibold tracking-wider uppercase opacity-90 mb-1">Pago por transferencia SPEI</div>
-                    <h1 class="text-2xl font-extrabold">Plan {{ ucfirst($this->plan === 'profesional' ? 'Pro' : $this->plan) }} · {{ $this->cycle === 'annual' ? 'Anual' : 'Mensual' }}</h1>
+                    <h1 class="text-2xl font-extrabold">Plan {{ \App\Models\Clinic::displayNameForPlan($this->plan) }} · {{ $this->cycle === 'annual' ? 'Anual' : 'Mensual' }}</h1>
                     <p class="mt-1 opacity-95">Total a transferir: <strong>${{ number_format($this->amount, 2) }} MXN</strong></p>
                 </div>
                 <a href="{{ route('filament.doctor.pages.actualizar-plan') }}" class="text-white/90 hover:text-white text-sm underline">← Regresar</a>

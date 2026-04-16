@@ -56,7 +56,7 @@ class SpeiPaymentResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('plan')
                     ->label('Plan')
-                    ->formatStateUsing(fn ($state) => ucfirst($state === 'profesional' ? 'Pro' : $state))
+                    ->formatStateUsing(fn ($state) => \App\Models\Clinic::displayNameForPlan($state))
                     ->badge(),
                 Tables\Columns\TextColumn::make('billing_cycle')
                     ->label('Ciclo')
@@ -155,7 +155,7 @@ class SpeiPaymentResource extends Resource
                 ->schema([
                     Infolists\Components\TextEntry::make('clinic.name')->label('Clínica'),
                     Infolists\Components\TextEntry::make('user.name')->label('Usuario que subió')->placeholder('—'),
-                    Infolists\Components\TextEntry::make('plan')->formatStateUsing(fn ($state) => ucfirst($state === 'profesional' ? 'Pro' : $state)),
+                    Infolists\Components\TextEntry::make('plan')->formatStateUsing(fn ($state) => \App\Models\Clinic::displayNameForPlan($state)),
                     Infolists\Components\TextEntry::make('billing_cycle')->label('Ciclo')->formatStateUsing(fn ($state) => $state === 'annual' ? 'Anual' : 'Mensual'),
                     Infolists\Components\TextEntry::make('amount')->money('MXN'),
                     Infolists\Components\TextEntry::make('reference_code')->label('Referencia')->copyable(),

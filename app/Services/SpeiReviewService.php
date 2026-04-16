@@ -93,24 +93,24 @@ class SpeiReviewService
         $email = $owner?->email ?? $clinic->email;
         $phone = $clinic->phone;
 
-        $planLabel = ucfirst($payment->plan === 'profesional' ? 'Pro' : $payment->plan);
+        $planLabel = \App\Models\Clinic::displayNameForPlan($payment->plan);
         $cycleLabel = $payment->billing_cycle === 'annual' ? 'anual' : 'mensual';
         $amount = number_format($payment->amount, 2);
 
         if ($result === 'approved') {
             $endsAt = $payment->fresh()->plan_activated_until?->format('d/m/Y') ?? '—';
-            $subject = '✅ Pago aprobado · DocFácil';
+            $subject = '[DocFacil] Pago aprobado — plan activo';
             $body = "Aprobamos tu pago SPEI por \${$amount} MXN del plan {$planLabel} ({$cycleLabel}).\n\n"
                 . "Tu plan queda activo hasta: {$endsAt}\n\n"
                 . "Entra a DocFácil: " . url('/doctor');
-            $waMessage = "✅ DocFácil: Aprobamos tu pago SPEI de \${$amount} por el plan {$planLabel} ({$cycleLabel}). Tu plan queda activo hasta {$endsAt}. ¡Gracias!";
+            $waMessage = "DocFacil: Aprobamos tu pago SPEI de \${$amount} por el plan {$planLabel} ({$cycleLabel}). Tu plan queda activo hasta {$endsAt}. Gracias!";
         } else {
             $reason = $payment->review_notes ?: 'No pudimos verificar el comprobante.';
-            $subject = '⚠ Pago SPEI rechazado · DocFácil';
+            $subject = '[DocFacil] Pago SPEI rechazado';
             $body = "No pudimos aprobar tu pago SPEI por \${$amount} MXN.\n\n"
                 . "Motivo: {$reason}\n\n"
                 . "Puedes intentar de nuevo o contactar a Omar por WhatsApp al 668 249 3398.";
-            $waMessage = "⚠ DocFácil: No pudimos aprobar tu pago SPEI de \${$amount}. Motivo: {$reason}. Contáctanos si tienes dudas: wa.me/526682493398";
+            $waMessage = "DocFacil: No pudimos aprobar tu pago SPEI de \${$amount}. Motivo: {$reason}. Contactanos si tienes dudas: wa.me/526682493398";
         }
 
         if ($email) {

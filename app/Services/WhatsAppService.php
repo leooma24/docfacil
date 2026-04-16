@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class WhatsAppService
 {
@@ -44,14 +46,56 @@ class WhatsAppService
                 return true;
             }
 
-            Log::error("WhatsApp: Failed to send to {$to}", [
-                'status' => $response->status(),
-                'body' => $response->json(),
-            ]);
+            $this->handleHttpFailure($to, $response->status(), $response->json());
             return false;
         } catch (\Exception $e) {
             Log::error("WhatsApp: Exception sending to {$to}: {$e->getMessage()}");
             return false;
+        }
+    }
+
+    /**
+     * Registra el fallo y — si es token expirado (401) — dispara alerta al admin.
+     * Throttled: máximo 1 alerta cada 6 horas para no spammear cuando fallan cientos seguidos.
+     */
+    private function handleHttpFailure(string $to, int $status, $body): void
+    {
+        Log::error("WhatsApp: Failed to send to {$to}", ['status' => $status, 'body' => $body]);
+
+        if ($status !== 401) {
+            return;
+        }
+
+        $throttleKey = 'whatsapp:token_expired_alert_sent';
+        if (Cache::has($throttleKey)) {
+            return; // ya avisamos hace menos de 6 horas
+        }
+        Cache::put($throttleKey, now()->toIso8601String(), now()->addHours(6));
+
+        $adminEmails = collect(explode(',', (string) config('services.notifications.emails', 'leooma24@gmail.com')))
+            ->map(fn ($e) => trim($e))
+            ->filter()
+            ->values()
+            ->all();
+
+        $subject = '[DocFacil] Token de WhatsApp expirado — renueva en Meta Business';
+        $bodyMsg = "El token de la WhatsApp Business API expiró o fue revocado.\n\n"
+            . "Todas las comunicaciones automáticas por WhatsApp (recordatorios de citas, "
+            . "aprobaciones de pago SPEI, emails al bot) están fallando con error 401.\n\n"
+            . "Para renovarlo:\n"
+            . "  1. Entra a https://business.facebook.com\n"
+            . "  2. Settings → WhatsApp Accounts → System Users\n"
+            . "  3. Genera un nuevo Permanent Token\n"
+            . "  4. Actualiza WHATSAPP_TOKEN en el .env de prod\n"
+            . "  5. Ejecuta: php artisan config:clear\n\n"
+            . "Primer fallo detectado: " . now()->toDateTimeString() . " hora servidor.";
+
+        foreach ($adminEmails as $email) {
+            try {
+                Mail::raw($bodyMsg, fn ($m) => $m->to($email)->subject($subject));
+            } catch (\Throwable $e) {
+                Log::warning('WhatsApp: no se pudo enviar alerta de token expirado', ['err' => $e->getMessage()]);
+            }
         }
     }
 

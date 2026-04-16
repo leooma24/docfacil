@@ -108,14 +108,21 @@ class StripeSetupPrices extends Command
             return null;
         }
 
-        // Si ya hay un precio con el monto+interval+moneda exactos, lo reusamos.
-        $existing = $stripe->prices->all([
-            'product' => $productId,
-            'active' => true,
-            'limit' => 100,
-        ]);
+        // Paginamos todos los precios activos del producto — no asumir <100.
+        $allPrices = [];
+        $params = ['product' => $productId, 'active' => true, 'limit' => 100];
+        do {
+            $page = $stripe->prices->all($params);
+            foreach ($page->data as $p) {
+                $allPrices[] = $p;
+            }
+            if ($page->has_more) {
+                $params['starting_after'] = end($page->data)->id;
+            }
+        } while ($page->has_more);
 
-        foreach ($existing->data as $p) {
+        // Si ya hay un precio con el monto+interval+moneda exactos, lo reusamos.
+        foreach ($allPrices as $p) {
             $sameInterval = $p->recurring && $p->recurring->interval === $interval;
             $sameAmount = $p->unit_amount === $amountMxn * 100;
             $sameCurrency = $p->currency === 'mxn';
@@ -133,7 +140,7 @@ class StripeSetupPrices extends Command
 
         // Si existe un precio (probablemente viejo con monto distinto) usando ese lookup_key,
         // lo liberamos antes de crear el nuevo — Stripe no permite duplicar lookup_keys.
-        foreach ($existing->data as $p) {
+        foreach ($allPrices as $p) {
             if (($p->lookup_key ?? null) === $fullLookupKey) {
                 $stripe->prices->update($p->id, ['lookup_key' => null]);
                 $this->line("  <fg=yellow>↻</> liberado lookup_key del precio anterior {$p->id}");

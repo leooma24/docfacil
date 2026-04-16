@@ -120,10 +120,10 @@ class SpeiCheckout extends Page implements HasForms
             ->values()
             ->all();
 
-        $planLabel = ucfirst($this->plan === 'profesional' ? 'Pro' : $this->plan);
+        $planLabel = \App\Models\Clinic::displayNameForPlan($this->plan);
         $cycleLabel = $this->cycle === 'annual' ? '(Anual)' : '(Mensual)';
         $amountFmt = number_format($this->amount, 2);
-        $subject = '🟡 Nuevo pago SPEI pendiente · DocFácil · $' . $amountFmt;
+        $subject = '[DocFacil] Nuevo pago SPEI pendiente · $' . $amountFmt;
         $body = sprintf(
             "Nuevo pago SPEI pendiente de aprobación:\n\nClínica: %s (#%d)\nPlan: %s %s\nMonto: $%s MXN\nReferencia: %s\n\nRevísalo en: %s",
             $clinic->name,

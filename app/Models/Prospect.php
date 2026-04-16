@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 class Prospect extends Model
 {
     protected $fillable = [
-        'name', 'email', 'phone', 'clinic_name', 'city',
+        'name', 'email', 'phone', 'website', 'has_whatsapp',
+        'osm_id', 'latitude', 'longitude',
+        'clinic_name', 'city',
         'specialty', 'source', 'status', 'notes',
         'contacted_at', 'converted_at', 'address',
         'assigned_to_sales_rep_id', 'converted_clinic_id',
@@ -34,6 +36,9 @@ class Prospect extends Model
             'objections_faced' => 'array',
             'conversation_log' => 'array',
             'lead_score' => 'integer',
+            'has_whatsapp' => 'boolean',
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
         ];
     }
 

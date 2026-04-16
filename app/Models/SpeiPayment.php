@@ -2,14 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * Pagos SPEI manuales con aprobación administrativa.
+ *
+ * Usa BelongsToClinic defensivamente: el admin global (sin clinic_id) ve todos
+ * los pagos, pero si un doctor accediera al modelo (hoy no hay UI), solo vería
+ * los de su clínica. Previene futuras filtraciones si se expone el recurso
+ * al panel Doctor para ver historial propio.
+ */
 class SpeiPayment extends Model
 {
+    use BelongsToClinic;
     use LogsActivity;
 
     public const STATUS_PENDING = 'pending';

@@ -26,7 +26,7 @@
         <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between dark:bg-gray-900 dark:border-gray-700">
             <div>
                 <div class="text-xs font-bold tracking-wider text-gray-500 dark:text-gray-400 uppercase">Tu plan actual</div>
-                <div class="text-2xl font-extrabold text-gray-900 dark:text-white capitalize">{{ $clinic->plan === 'profesional' ? 'Pro' : $clinic->plan }}</div>
+                <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ \App\Models\Clinic::displayNameForPlan($clinic->plan) }}</div>
                 @if ($clinic->plan_ends_at)
                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {{ $clinic->plan_ends_at->isPast() ? 'Venció el' : 'Vence el' }} {{ $clinic->plan_ends_at->format('d/m/Y') }}
