@@ -138,4 +138,24 @@ class Clinic extends Model
         }
         return $this->plan_ends_at && $this->plan_ends_at->isFuture();
     }
+
+    /**
+     * Nombre del plan tal cual se muestra al usuario.
+     * El slug interno 'basico' fue rebautizado a 'Starter' en marketing.
+     */
+    public function planDisplayName(): string
+    {
+        return self::displayNameForPlan($this->plan);
+    }
+
+    public static function displayNameForPlan(?string $plan): string
+    {
+        return match ($plan) {
+            'free' => 'Free',
+            'basico' => 'Starter',
+            'profesional' => 'Pro',
+            'clinica' => 'Clínica',
+            default => ucfirst((string) $plan),
+        };
+    }
 }

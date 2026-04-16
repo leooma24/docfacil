@@ -85,11 +85,11 @@ class VerifyClinicPlan
     private function getPlanLimits(string $plan): ?array
     {
         return match ($plan) {
-            'free' => ['doctors' => 1, 'patients' => 30, 'appointments' => 20],
+            'free' => ['doctors' => 1, 'patients' => 15, 'appointments' => 10],
             'basico' => ['doctors' => 1, 'patients' => 200, 'appointments' => null],
             'profesional' => ['doctors' => 3, 'patients' => null, 'appointments' => null],
             'clinica' => null,
-            default => ['doctors' => 1, 'patients' => 30, 'appointments' => 20],
+            default => ['doctors' => 1, 'patients' => 15, 'appointments' => 10],
         };
     }
 
