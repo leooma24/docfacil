@@ -166,8 +166,17 @@ class PremiumServicePurchaseResource extends Resource
         return $form->schema([
             Forms\Components\Section::make('Detalles de la compra')
                 ->schema([
-                    Forms\Components\TextInput::make('service_name_snapshot')->label('Servicio')->disabled(),
-                    Forms\Components\TextInput::make('amount_mxn')->label('Monto')->disabled()->prefix('$'),
+                    // Snapshot de precio y nombre — inmutables desde admin (dehydrated false
+                    // evita que el valor viaje en el POST aunque alguien lo manipule en el DOM).
+                    Forms\Components\TextInput::make('service_name_snapshot')
+                        ->label('Servicio')
+                        ->disabled()
+                        ->dehydrated(false),
+                    Forms\Components\TextInput::make('amount_mxn')
+                        ->label('Monto')
+                        ->disabled()
+                        ->dehydrated(false)
+                        ->prefix('$'),
                     Forms\Components\Select::make('status')
                         ->label('Estado')
                         ->options(PremiumServicePurchase::STATUSES)
@@ -182,11 +191,13 @@ class PremiumServicePurchaseResource extends Resource
                 ->schema([
                     Forms\Components\KeyValue::make('intake_data')
                         ->label('Datos del intake')
-                        ->disabled(),
+                        ->disabled()
+                        ->dehydrated(false),
                     Forms\Components\Textarea::make('client_notes')
                         ->label('Notas del cliente')
                         ->rows(3)
-                        ->disabled(),
+                        ->disabled()
+                        ->dehydrated(false),
                 ])
                 ->visible(fn ($record) => !empty($record?->intake_data) || !empty($record?->client_notes)),
 

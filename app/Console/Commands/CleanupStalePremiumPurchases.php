@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\PremiumServicePurchase;
+use App\Models\Scopes\ClinicScope;
 use Illuminate\Console\Command;
 
 /**
@@ -23,7 +24,10 @@ class CleanupStalePremiumPurchases extends Command
         $dryRun = (bool) $this->option('dry-run');
         $threshold = now()->subHours($hours);
 
+        // Explícito: comando corre sin usuario autenticado → nos saltamos el ClinicScope
+        // para barrer TODAS las clínicas, no solo las del user actual (que sería null).
         $stale = PremiumServicePurchase::query()
+            ->withoutGlobalScope(ClinicScope::class)
             ->where('status', PremiumServicePurchase::STATUS_PENDING_PAYMENT)
             ->where('created_at', '<', $threshold)
             ->get();

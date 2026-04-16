@@ -124,16 +124,15 @@ class StripeWebhookController extends Controller
             return;
         }
 
-        // markPaid() retorna false si ya estaba pagado — evita notificar/loggear 2 veces
-        $newlyMarked = $purchase->markPaid('stripe', $session->id ?? null);
+        // markPaid() consolida todos los IDs en un solo update y retorna false si ya estaba pagado.
+        $newlyMarked = $purchase->markPaid(
+            method: 'stripe',
+            stripeSession: $session->id ?? null,
+            stripeSubscriptionId: $session->subscription ?? null,
+        );
         if (!$newlyMarked) {
             Log::info('Servicio premium ya estaba pagado, evento ignorado', ['purchase_id' => $purchase->id]);
             return;
-        }
-
-        // Si fue subscription (monthly), guardar el sub_id para poder reaccionar a cancellation
-        if (!empty($session->subscription)) {
-            $purchase->update(['stripe_subscription_id' => $session->subscription]);
         }
 
         // Notificar a admins que hay un servicio nuevo en cola para ejecutar

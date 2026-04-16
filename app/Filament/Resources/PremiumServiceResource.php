@@ -89,9 +89,9 @@ class PremiumServiceResource extends Resource
                         ->helperText('Markdown admitido (saltos de línea, listas).'),
                     Forms\Components\Repeater::make('bullets')
                         ->label('Puntos destacados (bullets)')
-                        ->schema([Forms\Components\TextInput::make('')->required()])
+                        ->simple(Forms\Components\TextInput::make('value')->required())
                         ->defaultItems(3)
-                        ->simple(Forms\Components\TextInput::make('value')->required()),
+                        ->reorderable(),
                 ]),
 
             Forms\Components\Section::make('Intake post-compra')
