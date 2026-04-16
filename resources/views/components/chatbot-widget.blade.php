@@ -1,8 +1,15 @@
 @if(config('services.ai.chatbot_enabled', true))
-<div x-data="docfacilChatbot()" x-cloak>
-    <!-- Burbuja flotante -->
-    <button type="button" x-show="!open" @click="toggle()" aria-label="Abrir chat"
-        style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
+<div x-data="{ ...docfacilChatbot(), scrolled: false }"
+     x-init="
+        const check = () => scrolled = window.scrollY > 500;
+        check();
+        window.addEventListener('scroll', check, { passive: true });
+     "
+     x-cloak>
+    <!-- Burbuja flotante — solo aparece tras scroll 500px para no tapar hero CTAs -->
+    <button type="button" x-show="!open && scrolled" x-transition.opacity @click="toggle()" aria-label="Abrir chat"
+        style="position:fixed;right:22px;bottom:96px;z-index:9998;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
+        :style="window.innerWidth >= 768 ? 'bottom:22px; width:64px; height:64px;' : ''"
         onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:block;">
             <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-3 4-3-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
@@ -43,6 +50,19 @@
                     <span x-text="m.content"></span>
                 </div>
             </template>
+
+            <!-- FAQ quick-reply chips — visibles hasta que el user escriba algo propio -->
+            <div x-show="showFaqChips" style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+                <div style="font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Preguntas frecuentes</div>
+                <template x-for="(faq, i) in faqs" :key="i">
+                    <button type="button" @click="askFaq(i)"
+                        style="text-align:left;background:#fff;color:#0f766e;border:1px solid #99f6e4;padding:9px 12px;border-radius:10px;font-size:12.5px;cursor:pointer;line-height:1.3;transition:background 0.15s, border-color 0.15s;"
+                        onmouseover="this.style.background='#f0fdfa';this.style.borderColor='#14b8a6';"
+                        onmouseout="this.style.background='#fff';this.style.borderColor='#99f6e4';"
+                        x-text="faq.q"></button>
+                </template>
+                <div style="font-size:11px;color:#9ca3af;margin-top:4px;text-align:center;">O escribe tu duda abajo 👇</div>
+            </div>
 
             <!-- Typing -->
             <div x-show="typing" style="align-self:flex-start;background:#fff;padding:10px 14px;border-radius:16px 16px 16px 4px;border:1px solid #e5e7eb;display:flex;gap:4px;">
@@ -139,6 +159,17 @@
             tags: {},
             sessionId: '',
             capturedData: {},
+            showFaqChips: false,
+            faqs: [
+                { q: '¿Cuánto cuesta?', a: 'Tenemos 4 planes: Free (1 doctor, 15 pacientes, 10 citas/mes), Básico $499/mes, Pro $999/mes (multi-doctor) y Clínica $1,999/mes (multi-sucursal). 15 días de prueba gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
+                { q: '¿Cómo funcionan los recordatorios?', a: 'Automáticos por WhatsApp: 24h y 2h antes de la cita, más seguimiento si no asistió. Reduce inasistencias hasta 40%. También puedes mandarlos manual con un clic desde tu agenda cuando quieras.' },
+                { q: '¿Para qué especialidades funciona?', a: '¡Para todas! Odontología, medicina general, pediatría, dermatología, ginecología y más. Los dentistas tienen odontograma interactivo; los demás tienen expediente clínico completo. Todo en español mexicano.' },
+                { q: '¿Los pacientes pueden firmar digital?', a: '¡Sí! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },
+                { q: '¿Mis datos están seguros?', a: 'Servidores en México, cifrado TLS, backups automáticos diarios, historial de cambios por usuario, separación por clínica (tus datos nunca se cruzan con otra). Cumplimos LFPDPPP y NOM-004-SSA3.' },
+                { q: '¿Puedo tener varios doctores?', a: 'Sí. Desde el plan Pro ($999/mes) hasta 3 doctores, o plan Clínica ($1,999/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
+                { q: '¿Hay garantía?', a: '¡Sí! Garantía de 30 días: si no ves resultados en el primer mes, te devolvemos tu dinero completo sin preguntas.' },
+                { q: '¿Puedo probarlo sin registrarme?', a: '¡Sí! Hay un modo demo que crea una clínica temporal con 35 pacientes falsos, 60 citas históricas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
+            ],
 
             init() {
                 let sid = sessionStorage.getItem('docfacil_chatbot_sid');
@@ -177,15 +208,33 @@
             async greet() {
                 this.messages.push({
                     role: 'assistant',
-                    content: '¡Hola! 👋 Soy Ana de DocFácil. ¿Me cuentas qué tipo de consultorio tienes? Dental, médico, otro...'
+                    content: '¡Hola! 👋 Soy Ana de DocFácil. Puedes elegir una pregunta frecuente abajo, o cuéntame qué tipo de consultorio tienes (dental, médico, otro) para ayudarte mejor.'
                 });
+                this.showFaqChips = true;
                 this.$nextTick(() => this.scrollBottom());
+            },
+
+            askFaq(index) {
+                const faq = this.faqs[index];
+                if (!faq) return;
+                this.showFaqChips = false;
+                this.messages.push({ role: 'user', content: faq.q });
+                this.$nextTick(() => this.scrollBottom());
+                // Pequeño delay para que se sienta como conversación, no instantáneo
+                setTimeout(() => {
+                    this.messages.push({ role: 'assistant', content: faq.a });
+                    this.$nextTick(() => {
+                        this.scrollBottom();
+                        this.$refs.input?.focus();
+                    });
+                }, 450);
             },
 
             async send() {
                 const text = this.draft.trim();
                 if (!text || this.typing || this.disabled) return;
 
+                this.showFaqChips = false;
                 this.messages.push({ role: 'user', content: text });
                 this.draft = '';
                 this.typing = true;

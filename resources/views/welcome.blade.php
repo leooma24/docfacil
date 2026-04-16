@@ -1056,63 +1056,21 @@
     <p class="text-center text-xs text-gray-500 mt-1.5">Sin tarjeta · 15 días gratis · garantía 30 días</p>
 </div>
 
-{{-- Chatbot FAQ — oculto hasta que el usuario hace scroll 500px (evita tapar CTAs del hero) --}}
-<div id="chatbot" class="fixed bottom-20 md:bottom-6 right-3 md:right-6 z-50 opacity-0 pointer-events-none transition-opacity duration-300" style="visibility: hidden;">
-    <div id="chat-window" class="hidden mb-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-        <div class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                <span class="font-semibold text-sm">DocFacil — Ayuda</span>
-            </div>
-            <button onclick="toggleChat()" class="text-white/80 hover:text-white text-xl leading-none">&times;</button>
-        </div>
-        <div id="chat-messages" class="p-4 h-72 overflow-y-auto space-y-3 text-sm">
-            <div class="bg-teal-50 text-teal-800 p-3 rounded-xl rounded-tl-none">
-                Hola! Soy el asistente de DocFacil. En que puedo ayudarte?
-            </div>
-            <div class="space-y-2" id="faq-buttons">
-                <button onclick="askFaq(0)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Que es DocFacil?</button>
-                <button onclick="askFaq(1)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Cuanto cuesta?</button>
-                <button onclick="askFaq(2)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Como funcionan los recordatorios?</button>
-                <button onclick="askFaq(3)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Para que especialidades sirve?</button>
-                <button onclick="askFaq(4)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Los pacientes pueden firmar digital?</button>
-                <button onclick="askFaq(5)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Mis datos estan seguros?</button>
-                <button onclick="askFaq(6)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo tener varios doctores?</button>
-                <button onclick="askFaq(7)" class="block w-full text-left px-3 py-2.5 bg-gray-50 hover:bg-teal-50 rounded-xl text-xs transition border border-gray-100 hover:border-teal-200">Puedo probar gratis?</button>
-            </div>
-        </div>
-    </div>
-    <button onclick="toggleChat()" class="w-14 h-14 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-full shadow-lg hover:shadow-xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 flex items-center justify-center">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-    </button>
-</div>
-
 <script>
 // PWA
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 
-// Chatbot + Sticky CTA mobile: ambos aparecen tras scrollear 500px para no tapar hero
+// Sticky CTA mobile: aparece tras scrollear 500px (el chatbot unificado maneja su propio scroll)
 (function() {
-    const chatbot = document.getElementById('chatbot');
     const stickyCta = document.getElementById('sticky-cta');
+    if (!stickyCta) return;
 
     function update() {
         const show = window.scrollY > 500;
-        if (chatbot) {
-            if (show) {
-                chatbot.style.visibility = 'visible';
-                chatbot.classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                chatbot.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => { if (window.scrollY <= 500) chatbot.style.visibility = 'hidden'; }, 300);
-            }
-        }
-        if (stickyCta) {
-            if (show) {
-                stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-            } else {
-                stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-            }
+        if (show) {
+            stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+        } else {
+            stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
         }
     }
 
@@ -1149,31 +1107,6 @@ window.addEventListener('scroll', () => {
     lastScroll = scroll;
 });
 
-// Chatbot
-const faqs = [
-    { q: 'Que es DocFacil?', a: 'DocFacil es un software para consultorios medicos y dentales en Mexico. Incluye agenda, expedientes clinicos, recetas PDF, cobros, odontograma, firma digital, recordatorios WhatsApp y portal del paciente. Todo desde tu navegador, sin instalar nada.' },
-    { q: 'Cuanto cuesta?', a: 'Free para siempre (1 doctor, 15 pacientes, 10 citas/mes). Basico $499/mes con recetas PDF, recordatorios WhatsApp y check-in QR. Pro $999/mes con multi-doctor, odontograma, consentimientos digitales y portal del paciente. Clinica $1,999/mes para multi-sucursal. 15 dias gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
-    { q: 'Como funcionan los recordatorios?', a: 'Automaticos por WhatsApp: 24h y 2h antes de la cita, mas seguimiento si no asistio. Reduce inasistencias hasta 40%. Tambien puedes mandarlos manual con un clic desde tu agenda cuando quieras.' },
-    { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia y mas. Los dentistas tienen odontograma interactivo; los demas tienen expediente clinico completo. Todo esta en espanol mexicano.' },
-    { q: 'Los pacientes pueden firmar digital?', a: 'Si! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },
-    { q: 'Mis datos estan seguros?', a: 'Servidores en Mexico, cifrado TLS, backups automaticos diarios, historial de cambios por usuario, separacion por clinica (tus datos nunca se cruzan con otra). Cumplimos LFPDPPP y NOM-004-SSA3.' },
-    { q: 'Puedo tener varios doctores?', a: 'Si! Desde el plan Pro ($999/mes) hasta 3 doctores, o plan Clinica ($1,999/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
-    { q: 'Hay garantia?', a: 'Si! Garantia de 30 dias: si no ves resultados en el primer mes, te devolvemos tu dinero completo sin preguntas.' },
-    { q: 'Puedo probarlo sin registrarme?', a: 'Si! Hay un modo demo que crea una clinica temporal con 35 pacientes falsos, 60 citas historicas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
-];
-
-function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }
-
-function askFaq(index) {
-    const msgs = document.getElementById('chat-messages');
-    const faq = faqs[index];
-    msgs.innerHTML += `<div class="bg-gray-100 text-gray-800 p-3 rounded-xl rounded-tr-none ml-8">${faq.q}</div>`;
-    setTimeout(() => {
-        msgs.innerHTML += `<div class="bg-teal-50 text-teal-800 p-3 rounded-xl rounded-tl-none">${faq.a}</div>`;
-        msgs.scrollTop = msgs.scrollHeight;
-    }, 400);
-    msgs.scrollTop = msgs.scrollHeight;
-}
 </script>
 
 <x-chatbot-widget />
