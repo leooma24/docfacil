@@ -157,4 +157,104 @@ class Clinic extends Model
             default => ucfirst((string) $plan),
         };
     }
+
+    /**
+     * Source of truth para qué features cubre cada plan. Debe coincidir con la
+     * promesa de la landing — si alguien paga Pro debe tener lo que le prometimos.
+     *
+     * Si agregas un feature aquí, agrégalo también a la landing y al brochure.
+     */
+    public static function featuresForPlan(string $plan): array
+    {
+        $basico = [
+            'pdf_prescriptions',       // Recetas PDF con cédula y logo
+            'whatsapp_reminders',      // Recordatorios auto + manual 1-clic
+            'whatsapp_payment',        // Cobro por WhatsApp
+            'qr_checkin',              // Check-in con QR
+            'basic_dashboard',
+        ];
+        $profesional = array_merge($basico, [
+            'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
+            'consent_forms',           // Consentimientos + firma digital
+            'patient_portal',          // Portal del paciente
+            'multi_doctor',            // Hasta 3 doctores
+            'advanced_reports',        // Reportes avanzados
+            'smart_alerts',            // Alertas inteligentes
+            'priority_support',
+        ]);
+        $clinica = array_merge($profesional, [
+            'unlimited_doctors',
+            'multi_branch',            // Multi-sucursal
+            'commissions_between_doctors',
+            'dedicated_onboarding',
+        ]);
+
+        return match ($plan) {
+            'free' => [],
+            'basico' => $basico,
+            'profesional' => $profesional,
+            'clinica' => $clinica,
+            default => [],
+        };
+    }
+
+    /**
+     * ¿Este consultorio tiene acceso al feature X según su plan?
+     * Uso: $clinic->hasFeature('odontogram')
+     *
+     * Si el plan ya venció (trial/beta expirado), los features pagados dejan de
+     * funcionar aunque figuren en featuresForPlan(). Así evitamos que un user
+     * siga usando Pro después de que su trial expiró y no pagó.
+     */
+    public function hasFeature(string $feature): bool
+    {
+        // Feature de plan pagado pero el plan ya venció → bloquear.
+        if ($this->planIsPaid() && !$this->planIsActive()) {
+            return false;
+        }
+
+        // Trial/beta expirado: bloquea features pagados.
+        if ($this->plan === 'free' && $this->trial_ends_at && $this->trial_ends_at->isPast()) {
+            return false;
+        }
+        if ($this->is_beta && $this->beta_ends_at && $this->beta_ends_at->isPast()) {
+            return false;
+        }
+
+        return in_array($feature, self::featuresForPlan($this->plan), true);
+    }
+
+    /**
+     * Scope para filtrar clínicas que tienen un feature pagado activo.
+     * Lo usamos en comandos programados (reminders WhatsApp, portal paciente, etc.)
+     * para no disparar features a clínicas que no las tienen contratadas.
+     *
+     * Nota: esto es una aproximación SQL — replica la lógica de hasFeature()
+     * pero a nivel query. Si agregas un check en hasFeature(), agrégalo también aquí.
+     */
+    public function scopeWithActiveFeature($query, string $feature)
+    {
+        $plansWithFeature = collect(['free', 'basico', 'profesional', 'clinica'])
+            ->filter(fn ($p) => in_array($feature, self::featuresForPlan($p), true))
+            ->values()
+            ->all();
+
+        if (empty($plansWithFeature)) {
+            return $query->whereRaw('1=0'); // ninguna clínica califica
+        }
+
+        return $query
+            ->where('is_active', true)
+            ->whereIn('plan', $plansWithFeature)
+            ->where(function ($q) {
+                $q->where(function ($q2) {
+                    // Plan pagado todavía activo
+                    $q2->whereIn('plan', ['basico', 'profesional', 'clinica'])
+                       ->where('plan_ends_at', '>', now());
+                })->orWhere(function ($q2) {
+                    // Beta vigente (cualquier plan, incluso 'free' con is_beta=true)
+                    $q2->where('is_beta', true)->where('beta_ends_at', '>', now());
+                });
+            });
+    }
 }

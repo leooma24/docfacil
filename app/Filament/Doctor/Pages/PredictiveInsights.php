@@ -23,12 +23,25 @@ class PredictiveInsights extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        return (bool) config('services.ai.enabled', false);
+        return static::hasAccess();
     }
 
     public static function canAccess(): bool
     {
-        return (bool) config('services.ai.enabled', false);
+        return static::hasAccess();
+    }
+
+    /**
+     * Insights predictivos requieren 1) feature flag AI_ENABLED global,
+     * 2) plan Pro o Clínica (lo prometemos en la landing como "Alertas inteligentes").
+     */
+    protected static function hasAccess(): bool
+    {
+        if (!config('services.ai.enabled', false)) {
+            return false;
+        }
+        $clinic = auth()->user()?->clinic;
+        return $clinic && $clinic->hasFeature('smart_alerts');
     }
 
     public ?array $insights = null;

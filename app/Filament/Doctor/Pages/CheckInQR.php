@@ -2,10 +2,13 @@
 
 namespace App\Filament\Doctor\Pages;
 
+use App\Filament\Doctor\Concerns\GatedByPlanFeature;
 use Filament\Pages\Page;
 
 class CheckInQR extends Page
 {
+    use GatedByPlanFeature;
+
     protected static ?string $navigationIcon = 'heroicon-o-qr-code';
 
     protected static ?string $navigationLabel = 'Check-in QR';
@@ -19,6 +22,21 @@ class CheckInQR extends Page
     protected static ?string $navigationGroup = 'Consultorio';
 
     protected static ?int $navigationSort = 50;
+
+    protected static function planFeature(): string
+    {
+        return 'qr_checkin';
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
 
     public function getCheckInUrl(): string
     {

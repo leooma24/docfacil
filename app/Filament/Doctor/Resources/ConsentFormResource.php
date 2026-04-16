@@ -2,6 +2,7 @@
 
 namespace App\Filament\Doctor\Resources;
 
+use App\Filament\Doctor\Concerns\GatedByPlanFeature;
 use App\Filament\Doctor\Resources\ConsentFormResource\Pages;
 use App\Models\ConsentForm;
 use App\Models\Doctor;
@@ -15,7 +16,24 @@ use Filament\Tables\Table;
 
 class ConsentFormResource extends Resource
 {
+    use GatedByPlanFeature;
+
     protected static ?string $slug = 'consentimientos';
+
+    protected static function planFeature(): string
+    {
+        return 'consent_forms';
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {

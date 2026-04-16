@@ -2,6 +2,7 @@
 
 namespace App\Filament\Doctor\Resources;
 
+use App\Filament\Doctor\Concerns\GatedByPlanFeature;
 use App\Filament\Doctor\Resources\DoctorInvitationResource\Pages;
 use App\Models\DoctorInvitation;
 use Filament\Forms;
@@ -13,7 +14,24 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DoctorInvitationResource extends Resource
 {
+    use GatedByPlanFeature;
+
     protected static ?string $slug = 'invitar-doctores';
+
+    protected static function planFeature(): string
+    {
+        return 'multi_doctor';
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::clinicHasPlanFeature();
+    }
 
     public static function getEloquentQuery(): Builder
     {

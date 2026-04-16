@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Appointment;
+use App\Models\Clinic;
 use App\Services\WhatsAppService;
 use Illuminate\Console\Command;
 
@@ -34,6 +35,7 @@ class SendAppointmentReminders extends Command
             ->whereNull('reminder_24h_sent_at')
             ->whereIn('status', ['scheduled', 'confirmed'])
             ->whereBetween('starts_at', [now()->addHours(20), now()->addHours(28)])
+            ->whereHas('clinic', fn ($q) => $q->withActiveFeature('whatsapp_reminders'))
             ->get();
 
         $count = 0;
@@ -73,6 +75,7 @@ class SendAppointmentReminders extends Command
             ->whereNull('reminder_2h_sent_at')
             ->whereIn('status', ['scheduled', 'confirmed'])
             ->whereBetween('starts_at', [now()->addHours(1), now()->addHours(3)])
+            ->whereHas('clinic', fn ($q) => $q->withActiveFeature('whatsapp_reminders'))
             ->get();
 
         $count = 0;
@@ -106,6 +109,7 @@ class SendAppointmentReminders extends Command
             ->where('status', 'no_show')
             ->where('starts_at', '>=', now()->subDays(3))
             ->where('starts_at', '<', now()->subHours(2))
+            ->whereHas('clinic', fn ($q) => $q->withActiveFeature('whatsapp_reminders'))
             ->get();
 
         $count = 0;

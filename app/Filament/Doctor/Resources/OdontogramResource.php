@@ -2,6 +2,7 @@
 
 namespace App\Filament\Doctor\Resources;
 
+use App\Filament\Doctor\Concerns\GatedByPlanFeature;
 use App\Filament\Doctor\Resources\OdontogramResource\Pages;
 use App\Models\Doctor;
 use App\Models\Odontogram;
@@ -16,16 +17,23 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OdontogramResource extends Resource
 {
+    use GatedByPlanFeature;
+
     protected static ?string $slug = 'odontogramas';
+
+    protected static function planFeature(): string
+    {
+        return 'odontogram';
+    }
 
     public static function shouldRegisterNavigation(): bool
     {
-        return SpecialtyService::currentDoctorCanSee('odontogram');
+        return SpecialtyService::currentDoctorCanSee('odontogram') && static::clinicHasPlanFeature();
     }
 
     public static function canAccess(): bool
     {
-        return SpecialtyService::currentDoctorCanSee('odontogram');
+        return SpecialtyService::currentDoctorCanSee('odontogram') && static::clinicHasPlanFeature();
     }
 
     public static function getEloquentQuery(): Builder

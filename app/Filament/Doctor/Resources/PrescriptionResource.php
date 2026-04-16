@@ -131,11 +131,30 @@ class PrescriptionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                // Descarga PDF con cédula y logo: prometida desde Básico en adelante.
+                // Free ve el ícono pero con tooltip indicando que se requiere upgrade.
                 Tables\Actions\Action::make('download_pdf')
                     ->label('PDF')
                     ->icon('heroicon-o-arrow-down-tray')
-                    ->color('success')
+                    ->color(fn () => auth()->user()?->clinic?->hasFeature('pdf_prescriptions') ? 'success' : 'gray')
+                    ->tooltip(fn () => auth()->user()?->clinic?->hasFeature('pdf_prescriptions')
+                        ? null
+                        : 'Disponible desde el plan Básico — actualiza tu plan para descargar recetas PDF.')
                     ->action(function (Prescription $record) {
+                        if (!auth()->user()?->clinic?->hasFeature('pdf_prescriptions')) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Función disponible desde el plan Básico')
+                                ->body('Las recetas PDF con cédula y logo son parte del plan Básico en adelante.')
+                                ->warning()
+                                ->actions([
+                                    \Filament\Notifications\Actions\Action::make('upgrade')
+                                        ->label('Mejorar plan')
+                                        ->url(route('filament.doctor.pages.actualizar-plan')),
+                                ])
+                                ->send();
+                            return null;
+                        }
+
                         $record->load(['patient', 'doctor.user', 'doctor.clinic', 'items']);
 
                         $pdf = Pdf::loadView('pdf.prescription', [

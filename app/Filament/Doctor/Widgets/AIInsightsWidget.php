@@ -15,7 +15,12 @@ class AIInsightsWidget extends Widget
 
     public static function canView(): bool
     {
-        return (bool) config('services.ai.enabled', false);
+        if (!config('services.ai.enabled', false)) {
+            return false;
+        }
+        $clinic = auth()->user()?->clinic;
+        // Plan Pro+ tiene "Reportes avanzados" — widget de insights es parte de eso.
+        return $clinic && $clinic->hasFeature('advanced_reports');
     }
 
     public function getInsights(): ?array
