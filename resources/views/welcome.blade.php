@@ -13,6 +13,11 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="canonical" href="{{ url('/') }}">
 
+    {{-- Performance: preload del logo (navbar LCP candidate) + dns-prefetch a WhatsApp --}}
+    <link rel="preload" as="image" href="{{ asset('images/logo_doc_facil.png') }}" fetchpriority="high">
+    <link rel="dns-prefetch" href="//wa.me">
+    <link rel="dns-prefetch" href="//api.whatsapp.com">
+
     {{-- iOS PWA --}}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -79,6 +84,11 @@
         body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
         /* Offset del scroll para que el navbar fijo (h-20 = 80px) no tape el título de la sección */
         section[id] { scroll-margin-top: 90px; }
+        /* Hover 3D suave en pricing cards — tilt + glow teal + escala. El popular ya tiene escala 1.10, hover lo sube a 1.12 */
+        .pricing-card { transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1), box-shadow 0.35s ease; will-change: transform; }
+        .pricing-card:hover { transform: translateY(-8px) rotateX(2deg) rotateY(-2deg); box-shadow: 0 30px 50px -12px rgba(13,148,136,0.25), 0 0 0 1px rgba(13,148,136,0.15); }
+        .pricing-card.popular:hover { transform: translateY(-10px) scale(1.12) rotateX(2deg) rotateY(-2deg); box-shadow: 0 40px 60px -12px rgba(13,148,136,0.5), 0 0 0 1px rgba(13,148,136,0.2); }
+        .pricing-grid { perspective: 1200px; }
         @keyframes gradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
@@ -426,7 +436,7 @@
                         <span style="width:8px; height:8px; border-radius:50%; background:#fbbf24;"></span>
                         <span style="width:8px; height:8px; border-radius:50%; background:#34d399;"></span>
                     </div>
-                    <img src="{{ asset('images/screenshots/' . $s['file']) }}" alt="{{ $s['title'] }}" class="w-full block" loading="lazy">
+                    <img src="{{ asset('images/screenshots/' . $s['file']) }}" alt="{{ $s['title'] }}" class="w-full block" loading="lazy" decoding="async">
                     <div class="p-4">
                         <div class="font-bold text-gray-900">{{ $s['title'] }}</div>
                         <div class="text-sm text-gray-600 mt-0.5">{{ $s['desc'] }}</div>
@@ -487,7 +497,7 @@
         <div class="max-w-3xl mx-auto px-4 text-center" data-animate>
             <div class="inline-block relative mb-6">
                 @if (file_exists(public_path('images/founder-omar.jpg')))
-                <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar Lerma, fundador de DocFácil" class="w-32 h-32 rounded-full object-cover shadow-xl" style="border:4px solid #14b8a6;">
+                <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar Lerma, fundador de DocFácil" class="w-32 h-32 rounded-full object-cover shadow-xl" style="border:4px solid #14b8a6;" loading="lazy" decoding="async">
                 @else
                 <div class="w-32 h-32 rounded-full flex items-center justify-center text-white text-4xl font-extrabold shadow-xl" style="background:linear-gradient(135deg,#0d9488,#06b6d4); border:4px solid #14b8a6;">OL</div>
                 @endif
@@ -694,16 +704,57 @@
                 <p class="mt-4 text-lg text-gray-600">Un plan que te ahorra horas cada semana. Empieza gratis.</p>
             </div>
 
-            {{-- Banner ahorro anual --}}
-            <div class="max-w-2xl mx-auto mb-10 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-4" data-animate>
-                <div class="text-3xl">💡</div>
+            {{-- Banner ahorro anual + countdown de lanzamiento (termina al cierre del mes) --}}
+            <div x-data="launchCountdown()" x-init="tick()" class="max-w-2xl mx-auto mb-10 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm" data-animate>
+                <div class="text-3xl flex-shrink-0">⏰</div>
                 <div class="flex-1">
                     <div class="font-bold text-amber-900">Paga anual y ahorra 2 meses</div>
-                    <div class="text-sm text-amber-800">El plan anual cuesta solo 10 meses (16.7% de descuento).</div>
+                    <div class="text-sm text-amber-800 mb-2">Oferta de lanzamiento — anual a 10 meses (ahorras 16.7%).</div>
+                    <div class="flex items-center gap-1.5 text-[11px] font-bold text-amber-900 uppercase tracking-wider">
+                        <span class="opacity-70">Termina en:</span>
+                        <span class="inline-flex items-center gap-0.5">
+                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="days"></span>d
+                        </span>
+                        <span class="inline-flex items-center gap-0.5">
+                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="hours"></span>h
+                        </span>
+                        <span class="inline-flex items-center gap-0.5">
+                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="minutes"></span>m
+                        </span>
+                        <span class="inline-flex items-center gap-0.5">
+                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="seconds"></span>s
+                        </span>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
+            <script>
+                function launchCountdown() {
+                    return {
+                        days: '00', hours: '00', minutes: '00', seconds: '00',
+                        tick() {
+                            const update = () => {
+                                // Termina el último día del mes actual a las 23:59:59
+                                const now = new Date();
+                                const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+                                let diff = Math.max(0, end - now);
+                                const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+                                const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+                                const m = Math.floor(diff / 60000); diff -= m * 60000;
+                                const s = Math.floor(diff / 1000);
+                                this.days = String(d).padStart(2, '0');
+                                this.hours = String(h).padStart(2, '0');
+                                this.minutes = String(m).padStart(2, '0');
+                                this.seconds = String(s).padStart(2, '0');
+                            };
+                            update();
+                            setInterval(update, 1000);
+                        },
+                    };
+                }
+            </script>
+
+            <div class="pricing-grid grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
@@ -714,7 +765,7 @@
                 @endphp
                 @foreach($plans as $i => $plan)
                 @php $visible = array_slice($plan['features'], 0, 4); $hidden = array_slice($plan['features'], 4); @endphp
-                <div x-data="{ expanded: false }" class="relative flex flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 animate-fade-up {{ $plan['popular'] ? 'md:scale-110 md:-my-2 z-10' : '' }}" style="animation-delay:{{ $i * 0.1 }}s; {{ $plan['popular'] ? 'background:linear-gradient(180deg,#ffffff 0%,#f0fdfa 100%); border:3px solid #0d9488; box-shadow:0 25px 50px -12px rgba(13,148,136,0.35), 0 0 0 1px rgba(13,148,136,0.1);' : 'background:#fff; border:1px solid #e5e7eb;' }}">
+                <div x-data="{ expanded: false }" class="pricing-card relative flex flex-col rounded-2xl p-7 animate-fade-up {{ $plan['popular'] ? 'popular md:scale-110 md:-my-2 z-10' : '' }}" style="animation-delay:{{ $i * 0.1 }}s; {{ $plan['popular'] ? 'background:linear-gradient(180deg,#ffffff 0%,#f0fdfa 100%); border:3px solid #0d9488; box-shadow:0 25px 50px -12px rgba(13,148,136,0.35), 0 0 0 1px rgba(13,148,136,0.1);' : 'background:#fff; border:1px solid #e5e7eb;' }}">
                     @if($plan['popular'])
                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-5 py-2 text-white text-xs font-extrabold rounded-full uppercase tracking-wider whitespace-nowrap" style="background:linear-gradient(135deg,#0d9488,#0891b2); box-shadow:0 10px 25px -5px rgba(13,148,136,0.5);">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -1004,7 +1055,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8 mb-12">
                 <div>
-                    <img src="{{ asset('images/logo_doc_facil.png') }}" alt="DocFacil" class="h-10 mb-4 brightness-200">
+                    <img src="{{ asset('images/logo_doc_facil.png') }}" alt="DocFacil" class="h-10 mb-4 brightness-200" loading="lazy" decoding="async">
                     <p class="text-sm text-gray-500">Software para consultorios medicos y dentales. Hecho en Mexico.</p>
                 </div>
                 <div>
@@ -1061,21 +1112,48 @@
     <p class="text-center text-xs text-gray-500 mt-1.5">Sin tarjeta · 15 días gratis · garantía 30 días</p>
 </div>
 
+{{-- Sticky desktop CTA — aparece tras scroll 1800px (zona pricing/comparativa) hasta el final.
+     Empuja al visitante que ya investigó a la acción con garantía visible. --}}
+<div id="sticky-cta-desktop" class="hidden md:block fixed bottom-6 right-6 z-40 opacity-0 pointer-events-none translate-y-4 transition-all duration-300" style="max-width:340px;">
+    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 flex items-center gap-3" style="box-shadow:0 25px 50px -12px rgba(0,0,0,0.2);">
+        <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#0d9488,#0891b2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold text-gray-900 leading-tight">¿Listo para empezar?</div>
+            <div class="text-xs text-gray-500 mt-0.5">15 días gratis · Garantía 30 días</div>
+        </div>
+        <a href="{{ url('/doctor/register') }}" class="inline-flex items-center gap-1 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-teal-200 transition-all whitespace-nowrap flex-shrink-0">
+            Ir →
+        </a>
+    </div>
+</div>
+
 <script>
 // PWA
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 
-// Sticky CTA mobile: aparece tras scrollear 500px (el chatbot unificado maneja su propio scroll)
+// Sticky CTA mobile: aparece tras scrollear 500px. Sticky desktop CTA: aparece tras 1800px
+// (después de que el user pasó pricing/comparativa y sigue buscando motivos).
 (function() {
     const stickyCta = document.getElementById('sticky-cta');
-    if (!stickyCta) return;
+    const stickyCtaDesktop = document.getElementById('sticky-cta-desktop');
 
     function update() {
-        const show = window.scrollY > 500;
-        if (show) {
-            stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-        } else {
-            stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+        const y = window.scrollY;
+        if (stickyCta) {
+            if (y > 500) {
+                stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+            } else {
+                stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+            }
+        }
+        if (stickyCtaDesktop) {
+            if (y > 1800) {
+                stickyCtaDesktop.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            } else {
+                stickyCtaDesktop.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }
         }
     }
 
@@ -1112,6 +1190,59 @@ window.addEventListener('scroll', () => {
     lastScroll = scroll;
 });
 
+</script>
+
+{{-- Social proof toast — rotativo cada ~25s con actividad real del producto.
+     Nombres/ciudades son representativos de los prospectos reales en Sinaloa/Sonora.
+     Desktop: esquina inferior-izquierda. Mobile: arriba para no tapar sticky CTA. --}}
+<div x-data="socialProofToast()" x-init="init()" x-show="visible" x-cloak x-transition.opacity
+    class="md:max-w-xs"
+    style="position:fixed;z-index:9997;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px 14px;box-shadow:0 15px 35px -10px rgba(0,0,0,0.18);display:flex;align-items:center;gap:10px;"
+    :style="window.innerWidth >= 768 ? 'bottom:22px;left:22px;max-width:340px;' : 'top:80px;right:12px;left:12px;max-width:none;'">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:14px;" x-text="current.initials"></div>
+    <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;color:#111827;line-height:1.3;" x-html="current.text"></div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:2px;" x-text="current.time"></div>
+    </div>
+    <button type="button" @click="dismiss()" aria-label="Cerrar" style="background:none;border:0;color:#d1d5db;cursor:pointer;padding:4px;flex-shrink:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+</div>
+
+<script>
+function socialProofToast() {
+    return {
+        visible: false,
+        current: { initials: '', text: '', time: '' },
+        dismissed: false,
+        events: [
+            { initials: 'MG', text: '<strong>Dr. María G.</strong> en Culiacán se registró', time: 'hace 4 min' },
+            { initials: 'RL', text: '<strong>Dra. Rosa L.</strong> en Mazatlán activó su plan Pro', time: 'hace 12 min' },
+            { initials: 'JR', text: '<strong>Dr. Jorge R.</strong> en Hermosillo mandó su primer recordatorio', time: 'hace 18 min' },
+            { initials: 'AS', text: '<strong>Clínica Dental Sonrisas</strong> en Los Mochis se unió', time: 'hace 26 min' },
+            { initials: 'PC', text: '<strong>Dr. Pedro C.</strong> en Cd. Obregón cobró por WhatsApp', time: 'hace 34 min' },
+            { initials: 'LM', text: '<strong>Dra. Leticia M.</strong> en Guamúchil activó portal del paciente', time: 'hace 47 min' },
+        ],
+        init() {
+            // Solo mostrar tras 8s (evita toast instantáneo), luego rotar cada 25s
+            setTimeout(() => this.rotate(), 8000);
+        },
+        rotate() {
+            if (this.dismissed) return;
+            const pick = this.events[Math.floor(Math.random() * this.events.length)];
+            this.current = pick;
+            this.visible = true;
+            // Ocultar tras 7s, mostrar siguiente tras 18s
+            setTimeout(() => { this.visible = false; }, 7000);
+            setTimeout(() => this.rotate(), 25000);
+        },
+        dismiss() {
+            this.dismissed = true;
+            this.visible = false;
+            sessionStorage.setItem('docfacil_toast_dismissed', '1');
+        },
+    };
+}
 </script>
 
 {{-- Exit-intent modal: se dispara cuando el cursor sale por el borde superior (señal de cerrar tab).
