@@ -158,7 +158,7 @@
         <div class="tag">BROCHURE · EDICIÓN 2026</div>
         <h1>DocFácil</h1>
         <div class="divider"></div>
-        <p class="sub"><strong>Tu consultorio, organizado y al día.</strong><br>Software mexicano para consultorios médicos y dentales: agenda, expediente clínico, recetas PDF, recordatorios por WhatsApp y cobros — todo en un solo lugar.</p>
+        <p class="sub"><strong>Deja de perder $15,000 al mes en citas que no llegan.</strong><br>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana.</p>
 
         <div class="hero-shot">
             <img src="{{ $screens['dashboard'] }}" alt="Panel de control DocFácil">
@@ -167,19 +167,16 @@
         <table class="value-props">
             <tr>
                 <td>
-                    <div class="vp-icon">📅</div>
-                    <div class="vp-title">Menos inasistencias</div>
-                    <div class="vp-desc">Recordatorios por WhatsApp bajan las faltas de 30% a 8%.</div>
+                    <div class="vp-title" style="color:#fff;">+$11,500 al mes</div>
+                    <div class="vp-desc">WhatsApp baja la inasistencia de 30% a 8%.</div>
                 </td>
                 <td>
-                    <div class="vp-icon">📋</div>
-                    <div class="vp-title">Todo digital, en la nube</div>
-                    <div class="vp-desc">Expedientes, recetas y cobros accesibles desde cualquier dispositivo.</div>
+                    <div class="vp-title" style="color:#fff;">+8 hrs a la semana</div>
+                    <div class="vp-desc">Recetas, expedientes y cobros en segundos, no en horas.</div>
                 </td>
                 <td>
-                    <div class="vp-icon">💰</div>
-                    <div class="vp-title">Control de ingresos</div>
-                    <div class="vp-desc">Cobros, pendientes y reportes del consultorio en tiempo real.</div>
+                    <div class="vp-title" style="color:#fff;">Cobras el mismo día</div>
+                    <div class="vp-desc">Link de pago por WhatsApp al terminar la consulta.</div>
                 </td>
             </tr>
         </table>
@@ -187,10 +184,10 @@
         <div class="stats-card">
             <table>
                 <tr>
-                    <td><div class="num">500+</div><div class="label">consultorios activos</div></td>
-                    <td><div class="num">15K+</div><div class="label">citas gestionadas</div></td>
-                    <td><div class="num">40%</div><div class="label">menos inasistencias</div></td>
-                    <td><div class="num">4.9</div><div class="label">satisfacción / 5</div></td>
+                    <td><div class="num">15 días</div><div class="label">prueba gratis sin tarjeta</div></td>
+                    <td><div class="num">30 días</div><div class="label">garantía de devolución</div></td>
+                    <td><div class="num">8 hrs</div><div class="label">recuperas a la semana</div></td>
+                    <td><div class="num">2 min</div><div class="label">para empezar</div></td>
                 </tr>
             </table>
         </div>

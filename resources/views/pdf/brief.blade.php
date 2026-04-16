@@ -50,9 +50,9 @@
         .header-right { text-align: right; font-size: 8pt; color: #6b7280; }
 
         /* Hero */
-        .hero { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 14px 18px; border-radius: 10px; margin-bottom: 12px; }
-        .hero h1 { margin: 0 0 4px 0; font-size: 17pt; font-weight: 800; letter-spacing: -0.5px; }
-        .hero p { margin: 0; font-size: 9.5pt; opacity: 0.95; }
+        .hero { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; }
+        .hero h1 { margin: 0 0 4px 0; font-size: 15pt; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
+        .hero p { margin: 0; font-size: 9pt; opacity: 0.95; line-height: 1.4; }
 
         /* Sections */
         h2 { font-size: 12pt; color: #0d9488; margin: 10px 0 6px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 3px; }
@@ -150,37 +150,37 @@
     </div>
 
     <div class="hero">
-        <h1>Tu consultorio, organizado y al día</h1>
-        <p>Agenda, expedientes, recetas PDF, recordatorios por WhatsApp y cobros — todo en un solo lugar. Olvídate del papel y del Excel.</p>
+        <h1>Deja de perder $15,000 al mes en citas que no llegan</h1>
+        <p>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana — sin que muevas un dedo.</p>
     </div>
 
     <img src="{{ $screens['dashboard'] }}" alt="Escritorio DocFácil" class="shot shot-hero">
-    <p class="shot-cap">Así se ve tu escritorio al entrar — ingresos del mes, próximas citas y accesos rápidos.</p>
+    <p class="shot-cap">Tu día en un vistazo — ingresos del mes, próximas citas y lo que pasó hoy.</p>
 
     <div class="row">
         <div class="col-2">
-            <h2 style="margin-top:4px;">Lo que vives hoy</h2>
-            <div class="pain-box"><strong>Agenda en papel o Excel</strong><br>Pierdes citas, no puedes buscar rápido, y cada cambio cuesta tiempo.</div>
-            <div class="pain-box"><strong>Pacientes que no llegan</strong><br>El 30% no se presenta. Son consultas perdidas que no vuelven.</div>
-            <div class="pain-box"><strong>Recetas a mano, letra ilegible</strong><br>Sin copia, sin respaldo, riesgo de error.</div>
-            <div class="pain-box"><strong>No sabes cuánto ganas</strong><br>Sin reportes, sin control de cobros pendientes.</div>
+            <h2 style="margin-top:4px;">Lo que pierdes cada mes</h2>
+            <div class="pain-box"><strong>$14,400 en citas perdidas</strong><br>El 30% de pacientes no llega. 24 citas × $600 = dinero que se fue.</div>
+            <div class="pain-box"><strong>10 hrs/semana en papeleo</strong><br>Buscar expedientes, escribir recetas a mano, llamar a confirmar.</div>
+            <div class="pain-box"><strong>Cobros que se te olvidan</strong><br>"Te pago después" que nunca regresó. Trabajo hecho sin cobrar.</div>
+            <div class="pain-box"><strong>Decides a ojo, no con datos</strong><br>No sabes qué servicio te deja más ni cuánto te deben.</div>
         </div>
         <div class="col-2">
-            <h2 style="margin-top:4px;">Cómo lo resuelve DocFácil</h2>
-            <div class="solution-box"><strong>Agenda inteligente en la nube</strong><br>Multi-doctor, arrastra y suelta, desde cualquier dispositivo.</div>
-            <div class="solution-box"><strong>Recordatorios WhatsApp — auto + 1 clic</strong><br>Automáticos 24h y 2h antes, o manuales con un clic. Reduce inasistencias 40%.</div>
-            <div class="solution-box"><strong>Recetas PDF profesionales</strong><br>Con cédula y firma. El paciente las recibe por WhatsApp.</div>
-            <div class="solution-box"><strong>Reportes en tiempo real</strong><br>Ingresos, pendientes, pacientes activos, alertas.</div>
+            <h2 style="margin-top:4px;">Lo que recuperas con DocFácil</h2>
+            <div class="solution-box"><strong>+$11,500/mes en citas que sí llegan</strong><br>WhatsApp automático 24h y 2h antes. Inasistencia baja de 30% a 8%.</div>
+            <div class="solution-box"><strong>+8 horas a la semana</strong><br>Agenda en nube, expedientes digitales, recetas PDF en 10 segundos.</div>
+            <div class="solution-box"><strong>Cobras el mismo día</strong><br>Link de pago por WhatsApp al terminar la consulta. Antes que se vaya.</div>
+            <div class="solution-box"><strong>Sabes cuánto ganas cada día</strong><br>Ingresos, pendientes, servicios rentables — al entrar, sin Excel.</div>
         </div>
     </div>
 
     <div class="stats">
         <table style="width:100%;">
             <tr>
-                <td><div class="num">500+</div><div class="label">consultorios</div></td>
-                <td><div class="num">15K+</div><div class="label">citas gestionadas</div></td>
-                <td><div class="num">40%</div><div class="label">menos inasistencias</div></td>
-                <td><div class="num">4.9</div><div class="label">satisfacción / 5</div></td>
+                <td><div class="num">$29K</div><div class="label">que pierdes hoy al mes</div></td>
+                <td><div class="num">$999</div><div class="label">lo que pagas por DocFácil Pro</div></td>
+                <td><div class="num">30 días</div><div class="label">garantía de devolución</div></td>
+                <td><div class="num">15 días</div><div class="label">prueba gratis sin tarjeta</div></td>
             </tr>
         </table>
     </div>

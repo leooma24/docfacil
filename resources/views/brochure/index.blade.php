@@ -81,11 +81,10 @@
     <div class="absolute inset-0 bg-grid opacity-20"></div>
     <div class="max-w-6xl mx-auto px-6 pt-20 pb-12 sm:pt-24 text-center relative z-10">
         <span class="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wider ring-1 ring-white/30">BROCHURE · EDICIÓN 2026</span>
-        <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 tracking-tight leading-none">DocFácil</h1>
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight leading-tight">Deja de perder<br><span class="text-amber-200">$15,000 al mes</span><br>en citas que no llegan.</h1>
         <div class="w-16 h-1 bg-white/70 mx-auto rounded-full mb-6"></div>
-        <p class="text-lg sm:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">
-            Software para consultorios médicos y dentales.<br>
-            <strong>Tu consultorio, organizado y al día.</strong>
+        <p class="text-lg sm:text-xl opacity-95 max-w-3xl mx-auto leading-relaxed">
+            Cada cita perdida son $600 que se van. <strong>DocFácil recupera ese dinero</strong> con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana — sin que muevas un dedo.
         </p>
 
         <div class="flex flex-wrap justify-center gap-3 mt-8">
@@ -110,20 +109,20 @@
         {{-- Stats strip --}}
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12 text-left">
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 ring-1 ring-white/20">
-                <div class="text-3xl font-extrabold">500+</div>
-                <div class="text-xs opacity-90 mt-1">consultorios activos</div>
+                <div class="text-3xl font-extrabold">15 días</div>
+                <div class="text-xs opacity-90 mt-1">prueba gratis sin tarjeta</div>
             </div>
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 ring-1 ring-white/20">
-                <div class="text-3xl font-extrabold">15K+</div>
-                <div class="text-xs opacity-90 mt-1">citas gestionadas</div>
+                <div class="text-3xl font-extrabold">30 días</div>
+                <div class="text-xs opacity-90 mt-1">garantía de devolución</div>
             </div>
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 ring-1 ring-white/20">
-                <div class="text-3xl font-extrabold">40%</div>
-                <div class="text-xs opacity-90 mt-1">menos inasistencias</div>
+                <div class="text-3xl font-extrabold">8 hrs</div>
+                <div class="text-xs opacity-90 mt-1">recuperas a la semana</div>
             </div>
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 ring-1 ring-white/20">
-                <div class="text-3xl font-extrabold">4.9/5</div>
-                <div class="text-xs opacity-90 mt-1">satisfacción</div>
+                <div class="text-3xl font-extrabold">2 min</div>
+                <div class="text-xs opacity-90 mt-1">para empezar</div>
             </div>
         </div>
     </div>
