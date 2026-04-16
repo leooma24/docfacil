@@ -108,6 +108,7 @@ class StripeSetupPrices extends Command
             return null;
         }
 
+        // Si ya hay un precio con el monto+interval+moneda exactos, lo reusamos.
         $existing = $stripe->prices->all([
             'product' => $productId,
             'active' => true,
@@ -128,12 +129,23 @@ class StripeSetupPrices extends Command
             return null;
         }
 
+        $fullLookupKey = "docfacil_{$lookupKey}";
+
+        // Si existe un precio (probablemente viejo con monto distinto) usando ese lookup_key,
+        // lo liberamos antes de crear el nuevo — Stripe no permite duplicar lookup_keys.
+        foreach ($existing->data as $p) {
+            if (($p->lookup_key ?? null) === $fullLookupKey) {
+                $stripe->prices->update($p->id, ['lookup_key' => null]);
+                $this->line("  <fg=yellow>↻</> liberado lookup_key del precio anterior {$p->id}");
+            }
+        }
+
         $created = $stripe->prices->create([
             'product' => $productId,
             'unit_amount' => $amountMxn * 100, // Stripe usa centavos
             'currency' => 'mxn',
             'recurring' => ['interval' => $interval],
-            'lookup_key' => "docfacil_{$lookupKey}",
+            'lookup_key' => $fullLookupKey,
             'metadata' => ['docfacil_lookup' => $lookupKey],
         ]);
         return $created->toArray();
