@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Billing;
 
 use App\Http\Controllers\Controller;
 use App\Models\PremiumServicePurchase;
-use App\Models\SpeiPayment;
+use App\Services\Billing\PremiumPurchaseNotifier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Stripe\StripeClient;
 
 /**
@@ -17,6 +16,10 @@ use Stripe\StripeClient;
  */
 class PremiumServiceCheckoutController extends Controller
 {
+    public function __construct(
+        private PremiumPurchaseNotifier $notifier,
+    ) {}
+
     /**
      * Stripe Checkout para servicios premium one-time o monthly.
      */
@@ -74,6 +77,15 @@ class PremiumServiceCheckoutController extends Controller
 
             if ($isMonthly) {
                 $priceData['recurring'] = ['interval' => 'month'];
+
+                // Necesitamos metadata en la subscription (no solo en el session) para que
+                // el handler de customer.subscription.deleted sepa que es una premium service sub.
+                $sessionParams['subscription_data'] = [
+                    'metadata' => [
+                        'premium_purchase_id' => $purchase->id,
+                        'clinic_id' => $clinic->id,
+                    ],
+                ];
             }
 
             $sessionParams['line_items'] = [[
@@ -108,7 +120,7 @@ class PremiumServiceCheckoutController extends Controller
 
         $purchase->update(['payment_method' => 'spei']);
 
-        $this->notifyAdmins($purchase, 'pago SPEI solicitado — coordinar manualmente');
+        $this->notifier->notify($purchase, 'pago SPEI solicitado — coordinar manualmente');
 
         return redirect()->route('filament.doctor.pages.servicios-premium')
             ->with('success', '¡Solicitud recibida! Omar te contactará por WhatsApp en menos de 4 horas con los datos para la transferencia SPEI.');
@@ -122,7 +134,7 @@ class PremiumServiceCheckoutController extends Controller
         $user = $request->user();
         abort_unless($user && $user->clinic_id === $purchase->clinic_id, 403);
 
-        $this->notifyAdmins($purchase, 'cotizacion solicitada');
+        $this->notifier->notify($purchase, 'cotización solicitada');
 
         return redirect()->route('filament.doctor.pages.servicios-premium')
             ->with('success', '¡Solicitud de cotización recibida! Omar te contactará en menos de 24 hrs por WhatsApp.');
@@ -141,35 +153,4 @@ class PremiumServiceCheckoutController extends Controller
             ->with('success', '¡Pago recibido! Tu servicio se activará en unos minutos. Recibirás un correo de confirmación.');
     }
 
-    /**
-     * Notifica a los admins por correo cuando hay actividad nueva en una compra.
-     */
-    private function notifyAdmins(PremiumServicePurchase $purchase, string $event): void
-    {
-        $emails = collect(explode(',', (string) config('services.notifications.emails', 'leooma24@gmail.com')))
-            ->map(fn ($e) => trim($e))
-            ->filter()
-            ->all();
-
-        $body = sprintf(
-            "Nueva actividad en compra premium:\n\nClínica: %s (#%d)\nServicio: %s\nMonto: $%s MXN\nMétodo: %s\nEvento: %s\n\nVer en admin: %s",
-            $purchase->clinic->name ?? '—',
-            $purchase->clinic_id,
-            $purchase->service_name_snapshot,
-            number_format($purchase->amount_mxn, 2),
-            $purchase->payment_method ?? 'no definido',
-            $event,
-            url('/admin/premium-service-purchases/' . $purchase->id),
-        );
-
-        $subject = '[DocFacil] ' . $event . ' - ' . $purchase->service_name_snapshot;
-
-        foreach ($emails as $email) {
-            try {
-                Mail::raw($body, fn ($m) => $m->to($email)->subject($subject));
-            } catch (\Throwable $e) {
-                Log::warning('No se pudo enviar correo admin de servicio premium', ['err' => $e->getMessage()]);
-            }
-        }
-    }
 }

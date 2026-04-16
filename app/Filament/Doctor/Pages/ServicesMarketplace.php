@@ -6,6 +6,7 @@ use App\Models\PremiumService;
 use App\Models\PremiumServicePurchase;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ServicesMarketplace extends Page
 {
@@ -55,6 +56,20 @@ class ServicesMarketplace extends Page
      */
     public function purchase(int $serviceId, string $method): void
     {
+        // Rate limit: máx 10 intentos de compra por usuario cada minuto.
+        // Protege contra bots y clicks compulsivos.
+        $key = 'premium-purchase:' . (auth()->id() ?? 'anon');
+        if (RateLimiter::tooManyAttempts($key, 10)) {
+            $seconds = RateLimiter::availableIn($key);
+            Notification::make()
+                ->title('Demasiados intentos')
+                ->body("Espera {$seconds} segundos antes de intentar de nuevo.")
+                ->warning()
+                ->send();
+            return;
+        }
+        RateLimiter::hit($key, 60);
+
         // Validar método: solo stripe, spei o manual (custom_quote).
         if (!in_array($method, ['stripe', 'spei', 'manual'], true)) {
             Notification::make()

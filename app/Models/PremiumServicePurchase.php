@@ -37,7 +37,7 @@ class PremiumServicePurchase extends Model
         'clinic_id', 'user_id', 'premium_service_id', 'assigned_to',
         'service_name_snapshot', 'amount_mxn', 'pricing_type',
         'status',
-        'payment_method', 'stripe_session_id', 'spei_payment_id',
+        'payment_method', 'stripe_session_id', 'stripe_subscription_id', 'spei_payment_id',
         'intake_data', 'client_notes',
         'delivery_files', 'delivery_notes',
         'paid_at', 'started_at', 'delivered_at', 'cancelled_at',

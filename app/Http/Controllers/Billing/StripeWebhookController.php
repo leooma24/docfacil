@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Clinic;
 use App\Models\Commission;
 use App\Models\PremiumServicePurchase;
+use App\Services\Billing\PremiumPurchaseNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Stripe\Webhook;
 
 class StripeWebhookController extends Controller
 {
+    public function __construct(
+        private PremiumPurchaseNotifier $premiumNotifier,
+    ) {}
+
     /**
      * Endpoint que Stripe llama para notificar eventos de pago.
      * Rutado como POST /stripe/webhook (sin CSRF — ver VerifyCsrfToken).
@@ -127,39 +131,19 @@ class StripeWebhookController extends Controller
             return;
         }
 
+        // Si fue subscription (monthly), guardar el sub_id para poder reaccionar a cancellation
+        if (!empty($session->subscription)) {
+            $purchase->update(['stripe_subscription_id' => $session->subscription]);
+        }
+
         // Notificar a admins que hay un servicio nuevo en cola para ejecutar
-        $this->notifyPremiumPurchasePaid($purchase);
+        $this->premiumNotifier->notify($purchase, 'pago Stripe confirmado — listo para ejecutar');
 
         Log::info('Servicio premium pagado via Stripe', [
             'purchase_id' => $purchase->id,
             'service' => $purchase->service_name_snapshot,
             'amount' => $purchase->amount_mxn,
         ]);
-    }
-
-    private function notifyPremiumPurchasePaid(PremiumServicePurchase $purchase): void
-    {
-        $emails = collect(explode(',', (string) config('services.notifications.emails', 'leooma24@gmail.com')))
-            ->map(fn ($e) => trim($e))
-            ->filter()
-            ->all();
-
-        $body = sprintf(
-            "Pago confirmado de servicio premium:\n\nClinica: %s (#%d)\nServicio: %s\nMonto: $%s MXN\nMetodo: Stripe\n\nIniciar ejecucion: %s",
-            $purchase->clinic->name ?? '—',
-            $purchase->clinic_id,
-            $purchase->service_name_snapshot,
-            number_format($purchase->amount_mxn, 2),
-            url('/admin/premium-service-purchases/' . $purchase->id),
-        );
-
-        foreach ($emails as $email) {
-            try {
-                Mail::raw($body, fn ($m) => $m->to($email)->subject('[DocFacil] Servicio premium pagado - ' . $purchase->service_name_snapshot));
-            } catch (\Throwable $e) {
-                Log::warning('No se pudo enviar correo admin de servicio premium pagado', ['err' => $e->getMessage()]);
-            }
-        }
     }
 
     private function handlePaymentSucceeded($invoice): void
@@ -202,12 +186,33 @@ class StripeWebhookController extends Controller
 
     private function handleSubscriptionDeleted($subscription): void
     {
+        $subId = $subscription->id ?? null;
+        $subMetadata = (array) ($subscription->metadata ?? []);
+
+        // Caso 1: era una suscripción de servicio premium recurrente (campañas, etc.)
+        if (!empty($subMetadata['premium_purchase_id'])) {
+            $purchase = PremiumServicePurchase::find($subMetadata['premium_purchase_id']);
+            if ($purchase && $purchase->status !== PremiumServicePurchase::STATUS_CANCELLED) {
+                $purchase->update([
+                    'status' => PremiumServicePurchase::STATUS_CANCELLED,
+                    'cancelled_at' => now(),
+                    'internal_notes' => trim(($purchase->internal_notes ?? '') . "\n[auto] Subscripción Stripe cancelada (sub: {$subId})"),
+                ]);
+                $this->premiumNotifier->notify($purchase, 'suscripción cancelada en Stripe');
+                Log::info('Servicio premium cancelado vía Stripe', ['purchase_id' => $purchase->id, 'sub_id' => $subId]);
+            }
+            return;
+        }
+
+        // Caso 2: era una suscripción del SaaS (plan Básico/Pro/Clínica)
         $customerId = $subscription->customer ?? null;
         if (!$customerId) {
+            Log::warning('Stripe sub.deleted sin customer_id ni metadata premium', ['sub_id' => $subId]);
             return;
         }
         $clinic = Clinic::where('stripe_id', $customerId)->first();
         if (!$clinic) {
+            Log::warning('Stripe sub.deleted: clínica no encontrada', ['customer_id' => $customerId, 'sub_id' => $subId]);
             return;
         }
 
@@ -215,6 +220,6 @@ class StripeWebhookController extends Controller
             'auto_renew' => false,
             'cancelled_at' => now(),
         ]);
-        Log::info('Suscripción Stripe cancelada', ['clinic_id' => $clinic->id]);
+        Log::info('Plan SaaS cancelado vía Stripe', ['clinic_id' => $clinic->id, 'sub_id' => $subId]);
     }
 }
