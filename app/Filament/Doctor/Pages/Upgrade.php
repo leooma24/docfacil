@@ -66,7 +66,7 @@ class Upgrade extends Page
 
     public function getFounderPrice(): string
     {
-        return number_format($this->getClinic()?->founder_price ?? 149, 0);
+        return number_format($this->getClinic()?->founder_price ?? 499, 0);
     }
 
     /**

@@ -100,13 +100,21 @@ class VerifyClinicPlan
     {
         $features = [
             'free' => [],
-            'basico' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions'],
+            // Básico — según lo prometido en landing/brochure: recetas PDF,
+            // cobro por WhatsApp, check-in QR, recordatorios WhatsApp.
+            'basico' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions',
+                'pdf_prescriptions', 'whatsapp_payment', 'qr_checkin'],
+            // Pro (slug 'profesional') agrega: odontograma, consentimientos digitales,
+            // portal paciente, multi-doctor, AI avanzada.
             'profesional' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions',
-                'smart_dictation', 'ai_consent_templates', 'ai_insights', 'whatsapp_payment', 'qr_checkin',
+                'whatsapp_payment', 'qr_checkin',
+                'smart_dictation', 'ai_consent_templates', 'ai_insights',
                 'patient_portal', 'multi_doctor'],
             'clinica' => ['voice_dictation', 'patient_ai_summary', 'ai_dx_suggestions', 'pdf_prescriptions',
-                'smart_dictation', 'ai_consent_templates', 'ai_insights', 'whatsapp_payment', 'qr_checkin',
-                'patient_portal', 'multi_doctor', 'unlimited_doctors', 'multi_branch', 'priority_support'],
+                'whatsapp_payment', 'qr_checkin',
+                'smart_dictation', 'ai_consent_templates', 'ai_insights',
+                'patient_portal', 'multi_doctor',
+                'unlimited_doctors', 'multi_branch', 'priority_support'],
         ];
         return in_array($feature, $features[$plan] ?? []);
     }

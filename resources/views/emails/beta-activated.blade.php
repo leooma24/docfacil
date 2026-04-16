@@ -27,8 +27,8 @@
                 <ul>
                     <li>Plan Pro completo — <strong>6 meses gratis</strong></li>
                     <li>Agenda, expedientes, recetas PDF, odontograma y portal del paciente</li>
-                    <li>Cobro por WhatsApp + Check-in con QR + recordatorios automáticos</li>
-                    <li>Precio de fundador de por vida: <strong>$149/mes</strong> (cuando decidas pagar)</li>
+                    <li>Cobro por WhatsApp + Check-in con QR + recordatorios WhatsApp (auto + 1 clic)</li>
+                    <li>Precio de fundador de por vida: <strong>${{ \App\Models\Commission::monthlyPriceForPlan('basico') }}/mes</strong> (cuando decidas pagar)</li>
                 </ul>
                 <p>Tu beta vence el: <strong>{{ $clinic->beta_ends_at?->format('d/m/Y') }}</strong></p>
             </div>

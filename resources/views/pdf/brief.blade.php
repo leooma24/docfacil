@@ -168,7 +168,7 @@
         <div class="col-2">
             <h2 style="margin-top:4px;">Cómo lo resuelve DocFácil</h2>
             <div class="solution-box"><strong>Agenda inteligente en la nube</strong><br>Multi-doctor, arrastra y suelta, desde cualquier dispositivo.</div>
-            <div class="solution-box"><strong>Recordatorios WhatsApp automáticos</strong><br>Reduce inasistencias hasta 40%. 24h y 2h antes.</div>
+            <div class="solution-box"><strong>Recordatorios WhatsApp — auto + 1 clic</strong><br>Automáticos 24h y 2h antes, o manuales con un clic. Reduce inasistencias 40%.</div>
             <div class="solution-box"><strong>Recetas PDF profesionales</strong><br>Con cédula y firma. El paciente las recibe por WhatsApp.</div>
             <div class="solution-box"><strong>Reportes en tiempo real</strong><br>Ingresos, pendientes, pacientes activos, alertas.</div>
         </div>

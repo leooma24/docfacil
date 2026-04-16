@@ -52,11 +52,10 @@
         "url": "{{ url('/') }}",
         "offers": [
             { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free" },
-            { "@@type": "Offer", "price": "149", "priceCurrency": "MXN", "name": "Plan Básico" },
-            { "@@type": "Offer", "price": "299", "priceCurrency": "MXN", "name": "Plan Pro" },
-            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Clínica" }
-        ],
-        "aggregateRating": { "@@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" }
+            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Básico" },
+            { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Pro" },
+            { "@@type": "Offer", "price": "1999", "priceCurrency": "MXN", "name": "Plan Clínica" }
+        ]
     }
     </script>
     {{-- Captura evento beforeinstallprompt temprano para que Alpine lo pueda leer --}}
@@ -196,8 +195,8 @@
             </h1>
 
             <p class="mt-8 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Agenda, expedientes, recetas PDF, recordatorios por WhatsApp y cobros — todo en un solo lugar.
-                <strong class="text-gray-900">Olvidate del papel y del Excel.</strong> Empieza gratis en 2 minutos.
+                Deja de perder pacientes y dinero. Organiza tu consultorio, reduce inasistencias y
+                <strong class="text-gray-900">cóbrate más rápido</strong> — todo desde tu celular. Empieza gratis en 2 minutos.
             </p>
 
             <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-300">
@@ -229,24 +228,28 @@
         </div>
     </section>
 
-    {{-- Stats counter --}}
+    {{-- Badges de confianza --}}
     <section class="py-12 bg-gray-900">
-        <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div data-animate class="animate-fade-up">
-                <div class="text-3xl sm:text-4xl font-extrabold text-white" data-count="500">500+</div>
-                <div class="text-sm text-gray-400 mt-1">Consultorios activos</div>
+                <div class="text-3xl mb-2">🎁</div>
+                <div class="text-sm font-bold text-white">Prueba gratis 15 días</div>
+                <div class="text-xs text-gray-400 mt-1">Todas las funciones del plan Pro</div>
             </div>
             <div data-animate class="animate-fade-up delay-100">
-                <div class="text-3xl sm:text-4xl font-extrabold text-white" data-count="15000">15,000+</div>
-                <div class="text-sm text-gray-400 mt-1">Citas gestionadas</div>
+                <div class="text-3xl mb-2">💳</div>
+                <div class="text-sm font-bold text-white">Sin tarjeta de crédito</div>
+                <div class="text-xs text-gray-400 mt-1">Solo tu correo para empezar</div>
             </div>
             <div data-animate class="animate-fade-up delay-200">
-                <div class="text-3xl sm:text-4xl font-extrabold text-white" data-count="40">40%</div>
-                <div class="text-sm text-gray-400 mt-1">Menos inasistencias</div>
+                <div class="text-3xl mb-2">⚡</div>
+                <div class="text-sm font-bold text-white">Listo en 2 minutos</div>
+                <div class="text-xs text-gray-400 mt-1">Sin instalar nada</div>
             </div>
             <div data-animate class="animate-fade-up delay-300">
-                <div class="text-3xl sm:text-4xl font-extrabold text-teal-400">4.9/5</div>
-                <div class="text-sm text-gray-400 mt-1">Satisfaccion de usuarios</div>
+                <div class="text-3xl mb-2">💬</div>
+                <div class="text-sm font-bold text-white">Soporte por WhatsApp</div>
+                <div class="text-xs text-gray-400 mt-1">Directo con el fundador</div>
             </div>
         </div>
     </section>
@@ -297,7 +300,7 @@
                     @php
                     $solutions = [
                         ['title' => 'Agenda inteligente en la nube', 'desc' => 'Calendario visual, horarios por doctor, desde tu celular o computadora. Nunca pierdas una cita.'],
-                        ['title' => 'WhatsApp automatico', 'desc' => 'Recordatorio 24hrs antes con un clic o automatico. Reduce inasistencias un 40% desde el primer mes.'],
+                        ['title' => 'Recordatorios automáticos + un clic', 'desc' => 'Recordatorios por WhatsApp 24h y 2h antes (automáticos) o mándalos tú con un clic desde tu agenda. Reduce inasistencias 40%.'],
                         ['title' => 'Recetas PDF profesionales', 'desc' => 'Con tu nombre, cedula, logo del consultorio. Descargables e imprimibles en segundos.'],
                         ['title' => 'Reportes en tiempo real', 'desc' => 'Ingresos del mes, servicios mas solicitados, citas perdidas. Toma decisiones con datos, no con intuicion.'],
                     ];
@@ -332,7 +335,7 @@
                 @php
                 $features = [
                     ['icon' => '🗓️', 'title' => 'Agenda inteligente', 'desc' => 'Calendario visual con drag & drop, horarios por doctor, bloqueos y vista diaria/semanal/mensual. Desde tu celular o compu.'],
-                    ['icon' => '📱', 'title' => 'Recordatorios automaticos', 'desc' => 'Recordatorio 24h y 2h antes por WhatsApp. Seguimiento si no asistio. Reduce inasistencias hasta 40%.'],
+                    ['icon' => '📱', 'title' => 'Recordatorios automáticos + un clic', 'desc' => 'Recordatorios por WhatsApp automáticos 24h y 2h antes, o mándalos tú con un clic desde tu agenda. Seguimiento si no asistió. Reduce inasistencias hasta 40%.'],
                     ['icon' => '📋', 'title' => 'Expedientes completos', 'desc' => 'Historial clinico, alergias, antecedentes, notas SOAP. Todo organizado y accesible en segundos.'],
                     ['icon' => '📝', 'title' => 'Recetas PDF profesionales', 'desc' => 'Genera recetas con tu cedula, clinica, medicamentos y firma digital. Descarga o manda por WhatsApp.'],
                     ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => 'Diagrama dental completo con 13 condiciones. Perfecto para dentistas. Compartible con el paciente.'],
@@ -356,31 +359,166 @@
         </div>
     </section>
 
-    {{-- Testimonials --}}
-    <section class="py-24">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-16" data-animate>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Lo que dicen nuestros doctores</h2>
+    {{-- Así se ve DocFácil trabajando (screenshots reales) --}}
+    <section class="py-24 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14" data-animate>
+                <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-teal-50 text-teal-700 text-xs font-bold rounded-full mb-4 border border-teal-100">
+                    ASÍ SE VE TRABAJANDO
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Capturas reales del producto</h2>
+                <p class="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">No es un mockup. Esto es lo que ves tú al usar DocFácil todos los días.</p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8" data-animate>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-animate>
                 @php
-                $testimonials = [
-                    ['name' => 'Dra. Maria Fernandez', 'role' => 'Odontologa, CDMX', 'text' => 'Antes perdia 2 horas al dia organizando citas en mi libreta. Con DocFacil lo hago en 5 minutos. Mis pacientes reciben recordatorio por WhatsApp y ya casi no tengo inasistencias.', 'stars' => 5],
-                    ['name' => 'Dr. Carlos Mendoza', 'role' => 'Medicina General, Guadalajara', 'text' => 'Las recetas PDF le dan un toque profesional a mi consultorio. Mis pacientes las reciben por WhatsApp y no se pierden. Ademas el expediente clinico es muy completo.', 'stars' => 5],
-                    ['name' => 'Dra. Ana Torres', 'role' => 'Dentista, Monterrey', 'text' => 'El odontograma es increible, mis pacientes ven exactamente que dientes necesitan tratamiento. Antes todo era en papel. DocFacil me ahorra al menos 1 hora diaria.', 'stars' => 5],
+                $shots = [
+                    ['file' => '01-dashboard.png', 'title' => 'Escritorio', 'desc' => 'Ingresos del mes, próximas citas y accesos rápidos.'],
+                    ['file' => '03-calendario.png', 'title' => 'Agenda visual', 'desc' => 'Arrastra citas, colores por estado, vista diaria/semanal/mensual.'],
+                    ['file' => '05-expediente.png', 'title' => 'Expediente clínico', 'desc' => 'Historial por paciente, alergias, notas SOAP, NOM-004.'],
+                    ['file' => '07-odontograma-editor.png', 'title' => 'Odontograma interactivo', 'desc' => 'Haces clic en el diente, eliges el estado, se guarda automático.'],
+                    ['file' => '08-cobros.png', 'title' => 'Cobros e ingresos', 'desc' => 'Pagos, pendientes y link SPEI por WhatsApp con un clic.'],
+                    ['file' => '06-recetas.png', 'title' => 'Recetas PDF', 'desc' => 'Con cédula, firma y logo. Envíalas al paciente por WhatsApp.'],
                 ];
                 @endphp
-                @foreach($testimonials as $i => $test)
-                <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-up" style="animation-delay:{{ $i * 0.15 }}s">
-                    <div class="flex gap-1 mb-4">
-                        @for($s = 0; $s < $test['stars']; $s++)
-                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        @endfor
+                @foreach ($shots as $i => $s)
+                <div class="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-fade-up" style="animation-delay:{{ $i * 0.08 }}s">
+                    <div style="background:#e5e7eb; padding:6px 10px; display:flex; align-items:center; gap:4px;">
+                        <span style="width:8px; height:8px; border-radius:50%; background:#f87171;"></span>
+                        <span style="width:8px; height:8px; border-radius:50%; background:#fbbf24;"></span>
+                        <span style="width:8px; height:8px; border-radius:50%; background:#34d399;"></span>
                     </div>
-                    <p class="text-gray-600 leading-relaxed mb-6 italic">"{{ $test['text'] }}"</p>
-                    <div>
-                        <div class="font-bold text-gray-900">{{ $test['name'] }}</div>
-                        <div class="text-sm text-gray-500">{{ $test['role'] }}</div>
+                    <img src="{{ asset('images/screenshots/' . $s['file']) }}" alt="{{ $s['title'] }}" class="w-full block" loading="lazy">
+                    <div class="p-4">
+                        <div class="font-bold text-gray-900">{{ $s['title'] }}</div>
+                        <div class="text-sm text-gray-600 mt-0.5">{{ $s['desc'] }}</div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- Antes vs Después --}}
+    <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14" data-animate>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Tu consultorio, antes y después</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6" data-animate>
+                <div class="rounded-2xl p-8" style="background:linear-gradient(135deg,#fef2f2,#fee2e2); border:1px solid #fecaca;">
+                    <h3 class="font-extrabold text-red-900 text-xl mb-4 flex items-center gap-2">
+                        <span class="text-2xl">😩</span> Tu consultorio hoy
+                    </h3>
+                    <ul class="space-y-3 text-red-900 text-sm">
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Agenda en papel o Excel — se te traspapelan citas</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> 30% de pacientes no llegan sin avisar</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Recetas a mano con letra ilegible</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> No sabes cuánto ganas ni cuánto te deben</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Expedientes en carpetas o Word sueltos</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✕</span> Cobros que se te olvidan cobrar</li>
+                    </ul>
+                </div>
+                <div class="rounded-2xl p-8" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1); border:1px solid #5eead4;">
+                    <h3 class="font-extrabold text-teal-900 text-xl mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🎯</span> Con DocFácil
+                    </h3>
+                    <ul class="space-y-3 text-teal-900 text-sm">
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Agenda en la nube, accesible desde cualquier dispositivo</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> 8% de inasistencia (recordatorios WhatsApp)</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Recetas PDF profesionales con cédula y firma</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Reportes de ingresos en tiempo real</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Expediente digital completo, cumple NOM-004</li>
+                        <li class="flex items-start gap-2"><span class="font-bold">✓</span> Recordatorios automáticos de cobros pendientes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- Carta del fundador --}}
+    <section class="py-20 bg-white">
+        <div class="max-w-3xl mx-auto px-4 text-center" data-animate>
+            <div class="inline-block relative mb-6">
+                @if (file_exists(public_path('images/founder-omar.jpg')))
+                <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar Lerma, fundador de DocFácil" class="w-32 h-32 rounded-full object-cover shadow-xl" style="border:4px solid #14b8a6;">
+                @else
+                <div class="w-32 h-32 rounded-full flex items-center justify-center text-white text-4xl font-extrabold shadow-xl" style="background:linear-gradient(135deg,#0d9488,#06b6d4); border:4px solid #14b8a6;">OL</div>
+                @endif
+                <div class="absolute -bottom-1 -right-1 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center border-4 border-white">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m0 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.39-4.19-1.15l-.3-.17-3.12.82.83-3.04-.2-.32a8.188 8.188 0 01-1.26-4.38c.01-4.54 3.7-8.24 8.25-8.24M8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.86-.87 2.07 0 1.22.89 2.39 1 2.56.14.17 1.76 2.67 4.25 3.73.59.27 1.05.42 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.27-.25-.14-1.47-.74-1.69-.82-.23-.08-.37-.12-.56.12-.16.25-.64.81-.78.97-.15.17-.29.19-.53.07-.26-.13-1.06-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.12-.24-.01-.39.11-.5.11-.11.27-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.11-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43-.14 0-.3-.01-.47-.01z"/></svg>
+                </div>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">Una nota de Omar, fundador de DocFácil</h3>
+            <p class="text-lg text-gray-600 leading-relaxed italic">
+                "Construí DocFácil porque vi a demasiados doctores perdiendo pacientes, tiempo y dinero por culpa del papel y el Excel. Si DocFácil no te ayuda en los primeros 30 días, te devuelvo tu dinero sin preguntas. Y cualquier duda, me escribes tú directamente por WhatsApp."
+            </p>
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 items-center justify-center">
+                <a href="https://wa.me/526682493398" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+                    Escríbeme: 668 249 3398
+                </a>
+                <span class="text-sm text-gray-500">— Omar Lerma, Fundador</span>
+            </div>
+        </div>
+    </section>
+
+    {{-- Trust badges --}}
+    <section class="py-16 bg-gradient-to-b from-white to-gray-50">
+        <div class="max-w-5xl mx-auto px-4" data-animate>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @php
+                $badges = [
+                    ['icon' => '🇲🇽', 'title' => 'Hecho en México'],
+                    ['icon' => '🔒', 'title' => 'Servidores en MX (LFPDPPP)'],
+                    ['icon' => '📋', 'title' => 'Cumple NOM-004-SSA3'],
+                    ['icon' => '🔐', 'title' => 'Cifrado TLS 1.3'],
+                    ['icon' => '💾', 'title' => 'Backups diarios'],
+                    ['icon' => '🚫', 'title' => 'Sin contratos forzosos'],
+                    ['icon' => '💬', 'title' => 'Soporte por WhatsApp'],
+                    ['icon' => '📱', 'title' => 'PWA instalable'],
+                ];
+                @endphp
+                @foreach ($badges as $i => $b)
+                <div class="bg-white rounded-xl p-4 text-center border border-gray-200 hover:border-teal-300 hover:shadow-sm transition animate-fade-up" style="animation-delay:{{ $i * 0.05 }}s">
+                    <div class="text-3xl mb-2">{{ $b['icon'] }}</div>
+                    <div class="text-xs font-bold text-gray-800">{{ $b['title'] }}</div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- FAQ --}}
+    <section id="faq" class="py-24 bg-white">
+        <div class="max-w-3xl mx-auto px-4" data-animate>
+            <div class="text-center mb-12">
+                <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-teal-50 text-teal-700 text-xs font-bold rounded-full mb-4 border border-teal-100">PREGUNTAS FRECUENTES</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Antes de decidir, resolvemos dudas</h2>
+            </div>
+
+            <div x-data="{ open: 0 }" class="space-y-3">
+                @php
+                $landingFaqs = [
+                    ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes, 10 citas/mes). Básico $499/mes con recetas PDF, recordatorios WhatsApp y check-in QR. Pro $999/mes con multi-doctor, odontograma y portal del paciente. Clínica $1,999/mes para multi-sucursal. Paga anual y ahorra 2 meses.'],
+                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones ni letra chica. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos.'],
+                    ['q' => '¿Mis datos están seguros?', 'a' => 'Servidores en México, cifrado TLS 1.3, backups diarios automáticos, auditoría de accesos por usuario. Cumplimos LFPDPPP y NOM-004-SSA3.'],
+                    ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días: si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica.'],
+                    ['q' => '¿Puedo migrar mis pacientes de Excel?', 'a' => 'Sí. Te ayudamos con tu Excel o CSV en el onboarding gratuito. Si tienes más de 200 pacientes, alguien del equipo lo carga por ti.'],
+                    ['q' => '¿Funciona en celular?', 'a' => 'Sí, DocFácil es una PWA — se instala como app nativa en iPhone o Android sin App Store. También funciona en tablet y PC.'],
+                    ['q' => '¿Puedo usarlo en varios dispositivos?', 'a' => 'Sí, acceso simultáneo desde celular, tablet y PC. Los cambios se sincronizan en tiempo real.'],
+                    ['q' => '¿Hay capacitación?', 'a' => 'Plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos tutoriales y soporte directo por WhatsApp.'],
+                    ['q' => '¿Puedo agregar otros doctores o recepcionista?', 'a' => 'Sí, según el plan: Básico 1 doctor, Pro hasta 3, Clínica ilimitados. Recepcionistas adicionales incluidos sin costo extra.'],
+                    ['q' => '¿Emiten factura CFDI?', 'a' => 'Todavía no. Está en roadmap para Q3 2026. Por ahora puedes facturar manualmente desde tu sistema actual con los datos que DocFácil te muestra.'],
+                ];
+                @endphp
+                @foreach ($landingFaqs as $i => $faq)
+                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white hover:border-teal-300 transition">
+                    <button type="button" @click="open = (open === {{ $i }} ? null : {{ $i }})" class="w-full flex items-center justify-between text-left px-5 py-4 hover:bg-gray-50 transition">
+                        <span class="font-bold text-gray-900">{{ $faq['q'] }}</span>
+                        <svg class="w-5 h-5 text-teal-500 transition-transform flex-shrink-0 ml-4" :class="open === {{ $i }} ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="open === {{ $i }}" x-collapse.duration.300ms>
+                        <div class="px-5 pb-5 text-sm text-gray-600 leading-relaxed">{{ $faq['a'] }}</div>
                     </div>
                 </div>
                 @endforeach
@@ -434,9 +572,9 @@
                         </div>
                     </div>
                     <div class="text-center mt-6 pt-6 border-t border-white/20">
-                        <div class="text-sm opacity-90">DocFácil Pro cuesta $299/mes</div>
+                        <div class="text-sm opacity-90">DocFácil Pro cuesta $999/mes</div>
                         <div class="text-2xl font-extrabold mt-1">
-                            ROI: paga DocFácil <span x-text="(totalSavings / 299).toFixed(1)"></span>x
+                            ROI: paga DocFácil <span x-text="(totalSavings / 999).toFixed(1)"></span>x
                         </div>
                         <a href="#pricing" class="inline-block mt-4 px-8 py-3 bg-white text-teal-700 rounded-xl font-bold hover:scale-105 transition-transform">Empezar gratis →</a>
                     </div>
@@ -486,10 +624,10 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php
                 $plans = [
-                    ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '30 pacientes', '20 citas/mes', 'Agenda basica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Basico', 'price' => '149', 'annual' => 1490, 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Cobro por WhatsApp', 'Recordatorios automaticos', 'Check-in con QR'], 'cta' => 'Probar 14 dias', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '299', 'annual' => 2990, 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Basico +', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario'], 'cta' => 'Probar 14 dias', 'popular' => true],
-                    ['name' => 'Clinica', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Comisiones entre doctores', 'Soporte prioritario', 'Onboarding 1 a 1'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
+                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp (auto + 1 clic)', 'Cobro por WhatsApp', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Portal del paciente', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario'], 'cta' => 'Probar 15 días', 'popular' => true],
+                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro +', 'Reportes por doctor', 'Comisiones entre doctores', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 24/7'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -549,6 +687,17 @@
                 </div>
                 @endforeach
             </div>
+
+            {{-- Garantía 30 días --}}
+            <div class="max-w-3xl mx-auto mt-12 p-6 rounded-2xl flex items-start gap-4" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5); border:1px solid #6ee7b7;" data-animate>
+                <div class="text-4xl flex-shrink-0">🛡️</div>
+                <div>
+                    <div class="font-extrabold text-emerald-900 text-lg">Garantía de 30 días</div>
+                    <p class="text-sm text-emerald-800 mt-1 leading-relaxed">
+                        Si en los primeros 30 días no ves resultados, te devolvemos tu dinero completo. Sin preguntas, sin letra chica.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -582,7 +731,7 @@
                             ['Portal del paciente', true, false, false, true],
                             ['100% web (sin instalar)', true, false, false, true],
                             ['Soporte en espanol', true, false, false, false],
-                            ['Precio desde', '$149/mes MXN', 'USD $400', 'USD $350', 'USD $299'],
+                            ['Precio desde', '$499/mes MXN', 'USD $400', 'USD $350', 'USD $299'],
                         ];
                         @endphp
                         @foreach($comparisons as $row)
@@ -773,10 +922,13 @@
                 <div>
                     <h4 class="font-semibold text-gray-300 mb-3">Ciudades</h4>
                     <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="/software-dental/culiacan" class="hover:text-teal-400 transition">Culiacán</a></li>
+                        <li><a href="/software-dental/mazatlan" class="hover:text-teal-400 transition">Mazatlán</a></li>
+                        <li><a href="/software-dental/los-mochis" class="hover:text-teal-400 transition">Los Mochis</a></li>
                         <li><a href="/software-dental/cdmx" class="hover:text-teal-400 transition">CDMX</a></li>
                         <li><a href="/software-dental/guadalajara" class="hover:text-teal-400 transition">Guadalajara</a></li>
                         <li><a href="/software-dental/monterrey" class="hover:text-teal-400 transition">Monterrey</a></li>
-                        <li><a href="/software-dental/merida" class="hover:text-teal-400 transition">Merida</a></li>
+                        <li><a href="/software-dental/merida" class="hover:text-teal-400 transition">Mérida</a></li>
                     </ul>
                 </div>
                 <div>
@@ -868,12 +1020,13 @@ window.addEventListener('scroll', () => {
 // Chatbot
 const faqs = [
     { q: 'Que es DocFacil?', a: 'DocFacil es un software para consultorios medicos y dentales en Mexico. Incluye agenda, expedientes clinicos, recetas PDF, cobros, odontograma, firma digital, recordatorios WhatsApp y portal del paciente. Todo desde tu navegador, sin instalar nada.' },
-    { q: 'Cuanto cuesta?', a: 'Plan gratuito para siempre (1 doctor, 30 pacientes). Basico $149/mes con WhatsApp automatico, recetas PDF y check-in con QR. Pro $299/mes con multi-doctor, odontograma, consentimientos digitales y portal del paciente. Clinica $499/mes para multi-sucursal. 14 dias gratis con todas las funciones. Sin tarjeta.' },
-    { q: 'Como funcionan los recordatorios?', a: 'Automaticos por WhatsApp: 24hrs antes con confirmacion, 2hrs antes como reminder y seguimiento si no asistio. Reduce inasistencias hasta 40%. Puedes mandarlo manual con un clic o dejarlo automatico.' },
+    { q: 'Cuanto cuesta?', a: 'Free para siempre (1 doctor, 15 pacientes, 10 citas/mes). Basico $499/mes con recetas PDF, recordatorios WhatsApp y check-in QR. Pro $999/mes con multi-doctor, odontograma, consentimientos digitales y portal del paciente. Clinica $1,999/mes para multi-sucursal. 15 dias gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
+    { q: 'Como funcionan los recordatorios?', a: 'Automaticos por WhatsApp: 24h y 2h antes de la cita, mas seguimiento si no asistio. Reduce inasistencias hasta 40%. Tambien puedes mandarlos manual con un clic desde tu agenda cuando quieras.' },
     { q: 'Para que especialidades funciona?', a: 'Para todas! Odontologia, medicina general, pediatria, dermatologia, ginecologia y mas. Los dentistas tienen odontograma interactivo; los demas tienen expediente clinico completo. Todo esta en espanol mexicano.' },
     { q: 'Los pacientes pueden firmar digital?', a: 'Si! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },
-    { q: 'Mis datos estan seguros?', a: 'Encriptacion SSL, backups automaticos diarios, historial de cambios por usuario, separacion por clinica (tus datos nunca se cruzan con otra clinica). Cumplimos normas de proteccion de datos de salud en Mexico.' },
-    { q: 'Puedo tener varios doctores?', a: 'Si! Desde el plan Pro ($299/mes) hasta 3 doctores, o plan Clinica ($499/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
+    { q: 'Mis datos estan seguros?', a: 'Servidores en Mexico, cifrado TLS, backups automaticos diarios, historial de cambios por usuario, separacion por clinica (tus datos nunca se cruzan con otra). Cumplimos LFPDPPP y NOM-004-SSA3.' },
+    { q: 'Puedo tener varios doctores?', a: 'Si! Desde el plan Pro ($999/mes) hasta 3 doctores, o plan Clinica ($1,999/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
+    { q: 'Hay garantia?', a: 'Si! Garantia de 30 dias: si no ves resultados en el primer mes, te devolvemos tu dinero completo sin preguntas.' },
     { q: 'Puedo probarlo sin registrarme?', a: 'Si! Hay un modo demo que crea una clinica temporal con 35 pacientes falsos, 60 citas historicas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
 ];
 

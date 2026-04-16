@@ -169,7 +169,7 @@
                 <td>
                     <div class="vp-icon">📅</div>
                     <div class="vp-title">Menos inasistencias</div>
-                    <div class="vp-desc">Recordatorios WhatsApp automáticos bajan las faltas de 30% a 8%.</div>
+                    <div class="vp-desc">Recordatorios por WhatsApp bajan las faltas de 30% a 8%.</div>
                 </td>
                 <td>
                     <div class="vp-icon">📋</div>
@@ -258,7 +258,7 @@
             <td class="feat-text">
                 <span class="feat-num">01</span>
                 <h3>Agenda inteligente + recordatorios WhatsApp</h3>
-                <p>Calendario visual multi-doctor, arrastrar y soltar, vista diaria/semanal/mensual. Recordatorios automáticos 24h y 2h antes de cada cita.</p>
+                <p>Calendario visual multi-doctor, arrastrar y soltar, vista diaria/semanal/mensual. Recordatorios WhatsApp automáticos 24h y 2h antes, o con un clic manual desde tu agenda.</p>
                 <ul>
                     <li>Hasta 40% menos inasistencias</li>
                     <li>Acceso desde PC, tablet o celular</li>

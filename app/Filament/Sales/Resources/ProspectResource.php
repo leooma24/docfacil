@@ -269,10 +269,10 @@ class ProspectResource extends Resource
                                 . " y queria preguntarle: como lleva el control de citas? Estamos ayudando a " . ($isDentist ? 'dentistas' : 'doctores')
                                 . " a recuperar citas perdidas con recordatorios WhatsApp. Se lo muestro en 10 min?",
                             3 => "Hola {$name}, le doy seguimiento. " . ($isDentist ? "Dentistas" : "Doctores")
-                                . " que usan DocFacil recuperan 8-12 citas/mes. Son \$4,000+ extra por \$149/mes. Le hago una demo?",
+                                . " que usan DocFacil recuperan 8-12 citas/mes. Son \$4,800+ extra por \$499/mes y garantia de 30 dias. Le hago una demo?",
                             7 => "{$name}, ultimo mensaje. Le dejo acceso gratuito: https://docfacil.tu-app.co/doctor/register — Aqui estoy si lo necesita.",
                             14 => "Hola {$name}, seguimos mejorando DocFacil. Si sigue con el pendiente de organizar su consultorio, sigo disponible.",
-                            default => "Hola {$name}, soy de DocFacil. Agenda, expedientes, recetas y WhatsApp automatico. Todo en uno. Le interesa una demo?",
+                            default => "Hola {$name}, soy de DocFacil. Agenda, expedientes, recetas PDF y WhatsApp auto + 1 clic. Todo en uno. Le interesa una demo?",
                         };
                         return "https://wa.me/{$phone}?text=" . urlencode($msg);
                     })

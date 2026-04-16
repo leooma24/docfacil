@@ -83,10 +83,10 @@ class BrochureController extends Controller
                 ['name' => 'Dra. Ana Torres', 'city' => 'Monterrey', 'specialty' => 'Ortodoncia', 'quote' => 'El odontograma y las recetas PDF le dan un aire profesional que mis pacientes notan y valoran.'],
             ],
             'plans' => [
-                ['name' => 'Free', 'price' => 0, 'annual' => 0, 'ideal' => 'Probar el sistema sin tarjeta', 'features' => ['1 doctor', '30 pacientes', 'Agenda básica', '20 citas / mes']],
-                ['name' => 'Básico', 'price' => 149, 'annual' => 1490, 'ideal' => 'Consultorios individuales que arrancan', 'features' => ['1 doctor', '200 pacientes', 'WhatsApp + recetas PDF', 'Check-in QR', 'Expediente completo']],
-                ['name' => 'Pro', 'price' => 299, 'annual' => 2990, 'popular' => true, 'ideal' => 'Consultorios establecidos', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Odontograma interactivo', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario']],
-                ['name' => 'Clínica', 'price' => 499, 'annual' => 4990, 'ideal' => 'Clínicas con varios doctores o sedes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Comisiones entre doctores', 'Reportes por doctor', 'Onboarding 1 a 1']],
+                ['name' => 'Free', 'price' => 0, 'annual' => 0, 'ideal' => 'Probar el sistema sin tarjeta', 'features' => ['1 doctor', '15 pacientes', 'Agenda básica', '10 citas / mes']],
+                ['name' => 'Básico', 'price' => 499, 'annual' => 4990, 'ideal' => 'Consultorios individuales que arrancan', 'features' => ['1 doctor', '200 pacientes', 'WhatsApp + recetas PDF', 'Check-in QR', 'Expediente completo']],
+                ['name' => 'Pro', 'price' => 999, 'annual' => 9990, 'popular' => true, 'ideal' => 'Consultorios establecidos', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Odontograma interactivo', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario']],
+                ['name' => 'Clínica', 'price' => 1999, 'annual' => 19990, 'ideal' => 'Clínicas con varios doctores o sedes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Comisiones entre doctores', 'Reportes por doctor', 'Onboarding 1 a 1']],
             ],
         ];
     }

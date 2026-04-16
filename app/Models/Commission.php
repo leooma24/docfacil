@@ -72,13 +72,12 @@ class Commission extends Model
 
     /**
      * Precio mensual en MXN por plan.
-     * Nota: internamente el slug del plan 'Starter' sigue siendo 'basico'.
      */
     public static function monthlyPriceForPlan(string $plan): int
     {
         return match ($plan) {
             'free' => 0,
-            'basico' => 499,       // UI: "Starter"
+            'basico' => 499,       // UI: "Básico"
             'profesional' => 999,  // UI: "Pro"
             'clinica' => 1999,     // UI: "Clínica"
             default => 0,

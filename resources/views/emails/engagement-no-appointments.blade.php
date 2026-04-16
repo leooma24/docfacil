@@ -27,11 +27,11 @@
     <div class="header">
         <img src="https://docfacil.tu-app.co/images/logo_doc_facil_white.png" alt="DocFácil">
         <h1>Agenda tu primera cita</h1>
-        <p>Y activa los recordatorios automaticos</p>
+        <p>Activa los recordatorios WhatsApp</p>
     </div>
     <div class="content">
         <p>Hola <strong>{{ $doctorName }}</strong>,</p>
-        <p style="margin-top:12px;">Ya tienes pacientes registrados en <strong>{{ $clinic->name }}</strong>. El siguiente paso es agendar tu primera cita y ver la magia de los recordatorios automaticos.</p>
+        <p style="margin-top:12px;">Ya tienes pacientes registrados en <strong>{{ $clinic->name }}</strong>. El siguiente paso es agendar tu primera cita y mandar el primer recordatorio WhatsApp — automático o con un clic desde tu agenda.</p>
 
         <div class="stat-box">
             <div class="number">40%</div>

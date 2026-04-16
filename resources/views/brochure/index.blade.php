@@ -207,12 +207,12 @@
         <div class="grid md:grid-cols-2 gap-10 items-center mb-24">
             <div class="md:order-1 order-2">
                 <span class="inline-block bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full mb-4">01 · AGENDA</span>
-                <h3 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Calendario inteligente + recordatorios WhatsApp automáticos</h3>
-                <p class="text-gray-600 mb-5 leading-relaxed">Vista diaria, semanal, mensual. Arrastra citas para reagendar, colores por estado. Los pacientes reciben recordatorios 24h y 2h antes — hasta 40% menos inasistencias.</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Calendario inteligente + recordatorios WhatsApp</h3>
+                <p class="text-gray-600 mb-5 leading-relaxed">Vista diaria, semanal, mensual. Arrastra citas para reagendar, colores por estado. Los pacientes reciben recordatorios automáticos 24h y 2h antes, o los mandas tú con un clic desde tu agenda. Hasta 40% menos inasistencias.</p>
                 <ul class="space-y-2 text-sm text-gray-700">
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Multi-doctor con colores por profesional</li>
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Acceso desde PC, tablet o celular</li>
-                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Recordatorios WhatsApp automáticos incluidos</li>
+                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Recordatorios automáticos o manuales con un clic</li>
                 </ul>
             </div>
             <div class="md:order-2 order-1 relative">

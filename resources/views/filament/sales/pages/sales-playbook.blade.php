@@ -84,15 +84,15 @@
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Básico</span>
-                <span class="sp-price-val">$149/mes · $1,490/año · Comisión $447</span>
+                <span class="sp-price-val">$499/mes · $4,990/año · Comisión $1,497</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Pro ⭐</span>
-                <span class="sp-price-val">$299/mes · $2,990/año · Comisión $897</span>
+                <span class="sp-price-val">$999/mes · $9,990/año · Comisión $2,997</span>
             </div>
             <div class="sp-price-row">
                 <span class="sp-price-plan">Clínica</span>
-                <span class="sp-price-val">$499/mes · $4,990/año · Comisión $1,497</span>
+                <span class="sp-price-val">$1,999/mes · $19,990/año · Comisión $5,997</span>
             </div>
             <div class="sp-tip">
                 <strong>Comisión = 3× mensualidad</strong> (igual para mensual o anual).<br>
@@ -115,15 +115,15 @@
             </div>
             <div class="sp-step">
                 <div class="sp-step-num">3</div>
-                <div class="sp-step-text"><strong>Demo rápida:</strong> Muestra en tu celular: 1) Agenda con drag & drop, 2) Recordatorio WhatsApp automático, 3) Receta PDF con cédula, 4) Cobro por WhatsApp</div>
+                <div class="sp-step-text"><strong>Demo rápida:</strong> Muestra en tu celular: 1) Agenda con drag & drop, 2) Recordatorio WhatsApp (auto + 1 clic), 3) Receta PDF con cédula, 4) Cobro por WhatsApp</div>
             </div>
             <div class="sp-step">
                 <div class="sp-step-num">4</div>
-                <div class="sp-step-text"><strong>ROI:</strong> "Por $149/mes recupera 8+ citas que antes perdía. Si cada cita vale $500, son $4,000 más al mes. DocFácil se paga 27 veces."</div>
+                <div class="sp-step-text"><strong>ROI:</strong> "Por $499/mes recupera 8+ citas que antes perdía. Si cada cita vale $600, son $4,800 más al mes. DocFácil se paga 9 veces + tiempo que ahorras."</div>
             </div>
             <div class="sp-step">
                 <div class="sp-step-num">5</div>
-                <div class="sp-step-text"><strong>Cierre suave:</strong> "¿Qué tal si lo prueba 14 días gratis? Sin tarjeta, sin compromiso. Se lo configuro ahorita en 2 minutos."</div>
+                <div class="sp-step-text"><strong>Cierre suave:</strong> "¿Qué tal si lo prueba 15 días gratis? Sin tarjeta, sin compromiso. Y tenemos garantía de 30 días: si no ve resultados le devolvemos su dinero."</div>
             </div>
         </div>
 

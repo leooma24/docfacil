@@ -141,7 +141,6 @@ class Clinic extends Model
 
     /**
      * Nombre del plan tal cual se muestra al usuario.
-     * El slug interno 'basico' fue rebautizado a 'Starter' en marketing.
      */
     public function planDisplayName(): string
     {
@@ -152,7 +151,7 @@ class Clinic extends Model
     {
         return match ($plan) {
             'free' => 'Free',
-            'basico' => 'Starter',
+            'basico' => 'Básico',
             'profesional' => 'Pro',
             'clinica' => 'Clínica',
             default => ucfirst((string) $plan),

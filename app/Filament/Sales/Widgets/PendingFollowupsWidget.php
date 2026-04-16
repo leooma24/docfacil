@@ -51,7 +51,7 @@ class PendingFollowupsWidget extends Widget
 
         $msg = match ($p->contact_day) {
             0, 1 => "Hola {$name}, soy de DocFacil. Queria preguntarle: como lleva el control de citas y expedientes? Le puedo mostrar algo rapido que le ahorra 2 horas al dia.",
-            3 => "Hola {$name}, le doy seguimiento. Doctores que usan DocFacil recuperan 8-12 citas/mes con recordatorios WhatsApp. Son \$4,000+ extra por \$149/mes. Le interesa una demo de 10 min?",
+            3 => "Hola {$name}, le doy seguimiento. Doctores que usan DocFacil recuperan 8-12 citas/mes con recordatorios WhatsApp. Son \$4,800+ extra por \$499/mes y garantia de 30 dias. Le interesa una demo de 10 min?",
             7 => "{$name}, ultimo mensaje. Le dejo acceso gratuito: https://docfacil.tu-app.co/doctor/register - Si necesita algo, aqui estoy.",
             default => "Hola {$name}, soy de DocFacil. Queria saber si sigue con el pendiente de organizar su consultorio. Sigo disponible para una demo rapida.",
         };

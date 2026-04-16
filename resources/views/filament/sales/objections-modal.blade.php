@@ -3,13 +3,13 @@
     $objeciones = [
         ['cat' => 'PRECIO', 'items' => [
             ['q' => '"Está caro" / "No tengo presupuesto"',
-             'a' => 'Doctor, ¿cuánto cobra por consulta? ¿$500? DocFácil Básico cuesta $149 — menos de 1 consulta al mes. Y con los recordatorios WhatsApp recupera entre 8 y 12 citas que antes perdía. Son $4,000+ extra al mes por $149. Se paga más de 25 veces.',
+             'a' => 'Doctor, ¿cuánto cobra por consulta? ¿$600? DocFácil Básico cuesta $499 — menos de 1 consulta al mes. Y con los recordatorios WhatsApp recupera entre 8 y 12 citas que antes perdía. Son $4,800+ extra al mes por $499. Se paga casi 10 veces. Y tiene garantía de 30 días.',
              'follow' => '¿Cuántas citas pierde a la semana porque los pacientes no llegan?'],
             ['q' => '"¿Por qué pagar si puedo usar Excel/libreta?"',
-             'a' => 'Puede seguir con Excel, pero Excel no le manda WhatsApp a sus pacientes para recordarles la cita. Tampoco genera recetas PDF con su cédula ni expedientes que cumplan la NOM-004. DocFácil hace todo eso automático por $149/mes.',
+             'a' => 'Puede seguir con Excel, pero Excel no le manda WhatsApp a sus pacientes. Tampoco genera recetas PDF con su cédula ni expedientes que cumplan la NOM-004. DocFácil hace todo eso por $499/mes y ahorra horas al día.',
              'follow' => '¿Cuánto tiempo al día le toma organizar su agenda actualmente?'],
             ['q' => '"No sé si lo voy a usar"',
-             'a' => 'Por eso los primeros 14 días son completamente gratis, sin meter tarjeta. Si no le sirve, no paga ni un peso. Pero le apuesto a que cuando vea que sus pacientes llegan porque les llegó el recordatorio, no va a querer dejarlo.',
+             'a' => 'Por eso los primeros 15 días son completamente gratis, sin meter tarjeta. Y tenemos garantía de 30 días: si no ve resultados le devolvemos su dinero. Sin preguntas.',
              'follow' => '¿Qué tal si lo probamos juntos ahorita? Toma 2 minutos registrarse.'],
         ]],
         ['cat' => 'TECNOLOGÍA', 'items' => [
@@ -17,7 +17,7 @@
              'a' => 'Precisamente por eso DocFácil es tan simple. Si sabe usar WhatsApp, sabe usar DocFácil. Y lo acompañamos paso a paso en la configuración, sin costo extra.',
              'follow' => '¿Su secretaria maneja algún celular o computadora? Ella puede ayudarle al principio.'],
             ['q' => '"Ya tengo un sistema" (Doctoralia, otro)',
-             'a' => '¿Su sistema actual le manda recordatorios automáticos por WhatsApp a sus pacientes? ¿Le genera recetas PDF con su cédula? ¿Tiene portal donde el paciente ve su historial? DocFácil hace todo eso por $149. Pruébelo 14 días sin cancelar lo que ya tiene.',
+             'a' => '¿Su sistema actual le manda recordatorios por WhatsApp a sus pacientes? ¿Le genera recetas PDF con su cédula? ¿Tiene portal donde el paciente ve su historial? DocFácil hace todo eso por $499. Pruébelo 15 días sin cancelar lo que ya tiene.',
              'follow' => '¿Qué es lo que más le gusta de su sistema actual? ¿Y qué le falta?'],
             ['q' => '"¿Y si se cae el internet?"',
              'a' => 'DocFácil funciona en la nube, pero sus datos no se pierden nunca — hay respaldos automáticos diarios. Y hoy en día el internet está en todos lados. Además funciona desde su celular con datos móviles.',
@@ -44,7 +44,7 @@
         ]],
         ['cat' => 'ESPECÍFICAS', 'items' => [
             ['q' => '"Mi consultorio es muy pequeño"',
-             'a' => 'El plan Básico está hecho exactamente para consultorios como el suyo: 1 doctor, hasta 200 pacientes, citas ilimitadas. $149/mes. No necesita nada más grande. Y si crece, sube de plan.',
+             'a' => 'El plan Básico está hecho exactamente para consultorios como el suyo: 1 doctor, hasta 200 pacientes, citas ilimitadas. $499/mes. No necesita nada más grande. Y si crece, sube de plan.',
              'follow' => '¿Cuántos pacientes tiene registrados actualmente?'],
             ['q' => '"Ya estoy viejo para esto"',
              'a' => 'Doctor, tenemos usuarios de 60+ años que lo usan sin problema. La interfaz es muy simple — si usa WhatsApp en su celular, esto es igual de fácil. Además su secretaria puede manejarlo mientras usted atiende.',

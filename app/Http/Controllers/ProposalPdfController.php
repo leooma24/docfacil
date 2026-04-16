@@ -27,9 +27,9 @@ class ProposalPdfController extends Controller
             'prospect' => $prospect,
             'isDentist' => $isDentist,
             'plans' => [
-                ['name' => 'Básico', 'price' => 149, 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Recordatorios WhatsApp', 'Check-in QR']],
-                ['name' => 'Pro', 'price' => 299, 'popular' => true, 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Soporte prioritario']],
-                ['name' => 'Clínica', 'price' => 499, 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Onboarding 1 a 1']],
+                ['name' => 'Básico', 'price' => 499, 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Recordatorios WhatsApp', 'Check-in QR']],
+                ['name' => 'Pro', 'price' => 999, 'popular' => true, 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Soporte prioritario']],
+                ['name' => 'Clínica', 'price' => 1999, 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Onboarding 1 a 1']],
             ],
             'date' => now()->translatedFormat('d \d\e F \d\e Y'),
             'repName' => auth()->user()->name,
