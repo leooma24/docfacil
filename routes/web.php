@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Billing\PremiumServiceCheckoutController;
 use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
@@ -40,6 +41,16 @@ Route::middleware(['auth'])->group(function () {
     // Descarga de comprobantes SPEI — auth + admin-or-owner check dentro del controller
     Route::get('/billing/spei-receipts/{payment}', [SpeiReceiptController::class, 'download'])
         ->name('spei.receipt.download');
+
+    // Marketplace de servicios premium (compra de addons)
+    Route::get('/billing/premium/{purchase}/stripe', [PremiumServiceCheckoutController::class, 'stripe'])
+        ->name('premium.checkout.stripe');
+    Route::get('/billing/premium/{purchase}/spei', [PremiumServiceCheckoutController::class, 'spei'])
+        ->name('premium.checkout.spei');
+    Route::get('/billing/premium/{purchase}/quote', [PremiumServiceCheckoutController::class, 'quote'])
+        ->name('premium.checkout.quote');
+    Route::get('/billing/premium/{purchase}/success', [PremiumServiceCheckoutController::class, 'success'])
+        ->name('premium.checkout.success');
 });
 
 Route::post('/billing/stripe/webhook', [StripeWebhookController::class, 'handle'])

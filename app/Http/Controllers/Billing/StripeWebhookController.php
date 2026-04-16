@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Billing;
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
 use App\Models\Commission;
+use App\Models\PremiumServicePurchase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Webhook;
 
 class StripeWebhookController extends Controller
@@ -76,6 +78,14 @@ class StripeWebhookController extends Controller
     private function handleCheckoutCompleted($session): void
     {
         $metadata = (array) ($session->metadata ?? []);
+
+        // Caso 1: compra de servicio premium del marketplace
+        if (!empty($metadata['premium_purchase_id'])) {
+            $this->handlePremiumPurchaseCompleted($session, $metadata);
+            return;
+        }
+
+        // Caso 2: suscripción al SaaS (plan)
         $clinicId = $metadata['clinic_id'] ?? null;
         $plan = $metadata['plan'] ?? null;
         $cycle = $metadata['billing_cycle'] ?? 'monthly';
@@ -100,6 +110,54 @@ class StripeWebhookController extends Controller
         }
 
         Log::info('Plan activado vía Stripe', ['clinic_id' => $clinic->id, 'plan' => $plan, 'cycle' => $cycle]);
+    }
+
+    private function handlePremiumPurchaseCompleted($session, array $metadata): void
+    {
+        $purchase = PremiumServicePurchase::find($metadata['premium_purchase_id']);
+        if (!$purchase) {
+            Log::warning('Stripe webhook: PremiumServicePurchase no encontrado', $metadata);
+            return;
+        }
+        if ($purchase->isPaid()) {
+            return; // ya marcado, evita doble proceso
+        }
+
+        $purchase->markPaid('stripe', $session->id ?? null);
+
+        // Notificar a admins que hay un servicio nuevo en cola para ejecutar
+        $this->notifyPremiumPurchasePaid($purchase);
+
+        Log::info('Servicio premium pagado via Stripe', [
+            'purchase_id' => $purchase->id,
+            'service' => $purchase->service_name_snapshot,
+            'amount' => $purchase->amount_mxn,
+        ]);
+    }
+
+    private function notifyPremiumPurchasePaid(PremiumServicePurchase $purchase): void
+    {
+        $emails = collect(explode(',', (string) config('services.notifications.emails', 'leooma24@gmail.com')))
+            ->map(fn ($e) => trim($e))
+            ->filter()
+            ->all();
+
+        $body = sprintf(
+            "Pago confirmado de servicio premium:\n\nClinica: %s (#%d)\nServicio: %s\nMonto: $%s MXN\nMetodo: Stripe\n\nIniciar ejecucion: %s",
+            $purchase->clinic->name ?? '—',
+            $purchase->clinic_id,
+            $purchase->service_name_snapshot,
+            number_format($purchase->amount_mxn, 2),
+            url('/admin/premium-service-purchases/' . $purchase->id),
+        );
+
+        foreach ($emails as $email) {
+            try {
+                Mail::raw($body, fn ($m) => $m->to($email)->subject('[DocFacil] Servicio premium pagado - ' . $purchase->service_name_snapshot));
+            } catch (\Throwable $e) {
+                Log::warning('No se pudo enviar correo admin de servicio premium pagado', ['err' => $e->getMessage()]);
+            }
+        }
     }
 
     private function handlePaymentSucceeded($invoice): void
