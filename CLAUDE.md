@@ -60,7 +60,17 @@ Defined in `routes/console.php`, cron runs every minute on prod:
 
 ### Pricing
 
-Plans: Free ($0), Básico ($149), Pro ($299), Clínica ($499). Commission: 3× monthly price, split 50/50 across first two payments. All paid plans are commissionable. Source of truth: `Commission::monthlyPriceForPlan()`.
+Plans: Free ($0), Básico ($499), Pro ($999), Clínica ($1,999). Annual = monthly × 10 (2 months free). Commission: 3× monthly price. Payout depends on billing cycle:
+- **Monthly sale** → commission split 50/50 across first two payments (`payout_type='split'`).
+- **Annual sale** → commission paid 100% in one lump sum (`payout_type='lump_sum'`).
+
+All paid plans are commissionable. Source of truth: `Commission::monthlyPriceForPlan()` and `Commission::annualPriceForPlan()`. `Commission::generateForSale()` is idempotent — safe to call from both Stripe webhook retries and SPEI monthly renewals.
+
+### Billing (Stripe + SPEI manual)
+
+Two payment methods coexist in `/doctor/actualizar-plan`:
+- **Stripe Checkout** — card payments, auto-renewal. Config in `config/services.php:stripe`. Webhook at `/billing/stripe/webhook` with signature verification and idempotency via `stripe_webhook_events` table.
+- **Manual SPEI** — bank transfer, admin approves. Config in `config/services.php:spei` (CLABE, titular, admin_emails). Receipts stored on **private disk** (`storage/app/spei-receipts/`), served via signed route `/billing/spei-receipts/{id}` (auth + admin/owner check). Admin review at `/admin/spei-payments`. `SpeiReviewService::approve()` activates plan + generates commissions.
 
 ## Testing
 

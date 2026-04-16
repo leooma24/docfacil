@@ -73,12 +73,17 @@ class SpeiPayment extends Model
         return $this->status === self::STATUS_APPROVED;
     }
 
+    /**
+     * URL temporal firmada (5 min) para ver el comprobante.
+     * El archivo vive en el disco privado, no es accesible públicamente.
+     */
     public function receiptUrl(): ?string
     {
         if (!$this->receipt_path) {
             return null;
         }
-        return Storage::disk('public')->url($this->receipt_path);
+        // temporaryUrl solo funciona con drivers que lo soporten (S3). Para disco local usamos un signed route.
+        return route('spei.receipt.download', ['payment' => $this->id]);
     }
 
     /**

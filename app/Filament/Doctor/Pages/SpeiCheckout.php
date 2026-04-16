@@ -11,7 +11,9 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SpeiCheckout extends Page implements HasForms
@@ -56,11 +58,11 @@ class SpeiCheckout extends Page implements HasForms
                     ->label('Comprobante de transferencia (imagen o PDF)')
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf'])
                     ->maxSize(5120) // 5 MB
-                    ->disk('public')
+                    ->disk('local') // Almacenado en storage/app — NO accesible públicamente. Contiene datos bancarios.
                     ->directory('spei-receipts/' . auth()->user()->clinic_id)
-                    ->visibility('public')
+                    ->visibility('private')
                     ->required()
-                    ->helperText('Sube la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB.'),
+                    ->helperText('Sube la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB. Tu comprobante se guarda cifrado y solo lo vemos nosotros para aprobar el pago.'),
 
                 Textarea::make('notes')
                     ->label('Notas (opcional)')
@@ -91,9 +93,9 @@ class SpeiCheckout extends Page implements HasForms
             return;
         }
 
-        $path = \Storage::disk('public')->path($receiptPath);
-        $mime = file_exists($path) ? (mime_content_type($path) ?: null) : null;
-        $size = file_exists($path) ? filesize($path) : null;
+        $disk = Storage::disk('local');
+        $mime = $disk->exists($receiptPath) ? $disk->mimeType($receiptPath) : null;
+        $size = $disk->exists($receiptPath) ? $disk->size($receiptPath) : null;
         $original = basename($receiptPath);
 
         $payment = SpeiPayment::create([
@@ -139,7 +141,7 @@ class SpeiCheckout extends Page implements HasForms
                     $m->to($email)->subject($subject);
                 });
             } catch (\Throwable $e) {
-                \Log::warning('No se pudo enviar correo de nuevo SPEI', ['error' => $e->getMessage()]);
+                Log::warning('No se pudo enviar correo de nuevo SPEI', ['error' => $e->getMessage()]);
             }
         }
 

@@ -165,15 +165,23 @@ class SpeiPaymentResource extends Resource
 
             Infolists\Components\Section::make('Comprobante')
                 ->schema([
-                    Infolists\Components\ImageEntry::make('receipt_path')
-                        ->label('Imagen')
-                        ->disk('public')
-                        ->height(500)
-                        ->columnSpanFull(),
-                    Infolists\Components\TextEntry::make('receipt_original_name')->label('Archivo'),
+                    Infolists\Components\TextEntry::make('receipt_original_name')
+                        ->label('Archivo subido')
+                        ->placeholder('Sin archivo'),
                     Infolists\Components\TextEntry::make('receipt_mime')->label('Tipo'),
+                    Infolists\Components\TextEntry::make('receipt_size_bytes')
+                        ->label('Tamaño')
+                        ->formatStateUsing(fn ($state) => $state ? round($state / 1024) . ' KB' : '—'),
+                    Infolists\Components\Actions::make([
+                        Infolists\Components\Actions\Action::make('download')
+                            ->label('Ver / descargar comprobante')
+                            ->icon('heroicon-o-arrow-down-tray')
+                            ->color('primary')
+                            ->url(fn ($record) => $record->receiptUrl(), shouldOpenInNewTab: true)
+                            ->visible(fn ($record) => (bool) $record->receipt_path),
+                    ])->columnSpanFull(),
                 ])
-                ->columns(2),
+                ->columns(3),
 
             Infolists\Components\Section::make('Revisión')
                 ->schema([

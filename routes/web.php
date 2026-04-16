@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\BriefPdfController;
@@ -27,7 +28,7 @@ Route::get('/brief', [BriefPdfController::class, 'web'])->name('brief.web');
 Route::get('/brochure', [BrochureController::class, 'web'])->name('brochure.web');
 Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.pdf');
 
-// Billing: Stripe Checkout (autenticado) + webhook (sin CSRF)
+// Billing: Stripe Checkout (autenticado) + webhook (sin CSRF) + comprobantes SPEI privados
 Route::middleware(['auth'])->group(function () {
     Route::get('/billing/stripe/checkout/{plan}/{cycle}', [StripeCheckoutController::class, 'checkout'])
         ->name('stripe.checkout')
@@ -35,6 +36,10 @@ Route::middleware(['auth'])->group(function () {
         ->where('cycle', 'monthly|annual');
     Route::get('/billing/stripe/success', [StripeCheckoutController::class, 'success'])
         ->name('stripe.checkout.success');
+
+    // Descarga de comprobantes SPEI — auth + admin-or-owner check dentro del controller
+    Route::get('/billing/spei-receipts/{payment}', [SpeiReceiptController::class, 'download'])
+        ->name('spei.receipt.download');
 });
 
 Route::post('/billing/stripe/webhook', [StripeWebhookController::class, 'handle'])

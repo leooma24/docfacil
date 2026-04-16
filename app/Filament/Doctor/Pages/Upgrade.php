@@ -55,6 +55,11 @@ class Upgrade extends Page
         if ($clinic->is_beta && $clinic->beta_ends_at?->isPast()) {
             return true;
         }
+        // Plan pagado (Básico/Pro/Clínica) que venció sin renovar.
+        if (in_array($clinic->plan, ['basico', 'profesional', 'clinica'], true)
+            && $clinic->plan_ends_at?->isPast()) {
+            return true;
+        }
 
         return false;
     }

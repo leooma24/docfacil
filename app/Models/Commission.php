@@ -128,6 +128,12 @@ class Commission extends Model
      * - Ventas ANUALES → 1 sola comisión con tier='first' y payout_type='lump_sum' por el 100% (3× mensualidad).
      * - Ventas MENSUALES → 2 comisiones tier 'first'/'second', payout_type='split', 50% cada una.
      *
+     * Idempotente: si ya hay comisiones pending/paid para la combinación clínica+vendedor+plan,
+     * retorna vacío y no duplica. Esto protege contra:
+     * - Reintentos de webhook Stripe (checkout.session.completed llega 2+ veces).
+     * - Renovaciones mensuales SPEI (cada aprobación llama este método).
+     * - Clínica que cancela y re-contrata — considerar como misma venta.
+     *
      * Las comisiones quedan en status='pending' hasta que se confirme el pago del cliente.
      */
     public static function generateForSale(
@@ -139,6 +145,23 @@ class Commission extends Model
         ?int $prospectId = null,
     ): array {
         if (!in_array($plan, self::COMMISSIONABLE_PLANS)) {
+            return [];
+        }
+
+        // Guardia de idempotencia: si ya hay comisiones vivas para esta venta, no duplicar.
+        $alreadyHasCommissions = self::query()
+            ->where('clinic_id', $clinic->id)
+            ->where('user_id', $userId)
+            ->where('plan_at_sale', $plan)
+            ->whereIn('status', ['pending', 'paid'])
+            ->exists();
+
+        if ($alreadyHasCommissions) {
+            \Log::info('Commission::generateForSale skipped (ya existen comisiones)', [
+                'clinic_id' => $clinic->id,
+                'user_id' => $userId,
+                'plan' => $plan,
+            ]);
             return [];
         }
 
