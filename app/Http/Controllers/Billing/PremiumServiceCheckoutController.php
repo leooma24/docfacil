@@ -35,17 +35,17 @@ class PremiumServiceCheckoutController extends Controller
         $clinic = $purchase->clinic;
         $stripe = new StripeClient($secret);
 
-        // Asegura customer
-        if (!$clinic->stripe_id) {
-            $customer = $stripe->customers->create([
-                'email' => $user->email,
-                'name' => $clinic->name,
-                'metadata' => ['clinic_id' => $clinic->id],
-            ]);
-            $clinic->update(['stripe_id' => $customer->id]);
-        }
-
         try {
+            // Asegura customer (también puede fallar si Stripe API está caída)
+            if (!$clinic->stripe_id) {
+                $customer = $stripe->customers->create([
+                    'email' => $user->email,
+                    'name' => $clinic->name,
+                    'metadata' => ['clinic_id' => $clinic->id],
+                ]);
+                $clinic->update(['stripe_id' => $customer->id]);
+            }
+
             $isMonthly = $purchase->pricing_type === 'monthly';
 
             $sessionParams = [
@@ -130,10 +130,13 @@ class PremiumServiceCheckoutController extends Controller
 
     /**
      * Pantalla de éxito tras pago Stripe.
-     * El estado real cambia via webhook (implementado en próxima iteración).
+     * El estado real cambia via webhook (handlePremiumPurchaseCompleted en StripeWebhookController).
      */
     public function success(Request $request, PremiumServicePurchase $purchase): RedirectResponse
     {
+        $user = $request->user();
+        abort_unless($user && $user->clinic_id === $purchase->clinic_id, 403);
+
         return redirect()->route('filament.doctor.pages.servicios-premium')
             ->with('success', '¡Pago recibido! Tu servicio se activará en unos minutos. Recibirás un correo de confirmación.');
     }

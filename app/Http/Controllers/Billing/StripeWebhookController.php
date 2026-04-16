@@ -119,11 +119,13 @@ class StripeWebhookController extends Controller
             Log::warning('Stripe webhook: PremiumServicePurchase no encontrado', $metadata);
             return;
         }
-        if ($purchase->isPaid()) {
-            return; // ya marcado, evita doble proceso
-        }
 
-        $purchase->markPaid('stripe', $session->id ?? null);
+        // markPaid() retorna false si ya estaba pagado — evita notificar/loggear 2 veces
+        $newlyMarked = $purchase->markPaid('stripe', $session->id ?? null);
+        if (!$newlyMarked) {
+            Log::info('Servicio premium ya estaba pagado, evento ignorado', ['purchase_id' => $purchase->id]);
+            return;
+        }
 
         // Notificar a admins que hay un servicio nuevo en cola para ejecutar
         $this->notifyPremiumPurchasePaid($purchase);

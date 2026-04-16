@@ -118,9 +118,14 @@ class PremiumServicePurchase extends Model
 
     /**
      * Marca la compra como pagada — dispara el inicio del workflow.
+     * Idempotente: si ya está marcada como pagada (o más allá), retorna false sin tocar.
      */
-    public function markPaid(string $method, ?string $stripeSession = null, ?int $speiId = null): void
+    public function markPaid(string $method, ?string $stripeSession = null, ?int $speiId = null): bool
     {
+        if ($this->isPaid()) {
+            return false;
+        }
+
         $this->update([
             'status' => self::STATUS_PAID,
             'payment_method' => $method,
@@ -128,5 +133,7 @@ class PremiumServicePurchase extends Model
             'spei_payment_id' => $speiId,
             'paid_at' => now(),
         ]);
+
+        return true;
     }
 }
