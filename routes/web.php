@@ -20,6 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Landing dedicada para Google Ads / nicho dental
+Route::view('/dentistas', 'dentistas')->name('landing.dentistas');
+
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacy');
 Route::view('/terminos', 'legal.terminos')->name('legal.terms');
 
