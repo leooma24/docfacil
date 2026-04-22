@@ -1,0 +1,15 @@
+Dedupe Report — 2026-04-22 22:24:16
+==================================================
+Input CSV:    dentistas-mid-pilot.csv
+Existing:     existing-prospects.json (649 prospects)
+Output CSV:   dentistas-mid-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       0
+  dup_email       0
+  dup_bizcity     0
+  kept            60
+
+Details:
