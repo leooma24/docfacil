@@ -1,0 +1,17 @@
+Dedupe Report — 2026-04-22 05:38:49
+==================================================
+Input CSV:    dentistas-cdmx-pilot-50.csv
+Existing:     existing-prospects.json (403 prospects)
+Output CSV:   dentistas-cdmx-dedup.csv
+
+Counters:
+  total           44
+  no_phone        0
+  dup_phone       0
+  dup_email       2
+  dup_bizcity     0
+  kept            42
+
+Details:
+  - SKIP dup_email: Odontali Sucursal Narvarte (email info@odontali.com)
+  - SKIP dup_email: EOLODENT Narvarte (email clinicadental@eolodent.com)
