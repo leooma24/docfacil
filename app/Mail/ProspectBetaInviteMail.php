@@ -17,8 +17,11 @@ class ProspectBetaInviteMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $firstName = trim(explode(' ', (string) $this->prospect->name)[0] ?? '');
+        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+
         return new Envelope(
-            subject: 'Invitación exclusiva: Prueba DocFácil gratis para tu consultorio',
+            subject: "{$greeting}¿cuántos le dejaron plantado esta semana?",
         );
     }
 

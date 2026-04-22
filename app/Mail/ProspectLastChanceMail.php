@@ -17,8 +17,11 @@ class ProspectLastChanceMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $firstName = trim(explode(' ', (string) $this->prospect->name)[0] ?? '');
+        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+
         return new Envelope(
-            subject: 'Últimos lugares: Beta gratuito de DocFácil para tu consultorio',
+            subject: "{$greeting}cierro este hilo — gracias por su tiempo",
         );
     }
 

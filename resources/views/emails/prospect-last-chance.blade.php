@@ -3,52 +3,52 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; }
-        .header { background: #f59e0b; padding: 30px; text-align: center; color: #fff; }
-        .header h1 { margin: 0; font-size: 22px; }
-        .content { padding: 30px; color: #333; line-height: 1.6; }
-        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 15px 0; }
-        .urgency { background: #fffbeb; border: 2px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 8px; text-align: center; }
-        .footer { padding: 20px 30px; background: #f9fafb; color: #666; font-size: 12px; text-align: center; }
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .content { padding: 36px 32px; line-height: 1.65; font-size: 15px; }
+        .content p { margin: 0 0 16px; }
+        .list { margin: 18px 0; }
+        .list-item { padding: 10px 0; border-top: 1px solid #f0f0f0; }
+        .list-item:last-child { border-bottom: 1px solid #f0f0f0; }
+        .signature { margin-top: 28px; color: #2d2d2d; }
+        .footer { padding: 18px 30px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; }
+        a { color: #14b8a6; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Últimos lugares en el Beta de DocFácil</h1>
-        </div>
         <div class="content">
-            <p>Hola <strong>{{ $prospectName }}</strong>,</p>
+            <p>Hola Dr. <strong>{{ $prospectName }}</strong>,</p>
 
-            <p>Este es mi último correo sobre el programa beta de DocFácil. No quiero ser insistente, solo asegurarme de que no te pierdas esta oportunidad.</p>
+            <p>Este es el último correo que recibirá de mi parte sobre DocFácil. No me gusta insistir, y respeto que tal vez no es el momento, o simplemente no es para su consultorio. Cualquiera de las dos razones está perfectamente bien.</p>
 
-            <div class="urgency">
-                <strong>🔥 Quedan pocos lugares en el beta gratuito</strong><br>
-                Los consultorios que se registren ahora obtienen acceso de por vida al precio beta cuando lancemos.
+            <p>Le dejo tres cosas por si algún día cambian las cosas:</p>
+
+            <div class="list">
+                <div class="list-item">
+                    <strong>1. El link para empezar sigue activo.</strong><br>
+                    Sin letra chiquita: <a href="{{ url('/register') }}">docfacil.tu-app.co/register</a> — son 15 días con todo, sin tarjeta, y después queda en plan gratis permanente.
+                </div>
+                <div class="list-item">
+                    <strong>2. Mi WhatsApp personal: 668 249 3398.</strong><br>
+                    Si algún día quiere preguntarme cualquier cosa del sistema — incluso una opinión sobre otro software que esté evaluando — aquí estoy. Sin pitch.
+                </div>
+                <div class="list-item">
+                    <strong>3. Un favor (si le nace).</strong><br>
+                    Si conoce a un colega que batalle con las citas perdidas o con el expediente en papel, páseme su contacto. Le regalo un mes de cualquier plan en cuanto ese colega se suscriba.
+                </div>
             </div>
 
-            <p><strong>Resumen rápido de lo que obtienes GRATIS:</strong></p>
-            <ul>
-                <li>Agenda digital con recordatorios WhatsApp</li>
-                <li>Expedientes clínicos organizados</li>
-                <li>Recetas PDF profesionales</li>
-                <li>Control de cobros y pagos</li>
-                <li>Soporte directo conmigo por WhatsApp</li>
-            </ul>
+            <p>Le deseo que le siga yendo muy bien en su consultorio. De verdad.</p>
 
-            <p style="text-align: center; margin: 25px 0;">
-                <a href="{{ url('/register') }}" class="btn">Registrarme ahora (es gratis)</a>
+            <p class="signature">
+                <strong>Omar Lerma</strong><br>
+                DocFácil · Culiacán, Sinaloa
             </p>
-
-            <p>Si no es para ti, no hay problema. Te deseo mucho éxito con tu consultorio. 🙌</p>
-
-            <p>Saludos,<br><strong>Omar Lerma</strong><br>Fundador de DocFácil<br>WhatsApp: 668 249 3398</p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.<br>
-            <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a> — Software para consultorios médicos y dentales<br>
-            <small>Este es el último correo que recibirás de nosotros.</small>
+            DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
+            <small>Este es el último correo automático que recibirás de nosotros.</small>
         </div>
     </div>
 </body>

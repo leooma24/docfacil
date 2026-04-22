@@ -411,113 +411,57 @@ Le deseo mucho exito en su consultorio. Saludos.
 
 ---
 
-# SECUENCIA 5: Email Frio para Prospectar
+# SECUENCIA 5: Email Frío Automático (pipeline real)
 
-### Email 1 - Intro + Dolor
-**Asunto:** `[NOMBRE_DOCTOR], cuantas citas pierde a la semana?`
-**Mejor dia:** Martes o miercoles, 8:00-9:00 AM
+> **Importante:** Esta secuencia es la que el cron `docfacil:send-prospect-emails` manda automáticamente cada hora. Son **3 correos** (no 4), separados por 3 días, con pipeline de status `new → contacted → interested → lost`. Filtro del cron: `source='prospecting'`. Los templates reales viven en `app/Mail/Prospect*Mail.php` y `resources/views/emails/prospect-*.blade.php`. Si los editas, edita ambos lugares para mantener consistencia.
+>
+> Versión anterior (beta-framing) archivada en git history.
 
-```
-Hola [NOMBRE_DOCTOR],
+### Email 1 — Intro humanizada (status `new` → `contacted`)
 
-Le hago una pregunta directa: cuantos pacientes no llegan a su cita cada semana sin avisar?
+**Asunto:** `Dr. [NOMBRE], ¿cuántos le dejaron plantado esta semana?`
+**Blade:** `resources/views/emails/prospect-beta-invite.blade.php`
+**Mail:** `App\Mail\ProspectBetaInviteMail`
 
-Si la respuesta es mas de 3, esta dejando entre $5,000 y $15,000 pesos al mes sobre la mesa.
+Abre con una escena reconocible (agenda a las 10, paciente que no llegó, hueco). Pasa a beneficios concretos (recuperar $6-10k, ahorrar 20-30 min, bajar la carga de la recepcionista). Cierra con trial de **15 días sin tarjeta** + fallback a plan gratis permanente. CTA: "Probarlo 15 días gratis" o respuesta al correo para demo.
 
-Soy [NOMBRE_VENDEDOR] de DocFacil. Hacemos un software para consultorios medicos y dentales que resuelve exactamente eso: manda recordatorios automaticos por WhatsApp a sus pacientes un dia antes de cada cita.
+### Email 2 — Caso real (3 días después, status `contacted` → `interested`)
 
-Ademas le organiza expedientes, agenda, cobros y genera recetas PDF profesionales.
+**Asunto:** `Dr. [NOMBRE], le dejo un caso que quizá le suene familiar`
+**Blade:** `resources/views/emails/prospect-followup.blade.php`
+**Mail:** `App\Mail\ProspectFollowupMail`
 
-Los consultorios que ya lo usan reportan una reduccion de 40-60% en citas perdidas desde el primer mes.
+Storytelling: un dentista en Culiacán que pasó de 6-8 faltas/semana a 1-2 en 2 meses. Recupera ~$8k/mes pagando $499. Explica el *cómo* (WhatsApp el día anterior, botón para reagendar). CTA mismo trial 15 días.
 
-Le gustaria verlo funcionando? Son 10 minutos.
+### Email 3 — Cierre respetuoso (3 días después, status `interested` → `lost`)
 
-Puede agendar aqui: [LINK_DEMO]
+**Asunto:** `Dr. [NOMBRE], cierro este hilo — gracias por su tiempo`
+**Blade:** `resources/views/emails/prospect-last-chance.blade.php`
+**Mail:** `App\Mail\ProspectLastChanceMail`
 
-O respondame este correo y coordinamos.
+Respeta el "no" implícito. Deja 3 puertas abiertas: link de registro sin urgencia falsa, WhatsApp personal de Omar para cualquier duda (incluso opinar sobre otro software), petición de referido con reward (un mes gratis por colega que se suscriba).
 
-Saludos,
-[NOMBRE_VENDEDOR]
-DocFacil - Software para Consultorios
-[TELEFONO_VENDEDOR]
-```
+---
 
-### Email 2 - Caso de uso (3 dias despues)
-**Asunto:** `Como un dentista en Culiacan recupero $8,000/mes`
-**Mejor dia:** Jueves o viernes, 8:00-9:00 AM
+### Templates WhatsApp paralelos (fallback si no hay email)
 
-```
-Hola [NOMBRE_DOCTOR],
+Cuando el prospecto tiene `phone` pero no `email`, el mismo cron manda por WhatsApp con el mismo arco:
 
-Le platico un caso rapido.
+1. **`prospect_beta_invite`** — Escena del hueco en la agenda + 3 beneficios + trial 15 días.
+2. **`prospect_followup`** — Caso del dentista de Culiacán, recuperó $8k/mes.
+3. **`prospect_last_chance`** — Despedida respetuosa + petición de referido.
 
-Un dentista aqui en Culiacan tenia un problema comun: 6-8 pacientes a la semana que no llegaban a su cita. Cada cita vale entre $500 y $1,000 pesos. Haga la cuenta.
+Los templates están en `app/Console/Commands/SendProspectEmails.php:29-35` como constante `WA_MESSAGES`.
 
-Empezo a usar DocFacil hace 2 meses. Esto es lo que cambio:
+---
 
-- Las faltas bajaron a 1-2 por semana (recordatorios WhatsApp automaticos)
-- Ya no pierde 20 minutos buscando expedientes (todo esta digital y ordenado)
-- Sus recetas se ven profesionales y las manda por WhatsApp al paciente
+### Notas operacionales
 
-El calcula que recupera unos $8,000-$10,000 al mes. Y paga $149.
-
-Si su consultorio tiene un problema similar, DocFacil probablemente le conviene.
-
-Puede probarlo gratis: [LINK_TRIAL]
-
-O si prefiere una demo en vivo: [LINK_DEMO]
-
-Saludos,
-[NOMBRE_VENDEDOR]
-```
-
-### Email 3 - Demo invite (5 dias despues)
-**Asunto:** `10 minutos para organizar su consultorio, [NOMBRE_DOCTOR]`
-**Mejor dia:** Martes, 8:00-9:00 AM
-
-```
-Hola [NOMBRE_DOCTOR],
-
-Se que esta ocupado, asi que voy directo:
-
-Le puedo mostrar DocFacil en 10 minutos. Sin compromiso, sin presion.
-
-Lo que va a ver:
-1. Como se agendan citas y se mandan recordatorios automaticos
-2. Como se llevan expedientes digitales completos
-3. Como se generan recetas PDF en 30 segundos
-4. Reportes de ingresos y pacientes
-
-Si le sirve, perfecto. Si no, al menos ya sabe que existe para cuando lo necesite.
-
-Puede agendar aqui: [LINK_DEMO]
-
-O respondame con el dia y hora que le funcione.
-
-Saludos,
-[NOMBRE_VENDEDOR]
-```
-
-### Email 4 - Breakup (7 dias despues)
-**Asunto:** `Cierro su expediente, [NOMBRE_DOCTOR]`
-**Mejor dia:** Jueves, 8:00-9:00 AM
-
-```
-Hola [NOMBRE_DOCTOR],
-
-Le he escrito varias veces y entiendo que probablemente no es el momento. Cero problema.
-
-Este es mi ultimo correo sobre el tema.
-
-Si en el futuro busca un sistema para organizar su consultorio (agenda, expedientes, recordatorios, recetas), DocFacil va a seguir aqui: [LINK_TRIAL]
-
-Le deseo mucho exito.
-
-Saludos,
-[NOMBRE_VENDEDOR]
-DocFacil
-[TELEFONO_VENDEDOR]
-```
+- **Cron:** `Schedule::command('docfacil:send-prospect-emails')->hourly()` en [routes/console.php:15](routes/console.php).
+- **Rate limit:** máximo 10 mensajes por corrida (protege WhatsApp de marcarte como spam).
+- **Deduplicación:** el cron checa `lifecycle_emails` para no repetir el mismo mensaje al mismo prospect.
+- **Canal:** prueba email primero; si no hay, WhatsApp. Nunca ambos al mismo prospect en el mismo paso.
+- **Espacio entre mensajes:** 3 días (`DAYS_BETWEEN_MESSAGES = 3`).
 
 ---
 

@@ -17,8 +17,11 @@ class ProspectFollowupMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $firstName = trim(explode(' ', (string) $this->prospect->name)[0] ?? '');
+        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+
         return new Envelope(
-            subject: '¿Sigues usando agenda de papel? Hay una mejor forma',
+            subject: "{$greeting}le dejo un caso que quizá le suene familiar",
         );
     }
 

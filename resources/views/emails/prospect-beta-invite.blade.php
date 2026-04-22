@@ -3,49 +3,64 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; }
-        .header { background: #14b8a6; padding: 30px; text-align: center; color: #fff; }
-        .header h1 { margin: 0; font-size: 24px; }
-        .content { padding: 30px; color: #333; line-height: 1.6; }
-        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 15px 0; }
-        .benefit { padding: 8px 0; }
-        .benefit strong { color: #14b8a6; }
-        .footer { padding: 20px 30px; background: #f9fafb; color: #666; font-size: 12px; text-align: center; }
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .content { padding: 36px 32px; line-height: 1.65; font-size: 15px; }
+        .content p { margin: 0 0 16px; }
+        .scene { color: #4a4a4a; font-style: italic; border-left: 3px solid #14b8a6; padding: 4px 0 4px 14px; margin: 18px 0; }
+        .arrow { color: #14b8a6; font-weight: 700; }
+        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 18px 0; }
+        .note { font-size: 13px; color: #666; margin-top: 8px; }
+        .signature { margin-top: 28px; color: #2d2d2d; }
+        .footer { padding: 18px 30px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>DocFácil — Invitación Beta Exclusiva</h1>
-        </div>
         <div class="content">
-            <p>Hola <strong>{{ $prospectName }}</strong>,</p>
+            <p>Hola Dr. <strong>{{ $prospectName }}</strong>,</p>
 
-            <p>Soy Omar del equipo de <strong>DocFácil</strong>, un software diseñado especialmente para consultorios médicos y dentales en Sinaloa.</p>
+            <p>Le escribo porque vi su consultorio{{ $clinicName ? ' — ' . $clinicName . ' —' : '' }} y me imaginé una escena que probablemente ya vivió esta semana:</p>
 
-            <p>Estamos seleccionando consultorios para nuestro <strong>programa beta gratuito</strong> y {{ $clinicName ? 'pensamos que ' . $clinicName . ' sería ideal' : 'nos encantaría contar contigo' }}.</p>
+            <p class="scene">Abrió la agenda a las 10. A las 10:15 el paciente no llegaba. A las 10:30 ya había pasado a otro. Y el hueco del primero se quedó ahí.</p>
 
-            <p><strong>¿Qué incluye el beta gratuito?</strong></p>
-            <div class="benefit">✅ <strong>Agenda de citas</strong> con calendario visual</div>
-            <div class="benefit">✅ <strong>Expediente clínico</strong> digital de pacientes</div>
-            <div class="benefit">✅ <strong>Recetas PDF</strong> profesionales con tu firma</div>
-            <div class="benefit">✅ <strong>Recordatorios WhatsApp</strong> automáticos a pacientes</div>
-            <div class="benefit">✅ <strong>Control de cobros</strong> y pagos pendientes</div>
-            <div class="benefit">✅ <strong>Sin costo</strong> durante todo el periodo beta</div>
+            <p>Eso pasa en casi todos los consultorios del país. No es descuido del paciente — es que nadie le recuerda la cita de forma que no se pueda ignorar. Y cada hueco así son entre $500 y $1,500 que se evaporan, sin contar el tratamiento que no siguió.</p>
 
-            <p style="text-align: center; margin: 25px 0;">
-                <a href="{{ url('/register') }}" class="btn">Quiero probar DocFácil gratis</a>
+            <p>Le ayudo a que eso sea la excepción, no la regla. Soy <strong>Omar Lerma</strong>, y lo que hago es simple:</p>
+
+            <p>
+                <span class="arrow">→</span> Sus pacientes reciben un <strong>WhatsApp un día antes</strong> de su cita. Usted deja de perseguir a nadie.<br>
+                <span class="arrow">→</span> Cuando el paciente llega, abre su <strong>expediente en 5 segundos</strong>, no buscándolo entre carpetas.<br>
+                <span class="arrow">→</span> Su receta sale <strong>firmada y en PDF</strong>. Se ve seria, no escrita al vuelo.
             </p>
 
-            <p>Solo estamos aceptando <strong>100 consultorios</strong> en esta primera fase. Si te interesa, responde este correo o regístrate directamente.</p>
+            <p>Los consultorios que ya están con nosotros notan tres cosas en el primer mes:</p>
 
-            <p>Saludos,<br><strong>Omar Lerma</strong><br>Fundador de DocFácil<br>Tel: 668 249 3398</p>
+            <ul style="padding-left: 20px; margin: 0 0 18px;">
+                <li>Recuperan <strong>$6,000 a $10,000</strong> que antes se iban en huecos de agenda.</li>
+                <li>Se ahorran <strong>20-30 minutos al día</strong> escribiendo recordatorios uno por uno.</li>
+                <li>La recepcionista deja de cargar con lo que no le toca, y eso se nota.</li>
+            </ul>
+
+            <p><strong>No le pido que se comprometa con nada.</strong> Al registrarse tiene <strong>15 días con todo desbloqueado</strong>, sin tarjeta. Al terminar, su cuenta se queda viva en plan gratis (1 doctor, 15 pacientes) — nunca pierde acceso. Si le gusta cómo funciona, puede quedarse con un plan pagado desde $499/mes.</p>
+
+            <p style="text-align: center;">
+                <a href="{{ url('/register') }}" class="btn">Probarlo 15 días gratis</a>
+                <br>
+                <span class="note">Sin tarjeta. 2 minutos para registrarse.</span>
+            </p>
+
+            <p>O si prefiere verlo antes de registrarse, respóndame este correo con su mejor día y le muestro en 10 minutos cómo se vería en <em>su</em> consultorio.</p>
+
+            <p class="signature">
+                Un saludo,<br>
+                <strong>Omar Lerma</strong> · Fundador de DocFácil<br>
+                WhatsApp directo: <a href="https://wa.me/526682493398" style="color:#14b8a6;">668 249 3398</a>
+            </p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.<br>
-            <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a> — Software para consultorios médicos y dentales<br>
-            <small>Si no deseas recibir más correos, responde con "No me interesa".</small>
+            DocFácil · Software para consultorios médicos y dentales · <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a><br>
+            <small>Si no desea recibir más correos, responda con "No me interesa" y lo saco de la lista.</small>
         </div>
     </div>
 </body>

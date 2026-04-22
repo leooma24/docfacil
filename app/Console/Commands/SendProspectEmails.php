@@ -27,11 +27,11 @@ class SendProspectEmails extends Command
 
     // WhatsApp message templates per pipeline step
     private const WA_MESSAGES = [
-        'prospect_beta_invite' => "Hola *%s* 👋\n\nSoy Omar de *DocFácil*, un software para consultorios médicos y dentales.\n\nEstamos invitando consultorios de Sinaloa a nuestro *beta gratuito*:\n\n✅ Agenda de citas con calendario\n✅ Expedientes clínicos digitales\n✅ Recetas PDF profesionales\n✅ Recordatorios WhatsApp a pacientes\n✅ Control de cobros\n\nTodo *sin costo* durante el beta. Solo aceptamos 100 consultorios.\n\n¿Te interesa probarlo? Regístrate en: %s\n\nO responde este mensaje y te ayudo. 🙌",
+        'prospect_beta_invite' => "Hola Dr. *%s* 👋\n\nLe escribo porque me imaginé su semana: un par de pacientes que no llegaron, otro que canceló a última hora, y el hueco en la agenda ahí. Cada uno, $500 a $1,500 que se evaporaron.\n\nSoy Omar — hice *DocFácil* para que eso deje de pasar tanto. Sus pacientes reciben un WhatsApp un día antes de su cita, usted deja de perseguir a nadie, y su expediente abre en 5 segundos.\n\nPruébelo 15 días con todo desbloqueado, sin tarjeta. Después su cuenta se queda viva en plan gratis — nunca pierde acceso.\n\nSe registra en 2 min aquí: %s\n\nO respóndame \"sí\" y le paso un video de 3 min mostrando cómo se ve. 🙌",
 
-        'prospect_followup' => "Hola *%s*, te escribí hace unos días sobre DocFácil 😊\n\nOtros consultorios ya están usando el sistema:\n📉 50%% menos citas perdidas\n⏱️ 20 min/día que se ahorran en papelería\n💰 Mejor control de pagos\n\nEn menos de 5 minutos tienes tu consultorio digital funcionando.\n\n¿Quieres que te haga una demo rápida? Regístrate aquí: %s\n\nO márcame al 668 249 3398 👍",
+        'prospect_followup' => "Dr. *%s*, le escribo solo una cosa y me quito.\n\nHay un dentista aquí en Culiacán que antes perdía 6-8 pacientes a la semana. En 2 meses con DocFácil bajaron a 1-2. Calcula que recupera ~$8,000 al mes. Paga $499.\n\nSi a su consultorio le suena familiar, el link sigue aquí — 15 días con todo, sin tarjeta: %s\n\nY si no le suena, ignóreme sin pena. 🙏",
 
-        'prospect_last_chance' => "Hola *%s*, último mensaje sobre DocFácil 🙏\n\nQuedan pocos lugares en el beta gratuito. Los que se registren ahora obtienen precio preferencial de por vida.\n\nResumen:\n• Agenda + recordatorios WhatsApp\n• Expedientes + recetas PDF\n• Control de cobros\n• Soporte directo por WhatsApp\n\nRegístrate gratis: %s\n\nSi no es para ti, no hay problema. ¡Éxito con tu consultorio! 🙌",
+        'prospect_last_chance' => "Dr. *%s*, último mensaje — no le quiero robar más tiempo.\n\nEl link para probar DocFácil 15 días gratis sigue aquí por si algún día le sirve: %s\n\nY si conoce a un colega al que le pueda servir, pásemelo y le regalo un mes cuando se suscriba.\n\nGracias por leerme hasta aquí. 🙌\n\n— Omar, 668 249 3398",
     ];
 
     public function handle(WhatsAppService $whatsapp): int

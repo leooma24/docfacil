@@ -3,52 +3,55 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; }
-        .header { background: #14b8a6; padding: 30px; text-align: center; color: #fff; }
-        .header h1 { margin: 0; font-size: 22px; }
-        .content { padding: 30px; color: #333; line-height: 1.6; }
-        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 15px 0; }
-        .testimonial { background: #f0fdfa; border-left: 4px solid #14b8a6; padding: 15px; margin: 20px 0; border-radius: 4px; font-style: italic; }
-        .footer { padding: 20px 30px; background: #f9fafb; color: #666; font-size: 12px; text-align: center; }
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .content { padding: 36px 32px; line-height: 1.65; font-size: 15px; }
+        .content p { margin: 0 0 16px; }
+        .story { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 16px 18px; margin: 20px 0; border-radius: 4px; }
+        .story ul { padding-left: 20px; margin: 10px 0 0; }
+        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 18px 0; }
+        .note { font-size: 13px; color: #666; }
+        .signature { margin-top: 28px; color: #2d2d2d; }
+        .footer { padding: 18px 30px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>¿Sigues usando agenda de papel?</h1>
-        </div>
         <div class="content">
-            <p>Hola <strong>{{ $prospectName }}</strong>,</p>
+            <p>Hola Dr. <strong>{{ $prospectName }}</strong>,</p>
 
-            <p>Te escribí hace unos días sobre DocFácil y quería darte seguimiento.</p>
+            <p>Le escribí hace unos días y no quiero ser insistente, así que solo le dejo una cosa y me quito.</p>
 
-            <p>Entiendo que como {{ $specialty ?? 'profesional de la salud' }} tu tiempo es valioso. Por eso DocFácil está diseñado para que en <strong>menos de 5 minutos</strong> tengas tu consultorio digital funcionando.</p>
+            <p>Hay un {{ $specialty && str_contains(strtolower($specialty), 'dent') ? 'dentista' : 'doctor' }} aquí en Culiacán — mismo perfil que usted, 1-2 {{ $specialty && str_contains(strtolower($specialty), 'dent') ? 'sillas' : 'consultorios' }} — que antes perdía 6 u 8 pacientes a la semana sin avisar. Cada cita entre $500 y $1,000. Haga la cuenta: eran $20,000 al mes que se iban por la coladera.</p>
 
-            <div class="testimonial">
-                "Antes perdía 30 minutos al día buscando expedientes. Con DocFácil todo está a un clic."
-                <br>— Dr. en fase beta, Culiacán
+            <div class="story">
+                <strong>En dos meses con DocFácil esto cambió:</strong>
+                <ul>
+                    <li>Las faltas bajaron a <strong>1 o 2 por semana</strong>. No por magia — porque el paciente recibe un WhatsApp el día anterior y ya se siente "visto".</li>
+                    <li>Dejó de perder <strong>30 minutos diarios</strong> buscando expedientes y escribiendo recordatorios a mano.</li>
+                    <li>Sus pacientes empezaron a <strong>reagendar en lugar de cancelar</strong>, porque el mismo WhatsApp les ofrece un botón para cambiar la cita.</li>
+                </ul>
             </div>
 
-            <p><strong>Lo que otros consultorios ya están logrando:</strong></p>
-            <ul>
-                <li>📉 <strong>50% menos</strong> citas perdidas gracias a recordatorios WhatsApp</li>
-                <li>⏱️ <strong>20 min/día</strong> que se ahorran en papelería</li>
-                <li>💰 <strong>Mejor control</strong> de pagos pendientes</li>
-            </ul>
+            <p>Calcula que recupera unos <strong>$8,000 a $10,000 al mes</strong>. Paga $499 por el plan básico.</p>
 
-            <p style="text-align: center; margin: 25px 0;">
-                <a href="{{ url('/register') }}" class="btn">Activar mi prueba gratuita</a>
+            <p>Si a su consultorio le pasa algo parecido, probablemente también le conviene. Y si no, ignore este correo con toda confianza — respeto que quizá no es el momento.</p>
+
+            <p style="text-align: center;">
+                <a href="{{ url('/register') }}" class="btn">Probarlo 15 días gratis</a>
+                <br>
+                <span class="note">Sin tarjeta. Al terminar, su cuenta se queda viva en plan gratis.</span>
             </p>
 
-            <p>¿Tienes dudas? Responde este correo o márcame al <strong>668 249 3398</strong>. Con gusto te hago una demo personalizada.</p>
+            <p>Si prefiere que se lo muestre antes de registrarse, respóndame con un "me interesa" o escríbame al <strong>668 249 3398</strong> y le agendo 10 minutos.</p>
 
-            <p>Saludos,<br><strong>Omar Lerma</strong><br>Fundador de DocFácil</p>
+            <p class="signature">
+                <strong>Omar Lerma</strong> · DocFácil
+            </p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.<br>
-            <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a> — Software para consultorios médicos y dentales<br>
-            <small>Si no deseas recibir más correos, responde con "No me interesa".</small>
+            DocFácil · Software para consultorios médicos y dentales · <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a><br>
+            <small>Si no desea recibir más correos, responda con "No me interesa" y lo saco de la lista.</small>
         </div>
     </div>
 </body>
