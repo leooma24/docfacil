@@ -33,19 +33,19 @@
     {{-- JSON-LD estructurado para SEO + Ads --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
+        "@@context": "https://schema.org",
+        "@@type": "SoftwareApplication",
         "name": "DocFácil para Dentistas",
         "description": "Software para consultorios dentales en México. Odontograma digital, recordatorios WhatsApp, expediente clínico, recetas PDF.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "offers": {
-            "@type": "Offer",
+            "@@type": "Offer",
             "price": "499",
             "priceCurrency": "MXN"
         },
         "aggregateRating": {
-            "@type": "AggregateRating",
+            "@@type": "AggregateRating",
             "ratingValue": "4.8",
             "ratingCount": "37"
         }
