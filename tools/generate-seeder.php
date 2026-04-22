@@ -12,7 +12,9 @@ if ($argc < 4) {
 
 [$_, $csv, $className, $out] = $argv;
 
-$GLOBALS['batch_id'] = "research-cdmx-pilot-20260421";
+// Derive batch_id from filename stem (e.g. dentistas-gdl-dedup.csv → gdl)
+$stem = basename($csv, '.csv');
+$GLOBALS['batch_id'] = 'research-' . $stem . '-' . date('Ymd');
 
 $fh = fopen($csv, 'r');
 $header = fgetcsv($fh);
@@ -96,18 +98,16 @@ use App\Models\Prospect;
 use Illuminate\Database\Seeder;
 
 /**
- * Pilot CDMX dentist batch — generated from dentistas-cdmx-dedup.csv.
+ * Generated seeder — batch {$batchId}.
  *
- * {$count} registros descubiertos vía WebSearch + WebFetch (Google Maps + sitios propios),
- * deduplicados contra los 403 prospectos existentes en prod.
- *
- * Todos tienen teléfono válido (10 dígitos MX). Se asignan a Omar (user_id=100)
- * con source='prospecting' para que el cron send-prospect-emails los tome automático.
+ * {$count} dentistas descubiertos vía WebSearch + WebFetch, deduplicados contra prod.
+ * Todos con teléfono MX de 10 dígitos. Asignados a Omar (user_id=100) con
+ * source='prospecting' para que el cron send-prospect-emails los tome automático.
  * El batch identifier vive en notes.batch = '{$batchId}' para analytics.
  *
- * Ejecutar con: php artisan db:seed --class=ProspectDentistasCDMXPilotSeeder --force
+ * Ejecutar: php artisan db:seed --class={$className} --force
  */
-class ProspectDentistasCDMXPilotSeeder extends Seeder
+class {$className} extends Seeder
 {
     public function run(): void
     {
