@@ -113,7 +113,7 @@ class {$className} extends Seeder
     {
         \$prospects = {$dataExport};
 
-        \$this->command->info('Insertando ' . count(\$prospects) . ' dentistas CDMX (pilot)...');
+        \$this->command->info('Insertando ' . count(\$prospects) . ' dentistas del pilot ({$batchId})...');
 
         \$inserted = 0;
         \$skipped = 0;

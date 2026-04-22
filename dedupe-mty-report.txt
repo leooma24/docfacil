@@ -1,0 +1,17 @@
+Dedupe Report — 2026-04-22 16:20:04
+==================================================
+Input CSV:    dentistas-mty-pilot.csv
+Existing:     existing-prospects.json (474 prospects)
+Output CSV:   dentistas-mty-dedup.csv
+
+Counters:
+  total           58
+  no_phone        0
+  dup_phone       0
+  dup_email       2
+  dup_bizcity     0
+  kept            56
+
+Details:
+  - SKIP dup_email: Soto Center San Javier (email info@sotocenter.com)
+  - SKIP dup_email: Zental Odontología Cumbres (email zentalmx@gmail.com)
