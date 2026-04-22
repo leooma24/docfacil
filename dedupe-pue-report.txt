@@ -1,0 +1,16 @@
+Dedupe Report — 2026-04-22 19:41:17
+==================================================
+Input CSV:    dentistas-pue-pilot.csv
+Existing:     existing-prospects.json (590 prospects)
+Output CSV:   dentistas-pue-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       1
+  dup_email       0
+  dup_bizcity     0
+  kept            59
+
+Details:
+  - SKIP dup_phone: Dental Center Cholula (phone 2225702781)
