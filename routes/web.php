@@ -72,9 +72,10 @@ Route::post('/chatbot/close', [ChatbotController::class, 'close'])
 Route::post('/chatbot/create-account', [ChatbotController::class, 'createAccount'])
     ->name('chatbot.createAccount')
     ->middleware('throttle:5,60');
-Route::get('/chatbot/auto-login/{user}', [ChatbotController::class, 'autoLogin'])
+Route::get('/chatbot/auto-login/{token}', [ChatbotController::class, 'autoLogin'])
     ->name('chatbot.autoLogin')
-    ->middleware('signed');
+    ->where('token', '[a-f0-9]{64}')
+    ->middleware('throttle:10,1');
 
 Route::get('/demo', function () {
     session()->flash('demo_credentials', [

@@ -5,12 +5,13 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -81,6 +82,7 @@ class User extends Authenticatable implements FilamentUser
             'two_factor_confirmed_at' => 'datetime',
             'commission_rate_percent' => 'decimal:2',
             'is_active_sales_rep' => 'boolean',
+            'chatbot_autologin_expires_at' => 'datetime',
         ];
     }
 
@@ -98,6 +100,37 @@ class User extends Authenticatable implements FilamentUser
             'ventas' => $this->role === 'sales' && $this->is_active_sales_rep,
             default => false,
         };
+    }
+
+    /**
+     * One-time-use token para auto-login despues de crear cuenta via chatbot.
+     * Cualquier uso del metodo consume el token y limpia la columna.
+     */
+    public function generateChatbotAutologinToken(): string
+    {
+        $token = bin2hex(random_bytes(32));
+        $this->forceFill([
+            'chatbot_autologin_token' => hash('sha256', $token),
+            'chatbot_autologin_expires_at' => now()->addMinutes(15),
+        ])->save();
+        return $token;
+    }
+
+    public function consumeChatbotAutologinToken(string $token): bool
+    {
+        $hashed = hash('sha256', $token);
+        if (
+            !hash_equals((string) $this->chatbot_autologin_token, $hashed)
+            || $this->chatbot_autologin_expires_at === null
+            || $this->chatbot_autologin_expires_at->isPast()
+        ) {
+            return false;
+        }
+        $this->forceFill([
+            'chatbot_autologin_token' => null,
+            'chatbot_autologin_expires_at' => null,
+        ])->save();
+        return true;
     }
 
     public function isSuperAdmin(): bool

@@ -10,6 +10,7 @@ class WhatsAppWebhookController extends Controller
 {
     /**
      * Meta webhook verification (GET request on setup).
+     * Fails closed if WHATSAPP_VERIFY_TOKEN no esta configurado — no hay default.
      */
     public function verify(Request $request)
     {
@@ -17,9 +18,14 @@ class WhatsAppWebhookController extends Controller
         $token = $request->query('hub_verify_token');
         $challenge = $request->query('hub_challenge');
 
-        $expectedToken = config('services.whatsapp.verify_token', 'docfacil-webhook-2026');
+        $expectedToken = config('services.whatsapp.verify_token');
 
-        if ($mode === 'subscribe' && $token === $expectedToken) {
+        if (empty($expectedToken)) {
+            Log::error('WhatsApp webhook: WHATSAPP_VERIFY_TOKEN no configurado');
+            return response('Server misconfigured', 500);
+        }
+
+        if ($mode === 'subscribe' && hash_equals($expectedToken, (string) $token)) {
             return response($challenge, 200);
         }
 
@@ -28,11 +34,29 @@ class WhatsAppWebhookController extends Controller
 
     /**
      * Handle incoming WhatsApp messages from Meta.
+     * Requires valid X-Hub-Signature-256 firmada con el App Secret.
+     * El payload contiene PHI (telefonos + mensajes), asi que solo
+     * loggeamos metadata (type, message_id) — nunca el cuerpo del mensaje.
      */
     public function handle(Request $request, WhatsAppBotService $bot)
     {
+        $appSecret = config('services.whatsapp.app_secret');
+        if (empty($appSecret)) {
+            Log::error('WhatsApp webhook: WHATSAPP_APP_SECRET no configurado');
+            return response()->json(['ok' => false], 500);
+        }
+
+        $rawBody = $request->getContent();
+        $signature = $request->header('X-Hub-Signature-256', '');
+        if (!$this->isValidSignature($rawBody, $signature, $appSecret)) {
+            Log::warning('WhatsApp webhook: firma invalida', [
+                'ip' => $request->ip(),
+                'signature_present' => !empty($signature),
+            ]);
+            return response()->json(['ok' => false], 403);
+        }
+
         $payload = $request->all();
-        Log::info('WhatsApp webhook', $payload);
 
         try {
             $entry = $payload['entry'][0] ?? null;
@@ -45,14 +69,19 @@ class WhatsAppWebhookController extends Controller
             if (empty($messages)) return response()->json(['ok' => true]);
 
             foreach ($messages as $msg) {
-                if (($msg['type'] ?? '') !== 'text') continue;
+                $type = $msg['type'] ?? '';
+                $msgId = $msg['id'] ?? 'unknown';
+
+                // Metadata only — NEVER el body del mensaje (PHI + LFPDPPP)
+                Log::info('WhatsApp webhook msg', ['type' => $type, 'id' => $msgId]);
+
+                if ($type !== 'text') continue;
 
                 $from = $msg['from'] ?? '';
                 $text = $msg['text']['body'] ?? '';
 
                 if (empty($from) || empty($text)) continue;
 
-                // Process asynchronously would be better but for now inline is fine
                 $bot->handleIncoming($from, $text);
             }
         } catch (\Throwable $e) {
@@ -60,5 +89,13 @@ class WhatsAppWebhookController extends Controller
         }
 
         return response()->json(['ok' => true]);
+    }
+
+    private function isValidSignature(string $rawBody, string $header, string $secret): bool
+    {
+        if (!str_starts_with($header, 'sha256=')) return false;
+        $provided = substr($header, 7);
+        $expected = hash_hmac('sha256', $rawBody, $secret);
+        return hash_equals($expected, $provided);
     }
 }

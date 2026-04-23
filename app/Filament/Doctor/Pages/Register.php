@@ -10,10 +10,18 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Register as BaseRegister;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class Register extends BaseRegister
 {
+    /**
+     * Honeypot field — bots typically fill every visible input. If this is
+     * non-empty at submit time, we reject silently (record in the log for
+     * later analysis, but don't signal to the bot why).
+     */
+    public ?string $website_url_backup = null;
+
     public function form(Form $form): Form
     {
         return $form
@@ -22,6 +30,21 @@ class Register extends BaseRegister
                 $this->getEmailFormComponent()->default(request()->query('email')),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
+                Forms\Components\TextInput::make('website_url_backup')
+                    ->label('')
+                    ->extraAttributes([
+                        'autocomplete' => 'off',
+                        'tabindex' => '-1',
+                        'aria-hidden' => 'true',
+                    ])
+                    ->extraInputAttributes([
+                        'autocomplete' => 'off',
+                    ])
+                    ->extraFieldWrapperAttributes([
+                        'style' => 'position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden;',
+                        'aria-hidden' => 'true',
+                    ])
+                    ->dehydrated(true),
                 Forms\Components\Section::make('Datos del Consultorio')
                     ->schema([
                         Forms\Components\TextInput::make('clinic_name')
@@ -72,6 +95,21 @@ class Register extends BaseRegister
 
     protected function handleRegistration(array $data): \Illuminate\Database\Eloquent\Model
     {
+        // Honeypot: humanos NO llenan website_url_backup (esta oculto).
+        // Los bots si. Si llega con valor lo loggeamos y abortamos con mensaje
+        // generico para no revelar el honeypot.
+        if (!empty($data['website_url_backup'])) {
+            Log::warning('Registration honeypot triggered', [
+                'email' => $data['email'] ?? null,
+                'ip' => request()->ip(),
+                'ua' => request()->userAgent(),
+            ]);
+            throw new \Illuminate\Validation\ValidationException(
+                \Illuminate\Support\Facades\Validator::make([], [])
+                    ->after(fn ($v) => $v->errors()->add('email', 'No pudimos procesar tu registro. Intenta de nuevo en unos minutos.'))
+            );
+        }
+
         // Detectar si viene de un vendedor via ?vnd=CODIGO
         // Validamos formato del código para evitar enumeración con SQL caro:
         // el formato real es VND-XXXXX## (4-20 chars alfanuméricos con guion).

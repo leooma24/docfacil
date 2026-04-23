@@ -21,7 +21,7 @@ class SpeiReceiptController extends Controller
         abort_unless($user, 403);
 
         // Solo admins ven comprobantes. El cliente que lo subió puede verlo también.
-        $isAdmin = ($user->role ?? null) === 'admin';
+        $isAdmin = $user->isSuperAdmin();
         $isOwner = (int) $payment->user_id === (int) $user->id;
 
         abort_unless($isAdmin || $isOwner, 403);

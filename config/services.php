@@ -45,7 +45,10 @@ return [
         'token' => env('WHATSAPP_TOKEN'),
         'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
         'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
-        'verify_token' => env('WHATSAPP_VERIFY_TOKEN', 'docfacil-webhook-2026'),
+        'verify_token' => env('WHATSAPP_VERIFY_TOKEN'),
+        // Meta App Secret — usado para validar firma X-Hub-Signature-256
+        // de los webhooks entrantes. Si no esta seteado el webhook rechaza todo.
+        'app_secret' => env('WHATSAPP_APP_SECRET'),
     ],
 
     'mercadopago' => [

@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Validator;
 
 class ChatbotController extends Controller
 {
@@ -160,6 +158,11 @@ class ChatbotController extends Controller
                     Log::warning('WelcomeOnboardingMail failed', ['error' => $e->getMessage()]);
                 }
 
+                // User implements MustVerifyEmail — dispatch Registered para que
+                // Laravel mande el correo de verificacion. forceCreate no lo
+                // dispara automaticamente.
+                event(new \Illuminate\Auth\Events\Registered($user));
+
                 $this->notifyAdminNewLead(
                     $prospect,
                     '¡Conversión por chatbot!',
@@ -171,15 +174,15 @@ class ChatbotController extends Controller
 
             $bot->clearHistory($data['session_id']);
 
-            $loginUrl = URL::temporarySignedRoute(
-                'chatbot.autoLogin',
-                now()->addMinutes(15),
-                ['user' => $user->id]
-            );
+            // Genera token one-time-use guardado en DB (hash SHA-256).
+            // El token vive solo 15 minutos y se consume en el primer uso.
+            // Evita el patron anterior donde la URL firmada era un bearer
+            // token reusable sobre cualquier user ID por su TTL.
+            $token = $user->generateChatbotAutologinToken();
 
             return response()->json([
                 'ok' => true,
-                'login_url' => $loginUrl,
+                'login_url' => route('chatbot.autoLogin', ['token' => $token]),
             ]);
         } catch (\Throwable $e) {
             Log::error('Chatbot createAccount failed', ['error' => $e->getMessage()]);
@@ -190,13 +193,24 @@ class ChatbotController extends Controller
         }
     }
 
-    public function autoLogin(Request $request, int $user)
+    public function autoLogin(Request $request, string $token)
     {
-        if (!$request->hasValidSignature()) {
-            abort(403, 'Enlace expirado');
+        // Requires a token length sanity check before hitting DB to avoid
+        // enumeration + rate-limit sidechannels.
+        if (strlen($token) !== 64 || !ctype_xdigit($token)) {
+            abort(403, 'Enlace inválido');
         }
-        $u = User::findOrFail($user);
-        Auth::login($u);
+
+        $hashed = hash('sha256', $token);
+        $user = User::where('chatbot_autologin_token', $hashed)
+            ->where('chatbot_autologin_expires_at', '>', now())
+            ->first();
+
+        if (!$user || !$user->consumeChatbotAutologinToken($token)) {
+            abort(403, 'Enlace expirado o ya usado');
+        }
+
+        Auth::login($user);
         return redirect('/doctor');
     }
 

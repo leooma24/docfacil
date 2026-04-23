@@ -27,6 +27,7 @@ class DoctorPanelProvider extends PanelProvider
             ->path('doctor')
             ->login(\App\Filament\Doctor\Pages\Login::class)
             ->registration(\App\Filament\Doctor\Pages\Register::class)
+            ->emailVerification(\Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt::class, isSecure: true)
             ->brandName('DocFácil')
             ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')
@@ -76,6 +77,7 @@ class DoctorPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\VerifyClinicPlan::class,
+                \App\Http\Middleware\DemoMode::class,
             ]);
     }
 }
