@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Services\WhatsAppService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\URL;
 
 class SendAppointmentReminders extends Command
 {
@@ -49,12 +50,27 @@ class SendAppointmentReminders extends Command
             $date = $appt->starts_at->translatedFormat('l d \d\e F');
             $time = $appt->starts_at->format('H:i');
 
+            // Links firmados 1-click para confirmar/cancelar. Validos hasta
+            // 2 horas despues del inicio de la cita (para dejar margen).
+            $ttl = $appt->starts_at->copy()->addHours(2);
+            $confirmUrl = URL::temporarySignedRoute(
+                'appointment.confirm',
+                $ttl,
+                ['appointment' => $appt->id, 'action' => 'confirm']
+            );
+            $cancelUrl = URL::temporarySignedRoute(
+                'appointment.confirm',
+                $ttl,
+                ['appointment' => $appt->id, 'action' => 'cancel']
+            );
+
             $message = "🏥 *Recordatorio de cita*\n\n"
                 . "Hola *{$name}*, te recordamos tu cita en *{$clinic}*:\n\n"
                 . "📅 {$date}\n"
                 . "🕐 {$time} hrs\n"
                 . "💊 {$service}\n\n"
-                . "Responde *SÍ* para confirmar o *NO* si no podrás asistir.\n\n"
+                . "✅ Confirmar: {$confirmUrl}\n"
+                . "❌ Cancelar: {$cancelUrl}\n\n"
                 . "¡Te esperamos!";
 
             if ($whatsapp->sendMessage($phone, $message)) {

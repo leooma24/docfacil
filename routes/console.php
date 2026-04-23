@@ -9,7 +9,17 @@ Schedule::command('docfacil:send-trial-emails')->dailyAt('09:00');
 Schedule::command('docfacil:send-engagement')->dailyAt('10:00');
 
 // Send appointment reminders every hour (handles 24h, 2h, and follow-ups)
+// NOTA: solo envia automaticamente via WhatsApp API global de DocFacil
+// (config/services.php:whatsapp). En el setup actual esto es solo para demo/
+// testing — los widgets del Doctor panel usan click-to-wa.me manual para que
+// cada clinica use su propio WhatsApp personal sin costar API calls.
 Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
+
+// Cumpleanos: el comando existe para cuando una clinica conecte su propia
+// WA Business API. Por default NO se programa — los doctores ven los
+// cumpleanos de hoy en el widget BirthdaysToday con click-to-wa.me.
+// Para activar: descomentar la siguiente linea.
+// Schedule::command('docfacil:send-birthday-greetings')->dailyAt('10:00');
 
 // Send prospect pipeline emails every hour (max 10 per run)
 Schedule::command('docfacil:send-prospect-emails')->hourly();

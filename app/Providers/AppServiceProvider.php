@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Appointment;
 use App\Models\Clinic;
+use App\Observers\AppointmentObserver;
 use App\Observers\ClinicObserver;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Clinic::observe(ClinicObserver::class);
+        Appointment::observe(AppointmentObserver::class);
 
         $bccAll = array_filter(array_map(
             'trim',

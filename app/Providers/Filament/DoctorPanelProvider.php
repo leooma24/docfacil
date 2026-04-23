@@ -63,6 +63,7 @@ class DoctorPanelProvider extends PanelProvider
                 \App\Filament\Doctor\Widgets\AlertsWidget::class,
                 \App\Filament\Doctor\Widgets\TopServicesChart::class,
                 \App\Filament\Doctor\Widgets\DoctorProductionWidget::class,
+                \App\Filament\Doctor\Widgets\BirthdaysTodayWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

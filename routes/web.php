@@ -4,6 +4,7 @@ use App\Http\Controllers\Billing\PremiumServiceCheckoutController;
 use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
+use App\Http\Controllers\AppointmentConfirmationController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
@@ -141,6 +142,11 @@ Route::get('/demo-vendedor', [DemoModeController::class, 'start'])
 Route::get('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'verify']);
 Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle'])
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+// Confirmacion de cita 1-clic desde WhatsApp (ruta firmada, sin auth)
+Route::get('/c/{appointment}', [AppointmentConfirmationController::class, 'show'])
+    ->middleware(['signed', 'throttle:30,1'])
+    ->name('appointment.confirm');
 
 // Public check-in for patients
 Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])

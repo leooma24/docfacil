@@ -230,7 +230,29 @@ class AppointmentResource extends Resource
                         $clinicName = $record->clinic->name ?? 'DocFácil';
                         $date = $record->starts_at->translatedFormat('l d \d\e F');
                         $time = $record->starts_at->format('H:i');
-                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n📅 {$date}\n🕐 {$time} hrs\n👨‍⚕️ {$record->doctor->user->name}\n\nSi necesitas reagendar, responde este mensaje. ¡Te esperamos!\n\n_Enviado desde DocFácil_ 👉 https://docfacil.tu-app.co");
+
+                        // Links firmados para confirmar/cancelar en 1 clic. TTL hasta 2h despues de la cita.
+                        $ttl = $record->starts_at->copy()->addHours(2);
+                        $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                            'appointment.confirm',
+                            $ttl,
+                            ['appointment' => $record->id, 'action' => 'confirm']
+                        );
+                        $cancelUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                            'appointment.confirm',
+                            $ttl,
+                            ['appointment' => $record->id, 'action' => 'cancel']
+                        );
+
+                        $msg = urlencode(
+                            "Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n" .
+                            "📅 {$date}\n" .
+                            "🕐 {$time} hrs\n" .
+                            "👨‍⚕️ {$record->doctor->user->name}\n\n" .
+                            "✅ Confirmar: {$confirmUrl}\n" .
+                            "❌ Cancelar: {$cancelUrl}\n\n" .
+                            "¡Te esperamos!"
+                        );
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),

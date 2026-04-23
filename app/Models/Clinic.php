@@ -180,6 +180,7 @@ class Clinic extends Model
             'advanced_reports',        // Reportes avanzados
             'smart_alerts',            // Alertas inteligentes
             'priority_support',
+            'waitlist',                // Lista de espera + notificacion auto al cancelar
         ]);
         $clinica = array_merge($profesional, [
             'unlimited_doctors',
