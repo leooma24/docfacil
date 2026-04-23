@@ -176,7 +176,6 @@ class Clinic extends Model
         $profesional = array_merge($basico, [
             'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
             'consent_forms',           // Consentimientos + firma digital
-            'patient_portal',          // Portal del paciente
             'multi_doctor',            // Hasta 3 doctores
             'advanced_reports',        // Reportes avanzados
             'smart_alerts',            // Alertas inteligentes
@@ -184,8 +183,7 @@ class Clinic extends Model
         ]);
         $clinica = array_merge($profesional, [
             'unlimited_doctors',
-            'multi_branch',            // Multi-sucursal
-            'commissions_between_doctors',
+            'per_doctor_reports',      // Reportes + produccion individual por doctor
             'dedicated_onboarding',
         ]);
 

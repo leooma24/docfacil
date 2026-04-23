@@ -174,6 +174,54 @@ class PaymentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                // Recordatorio de cobro por WhatsApp a 1 clic.
+                // Promesa desde plan Básico; Free ve la accion con tooltip de upgrade.
+                Tables\Actions\Action::make('whatsapp_reminder')
+                    ->label('Recordar por WhatsApp')
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->color(fn (Payment $record) => auth()->user()?->clinic?->hasFeature('whatsapp_payment')
+                        && !empty($record->patient?->phone)
+                        && in_array($record->status, ['pending', 'partial'])
+                            ? 'success'
+                            : 'gray')
+                    ->visible(fn (Payment $record) => in_array($record->status, ['pending', 'partial']) && !empty($record->patient?->phone))
+                    ->tooltip(fn () => auth()->user()?->clinic?->hasFeature('whatsapp_payment')
+                        ? 'Abre WhatsApp con el mensaje de recordatorio listo'
+                        : 'Disponible desde el plan Básico — actualiza tu plan para enviar cobros por WhatsApp')
+                    ->url(function (Payment $record) {
+                        if (!auth()->user()?->clinic?->hasFeature('whatsapp_payment')) {
+                            return null;
+                        }
+                        $phone = preg_replace('/\D/', '', $record->patient->phone);
+                        if (strlen($phone) === 10) $phone = '52' . $phone;
+                        if (strlen($phone) < 12) return null;
+                        $clinicName = $record->clinic->name ?? 'DocFácil';
+                        $firstName = $record->patient->first_name ?? 'hola';
+                        $amount = number_format((float) $record->amount, 2);
+                        $servicePart = $record->service?->name
+                            ? " por *{$record->service->name}*"
+                            : '';
+                        $context = $record->status === 'partial'
+                            ? "Te aviso que de tu tratamiento{$servicePart} aún queda pendiente *\${$amount} MXN*."
+                            : "Te aviso que tienes un cobro pendiente de *\${$amount} MXN*{$servicePart}.";
+                        $msg = urlencode("Hola {$firstName}, te escribo de *{$clinicName}*. {$context}\n\nCuando te acomode avísame y lo ajustamos. Si ya lo pagaste, dímelo y lo marco como saldado. ¡Gracias!\n\n_Enviado desde DocFácil_");
+                        return "https://wa.me/{$phone}?text={$msg}";
+                    })
+                    ->openUrlInNewTab()
+                    ->action(function (Payment $record) {
+                        if (!auth()->user()?->clinic?->hasFeature('whatsapp_payment')) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Función disponible desde el plan Básico')
+                                ->body('El recordatorio de cobro por WhatsApp es parte del plan Básico en adelante.')
+                                ->warning()
+                                ->actions([
+                                    \Filament\Notifications\Actions\Action::make('upgrade')
+                                        ->label('Mejorar plan')
+                                        ->url(route('filament.doctor.pages.actualizar-plan')),
+                                ])
+                                ->send();
+                        }
+                    }),
             ])
             ->defaultSort('payment_date', 'desc');
     }
