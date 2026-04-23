@@ -15,6 +15,7 @@ use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -164,6 +165,22 @@ Route::get('/clinica/{slug}/agendar', [PublicBookingController::class, 'show'])
 Route::post('/clinica/{slug}/agendar', [PublicBookingController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('public.booking.store');
+
+// Planes de tratamiento / Presupuestos: PDF del doctor (auth) + vista publica (token)
+Route::get('/doctor/presupuestos/{treatmentPlan}/pdf', [TreatmentPlanController::class, 'downloadPdf'])
+    ->middleware('auth')->name('treatment-plan.pdf');
+Route::get('/p/{token}', [TreatmentPlanController::class, 'publicShow'])
+    ->middleware('throttle:30,1')
+    ->where('token', '[a-f0-9]{64}')
+    ->name('treatment-plan.public');
+Route::get('/p/{token}/aceptar', [TreatmentPlanController::class, 'accept'])
+    ->middleware('throttle:10,1')
+    ->where('token', '[a-f0-9]{64}')
+    ->name('treatment-plan.accept');
+Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
+    ->middleware('throttle:10,1')
+    ->where('token', '[a-f0-9]{64}')
+    ->name('treatment-plan.reject');
 
 Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
     abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);

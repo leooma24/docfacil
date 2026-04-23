@@ -173,6 +173,7 @@ class Clinic extends Model
             'qr_checkin',              // Check-in con QR
             'basic_dashboard',
             'recall_automation',       // Add-on $49/mes (incluido mientras termina infra W3)
+            'treatment_plans',         // Add-on $129/mes (incluido mientras termina infra W3)
         ];
         $profesional = array_merge($basico, [
             'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
