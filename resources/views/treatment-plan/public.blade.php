@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $plan->title }} · {{ $plan->clinic->name }}</title>
+    <meta name="description" content="Plan de tratamiento de {{ $plan->clinic->name }}. Revisa los detalles y acepta en línea.">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
+
+    {{-- OpenGraph / Twitter Cards --}}
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ $plan->title }} · {{ $plan->clinic->name }}">
+    <meta property="og:description" content="Plan de tratamiento personalizado. Total: ${{ number_format($plan->total, 0) }} MXN">
+    <meta property="og:image" content="@if($plan->clinic->logo){{ asset('storage/' . $plan->clinic->logo) }}@else{{ asset('images/og-default.png') }}@endif">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $plan->title }} · {{ $plan->clinic->name }}">
+    <meta name="twitter:description" content="Plan de tratamiento personalizado.">
+    <meta name="robots" content="noindex"><!-- presupuestos no se indexan -->
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%); min-height: 100vh; padding: 20px; color: #1f2937; }
@@ -104,7 +115,13 @@
         @endif
     </div>
 
-    <p class="footer">Presupuesto enviado vía <span class="docfacil">DocFácil</span></p>
+    <div style="text-align:center;margin-top:18px;padding:14px;">
+        <a href="{{ url('/') }}?utm_source=portal&utm_medium=treatment_plan&utm_campaign=powered_by" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,0.85);border:1px solid rgba(13, 148, 136, 0.15);border-radius:999px;text-decoration:none;font-size:12px;color:#6b7280;font-weight:500;transition:all 0.2s;">
+            <span style="width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg, #14b8a6, #06b6d4);"></span>
+            Presupuesto vía <strong style="color:#0d9488;font-weight:700;">DocFácil</strong>
+        </a>
+    </div>
 </div>
 </body>
 </html>

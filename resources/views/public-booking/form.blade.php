@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar cita · {{ $clinic->name }}</title>
+    <meta name="description" content="Agenda tu cita en {{ $clinic->name }} en línea. @if($clinic->city){{ $clinic->city }}@endif — reserva fácil y rápida.">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
+
+    {{-- OpenGraph / Twitter Cards para que se vea bonito cuando lo compartan en WA, Facebook, Instagram --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ route('public.booking.show', $clinic->slug) }}">
+    <meta property="og:title" content="Agenda tu cita en {{ $clinic->name }}">
+    <meta property="og:description" content="Reserva tu cita en línea de forma fácil. @if($clinic->city){{ $clinic->city }}@endif @if($clinic->phone)· Tel: {{ $clinic->phone }}@endif">
+    <meta property="og:image" content="@if($clinic->logo){{ asset('storage/' . $clinic->logo) }}@else{{ asset('images/og-default.png') }}@endif">
+    <meta property="og:site_name" content="{{ $clinic->name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agenda tu cita en {{ $clinic->name }}">
+    <meta name="twitter:description" content="Reserva tu cita en línea de forma fácil.">
+    <meta name="twitter:image" content="@if($clinic->logo){{ asset('storage/' . $clinic->logo) }}@else{{ asset('images/og-default.png') }}@endif">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -14,17 +28,38 @@
             padding: 20px;
             color: #1f2937;
         }
+        .page { max-width: 560px; margin: 0 auto; }
         .card {
             background: #ffffff;
             border-radius: 20px;
             padding: 36px 32px;
             box-shadow: 0 20px 40px -8px rgba(13, 148, 136, 0.12);
-            max-width: 520px;
-            margin: 0 auto;
             border: 1px solid rgba(13, 148, 136, 0.1);
         }
-        h1 { font-size: 22px; font-weight: 700; color: #0d9488; margin-bottom: 6px; }
-        .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 24px; }
+        .clinic-header { text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #f0fdfa; }
+        .logo-wrap {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+            color: white; font-size: 28px; font-weight: 800;
+            box-shadow: 0 8px 20px -6px rgba(13, 148, 136, 0.35);
+        }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        h1 { font-size: 24px; font-weight: 800; color: #0f766e; margin-bottom: 4px; letter-spacing: -0.02em; }
+        .clinic-meta { color: #6b7280; font-size: 13px; line-height: 1.5; }
+        .cta-box {
+            background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+            border: 1px solid #99f6e4;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #115e59;
+        }
+        .cta-box strong { color: #0f766e; }
+
         label { display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
         input[type=text], input[type=email], input[type=tel], input[type=datetime-local], select, textarea {
             width: 100%;
@@ -42,7 +77,7 @@
         }
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .required { color: #dc2626; }
-        button {
+        button[type=submit] {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #14b8a6, #0d9488);
@@ -55,17 +90,57 @@
             cursor: pointer;
             transition: transform 0.15s, box-shadow 0.15s;
         }
-        button:hover { transform: translateY(-1px); box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4); }
+        button[type=submit]:hover { transform: translateY(-1px); box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4); }
         .error { background: #fef2f2; color: #991b1b; padding: 12px; border-radius: 10px; margin-bottom: 16px; border: 1px solid #fecaca; font-size: 14px; }
         .honeypot { position: absolute; left: -9999px; top: -9999px; height: 0; width: 0; overflow: hidden; }
-        .footer { text-align: center; margin-top: 24px; color: #9ca3af; font-size: 13px; }
-        .brand { color: #14b8a6; font-weight: 700; }
+
+        .df-footer {
+            text-align: center;
+            margin-top: 18px;
+            padding: 14px;
+        }
+        .df-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .df-badge:hover { background: white; color: #0d9488; border-color: #14b8a6; transform: translateY(-1px); }
+        .df-badge strong { color: #0d9488; font-weight: 700; }
+        .df-logo-dot { width: 16px; height: 16px; border-radius: 4px; background: linear-gradient(135deg, #14b8a6, #06b6d4); }
     </style>
 </head>
 <body>
+<div class="page">
     <div class="card">
-        <h1>{{ $clinic->name }}</h1>
-        <p class="subtitle">Llena este formulario para solicitar tu cita. El consultorio te confirmará el horario exacto por WhatsApp.</p>
+        <div class="clinic-header">
+            <div class="logo-wrap">
+                @if($clinic->logo)
+                    <img src="{{ asset('storage/' . $clinic->logo) }}" alt="{{ $clinic->name }}">
+                @else
+                    {{ mb_strtoupper(mb_substr($clinic->name, 0, 1)) }}
+                @endif
+            </div>
+            <h1>{{ $clinic->name }}</h1>
+            <p class="clinic-meta">
+                @if($clinic->address){{ $clinic->address }}@if($clinic->city) · {{ $clinic->city }}@endif @elseif($clinic->city){{ $clinic->city }}@endif
+                @if($clinic->phone)<br>📞 {{ $clinic->phone }}@endif
+            </p>
+        </div>
+
+        <div class="cta-box">
+            <strong>Agenda tu cita en 2 minutos</strong><br>
+            <span style="font-size:13px;">Te confirmaremos el horario exacto por WhatsApp.</span>
+        </div>
 
         @if ($errors->any())
             <div class="error">
@@ -130,10 +205,14 @@
 
             <button type="submit">Solicitar cita</button>
         </form>
-
-        <p class="footer">
-            Reserva vía <span class="brand">DocFácil</span>
-        </p>
     </div>
+
+    <div class="df-footer">
+        <a href="{{ url('/') }}?utm_source=portal&utm_medium=booking&utm_campaign=powered_by" target="_blank" rel="noopener" class="df-badge">
+            <span class="df-logo-dot"></span>
+            Reserva vía <strong>DocFácil</strong>
+        </a>
+    </div>
+</div>
 </body>
 </html>
