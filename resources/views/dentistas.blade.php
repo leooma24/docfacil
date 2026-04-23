@@ -856,37 +856,37 @@
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Citas que no llegan</div>
-                                <div class="text-xs text-gray-500">24 citas no confirmadas × $600 promedio</div>
+                                <div class="text-xs text-gray-500">~12 citas no confirmadas × $600 promedio</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$14,400</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$7,200</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Horas en papeleo administrativo</div>
-                                <div class="text-xs text-gray-500">10 hrs/semana × 4 semanas × costo de oportunidad</div>
+                                <div class="text-xs text-gray-500">~8 hrs/semana × 4 semanas × costo de oportunidad</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$9,600</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$5,000</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Cobros que se te olvidan cobrar</div>
                                 <div class="text-xs text-gray-500">Pacientes que quedaron "te pago luego" y nunca regresaste</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$3,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Pacientes que se van por imagen</div>
                                 <div class="text-xs text-gray-500">Recetas a mano, agenda desorganizada = menos retención</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$1,500</td>
                         </tr>
                         <tr class="border-t-2 border-gray-300 bg-red-50">
                             <td class="py-5 px-2">
-                                <div class="font-extrabold text-gray-900 text-base">Total que estás perdiendo cada mes</div>
-                                <div class="text-xs text-gray-600 mt-0.5">Sin cambiar nada, sin "no hacer nada"</div>
+                                <div class="font-extrabold text-gray-900 text-base">Total aproximado perdido al mes</div>
+                                <div class="text-xs text-gray-600 mt-0.5">Rango típico: $10k–$20k según volumen y tickets</div>
                             </td>
-                            <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">$29,000</td>
+                            <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">~$15,700</td>
                         </tr>
                         <tr class="bg-teal-50">
                             <td class="py-5 px-2">
@@ -900,7 +900,7 @@
 
                 <div class="mt-6 text-center">
                     <a href="#pricing" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition">
-                        Dejar de perder $29,000 al mes →
+                        Dejar de perder miles al mes →
                     </a>
                     <p class="text-xs text-gray-500 mt-3">Con garantía de 30 días. Si no ves resultados, te devolvemos tu dinero.</p>
                 </div>
