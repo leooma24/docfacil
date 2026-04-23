@@ -210,7 +210,7 @@
             </h1>
 
             <p class="mt-5 sm:mt-8 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Cada cita perdida son <strong class="text-gray-900">$600 a $1,500 que se van</strong>. DocFácil manda recordatorios WhatsApp, guarda el <strong class="text-gray-900">odontograma digital FDI</strong>, genera recetas PDF y cobra por ti — <strong class="text-gray-900">sin que tú muevas un dedo</strong>. 15 días gratis, sin tarjeta.
+                Cada cita perdida son <strong class="text-gray-900">$600 a $1,500 que se van</strong>. DocFácil te deja mandar recordatorios por WhatsApp a 1 clic, guarda el <strong class="text-gray-900">odontograma digital FDI</strong>, genera recetas PDF con cédula y te lleva los cobros — <strong class="text-gray-900">desde un solo lugar</strong>. 15 días gratis, sin tarjeta.
             </p>
 
             <div class="mt-7 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up delay-300">
@@ -321,7 +321,7 @@
                     </div>
                     @php
                     $solutions = [
-                        ['title' => 'Recupera miles al mes', 'desc' => 'WhatsApp automático 24h y 2h antes de cada cita reduce fuerte las inasistencias. Clínicas con recordatorios automáticos reportan bajar no-shows hasta 70% — usa el calculador de abajo con tus números reales.'],
+                        ['title' => 'Recupera miles al mes', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda (24h y 2h antes). Clínicas que confirman por WhatsApp reportan bajar inasistencias hasta 70% — usa el calculador de abajo con tus números reales.'],
                         ['title' => 'Odontograma digital FDI siempre al día', 'desc' => 'Editor visual interactivo con 13 condiciones (caries, corona, extracción, endodoncia, implante, carilla, sellante y más). Se actualiza en el momento desde tablet o laptop.'],
                         ['title' => 'Recetas con firma que dan confianza', 'desc' => 'Recetas PDF con tu cédula, firma digital y logo. Llegan al paciente por WhatsApp en un clic. Te ves como clínica premium — no consultorio improvisado.'],
                         ['title' => 'Sabes cuánto ganas cada día', 'desc' => 'Ingresos del mes, cobros pendientes por ortodoncia, tratamientos en curso. Al entrar ves cómo va tu consultorio sin adivinar — decides con datos.'],
@@ -357,7 +357,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-animate>
                 @php
                 $featuresTop = [
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios WhatsApp automáticos 24h y 2h antes (o con un clic manual). Menos huecos de última hora, más sillón lleno.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda: abres el mensaje armado y lo mandas desde tu propio WhatsApp. Menos huecos, más sillón lleno.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y firma digital, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobros claros y al día', 'desc' => 'Registras cobros en segundos y envías el monto por WhatsApp al paciente en un clic. Ves quién te debe y quién ya pagó sin revisar tu libreta.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Alineado a NOM-004-SSA3.'],
@@ -661,7 +661,7 @@
                         </div>
                         <div class="bg-white/10 backdrop-blur rounded-xl p-4">
                             <div class="font-bold" x-text="'$' + retentionGain.toLocaleString('es-MX')"></div>
-                            <div class="opacity-90 text-xs mt-1">Citas que sí llegan<br>WhatsApp automático antes de cada cita</div>
+                            <div class="opacity-90 text-xs mt-1">Citas que sí llegan<br>Recordatorio WhatsApp a 1 clic antes de cada cita</div>
                         </div>
                     </div>
                     <div class="text-center mt-6 pt-6 border-t border-white/20">
@@ -759,7 +759,7 @@
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp (auto + 1 clic)', 'Cobro por WhatsApp', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
+                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
                     ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
                     ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Pacientes ilimitados', 'Todo del Pro +', 'Reportes por doctor', 'Producción individual por doctor', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 7 días/semana'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
