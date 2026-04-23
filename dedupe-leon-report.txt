@@ -1,0 +1,20 @@
+Dedupe Report — 2026-04-23 16:01:21
+==================================================
+Input CSV:    dentistas-leon-pilot.csv
+Existing:     existing-prospects.json (709 prospects)
+Output CSV:   dentistas-leon-dedup.csv
+
+Counters:
+  total           61
+  no_phone        2
+  dup_phone       3
+  dup_email       0
+  dup_bizcity     0
+  kept            56
+
+Details:
+  - SKIP no_phone: ARLO Clínica Dental
+  - SKIP no_phone: Consultorio Dr. Kevinth Flores Ch.
+  - SKIP dup_phone: Dra. Paola Judith Mayagoitia (phone 4777790550)
+  - SKIP dup_phone: Dra. Angélica Abigail Pérez (phone 4777790550)
+  - SKIP dup_phone: Dr. Héctor Sánchez (phone 4775143892)
