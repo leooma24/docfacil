@@ -1,0 +1,17 @@
+Dedupe Report — 2026-04-23 04:01:45
+==================================================
+Input CSV:    dentistas-tij-pilot.csv
+Existing:     existing-prospects.json (709 prospects)
+Output CSV:   dentistas-tij-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       2
+  dup_email       0
+  dup_bizcity     0
+  kept            58
+
+Details:
+  - SKIP dup_phone: Dental Clinic Otay (phone 6649807626)
+  - SKIP dup_phone: Consultorio Dra. Rosa E. García (phone 6646854766)
