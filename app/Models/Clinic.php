@@ -181,6 +181,7 @@ class Clinic extends Model
             'smart_alerts',            // Alertas inteligentes
             'priority_support',
             'waitlist',                // Lista de espera + notificacion auto al cancelar
+            'public_booking',          // Portal publico /clinica/{slug}/agendar
         ]);
         $clinica = array_merge($profesional, [
             'unlimited_doctors',

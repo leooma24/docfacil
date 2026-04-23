@@ -61,10 +61,25 @@ class PaymentResource extends Resource
                                 }
                             }),
                         Forms\Components\TextInput::make('amount')
-                            ->label('Monto')
+                            ->label('Monto total')
+                            ->helperText('Total del tratamiento o servicio')
                             ->numeric()
                             ->prefix('$')
+                            ->reactive()
                             ->required(),
+                        Forms\Components\TextInput::make('amount_paid')
+                            ->label('Pagado hasta ahora')
+                            ->helperText('Para pagos parciales; si ya cobraste todo déjalo en 0 y marca estado Pagado')
+                            ->numeric()
+                            ->prefix('$')
+                            ->default(0)
+                            ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
+                        Forms\Components\DatePicker::make('due_date')
+                            ->label('Fecha límite de pago')
+                            ->helperText('Si pasa esta fecha sin cobrar se marca como vencido')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
+                            ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
                         Forms\Components\Select::make('payment_method')
                             ->label('Método de pago')
                             ->options([
@@ -84,6 +99,7 @@ class PaymentResource extends Resource
                                 'refunded' => 'Reembolsado',
                             ])
                             ->default('paid')
+                            ->reactive()
                             ->required(),
                         Forms\Components\DatePicker::make('payment_date')
                             ->label('Fecha de pago')
@@ -124,6 +140,17 @@ class PaymentResource extends Resource
                     ->label('Monto')
                     ->money('MXN')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('remaining')
+                    ->label('Restante')
+                    ->money('MXN')
+                    ->badge()
+                    ->color(fn ($state) => $state > 0 ? 'warning' : 'success')
+                    ->visible(fn () => true),
+                Tables\Columns\TextColumn::make('due_date')
+                    ->label('Límite')
+                    ->date('d/m/Y')
+                    ->placeholder('—')
+                    ->color(fn ($record) => $record?->is_overdue ? 'danger' : 'gray'),
                 Tables\Columns\BadgeColumn::make('payment_method')
                     ->label('Método')
                     ->formatStateUsing(fn (string $state) => match ($state) {
@@ -171,9 +198,51 @@ class PaymentResource extends Resource
                 Tables\Filters\Filter::make('today')
                     ->label('Hoy')
                     ->query(fn ($query) => $query->whereDate('payment_date', today())),
+                Tables\Filters\Filter::make('overdue')
+                    ->label('Vencidos')
+                    ->query(fn ($query) => $query->overdue())
+                    ->toggle(),
+                Tables\Filters\Filter::make('with_balance')
+                    ->label('Con saldo')
+                    ->query(fn ($query) => $query->withBalance())
+                    ->toggle(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('pay_installment')
+                    ->label('Pagar abono')
+                    ->icon('heroicon-o-banknotes')
+                    ->color('success')
+                    ->visible(fn (Payment $record) => in_array($record->status, ['pending', 'partial']) && $record->remaining > 0)
+                    ->form(fn (Payment $record) => [
+                        Forms\Components\Placeholder::make('info')
+                            ->label('Saldo actual')
+                            ->content(fn () => '$' . number_format($record->remaining, 2) . ' MXN'),
+                        Forms\Components\TextInput::make('installment')
+                            ->label('Monto del abono')
+                            ->numeric()
+                            ->prefix('$')
+                            ->required()
+                            ->minValue(0.01)
+                            ->maxValue((float) $record->remaining),
+                    ])
+                    ->action(function (Payment $record, array $data) {
+                        $installment = (float) $data['installment'];
+                        $newPaid = (float) $record->amount_paid + $installment;
+                        $totalAmount = (float) $record->amount;
+
+                        $newStatus = $newPaid >= $totalAmount ? 'paid' : 'partial';
+                        $record->update([
+                            'amount_paid' => min($newPaid, $totalAmount),
+                            'status' => $newStatus,
+                        ]);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Abono registrado')
+                            ->body('Saldo restante: $' . number_format($record->fresh()->remaining, 2))
+                            ->success()
+                            ->send();
+                    }),
                 // Recordatorio de cobro por WhatsApp a 1 clic.
                 // Promesa desde plan Básico; Free ve la accion con tooltip de upgrade.
                 Tables\Actions\Action::make('whatsapp_reminder')

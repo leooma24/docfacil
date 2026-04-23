@@ -13,6 +13,7 @@ use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -155,6 +156,14 @@ Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])
 Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('checkin.store');
+
+// Public booking portal (Pro+): solicitud de cita sin auth, feature-gated
+Route::get('/clinica/{slug}/agendar', [PublicBookingController::class, 'show'])
+    ->middleware('throttle:20,1')
+    ->name('public.booking.show');
+Route::post('/clinica/{slug}/agendar', [PublicBookingController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('public.booking.store');
 
 Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
     abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);
