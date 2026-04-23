@@ -172,9 +172,11 @@ class Clinic extends Model
             'whatsapp_payment',        // Cobro por WhatsApp
             'qr_checkin',              // Check-in con QR
             'basic_dashboard',
-            'recall_automation',       // Add-on $49/mes (incluido mientras termina infra W3)
-            'treatment_plans',         // Add-on $129/mes (incluido mientras termina infra W3)
         ];
+        // Nota: recall_automation y treatment_plans son ADD-ONS de pago
+        // ($49 y $129/mes), gestionados via ClinicAddon. Ya no estan en
+        // featuresForPlan — Clinic::hasFeature() consulta addons activos
+        // adicionalmente al plan base.
         $profesional = array_merge($basico, [
             'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
             'consent_forms',           // Consentimientos + firma digital
@@ -223,7 +225,28 @@ class Clinic extends Model
             return false;
         }
 
-        return in_array($feature, self::featuresForPlan($this->plan), true);
+        // 1) Feature incluido en el plan base
+        if (in_array($feature, self::featuresForPlan($this->plan), true)) {
+            return true;
+        }
+
+        // 2) Feature disponible via add-on activo
+        $addonsConfig = config('addons', []);
+        foreach ($addonsConfig as $addon) {
+            if (($addon['feature_flag'] ?? null) !== $feature) continue;
+            $hasActive = $this->addons()
+                ->where('addon_slug', $addon['slug'])
+                ->active()
+                ->exists();
+            if ($hasActive) return true;
+        }
+
+        return false;
+    }
+
+    public function addons(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ClinicAddon::class);
     }
 
     /**
