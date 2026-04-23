@@ -210,7 +210,7 @@
             </h1>
 
             <p class="mt-5 sm:mt-8 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Cada cita perdida son <strong class="text-gray-900">$600 que se van</strong>. DocFácil manda recordatorios por WhatsApp, organiza tu agenda y cobra por ti — <strong class="text-gray-900">sin que tú muevas un dedo</strong>. Empieza gratis en 2 minutos.
+                Cada cita perdida son <strong class="text-gray-900">$600 que se van</strong>. DocFácil te deja mandar recordatorios por WhatsApp a 1 clic, organiza tu agenda y te lleva los cobros — <strong class="text-gray-900">desde un solo lugar</strong>. Empieza gratis en 2 minutos.
             </p>
 
             <div class="mt-7 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up delay-300">
@@ -294,7 +294,7 @@
                     </div>
                     @php
                     $pains = [
-                        ['title' => '$14,400/mes en citas perdidas', 'desc' => 'El 30% de tus pacientes no llega. En un consultorio de 80 pacientes/mes son 24 citas perdidas a $600 cada una. Dinero que se fue.'],
+                        ['title' => 'Pacientes que no llegan = sillón vacío', 'desc' => '1 de cada 3 pacientes no llega sin avisar. En un consultorio típico son 15-25 citas perdidas al mes a $500-$1,500 cada una. Sin contar el tratamiento que no siguió.'],
                         ['title' => '10 horas a la semana en papeleo', 'desc' => 'Buscar expedientes, escribir recetas a mano, llamar uno por uno para confirmar citas. Tiempo que podrías estar con tu familia.'],
                         ['title' => 'Recetas que se ven amateur', 'desc' => 'Letra ilegible, sin tu cédula impresa, sin logo. Los pacientes lo notan — y empiezan a compararte con clínicas grandes.'],
                         ['title' => 'No sabes si ganas o pierdes', 'desc' => 'Sin reportes no sabes qué servicio te deja más, qué paciente ya no regresó ni cuánto te deben. Decides a ojo.'],
@@ -321,7 +321,7 @@
                     </div>
                     @php
                     $solutions = [
-                        ['title' => 'Recupera $11,500 al mes', 'desc' => 'WhatsApp automático 24h y 2h antes de cada cita baja las inasistencias de 30% a 8%. Recuperas 19 citas al mes = $11,520 que antes se iban.'],
+                        ['title' => 'Recupera miles al mes', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda (24h y 2h antes). Clínicas que confirman por WhatsApp reportan bajar inasistencias hasta 70% — usa el calculador con tus números reales.'],
                         ['title' => 'Recuperas 8 horas a la semana', 'desc' => 'Agenda en la nube, expedientes digitales, recetas PDF en 10 segundos. El papeleo que te quitaba 2h/día se reduce a minutos.'],
                         ['title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula, firma digital y logo del consultorio. Llegan al paciente por WhatsApp en un clic. Te ven como clínica grande.'],
                         ['title' => 'Sabes cuánto ganas cada día', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes. Al entrar ves cómo va tu consultorio — sin adivinar.'],
@@ -357,9 +357,9 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-animate>
                 @php
                 $featuresTop = [
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios WhatsApp automáticos 24h y 2h antes (o con un clic manual). Baja inasistencias de 30% a 8%.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda: abres el mensaje armado y lo mandas desde tu propio WhatsApp. Menos huecos, más sillón lleno.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y firma digital, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobras el mismo día', 'desc' => 'Al terminar la consulta, mandas monto + link de pago por WhatsApp. El paciente paga desde el celular antes de llegar a su casa.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobros claros y al día', 'desc' => 'Registras cobros en segundos y envías el monto por WhatsApp al paciente en un clic. Ves quién te debe y quién ya pagó sin revisar tu libreta.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Cumple NOM-004.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>', 'title' => 'Odontograma en 1 clic', 'desc' => 'Diagrama dental con 13 condiciones. El diente que sea, lo marcas con un clic y lo compartes con tu paciente por WhatsApp.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', 'title' => 'Sabes cuánto ganas', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes, pacientes activos. Al entrar lo ves — sin hojas de Excel.'],
@@ -367,7 +367,7 @@
                 $featuresMore = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m0 14v1m-8-9H3m18 0h-1M5.636 5.636l-.707-.707m12.728 12.728l-.707-.707M5.636 18.364l-.707.707M18.364 5.636l.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>', 'title' => 'Check-in con QR', 'desc' => 'Un QR en recepción, el paciente llena sus datos desde su celular. Sin papel, sin filas.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma digital legal', 'desc' => 'El paciente firma consentimientos con el dedo. Válido con timestamp e IP.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas e historial desde su celular. Menos llamadas rutinarias para ti.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', 'title' => 'Lista de espera inteligente', 'desc' => 'Cuando se cancela una cita, te avisamos qué pacientes en espera podrían tomarla. Cero slots vacíos.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, cumpleaños, citas sin confirmar. Nada se te escapa.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Varios doctores o sucursales desde un panel. Comisiones entre doctores incluidas.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente NOM-004', 'desc' => 'Cumple con la norma mexicana. Diagnósticos, tratamientos, notas SOAP estructuradas.'],
@@ -425,7 +425,7 @@
                     ['file' => '03-calendario.png', 'title' => 'Arrastra y reagendas en 2 segundos', 'desc' => 'Agenda visual por día, semana o mes. Colores por estado.'],
                     ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Cumple NOM-004.'],
                     ['file' => '07-odontograma-editor.png', 'title' => 'El diente que sea, con 1 clic', 'desc' => '13 condiciones dentales. Se guarda solo y lo mandas al paciente por WhatsApp.'],
-                    ['file' => '08-cobros.png', 'title' => 'Cuánto te deben, listo para cobrar', 'desc' => 'Pendientes por paciente + link de pago por WhatsApp en un clic.'],
+                    ['file' => '08-cobros.png', 'title' => 'Cuánto te deben, listo para cobrar', 'desc' => 'Pendientes por paciente + envío del monto por WhatsApp en un clic.'],
                     ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, firma y logo. El paciente la recibe por WhatsApp.'],
                 ];
                 @endphp
@@ -465,7 +465,7 @@
                         Tu consultorio hoy
                     </h3>
                     <ul class="space-y-3 text-red-900 text-sm">
-                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span><strong>$14,400/mes</strong> en citas perdidas (30% no llegan)</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span><strong>Miles al mes</strong> perdidos en citas que no llegan</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span><strong>10 horas/semana</strong> en papeleo y llamadas</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span>Cobros olvidados y pendientes que no cobras</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#b91c1c;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> <span>Recetas con letra ilegible que dan mala imagen</span></li>
@@ -591,11 +591,11 @@
             <div x-data="{ open: 0 }" class="space-y-3">
                 @php
                 $landingFaqs = [
-                    ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para doctores, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Además te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. Tenemos doctores de 60+ años usándolo sin problema.'],
+                    ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para doctores, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Además te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. El diseño es deliberadamente simple — sin menús infinitos ni configuración compleja.'],
                     ['q' => '¿Puedo migrar mis pacientes de Excel?', 'a' => 'Sí, y lo hacemos por ti. Subes tu archivo (Excel, CSV o una foto de tu libreta) y lo cargamos en tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas.'],
                     ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días. Si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica. Tu riesgo es cero.'],
                     ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos. Sin contratos forzosos.'],
-                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Servidores en México, cifrado TLS 1.3, backups diarios automáticos, auditoría de accesos por usuario. Cumplimos LFPDPPP y NOM-004-SSA3. Tus datos nunca se mezclan con otras clínicas.'],
+                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Conexión cifrada end-to-end, backups diarios automáticos, auditoría de accesos por usuario y aislamiento total entre clínicas (tus datos nunca se mezclan con los de otro consultorio). Estructura alineada a LFPDPPP y NOM-004-SSA3.'],
                     ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil se instala como app en iPhone o Android (PWA, sin pasar por App Store). Funciona incluso con internet intermitente — los cambios se sincronizan cuando vuelves a tener señal.'],
                     ['q' => '¿Puedo usarlo con mi recepcionista/asistente?', 'a' => 'Sí, cada plan incluye al menos 1 cuenta de recepcionista sin costo adicional. Cada quien ve solo lo que necesita — tu asistente agenda y tú ves el expediente clínico.'],
                     ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes). Básico $499/mes, Pro $999/mes, Clínica $1,999/mes. Paga anual y te ahorras 2 meses. Con garantía de 30 días: si no te sirve, te devolvemos tu dinero.'],
@@ -660,7 +660,7 @@
                         </div>
                         <div class="bg-white/10 backdrop-blur rounded-xl p-4">
                             <div class="font-bold" x-text="'$' + retentionGain.toLocaleString('es-MX')"></div>
-                            <div class="opacity-90 text-xs mt-1">Citas que sí llegan<br>WhatsApp baja inasistencia de 30% a 8%</div>
+                            <div class="opacity-90 text-xs mt-1">Citas que sí llegan<br>Recordatorio WhatsApp a 1 clic antes de cada cita</div>
                         </div>
                     </div>
                     <div class="text-center mt-6 pt-6 border-t border-white/20">
@@ -758,9 +758,9 @@
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp (auto + 1 clic)', 'Cobro por WhatsApp', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Portal del paciente', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario'], 'cta' => 'Empezar con Pro →', 'popular' => true],
-                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro +', 'Reportes por doctor', 'Comisiones entre doctores', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 24/7'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Lista de espera', 'Adeudos + plan de pagos', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
+                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Pacientes ilimitados', 'Todo del Pro +', 'Reportes por doctor', 'Producción individual por doctor', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 7 días/semana'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
@@ -832,6 +832,43 @@
                     </p>
                 </div>
             </div>
+
+            {{-- Add-ons opcionales --}}
+            <div class="max-w-5xl mx-auto mt-14" data-animate>
+                <div class="text-center mb-8">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Add-ons opcionales · Próximamente</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Cuando quieras más, vas activando</h3>
+                    <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Paga solo lo que usas. Puedes prender o apagar cualquier add-on mes a mes desde tu panel.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-5">
+                    <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="text-3xl">🔁</div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$49/mes</span>
+                        </div>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Recall automático</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Tus pacientes que hace meses no regresan aparecen listados cada semana. Un clic abre WhatsApp con el mensaje para invitarlos de vuelta.</p>
+                        <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
+                            💰 Recupera miles/mes en consultas de seguimiento perdidas
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="text-3xl">📋</div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$129/mes</span>
+                        </div>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Plan de tratamiento / Presupuestos</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Armas el plan completo, generas PDF con tu marca y el paciente acepta en línea desde su celular.</p>
+                        <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
+                            💰 Sube 20% tu tasa de aceptación de tratamientos grandes
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-gray-500 mt-6 italic">Beta testers: activamos add-ons gratis por 30 días a las primeras 50 clínicas que se registren.</p>
+            </div>
         </div>
     </section>
 
@@ -854,43 +891,43 @@
                     <tbody class="divide-y divide-gray-100">
                         <tr>
                             <td class="py-4 px-2">
-                                <div class="font-bold text-gray-900">Citas que no llegan (30%)</div>
-                                <div class="text-xs text-gray-500">24 citas no confirmadas × $600 promedio</div>
+                                <div class="font-bold text-gray-900">Citas que no llegan</div>
+                                <div class="text-xs text-gray-500">~12 citas no confirmadas × $600 promedio</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$14,400</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$7,200</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Horas en papeleo administrativo</div>
-                                <div class="text-xs text-gray-500">10 hrs/semana × 4 semanas × costo de oportunidad</div>
+                                <div class="text-xs text-gray-500">~8 hrs/semana × 4 semanas × costo de oportunidad</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$9,600</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$5,000</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Cobros que se te olvidan cobrar</div>
                                 <div class="text-xs text-gray-500">Pacientes que quedaron "te pago luego" y nunca regresaste</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">$3,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
                                 <div class="font-bold text-gray-900">Pacientes que se van por imagen</div>
                                 <div class="text-xs text-gray-500">Recetas a mano, agenda desorganizada = menos retención</div>
                             </td>
-                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$1,500</td>
                         </tr>
                         <tr class="border-t-2 border-gray-300 bg-red-50">
                             <td class="py-5 px-2">
-                                <div class="font-extrabold text-gray-900 text-base">Total que estás perdiendo cada mes</div>
-                                <div class="text-xs text-gray-600 mt-0.5">Sin cambiar nada, sin "no hacer nada"</div>
+                                <div class="font-extrabold text-gray-900 text-base">Total aproximado perdido al mes</div>
+                                <div class="text-xs text-gray-600 mt-0.5">Rango típico: $10k–$20k según volumen y tickets</div>
                             </td>
-                            <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">$29,000</td>
+                            <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">~$15,700</td>
                         </tr>
                         <tr class="bg-teal-50">
                             <td class="py-5 px-2">
                                 <div class="font-extrabold text-teal-900 text-base">Lo que pagas por DocFácil Pro</div>
-                                <div class="text-xs text-teal-700 mt-0.5">Menos del 4% de lo que pierdes hoy</div>
+                                <div class="text-xs text-teal-700 mt-0.5">Menos del 7% de lo que pierdes hoy</div>
                             </td>
                             <td class="py-5 px-2 text-right font-extrabold text-teal-700 text-2xl">$999</td>
                         </tr>
@@ -899,7 +936,7 @@
 
                 <div class="mt-6 text-center">
                     <a href="#pricing" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition">
-                        Dejar de perder $29,000 al mes →
+                        Dejar de perder miles al mes →
                     </a>
                     <p class="text-xs text-gray-500 mt-3">Con garantía de 30 días. Si no ves resultados, te devolvemos tu dinero.</p>
                 </div>

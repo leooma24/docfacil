@@ -27,9 +27,9 @@
             <div class="story">
                 <strong>En dos meses con DocFácil esto cambió:</strong>
                 <ul>
-                    <li>Las faltas bajaron a <strong>1 o 2 por semana</strong>. No por magia — porque el paciente recibe un WhatsApp el día anterior y ya se siente "visto".</li>
+                    <li>Las faltas bajaron a <strong>1 o 2 por semana</strong>. Él manda el recordatorio por WhatsApp a 1 clic desde la agenda, el paciente da clic al link de "Confirmar" y listo.</li>
                     <li>Dejó de perder <strong>30 minutos diarios</strong> buscando expedientes y escribiendo recordatorios a mano.</li>
-                    <li>Sus pacientes empezaron a <strong>reagendar en lugar de cancelar</strong>, porque el mismo WhatsApp les ofrece un botón para cambiar la cita.</li>
+                    <li>Cuando sí se cancela, DocFácil le avisa qué paciente de su <strong>lista de espera</strong> puede tomar el slot — otro hueco cerrado.</li>
                 </ul>
             </div>
 

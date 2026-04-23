@@ -27,20 +27,25 @@
             <p><strong>Tienes 15 días de prueba gratuita</strong> con todas las funciones disponibles.</p>
 
             <div class="steps">
-                <p><strong>Primeros pasos:</strong></p>
-                <div class="step"><span class="step-num">1</span> Agrega tus servicios y precios</div>
-                <div class="step"><span class="step-num">2</span> Registra a tus primeros pacientes</div>
-                <div class="step"><span class="step-num">3</span> Crea tu primera cita</div>
-                <div class="step"><span class="step-num">4</span> Genera tu primera receta PDF</div>
+                <p><strong>Primeros pasos (15 min en total):</strong></p>
+                <div class="step"><span class="step-num">1</span> Agrega tus servicios y precios (marca con recall los que necesitan seguimiento — limpiezas, revisiones)</div>
+                <div class="step"><span class="step-num">2</span> Registra a tus primeros pacientes o súbelos de Excel por WhatsApp</div>
+                <div class="step"><span class="step-num">3</span> Crea tu primera cita y manda el recordatorio por WhatsApp a 1 clic</div>
+                <div class="step"><span class="step-num">4</span> Genera tu primera receta PDF con tu cédula y firma</div>
             </div>
 
             <p style="text-align: center;">
                 <a href="{{ url('/doctor') }}" style="display:inline-block;background:#14b8a6;color:#ffffff!important;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Ir a mi consultorio</a>
             </p>
 
-            <p>Si tienes dudas, responde este correo y te ayudamos.</p>
+            <div style="background:#f0fdfa;border-left:3px solid #14b8a6;padding:14px 16px;margin:20px 0;border-radius:4px;">
+                <p style="margin:0 0 8px;font-weight:700;color:#0d9488;">🎁 Como beta tester tienes acceso gratis a los nuevos add-ons por 30 días:</p>
+                <p style="margin:0;font-size:14px;color:#4b5563;"><strong>Recall automático</strong> ($49/mes): pacientes que no regresan aparecen listados cada semana.<br><strong>Plan de tratamiento</strong> ($129/mes): arma presupuestos con PDF bonito y el paciente acepta en línea.</p>
+            </div>
 
-            <p>— El equipo de DocFácil</p>
+            <p>Si tienes dudas, responde este correo o escríbeme al WhatsApp <strong>668 249 3398</strong>. Contesto yo personalmente.</p>
+
+            <p>— Omar Lerma, fundador de DocFácil</p>
         </div>
         <div class="footer">
             &copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.<br><a href="https://docfacil.tu-app.co" style="color:#14b8a6;">docfacil.tu-app.co</a> — Software para consultorios médicos y dentales

@@ -29,7 +29,7 @@
             <p>Le ayudo a que eso sea la excepción, no la regla. Soy <strong>Omar Lerma</strong>, y lo que hago es simple:</p>
 
             <p>
-                <span class="arrow">→</span> Sus pacientes reciben un <strong>WhatsApp un día antes</strong> de su cita. Usted deja de perseguir a nadie.<br>
+                <span class="arrow">→</span> <strong>A 1 clic desde la agenda</strong> le manda un WhatsApp al paciente con la fecha y un link para confirmar. Se olvida de perseguir a nadie.<br>
                 <span class="arrow">→</span> Cuando el paciente llega, abre su <strong>expediente en 5 segundos</strong>, no buscándolo entre carpetas.<br>
                 <span class="arrow">→</span> Su receta sale <strong>firmada y en PDF</strong>. Se ve seria, no escrita al vuelo.
             </p>
