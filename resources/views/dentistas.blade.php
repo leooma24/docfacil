@@ -367,9 +367,9 @@
                 $featuresMore = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m0 14v1m-8-9H3m18 0h-1M5.636 5.636l-.707-.707m12.728 12.728l-.707-.707M5.636 18.364l-.707.707M18.364 5.636l.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>', 'title' => 'Check-in con QR', 'desc' => 'Un QR en recepción, el paciente llena sus datos desde su celular. Sin papel, sin filas.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma digital legal', 'desc' => 'El paciente firma consentimientos con el dedo. Válido con timestamp e IP.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas e historial desde su celular. Menos llamadas rutinarias para ti.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, cumpleaños, citas sin confirmar. Nada se te escapa.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Varios doctores o sucursales desde un panel. Comisiones entre doctores incluidas.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', 'title' => 'Lista de espera inteligente', 'desc' => 'Cuando se cancela una cita, te avisamos qué pacientes en espera podrían tomarla. Cero slots vacíos.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas y cumpleaños', 'desc' => 'Cobros vencidos, citas sin confirmar y pacientes que cumplen años hoy con botón para felicitar desde tu WhatsApp.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor con reportes', 'desc' => 'Varios doctores desde un panel. Producción individual por doctor: citas, completadas, ingresos del mes.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente NOM-004', 'desc' => 'Estructura alineada a la norma mexicana NOM-004-SSA3. Diagnósticos, tratamientos, notas SOAP.'],
                 ];
                 @endphp
@@ -832,6 +832,45 @@
                         Si en los primeros 30 días no ves resultados, te devolvemos tu dinero completo. Sin preguntas, sin letra chica.
                     </p>
                 </div>
+            </div>
+
+            {{-- Add-ons opcionales --}}
+            <div class="max-w-5xl mx-auto mt-14" data-animate>
+                <div class="text-center mb-8">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Add-ons opcionales · Próximamente</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Cuando quieras más, vas activando</h3>
+                    <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Paga solo lo que usas. Puedes prender o apagar cualquier add-on mes a mes desde tu panel.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-5">
+                    {{-- Recall add-on --}}
+                    <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="text-3xl">🦷</div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$49/mes</span>
+                        </div>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Recall automático a 6 meses</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Tus pacientes que hace meses no regresan aparecen listados cada semana. Un clic abre WhatsApp con el mensaje para invitarlos de vuelta.</p>
+                        <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
+                            💰 Recupera $10-30k/mes en limpiezas perdidas
+                        </div>
+                    </div>
+
+                    {{-- Presupuestos add-on --}}
+                    <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="text-3xl">📋</div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$129/mes</span>
+                        </div>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Plan de tratamiento / Presupuestos</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Armas el plan completo (ortodoncia, rehabilitación, implantes), generas PDF con tu marca y el paciente acepta en línea desde su celular.</p>
+                        <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
+                            💰 Sube 20% tu tasa de aceptación de tratamientos grandes
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-gray-500 mt-6 italic">Beta testers: activamos add-ons gratis por 30 días a las primeras 50 clínicas que se registren.</p>
             </div>
         </div>
     </section>

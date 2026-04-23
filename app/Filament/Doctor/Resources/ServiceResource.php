@@ -77,6 +77,16 @@ class ServiceResource extends Resource
                             ->suffix('min')
                             ->required()
                             ->default(30),
+                        Forms\Components\Select::make('recall_months')
+                            ->label('Recall / seguimiento')
+                            ->placeholder('Sin recall')
+                            ->helperText('Los pacientes que reciben este servicio serán recordados para regresar. Típico: 6 meses para limpieza, 12 para revisión.')
+                            ->options([
+                                3 => 'Cada 3 meses (ortodoncia, whitening)',
+                                6 => 'Cada 6 meses (limpieza, revisión)',
+                                12 => 'Cada 12 meses (revisión anual)',
+                                24 => 'Cada 24 meses',
+                            ]),
                         Forms\Components\Textarea::make('description')
                             ->label('Descripción')
                             ->columnSpanFull()

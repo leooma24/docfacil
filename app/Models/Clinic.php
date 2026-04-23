@@ -172,6 +172,7 @@ class Clinic extends Model
             'whatsapp_payment',        // Cobro por WhatsApp
             'qr_checkin',              // Check-in con QR
             'basic_dashboard',
+            'recall_automation',       // Add-on $49/mes (incluido mientras termina infra W3)
         ];
         $profesional = array_merge($basico, [
             'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
