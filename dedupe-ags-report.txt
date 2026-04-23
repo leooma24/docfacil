@@ -1,0 +1,17 @@
+Dedupe Report — 2026-04-23 21:09:25
+==================================================
+Input CSV:    dentistas-ags-pilot.csv
+Existing:     existing-prospects.json (823 prospects)
+Output CSV:   dentistas-ags-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       0
+  dup_email       2
+  dup_bizcity     0
+  kept            58
+
+Details:
+  - SKIP dup_email: Hospital de Dientes Oriente (email hospitaldedientes@gmail.com)
+  - SKIP dup_email: Hospital de Dientes Poniente (email hospitaldedientes@gmail.com)
