@@ -1,0 +1,18 @@
+Dedupe Report — 2026-04-23 18:31:38
+==================================================
+Input CSV:    dentistas-tol-pilot.csv
+Existing:     existing-prospects.json (823 prospects)
+Output CSV:   dentistas-tol-dedup.csv
+
+Counters:
+  total           60
+  no_phone        3
+  dup_phone       0
+  dup_email       0
+  dup_bizcity     0
+  kept            57
+
+Details:
+  - SKIP no_phone: Médica Integral Odontológica
+  - SKIP no_phone: PRO Smile México Lerma
+  - SKIP no_phone: Consultorio Dental Dra. Martha Medrano
