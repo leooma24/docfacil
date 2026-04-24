@@ -20,18 +20,19 @@
     <meta name="twitter:title" content="¿Cuánto pierdes al mes en tu consultorio? Calculadora gratis">
 
     {{-- JSON-LD structured data para rich snippets --}}
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Calculadora ROI Consultorio Dental",
-        "url": "{{ url('/herramientas/calculadora-consultorio') }}",
-        "applicationCategory": "BusinessApplication",
-        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "MXN"},
-        "description": "Calculadora gratuita para dentistas en México que calcula pérdidas mensuales por no-shows, papeleo y cobros no recuperados.",
-        "publisher": {"@type": "Organization", "name": "DocFácil", "url": "{{ url('/') }}"}
-    }
-    </script>
+    @php
+        $jsonLd = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebApplication',
+            'name' => 'Calculadora ROI Consultorio Dental',
+            'url' => url('/herramientas/calculadora-consultorio'),
+            'applicationCategory' => 'BusinessApplication',
+            'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'MXN'],
+            'description' => 'Calculadora gratuita para dentistas en México que calcula pérdidas mensuales por no-shows, papeleo y cobros no recuperados.',
+            'publisher' => ['@type' => 'Organization', 'name' => 'DocFácil', 'url' => url('/')],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
