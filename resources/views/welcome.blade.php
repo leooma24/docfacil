@@ -841,7 +841,7 @@
                     <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Paga solo lo que usas. Puedes prender o apagar cualquier add-on mes a mes desde tu panel.</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-5">
+                <div class="grid md:grid-cols-3 gap-5">
                     <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
                         <div class="flex items-start justify-between gap-3 mb-3">
                             <div class="text-3xl">🔁</div>
@@ -850,7 +850,19 @@
                         <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Recall automático</h4>
                         <p class="text-sm text-gray-600 leading-relaxed mb-3">Tus pacientes que hace meses no regresan aparecen listados cada semana. Un clic abre WhatsApp con el mensaje para invitarlos de vuelta.</p>
                         <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
-                            💰 Recupera miles/mes en consultas de seguimiento perdidas
+                            💰 Recupera miles/mes en seguimientos perdidos
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="text-3xl">⭐</div>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$49/mes</span>
+                        </div>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Reseñas Google automáticas</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Después de cada consulta, lista qué pacientes pedir reseña. 1 clic manda WhatsApp con tu link de Google.</p>
+                        <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
+                            💰 Triplica reseñas → 2-3x leads orgánicos
                         </div>
                     </div>
 
@@ -859,10 +871,10 @@
                             <div class="text-3xl">📋</div>
                             <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$129/mes</span>
                         </div>
-                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Plan de tratamiento / Presupuestos</h4>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Armas el plan completo, generas PDF con tu marca y el paciente acepta en línea desde su celular.</p>
+                        <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Planes de tratamiento</h4>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Presupuestos multi-cita con PDF bonito. El paciente acepta en línea desde su celular.</p>
                         <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
-                            💰 Sube 20% tu tasa de aceptación de tratamientos grandes
+                            💰 Sube 20% aceptación de tratamientos grandes
                         </div>
                     </div>
                 </div>

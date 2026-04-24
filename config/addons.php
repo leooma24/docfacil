@@ -43,4 +43,20 @@ return [
         'beta_trial_days' => 30,
         'available' => true,
     ],
+
+    'google_reviews' => [
+        'slug' => 'google_reviews',
+        'name' => 'Reseñas Google automatizadas',
+        'feature_flag' => 'google_reviews',
+        'short_description' => 'Lista pacientes a pedirles reseña. 1 clic y abre WhatsApp con el link a Google Maps listo.',
+        'long_description' => 'Después de cada cita completada, DocFácil te muestra qué pacientes pueden dejarte reseña en Google. Un clic manda WhatsApp personalizado con tu link directo. Triplicar tus reseñas Google = más pacientes nuevos te encuentran orgánicamente (sin pagar ads).',
+        'monthly_price' => 49.00,
+        'annual_price' => 490.00,
+        'icon' => '⭐',
+        'revenue_hypothesis' => 'Triplica reseñas Google → 2-3x leads orgánicos nuevos por mes.',
+        'stripe_price_id_monthly' => env('STRIPE_PRICE_ADDON_GOOGLE_REVIEWS_MONTHLY'),
+        'stripe_price_id_annual' => env('STRIPE_PRICE_ADDON_GOOGLE_REVIEWS_ANNUAL'),
+        'beta_trial_days' => 30,
+        'available' => true,
+    ],
 ];

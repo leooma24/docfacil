@@ -25,6 +25,7 @@ class Appointment extends Model
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',
         'consultation_data',
         'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
+        'review_request_sent_at',
     ];
 
     protected function casts(): array
@@ -37,6 +38,7 @@ class Appointment extends Model
             'reminder_24h_sent_at' => 'datetime',
             'reminder_2h_sent_at' => 'datetime',
             'followup_sent_at' => 'datetime',
+            'review_request_sent_at' => 'datetime',
             'confirmed_at' => 'datetime',
         ];
     }

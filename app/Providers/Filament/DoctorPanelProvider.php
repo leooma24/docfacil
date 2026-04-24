@@ -67,6 +67,7 @@ class DoctorPanelProvider extends PanelProvider
                 \App\Filament\Doctor\Widgets\OverdueDebtorsWidget::class,
                 \App\Filament\Doctor\Widgets\PendingRecallsWidget::class,
                 \App\Filament\Doctor\Widgets\PublicPortalShareWidget::class,
+                \App\Filament\Doctor\Widgets\PendingReviewRequestsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
