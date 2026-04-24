@@ -1244,17 +1244,39 @@ window.addEventListener('scroll', () => {
 
 </script>
 
-{{-- Social proof toast — rotativo cada ~25s con actividad real del producto.
-     Nombres/ciudades son representativos de los prospectos reales en Sinaloa/Sonora.
-     Desktop: esquina inferior-izquierda. Mobile: arriba para no tapar sticky CTA. --}}
-<div x-data="socialProofToast()" x-init="init()" x-show="visible" x-cloak x-transition.opacity
-    class="md:max-w-xs"
-    style="position:fixed;z-index:9997;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px 14px;box-shadow:0 15px 35px -10px rgba(0,0,0,0.18);display:flex;align-items:center;gap:10px;"
-    :style="window.innerWidth >= 768 ? 'bottom:22px;left:22px;max-width:340px;' : 'top:80px;right:12px;left:12px;max-width:none;'">
-    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:14px;" x-text="current.initials"></div>
+{{-- Toast de estatus honesto — mensajes reales sobre el estado actual de DocFacil.
+     Sin datos inventados. Desktop: esquina inferior-izquierda. Mobile: arriba. --}}
+<style>
+    .df-toast {
+        position: fixed;
+        z-index: 9997;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 12px 14px;
+        box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.18);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 340px;
+        bottom: 22px;
+        left: 22px;
+    }
+    @@media (max-width: 767px) {
+        .df-toast {
+            bottom: auto;
+            left: 12px;
+            right: 12px;
+            top: 80px;
+            max-width: none;
+        }
+    }
+</style>
+<div x-data="socialProofToast()" x-init="init()" x-show="visible" x-cloak x-transition.opacity class="df-toast">
+    <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:15px;" x-text="current.icon"></div>
     <div style="flex:1;min-width:0;">
-        <div style="font-size:13px;color:#111827;line-height:1.3;" x-html="current.text"></div>
-        <div style="font-size:11px;color:#9ca3af;margin-top:2px;" x-text="current.time"></div>
+        <div style="font-size:13px;color:#111827;line-height:1.35;font-weight:600;" x-html="current.title"></div>
+        <div style="font-size:12px;color:#6b7280;margin-top:1px;" x-text="current.sub"></div>
     </div>
     <button type="button" @click="dismiss()" aria-label="Cerrar" style="background:none;border:0;color:#d1d5db;cursor:pointer;padding:4px;flex-shrink:0;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -1265,28 +1287,25 @@ window.addEventListener('scroll', () => {
 function socialProofToast() {
     return {
         visible: false,
-        current: { initials: '', text: '', time: '' },
-        dismissed: false,
+        current: { icon: '', title: '', sub: '' },
+        dismissed: sessionStorage.getItem('docfacil_toast_dismissed') === '1',
+        index: 0,
         events: [
-            { initials: 'MG', text: '<strong>Dr. María G.</strong> en Culiacán se registró', time: 'hace 4 min' },
-            { initials: 'RL', text: '<strong>Dra. Rosa L.</strong> en Mazatlán activó su plan Pro', time: 'hace 12 min' },
-            { initials: 'JR', text: '<strong>Dr. Jorge R.</strong> en Hermosillo mandó su primer recordatorio', time: 'hace 18 min' },
-            { initials: 'AS', text: '<strong>Clínica Dental Sonrisas</strong> en Los Mochis se unió', time: 'hace 26 min' },
-            { initials: 'PC', text: '<strong>Dr. Pedro C.</strong> en Cd. Obregón cobró por WhatsApp', time: 'hace 34 min' },
-            { initials: 'LM', text: '<strong>Dra. Leticia M.</strong> en Guamúchil activó portal del paciente', time: 'hace 47 min' },
+            { icon: '🚀', title: 'Apenas arrancamos — sé de los primeros',      sub: 'Los primeros 50 consultorios reciben atención 1:1 directa de Omar.' },
+            { icon: '📋', title: 'Beta abierta con garantía de 30 días',         sub: 'Si no te funciona, te devolvemos tu dinero. Sin letra chica.' },
+            { icon: '💬', title: 'Contesto yo personalmente',                    sub: 'Omar — WhatsApp directo 668 249 3398. Sin equipos de soporte impersonales.' },
         ],
         init() {
-            // Solo mostrar tras 8s (evita toast instantáneo), luego rotar cada 25s
-            setTimeout(() => this.rotate(), 8000);
+            if (this.dismissed) return;
+            setTimeout(() => this.rotate(), 7000);
         },
         rotate() {
             if (this.dismissed) return;
-            const pick = this.events[Math.floor(Math.random() * this.events.length)];
-            this.current = pick;
+            this.current = this.events[this.index % this.events.length];
+            this.index++;
             this.visible = true;
-            // Ocultar tras 7s, mostrar siguiente tras 18s
             setTimeout(() => { this.visible = false; }, 7000);
-            setTimeout(() => this.rotate(), 25000);
+            setTimeout(() => this.rotate(), 22000);
         },
         dismiss() {
             this.dismissed = true;
