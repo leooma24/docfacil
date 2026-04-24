@@ -90,7 +90,7 @@
             gap: 32px;
             margin-top: 8px;
         }
-        @media (max-width: 820px) { .grid-split { grid-template-columns: 1fr; gap: 20px; } }
+        @@media (max-width: 820px) { .grid-split { grid-template-columns: 1fr; gap: 20px; } }
 
         .inputs-section h2, .results-section h2 {
             font-size: 18px;
