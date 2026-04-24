@@ -1,0 +1,19 @@
+Dedupe Report — 2026-04-24 16:21:51
+==================================================
+Input CSV:    dentistas-saltillo-pilot.csv
+Existing:     existing-prospects.json (994 prospects)
+Output CSV:   dentistas-saltillo-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       4
+  dup_email       0
+  dup_bizcity     0
+  kept            56
+
+Details:
+  - SKIP dup_phone: Odontología Infantil Especializada (phone 8444153747)
+  - SKIP dup_phone: Dra. Primavera Villarreal Odontopediatra (phone 8444444457)
+  - SKIP dup_phone: Dra. Susana Cherta Pérez (phone 8442186440)
+  - SKIP dup_phone: Cosmética Dental Regio (phone 8444104705)
