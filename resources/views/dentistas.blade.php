@@ -955,6 +955,9 @@
                         Dejar de perder miles al mes →
                     </a>
                     <p class="text-xs text-gray-500 mt-3">Con garantía de 30 días. Si no ves resultados, te devolvemos tu dinero.</p>
+                    <p class="text-sm text-gray-600 mt-5">
+                        👉 <a href="{{ route('tools.calculadora_roi') }}" class="text-teal-600 hover:text-teal-700 underline font-semibold">Calcula con tus números reales en la calculadora gratis</a>
+                    </p>
                 </div>
             </div>
         </div>
