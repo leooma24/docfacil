@@ -124,6 +124,18 @@ class Clinic extends Model
             'plan_ends_at' => $from->copy()->addDays($days),
             'is_active' => true,
         ]);
+
+        // Referral cascading: si esta clinica fue referida, el referente
+        // gana 1 mes gratis por este pago (hasta cap de 12 meses/año).
+        // Silencioso si no hay referral asociado o si ya alcanzo el cap.
+        try {
+            \App\Models\Referral::grantCascadeReward($this);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Referral cascade failed on activatePlan', [
+                'clinic_id' => $this->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function planIsPaid(): bool
