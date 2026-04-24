@@ -15,6 +15,7 @@ use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -124,6 +125,10 @@ Route::post('/beta', function (\Illuminate\Http\Request $request) {
 })->name('beta.store')->middleware('throttle:5,1');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+
+// Herramientas gratis publicas (engineering-as-marketing, SEO)
+Route::get('/herramientas/calculadora-consultorio', [ToolsController::class, 'calculadoraRoi'])
+    ->name('tools.calculadora_roi');
 Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');

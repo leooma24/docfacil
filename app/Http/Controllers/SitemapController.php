@@ -32,9 +32,12 @@ class SitemapController extends Controller
     {
         $urls = [
             ['loc' => url('/'), 'priority' => '1.0', 'changefreq' => 'weekly'],
+            ['loc' => url('/dentistas'), 'priority' => '0.95', 'changefreq' => 'weekly'],
             ['loc' => url('/doctor/login'), 'priority' => '0.8', 'changefreq' => 'monthly'],
             ['loc' => url('/doctor/register'), 'priority' => '0.9', 'changefreq' => 'monthly'],
             ['loc' => url('/blog'), 'priority' => '0.8', 'changefreq' => 'weekly'],
+            // Herramientas gratis (activos SEO permanentes)
+            ['loc' => url('/herramientas/calculadora-consultorio'), 'priority' => '0.9', 'changefreq' => 'monthly'],
         ];
 
         foreach (BlogController::articles() as $slug => $article) {
