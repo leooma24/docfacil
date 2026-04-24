@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Calculadora gratis: ¿cuánto pierdes al mes en tu consultorio dental? · DocFácil</title>
     <meta name="description" content="Calcula en 1 minuto cuánto dinero pierdes cada mes por citas no confirmadas, papeleo y cobros olvidados. Calculadora interactiva gratis para consultorios dentales en México.">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
@@ -329,14 +330,54 @@
             <div class="cta-footnote">Sin tarjeta · sin compromisos · 15 días con todo desbloqueado</div>
         </div>
 
+        {{-- LEAD CAPTURE: opcional, aparece despues de ver resultados --}}
+        <div style="margin-top: 28px;">
+            <template x-if="!leadDismissed && !leadSubmitted">
+                <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:22px;">
+                    <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                        <div>
+                            <h4 style="font-size:16px;font-weight:700;color:#78350f;margin-bottom:4px;">¿Quieres saber cómo recuperar estos <span x-text="'$' + Math.round(total).toLocaleString('es-MX')"></span> al mes?</h4>
+                            <p style="font-size:13px;color:#92400e;">Te mando por WhatsApp un análisis corto con los 3 cambios que más impacto tendrían en tu caso específico. Sin spam, sin llamadas molestas.</p>
+                        </div>
+                        <button x-on:click="leadDismissed = true" style="background:none;border:none;color:#92400e;cursor:pointer;padding:4px;font-size:18px;line-height:1;" aria-label="Cerrar">✕</button>
+                    </div>
+                    <form x-on:submit.prevent="submitLead()" style="display:grid;gap:10px;">
+                        <input type="text" x-model="leadName" placeholder="Tu nombre" required maxlength="100" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <input type="tel" x-model="leadPhone" placeholder="WhatsApp (ej. 6682493398)" required maxlength="20" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
+                            <input type="email" x-model="leadEmail" placeholder="Email (opcional)" maxlength="100" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
+                        </div>
+                        <div x-show="leadError" x-text="leadError" style="color:#991b1b;font-size:13px;" x-cloak></div>
+                        <button type="submit" x-bind:disabled="leadLoading"
+                            style="background:linear-gradient(135deg,#d97706,#b45309);color:white;border:none;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;">
+                            <span x-show="!leadLoading">Mándame el análisis →</span>
+                            <span x-show="leadLoading" x-cloak>Enviando...</span>
+                        </button>
+                        <p style="font-size:11px;color:#b45309;text-align:center;">Tu info solo se usa para contactarte una vez. No la compartimos.</p>
+                    </form>
+                </div>
+            </template>
+            <template x-if="leadSubmitted">
+                <div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:14px;padding:20px;text-align:center;">
+                    <div style="font-size:36px;margin-bottom:6px;">✓</div>
+                    <h4 style="font-size:16px;font-weight:700;color:#065f46;margin-bottom:4px;">¡Listo! Omar te escribe pronto por WhatsApp</h4>
+                    <p style="font-size:13px;color:#047857;">Normalmente respondo el mismo día.</p>
+                </div>
+            </template>
+        </div>
+
         <div class="share-section">
-            <p style="margin-bottom: 10px;">💡 Compártelo con un colega que siga en libreta:</p>
-            <a href="https://wa.me/?text=%C2%BFCu%C3%A1nto%20pierdes%20al%20mes%20en%20tu%20consultorio%3F%20Est%C3%A1%20calculadora%20gratis%20lo%20dice%20en%201%20minuto%3A%20{{ urlencode(url('/herramientas/calculadora-consultorio')) }}" target="_blank" rel="noopener" class="share-btn">
+            <p style="margin-bottom: 10px;">💡 Comparte el análisis con un colega que siga en libreta:</p>
+            <a :href="personalizedWhatsappShare" target="_blank" rel="noopener" class="share-btn">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/></svg>
-                WhatsApp
+                Compartir con mis números
+            </a>
+            <a href="#" x-on:click.prevent="copyShare()" class="share-btn">
+                <span x-show="!copiedShare">🔗 Copiar link con mis números</span>
+                <span x-show="copiedShare" x-cloak>✓ Copiado</span>
             </a>
             <a href="#" x-on:click.prevent="copy()" class="share-btn">
-                <span x-show="!copied">📋 Copiar link</span>
+                <span x-show="!copied">📋 Solo la calculadora</span>
                 <span x-show="copied" x-cloak>✓ Copiado</span>
             </a>
         </div>
@@ -357,15 +398,34 @@
 
 <script>
 function calculator() {
+    // Lee parametros de la URL al cargar. Permite compartir la calculadora
+    // con numeros personalizados (ej. /herramientas/...?p=80&ns=25&ta=700).
+    const params = new URLSearchParams(window.location.search);
+    const p = (key, def, min, max) => {
+        const v = parseInt(params.get(key));
+        if (Number.isNaN(v)) return def;
+        return Math.min(Math.max(v, min), max);
+    };
+
     return {
-        // Inputs (defaults = consultorio dental típico MX)
-        patients: 60,
-        noShowPct: 20,
-        avgTicket: 600,
-        paperworkHours: 8,
-        hourlyRate: 400,
-        forgottenPct: 4,
+        // Inputs: leer de URL params o usar defaults (consultorio dental tipico MX)
+        patients: p('p', 60, 10, 200),
+        noShowPct: p('ns', 20, 5, 45),
+        avgTicket: p('ta', 600, 200, 3000),
+        paperworkHours: p('ph', 8, 0, 25),
+        hourlyRate: p('hr', 400, 150, 1500),
+        forgottenPct: p('fo', 4, 0, 20),
         copied: false,
+        copiedShare: false,
+
+        // Lead capture state (inline para que acceda a los inputs de arriba)
+        leadDismissed: false,
+        leadSubmitted: false,
+        leadLoading: false,
+        leadError: '',
+        leadName: '',
+        leadPhone: '',
+        leadEmail: '',
 
         get missedAppointments() { return this.patients * (this.noShowPct / 100); },
         get lossNoShows() { return this.missedAppointments * this.avgTicket; },
@@ -373,10 +433,74 @@ function calculator() {
         get lossForgotten() { return this.patients * (this.forgottenPct / 100) * this.avgTicket; },
         get total() { return this.lossNoShows + this.lossPaperwork + this.lossForgotten; },
 
+        get personalizedUrl() {
+            const base = window.location.origin + window.location.pathname;
+            const q = new URLSearchParams({
+                p: this.patients,
+                ns: this.noShowPct,
+                ta: this.avgTicket,
+                ph: this.paperworkHours,
+                hr: this.hourlyRate,
+                fo: this.forgottenPct,
+            });
+            return `${base}?${q.toString()}`;
+        },
+
+        get personalizedWhatsappShare() {
+            const total = Math.round(this.total).toLocaleString('es-MX');
+            const msg = `Mira lo que dice esta calculadora que pierdo al mes en mi consultorio: $${total}. Pruébala con tus números: ${this.personalizedUrl}`;
+            return `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        },
+
         copy() {
             navigator.clipboard.writeText(window.location.href);
             this.copied = true;
             setTimeout(() => this.copied = false, 2000);
+        },
+
+        copyShare() {
+            navigator.clipboard.writeText(this.personalizedUrl);
+            this.copiedShare = true;
+            setTimeout(() => this.copiedShare = false, 2000);
+        },
+
+        async submitLead() {
+            this.leadError = '';
+            if (!this.leadName || !this.leadPhone) {
+                this.leadError = 'Tu nombre y teléfono son obligatorios';
+                return;
+            }
+            this.leadLoading = true;
+            try {
+                const resp = await fetch('/herramientas/calculadora-consultorio/lead', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: this.leadName,
+                        phone: this.leadPhone,
+                        email: this.leadEmail,
+                        calc: {
+                            patients: this.patients,
+                            noShowPct: this.noShowPct,
+                            avgTicket: this.avgTicket,
+                            paperworkHours: this.paperworkHours,
+                            hourlyRate: this.hourlyRate,
+                            forgottenPct: this.forgottenPct,
+                            total: this.total,
+                        },
+                    }),
+                });
+                if (!resp.ok) throw new Error('Server error');
+                this.leadSubmitted = true;
+            } catch (e) {
+                this.leadError = 'Hubo un error. Intenta de nuevo en unos segundos.';
+            } finally {
+                this.leadLoading = false;
+            }
         }
     }
 }

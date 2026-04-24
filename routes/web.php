@@ -129,6 +129,9 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 // Herramientas gratis publicas (engineering-as-marketing, SEO)
 Route::get('/herramientas/calculadora-consultorio', [ToolsController::class, 'calculadoraRoi'])
     ->name('tools.calculadora_roi');
+Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::class, 'calculadoraRoiLead'])
+    ->middleware('throttle:5,1')
+    ->name('tools.calculadora_roi.lead');
 Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
