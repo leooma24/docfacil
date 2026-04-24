@@ -1,0 +1,17 @@
+Dedupe Report — 2026-04-24 03:38:47
+==================================================
+Input CSV:    dentistas-torreon-pilot.csv
+Existing:     existing-prospects.json (938 prospects)
+Output CSV:   dentistas-torreon-dedup.csv
+
+Counters:
+  total           58
+  no_phone        0
+  dup_phone       1
+  dup_email       1
+  dup_bizcity     0
+  kept            56
+
+Details:
+  - SKIP dup_email: Clínica Odontológica Especializada Gómez (email contacto@coelaguna.com.mx)
+  - SKIP dup_phone: Dr. Luis Daniel Morales Frías (phone 8717222188)
