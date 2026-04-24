@@ -89,40 +89,11 @@ Route::get('/demo', function () {
     return redirect('/doctor/login');
 })->middleware('throttle:10,1')->name('demo');
 
-Route::get('/beta', function () {
-    return view('beta');
-})->name('beta');
-
-Route::post('/beta', function (\Illuminate\Http\Request $request) {
-    if ($request->filled('website_url')) {
-        return back()->with('beta_success', true);
-    }
-
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone' => 'required|string|max:50',
-        'clinic_name' => 'nullable|string|max:255',
-        'specialty' => 'nullable|string|max:255',
-        'city' => 'nullable|string|max:255',
-    ]);
-
-    \App\Models\Prospect::updateOrCreate(
-        ['email' => $request->email],
-        [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'clinic_name' => $request->clinic_name,
-            'specialty' => $request->specialty,
-            'city' => $request->city,
-            'source' => 'landing',
-            'status' => 'interested',
-            'notes' => 'BETA TESTER - Registro desde /beta',
-        ]
-    );
-
-    return back()->with('beta_success', true);
-})->name('beta.store')->middleware('throttle:5,1');
+// Programa beta retirado (2026-04-24): contradecia el pricing de planes pagados.
+// Links legacy van al landing dental con redirect permanente (301) para preservar SEO.
+// Las clinicas historicas con is_beta=true conservan su acceso via upgrade.blade.php.
+Route::redirect('/beta', '/dentistas', 301)->name('beta');
+Route::post('/beta', fn () => redirect('/dentistas', 301))->name('beta.store');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 

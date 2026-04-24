@@ -834,6 +834,17 @@
                 </div>
             </div>
 
+            {{-- Gana hasta 1 año gratis invitando colegas --}}
+            <div class="max-w-3xl mx-auto mt-4 p-6 rounded-2xl flex items-start gap-4" style="background:linear-gradient(135deg,#fdf4ff,#fae8ff); border:1px solid #e9d5ff;" data-animate>
+                <div class="text-4xl flex-shrink-0">🎁</div>
+                <div>
+                    <div class="font-extrabold text-purple-900 text-lg">Gana hasta <strong style="color:#7c3aed;">1 año gratis</strong> invitando colegas</div>
+                    <p class="text-sm text-purple-800 mt-1 leading-relaxed">
+                        Cada vez que un colega tuyo paga su plan con tu código de referido, <strong>ganas +1 mes gratis</strong> — hasta 12 meses (un año completo) por cada colega que refieras. Dentro del panel te damos tu código personal y link listo para WhatsApp.
+                    </p>
+                </div>
+            </div>
+
             {{-- Add-ons opcionales --}}
             <div class="max-w-5xl mx-auto mt-14" data-animate>
                 <div class="text-center mb-8">
@@ -883,7 +894,7 @@
                     </div>
                 </div>
 
-                <p class="text-center text-xs text-gray-500 mt-6 italic">Beta testers: activamos add-ons gratis por 30 días a las primeras 50 clínicas que se registren.</p>
+                <p class="text-center text-xs text-gray-500 mt-6 italic">Primeros 50 consultorios: activamos add-ons gratis por 30 días como founding members.</p>
             </div>
         </div>
     </section>
@@ -1298,7 +1309,7 @@ function socialProofToast() {
         index: 0,
         events: [
             { icon: '🚀', title: 'Apenas arrancamos — sé de los primeros',      sub: 'Los primeros 50 consultorios reciben atención 1:1 directa de Omar.' },
-            { icon: '📋', title: 'Beta abierta con garantía de 30 días',         sub: 'Si no te funciona, te devolvemos tu dinero. Sin letra chica.' },
+            { icon: '📋', title: 'Garantía de 30 días sin letra chica',          sub: 'Si en el primer mes no ves resultados, te devolvemos tu dinero completo.' },
             { icon: '💬', title: 'Contesto yo personalmente',                    sub: 'Omar — WhatsApp directo 668 249 3398. Sin equipos de soporte impersonales.' },
         ],
         init() {

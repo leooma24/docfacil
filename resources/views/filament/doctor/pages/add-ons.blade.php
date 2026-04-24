@@ -6,7 +6,7 @@
                 <div>
                     <h3 class="font-extrabold text-teal-900 text-lg">Amplía tu plan con features específicos</h3>
                     <p class="text-sm text-teal-800 mt-1 leading-relaxed">
-                        Paga solo lo que usas. Activa cualquier add-on con <strong>30 días gratis</strong> como beta tester. Puedes cancelarlo cuando quieras desde esta página.
+                        Paga solo lo que usas. Activa cualquier add-on con <strong>30 días gratis</strong> como founding member. Puedes cancelarlo cuando quieras desde esta página.
                     </p>
                 </div>
             </div>
