@@ -1,0 +1,15 @@
+Dedupe Report — 2026-04-27 23:15:09
+==================================================
+Input CSV:    dentistas-cuernavaca-pilot.csv
+Existing:     existing-prospects.json (1108 prospects)
+Output CSV:   dentistas-cuernavaca-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       0
+  dup_email       0
+  dup_bizcity     0
+  kept            60
+
+Details:
