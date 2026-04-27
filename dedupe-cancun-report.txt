@@ -1,0 +1,16 @@
+Dedupe Report — 2026-04-27 20:55:10
+==================================================
+Input CSV:    dentistas-cancun-pilot.csv
+Existing:     existing-prospects.json (1050 prospects)
+Output CSV:   dentistas-cancun-dedup.csv
+
+Counters:
+  total           59
+  no_phone        0
+  dup_phone       1
+  dup_email       0
+  dup_bizcity     0
+  kept            58
+
+Details:
+  - SKIP dup_phone: Clínica Dental Tulum (phone 9841679649)
