@@ -196,7 +196,7 @@
              las cubre parcialmente — refuerza visual de "esto es lo que estan
              viendo en la tablet". --}}
         <div class="hidden lg:block absolute inset-0 z-0">
-            <img src="{{ asset('images/hero-bg.png') }}"
+            <img src="{{ asset('images/hero-bg.jpg') }}"
                 alt=""
                 aria-hidden="true"
                 fetchpriority="high"
