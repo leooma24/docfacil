@@ -1,0 +1,38 @@
+Dedupe Report — 2026-04-28 00:06:55
+==================================================
+Input CSV:    dentistas-morelia-pilot.csv
+Existing:     existing-prospects.json (1168 prospects)
+Output CSV:   dentistas-morelia-dedup.csv
+
+Counters:
+  total           60
+  no_phone        0
+  dup_phone       23
+  dup_email       0
+  dup_bizcity     0
+  kept            37
+
+Details:
+  - SKIP dup_phone: Chikysmile Morelia (phone 4432073741)
+  - SKIP dup_phone: Núcleo 55 Especialidades (phone 4433125319)
+  - SKIP dup_phone: Smile Clínica Dental (phone 4433316950)
+  - SKIP dup_phone: Clínica Dental Morell (phone 4433125319)
+  - SKIP dup_phone: Smile Designers (phone 4433935191)
+  - SKIP dup_phone: Dental Studio Acueducto (phone 4432073741)
+  - SKIP dup_phone: Biomédica Dental Acueducto (phone 4432073741)
+  - SKIP dup_phone: BM Dental Camelinas (phone 4431416898)
+  - SKIP dup_phone: Consultorio Dental Vasco de Quiroga (phone 4433690121)
+  - SKIP dup_phone: Endo Perio Dental Center (phone 4433122214)
+  - SKIP dup_phone: MediDent Ventura Puente (phone 4433125319)
+  - SKIP dup_phone: Danadent Especialidades Dentales (phone 4433122214)
+  - SKIP dup_phone: Endo-Pro Dental (phone 4433125319)
+  - SKIP dup_phone: Clínica G.O.E (phone 4433316950)
+  - SKIP dup_phone: MGM Dental (phone 4521115901)
+  - SKIP dup_phone: Consultorio Dental Infantil Jiménez (phone 4525247032)
+  - SKIP dup_phone: Consultorio Dental Cupatitzio (phone 4521115901)
+  - SKIP dup_phone: Clínica Dental Chon (phone 3511369449)
+  - SKIP dup_phone: Dr. Antonio Dueñas (phone 3515122333)
+  - SKIP dup_phone: Clínica Dental HG (phone 3511619612)
+  - SKIP dup_phone: Aluna Dental (phone 3511369449)
+  - SKIP dup_phone: Clínica Dental Ángel (phone 3511369449)
+  - SKIP dup_phone: Dental Don Vasco (phone 4341125735)
