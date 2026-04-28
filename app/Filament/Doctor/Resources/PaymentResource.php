@@ -145,7 +145,14 @@ class PaymentResource extends Resource
                     ->money('MXN')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'warning' : 'success')
-                    ->visible(fn () => true),
+                    ->placeholder('—')
+                    // Cuando esta pagado, mostrar guion en lugar de "$0.00"
+                    ->formatStateUsing(function ($state, $record) {
+                        if (in_array($record->status, ['paid', 'refunded']) || $state <= 0) {
+                            return '—';
+                        }
+                        return '$' . number_format((float) $state, 2) . ' MXN';
+                    }),
                 Tables\Columns\TextColumn::make('due_date')
                     ->label('Límite')
                     ->date('d/m/Y')
@@ -206,9 +213,16 @@ class PaymentResource extends Resource
                     ->label('Con saldo')
                     ->query(fn ($query) => $query->withBalance())
                     ->toggle(),
+                // Cobros que llevan >30 dias pendientes/parciales -> persigue cobranza vieja
+                Tables\Filters\Filter::make('over_30_days')
+                    ->label('Sin pago hace +30 días')
+                    ->query(fn ($query) => $query
+                        ->whereIn('status', ['pending', 'partial'])
+                        ->where('created_at', '<=', now()->subDays(30)))
+                    ->toggle(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
                 Tables\Actions\Action::make('pay_installment')
                     ->label('Pagar abono')
                     ->icon('heroicon-o-banknotes')
@@ -264,16 +278,46 @@ class PaymentResource extends Resource
                         $phone = preg_replace('/\D/', '', $record->patient->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         if (strlen($phone) < 12) return null;
-                        $clinicName = $record->clinic->name ?? 'DocFácil';
+
+                        $clinic = $record->clinic;
+                        $clinicName = $clinic->name ?? 'DocFácil';
                         $firstName = $record->patient->first_name ?? 'hola';
-                        $amount = number_format((float) $record->amount, 2);
-                        $servicePart = $record->service?->name
-                            ? " por *{$record->service->name}*"
-                            : '';
-                        $context = $record->status === 'partial'
-                            ? "Te aviso que de tu tratamiento{$servicePart} aún queda pendiente *\${$amount} MXN*."
-                            : "Te aviso que tienes un cobro pendiente de *\${$amount} MXN*{$servicePart}.";
-                        $msg = urlencode("Hola {$firstName}, te escribo de *{$clinicName}*. {$context}\n\nCuando te acomode avísame y lo ajustamos. Si ya lo pagaste, dímelo y lo marco como saldado. ¡Gracias!\n\n_Enviado desde DocFácil_");
+                        $servicePart = $record->service?->name ? " por *{$record->service->name}*" : '';
+
+                        // Status: partial (con abonos) vs pending (sin abonos)
+                        $remaining = number_format((float) $record->remaining, 2);
+                        if ($record->status === 'partial') {
+                            $total = number_format((float) $record->amount, 2);
+                            $paid = number_format((float) $record->amount_paid, 2);
+                            $context = "Le recuerdo que de su tratamiento{$servicePart}:\n"
+                                . "  • Total: *\${$total} MXN*\n"
+                                . "  • Abonado: \${$paid} MXN\n"
+                                . "  • *Pendiente: \${$remaining} MXN*";
+                        } else {
+                            $context = "Le recuerdo que tiene un cobro pendiente de *\${$remaining} MXN*{$servicePart}.";
+                        }
+
+                        // Fecha limite (si existe)
+                        $dueDatePart = '';
+                        if ($record->due_date) {
+                            $dueDate = $record->due_date->translatedFormat('d \d\e F');
+                            $dueDatePart = $record->is_overdue
+                                ? "\n\n⚠ La fecha de pago era el {$dueDate}."
+                                : "\n\nFecha de pago: {$dueDate}.";
+                        }
+
+                        // Como pagar (3 opciones)
+                        $clinicPhone = $clinic->phone ? "\n  • Llamar al consultorio: {$clinic->phone}" : '';
+                        $clinicAddress = $clinic->address ? "\n  • Pasar al consultorio: {$clinic->address}" : '';
+                        $howToPay = "\n\nCuando le acomode:{$clinicPhone}{$clinicAddress}\n  • O respondame por aqui y le paso los datos de transferencia";
+
+                        $msg = urlencode(
+                            "Hola {$firstName}, le escribo de *{$clinicName}*.\n\n"
+                            . $context
+                            . $dueDatePart
+                            . $howToPay
+                            . "\n\nSi ya lo pagó, avíseme y lo marco como saldado. ¡Gracias!"
+                        );
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab()
@@ -291,6 +335,12 @@ class PaymentResource extends Resource
                                 ->send();
                         }
                     }),
+                Tables\Actions\EditAction::make()->label('Editar'),
+                ])
+                    ->label('Acciones')
+                    ->icon('heroicon-o-ellipsis-vertical')
+                    ->color('gray')
+                    ->button(),
             ])
             ->defaultSort('payment_date', 'desc');
     }
