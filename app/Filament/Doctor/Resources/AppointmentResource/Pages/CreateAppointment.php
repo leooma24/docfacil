@@ -26,27 +26,20 @@ class CreateAppointment extends CreateRecord
      * profile de un paciente con click en "Agendar"), doctor_id default al
      * doctor logueado para no tener que seleccionar uno mismo cada vez.
      *
-     * Llamamos parent::mount() PRIMERO (ahí se aplican defaults declarados
-     * como status='scheduled'). Luego mergeamos nuestros pre-fills SIN
-     * sobreescribir lo que ya está.
+     * Set directo a $this->data en lugar de form->fill/getState — eso ultimo
+     * dispara validación temprana que genera errores antes de que el usuario
+     * toque el form. Set al property de Livewire es lo más limpio.
      */
     public function mount(): void
     {
         parent::mount();
 
-        $overrides = [];
-
         if ($patientId = request()->query('patient')) {
-            $overrides['patient_id'] = (int) $patientId;
+            $this->data['patient_id'] = (int) $patientId;
         }
 
         if ($doctorId = auth()->user()?->doctor?->id) {
-            $overrides['doctor_id'] = $doctorId;
-        }
-
-        if (!empty($overrides)) {
-            $current = $this->form->getState();
-            $this->form->fill(array_merge($current, $overrides));
+            $this->data['doctor_id'] = $doctorId;
         }
     }
 
