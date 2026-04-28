@@ -28,7 +28,13 @@ class ProspectBetaInviteMail extends Mailable
             ? "consultorio en {$city}"
             : 'su agenda';
 
-        return new Envelope(subject: $subject);
+        return new Envelope(
+            subject: $subject,
+            // Reply-To al inbox real de Omar (Gmail). El From puede ser
+            // fundador@docfacil.tu-app.co (Resend) pero las respuestas
+            // llegan al inbox que si tiene buzón.
+            replyTo: ['leooma24@gmail.com' => 'Omar Lerma'],
+        );
     }
 
     /**

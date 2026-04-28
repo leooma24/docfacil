@@ -26,7 +26,10 @@ class ProspectFollowupMail extends Mailable
             ? '$8,000 al mes'
             : 'haga la cuenta';
 
-        return new Envelope(subject: $subject);
+        return new Envelope(
+            subject: $subject,
+            replyTo: ['leooma24@gmail.com' => 'Omar Lerma'],
+        );
     }
 
     public function headers(): Headers

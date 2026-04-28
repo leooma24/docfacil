@@ -25,7 +25,10 @@ class ProspectLastChanceMail extends Mailable
             ? 'cierro este hilo'
             : 'última nota';
 
-        return new Envelope(subject: $subject);
+        return new Envelope(
+            subject: $subject,
+            replyTo: ['leooma24@gmail.com' => 'Omar Lerma'],
+        );
     }
 
     public function headers(): Headers
