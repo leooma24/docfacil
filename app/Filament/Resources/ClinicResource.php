@@ -218,6 +218,18 @@ class ClinicResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')->label('Activo')->boolean(),
             ])
             ->filters([
+                // Por default escondemos las clinicas demo (las crea el cron
+                // app:demo-reset diario para poblar el panel de ventas con
+                // comisiones de ejemplo — confunden al admin porque se ven
+                // vacias). Se pueden traer de vuelta destildando este filtro.
+                Tables\Filters\Filter::make('hide_demo')
+                    ->label('Ocultar clínicas demo')
+                    ->default(true)
+                    ->toggle()
+                    ->query(fn ($q) => $q->where(function ($q2) {
+                        $q2->where('slug', 'not like', 'demo-sales-%')
+                            ->orWhereNull('slug');
+                    })),
                 Tables\Filters\TernaryFilter::make('is_beta')->label('Beta testers'),
                 Tables\Filters\TernaryFilter::make('is_founder')->label('Fundadores'),
                 Tables\Filters\SelectFilter::make('onboarding_status')
