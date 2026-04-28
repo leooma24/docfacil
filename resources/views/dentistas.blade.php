@@ -189,12 +189,32 @@
         </div>
     </nav>
 
-    {{-- Hero con background animado --}}
+    {{-- Hero con background animado + foto editorial (solo desktop) --}}
     <section class="relative pt-24 pb-10 sm:pt-32 sm:pb-24 px-4 overflow-hidden">
-        {{-- Animated blobs --}}
-        <div class="absolute top-20 -left-40 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl animate-blob"></div>
-        <div class="absolute top-40 -right-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-blob" style="animation-delay:3s"></div>
-        <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl animate-blob" style="animation-delay:6s"></div>
+        {{-- Foto de ambiente: solo lg+ por performance.
+             Las personas estan en el tercio derecho, el screenshot del dashboard
+             las cubre parcialmente — refuerza visual de "esto es lo que estan
+             viendo en la tablet". --}}
+        <div class="hidden lg:block absolute inset-0 z-0">
+            <img src="{{ asset('images/hero-bg.png') }}"
+                alt=""
+                aria-hidden="true"
+                fetchpriority="high"
+                class="absolute inset-0 w-full h-full object-cover"
+                style="object-position: center;">
+            {{-- Overlay degradado: blanco solido a la izquierda (donde va el texto)
+                 → transparente al centro/derecha (deja ver la foto). --}}
+            <div class="absolute inset-0"
+                style="background: linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.92) 35%, rgba(255,255,255,0.55) 60%, rgba(255,255,255,0.25) 100%);"></div>
+            {{-- Tinte teal sutil para mantener brand --}}
+            <div class="absolute inset-0"
+                style="background: linear-gradient(135deg, rgba(204,251,241,0.25) 0%, transparent 50%, rgba(207,250,254,0.20) 100%);"></div>
+        </div>
+
+        {{-- Animated blobs (mobile primario, desktop sutil sobre la foto) --}}
+        <div class="absolute top-20 -left-40 w-96 h-96 bg-teal-200/30 rounded-full blur-3xl animate-blob lg:opacity-40"></div>
+        <div class="absolute top-40 -right-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-blob lg:opacity-40" style="animation-delay:3s"></div>
+        <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl animate-blob lg:opacity-40" style="animation-delay:6s"></div>
 
         <div class="max-w-5xl mx-auto text-center relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 text-xs sm:text-sm font-bold rounded-full mb-5 sm:mb-8 animate-fade-up border border-teal-200 shadow-sm">
