@@ -16,6 +16,7 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ToolsController;
+use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\UnsubscribeController;
 use App\Http\Controllers\TreatmentPlanController;
@@ -114,6 +115,13 @@ Route::get('/t/c/{token}', [TrackController::class, 'click'])
 Route::get('/baja/{token}', [UnsubscribeController::class, 'handle'])
     ->name('prospect.unsubscribe')
     ->middleware('throttle:30,1');
+
+// URL corta para reemplazar links firmados largos en WhatsApp.
+// Código de 6 chars resuelve a la URL real. ~30 chars vs ~250.
+Route::get('/c/{code}', [ShortUrlController::class, 'redirect'])
+    ->name('shortlink')
+    ->where('code', '[A-Za-z0-9]{6,12}')
+    ->middleware('throttle:120,1');
 Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::class, 'calculadoraRoiLead'])
     ->middleware('throttle:5,1')
     ->name('tools.calculadora_roi.lead');

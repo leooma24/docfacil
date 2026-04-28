@@ -32,6 +32,10 @@ class DemoSeeder extends Seeder
             'zip_code' => '03100',
             'plan' => 'profesional',
             'trial_ends_at' => now()->addDays(30),
+            // plan_ends_at lejano para que hasFeature() no bloquee odontograma,
+            // consentimientos, reportes avanzados etc. Sin esto, el demo se ve
+            // capado y no podemos mostrar las funciones que vendemos en Pro.
+            'plan_ends_at' => now()->addYears(10),
             'onboarding_status' => 'completed',
         ]);
 

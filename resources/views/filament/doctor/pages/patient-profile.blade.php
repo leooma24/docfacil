@@ -370,34 +370,147 @@
         </div>
         @endif
 
-        {{-- Odontogram tab --}}
+        {{-- Odontogram tab — vista visual de la arcada dental (read-only) --}}
         @if($activeTab === 'odontogram')
         <div class="p-4 md:p-6">
+            @php
+                // FDI tooth numbering: cuadrantes 1-4 superior, 5-8 inferior
+                // Sup. derecho: 18-11 (de molar a incisivo central)
+                // Sup. izquierdo: 21-28
+                // Inf. izquierdo: 38-31 (de molar a incisivo)
+                // Inf. derecho: 41-48
+                $upperRight = [18, 17, 16, 15, 14, 13, 12, 11];
+                $upperLeft  = [21, 22, 23, 24, 25, 26, 27, 28];
+                $lowerLeft  = [38, 37, 36, 35, 34, 33, 32, 31];
+                $lowerRight = [41, 42, 43, 44, 45, 46, 47, 48];
+                $colors = \App\Models\OdontogramTooth::conditionColors();
+                $labels = \App\Models\OdontogramTooth::conditionLabels();
+            @endphp
+
             @forelse($this->odontograms as $odonto)
-            <div class="mb-6">
-                <div class="flex items-center justify-between mb-3 md:mb-4">
+            @php
+                // Indexar dientes por número para lookup rápido
+                $byNum = $odonto->teeth->keyBy('tooth_number');
+            @endphp
+            <div class="mb-8">
+                {{-- Header: fecha + doctor + total + boton editar --}}
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
                     <div>
-                        <span class="font-bold text-xs md:text-base">{{ $odonto->evaluation_date->format('d/m/Y') }}</span>
-                        <span class="text-[10px] md:text-sm text-gray-500 ml-2">{{ $odonto->doctor->user->name ?? '' }}</span>
-                    </div>
-                    <span class="text-[10px] md:text-sm text-gray-500">{{ $odonto->teeth->count() }} dientes</span>
-                </div>
-                @if($odonto->teeth->count())
-                <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5 md:gap-2">
-                    @foreach($odonto->teeth as $tooth)
-                    <div class="text-center p-1.5 md:p-2 rounded-lg border text-[10px] md:text-xs" style="background-color: {{ \App\Models\OdontogramTooth::conditionColors()[$tooth->condition] ?? '#10b981' }}15; border-color: {{ \App\Models\OdontogramTooth::conditionColors()[$tooth->condition] ?? '#10b981' }}40;">
-                        <div class="font-bold">{{ $tooth->tooth_number }}</div>
-                        <div style="color: {{ \App\Models\OdontogramTooth::conditionColors()[$tooth->condition] ?? '#10b981' }}">
-                            {{ \App\Models\OdontogramTooth::conditionLabels()[$tooth->condition] ?? $tooth->condition }}
+                        <div class="font-bold text-sm md:text-base text-gray-900">{{ $odonto->evaluation_date->format('d/m/Y') }}</div>
+                        <div class="text-[11px] md:text-xs text-gray-500 mt-0.5">
+                            {{ $odonto->doctor->user->name ?? 'Sin doctor' }}
+                            <span class="mx-1.5 text-gray-300">·</span>
+                            {{ $odonto->teeth->count() }} dientes con condición
                         </div>
                     </div>
-                    @endforeach
+                    <a href="{{ route('filament.doctor.resources.odontogramas.edit', ['record' => $odonto->id]) }}"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-semibold rounded-lg border border-teal-200 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        Editar
+                    </a>
                 </div>
+
+                {{-- Arcada dental visual --}}
+                <div class="bg-gradient-to-b from-gray-50 to-white border border-gray-200 rounded-xl p-3 md:p-5">
+                    {{-- ARCADA SUPERIOR --}}
+                    <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mb-2">SUPERIOR</div>
+                    <div class="flex justify-center gap-0.5 md:gap-1 mb-1">
+                        {{-- Cuadrante superior derecho (paciente) — se muestra a la izquierda visual --}}
+                        @foreach($upperRight as $num)
+                        @php
+                            $tooth = $byNum->get($num);
+                            $cond = $tooth?->condition ?? 'sano';
+                            $color = $colors[$cond] ?? '#cbd5e1';
+                            $label = $labels[$cond] ?? null;
+                        @endphp
+                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
+                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110 cursor-help"
+                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
+                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
+                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
+                            </div>
+                        </div>
+                        @endforeach
+                        {{-- Línea media --}}
+                        <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
+                        @foreach($upperLeft as $num)
+                        @php
+                            $tooth = $byNum->get($num);
+                            $cond = $tooth?->condition ?? 'sano';
+                            $color = $colors[$cond] ?? '#cbd5e1';
+                            $label = $labels[$cond] ?? null;
+                        @endphp
+                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
+                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110 cursor-help"
+                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
+                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
+                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Separador entre arcadas --}}
+                    <div class="border-t-2 border-dashed border-gray-300 my-3 mx-4"></div>
+
+                    {{-- ARCADA INFERIOR --}}
+                    <div class="flex justify-center gap-0.5 md:gap-1 mt-1">
+                        @foreach($lowerLeft as $num)
+                        @php
+                            $tooth = $byNum->get($num);
+                            $cond = $tooth?->condition ?? 'sano';
+                            $color = $colors[$cond] ?? '#cbd5e1';
+                            $label = $labels[$cond] ?? null;
+                        @endphp
+                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
+                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110 cursor-help"
+                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
+                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
+                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
+                        @foreach($lowerRight as $num)
+                        @php
+                            $tooth = $byNum->get($num);
+                            $cond = $tooth?->condition ?? 'sano';
+                            $color = $colors[$cond] ?? '#cbd5e1';
+                            $label = $labels[$cond] ?? null;
+                        @endphp
+                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
+                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110 cursor-help"
+                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
+                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
+                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mt-2">INFERIOR</div>
+
+                    {{-- Leyenda solo de condiciones presentes en este odontograma --}}
+                    @php
+                        $presentConditions = $odonto->teeth->pluck('condition')->unique()->values();
+                    @endphp
+                    @if($presentConditions->count())
+                    <div class="flex flex-wrap justify-center gap-2 md:gap-3 mt-4 pt-3 border-t border-gray-100 text-[10px] md:text-xs">
+                        @foreach($presentConditions as $cond)
+                        <span class="inline-flex items-center gap-1.5 text-gray-600">
+                            <span class="w-2.5 h-2.5 rounded-sm" style="background-color: {{ $colors[$cond] ?? '#94a3b8' }}"></span>
+                            {{ $labels[$cond] ?? $cond }}
+                        </span>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+
+                @if($odonto->notes)
+                <p class="text-xs md:text-sm text-gray-600 mt-3 italic px-1">{{ $odonto->notes }}</p>
                 @endif
-                @if($odonto->notes)<p class="text-xs md:text-sm text-gray-500 mt-2 md:mt-3">{{ $odonto->notes }}</p>@endif
             </div>
             @empty
-            <div class="text-center text-gray-400 py-8 text-sm">Sin odontogramas</div>
+            <div class="text-center text-gray-400 py-8 text-sm">Sin odontogramas registrados.</div>
             @endforelse
         </div>
         @endif

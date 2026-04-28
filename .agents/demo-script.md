@@ -88,7 +88,7 @@
 
 ### Lo que muestras
 
-1. **Pacientes** (sidebar) → click en Roberto García (cualquier paciente con datos)
+1. **Pacientes** (sidebar) → click en Héctor Aguilar Fuentes (cualquier paciente con datos)
 2. **Vista del expediente:**
    - Datos personales arriba
    - Historial clínico (alergias, medicamentos)

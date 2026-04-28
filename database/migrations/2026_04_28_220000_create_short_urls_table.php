@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Tabla de URLs cortas. Convierte links firmados largos
+ * (~250 chars) en links de ~30 chars que se ven bien en WhatsApp.
+ *
+ * Uso: ShortUrl::make('https://...long...', $expiresAt) devuelve
+ * 'https://docfacil.tu-app.co/c/Ab3kP9'.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('short_urls', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 12)->unique();
+            $table->text('target_url');
+            $table->timestamp('expires_at')->nullable()->index();
+            $table->unsignedInteger('clicks')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('short_urls');
+    }
+};
