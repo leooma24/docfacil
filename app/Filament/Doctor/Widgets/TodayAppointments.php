@@ -14,7 +14,7 @@ class TodayAppointments extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Citas de hoy';
+    protected static ?string $heading = 'Citas de hoy y mañana';
 
     public function table(Table $table): Table
     {
@@ -22,11 +22,18 @@ class TodayAppointments extends BaseWidget
             ->query(
                 Appointment::query()
                     ->where('clinic_id', auth()->user()->clinic_id)
-                    ->whereDate('starts_at', today())
+                    // Hoy y mañana: el dentista usualmente confirma de noche
+                    // las del dia siguiente, o en la mañana las del mismo dia.
+                    ->whereBetween('starts_at', [today()->startOfDay(), today()->addDay()->endOfDay()])
                     ->with(['patient', 'doctor.user', 'service'])
                     ->orderBy('starts_at')
             )
             ->columns([
+                Tables\Columns\TextColumn::make('day_label')
+                    ->label('Día')
+                    ->state(fn ($record) => $record->starts_at->isToday() ? 'Hoy' : 'Mañana')
+                    ->badge()
+                    ->color(fn ($state) => $state === 'Hoy' ? 'primary' : 'gray'),
                 Tables\Columns\TextColumn::make('starts_at')
                     ->label('Hora')
                     ->dateTime('H:i')
@@ -85,8 +92,16 @@ class TodayAppointments extends BaseWidget
                         $clinicName = $record->clinic->name ?? 'DocFácil';
                         $time = $record->starts_at->format('H:i');
 
-                        // Links firmados 1-clic para confirmar/cancelar — validos
-                        // hasta 2hrs despues del inicio (mismo patron que cron).
+                        // "hoy" / "mañana" / "el viernes 12 de mayo" segun proximidad.
+                        if ($record->starts_at->isToday()) {
+                            $when = "hoy a las *{$time} hrs*";
+                        } elseif ($record->starts_at->isTomorrow()) {
+                            $when = "mañana a las *{$time} hrs*";
+                        } else {
+                            $dateStr = $record->starts_at->translatedFormat('l j \d\e F');
+                            $when = "el {$dateStr} a las *{$time} hrs*";
+                        }
+
                         $ttl = $record->starts_at->copy()->addHours(2);
                         $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
                             'appointment.confirm',
@@ -100,8 +115,7 @@ class TodayAppointments extends BaseWidget
                         );
 
                         $msg = urlencode(
-                            "Hola {$record->patient->first_name}, te recordamos tu cita hoy en *{$clinicName}*:\n\n" .
-                            "Hora: {$time} hrs\n\n" .
+                            "Hola {$record->patient->first_name}, te recordamos tu cita {$when} en *{$clinicName}*.\n\n" .
                             "Confirmar: {$confirmUrl}\n" .
                             "Cancelar: {$cancelUrl}\n\n" .
                             "¡Te esperamos!"

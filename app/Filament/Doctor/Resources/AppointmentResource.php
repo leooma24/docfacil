@@ -228,10 +228,18 @@ class AppointmentResource extends Resource
                         $phone = preg_replace('/\D/', '', $record->patient->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         $clinicName = $record->clinic->name ?? 'DocFácil';
-                        $date = $record->starts_at->translatedFormat('l d \d\e F');
                         $time = $record->starts_at->format('H:i');
 
-                        // Links firmados para confirmar/cancelar en 1 clic. TTL hasta 2h despues de la cita.
+                        // "hoy" / "mañana" / "el [día completo]" segun proximidad
+                        if ($record->starts_at->isToday()) {
+                            $when = "hoy a las *{$time} hrs*";
+                        } elseif ($record->starts_at->isTomorrow()) {
+                            $when = "mañana a las *{$time} hrs*";
+                        } else {
+                            $dateStr = $record->starts_at->translatedFormat('l j \d\e F');
+                            $when = "el {$dateStr} a las *{$time} hrs*";
+                        }
+
                         $ttl = $record->starts_at->copy()->addHours(2);
                         $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
                             'appointment.confirm',
@@ -245,10 +253,7 @@ class AppointmentResource extends Resource
                         );
 
                         $msg = urlencode(
-                            "Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n" .
-                            "Fecha: {$date}\n" .
-                            "Hora: {$time} hrs\n" .
-                            "Con: {$record->doctor->user->name}\n\n" .
+                            "Hola {$record->patient->first_name}, te recordamos tu cita {$when} en *{$clinicName}* con {$record->doctor->user->name}.\n\n" .
                             "Confirmar: {$confirmUrl}\n" .
                             "Cancelar: {$cancelUrl}\n\n" .
                             "¡Te esperamos!"
