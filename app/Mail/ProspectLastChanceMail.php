@@ -37,6 +37,7 @@ class ProspectLastChanceMail extends Mailable
         return new Headers(text: [
             'List-Unsubscribe' => "<{$url}>",
             'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
+            'X-DocFacil-Skip-Bcc' => '1',
         ]);
     }
 

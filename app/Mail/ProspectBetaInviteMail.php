@@ -44,6 +44,7 @@ class ProspectBetaInviteMail extends Mailable
             text: [
                 'List-Unsubscribe' => "<{$url}>",
                 'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
+                'X-DocFacil-Skip-Bcc' => '1',
             ],
         );
     }
