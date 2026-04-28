@@ -55,6 +55,9 @@ class DemoSalesSeeder extends Seeder
             'role' => 'sales',
             'is_active_sales_rep' => true,
             'commission_rate_percent' => 50,
+            // Demo verificado para no perder tiempo en cada demo
+            'email_verified_at' => now(),
+            'terms_accepted_at' => now(),
         ])->save();
 
         // =============================================

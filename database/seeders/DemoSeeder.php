@@ -44,6 +44,10 @@ class DemoSeeder extends Seeder
             'password' => bcrypt('demo2026'),
             'role' => 'doctor',
             'clinic_id' => $clinic->id,
+            // Demo siempre con email verificado (no quemar 1 min cada demo
+            // pidiendo verificacion). Se regenera 4 AM diario.
+            'email_verified_at' => now(),
+            'terms_accepted_at' => now(),
         ]);
 
         $doctor = Doctor::create([
@@ -69,6 +73,8 @@ class DemoSeeder extends Seeder
             'password' => bcrypt('demo2026'),
             'role' => 'doctor',
             'clinic_id' => $clinic->id,
+            'email_verified_at' => now(),
+            'terms_accepted_at' => now(),
         ]);
 
         $doctor2 = Doctor::create([
