@@ -52,11 +52,14 @@ class SendProspectEmails extends Command
     {
         if ($this->sent >= self::MAX_PER_RUN) return;
 
+        // Pipeline operativo: solo procesamos prospects con email valido. Los
+        // que solo tienen phone se quedan inactivos hasta que (a) consigamos
+        // su email, o (b) la WhatsApp Business API este aprobada en produccion
+        // (hoy esta en modo test y rechaza envios a numeros no pre-aprobados).
         $query = Prospect::where('status', $currentStatus)
             ->where('source', 'prospecting')
-            ->where(function ($q) {
-                $q->whereNotNull('email')->orWhereNotNull('phone');
-            });
+            ->whereNotNull('email')
+            ->where('email', '!=', '');
 
         // For follow-ups, wait DAYS_BETWEEN_MESSAGES after previous message
         if ($previousType) {
@@ -72,15 +75,9 @@ class SendProspectEmails extends Command
 
         foreach ($prospects as $prospect) {
             if ($this->sent >= self::MAX_PER_RUN) return;
-
             if ($this->alreadySent($prospect, $messageType)) continue;
 
-            // Try email first, fallback to WhatsApp
-            if ($prospect->email) {
-                $this->sendEmail($prospect, new $mailableClass($prospect), $messageType, $nextStatus);
-            } elseif ($prospect->phone) {
-                $this->sendWhatsApp($prospect, $messageType, $nextStatus);
-            }
+            $this->sendEmail($prospect, new $mailableClass($prospect), $messageType, $nextStatus);
         }
     }
 
