@@ -69,12 +69,20 @@ class AppointmentResource extends Resource
                             ->relationship('service', 'name')
                             ->preload()
                             ->reactive()
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                if ($state) {
-                                    $service = Service::find($state);
-                                    if ($service) {
-                                        $set('duration_hint', "{$service->duration_minutes} min - \${$service->price}");
-                                    }
+                            ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
+                                if (!$state) return;
+                                $service = Service::find($state);
+                                if (!$service) return;
+
+                                $set('duration_hint', "{$service->duration_minutes} min - \${$service->price}");
+
+                                // Auto-calcular ends_at si ya hay starts_at.
+                                // Si no hay starts_at todavia, no hacemos nada — se calculara
+                                // cuando se llene starts_at (logica simétrica abajo).
+                                $start = $get('starts_at');
+                                if ($start) {
+                                    $end = \Carbon\Carbon::parse($start)->addMinutes((int) $service->duration_minutes);
+                                    $set('ends_at', $end->format('Y-m-d H:i:s'));
                                 }
                             }),
                         Forms\Components\Placeholder::make('duration_hint')
@@ -88,13 +96,31 @@ class AppointmentResource extends Resource
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')
-                            ->minutesStep(15),
+                            ->minutesStep(15)
+                            ->reactive()
+                            ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
+                                // Cuando cambian el inicio, recalcular el fin segun la duracion
+                                // del servicio (si hay servicio seleccionado). Si no hay servicio
+                                // poner +30 min como default razonable.
+                                if (!$state) return;
+                                $serviceId = $get('service_id');
+                                $minutes = 30; // default si no hay servicio
+                                if ($serviceId) {
+                                    $service = Service::find($serviceId);
+                                    if ($service) {
+                                        $minutes = (int) $service->duration_minutes;
+                                    }
+                                }
+                                $end = \Carbon\Carbon::parse($state)->addMinutes($minutes);
+                                $set('ends_at', $end->format('Y-m-d H:i:s'));
+                            }),
                         Forms\Components\DateTimePicker::make('ends_at')
                             ->label('Fin')
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')
-                            ->minutesStep(15),
+                            ->minutesStep(15)
+                            ->helperText('Se calcula automáticamente al elegir servicio + inicio. Puedes ajustarlo.'),
                         Forms\Components\Select::make('status')
                             ->label('Estado')
                             ->options([
