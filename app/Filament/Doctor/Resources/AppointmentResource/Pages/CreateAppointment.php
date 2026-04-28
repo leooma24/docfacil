@@ -26,22 +26,28 @@ class CreateAppointment extends CreateRecord
      * profile de un paciente con click en "Agendar"), doctor_id default al
      * doctor logueado para no tener que seleccionar uno mismo cada vez.
      *
-     * Usamos mutateFormDataBeforeFill() en lugar de fillForm() para que los
-     * defaults declarados en los fields del form (status='scheduled', etc.)
-     * sigan aplicando. Si sobreescribiamos fillForm() con form->fill($only),
-     * los defaults declarados se borraban.
+     * Llamamos parent::mount() PRIMERO (ahí se aplican defaults declarados
+     * como status='scheduled'). Luego mergeamos nuestros pre-fills SIN
+     * sobreescribir lo que ya está.
      */
-    protected function mutateFormDataBeforeFill(array $data): array
+    public function mount(): void
     {
+        parent::mount();
+
+        $overrides = [];
+
         if ($patientId = request()->query('patient')) {
-            $data['patient_id'] = (int) $patientId;
+            $overrides['patient_id'] = (int) $patientId;
         }
 
         if ($doctorId = auth()->user()?->doctor?->id) {
-            $data['doctor_id'] = $doctorId;
+            $overrides['doctor_id'] = $doctorId;
         }
 
-        return $data;
+        if (!empty($overrides)) {
+            $current = $this->form->getState();
+            $this->form->fill(array_merge($current, $overrides));
+        }
     }
 
     protected function getFormHeroConfig(): array
