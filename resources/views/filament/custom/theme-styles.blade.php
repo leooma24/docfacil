@@ -649,9 +649,18 @@
         background: transparent !important;
     }
 
-    /* Fix: ActionGroup dropdown z-index */
-    .fi-dropdown-panel {
-        z-index: 999 !important;
+    /* Fix: ActionGroup dropdown z-index — los dropdowns deben estar arriba
+       de cualquier celda sticky (z-index 3-6) y arriba de filas siguientes.
+       Subimos a 9999 para garantizar que no quede debajo de nada en tablas. */
+    .fi-dropdown,
+    .fi-dropdown-panel,
+    .fi-dropdown-list {
+        z-index: 9999 !important;
+    }
+    /* Modales por encima de todo (incluyendo dropdowns) */
+    .fi-modal,
+    .fi-modal-window {
+        z-index: 99999 !important;
     }
 
     /* ====== STICKY COLUMNS EN TABLAS ANCHAS ======
