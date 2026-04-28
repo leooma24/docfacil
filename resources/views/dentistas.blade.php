@@ -201,43 +201,72 @@
                 Software para consultorio dental · Hecho en México
             </div>
 
-            <h1 class="text-[34px] sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] animate-fade-up delay-100">
-                Deja de perder<br>
-                <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-700 bg-clip-text text-transparent animate-gradient">
-                    $15,000 al mes
-                </span><br>
-                <span class="text-gray-900">en pacientes que no llegan.</span>
-            </h1>
+            <div class="grid lg:grid-cols-5 gap-8 items-center text-left">
+                <div class="lg:col-span-3 text-center lg:text-left">
+                    <h1 class="text-[34px] sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] animate-fade-up delay-100">
+                        Recupera<br>
+                        <span class="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-700 bg-clip-text text-transparent animate-gradient">
+                            $8,000 al mes
+                        </span><br>
+                        <span class="text-gray-900">en pacientes que no llegan.</span>
+                    </h1>
 
-            <p class="mt-5 sm:mt-8 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up delay-200">
-                Cada cita perdida son <strong class="text-gray-900">$600 a $1,500 que se van</strong>. DocFácil te deja mandar recordatorios por WhatsApp a 1 clic, guarda el <strong class="text-gray-900">odontograma digital FDI</strong>, genera recetas PDF con cédula y te lleva los cobros — <strong class="text-gray-900">desde un solo lugar</strong>. 15 días gratis, sin tarjeta.
-            </p>
+                    <p class="mt-5 sm:mt-7 text-base sm:text-xl text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed animate-fade-up delay-200">
+                        Recordatorios WhatsApp <strong class="text-gray-900">a 1 clic</strong>, expediente digital y recetas PDF con cédula. <strong class="text-gray-900">Hecho en México</strong>, para dentistas. 15 días gratis, sin tarjeta.
+                    </p>
 
-            <div class="mt-7 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up delay-300">
-                <a href="{{ url('/doctor/register') }}" class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
-                    Empieza gratis hoy
-                    <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </a>
-                <a href="{{ route('demo') }}"
-                    class="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Ver demo en vivo
-                </a>
-            </div>
+                    <div class="mt-7 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 animate-fade-up delay-300">
+                        <a href="{{ url('/doctor/register') }}" class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
+                            Probar 15 días gratis
+                            <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+                        </a>
+                        <a href="{{ route('demo') }}"
+                            class="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Ver demo en vivo
+                        </a>
+                    </div>
 
-            <div class="mt-6 flex items-center justify-center gap-6 text-sm text-gray-500 animate-fade-up delay-400">
-                <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                    Sin tarjeta de credito
-                </span>
-                <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                    15 dias gratis
-                </span>
-                <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                    Listo en 2 min
-                </span>
+                    {{-- Founder badge: scarcity real, sin inventar testimoniales --}}
+                    <div class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-xs font-semibold text-amber-800 animate-fade-up delay-400">
+                        <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                        Programa fundadores · onboarding 1:1 con Omar para los primeros 50
+                    </div>
+
+                    <div class="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-sm text-gray-500 animate-fade-up delay-400">
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Sin tarjeta
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Garantía 30 días
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Cancelas en 1 clic
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Hero visual: screenshot del dashboard. Da contexto de "qué es" en cold traffic. --}}
+                <div class="lg:col-span-2 animate-fade-up delay-300 hidden lg:block">
+                    <div class="relative">
+                        <div class="absolute -inset-3 bg-gradient-to-r from-teal-400/30 to-cyan-400/30 rounded-3xl blur-2xl"></div>
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-white">
+                            <div class="flex items-center gap-1.5 px-3 py-2 bg-gray-50 border-b border-gray-100">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                            </div>
+                            <img src="{{ asset('images/screenshots/01-dashboard.png') }}"
+                                alt="Dashboard de DocFácil mostrando agenda del día, ingresos y alertas"
+                                loading="eager"
+                                decoding="async"
+                                class="w-full h-auto block">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -272,6 +301,54 @@
                 </div>
                 <div class="text-sm font-bold text-white">Soporte por WhatsApp</div>
                 <div class="text-xs text-gray-400 mt-1">Directo con el fundador</div>
+            </div>
+        </div>
+    </section>
+
+    {{-- Programa fundadores: prueba social honesta para early-stage. No
+         inventamos testimoniales — convertimos la falta de reseñas en
+         virtud (acceso directo, precio bloqueado, voz en roadmap). --}}
+    <section class="py-12 sm:py-16 bg-gradient-to-b from-amber-50/40 to-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="rounded-2xl border-2 border-amber-200 bg-white p-6 sm:p-10 shadow-sm" data-animate>
+                <div class="flex flex-col sm:flex-row items-start gap-5">
+                    <div class="flex-shrink-0">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.539 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-xs font-bold tracking-wider text-amber-700 uppercase mb-2">
+                            Estamos apenas empezando
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 leading-tight">
+                            Programa fundadores · primeros 50 dentistas
+                        </h2>
+                        <p class="mt-3 text-gray-600 leading-relaxed">
+                            DocFácil arrancó en abril 2026. No tengo cientos de reseñas todavía —
+                            tengo el WhatsApp directo conmigo y un compromiso con los primeros 50.
+                            Si entras hoy, eres uno de ellos:
+                        </p>
+                        <ul class="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-gray-700">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                <span><strong>Onboarding 1 a 1 conmigo</strong> — no tutoriales fríos</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                <span><strong>Mi WhatsApp directo</strong> para soporte (668 249 3398)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                <span><strong>Precio fundador bloqueado</strong> de por vida — nunca te suben</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                <span><strong>Voz directa en el roadmap</strong> — lo que pidas, lo construyo</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -591,6 +668,8 @@
             <div x-data="{ open: 0 }" class="space-y-3">
                 @php
                 $landingFaqs = [
+                    ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes). Básico $499/mes, Pro $999/mes, Clínica $1,999/mes. Paga anual y te ahorras 2 meses. Con garantía de 30 días: si no te sirve, te devolvemos tu dinero.'],
+                    ['q' => '¿Emiten factura CFDI? (importante)', 'a' => 'Aún no integramos CFDI directo — está en roadmap Q3 2026. Mientras tanto: tú facturas como hoy desde tu sistema fiscal (Contpaq, SAT, tu contador) usando los datos que DocFácil te muestra de cada cobro. Si esto es bloqueante para tu consultorio, dímelo por WhatsApp y vemos cómo acomodarlo.'],
                     ['q' => '¿El odontograma es interactivo o solo texto?', 'a' => 'Es un editor visual FDI: haces clic en el diente, eliges la condición (caries, corona, extracción, endodoncia, implante, sellante, carilla, fractura y 6 más) y se guarda automático. Funciona en tablet, laptop y celular. Soporta los 32 dientes adultos con notación FDI internacional. Puedes compartirlo con el paciente por WhatsApp.'],
                     ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para dentistas, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. El diseño es deliberadamente simple — sin menús infinitos ni configuración compleja.'],
                     ['q' => '¿Puedo migrar mis pacientes de Excel o papel?', 'a' => 'Sí, y lo hacemos por ti. Me mandas tu Excel o CSV por WhatsApp y yo lo subo a tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas. Si están en libreta, te ayudo a armar la lista inicial con los datos clave.'],
@@ -599,9 +678,7 @@
                     ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Conexión cifrada end-to-end, backups diarios automáticos, auditoría de accesos por usuario y aislamiento total entre clínicas (tus datos nunca se mezclan con los de otro consultorio). Estructura alineada a LFPDPPP y NOM-004-SSA3.'],
                     ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil se instala como app en iPhone o Android (PWA, sin pasar por App Store). Si pierdes conexión un momento, DocFácil te avisa y recupera tu sesión cuando vuelve la señal — no pierdes lo que estabas escribiendo.'],
                     ['q' => '¿Puedo usarlo con mi recepcionista/asistente?', 'a' => 'Sí, cada plan incluye al menos 1 cuenta de recepcionista sin costo adicional. Cada quien ve solo lo que necesita — tu asistente agenda y tú ves el expediente clínico.'],
-                    ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes). Básico $499/mes, Pro $999/mes, Clínica $1,999/mes. Paga anual y te ahorras 2 meses. Con garantía de 30 días: si no te sirve, te devolvemos tu dinero.'],
                     ['q' => '¿Hay capacitación?', 'a' => 'Sí. El plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos cortos tutoriales y soporte directo por WhatsApp con el equipo (incluido el fundador).'],
-                    ['q' => '¿Emiten factura CFDI?', 'a' => 'Todavía no. Está en nuestro roadmap para Q3 2026. Por ahora puedes facturar manualmente desde tu sistema actual usando los datos que DocFácil te muestra.'],
                 ];
                 @endphp
                 @foreach ($landingFaqs as $i => $faq)
@@ -904,7 +981,7 @@
         <div class="max-w-5xl mx-auto px-4" data-animate>
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">"Me ha funcionado así toda la vida"</h2>
-                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Lo entendemos. Pero esto es lo que te cuesta cada mes seguir haciendo las cosas como siempre:</p>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Lo entendemos. Mira las dos columnas: a la izquierda lo que pierde un consultorio típico cada mes; a la derecha lo que recupera con DocFácil.</p>
             </div>
 
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
@@ -912,7 +989,8 @@
                     <thead>
                         <tr class="border-b-2 border-gray-200">
                             <th class="py-3 px-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Concepto</th>
-                            <th class="py-3 px-2 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Pérdida mensual</th>
+                            <th class="py-3 px-2 text-right text-xs font-bold text-red-600 uppercase tracking-wider">Hoy pierdes</th>
+                            <th class="py-3 px-2 text-right text-xs font-bold text-teal-700 uppercase tracking-wider">Con DocFácil recuperas</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -922,6 +1000,7 @@
                                 <div class="text-xs text-gray-500">~12 citas no confirmadas × $600 promedio</div>
                             </td>
                             <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$7,200</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-teal-700 text-lg">+$5,400</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
@@ -929,6 +1008,7 @@
                                 <div class="text-xs text-gray-500">~8 hrs/semana × 4 semanas × costo de oportunidad</div>
                             </td>
                             <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$5,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-teal-700 text-lg">+$3,500</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
@@ -936,6 +1016,7 @@
                                 <div class="text-xs text-gray-500">Pacientes que quedaron "te pago luego" y nunca regresaste</div>
                             </td>
                             <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$2,000</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-teal-700 text-lg">+$1,500</td>
                         </tr>
                         <tr>
                             <td class="py-4 px-2">
@@ -943,19 +1024,22 @@
                                 <div class="text-xs text-gray-500">Recetas a mano, agenda desorganizada = menos retención</div>
                             </td>
                             <td class="py-4 px-2 text-right font-extrabold text-red-600 text-lg">~$1,500</td>
+                            <td class="py-4 px-2 text-right font-extrabold text-teal-700 text-lg">+$1,000</td>
                         </tr>
-                        <tr class="border-t-2 border-gray-300 bg-red-50">
+                        <tr class="border-t-2 border-gray-300 bg-gradient-to-r from-red-50 to-teal-50">
                             <td class="py-5 px-2">
-                                <div class="font-extrabold text-gray-900 text-base">Total aproximado perdido al mes</div>
-                                <div class="text-xs text-gray-600 mt-0.5">Rango típico: $10k–$20k según volumen y tickets</div>
+                                <div class="font-extrabold text-gray-900 text-base">Diferencia mensual</div>
+                                <div class="text-xs text-gray-600 mt-0.5">Rango típico de recuperación: $8k–$12k según consultorio</div>
                             </td>
                             <td class="py-5 px-2 text-right font-extrabold text-red-700 text-2xl">~$15,700</td>
+                            <td class="py-5 px-2 text-right font-extrabold text-teal-700 text-2xl">+$11,400</td>
                         </tr>
                         <tr class="bg-teal-50">
                             <td class="py-5 px-2">
-                                <div class="font-extrabold text-teal-900 text-base">Lo que pagas por DocFácil Pro</div>
-                                <div class="text-xs text-teal-700 mt-0.5">Menos del 4% de lo que pierdes hoy</div>
+                                <div class="font-extrabold text-teal-900 text-base">DocFácil Pro cuesta</div>
+                                <div class="text-xs text-teal-700 mt-0.5">Menos del 9% de lo que recuperas</div>
                             </td>
+                            <td class="py-5 px-2 text-right text-gray-400 text-sm">—</td>
                             <td class="py-5 px-2 text-right font-extrabold text-teal-700 text-2xl">$999</td>
                         </tr>
                     </tbody>
@@ -1029,68 +1113,77 @@
                         <p class="text-teal-700">Gracias por tu interes. Te contactaremos pronto.</p>
                     </div>
                     @else
-                    <form action="{{ route('contact.store') }}" method="POST" class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 space-y-5">
+                    {{-- Form simplificado: solo 3 campos visibles + detalles colapsables.
+                         Pre-fill via query params (los manda TrackController al
+                         hacer click en correos del pipeline). --}}
+                    <form x-data="{ showMore: false }" action="{{ route('contact.store') }}" method="POST" class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 space-y-5">
                         @csrf
                         {{-- Honeypot anti-bot --}}
                         <div style="position:absolute;left:-9999px" aria-hidden="true">
                             <input type="text" name="website_url" tabindex="-1" autocomplete="off">
                         </div>
                         <input type="hidden" name="form_rendered_at" value="{{ time() }}">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre *</label>
-                                <input type="text" name="name" required value="{{ old('name') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                    placeholder="Dr. Juan Perez">
-                                @error('name') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email *</label>
-                                <input type="email" name="email" required value="{{ old('email') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                    placeholder="doctor@email.com">
-                                @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
-                            </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre *</label>
+                            <input type="text" name="name" required value="{{ old('name', request()->query('name')) }}"
+                                class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                placeholder="Dr. Juan Pérez">
+                            @error('name') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Telefono / WhatsApp</label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                    placeholder="668 123 4567">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Ciudad</label>
-                                <input type="text" name="city" value="{{ old('city') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                    placeholder="Ej: CDMX, Guadalajara">
-                            </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email *</label>
+                            <input type="email" name="email" required value="{{ old('email', request()->query('email')) }}"
+                                class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                placeholder="doctor@email.com">
+                            @error('email') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Teléfono / WhatsApp</label>
+                            <input type="tel" name="phone" value="{{ old('phone', request()->query('phone')) }}"
+                                class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                placeholder="668 123 4567">
+                        </div>
+
+                        <div x-show="!showMore" class="text-center">
+                            <button type="button" @click="showMore = true" class="text-sm text-teal-600 hover:text-teal-700 font-semibold underline">
+                                + Más detalles del consultorio (opcional)
+                            </button>
+                        </div>
+
+                        <div x-show="showMore" x-cloak x-transition class="space-y-5 pt-2 border-t border-gray-100">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Ciudad</label>
+                                    <input type="text" name="city" value="{{ old('city', request()->query('city')) }}"
+                                        class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-2.5"
+                                        placeholder="Ej: CDMX">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">Especialidad</label>
+                                    <input type="text" name="specialty" value="{{ old('specialty', request()->query('specialty')) }}"
+                                        class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-2.5"
+                                        placeholder="Odontología">
+                                </div>
+                            </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre del consultorio</label>
-                                <input type="text" name="clinic_name" value="{{ old('clinic_name') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nombre del consultorio</label>
+                                <input type="text" name="clinic_name" value="{{ old('clinic_name', request()->query('clinic_name')) }}"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-2.5"
                                     placeholder="Consultorio Dental Sonrisas">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Especialidad</label>
-                                <input type="text" name="specialty" value="{{ old('specialty') }}"
-                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                    placeholder="Odontologia, Medicina General...">
+                                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Mensaje</label>
+                                <textarea name="message" rows="3"
+                                    class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-2.5"
+                                    placeholder="Cuéntanos qué necesitas o pregúntanos lo que quieras...">{{ old('message') }}</textarea>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Mensaje (opcional)</label>
-                            <textarea name="message" rows="3"
-                                class="w-full rounded-xl border-gray-200 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm py-3"
-                                placeholder="Cuentanos que necesitas o preguntanos lo que quieras...">{{ old('message') }}</textarea>
-                        </div>
+
                         <button type="submit"
                             class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition-all hover:-translate-y-0.5 text-base">
-                            Enviar mensaje
+                            Hablar con Omar
                         </button>
-                        <p class="text-xs text-gray-400 text-center">Te contactaremos en menos de 24 horas. Sin spam.</p>
+                        <p class="text-xs text-gray-400 text-center">Te contactamos en menos de 24 horas. Sin spam.</p>
                     </form>
                     @endif
                 </div>
@@ -1343,19 +1436,19 @@ function socialProofToast() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
         <div style="text-align:center;">
-            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
-                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v3m0 3h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#ccfbf1,#5eead4);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             </div>
-            <div style="font-size:13px;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Espera un momento</div>
-            <h3 style="font-size:24px;font-weight:800;color:#111827;line-height:1.25;margin-bottom:12px;">¿Te vas sin tu descuento?</h3>
-            <p style="font-size:15px;color:#4b5563;line-height:1.5;margin-bottom:22px;">Crea tu cuenta hoy y recibe <strong style="color:#0f766e;">20% off tu primer mes</strong> de cualquier plan pagado. Solo por hoy.</p>
-            <a href="{{ url('/doctor/register?promo=VUELVE20') }}" onclick="trackExitConvert()"
+            <div style="font-size:13px;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Antes de irte</div>
+            <h3 style="font-size:24px;font-weight:800;color:#111827;line-height:1.25;margin-bottom:12px;">20 minutos conmigo, sin venta</h3>
+            <p style="font-size:15px;color:#4b5563;line-height:1.5;margin-bottom:22px;">Si tienes dudas reales, te muestro DocFácil con <strong style="color:#0f766e;">tus números</strong> (no genérico). Soy <strong>Omar, el fundador</strong>. Sin equipo de ventas, sin presión.</p>
+            <a href="https://wa.me/526682493398?text={{ urlencode('Hola Omar, me interesa una demo personal de 20 min de DocFácil') }}" onclick="trackExitConvert()" target="_blank" rel="noopener"
                 style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px;box-shadow:0 10px 25px -5px rgba(13,148,136,0.4);margin-bottom:10px;">
-                Sí, quiero mi 20% off →
+                Agendar 20 min con Omar →
             </a>
             <button type="button" onclick="closeExitModal()"
                 style="background:none;border:0;color:#9ca3af;font-size:13px;cursor:pointer;padding:8px;">
-                No gracias, prefiero pagar el precio completo
+                No gracias, prefiero seguir explorando solo
             </button>
         </div>
     </div>
