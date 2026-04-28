@@ -249,11 +249,11 @@ class TreatmentPlanResource extends Resource
                         $total = number_format((float) $record->total, 2);
 
                         $msg = "Hola {$firstName}, te comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
-                            . "📄 *{$record->title}*\n"
-                            . "💰 Total: *\${$total} MXN*\n\n"
+                            . "*{$record->title}*\n"
+                            . "Total: *\${$total} MXN*\n\n"
                             . "Ver el presupuesto: {$pdfUrl}\n\n"
                             . "Si te parece bien, puedes aceptarlo aquí: {$acceptUrl}\n\n"
-                            . "Cualquier duda me la platicas por aquí 🙌";
+                            . "Cualquier duda me la platicas por aquí.";
 
                         Notification::make()
                             ->title('Presupuesto listo para enviar')

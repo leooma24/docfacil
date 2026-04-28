@@ -87,11 +87,11 @@ class PendingReviewRequestsWidget extends BaseWidget
                         $clinicName = $clinic->name ?? 'el consultorio';
                         $googleUrl = $clinic->google_review_url;
 
-                        $msg = "¡Hola {$firstName}! 🙌\n\n"
+                        $msg = "¡Hola {$firstName}!\n\n"
                             . "Te escribo de *{$clinicName}*. Espero que hayas tenido una buena experiencia con nosotros.\n\n"
                             . "Si te gustó cómo te atendimos, ¿nos ayudarías con una reseña corta en Google? Para nosotros es enorme — ayuda a que más personas encuentren el consultorio.\n\n"
                             . "Dejar reseña: {$googleUrl}\n\n"
-                            . "¡Gracias! ⭐";
+                            . "¡Gracias!";
 
                         return "https://wa.me/{$phone}?text=" . urlencode($msg);
                     })

@@ -653,4 +653,140 @@
     .fi-dropdown-panel {
         z-index: 999 !important;
     }
+
+    /* ====== STICKY COLUMNS EN TABLAS ANCHAS ======
+       Cuando la tabla tiene scroll horizontal el doctor pierde de vista
+       el nombre del paciente/prospecto y los botones de accion. Pegamos
+       la primera columna a la izquierda y la columna de acciones a la
+       derecha para que siempre esten visibles. Solo desktop (>= 768px),
+       en movil no aplica porque la tabla se renderiza como cards.
+    */
+    @media (min-width: 768px) {
+        /* Wrapper hace overflow-x: auto. Le marcamos minmax explicito
+           para que el sticky funcione bien aun con muchas columnas. */
+        .fi-ta-content {
+            overflow-x: auto;
+        }
+
+        /* Primera columna: nombre / titulo del registro */
+        .fi-ta-table > thead > tr > th:first-child,
+        .fi-ta-table > tbody > tr > td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 4;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+            box-shadow: 4px 0 6px -4px rgba(15, 23, 42, 0.08);
+        }
+        .dark .fi-ta-table > thead > tr > th:first-child,
+        .dark .fi-ta-table > tbody > tr > td:first-child {
+            background: rgba(15, 23, 42, 0.97);
+            box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Hover: la primera columna debe matchear el highlight de la fila */
+        .fi-ta-row:hover > td:first-child {
+            background: rgba(240, 253, 250, 0.97) !important;
+        }
+        .dark .fi-ta-row:hover > td:first-child {
+            background: rgba(6, 78, 59, 0.85) !important;
+        }
+
+        /* La fila del header se queda a la izquierda con el bg del header */
+        .fi-ta-table > thead > tr > th:first-child {
+            background: rgba(240, 253, 250, 0.95) !important;
+            z-index: 6;
+        }
+        .dark .fi-ta-table > thead > tr > th:first-child {
+            background: rgba(6, 78, 59, 0.6) !important;
+        }
+
+        /* Ultima columna (acciones): pegada a la derecha */
+        .fi-ta-table > thead > tr > th:last-child,
+        .fi-ta-table > tbody > tr > td:last-child {
+            position: sticky;
+            right: 0;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+            box-shadow: -4px 0 6px -4px rgba(15, 23, 42, 0.08);
+        }
+        .dark .fi-ta-table > thead > tr > th:last-child,
+        .dark .fi-ta-table > tbody > tr > td:last-child {
+            background: rgba(15, 23, 42, 0.97);
+            box-shadow: -4px 0 6px -4px rgba(0, 0, 0, 0.4);
+        }
+        .fi-ta-row:hover > td:last-child {
+            background: rgba(240, 253, 250, 0.97) !important;
+        }
+        .dark .fi-ta-row:hover > td:last-child {
+            background: rgba(6, 78, 59, 0.85) !important;
+        }
+        .fi-ta-table > thead > tr > th:last-child {
+            background: rgba(240, 253, 250, 0.95) !important;
+            z-index: 6;
+        }
+        .dark .fi-ta-table > thead > tr > th:last-child {
+            background: rgba(6, 78, 59, 0.6) !important;
+        }
+    }
 </style>
+
+<script>
+    // Scroll horizontal en tablas Filament sin tener que bajar al
+    // scrollbar de hasta abajo. 3 mecanismos para que no haya friccion:
+    //   1. Shift + rueda del mouse → mueve la tabla horizontal.
+    //   2. Click sostenido + arrastrar → drag-to-scroll (como mapas).
+    //   3. La rueda del mouse normal sobre la tabla mueve horizontal
+    //      cuando NO se puede scrollear vertical (table mas ancha que tall).
+    (function () {
+        var SELECTOR = '.fi-ta-content, .fi-ta-ctn';
+
+        // (1) Shift+wheel
+        document.addEventListener('wheel', function (e) {
+            if (!e.shiftKey || e.deltaY === 0) return;
+            var el = e.target.closest(SELECTOR);
+            if (!el) return;
+            if (el.scrollWidth <= el.clientWidth) return;
+            el.scrollLeft += e.deltaY;
+            e.preventDefault();
+        }, { passive: false });
+
+        // (2) Drag-to-scroll: el rep agarra la tabla con el mouse y la mueve.
+        // Solo se activa si arrastra al menos 4px (asi clicks normales en
+        // botones / enlaces / filas siguen funcionando bien).
+        document.addEventListener('mousedown', function (e) {
+            if (e.button !== 0) return;
+            // No interferir con clicks en botones, links, inputs, etc.
+            if (e.target.closest('button, a, input, textarea, select, label, .fi-btn, .fi-link, [role="button"]')) return;
+            var el = e.target.closest(SELECTOR);
+            if (!el) return;
+            if (el.scrollWidth <= el.clientWidth) return;
+
+            var startX = e.pageX;
+            var startScroll = el.scrollLeft;
+            var dragging = false;
+
+            function onMove(ev) {
+                var dx = ev.pageX - startX;
+                if (!dragging && Math.abs(dx) < 4) return;
+                dragging = true;
+                el.scrollLeft = startScroll - dx;
+                ev.preventDefault();
+            }
+            function onUp(ev) {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                if (dragging) {
+                    el.style.cursor = '';
+                    // Bloquear el siguiente click si efectivamente arrastramos
+                    var stopClick = function (ce) { ce.stopPropagation(); ce.preventDefault(); };
+                    document.addEventListener('click', stopClick, { capture: true, once: true });
+                }
+            }
+            el.style.cursor = 'grab';
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        });
+    })();
+</script>

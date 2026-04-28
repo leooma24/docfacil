@@ -55,10 +55,10 @@ class BirthdaysTodayWidget extends Widget
                 $phoneDigits = preg_replace('/\D/', '', (string) $patient->phone);
                 if (strlen($phoneDigits) === 10) $phoneDigits = '52' . $phoneDigits;
 
-                $message = "🎉 *¡Feliz cumpleaños, {$name}!* 🎂\n\n"
+                $message = "*¡Feliz cumpleaños, {$name}!*\n\n"
                     . "Todo el equipo de *{$clinicName}* te desea un día increíble. "
                     . "Gracias por confiar en nosotros para cuidar tu salud.\n\n"
-                    . "Que cumplas muchos más. 🌟";
+                    . "Que cumplas muchos más.";
 
                 return [
                     'id' => $patient->id,

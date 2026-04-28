@@ -38,8 +38,8 @@ class Referrals extends Page
         $msg = urlencode(
             "Hola! Te recomiendo *DocFácil* para tu consultorio. Software para agenda, pacientes, recetas PDF, cobros por WhatsApp y más.\n\n".
             "Usa mi código *{$code}* al registrarte y ambos ganamos:\n\n".
-            "🎁 *Tú*: 30 días gratis (vs 15 normales)\n".
-            "🎁 *Yo*: 15 días extra + 1 mes gratis por cada mes que pagues (hasta 12 meses)\n\n".
+            "*Tú*: 30 días gratis (vs 15 normales)\n".
+            "*Yo*: 15 días extra + 1 mes gratis por cada mes que pagues (hasta 12 meses)\n\n".
             "Regístrate aquí: {$link}"
         );
         return "https://wa.me/?text={$msg}";

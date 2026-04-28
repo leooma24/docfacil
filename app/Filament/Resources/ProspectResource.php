@@ -189,9 +189,9 @@ class ProspectResource extends Resource
 
                         $status = $record->status;
                         $message = match ($status) {
-                            'new' => "Hola *{$name}* 👋 Soy Omar de *DocFácil*, un software para consultorios médicos y dentales. Estamos invitando consultorios de Sinaloa a nuestro *beta gratuito* con agenda de citas, expedientes digitales, recetas PDF y recordatorios WhatsApp. ¿Te interesa probarlo sin costo para {$clinic}?",
-                            'contacted' => "Hola *{$name}*, te escribí hace unos días sobre DocFácil 😊 Otros consultorios ya redujeron 50% sus citas perdidas con nuestro sistema. ¿Te gustaría una demo rápida de 5 minutos?",
-                            'interested' => "Hola *{$name}*, último mensaje sobre DocFácil 🙏 Quedan pocos lugares en el beta gratuito con precio preferencial de por vida. ¿Te animas a probarlo? Es gratis.",
+                            'new' => "Hola *{$name}*, soy Omar de *DocFácil*, un software para consultorios médicos y dentales. Estamos invitando consultorios de Sinaloa a nuestro *beta gratuito* con agenda de citas, expedientes digitales, recetas PDF y recordatorios WhatsApp. ¿Te interesa probarlo sin costo para {$clinic}?",
+                            'contacted' => "Hola *{$name}*, te escribí hace unos días sobre DocFácil. Otros consultorios ya redujeron 50% sus citas perdidas con nuestro sistema. ¿Te gustaría una demo rápida de 5 minutos?",
+                            'interested' => "Hola *{$name}*, último mensaje sobre DocFácil. Quedan pocos lugares en el beta gratuito con precio preferencial de por vida. ¿Te animas a probarlo? Es gratis.",
                             default => "Hola *{$name}*, soy Omar de DocFácil. ¿Cómo va todo con tu consultorio?",
                         };
 

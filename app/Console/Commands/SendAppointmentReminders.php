@@ -103,7 +103,7 @@ class SendAppointmentReminders extends Command
             $time = $appt->starts_at->format('H:i');
             $clinic = $appt->clinic->name ?? 'tu clínica';
 
-            $message = "👋 Hola *{$name}*, tu cita en *{$clinic}* es en *{$time} hrs* (aprox. 2 horas).\n\n"
+            $message = "Hola *{$name}*, tu cita en *{$clinic}* es en *{$time} hrs* (aprox. 2 horas).\n\n"
                 . "¡Te esperamos! Si tuviste un imprevisto, avísanos por este medio.";
 
             if ($whatsapp->sendMessage($phone, $message)) {

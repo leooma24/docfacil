@@ -105,7 +105,7 @@ class PendingRecallsWidget extends Widget
             $message = "¡Hola {$firstName}! Te escribimos de *{$clinicName}*.\n\n"
                 . "Hace {$monthsAgo} meses te hicimos *{$serviceName}* y ya te toca tu seguimiento. "
                 . "Recordarte es parte de cuidarte bien.\n\n"
-                . "¿Te apartamos una cita esta o la próxima semana? Responde cuándo te acomoda mejor y lo arreglamos. 🦷";
+                . "¿Te apartamos una cita esta o la próxima semana? Responde cuándo te acomoda mejor y lo arreglamos.";
 
             $dueRecalls->push([
                 'patient_id' => $patient->id,

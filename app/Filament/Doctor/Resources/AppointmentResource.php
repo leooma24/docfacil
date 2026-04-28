@@ -246,11 +246,11 @@ class AppointmentResource extends Resource
 
                         $msg = urlencode(
                             "Hola {$record->patient->first_name}, te recordamos tu cita en *{$clinicName}*:\n\n" .
-                            "📅 {$date}\n" .
-                            "🕐 {$time} hrs\n" .
-                            "👨‍⚕️ {$record->doctor->user->name}\n\n" .
-                            "✅ Confirmar: {$confirmUrl}\n" .
-                            "❌ Cancelar: {$cancelUrl}\n\n" .
+                            "Fecha: {$date}\n" .
+                            "Hora: {$time} hrs\n" .
+                            "Con: {$record->doctor->user->name}\n\n" .
+                            "Confirmar: {$confirmUrl}\n" .
+                            "Cancelar: {$cancelUrl}\n\n" .
                             "¡Te esperamos!"
                         );
                         return "https://wa.me/{$phone}?text={$msg}";

@@ -180,7 +180,7 @@ class WaitlistEntryResource extends Resource
                         $date = $slot->translatedFormat('l d \d\e F');
                         $time = $slot->format('H:i');
 
-                        $message = "👋 Hola {$firstName}, te escribo de *{$clinicName}*. Estás en nuestra lista de espera y se acaba de liberar un horario:\n\n📅 {$date}\n🕐 {$time} hrs\n\nSi te acomoda responde *SÍ* y te lo aparto. ¡Es primer llegado, primer servido!";
+                        $message = "Hola {$firstName}, te escribo de *{$clinicName}*. Estás en nuestra lista de espera y se acaba de liberar un horario:\n\nFecha: {$date}\nHora: {$time} hrs\n\nSi te acomoda responde *SÍ* y te lo aparto. ¡Es primer llegado, primer servido!";
 
                         $record->update(['status' => 'notified', 'notified_at' => now()]);
                         Notification::make()

@@ -34,7 +34,7 @@ class PublicPortalShareWidget extends Widget
         // QR code via qrserver.com (servicio publico gratis, SVG renderable inline)
         $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=' . urlencode($publicUrl);
 
-        $shareText = "¡Agenda tu cita en {$clinic->name} en línea! 👇";
+        $shareText = "¡Agenda tu cita en {$clinic->name} en línea!";
         $whatsappShareUrl = 'https://wa.me/?text=' . urlencode("{$shareText}\n{$publicUrl}");
 
         return [

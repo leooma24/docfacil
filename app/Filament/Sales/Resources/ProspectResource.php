@@ -430,10 +430,10 @@ class ProspectResource extends Resource
         $name = explode(' ', trim((string) $record->name))[0] ?? '';
         $cityPart = $record->city ? " en {$record->city}" : '';
 
-        $msg = "Hola Dr. {$name} 👋\n\n"
+        $msg = "Hola Dr. {$name},\n\n"
             . "Soy Omar de DocFácil. Vi su consultorio{$cityPart} y le escribo breve — sé que su tiempo vale.\n\n"
             . "Es un sistema mexicano que ayuda a consultorios a recuperar las citas que no llegan (1 de cada 3 pacientes no llega = $500-1500 perdidos cada uno).\n\n"
-            . "Si tiene 30 segundos, ¿le mando una liga rápida? Si no le late, me avisa y lo dejo en paz 🙌";
+            . "Si tiene 30 segundos, ¿le mando una liga rápida? Si no le late, me avisa y lo dejo en paz.";
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
@@ -454,7 +454,7 @@ class ProspectResource extends Resource
         $url = url('/doctor/register') . ($code ? "?vnd={$code}" : '');
         $msg = "Hola {$name}, aquí le dejo su acceso a DocFácil para que lo pruebe gratis 15 días:\n\n"
             . "{$url}\n\n"
-            . "Se registra en 2 minutos. Cualquier duda me dice por aquí 🙏";
+            . "Se registra en 2 minutos. Cualquier duda me dice por aquí.";
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
