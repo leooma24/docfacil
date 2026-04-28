@@ -20,12 +20,15 @@ class ProspectBetaInviteMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $firstName = $this->prospect->firstName();
-        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+        // A/B subject: si hay ciudad, alternamos 50/50 con "su agenda"
+        // (deterministico por prospect_id para que el mismo prospect siempre
+        // reciba el mismo subject, util para analytics).
+        $city = trim((string) ($this->prospect->city ?? ''));
+        $subject = ($city !== '' && $this->prospect->id % 2 === 0)
+            ? "consultorio en {$city}"
+            : 'su agenda';
 
-        return new Envelope(
-            subject: "{$greeting}¿cuántos le dejaron plantado esta semana?",
-        );
+        return new Envelope(subject: $subject);
     }
 
     /**
@@ -63,8 +66,8 @@ class ProspectBetaInviteMail extends Mailable
         return new Content(
             view: 'emails.prospect-beta-invite',
             with: [
-                'prospectName' => $this->prospect->cleanName(),
-                'clinicName' => $this->prospect->clinic_name,
+                'firstName' => $this->prospect->firstName(),
+                'cityPart' => $this->prospect->city ? " en {$this->prospect->city}" : '',
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],

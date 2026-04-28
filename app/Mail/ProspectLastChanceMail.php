@@ -20,12 +20,12 @@ class ProspectLastChanceMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $firstName = $this->prospect->firstName();
-        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+        // A/B subject 50/50 entre dos variantes calmadas
+        $subject = $this->prospect->id % 2 === 0
+            ? 'cierro este hilo'
+            : 'última nota';
 
-        return new Envelope(
-            subject: "{$greeting}cierro este hilo — gracias por su tiempo",
-        );
+        return new Envelope(subject: $subject);
     }
 
     public function headers(): Headers
@@ -55,7 +55,7 @@ class ProspectLastChanceMail extends Mailable
         return new Content(
             view: 'emails.prospect-last-chance',
             with: [
-                'prospectName' => $this->prospect->cleanName(),
+                'firstName' => $this->prospect->firstName(),
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],

@@ -21,7 +21,16 @@ class SendProspectEmails extends Command
 
     private const MAX_PER_RUN = 10;
 
-    private const DAYS_BETWEEN_MESSAGES = 3;
+    /**
+     * Cadencia (dias desde el envio anterior). Cumulativo: 0 / 4 / 9.
+     * Espaciar mas alla de los 3 dias originales reduce queja-spam y
+     * sube reply rate sin perder mas que 1 punto de cobertura.
+     */
+    private const DAYS_AFTER_PREVIOUS = [
+        'prospect_beta_invite' => 0,    // primer toque, sin espera
+        'prospect_followup' => 4,       // 4 dias despues del beta_invite
+        'prospect_last_chance' => 5,    // 5 dias despues del followup (acumulado: 9)
+    ];
 
     private WhatsAppService $whatsapp;
 
@@ -62,11 +71,13 @@ class SendProspectEmails extends Command
             ->where('email', '!=', '')
             ->whereNull('unsubscribed_at');
 
-        // For follow-ups, wait DAYS_BETWEEN_MESSAGES after previous message
+        // Esperar el numero de dias configurado en DAYS_AFTER_PREVIOUS
+        // desde el envio anterior (0 para el primer correo, 4-5 para follow-ups).
         if ($previousType) {
-            $query->whereHas('lifecycleEmails', function ($q) use ($previousType) {
+            $waitDays = self::DAYS_AFTER_PREVIOUS[$messageType] ?? 4;
+            $query->whereHas('lifecycleEmails', function ($q) use ($previousType, $waitDays) {
                 $q->where('type', $previousType)
-                    ->where('sent_at', '<=', now()->subDays(self::DAYS_BETWEEN_MESSAGES));
+                    ->where('sent_at', '<=', now()->subDays($waitDays));
             });
         }
 

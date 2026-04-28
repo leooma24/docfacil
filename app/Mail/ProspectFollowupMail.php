@@ -20,12 +20,13 @@ class ProspectFollowupMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $firstName = $this->prospect->firstName();
-        $greeting = $firstName !== '' ? "Dr. {$firstName}, " : '';
+        // A/B subject 50/50: el ID par recibe la cifra cruda, el impar la
+        // pregunta. Deterministico por prospect_id para analytics estables.
+        $subject = $this->prospect->id % 2 === 0
+            ? '$8,000 al mes'
+            : 'haga la cuenta';
 
-        return new Envelope(
-            subject: "{$greeting}le dejo un caso que quizá le suene familiar",
-        );
+        return new Envelope(subject: $subject);
     }
 
     public function headers(): Headers
@@ -55,8 +56,7 @@ class ProspectFollowupMail extends Mailable
         return new Content(
             view: 'emails.prospect-followup',
             with: [
-                'prospectName' => $this->prospect->cleanName(),
-                'specialty' => $this->prospect->specialty,
+                'firstName' => $this->prospect->firstName(),
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],

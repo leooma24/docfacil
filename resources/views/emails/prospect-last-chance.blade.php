@@ -3,52 +3,42 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .content { padding: 36px 32px; line-height: 1.65; font-size: 15px; }
-        .content p { margin: 0 0 16px; }
-        .list { margin: 18px 0; }
-        .list-item { padding: 10px 0; border-top: 1px solid #f0f0f0; }
-        .list-item:last-child { border-bottom: 1px solid #f0f0f0; }
-        .signature { margin-top: 28px; color: #2d2d2d; }
-        .footer { padding: 18px 30px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; }
-        a { color: #14b8a6; }
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #2d2d2d; }
+        .container { max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .content { padding: 32px 28px; line-height: 1.6; font-size: 15px; }
+        .content p { margin: 0 0 14px; }
+        .content ol { padding-left: 22px; margin: 14px 0; }
+        .content ol li { margin-bottom: 10px; }
+        .signature { margin-top: 24px; color: #2d2d2d; font-size: 14px; }
+        .signature a { color: #14b8a6; text-decoration: none; }
+        .footer { padding: 16px 28px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; line-height: 1.5; }
+        .footer a { color: #14b8a6; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <p>Hola Dr. <strong>{{ $prospectName }}</strong>,</p>
+            <p>Dr. <strong>{{ $firstName }}</strong>,</p>
 
-            <p>Este es el último correo que recibirá de mi parte sobre DocFácil. No me gusta insistir, y respeto que tal vez no es el momento, o simplemente no es para su consultorio. Cualquiera de las dos razones está perfectamente bien.</p>
+            <p>No le sigo escribiendo, no quiero robarle más tiempo.</p>
 
-            <p>Le dejo tres cosas por si algún día cambian las cosas:</p>
+            <p>Dos cosas antes de cerrar:</p>
 
-            <div class="list">
-                <div class="list-item">
-                    <strong>1. El link para empezar sigue activo.</strong><br>
-                    Sin letra chiquita: <a href="{{ $ctaUrl ?? url('/register') }}">docfacil.tu-app.co/register</a> — son 15 días con todo, sin tarjeta, y después queda en plan gratis permanente.
-                </div>
-                <div class="list-item">
-                    <strong>2. Mi WhatsApp personal: 668 249 3398.</strong><br>
-                    Si algún día quiere preguntarme cualquier cosa del sistema — incluso una opinión sobre otro software que esté evaluando — aquí estoy. Sin pitch.
-                </div>
-                <div class="list-item">
-                    <strong>3. Un favor (si le nace).</strong><br>
-                    Si conoce a un colega que batalle con las citas perdidas o con el expediente en papel, páseme su contacto. Le regalo un mes de cualquier plan en cuanto ese colega se suscriba.
-                </div>
-            </div>
+            <ol>
+                <li>Si algún día el cuaderno deja de servirle, aquí estoy: <a href="https://wa.me/526682493398" style="color:#14b8a6;">668 249 3398</a> (mi WhatsApp directo).</li>
+                <li>Si no es para usted pero conoce a un colega al que le pueda servir, le regalo <strong>1 mes</strong> cuando se suscriba con su recomendación.</li>
+            </ol>
 
-            <p>Le deseo que le siga yendo muy bien en su consultorio. De verdad.</p>
+            <p>Gracias por leerme.</p>
 
             <p class="signature">
-                <strong>Omar Lerma</strong><br>
-                DocFácil · Culiacán, Sinaloa
+                — <strong>Omar Lerma</strong><br>
+                DocFácil
             </p>
         </div>
         <div class="footer">
             DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
-            <small>Este es el último correo automático que recibirás de nosotros.</small>
+            <small>Este es el último correo automático que recibirá de nosotros.</small>
             @if(!empty($unsubscribeUrl))
                 <br><small>O <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">déme de baja ya mismo</a> si prefiere.</small>
             @endif

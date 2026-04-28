@@ -3,58 +3,45 @@
 <head>
     <meta charset="utf-8">
     <style>
-        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .content { padding: 36px 32px; line-height: 1.65; font-size: 15px; }
-        .content p { margin: 0 0 16px; }
-        .story { background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 16px 18px; margin: 20px 0; border-radius: 4px; }
-        .story ul { padding-left: 20px; margin: 10px 0 0; }
-        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px; margin: 18px 0; }
-        .note { font-size: 13px; color: #666; }
-        .signature { margin-top: 28px; color: #2d2d2d; }
-        .footer { padding: 18px 30px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; }
+        body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 20px; color: #2d2d2d; }
+        .container { max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .content { padding: 32px 28px; line-height: 1.6; font-size: 15px; }
+        .content p { margin: 0 0 14px; }
+        .math { font-family: ui-monospace, "SF Mono", Menlo, monospace; background: #f0fdfa; border-left: 3px solid #14b8a6; padding: 12px 16px; margin: 16px 0; font-size: 14px; }
+        .btn { display: inline-block; background: #14b8a6; color: #ffffff !important; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; margin: 6px 0 14px; }
+        .signature { margin-top: 22px; color: #2d2d2d; font-size: 14px; }
+        .signature a { color: #14b8a6; text-decoration: none; }
+        .footer { padding: 16px 28px; background: #f9fafb; color: #888; font-size: 12px; text-align: center; line-height: 1.5; }
+        .footer a { color: #14b8a6; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <p>Hola Dr. <strong>{{ $prospectName }}</strong>,</p>
+            <p>Dr. <strong>{{ $firstName }}</strong>,</p>
 
-            <p>Le escribí hace unos días y no quiero ser insistente, así que solo le dejo una cosa y me quito.</p>
+            <p>La cuenta rápida del mes promedio en un consultorio dental:</p>
 
-            <p>Hay un {{ $specialty && str_contains(strtolower($specialty), 'dent') ? 'dentista' : 'doctor' }} aquí en Culiacán — mismo perfil que usted, 1-2 {{ $specialty && str_contains(strtolower($specialty), 'dent') ? 'sillas' : 'consultorios' }} — que antes perdía 6 u 8 pacientes a la semana sin avisar. Cada cita entre $500 y $1,000. Haga la cuenta: eran $20,000 al mes que se iban por la coladera.</p>
-
-            <div class="story">
-                <strong>En dos meses con DocFácil esto cambió:</strong>
-                <ul>
-                    <li>Las faltas bajaron a <strong>1 o 2 por semana</strong>. Él manda el recordatorio por WhatsApp a 1 clic desde la agenda, el paciente da clic al link de "Confirmar" y listo.</li>
-                    <li>Dejó de perder <strong>30 minutos diarios</strong> buscando expedientes y escribiendo recordatorios a mano.</li>
-                    <li>Cuando sí se cancela, DocFácil le avisa qué paciente de su <strong>lista de espera</strong> puede tomar el slot — otro hueco cerrado.</li>
-                </ul>
+            <div class="math">
+                8 pacientes que no llegan × $1,000 = <strong>$8,000</strong><br>
+                En un año: <strong>$96,000</strong> que se evaporan.
             </div>
 
-            <p>Calcula que recupera unos <strong>$8,000 a $10,000 al mes</strong>. Paga $499 por el plan básico.</p>
+            <p><strong>DocFácil</strong> cuesta $499/mes. Si recupera 1 cita al mes ya pagó el plan; lo demás es ganancia neta.</p>
 
-            <p>Si a su consultorio le pasa algo parecido, probablemente también le conviene. Y si no, ignore este correo con toda confianza — respeto que quizá no es el momento.</p>
+            <p>15 días gratis con todo, sin tarjeta. Si no le sirve, un clic y lo cancela.</p>
 
-            <p style="text-align: center;">
-                <a href="{{ $ctaUrl ?? url('/register') }}" class="btn">Probarlo 15 días gratis</a>
-                <br>
-                <span class="note">Sin tarjeta. Al terminar, su cuenta se queda viva en plan gratis.</span>
-            </p>
-
-            <p>Si prefiere que se lo muestre antes de registrarse, respóndame con un "me interesa" o escríbame al <strong>668 249 3398</strong> y le agendo 10 minutos.</p>
+            <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">¿Le paso la liga? →</a></p>
 
             <p class="signature">
-                <strong>Omar Lerma</strong> · DocFácil
+                — <strong>Omar</strong><br>
+                WhatsApp directo: <a href="https://wa.me/526682493398">668 249 3398</a>
             </p>
         </div>
         <div class="footer">
-            DocFácil · Software para consultorios médicos y dentales · <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a><br>
+            DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
             @if(!empty($unsubscribeUrl))
-                <small>Si no desea recibir más correos, <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">dé de baja su correo aquí</a>. Un solo clic, lo respetamos.</small>
-            @else
-                <small>Si no desea recibir más correos, responda con "No me interesa" y lo saco de la lista.</small>
+                <small>¿Ya no desea recibir correos? <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">Dése de baja aquí</a> · 1 clic.</small>
             @endif
         </div>
     </div>
