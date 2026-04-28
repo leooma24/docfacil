@@ -152,8 +152,8 @@ Vas a la landing en otra pestaña: `docfacil.tu-app.co/dentistas` → scroll a s
 > "Doctor, déjeme ser directo con los números.
 >
 > - **Plan Free de por vida:** 1 doctor, 15 pacientes. Cero costo, para siempre. Si tiene poquitos pacientes, este le funciona.
-> - **Plan Básico $499/mes:** 1 doctor, 200 pacientes, todo lo que le acabo de mostrar — WhatsApp 1-clic, expediente, recetas PDF, cobros.
-> - **Plan Pro $999/mes:** Hasta 3 doctores, pacientes ilimitados, **odontograma interactivo**, consentimientos, reportes.
+> - **Plan Básico $499/mes:** 1 doctor, 200 pacientes, **todo lo que le acabo de mostrar incluyendo el odontograma FDI** — WhatsApp 1-clic, expediente, recetas PDF, cobros.
+> - **Plan Pro $999/mes:** Hasta 3 doctores, pacientes ilimitados, consentimientos digitales, portal público de agendamiento, lista de espera con notificación automática, reportes avanzados.
 > - **Plan Clínica $1,999/mes:** Si tiene varios doctores y necesita reportes por doctor.
 >
 > Si paga anual, son 10 meses pagados, ahorra 2.
@@ -261,7 +261,7 @@ Ajustes:
 
 **Min 5-7:** Recetas PDF (NOM-004) + cobros WhatsApp → "Profesionalismo + dinero."
 
-**Min 7-9:** Precios → Plan Pro $999, garantía 30 días. "¿Cuál le suena?"
+**Min 7-9:** Precios → Plan Básico $499 (incluye odontograma), Pro $999 si necesita 2-3 doctores. Garantía 30 días. "¿Cuál le suena?"
 
 **Min 9-10:** Liga de registro → "¿Lo registramos ahora?"
 

@@ -16,12 +16,14 @@
 
 **Business model:** Free + 4 planes pagados + add-ons. Anual = mensual × 10 (2 meses gratis). Garantía 30 días. Cancelación 1 clic.
 
-| Plan | $/mes | $/año | Doctores | Pacientes |
-|---|---|---|---|---|
-| Free | $0 | $0 | 1 | 15 |
-| Básico | $499 | $4,990 | 1 | 200 |
-| Pro | $999 | $9,990 | 3 | ∞ |
-| Clínica | $1,999 | $19,990 | ∞ | ∞ |
+| Plan | $/mes | $/año | Doctores | Pacientes | Highlights dentales |
+|---|---|---|---|---|---|
+| Free | $0 | $0 | 1 | 15 | Solo agenda básica |
+| Básico | $499 | $4,990 | 1 | 200 | **Odontograma FDI** + WhatsApp + recetas + cobros |
+| Pro | $999 | $9,990 | 3 | ∞ | Todo Básico + consentimientos + reportes + portal público |
+| Clínica | $1,999 | $19,990 | ∞ | ∞ | Todo Pro + reportes por doctor + onboarding 1:1 |
+
+**Decisión de pricing (2026-04-28):** El odontograma FDI vive en Básico (no en Pro) porque es el diferenciador clave del marketing. El 90% del ICP son dentistas solos que necesitan el odontograma como su WOW principal — esconderlo en Pro generaba churn en mes 2 ("DocFácil prometía odontograma pero ahora me dicen que pague $999"). Pro vende escala (multi-doctor + portal público + consentimientos + reportes), no features clínicas básicas.
 
 Add-ons: Recall ($49), Reseñas Google ($49), Presupuestos/Treatment plans ($129).
 

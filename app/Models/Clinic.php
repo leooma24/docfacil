@@ -184,13 +184,15 @@ class Clinic extends Model
             'whatsapp_payment',        // Cobro por WhatsApp
             'qr_checkin',              // Check-in con QR
             'basic_dashboard',
+            'odontogram',              // Odontograma FDI interactivo — diferenciador
+                                       // dental clave; va en Basico para que el
+                                       // dentista solo (90% del ICP) lo tenga.
         ];
         // Nota: recall_automation y treatment_plans son ADD-ONS de pago
         // ($49 y $129/mes), gestionados via ClinicAddon. Ya no estan en
         // featuresForPlan — Clinic::hasFeature() consulta addons activos
         // adicionalmente al plan base.
         $profesional = array_merge($basico, [
-            'odontogram',              // Odontograma interactivo (solo aplica a dentistas)
             'consent_forms',           // Consentimientos + firma digital
             'multi_doctor',            // Hasta 3 doctores
             'advanced_reports',        // Reportes avanzados
