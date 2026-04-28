@@ -84,7 +84,28 @@ class TodayAppointments extends BaseWidget
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         $clinicName = $record->clinic->name ?? 'DocFácil';
                         $time = $record->starts_at->format('H:i');
-                        $msg = urlencode("Hola {$record->patient->first_name}, te recordamos tu cita hoy a las *{$time} hrs* en *{$clinicName}*. ¡Te esperamos!\n\n_Enviado desde DocFácil_ — https://docfacil.tu-app.co");
+
+                        // Links firmados 1-clic para confirmar/cancelar — validos
+                        // hasta 2hrs despues del inicio (mismo patron que cron).
+                        $ttl = $record->starts_at->copy()->addHours(2);
+                        $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                            'appointment.confirm',
+                            $ttl,
+                            ['appointment' => $record->id, 'action' => 'confirm']
+                        );
+                        $cancelUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                            'appointment.confirm',
+                            $ttl,
+                            ['appointment' => $record->id, 'action' => 'cancel']
+                        );
+
+                        $msg = urlencode(
+                            "Hola {$record->patient->first_name}, te recordamos tu cita hoy en *{$clinicName}*:\n\n" .
+                            "Hora: {$time} hrs\n\n" .
+                            "Confirmar: {$confirmUrl}\n" .
+                            "Cancelar: {$cancelUrl}\n\n" .
+                            "¡Te esperamos!"
+                        );
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),

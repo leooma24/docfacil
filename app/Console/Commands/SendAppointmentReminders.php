@@ -64,13 +64,13 @@ class SendAppointmentReminders extends Command
                 ['appointment' => $appt->id, 'action' => 'cancel']
             );
 
-            $message = "🏥 *Recordatorio de cita*\n\n"
+            $message = "*Recordatorio de cita*\n\n"
                 . "Hola *{$name}*, te recordamos tu cita en *{$clinic}*:\n\n"
-                . "📅 {$date}\n"
-                . "🕐 {$time} hrs\n"
-                . "💊 {$service}\n\n"
-                . "✅ Confirmar: {$confirmUrl}\n"
-                . "❌ Cancelar: {$cancelUrl}\n\n"
+                . "Fecha: {$date}\n"
+                . "Hora: {$time} hrs\n"
+                . "Servicio: {$service}\n\n"
+                . "Confirmar: {$confirmUrl}\n"
+                . "Cancelar: {$cancelUrl}\n\n"
                 . "¡Te esperamos!";
 
             if ($whatsapp->sendMessage($phone, $message)) {
