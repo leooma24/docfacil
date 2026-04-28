@@ -49,7 +49,7 @@ class ProspectResource extends Resource
                         ->options([
                             'new' => 'Nuevo',
                             'contacted' => 'Contactado',
-                            'interested' => 'Interesado',
+                            'interested' => 'En seguimiento',
                             'trial' => 'En trial',
                             'lost' => 'Perdido',
                         ])
@@ -95,7 +95,7 @@ class ProspectResource extends Resource
                     ->formatStateUsing(fn (string $state) => match ($state) {
                         'new' => 'Nuevo',
                         'contacted' => 'Contactado',
-                        'interested' => 'Interesado',
+                        'interested' => 'En seguimiento',
                         'trial' => 'En trial',
                         'converted' => 'Convertido ✓',
                         'lost' => 'Perdido',
@@ -117,6 +117,13 @@ class ProspectResource extends Resource
                         return '→ ' . $r->next_contact_at->format('d/m');
                     })
                     ->color(fn (Prospect $r) => $r->next_contact_at?->isPast() ? 'danger' : null),
+                Tables\Columns\TextColumn::make('email_events_count')
+                    ->label('Engagement')
+                    ->counts('emailEvents')
+                    ->formatStateUsing(fn ($state) => $state > 0 ? "🔥 {$state} click" . ($state > 1 ? 's' : '') : '—')
+                    ->color(fn ($state) => $state >= 2 ? 'success' : ($state >= 1 ? 'warning' : 'gray'))
+                    ->sortable()
+                    ->tooltip('Clicks del prospect en links de los correos enviados'),
                 Tables\Columns\TextColumn::make('phone')->label('Teléfono')->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')->label('Fecha')->date('d/m')->sortable()
@@ -128,7 +135,7 @@ class ProspectResource extends Resource
                     ->options([
                         'new' => 'Nuevo',
                         'contacted' => 'Contactado',
-                        'interested' => 'Interesado',
+                        'interested' => 'En seguimiento',
                         'trial' => 'En trial',
                         'converted' => 'Convertido',
                         'lost' => 'Perdido',
@@ -149,7 +156,7 @@ class ProspectResource extends Resource
                 Tables\Actions\Action::make('main_action')
                     ->label(fn (Prospect $r) => match ($r->status) {
                         'new' => $r->contact_day == 0 ? '▶ Iniciar contacto' : '▶ Registrar contacto',
-                        'contacted' => '▶ Marcar interesado',
+                        'contacted' => '▶ Marcar en seguimiento',
                         'interested' => '▶ Enviar link registro',
                         'trial' => '✓ Marcar convertido',
                         default => 'Acción',

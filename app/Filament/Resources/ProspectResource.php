@@ -55,7 +55,7 @@ class ProspectResource extends Resource
                             ->options([
                                 'new' => 'Nuevo',
                                 'contacted' => 'Contactado',
-                                'interested' => 'Interesado',
+                                'interested' => 'En seguimiento',
                                 'trial' => 'En trial',
                                 'converted' => 'Convertido',
                                 'lost' => 'Perdido',
@@ -128,7 +128,7 @@ class ProspectResource extends Resource
                     ->formatStateUsing(fn (string $state) => match ($state) {
                         'new' => 'Nuevo',
                         'contacted' => 'Contactado',
-                        'interested' => 'Interesado',
+                        'interested' => 'En seguimiento',
                         'trial' => 'En trial',
                         'converted' => 'Convertido',
                         'lost' => 'Perdido',
@@ -142,7 +142,7 @@ class ProspectResource extends Resource
                     ->options([
                         'new' => 'Nuevo',
                         'contacted' => 'Contactado',
-                        'interested' => 'Interesado',
+                        'interested' => 'En seguimiento',
                         'trial' => 'En trial',
                         'converted' => 'Convertido',
                         'lost' => 'Perdido',
@@ -244,7 +244,7 @@ class ProspectResource extends Resource
                             ->success()
                             ->title("{$record->name} → " . match ($nextStatus) {
                                 'contacted' => 'Contactado',
-                                'interested' => 'Interesado',
+                                'interested' => 'En seguimiento',
                                 'trial' => 'En trial',
                                 'converted' => 'Convertido',
                                 default => $nextStatus,

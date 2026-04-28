@@ -239,7 +239,7 @@
                 $stages = [
                     ['label' => 'Nuevo', 'color' => '#94a3b8', 'desc' => 'En la base, sin contactar'],
                     ['label' => 'Contactado', 'color' => '#3b82f6', 'desc' => 'Ya hablaste con él'],
-                    ['label' => 'Interesado', 'color' => '#f59e0b', 'desc' => 'Quiere saber más / demo'],
+                    ['label' => 'En seguimiento', 'color' => '#f59e0b', 'desc' => 'Recibió email 2, esperando respuesta'],
                     ['label' => 'En trial', 'color' => '#8b5cf6', 'desc' => 'Se registró, probando'],
                     ['label' => 'Convertido ✓', 'color' => '#10b981', 'desc' => 'Pagó = comisión'],
                 ];

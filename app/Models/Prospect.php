@@ -108,6 +108,11 @@ class Prospect extends Model
         return $this->morphMany(LifecycleEmail::class, 'emailable');
     }
 
+    public function emailEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProspectEmailEvent::class);
+    }
+
     public function assignedSalesRep(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_sales_rep_id');

@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Prospect;
+use App\Support\ProspectTrackingToken;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -27,11 +28,17 @@ class ProspectFollowupMail extends Mailable
 
     public function content(): Content
     {
+        $registerUrl = url('/doctor/register?utm_source=prospect_email&utm_medium=email&utm_campaign=followup');
+        $token = $this->prospect->id
+            ? ProspectTrackingToken::make($this->prospect->id, 'followup', $registerUrl)
+            : null;
+
         return new Content(
             view: 'emails.prospect-followup',
             with: [
                 'prospectName' => $this->prospect->name,
                 'specialty' => $this->prospect->specialty,
+                'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
             ],
         );
     }

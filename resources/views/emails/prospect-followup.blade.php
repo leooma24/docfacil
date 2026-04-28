@@ -38,7 +38,7 @@
             <p>Si a su consultorio le pasa algo parecido, probablemente también le conviene. Y si no, ignore este correo con toda confianza — respeto que quizá no es el momento.</p>
 
             <p style="text-align: center;">
-                <a href="{{ url('/register') }}" class="btn">Probarlo 15 días gratis</a>
+                <a href="{{ $ctaUrl ?? url('/register') }}" class="btn">Probarlo 15 días gratis</a>
                 <br>
                 <span class="note">Sin tarjeta. Al terminar, su cuenta se queda viva en plan gratis.</span>
             </p>

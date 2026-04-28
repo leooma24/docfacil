@@ -45,7 +45,7 @@
             <p><strong>No le pido que se comprometa con nada.</strong> Al registrarse tiene <strong>15 días con todo desbloqueado</strong>, sin tarjeta. Al terminar, su cuenta se queda viva en plan gratis (1 doctor, 15 pacientes) — nunca pierde acceso. Si le gusta cómo funciona, puede quedarse con un plan pagado desde $499/mes.</p>
 
             <p style="text-align: center;">
-                <a href="{{ url('/register') }}" class="btn">Probarlo 15 días gratis</a>
+                <a href="{{ $ctaUrl ?? url('/register') }}" class="btn">Probarlo 15 días gratis</a>
                 <br>
                 <span class="note">Sin tarjeta. 2 minutos para registrarse.</span>
             </p>

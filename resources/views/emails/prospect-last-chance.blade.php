@@ -27,7 +27,7 @@
             <div class="list">
                 <div class="list-item">
                     <strong>1. El link para empezar sigue activo.</strong><br>
-                    Sin letra chiquita: <a href="{{ url('/register') }}">docfacil.tu-app.co/register</a> — son 15 días con todo, sin tarjeta, y después queda en plan gratis permanente.
+                    Sin letra chiquita: <a href="{{ $ctaUrl ?? url('/register') }}">docfacil.tu-app.co/register</a> — son 15 días con todo, sin tarjeta, y después queda en plan gratis permanente.
                 </div>
                 <div class="list-item">
                     <strong>2. Mi WhatsApp personal: 668 249 3398.</strong><br>

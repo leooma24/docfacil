@@ -16,6 +16,7 @@ use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ToolsController;
+use App\Http\Controllers\TrackController;
 use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,11 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 // Herramientas gratis publicas (engineering-as-marketing, SEO)
 Route::get('/herramientas/calculadora-consultorio', [ToolsController::class, 'calculadoraRoi'])
     ->name('tools.calculadora_roi');
+
+// Tracking de clicks en correos del pipeline de prospects
+Route::get('/t/c/{token}', [TrackController::class, 'click'])
+    ->name('track.click')
+    ->middleware('throttle:60,1');
 Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::class, 'calculadoraRoiLead'])
     ->middleware('throttle:5,1')
     ->name('tools.calculadora_roi.lead');
