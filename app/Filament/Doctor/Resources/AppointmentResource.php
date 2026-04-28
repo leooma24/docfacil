@@ -197,13 +197,13 @@ class AppointmentResource extends Resource
                     ->default(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('start_consultation')
-                    ->label('Consulta')
-                    ->icon('heroicon-o-play-circle')
-                    ->color('primary')
-                    ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
-                    ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress'])),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('start_consultation')
+                        ->label('Iniciar consulta')
+                        ->icon('heroicon-o-play-circle')
+                        ->color('primary')
+                        ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
+                        ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress'])),
                 Tables\Actions\Action::make('charge')
                     ->label('Cobrar')
                     ->icon('heroicon-o-banknotes')
@@ -310,12 +310,18 @@ class AppointmentResource extends Resource
                         ]);
                     }),
                 Tables\Actions\Action::make('cancel')
-                    ->label('Cancelar')
+                    ->label('Cancelar cita')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->requiresConfirmation()
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed']))
                     ->action(fn (Appointment $record) => $record->update(['status' => 'cancelled'])),
+                    Tables\Actions\EditAction::make()->label('Editar detalles'),
+                ])
+                    ->label('Acciones')
+                    ->icon('heroicon-o-ellipsis-vertical')
+                    ->color('gray')
+                    ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
