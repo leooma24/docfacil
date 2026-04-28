@@ -657,20 +657,54 @@
     /* ====== STICKY COLUMNS EN TABLAS ANCHAS ======
        Cuando la tabla tiene scroll horizontal el doctor pierde de vista
        el nombre del paciente/prospecto y los botones de accion. Pegamos
-       la primera columna a la izquierda y la columna de acciones a la
-       derecha para que siempre esten visibles. Solo desktop (>= 768px),
-       en movil no aplica porque la tabla se renderiza como cards.
+       checkbox + nombre a la izquierda y acciones a la derecha para
+       que siempre esten visibles. Solo desktop (>= 768px), en movil
+       no aplica porque la tabla se renderiza como cards.
     */
     @media (min-width: 768px) {
-        /* Wrapper hace overflow-x: auto. Le marcamos minmax explicito
-           para que el sticky funcione bien aun con muchas columnas. */
         .fi-ta-content {
             overflow-x: auto;
         }
 
-        /* Primera columna: nombre / titulo del registro */
-        .fi-ta-table > thead > tr > th:first-child,
-        .fi-ta-table > tbody > tr > td:first-child {
+        /* Variables: ancho aproximado de la columna de checkbox y de la
+           columna de acciones (Filament: w-1 + px-3 ~= 2.75rem para el
+           checkbox; las acciones varian segun cuantos botones haya). */
+
+        /* === IZQUIERDA: checkbox + primera columna de datos === */
+
+        /* (A) Checkbox de seleccion → pegado a 0 */
+        .fi-ta-table > thead > tr > th.fi-ta-selection-cell,
+        .fi-ta-table > tbody > tr > td.fi-ta-selection-cell {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+        }
+        .dark .fi-ta-table > thead > tr > th.fi-ta-selection-cell,
+        .dark .fi-ta-table > tbody > tr > td.fi-ta-selection-cell {
+            background: rgba(15, 23, 42, 0.97);
+        }
+
+        /* (B) Si hay checkbox: la SIGUIENTE celda (nombre) es sticky despues */
+        .fi-ta-table > thead > tr > th.fi-ta-selection-cell + th,
+        .fi-ta-table > tbody > tr > td.fi-ta-selection-cell + td {
+            position: sticky;
+            left: 2.75rem;
+            z-index: 4;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+            box-shadow: 4px 0 6px -4px rgba(15, 23, 42, 0.08);
+        }
+        .dark .fi-ta-table > thead > tr > th.fi-ta-selection-cell + th,
+        .dark .fi-ta-table > tbody > tr > td.fi-ta-selection-cell + td {
+            background: rgba(15, 23, 42, 0.97);
+            box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* (C) Si NO hay checkbox: la primera columna de datos es la del nombre */
+        .fi-ta-table > thead > tr > th:first-child:not(.fi-ta-selection-cell),
+        .fi-ta-table > tbody > tr > td:first-child:not(.fi-ta-selection-cell) {
             position: sticky;
             left: 0;
             z-index: 4;
@@ -678,32 +712,40 @@
             backdrop-filter: blur(8px);
             box-shadow: 4px 0 6px -4px rgba(15, 23, 42, 0.08);
         }
-        .dark .fi-ta-table > thead > tr > th:first-child,
-        .dark .fi-ta-table > tbody > tr > td:first-child {
+        .dark .fi-ta-table > thead > tr > th:first-child:not(.fi-ta-selection-cell),
+        .dark .fi-ta-table > tbody > tr > td:first-child:not(.fi-ta-selection-cell) {
             background: rgba(15, 23, 42, 0.97);
             box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.4);
         }
 
-        /* Hover: la primera columna debe matchear el highlight de la fila */
-        .fi-ta-row:hover > td:first-child {
+        /* Headers con bg de header (mas oscuro que filas) */
+        .fi-ta-table > thead > tr > th.fi-ta-selection-cell,
+        .fi-ta-table > thead > tr > th.fi-ta-selection-cell + th,
+        .fi-ta-table > thead > tr > th:first-child:not(.fi-ta-selection-cell) {
             background: rgba(240, 253, 250, 0.97) !important;
         }
-        .dark .fi-ta-row:hover > td:first-child {
+        .dark .fi-ta-table > thead > tr > th.fi-ta-selection-cell,
+        .dark .fi-ta-table > thead > tr > th.fi-ta-selection-cell + th,
+        .dark .fi-ta-table > thead > tr > th:first-child:not(.fi-ta-selection-cell) {
+            background: rgba(6, 78, 59, 0.7) !important;
+        }
+
+        /* Hover: matchear el highlight de la fila para no ver "huecos" */
+        .fi-ta-row:hover > td.fi-ta-selection-cell,
+        .fi-ta-row:hover > td.fi-ta-selection-cell + td,
+        .fi-ta-row:hover > td:first-child:not(.fi-ta-selection-cell) {
+            background: rgba(240, 253, 250, 0.97) !important;
+        }
+        .dark .fi-ta-row:hover > td.fi-ta-selection-cell,
+        .dark .fi-ta-row:hover > td.fi-ta-selection-cell + td,
+        .dark .fi-ta-row:hover > td:first-child:not(.fi-ta-selection-cell) {
             background: rgba(6, 78, 59, 0.85) !important;
         }
 
-        /* La fila del header se queda a la izquierda con el bg del header */
-        .fi-ta-table > thead > tr > th:first-child {
-            background: rgba(240, 253, 250, 0.95) !important;
-            z-index: 6;
-        }
-        .dark .fi-ta-table > thead > tr > th:first-child {
-            background: rgba(6, 78, 59, 0.6) !important;
-        }
+        /* === DERECHA: columna de acciones === */
 
-        /* Ultima columna (acciones): pegada a la derecha */
-        .fi-ta-table > thead > tr > th:last-child,
-        .fi-ta-table > tbody > tr > td:last-child {
+        .fi-ta-table > thead > tr > th.fi-ta-actions-cell,
+        .fi-ta-table > tbody > tr > td.fi-ta-actions-cell {
             position: sticky;
             right: 0;
             z-index: 3;
@@ -711,23 +753,23 @@
             backdrop-filter: blur(8px);
             box-shadow: -4px 0 6px -4px rgba(15, 23, 42, 0.08);
         }
-        .dark .fi-ta-table > thead > tr > th:last-child,
-        .dark .fi-ta-table > tbody > tr > td:last-child {
+        .dark .fi-ta-table > thead > tr > th.fi-ta-actions-cell,
+        .dark .fi-ta-table > tbody > tr > td.fi-ta-actions-cell {
             background: rgba(15, 23, 42, 0.97);
             box-shadow: -4px 0 6px -4px rgba(0, 0, 0, 0.4);
         }
-        .fi-ta-row:hover > td:last-child {
+        .fi-ta-table > thead > tr > th.fi-ta-actions-cell {
             background: rgba(240, 253, 250, 0.97) !important;
-        }
-        .dark .fi-ta-row:hover > td:last-child {
-            background: rgba(6, 78, 59, 0.85) !important;
-        }
-        .fi-ta-table > thead > tr > th:last-child {
-            background: rgba(240, 253, 250, 0.95) !important;
             z-index: 6;
         }
-        .dark .fi-ta-table > thead > tr > th:last-child {
-            background: rgba(6, 78, 59, 0.6) !important;
+        .dark .fi-ta-table > thead > tr > th.fi-ta-actions-cell {
+            background: rgba(6, 78, 59, 0.7) !important;
+        }
+        .fi-ta-row:hover > td.fi-ta-actions-cell {
+            background: rgba(240, 253, 250, 0.97) !important;
+        }
+        .dark .fi-ta-row:hover > td.fi-ta-actions-cell {
+            background: rgba(6, 78, 59, 0.85) !important;
         }
     }
 </style>
