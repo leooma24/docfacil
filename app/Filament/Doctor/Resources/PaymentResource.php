@@ -132,7 +132,8 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
-                    ->searchable(),
+                    ->description(fn ($record) => $record->patient?->phone ?: null)
+                    ->searchable(['patient.first_name', 'patient.last_name', 'patient.phone']),
                 Tables\Columns\TextColumn::make('service.name')
                     ->label('Servicio')
                     ->placeholder('Sin servicio'),

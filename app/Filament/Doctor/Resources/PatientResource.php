@@ -154,12 +154,29 @@ class PatientResource extends Resource
                     ->label('Activo'),
             ])
             ->actions([
-                Tables\Actions\Action::make('profile')
-                    ->label('Ver perfil')
-                    ->icon('heroicon-o-user-circle')
-                    ->color('primary')
-                    ->url(fn ($record) => route('filament.doctor.pages.perfil-paciente', ['patient' => $record->id])),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('profile')
+                        ->label('Ver perfil')
+                        ->icon('heroicon-o-user-circle')
+                        ->color('primary')
+                        ->url(fn ($record) => route('filament.doctor.pages.perfil-paciente', ['patient' => $record->id])),
+                    Tables\Actions\EditAction::make()->label('Editar datos'),
+                    Tables\Actions\Action::make('whatsapp')
+                        ->label('WhatsApp')
+                        ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                        ->color('success')
+                        ->visible(fn ($record) => !empty($record->phone))
+                        ->url(function ($record) {
+                            $phone = preg_replace('/\D/', '', $record->phone);
+                            if (strlen($phone) === 10) $phone = '52' . $phone;
+                            return "https://wa.me/{$phone}";
+                        })
+                        ->openUrlInNewTab(),
+                ])
+                    ->label('Acciones')
+                    ->icon('heroicon-o-ellipsis-vertical')
+                    ->color('gray')
+                    ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
