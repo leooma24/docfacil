@@ -85,6 +85,14 @@ return [
         'admin_emails' => env('SPEI_ADMIN_EMAILS', 'leooma24@gmail.com'),
     ],
 
+    // Google Analytics 4 — tracking de marketing site + signup funnel
+    // Si no esta seteado MEASUREMENT_ID o ENABLED=false, el partial
+    // analytics no renderiza nada (cero overhead).
+    'analytics' => [
+        'enabled' => env('ANALYTICS_ENABLED', false),
+        'ga_measurement_id' => env('GA_MEASUREMENT_ID'),
+    ],
+
     'ai' => [
         'enabled' => env('AI_ENABLED', false),
         'max_daily_cost_usd' => env('AI_MAX_DAILY_COST_USD', 5),

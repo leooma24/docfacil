@@ -111,6 +111,7 @@
         [data-animate].visible { opacity:1; }
         [x-cloak] { display: none !important; }
     </style>
+    @include('partials.analytics')
 </head>
 <body class="bg-white text-gray-900 antialiased overflow-x-hidden">
 

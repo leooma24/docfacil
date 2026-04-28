@@ -207,6 +207,18 @@ class Register extends BaseRegister
             // Don't block registration if email fails
         }
 
+        // Analytics: flash event para que el partial lo dispare en el proximo
+        // pageload (sera el dashboard/onboarding del doctor recien creado).
+        session()->push('analytics_events', [
+            'name' => 'signup_completed',
+            'params' => [
+                'method' => 'email',
+                'from_email_track' => $verifiedFromTrackedClick,
+                'has_sales_rep' => $salesRep !== null,
+                'plan' => 'free',
+            ],
+        ]);
+
         return $user;
     }
 }

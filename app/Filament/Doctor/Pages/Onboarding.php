@@ -135,7 +135,14 @@ class Onboarding extends Page implements HasForms
         if ($this->step === 2 && empty($this->quick_services) && !$this->suggestions_loaded) {
             $this->loadServiceSuggestions();
         }
+        $previousStep = $this->step;
         $this->step = min($this->step + 1, self::TOTAL_STEPS);
+
+        // Analytics: flash event para el siguiente render
+        session()->push('analytics_events', [
+            'name' => 'onboarding_step_completed',
+            'params' => ['step' => $previousStep],
+        ]);
     }
 
     public function prevStep(): void
@@ -275,6 +282,15 @@ class Onboarding extends Page implements HasForms
 
         $servicesCount = collect($this->quick_services)->filter(fn ($s) => !empty($s['name']) && !empty($s['price']))->count();
         $addonCount = count($this->addons_activate);
+
+        // Analytics: onboarding_completed dispara en el dashboard (proximo render)
+        session()->push('analytics_events', [
+            'name' => 'onboarding_completed',
+            'params' => [
+                'services_count' => $servicesCount,
+                'addons_activated' => $addonCount,
+            ],
+        ]);
 
         Notification::make()
             ->title('¡Consultorio listo!')

@@ -42,7 +42,7 @@ class DoctorPanelProvider extends PanelProvider
             ->globalSearchFieldSuffix(fn () => 'Ctrl+K')
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
-            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
+            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles') . view('partials.analytics'))
             ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat') . \Livewire\Livewire::mount('command-palette'))
             ->discoverResources(in: app_path('Filament/Doctor/Resources'), for: 'App\\Filament\\Doctor\\Resources')
             ->discoverPages(in: app_path('Filament/Doctor/Pages'), for: 'App\\Filament\\Doctor\\Pages')

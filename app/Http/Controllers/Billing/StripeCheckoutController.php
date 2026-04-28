@@ -91,6 +91,26 @@ class StripeCheckoutController extends Controller
      */
     public function success(Request $request)
     {
+        // Analytics: subscription_upgraded en el proximo render. El plan/cycle
+        // exactos los obtenemos del clinic actual (ya actualizado por el webhook).
+        $clinic = auth()->user()?->clinic;
+        if ($clinic) {
+            session()->push('analytics_events', [
+                'name' => 'subscription_upgraded',
+                'params' => [
+                    'plan' => $clinic->plan,
+                    'billing_cycle' => $clinic->billing_cycle ?? 'monthly',
+                    'value_mxn' => match ($clinic->plan) {
+                        'basico' => ($clinic->billing_cycle === 'annual' ? 4990 : 499),
+                        'profesional' => ($clinic->billing_cycle === 'annual' ? 9990 : 999),
+                        'clinica' => ($clinic->billing_cycle === 'annual' ? 19990 : 1999),
+                        default => 0,
+                    },
+                    'gateway' => 'stripe',
+                ],
+            ]);
+        }
+
         return redirect()
             ->route('filament.doctor.pages.actualizar-plan')
             ->with('success', '¡Pago recibido! Tu plan se activará en unos segundos. Si no ves el cambio, recarga la página.');

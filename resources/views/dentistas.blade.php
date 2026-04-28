@@ -111,6 +111,7 @@
         [data-animate].visible { opacity:1; }
         [x-cloak] { display: none !important; }
     </style>
+    @include('partials.analytics')
 </head>
 <body class="bg-white text-gray-900 antialiased overflow-x-hidden">
 
@@ -151,7 +152,7 @@
 
                 <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-500 hover:text-teal-600 transition font-medium">Iniciar sesión</a>
                 {{-- CTA único primary — sin competencia visual en el nav --}}
-                <a href="{{ url('/doctor/register') }}" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
+                <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar" data-track-text="prueba_gratis" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
                     Prueba gratis
                 </a>
             </div>
@@ -184,7 +185,7 @@
                 📲 Instalar como app
             </button>
             <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesion</a>
-            <a href="{{ url('/doctor/register') }}" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
+            <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar_mobile" data-track-text="prueba_gratis" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
         </div>
     </nav>
 
@@ -216,11 +217,14 @@
                     </p>
 
                     <div class="mt-7 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 animate-fade-up delay-300">
-                        <a href="{{ url('/doctor/register') }}" class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
+                        <a href="{{ url('/doctor/register') }}"
+                            data-track="cta_clicked" data-track-location="hero" data-track-text="probar_15_dias_gratis"
+                            class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
                             Probar 15 días gratis
                             <span class="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </a>
                         <a href="{{ route('demo') }}"
+                            data-track="cta_clicked" data-track-location="hero" data-track-text="ver_demo_en_vivo"
                             class="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Ver demo en vivo
@@ -587,7 +591,7 @@
                 "Soy Omar Lerma. <strong class="not-italic text-gray-900">Desde Los Mochis, Sinaloa</strong>, construí DocFácil porque me cansé de ver a doctores perdiendo miles de pesos al mes en citas que no llegaban, en cobros que se olvidaban, en horas tirándose a buscar un expediente en papel. Si en los primeros 30 días DocFácil no te está ahorrando dinero y tiempo, <strong class="not-italic text-gray-900">te devuelvo tu dinero completo sin preguntas</strong>. Y si tienes cualquier duda, me escribes tú a mi celular."
             </p>
             <div class="mt-6 flex flex-col sm:flex-row gap-3 items-center justify-center">
-                <a href="https://wa.me/526682493398" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all">
+                <a href="https://wa.me/526682493398" target="_blank" data-track="whatsapp_clicked" data-track-location="founder_section" class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition-all">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
                     Escríbeme: 668 249 3398
                 </a>
@@ -711,18 +715,18 @@
                 <div class="grid md:grid-cols-3 gap-6 mb-8">
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Pacientes al mes</label>
-                        <input type="number" x-model.number="patients" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                        <input type="number" x-model.number="patients" @change="onChange()" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">$ por consulta</label>
                         <div class="relative">
                             <span class="absolute left-4 top-3 text-2xl font-bold text-gray-400">$</span>
-                            <input type="number" x-model.number="pricePerVisit" min="0" class="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                            <input type="number" x-model.number="pricePerVisit" @change="onChange()" min="0" class="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Hrs/semana en admin</label>
-                        <input type="number" x-model.number="adminHours" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
+                        <input type="number" x-model.number="adminHours" @change="onChange()" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-2xl font-bold text-gray-900 focus:border-teal-500 focus:outline-none">
                     </div>
                 </div>
 
@@ -757,6 +761,7 @@
                     patients: 80,
                     pricePerVisit: 600,
                     adminHours: 10,
+                    _trackedRoi: false,
                     get timeSavings() {
                         // 60% reducción en horas admin, valoradas a la tarifa/hora del doctor
                         const hourlyRate = this.pricePerVisit / 0.5; // asume 30min por consulta
@@ -768,6 +773,16 @@
                     },
                     get totalSavings() {
                         return this.timeSavings + this.retentionGain;
+                    },
+                    onChange() {
+                        // GA: solo 1 fire por sesion (engagement marker, no flood de eventos)
+                        if (this._trackedRoi || !window.trackEvent) return;
+                        this._trackedRoi = true;
+                        window.trackEvent('roi_calculator_used', {
+                            monthly_savings: this.totalSavings,
+                            patients: this.patients,
+                            price_per_visit: this.pricePerVisit,
+                        });
                     },
                 };
             }
@@ -892,7 +907,11 @@
                             <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         @endif
-                        <a href="{{ url('/doctor/register') }}" class="block w-full text-center px-4 py-3 rounded-xl font-semibold transition-all {{ $plan['popular'] ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-teal-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                        <a href="{{ url('/doctor/register') }}"
+                            data-track="pricing_tier_clicked"
+                            data-track-tier="{{ $plan['slug'] ?? strtolower($plan['name']) }}"
+                            data-track-cycle="{{ $plan['popular'] ? 'pro' : ($plan['name'] ?? 'unknown') }}"
+                            class="block w-full text-center px-4 py-3 rounded-xl font-semibold transition-all {{ $plan['popular'] ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-teal-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                             {{ $plan['cta'] }}
                         </a>
                     </div>
@@ -1080,7 +1099,7 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-900">WhatsApp / Telefono</div>
-                                <a href="https://wa.me/526682493398" target="_blank" class="text-teal-600 hover:text-teal-700 transition font-medium">668 249 3398</a>
+                                <a href="https://wa.me/526682493398" target="_blank" data-track="whatsapp_clicked" data-track-location="contact_section" class="text-teal-600 hover:text-teal-700 transition font-medium">668 249 3398</a>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -1116,7 +1135,9 @@
                     {{-- Form simplificado: solo 3 campos visibles + detalles colapsables.
                          Pre-fill via query params (los manda TrackController al
                          hacer click en correos del pipeline). --}}
-                    <form x-data="{ showMore: false }" action="{{ route('contact.store') }}" method="POST" class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 space-y-5">
+                    <form x-data="{ showMore: false }" action="{{ route('contact.store') }}" method="POST"
+                        onsubmit="window.trackEvent && window.trackEvent('form_submitted', { form_type: 'contact' })"
+                        class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 space-y-5">
                         @csrf
                         {{-- Honeypot anti-bot --}}
                         <div style="position:absolute;left:-9999px" aria-hidden="true">
@@ -1204,7 +1225,7 @@
                 Cada dia que sigues con papel y Excel, pierdes pacientes, pierdes dinero y pierdes tiempo.
                 Empieza gratis hoy y ve la diferencia esta misma semana.
             </p>
-            <a href="{{ url('/doctor/register') }}" class="mt-10 inline-flex items-center px-10 py-4 bg-white text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition-all shadow-2xl hover:-translate-y-1 text-lg animate-pulse-glow">
+            <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="final_cta" data-track-text="crear_mi_cuenta_gratis" class="mt-10 inline-flex items-center px-10 py-4 bg-white text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition-all shadow-2xl hover:-translate-y-1 text-lg animate-pulse-glow">
                 Crear mi cuenta gratis &rarr;
             </a>
         </div>
@@ -1265,7 +1286,7 @@
 {{-- Sticky CTA mobile — aparece después del hero para reducir scroll fatigue.
      Solo visible en pantallas chicas (md:hidden). --}}
 <div id="sticky-cta" class="md:hidden fixed bottom-0 left-0 right-0 z-40 px-3 pb-3 pt-2 bg-white/95 backdrop-blur-md border-t border-gray-200 opacity-0 pointer-events-none translate-y-full transition-all duration-300" style="box-shadow: 0 -4px 12px rgba(0,0,0,0.06);">
-    <a href="{{ url('/doctor/register') }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl shadow-lg">
+    <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="sticky_mobile" data-track-text="empieza_gratis" class="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl shadow-lg">
         <span>Empieza gratis</span>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
     </a>
@@ -1283,7 +1304,7 @@
             <div class="text-sm font-bold text-gray-900 leading-tight">¿Listo para empezar?</div>
             <div class="text-xs text-gray-500 mt-0.5">15 días gratis · Garantía 30 días</div>
         </div>
-        <a href="{{ url('/doctor/register') }}" class="inline-flex items-center gap-1 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-teal-200 transition-all whitespace-nowrap flex-shrink-0">
+        <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="sticky_desktop" data-track-text="ir" class="inline-flex items-center gap-1 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-teal-200 transition-all whitespace-nowrap flex-shrink-0">
             Ir →
         </a>
     </div>
@@ -1442,7 +1463,7 @@ function socialProofToast() {
             <div style="font-size:13px;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Antes de irte</div>
             <h3 style="font-size:24px;font-weight:800;color:#111827;line-height:1.25;margin-bottom:12px;">20 minutos conmigo, sin venta</h3>
             <p style="font-size:15px;color:#4b5563;line-height:1.5;margin-bottom:22px;">Si tienes dudas reales, te muestro DocFácil con <strong style="color:#0f766e;">tus números</strong> (no genérico). Soy <strong>Omar, el fundador</strong>. Sin equipo de ventas, sin presión.</p>
-            <a href="https://wa.me/526682493398?text={{ urlencode('Hola Omar, me interesa una demo personal de 20 min de DocFácil') }}" onclick="trackExitConvert()" target="_blank" rel="noopener"
+            <a href="https://wa.me/526682493398?text={{ urlencode('Hola Omar, me interesa una demo personal de 20 min de DocFácil') }}" onclick="trackExitConvert(); window.trackEvent && window.trackEvent('exit_intent_converted',{}); window.trackEvent && window.trackEvent('whatsapp_clicked',{location:'exit_intent'});" target="_blank" rel="noopener"
                 style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px;box-shadow:0 10px 25px -5px rgba(13,148,136,0.4);margin-bottom:10px;">
                 Agendar 20 min con Omar →
             </a>
@@ -1472,6 +1493,10 @@ function socialProofToast() {
             modal.style.opacity = '1';
             card.style.transform = 'scale(1)';
         });
+        // GA: marca que vimos el exit-intent
+        if (typeof window.trackEvent === 'function') {
+            window.trackEvent('exit_intent_shown', {});
+        }
     }
 
     // Desktop: mouse sale por arriba (señal de ir a cerrar la tab)
