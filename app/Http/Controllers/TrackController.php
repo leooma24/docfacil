@@ -50,23 +50,39 @@ class TrackController extends Controller
             ]);
         }
 
+        // Cargar el prospect una vez (lo usamos para pre-llenar + atribuir
+        // sales_rep + marcar email como verificado en sesion).
+        $prospect = Prospect::with('assignedSalesRep')->find($prospectId);
+
+        if ($prospect && $prospect->email) {
+            // Email verification skip: el prospect demostro acceso a su inbox al
+            // dar clic en el link. Marcamos la sesion para que Register.php
+            // setee email_verified_at=now() si registra con el mismo email.
+            // El match por email previene que cualquier visitante de la session
+            // se aproveche del flag.
+            $request->session()->put('prospect_email_verified', [
+                'prospect_id' => $prospect->id,
+                'email' => $prospect->email,
+                'verified_at' => now()->toIso8601String(),
+            ]);
+        }
+
         // Pre-llenar el destino con los datos del prospect si vamos a /doctor/register.
         // Los campos del Filament Register page ya leen estos query params como default.
-        $destination = $this->prefillRegistrationUrl($destination, $prospectId);
+        $destination = $this->prefillRegistrationUrl($destination, $prospect);
 
         return redirect()->away($destination, 302);
     }
 
-    private function prefillRegistrationUrl(string $url, int $prospectId): string
+    private function prefillRegistrationUrl(string $url, ?Prospect $prospect): string
     {
+        if (!$prospect) return $url;
+
         $parsed = parse_url($url);
         $path = $parsed['path'] ?? '';
         if (!str_contains($path, '/doctor/register')) {
             return $url;
         }
-
-        $prospect = Prospect::find($prospectId);
-        if (!$prospect) return $url;
 
         parse_str($parsed['query'] ?? '', $params);
 
@@ -77,6 +93,15 @@ class TrackController extends Controller
         if ($prospect->phone) $params['phone'] = $params['phone'] ?? $prospect->phone;
         if ($prospect->city) $params['city'] = $params['city'] ?? $prospect->city;
         if ($prospect->specialty) $params['specialty'] = $params['specialty'] ?? $prospect->specialty;
+
+        // Atribucion al sales rep asignado para tracking de comision (si tiene
+        // codigo de vendedor activo). Register.php detecta ?vnd= y asocia la
+        // venta a ese rep para Commission::generateForSale.
+        if (!isset($params['vnd']) && $prospect->assignedSalesRep
+            && $prospect->assignedSalesRep->is_active_sales_rep
+            && $prospect->assignedSalesRep->sales_rep_code) {
+            $params['vnd'] = $prospect->assignedSalesRep->sales_rep_code;
+        }
 
         $newQuery = http_build_query(array_filter($params, fn ($v) => $v !== '' && $v !== null));
         $base = ($parsed['scheme'] ?? 'https') . '://' . ($parsed['host'] ?? '') . $path;

@@ -134,6 +134,20 @@ class Register extends BaseRegister
             'sold_at' => $salesRep ? now() : null,
         ])->save();
 
+        // Email verification skip si vino de un link trackeado de correo:
+        // TrackController::click puso 'prospect_email_verified' en sesion al
+        // validar el HMAC del token. Si el email del registro matchea el
+        // del prospect que dio clic, marcamos email_verified_at=now() para
+        // saltar el paso de verificacion (ya demostro acceso al inbox).
+        $verifiedFromTrackedClick = false;
+        $sessionVerified = session('prospect_email_verified');
+        if (is_array($sessionVerified)
+            && !empty($sessionVerified['email'])
+            && strcasecmp($sessionVerified['email'], $data['email']) === 0) {
+            $verifiedFromTrackedClick = true;
+            session()->forget('prospect_email_verified');
+        }
+
         // Create user
         $user = $this->getUserModel()::forceCreate([
             'name' => $data['name'],
@@ -142,6 +156,7 @@ class Register extends BaseRegister
             'role' => 'doctor',
             'clinic_id' => $clinic->id,
             'terms_accepted_at' => now(), // LFPDPPP art. 9
+            'email_verified_at' => $verifiedFromTrackedClick ? now() : null,
         ]);
 
         // Create doctor profile

@@ -204,8 +204,13 @@ class ProspectResource extends Resource
                         default => null,
                     })
                     ->action(function (Prospect $record, array $data) {
-                        match ($record->status) {
-                            'new' => (function () use ($record, $data) {
+                        // URL de WhatsApp opcional. Si se setea, retornamos redirect()
+                        // al final del action para que el navegador abra wa.me en
+                        // pestana nueva sin que el rep tenga que copiar/pegar.
+                        $whatsappRedirect = null;
+
+                        switch ($record->status) {
+                            case 'new':
                                 $record->advanceContactDay($data['method']);
                                 $record->update([
                                     'status' => 'contacted',
@@ -221,39 +226,38 @@ class ProspectResource extends Resource
                                         'notes' => trim(($record->notes ? $record->notes . "\n" : '') . "[{$dateStr} · {$methodLabel}] {$data['contact_notes']}"),
                                     ]);
                                 }
-                                Notification::make()->title('Contacto registrado. Próximo seguimiento agendado.')->success()->send();
-                            })(),
-                            'contacted' => (function () use ($record) {
+                                // Si eligio WhatsApp como metodo, abrir wa.me con mensaje de intro
+                                if ($data['method'] === 'whatsapp' && !empty($record->phone)) {
+                                    $whatsappRedirect = static::buildIntroWhatsappUrl($record);
+                                }
+                                Notification::make()
+                                    ->title($whatsappRedirect ? 'Status actualizado · abriendo WhatsApp...' : 'Contacto registrado. Próximo seguimiento agendado.')
+                                    ->success()->send();
+                                break;
+
+                            case 'contacted':
                                 $record->update(['status' => 'interested']);
                                 Notification::make()->title('Prospecto marcado como interesado')->success()->send();
-                            })(),
-                            'interested' => (function () use ($record) {
-                                $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone ?? '');
-                                if (strlen($phone) === 10) $phone = '52' . $phone;
-                                $code = auth()->user()->sales_rep_code ?? '';
-                                $name = explode(' ', trim($record->name))[0] ?? '';
-                                $url = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
-                                $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias:\n\n{$url}\n\nSe registra en 2 minutos.";
+                                break;
+
+                            case 'interested':
                                 $record->update(['status' => 'trial']);
-                                Notification::make()->title('Movido a trial. Se abrirá WhatsApp para enviar el link.')->success()->send();
-                                // Redirect happens via JS below
-                            })(),
-                            'trial' => (function () use ($record) {
+                                if (!empty($record->phone)) {
+                                    $whatsappRedirect = static::buildRegisterLinkWhatsappUrl($record);
+                                }
+                                Notification::make()
+                                    ->title($whatsappRedirect ? 'Movido a trial · abriendo WhatsApp con el link' : 'Movido a trial')
+                                    ->success()->send();
+                                break;
+
+                            case 'trial':
                                 $record->update(['status' => 'converted', 'converted_at' => now()]);
                                 Notification::make()->title('¡Convertido! Tu comisión se genera automáticamente.')->success()->send();
-                            })(),
-                        };
-                    })
-                    ->after(function (Prospect $record) {
-                        // For 'interested' status, open WhatsApp with register link
-                        if ($record->status === 'trial') {
-                            $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone ?? '');
-                            if (strlen($phone) === 10) $phone = '52' . $phone;
-                            $code = auth()->user()->sales_rep_code ?? '';
-                            $name = explode(' ', trim($record->name))[0] ?? '';
-                            $url = "https://docfacil.tu-app.co/doctor/register" . ($code ? "?vnd={$code}" : '');
-                            $msg = "Hola {$name}, aqui le dejo su acceso a DocFacil para que lo pruebe gratis 14 dias:\n\n{$url}\n\nSe registra en 2 minutos.";
-                            // Can't open URL from action after, but notification is enough
+                                break;
+                        }
+
+                        if ($whatsappRedirect) {
+                            return redirect()->away($whatsappRedirect);
                         }
                     }),
 
@@ -412,5 +416,46 @@ class ProspectResource extends Resource
             'create' => Pages\CreateProspect::route('/create'),
             'edit' => Pages\EditProspect::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * URL wa.me con mensaje de intro cuando el rep marca primer contacto
+     * por WhatsApp. Tono humano, no spam, opcion de salir abierta.
+     */
+    protected static function buildIntroWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/\D/', '', (string) $record->phone);
+        if (strlen($phone) === 10) $phone = '52' . $phone;
+
+        $name = explode(' ', trim((string) $record->name))[0] ?? '';
+        $cityPart = $record->city ? " en {$record->city}" : '';
+
+        $msg = "Hola Dr. {$name} 👋\n\n"
+            . "Soy Omar de DocFácil. Vi su consultorio{$cityPart} y le escribo breve — sé que su tiempo vale.\n\n"
+            . "Es un sistema mexicano que ayuda a consultorios a recuperar las citas que no llegan (1 de cada 3 pacientes no llega = $500-1500 perdidos cada uno).\n\n"
+            . "Si tiene 30 segundos, ¿le mando una liga rápida? Si no le late, me avisa y lo dejo en paz 🙌";
+
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
+    /**
+     * URL wa.me con link de registro cuando el rep avanza a 'trial' (el
+     * prospecto pidió la liga). Incluye codigo de vendedor para atribucion
+     * de comision si convierte.
+     */
+    protected static function buildRegisterLinkWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/\D/', '', (string) $record->phone);
+        if (strlen($phone) === 10) $phone = '52' . $phone;
+
+        $code = auth()->user()->sales_rep_code ?? '';
+        $name = explode(' ', trim((string) $record->name))[0] ?? '';
+
+        $url = url('/doctor/register') . ($code ? "?vnd={$code}" : '');
+        $msg = "Hola {$name}, aquí le dejo su acceso a DocFácil para que lo pruebe gratis 15 días:\n\n"
+            . "{$url}\n\n"
+            . "Se registra en 2 minutos. Cualquier duda me dice por aquí 🙏";
+
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
 }
