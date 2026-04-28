@@ -48,6 +48,10 @@ class AppointmentResource extends Resource
                             ->searchable(['first_name', 'last_name'])
                             ->preload()
                             ->required()
+                            // Pre-fill desde ?patient= cuando se llega desde
+                            // el profile del paciente. Closure para que se
+                            // evalue por request, no en compile.
+                            ->default(fn () => request()->query('patient'))
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('first_name')->label('Nombre')->required(),
                                 Forms\Components\TextInput::make('last_name')->label('Apellidos')->required(),
@@ -63,7 +67,11 @@ class AppointmentResource extends Resource
                             ->relationship('doctor')
                             ->getOptionLabelFromRecordUsing(fn (Doctor $record) => $record->user?->name ?? '')
                             ->preload()
-                            ->required(),
+                            ->required()
+                            // Doctor logueado por default. El usuario puede
+                            // cambiarlo en el dropdown sin que se revierta
+                            // (porque es declared default, no mount override).
+                            ->default(fn () => auth()->user()?->doctor?->id),
                         Forms\Components\Select::make('service_id')
                             ->label('Servicio')
                             ->relationship('service', 'name')

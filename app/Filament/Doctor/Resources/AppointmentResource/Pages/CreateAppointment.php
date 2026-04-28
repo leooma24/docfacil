@@ -21,27 +21,11 @@ class CreateAppointment extends CreateRecord
         return $data;
     }
 
-    /**
-     * Pre-fill form: patient_id viene de ?patient= (cuando se entra desde el
-     * profile de un paciente con click en "Agendar"), doctor_id default al
-     * doctor logueado para no tener que seleccionar uno mismo cada vez.
-     *
-     * Set directo a $this->data en lugar de form->fill/getState — eso ultimo
-     * dispara validación temprana que genera errores antes de que el usuario
-     * toque el form. Set al property de Livewire es lo más limpio.
-     */
-    public function mount(): void
-    {
-        parent::mount();
-
-        if ($patientId = request()->query('patient')) {
-            $this->data['patient_id'] = (int) $patientId;
-        }
-
-        if ($doctorId = auth()->user()?->doctor?->id) {
-            $this->data['doctor_id'] = $doctorId;
-        }
-    }
+    // Defaults de patient_id y doctor_id viven en los fields del form
+    // (AppointmentResource::form() con ->default() closures). NO usar
+    // mount() porque sobreescribir $this->data despues del form->fill
+    // causa que dropdowns reverten a default cuando el usuario cambia
+    // valores y otro field reactivo dispara re-render.
 
     protected function getFormHeroConfig(): array
     {

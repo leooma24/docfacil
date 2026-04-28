@@ -4,7 +4,12 @@ namespace App\Filament\Doctor\Resources\DoctorInvitationResource\Pages;
 
 use App\Filament\Doctor\Concerns\HasFormHero;
 use App\Filament\Doctor\Resources\DoctorInvitationResource;
+use App\Mail\DoctorInvitationMail;
+use App\Models\DoctorInvitation;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CreateDoctorInvitation extends CreateRecord
 {
@@ -20,6 +25,38 @@ class CreateDoctorInvitation extends CreateRecord
         $data['invited_by'] = auth()->id();
 
         return $data;
+    }
+
+    /**
+     * Después de crear la invitación, mandar email al invitado con el link
+     * /invitation/{token}. Si falla el envío, no rompemos la creación —
+     * loggeamos y avisamos para que el usuario comparta el link manual.
+     */
+    protected function afterCreate(): void
+    {
+        /** @var DoctorInvitation $invitation */
+        $invitation = $this->record;
+
+        try {
+            Mail::to($invitation->email)->send(new DoctorInvitationMail($invitation));
+            Notification::make()
+                ->title('Invitación enviada')
+                ->body("Se mandó correo a {$invitation->email}. La invitación expira en 7 días.")
+                ->success()
+                ->send();
+        } catch (\Throwable $e) {
+            Log::warning('DoctorInvitationMail failed', [
+                'invitation_id' => $invitation->id,
+                'email' => $invitation->email,
+                'error' => $e->getMessage(),
+            ]);
+            Notification::make()
+                ->title('Invitación creada, pero no se pudo enviar el correo')
+                ->body("Comparte manualmente este link con {$invitation->name}: " . route('invitation.accept', ['token' => $invitation->token]))
+                ->warning()
+                ->persistent()
+                ->send();
+        }
     }
 
     protected function getFormHeroConfig(): array

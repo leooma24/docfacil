@@ -43,6 +43,10 @@ class InvitationController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => 'doctor',
             'clinic_id' => $invitation->clinic_id,
+            // Email verificado: ya demostró acceso al inbox al dar clic
+            // al link de invitación. Y aceptó terminos al completar registro.
+            'email_verified_at' => now(),
+            'terms_accepted_at' => now(),
         ]);
 
         Doctor::create([

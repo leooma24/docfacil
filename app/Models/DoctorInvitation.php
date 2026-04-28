@@ -33,6 +33,9 @@ class DoctorInvitation extends Model
             if (empty($invitation->expires_at)) {
                 $invitation->expires_at = now()->addDays(7);
             }
+            if (empty($invitation->status)) {
+                $invitation->status = 'pending';
+            }
         });
     }
 
