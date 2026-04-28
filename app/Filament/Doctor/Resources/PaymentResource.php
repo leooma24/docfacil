@@ -158,7 +158,10 @@ class PaymentResource extends Resource
                     ->label('Límite')
                     ->date('d/m/Y')
                     ->placeholder('—')
-                    ->color(fn ($record) => $record?->is_overdue ? 'danger' : 'gray'),
+                    ->color(fn ($record) => $record?->is_overdue ? 'danger' : 'gray')
+                    // Ocultada por default — la mayoria de dentistas no usa
+                    // fechas limite de pago. Se activa con toggle si la necesitan.
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\BadgeColumn::make('payment_method')
                     ->label('Método')
                     ->formatStateUsing(fn (string $state) => match ($state) {
