@@ -378,4 +378,22 @@
             </div>
         </div>
     </div>
+
+    {{--
+        Después de arrastrar/redimensionar una cita, forzamos al FullCalendar
+        a refetch sus eventos desde la BD. Si no hacemos esto, el visual se
+        queda "regresando" o desincronizado de la BD.
+
+        El widget despacha 'docfacil-calendar-refresh' después de guardar.
+        Aquí escuchamos ese evento y llamamos refetchEvents() en la instancia
+        de FullCalendar que vive dentro de .filament-fullcalendar.
+    --}}
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('docfacil-calendar-refresh', () => {
+                // El package usa un evento window-level para refresh
+                window.dispatchEvent(new CustomEvent('filament-fullcalendar--refresh'));
+            });
+        });
+    </script>
 </x-filament-panels::page>

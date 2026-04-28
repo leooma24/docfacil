@@ -264,13 +264,27 @@ class CalendarWidget extends FullCalendarWidget
     public function onEventDrop(array $event, array $oldEvent, array $relatedEvents, array $delta, ?array $oldResource, ?array $newResource): bool
     {
         $appointment = Appointment::where('clinic_id', auth()->user()->clinic_id)->find($event['id']);
-        if ($appointment) {
-            $appointment->update([
-                'starts_at' => $event['start'],
-                'ends_at' => $event['end'] ?? \Carbon\Carbon::parse($event['start'])->addMinutes(30),
-            ]);
+        if (! $appointment) {
+            return true;
         }
-        return true;
+
+        $appointment->update([
+            'starts_at' => $event['start'],
+            'ends_at' => $event['end'] ?? \Carbon\Carbon::parse($event['start'])->addMinutes(30),
+        ]);
+
+        // Disparar refetch explícitamente — el JS de la página escucha este
+        // evento y llama calendar.refetchEvents() para repintar con datos
+        // frescos de BD.
+        $this->dispatch('docfacil-calendar-refresh');
+
+        \Filament\Notifications\Notification::make()
+            ->title('Cita reagendada')
+            ->body(\Carbon\Carbon::parse($event['start'])->translatedFormat('d \d\e F H:i'))
+            ->success()
+            ->send();
+
+        return false;
     }
 
     public function onEventResize(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool

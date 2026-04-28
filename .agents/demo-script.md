@@ -34,24 +34,51 @@
 
 ---
 
-## MIN 0-1 — APERTURA Y RAPPORT
+## MIN 0-1 — APERTURA CALIBRADA
 
-### Lo que dices
+**Regla de oro:** tú ya sabes qué le duele (recordatorios, recetas, cobros, expediente). Pero NO se lo digas. Hazlo decir a él. Cuando él lo dice, él se vende solo. Cuando tú lo dices, suena a vendedor.
 
-> "Doctor, gracias por su tiempo — sé que vale. Antes de mostrarle la pantalla, una pregunta rápida: **¿cuál de estas tres es la que más le quita energía hoy en su consultorio?**
->
-> 1. Pacientes que no llegan sin avisar
-> 2. Tiempo perdido en papeleo y recordatorios manuales
-> 3. Cobranza que se le olvida o se le va
->
-> ¿Cuál pesa más?"
+### Lo que dices (en este orden)
 
-**Por qué:** Esto te dice por dónde empezar. Si dice "pacientes que no llegan" → empieza por WhatsApp recordatorio. Si dice "papeleo" → empieza por expediente. Personalizas la demo a SU dolor.
+**Pregunta 1 — abierta y amplia:**
+> "Doctor, gracias por su tiempo. Antes de enseñarle la pantalla, dígame una cosa: **en un día normal de consulta, ¿qué es lo que más tiempo le come fuera de atender pacientes?**"
+
+Cállate. Espera. **No llenes el silencio.** Lo más probable: agenda, recordatorios, papeleo, cobros pendientes, expedientes a mano.
+
+**Pregunta 2 — el dolor #1:**
+> "¿Y si pudiera quitarse UNA cosa de encima mañana, qué sería?"
+
+Lo que conteste a esta segunda es donde arranca tu demo. Esa es su frustración real.
+
+### Cómo mapeas su respuesta a la demo
+
+| Lo que dice el doctor | Por dónde arrancas |
+|---|---|
+| "Recordar a los pacientes" / "que no lleguen" | Hero WhatsApp masivo (Min 1-3) |
+| "El papeleo" / "las recetas a mano" | Recetas PDF NOM-004 (Min 5-7) |
+| "Cobrar lo que me deben" / "se me olvida" | Cobros con WhatsApp (Min 5-7) |
+| "El expediente" / "no encuentro las cosas" | Expediente + odontograma (Min 3-5) |
+| "Mi asistente no se da abasto" | **Cambia a Enfoque B** (asistente Lupita) |
+| No contesta o duda | Caída blanda → opciones cerradas (abajo) |
+
+### Si el doctor titubea o dice "todo"
+
+Ahí sí baja a las 3 opciones cerradas:
+> "OK, pongámoslo así: **¿cuál pesa más, los pacientes que no llegan, el papeleo, o la cobranza que se le va?**"
+
+### Espejo + transición a la demo
+
+Una vez que dijo SU dolor, le devuelves SU palabra:
+> "Perfecto. Entonces empecemos justo ahí. Le voy a mostrar cómo lo resolvemos en menos de un minuto."
+
+**Por qué funciona:** él ya verbalizó el problema. Ahora cualquier solución que vea es la respuesta a SU problema, no a un problema genérico que tú le inventaste.
 
 ### Lo que NO dices
 - ❌ "Soy Omar y le voy a contar todo lo que hace DocFácil" → 0 interés
 - ❌ "Tenemos 47 funciones" → abrumador
+- ❌ "Sé que las recetas a mano lo están atrasando..." → tú diciendo el dolor = vendedor
 - ❌ Mencionar precios todavía → muy temprano
+- ❌ Llenar el silencio después de la pregunta → mata la calibrada
 
 ---
 
@@ -268,6 +295,110 @@ Ajustes:
 **Si duda:** "¿Qué información le falta para decidir? Lo resolvemos hoy."
 
 **Cierre WhatsApp:** "Le mando la liga. ¿Su lista de pacientes está en Excel o libreta?"
+
+---
+
+## ENFOQUE B — Demo "La asistente Lupita" (10 min)
+
+Cuando el doctor diga "yo no soy de tecnología" o "para eso tengo a la recepcionista", cambiamos de protagonista. En vez de mostrarle al doctor cómo cargar pacientes, le mostramos cómo **su asistente** termina la jornada en 5 minutos en vez de quedarse 45 más.
+
+**Personaje:** Lupita, asistente del Dr. Hernández. Son las 6:45 pm, ya cerró el consultorio. El doctor se fue. Lupita normalmente se queda hasta 7:30 mandando recordatorios manuales por WhatsApp uno por uno.
+
+### Min 0-1: Apertura calibrada (centrada en la asistente)
+
+Mismo principio que Enfoque A — que él diga el dolor, no tú. Aquí el dolor lo cargas hacia su equipo:
+
+**Pregunta 1 — abierta:**
+> "Doctor, antes de mostrarle algo, una pregunta: **al final del día, cuando ya cerró el consultorio, ¿qué cosas se queda haciendo su asistente o usted antes de poder irse?**"
+
+Espera. Lo más probable: recordatorios de mañana, cobros, agendar pacientes nuevos, archivar expedientes.
+
+**Pregunta 2 — el peso real:**
+> "¿Cuánto tiempo extra cree que se queda? ¿Media hora, una hora más?"
+
+Lo que conteste te da la munición para el cierre ("son 14 horas al mes que se ahorra Lupita").
+
+**Espejo + transición:**
+> "OK, entonces lo que le voy a mostrar es exactamente la pantalla que su asistente abriría a las 6:45 pm para terminar todo eso en 5 minutos en vez de 45. ¿Le parece?"
+
+Abrir `/doctor` con el usuario demo. Mostrar el escritorio.
+
+### Si el doctor responde "yo no sé qué hace ella"
+
+Eso es señal verde. Refuerzas:
+> "Por eso justo le voy a enseñar esta vista. Para que en 3 minutos vea lo que ella hace todos los días — y juzgue si vale lo que cuesta."
+
+### Min 1-3: Recordatorios masivos
+
+Ir a **Citas** → filtrar por "Mañana".
+
+> "Aquí están las 8 citas de mañana. En vez de copiar y pegar 8 mensajes en WhatsApp, mire."
+
+Click en una cita → acción **WhatsApp** → se abre con mensaje completo:
+
+```
+Hola Roberto, le recuerdo su cita mañana 29 de abril a las 10:00 am
+con el Dr. Hernández. Servicio: limpieza dental. Si necesita reagendar,
+respóndame este mismo mensaje. Saludos. Clínica Sonrisa Norte.
+```
+
+> "El mensaje sale ya armado, con el nombre del paciente, la fecha en español, el servicio, y el doctor. Lupita solo da enviar. Ocho segundos por paciente. Las 8 citas en menos de 2 minutos."
+
+### Min 3-5: Cobros pendientes
+
+Ir a **Cobros** → filtro "Sin pago hace 30+ días".
+
+> "Esto es lo que más sangra a una clínica: pacientes que se fueron debiendo y nadie se acuerda de cobrarles. Mire, estos 4 pacientes deben en total $8,400. Antes lo apuntaban en una libreta y se les olvidaba."
+
+Click en un cobro pendiente → acción **Recordar WhatsApp** → mensaje completo con desglose:
+
+```
+Hola Sra. Martínez, le recuerdo su saldo pendiente de $1,800
+por el tratamiento del 12 de marzo. Puede pagar con transferencia
+o tarjeta en el consultorio. Cualquier duda, aquí estoy.
+Clínica Sonrisa Norte.
+```
+
+> "Lupita manda 4 mensajes en 30 segundos. Si solo uno paga, ya pagó el sistema dos veces."
+
+### Min 5-7: Pacientes y odontograma rápido
+
+Ir a **Pacientes** → buscar uno → abrir perfil.
+
+> "Cuando llega el paciente mañana, Lupita ya tiene su expediente listo. Mire: aquí está su odontograma — los dientes con tratamientos previos marcados en colores. El doctor entra, lo ve en 3 segundos y sabe en qué quedaron."
+
+Mostrar el odontograma visual (arcada superior + inferior con dientes coloreados).
+
+> "Esto su asistente no lo dibuja. El doctor lo marca en la consulta con un click. Lupita solo abre el perfil."
+
+### Min 7-9: Precios
+
+> "Doctor, lo que acaba de ver — recordatorios automáticos, cobros con WhatsApp, expediente con odontograma — eso es **el plan Básico, $499 al mes.** Es para un solo doctor con asistente, que es exactamente su caso."
+>
+> "Si después contrata un segundo doctor, brincamos al Pro de $999. Pero arrancamos con el Básico."
+>
+> "Lo que se ahorra Lupita en una sola noche — 40 minutos × 22 días hábiles = 14 horas al mes. ¿Cuánto le paga la hora?"
+
+### Min 9-10: Cierre + invitación a la asistente
+
+> "Le voy a mandar dos ligas: una para usted como doctor para que entre a su consultorio, y otra para que su asistente reciba su propio acceso."
+>
+> "Mañana en la mañana hagamos una llamada de 15 min con Lupita y le enseño exactamente lo que acabamos de ver. Que ella se vaya tranquila a casa la primera noche que use el sistema. ¿Le parece?"
+
+**Garantía 30 días.** "Si en un mes Lupita no se ahorra al menos 8 horas, le devuelvo el dinero."
+
+### Cuándo usar Enfoque B vs Enfoque A
+
+| Señal del doctor | Enfoque |
+|---|---|
+| "Yo no soy de tecnología" | **B** — Lupita |
+| "Para eso tengo a la recepcionista" | **B** — Lupita |
+| "Yo no me voy a poner a meter pacientes" | **B** — Lupita |
+| "Quiero ver cómo es la consulta" | A — Dr. Hernández |
+| "Tengo Excel con todo" | A — Dr. Hernández |
+| "Cómo se ven mis reportes de ingresos" | A — Dr. Hernández |
+
+El Enfoque B funciona porque cambia al protagonista del demo. El doctor no compra software, compra **menos fricción para su equipo**.
 
 ---
 

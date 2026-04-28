@@ -36,7 +36,7 @@ class DoctorPanelProvider extends PanelProvider
                 'primary' => Color::Teal,
             ])
             ->font('Inter')
-            ->plugin(\Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make())
+            ->plugin(\Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()->editable()->selectable())
             ->sidebarCollapsibleOnDesktop()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->globalSearchFieldSuffix(fn () => 'Ctrl+K')
