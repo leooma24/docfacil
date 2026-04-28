@@ -59,7 +59,8 @@ class SendProspectEmails extends Command
         $query = Prospect::where('status', $currentStatus)
             ->where('source', 'prospecting')
             ->whereNotNull('email')
-            ->where('email', '!=', '');
+            ->where('email', '!=', '')
+            ->whereNull('unsubscribed_at');
 
         // For follow-ups, wait DAYS_BETWEEN_MESSAGES after previous message
         if ($previousType) {
@@ -106,7 +107,7 @@ class SendProspectEmails extends Command
         $template = self::WA_MESSAGES[$messageType] ?? null;
         if (!$template) return;
 
-        $message = sprintf($template, $prospect->name, url('/register'));
+        $message = sprintf($template, $prospect->firstName() ?: $prospect->cleanName(), url('/register'));
 
         try {
             $success = $this->whatsapp->sendMessage($prospect->phone, $message);

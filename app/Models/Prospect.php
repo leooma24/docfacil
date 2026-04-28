@@ -19,6 +19,7 @@ class Prospect extends Model
         'contact_day', 'last_contact_method', 'next_contact_at', 'outreach_started_at',
         'objections_faced', 'demo_scheduled_at', 'demo_completed_at',
         'conversation_log', 'lead_score',
+        'unsubscribed_at',
     ];
 
     protected function casts(): array
@@ -32,6 +33,7 @@ class Prospect extends Model
             'outreach_started_at' => 'datetime',
             'demo_scheduled_at' => 'datetime',
             'demo_completed_at' => 'datetime',
+            'unsubscribed_at' => 'datetime',
             'contact_day' => 'integer',
             'objections_faced' => 'array',
             'conversation_log' => 'array',
@@ -69,6 +71,49 @@ class Prospect extends Model
      * Cadencia de contacto: día actual → próximo día.
      */
     public const CADENCE = [0 => 1, 1 => 3, 3 => 7, 7 => 14, 14 => 30, 30 => null];
+
+    /**
+     * Quita prefijos de titulo ("Dr.", "Dra.", "Doctor", etc.) del inicio
+     * del nombre. Lo importamos de directorios donde el nombre suele venir
+     * como "Dr. Alberto Salcedo" — si despues le anteponemos "Dr." en el
+     * saludo, queda "Dr. Dr. Alberto" y se ve raro/spam. Idempotente.
+     *
+     * Uso: Prospect::stripTitles('Dr. Alberto Salcedo') === 'Alberto Salcedo'
+     */
+    public static function stripTitles(?string $name): string
+    {
+        $clean = trim((string) $name);
+        if ($clean === '') return '';
+
+        // Titulos comunes en MX (dental + medico). \. opcional, \s+ obligatorio
+        // para no comer 'Drago' u 'Drauzio'. Loop hasta que no haya match
+        // por si viene "Dr. Dra. Maria" mezclado.
+        $pattern = '/^(dr|dra|doctor|doctora|mtra|mtro|maestra|maestro|lic|ing)\.?\s+/iu';
+        $guard = 0;
+        while ($guard < 4 && preg_match($pattern, $clean)) {
+            $clean = preg_replace($pattern, '', $clean);
+            $guard++;
+        }
+        return trim($clean);
+    }
+
+    /**
+     * Primer nombre limpio, sin titulo. Para saludos personalizados.
+     */
+    public function firstName(): string
+    {
+        $clean = self::stripTitles($this->name);
+        $parts = preg_split('/\s+/', $clean);
+        return trim($parts[0] ?? '');
+    }
+
+    /**
+     * Nombre completo limpio (sin titulo) para usar en cuerpo de correos.
+     */
+    public function cleanName(): string
+    {
+        return self::stripTitles($this->name);
+    }
 
     public function advanceContactDay(string $method): void
     {

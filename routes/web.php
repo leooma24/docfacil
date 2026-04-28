@@ -17,6 +17,7 @@ use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\TrackController;
+use App\Http\Controllers\UnsubscribeController;
 use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -106,6 +107,12 @@ Route::get('/herramientas/calculadora-consultorio', [ToolsController::class, 'ca
 Route::get('/t/c/{token}', [TrackController::class, 'click'])
     ->name('track.click')
     ->middleware('throttle:60,1');
+
+// One-click unsubscribe (LFPDPPP art. 16, anti-spam best practice).
+// Token HMAC-SHA256 firmado por prospect_id; cualquier modificacion lo invalida.
+Route::get('/baja/{token}', [UnsubscribeController::class, 'handle'])
+    ->name('prospect.unsubscribe')
+    ->middleware('throttle:30,1');
 Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::class, 'calculadoraRoiLead'])
     ->middleware('throttle:5,1')
     ->name('tools.calculadora_roi.lead');

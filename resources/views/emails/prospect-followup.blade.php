@@ -51,7 +51,11 @@
         </div>
         <div class="footer">
             DocFácil · Software para consultorios médicos y dentales · <a href="{{ url('/') }}" style="color:#14b8a6;">docfacil.tu-app.co</a><br>
-            <small>Si no desea recibir más correos, responda con "No me interesa" y lo saco de la lista.</small>
+            @if(!empty($unsubscribeUrl))
+                <small>Si no desea recibir más correos, <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">dé de baja su correo aquí</a>. Un solo clic, lo respetamos.</small>
+            @else
+                <small>Si no desea recibir más correos, responda con "No me interesa" y lo saco de la lista.</small>
+            @endif
         </div>
     </div>
 </body>

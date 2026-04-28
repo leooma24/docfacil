@@ -47,7 +47,7 @@ class PendingFollowupsWidget extends Widget
     {
         $phone = preg_replace('/[\s\-\(\)\+]/', '', $p->phone ?? '');
         if (strlen($phone) === 10) $phone = '52' . $phone;
-        $name = explode(' ', trim($p->name))[0] ?? '';
+        $name = $p->firstName();
 
         $msg = match ($p->contact_day) {
             0, 1 => "Hola {$name}, soy de DocFacil. Queria preguntarle: como lleva el control de citas y expedientes? Le puedo mostrar algo rapido que le ahorra 2 horas al dia.",

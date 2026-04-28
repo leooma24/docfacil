@@ -184,7 +184,7 @@ class ProspectResource extends Resource
                     ->url(function (Prospect $record) {
                         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $name = $record->name;
+                        $name = $record->cleanName();
                         $clinic = $record->clinic_name ?? 'tu consultorio';
 
                         $status = $record->status;

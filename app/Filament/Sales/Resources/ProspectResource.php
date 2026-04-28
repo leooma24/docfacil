@@ -271,7 +271,7 @@ class ProspectResource extends Resource
                     ->url(function (Prospect $record) {
                         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $name = explode(' ', trim($record->name))[0] ?? '';
+                        $name = $record->firstName();
                         $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
                             || str_contains(strtolower($record->specialty ?? ''), 'odont');
 
@@ -427,7 +427,7 @@ class ProspectResource extends Resource
         $phone = preg_replace('/\D/', '', (string) $record->phone);
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
-        $name = explode(' ', trim((string) $record->name))[0] ?? '';
+        $name = $record->firstName();
         $cityPart = $record->city ? " en {$record->city}" : '';
 
         $msg = "Hola Dr. {$name},\n\n"
@@ -449,7 +449,7 @@ class ProspectResource extends Resource
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
         $code = auth()->user()->sales_rep_code ?? '';
-        $name = explode(' ', trim((string) $record->name))[0] ?? '';
+        $name = $record->firstName();
 
         $url = url('/doctor/register') . ($code ? "?vnd={$code}" : '');
         $msg = "Hola {$name}, aquí le dejo su acceso a DocFácil para que lo pruebe gratis 15 días:\n\n"
