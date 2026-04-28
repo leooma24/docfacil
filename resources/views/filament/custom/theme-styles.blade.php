@@ -751,35 +751,13 @@
             background: rgba(6, 78, 59, 0.85) !important;
         }
 
-        /* === DERECHA: columna de acciones === */
-
-        .fi-ta-table > thead > tr > th.fi-ta-actions-cell,
-        .fi-ta-table > tbody > tr > td.fi-ta-actions-cell {
-            position: sticky;
-            right: 0;
-            z-index: 3;
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(8px);
-            box-shadow: -4px 0 6px -4px rgba(15, 23, 42, 0.08);
-        }
-        .dark .fi-ta-table > thead > tr > th.fi-ta-actions-cell,
-        .dark .fi-ta-table > tbody > tr > td.fi-ta-actions-cell {
-            background: rgba(15, 23, 42, 0.97);
-            box-shadow: -4px 0 6px -4px rgba(0, 0, 0, 0.4);
-        }
-        .fi-ta-table > thead > tr > th.fi-ta-actions-cell {
-            background: rgba(240, 253, 250, 0.97) !important;
-            z-index: 6;
-        }
-        .dark .fi-ta-table > thead > tr > th.fi-ta-actions-cell {
-            background: rgba(6, 78, 59, 0.7) !important;
-        }
-        .fi-ta-row:hover > td.fi-ta-actions-cell {
-            background: rgba(240, 253, 250, 0.97) !important;
-        }
-        .dark .fi-ta-row:hover > td.fi-ta-actions-cell {
-            background: rgba(6, 78, 59, 0.85) !important;
-        }
+        /* === DERECHA: columna de acciones ===
+           NO la hacemos sticky — los dropdowns de ActionGroup quedan
+           atrapados en el stacking context de la celda sticky y se
+           tapan con celdas de filas siguientes. La primera columna
+           sticky ya da el contexto al scrollear (nombre del paciente
+           siempre visible). El usuario puede usar la rueda/drag para
+           llegar a la columna de acciones. */
     }
 </style>
 
