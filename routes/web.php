@@ -22,11 +22,12 @@ use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\WhatsAppWebhookController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// Landing dedicada para Google Ads / nicho dental
+// Raiz y /dentistas comparten la misma vista. La estrategia es 100% dental
+// hasta llegar a 100 clinicas pagando — no tiene sentido mantener 2 landings
+// que digan cosas distintas. /dentistas se mantiene para Google Ads /
+// tracking diferenciado de email vs SEO. welcome.blade.php se conserva en
+// el repo por si se reabre el segmento medico general.
+Route::view('/', 'dentistas')->name('landing.home');
 Route::view('/dentistas', 'dentistas')->name('landing.dentistas');
 
 Route::view('/privacidad', 'legal.privacidad')->name('legal.privacy');
