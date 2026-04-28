@@ -649,14 +649,44 @@
         background: transparent !important;
     }
 
-    /* Fix: ActionGroup dropdown z-index — los dropdowns deben estar arriba
-       de cualquier celda sticky (z-index 3-6) y arriba de filas siguientes.
-       Subimos a 9999 para garantizar que no quede debajo de nada en tablas. */
-    .fi-dropdown,
+    /* === FIX DROPDOWN EN TABLAS (z-index + stacking context) ===
+       Problema: el dropdown del ActionGroup se renderiza dentro de la
+       fila de la tabla. Como cada fila tiene su propio stacking context
+       implicito, el dropdown queda capado por filas siguientes (que se
+       renderizan despues en DOM con z-index igual o mayor).
+
+       Solucion: cuando un dropdown esta ABIERTO en una fila, esa fila
+       entera sube de capa. Detectamos via aria-expanded="true" en el
+       trigger boton, que Filament/Alpine agrega automaticamente.
+    */
+
+    /* Dropdown panel arriba de todo */
     .fi-dropdown-panel,
-    .fi-dropdown-list {
+    .fi-dropdown-list,
+    [x-ref="panel"] {
         z-index: 9999 !important;
     }
+
+    /* Cuando una fila contiene un trigger expandido, la fila sube de capa
+       para que su dropdown pueda flotar sobre las siguientes. */
+    .fi-ta-row:has([aria-expanded="true"]),
+    tr:has([aria-expanded="true"]) {
+        position: relative !important;
+        z-index: 9999 !important;
+    }
+
+    /* Celdas con dropdown abierto no deben recortar contenido */
+    .fi-ta-actions-cell,
+    .fi-ta-cell {
+        overflow: visible !important;
+    }
+
+    /* El wrapper de la tabla mantiene scroll horizontal pero NO recorta vertical */
+    .fi-ta-content {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+    }
+
     /* Modales por encima de todo (incluyendo dropdowns) */
     .fi-modal,
     .fi-modal-window {
