@@ -21,6 +21,26 @@ class CreateAppointment extends CreateRecord
         return $data;
     }
 
+    /**
+     * Pre-fill form: patient_id viene de ?patient= (cuando se entra desde el
+     * profile de un paciente con click en "Agendar"), doctor_id default al
+     * doctor logueado para no tener que seleccionar uno mismo cada vez.
+     */
+    protected function fillForm(): void
+    {
+        $defaults = [];
+
+        if ($patientId = request()->query('patient')) {
+            $defaults['patient_id'] = (int) $patientId;
+        }
+
+        if ($doctorId = auth()->user()?->doctor?->id) {
+            $defaults['doctor_id'] = $doctorId;
+        }
+
+        $this->form->fill($defaults);
+    }
+
     protected function getFormHeroConfig(): array
     {
         return [
