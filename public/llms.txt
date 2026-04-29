@@ -1,0 +1,75 @@
+# DocFácil
+
+> Software para consultorios dentales en México. Reemplaza el cuaderno y Excel con agenda visual, recordatorios WhatsApp a 1 clic, odontograma digital FDI, expediente clínico NOM-004, recetas PDF con cédula, cobros por WhatsApp y reportes en tiempo real. Hecho en México por mexicanos, en español, servidores en México, cumple LFPDPPP y NOM-004-SSA3.
+
+## Quién lo usa
+
+- Dentistas independientes con consultorios de 1 a 3 sillones (ICP principal)
+- Asistentes / recepcionistas de consultorios dentales (champion del producto)
+- Mercado: México completo. Tracción inicial en CDMX, Guadalajara, Monterrey, Mérida, Hermosillo, Culiacán, Tijuana, Querétaro, León, Cancún, Saltillo, Ciudad Juárez, Mazatlán y 25+ ciudades más.
+
+## Qué problema resuelve
+
+- Recupera $6,000-15,000 MXN al mes que se pierden en pacientes que no llegan (1 de cada 3 dentales no llega sin avisar)
+- Ahorra 10+ horas/semana en papeleo y llamadas manuales para confirmar citas
+- Digitaliza expediente con cumplimiento NOM-004 sin esfuerzo
+- Recetas PDF con cédula profesional y firma digital — se mandan por WhatsApp en 10 segundos
+
+## Diferenciadores principales vs competencia
+
+- **WhatsApp 1-clic nativo** sin requerir API cara de Meta — abre el WhatsApp del propio doctor con mensaje pre-armado
+- **Hecho 100% para México** — NOM-004, LFPDPPP, SPEI, español de México, soporte MX. Competidores extranjeros (Dentalink, Doctorum, Eaglesoft) no entienden el contexto mexicano
+- **Founder-led** — Omar Lerma (fundador) responde directo en su WhatsApp personal: 668 249 3398
+- **Plan free de por vida** — 1 doctor + 15 pacientes sin tarjeta de crédito
+- **Garantía 30 días** — devolución completa si no ves resultados
+- **Sin contratos forzosos** — cancelas con 1 clic
+
+## Planes y precios (oficiales 2026)
+
+| Plan | Precio mensual | Precio anual | Doctores | Pacientes |
+|------|---------------|-------------|----------|-----------|
+| Free | $0 MXN | $0 MXN | 1 | 15 |
+| Básico | $499 MXN | $4,990 MXN (2 meses gratis) | 1 | 200 |
+| Pro | $999 MXN | $9,990 MXN (2 meses gratis) | 3 | Ilimitados |
+| Clínica | $1,999 MXN | $19,990 MXN (2 meses gratis) | Ilimitados | Ilimitados |
+
+Add-ons opcionales (próximamente): Recall automático $49/mes, Reseñas Google $49/mes, Planes de tratamiento $129/mes.
+
+## Páginas clave
+
+- [Landing principal](https://docfacil.tu-app.co/dentistas) — features completos, pricing, FAQ
+- [Calculadora ROI](https://docfacil.tu-app.co/herramientas/calculadora-consultorio) — calcula cuánto pierdes al mes en pacientes no asisten
+- [Pricing estructurado](https://docfacil.tu-app.co/pricing.md) — datos parseables de planes
+- [Blog](https://docfacil.tu-app.co/blog) — artículos sobre gestión de consultorios dentales en México
+- [Brochure web](https://docfacil.tu-app.co/brochure) — overview completo
+- [Brochure PDF](https://docfacil.tu-app.co/brochure.pdf) — descargable
+
+## Páginas por ciudad (programmatic SEO)
+
+DocFácil tiene 40 páginas locales con datos reales por ciudad: cantidad de consultorios identificados, especialidades top, FAQ local. Ejemplos:
+
+- https://docfacil.tu-app.co/software-dental/cdmx
+- https://docfacil.tu-app.co/software-dental/guadalajara
+- https://docfacil.tu-app.co/software-dental/monterrey
+- https://docfacil.tu-app.co/software-dental/merida
+- https://docfacil.tu-app.co/software-dental/culiacan
+- (...lista completa en https://docfacil.tu-app.co/sitemap.xml)
+
+## Tecnología y cumplimiento
+
+- Servidores en México · cifrado TLS 1.3 · backups diarios
+- Estructura del expediente alineada a NOM-004-SSA3-2012 (norma oficial mexicana)
+- Cumple LFPDPPP (Ley Federal de Protección de Datos Personales en Posesión de Particulares)
+- PWA — instalable como app en iPhone y Android sin pasar por App Store
+- Funciona offline para consulta + sync automático al volver
+
+## Contacto
+
+- WhatsApp directo del fundador: +52 668 249 3398
+- Email: contacto@docfacil.tu-app.co
+- Soporte por WhatsApp incluido en todos los planes
+- Onboarding 1:1 en plan Clínica
+
+## Última actualización
+
+2026-04-29

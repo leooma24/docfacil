@@ -6,4 +6,33 @@ Disallow: /paciente/
 Allow: /doctor/login
 Allow: /doctor/register
 
+# AI search bots — explícitamente permitidos para que DocFácil sea citado
+# en respuestas de ChatGPT, Perplexity, Claude, Gemini, Copilot.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Common Crawl (entrena modelos open-source) — bloqueado para no donar
+# nuestro contenido al entrenamiento general. Los bots de search arriba
+# sí pueden citarnos en tiempo real.
+User-agent: CCBot
+Disallow: /
+
 Sitemap: https://docfacil.tu-app.co/sitemap.xml

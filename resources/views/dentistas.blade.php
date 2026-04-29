@@ -51,15 +51,83 @@
         "@@context": "https://schema.org",
         "@@type": "SoftwareApplication",
         "name": "DocFácil para Dentistas",
-        "description": "Software para consultorios dentales en México. Odontograma digital, recordatorios WhatsApp, expediente clínico.",
+        "description": "Software para consultorios dentales en México. Odontograma digital FDI, recordatorios WhatsApp 1-clic, expediente clínico NOM-004, recetas PDF con cédula y cobros por WhatsApp.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "url": "{{ url('/dentistas') }}",
         "offers": [
-            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free" },
-            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Básico" },
-            { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Pro" },
-            { "@@type": "Offer", "price": "1999", "priceCurrency": "MXN", "name": "Plan Clínica" }
+            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free", "description": "1 doctor, 15 pacientes, agenda básica. Gratis de por vida." },
+            { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Básico", "description": "Odontograma FDI + WhatsApp + recetas PDF + cobros." },
+            { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Pro", "description": "Hasta 3 doctores, portal público, consentimientos, reportes avanzados." },
+            { "@@type": "Offer", "price": "1999", "priceCurrency": "MXN", "name": "Plan Clínica", "description": "Doctores ilimitados, reportes por doctor, onboarding 1:1." }
+        ],
+        "areaServed": { "@@type": "Country", "name": "México" },
+        "inLanguage": "es-MX"
+    }
+    </script>
+
+    {{-- Organization schema — entidad reconocible por LLMs y Google Knowledge Graph --}}
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "DocFácil",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('images/logo_doc_facil.png') }}",
+        "description": "Software dental hecho en México para consultorios dentales. Founder-led por Omar Lerma desde Los Mochis, Sinaloa.",
+        "founder": {
+            "@@type": "Person",
+            "name": "Omar Lerma",
+            "jobTitle": "Fundador"
+        },
+        "areaServed": { "@@type": "Country", "name": "México" },
+        "knowsAbout": [
+            "Software dental",
+            "Odontograma digital FDI",
+            "Expediente clínico NOM-004-SSA3",
+            "LFPDPPP",
+            "Recordatorios WhatsApp",
+            "Recetas digitales con cédula"
+        ],
+        "contactPoint": {
+            "@@type": "ContactPoint",
+            "telephone": "+52-668-249-3398",
+            "contactType": "customer service",
+            "areaServed": "MX",
+            "availableLanguage": "Spanish"
+        }
+    }
+    </script>
+
+    {{-- FAQPage schema — la lista de FAQs se inyecta dinámicamente desde el array
+         $landingFaqs que aparece más abajo, generando JSON-LD válido para extracción
+         por AI Overviews / Perplexity / ChatGPT. --}}
+    @php
+    $landingFaqsForSchema = [
+        ['q' => '¿Cuánto cuesta DocFácil?', 'a' => 'Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico desde $499 MXN/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pro $999 MXN/mes para hasta 3 doctores. Clínica $1,999 MXN/mes ilimitado. Pago anual = 2 meses gratis. Garantía 30 días.'],
+        ['q' => '¿DocFácil cumple con NOM-004 y LFPDPPP?', 'a' => 'Sí. La estructura del expediente está alineada a NOM-004-SSA3-2012 (recetas con cédula, notas SOAP, diagnósticos, tratamientos). Cumple LFPDPPP con servidores en México, cifrado TLS 1.3, backups diarios y aislamiento total entre clínicas.'],
+        ['q' => '¿El odontograma de DocFácil es interactivo?', 'a' => 'Sí. Es un editor visual FDI con 13 condiciones dentales (caries, corona, extracción, endodoncia, implante, sellante, carilla, fractura, entre otras). Funciona en tablet, laptop y celular. Soporta los 32 dientes adultos con notación FDI internacional.'],
+        ['q' => '¿Qué hace DocFácil diferente a Dentalink, Doctorum o Eaglesoft?', 'a' => 'DocFácil está hecho 100% para México: cumple NOM-004 y LFPDPPP, integra SPEI, soporta WhatsApp 1-clic sin requerir API cara de Meta, tiene servidores en México y soporte directo por WhatsApp con el fundador. Las opciones extranjeras cobran en USD y no entienden el contexto mexicano.'],
+        ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, con 1 clic y sin penalizaciones. Garantía de 30 días: si no ves resultados, devolvemos tu dinero completo. Sin contratos forzosos.'],
+        ['q' => '¿Necesito instalar algo?', 'a' => 'No. DocFácil funciona en cualquier navegador y se instala como app (PWA) en iPhone y Android sin pasar por App Store. Sin instalación local.'],
+        ['q' => '¿Quién está detrás de DocFácil?', 'a' => 'Omar Lerma, ingeniero mexicano de Los Mochis, Sinaloa. Soporte directo por WhatsApp en +52 668 249 3398. Programa fundadores para los primeros 50 consultorios.'],
+    ];
+    @endphp
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "FAQPage",
+        "mainEntity": [
+            @foreach($landingFaqsForSchema as $i => $faq)
+            {
+                "@@type": "Question",
+                "name": @json($faq['q']),
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": @json($faq['a'])
+                }
+            }@if(!$loop->last),@endif
+            @endforeach
         ]
     }
     </script>
@@ -1327,6 +1395,13 @@
                     <a href="/terminos" class="text-gray-400 hover:text-teal-400 transition">Términos y Condiciones</a>
                 </div>
                 <p class="text-sm text-gray-600">&copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.</p>
+                @php
+                    // Última actualización del archivo del template (señal de freshness para AI/SEO).
+                    $manifestPath = public_path('build/manifest.json');
+                    $sourceFile = is_file($manifestPath) ? $manifestPath : __FILE__;
+                    $lastUpdated = \Carbon\Carbon::createFromTimestamp(filemtime($sourceFile))->translatedFormat('j \d\e F \d\e Y');
+                @endphp
+                <p class="text-xs text-gray-700 mt-1">Última actualización: {{ $lastUpdated }}</p>
             </div>
         </div>
     </footer>
