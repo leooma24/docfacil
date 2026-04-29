@@ -26,10 +26,23 @@ class Register extends BaseRegister
     {
         return $form
             ->schema([
-                $this->getNameFormComponent()->default(request()->query('name')),
-                $this->getEmailFormComponent()->default(request()->query('email')),
-                $this->getPasswordFormComponent(),
-                $this->getPasswordConfirmationFormComponent(),
+                $this->getNameFormComponent()
+                    ->default(request()->query('name'))
+                    ->placeholder('Dr. Juan Pérez'),
+                $this->getEmailFormComponent()
+                    ->default(request()->query('email'))
+                    ->placeholder('doctor@email.com'),
+                $this->getPasswordFormComponent()
+                    ->revealable() // Show/hide toggle — mejor UX que confirmation
+                    ->helperText('Mínimo 8 caracteres'),
+                $this->getPasswordConfirmationFormComponent()
+                    ->revealable(),
+                Forms\Components\TextInput::make('clinic_name')
+                    ->label('Nombre del consultorio')
+                    ->required()
+                    ->default(request()->query('clinic_name'))
+                    ->placeholder('Ej: Consultorio Dental Sonrisas')
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('website_url_backup')
                     ->label('')
                     ->extraAttributes([
@@ -45,50 +58,15 @@ class Register extends BaseRegister
                         'aria-hidden' => 'true',
                     ])
                     ->dehydrated(true),
-                Forms\Components\Section::make('Datos del Consultorio')
-                    ->schema([
-                        Forms\Components\TextInput::make('clinic_name')
-                            ->label('Nombre del consultorio')
-                            ->required()
-                            ->default(request()->query('clinic_name'))
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('specialty')
-                            ->label('Especialidad')
-                            ->placeholder('Ej: Odontología, Medicina General, Pediatría')
-                            ->default(request()->query('specialty'))
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('license_number')
-                            ->label('Cédula profesional')
-                            ->required()
-                            ->helperText('Obligatoria por NOM-004-SSA3-2012 para emitir recetas y expedientes')
-                            ->maxLength(50),
-                        Forms\Components\TextInput::make('clinic_phone')
-                            ->label('Teléfono del consultorio')
-                            ->tel()
-                            ->default(request()->query('phone'))
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('city')
-                            ->label('Ciudad')
-                            ->placeholder('Ej: Culiacán')
-                            ->default(request()->query('city'))
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('referral_code')
-                            ->label('Código de referido (opcional)')
-                            ->placeholder('Ej: DRGARCIA123')
-                            ->maxLength(20)
-                            ->default(request()->query('ref'))
-                            ->helperText('Si un colega te invitó, pon su código y ambos reciben 15 días gratis extra'),
-                    ]),
                 Forms\Components\Checkbox::make('terms_accepted')
                     ->label(new \Illuminate\Support\HtmlString(
-                        'He leído y acepto los <a href="/terminos" target="_blank" class="text-teal-600 underline">Términos y Condiciones</a> ' .
-                        'y el <a href="/privacidad" target="_blank" class="text-teal-600 underline">Aviso de Privacidad</a>. ' .
-                        'Me comprometo a obtener el consentimiento expreso de mis pacientes antes de cargar sus datos.'
+                        'Acepto los <a href="/terminos" target="_blank" class="text-teal-600 underline">Términos</a> ' .
+                        'y el <a href="/privacidad" target="_blank" class="text-teal-600 underline">Aviso de Privacidad</a>.'
                     ))
                     ->accepted()
                     ->required()
                     ->validationMessages([
-                        'accepted' => 'Debes aceptar los Términos y el Aviso de Privacidad para registrarte.',
+                        'accepted' => 'Debes aceptar los Términos para continuar.',
                     ]),
             ]);
     }
@@ -122,12 +100,21 @@ class Register extends BaseRegister
                 ->first();
         }
 
+        // Datos opcionales que ya no están en el form pero pueden venir por
+        // query string (cuando un correo del pipeline pre-llena el registro).
+        // Los campos clínicos (specialty, license, phone, city) se completan
+        // en el wizard de onboarding después del registro.
+        $queryPhone = request()->query('phone');
+        $queryCity = request()->query('city');
+        $querySpecialty = request()->query('specialty');
+        $queryRef = request()->query('ref');
+
         // Create clinic (sold_by_user_id NO está en fillable — requiere forceFill)
         $clinic = new Clinic();
         $clinic->forceFill([
             'name' => $data['clinic_name'],
-            'phone' => $data['clinic_phone'] ?? null,
-            'city' => $data['city'] ?? null,
+            'phone' => $queryPhone,
+            'city' => $queryCity,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
             'sold_by_user_id' => $salesRep?->id,
@@ -159,12 +146,14 @@ class Register extends BaseRegister
             'email_verified_at' => $verifiedFromTrackedClick ? now() : null,
         ]);
 
-        // Create doctor profile
+        // Create doctor profile (license_number y specialty se llenan en el
+        // wizard de onboarding step 2 — aquí null para que el doctor pueda
+        // entrar a explorar sin fricción).
         Doctor::create([
             'user_id' => $user->id,
             'clinic_id' => $clinic->id,
-            'specialty' => $data['specialty'] ?? null,
-            'license_number' => $data['license_number'],
+            'specialty' => $querySpecialty,
+            'license_number' => null,
         ]);
 
         // Create/update prospect for CRM tracking
@@ -174,19 +163,19 @@ class Register extends BaseRegister
                 'status' => 'converted',
                 'converted_at' => now(),
                 'converted_clinic_id' => $clinic->id,
-                'phone' => $existingProspect->phone ?: ($data['clinic_phone'] ?? null),
-                'city' => $existingProspect->city ?: ($data['city'] ?? null),
+                'phone' => $existingProspect->phone ?: $queryPhone,
+                'city' => $existingProspect->city ?: $queryCity,
                 'clinic_name' => $existingProspect->clinic_name ?: $data['clinic_name'],
-                'specialty' => $existingProspect->specialty ?: ($data['specialty'] ?? null),
+                'specialty' => $existingProspect->specialty ?: $querySpecialty,
             ], fn ($v) => $v !== null));
         } else {
             Prospect::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'phone' => $data['clinic_phone'] ?? null,
+                'phone' => $queryPhone,
                 'clinic_name' => $data['clinic_name'],
-                'specialty' => $data['specialty'] ?? null,
-                'city' => $data['city'] ?? null,
+                'specialty' => $querySpecialty,
+                'city' => $queryCity,
                 'source' => $salesRep ? 'prospecting' : 'landing',
                 'status' => 'converted',
                 'converted_at' => now(),
@@ -195,9 +184,9 @@ class Register extends BaseRegister
             ]);
         }
 
-        // Process referral if code provided
-        if (!empty($data['referral_code'])) {
-            \App\Models\Referral::processReferral($user, $data['referral_code']);
+        // Process referral si vino por query string ?ref=
+        if (!empty($queryRef)) {
+            \App\Models\Referral::processReferral($user, $queryRef);
         }
 
         // Send welcome email
