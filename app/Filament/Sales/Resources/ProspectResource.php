@@ -78,8 +78,18 @@ class ProspectResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('lead_score', 'desc')
             ->columns([
+                Tables\Columns\TextColumn::make('lead_score')
+                    ->label('Score')
+                    ->sortable()
+                    ->badge()
+                    ->color(fn ($state) => \App\Services\LeadScoringService::bucketColor($state))
+                    ->formatStateUsing(function ($state) {
+                        $state ??= 0;
+                        return $state . ' · ' . \App\Services\LeadScoringService::bucketLabel($state);
+                    })
+                    ->tooltip('Score 0-100 calculado de fit (especialidad, ciudad, contacto) + engagement (clicks, demo, status). Recalcula nocturno.'),
                 Tables\Columns\TextColumn::make('name')->label('Prospecto')->searchable()->sortable()
                     ->description(fn (Prospect $r) => collect([$r->specialty, $r->clinic_name, $r->city])->filter()->implode(' · ') ?: null),
                 Tables\Columns\BadgeColumn::make('status')
@@ -150,6 +160,15 @@ class ProspectResource extends Resource
                 Tables\Filters\Filter::make('no_started')
                     ->label('Sin iniciar cadencia')
                     ->query(fn ($q) => $q->where('contact_day', 0)->whereIn('status', ['new', 'contacted'])),
+                Tables\Filters\Filter::make('hot_leads')
+                    ->label('🔥 Calientes (80+)')
+                    ->query(fn ($q) => $q->where('lead_score', '>=', \App\Services\LeadScoringService::HOT_THRESHOLD)),
+                Tables\Filters\Filter::make('warm_leads')
+                    ->label('🌡️ Tibios (50-79)')
+                    ->query(fn ($q) => $q->whereBetween('lead_score', [
+                        \App\Services\LeadScoringService::WARM_THRESHOLD,
+                        \App\Services\LeadScoringService::HOT_THRESHOLD - 1,
+                    ])),
             ])
             ->actions([
                 // ═══ BOTÓN 1: Acción principal (cambia según estado) ═══

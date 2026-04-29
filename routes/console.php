@@ -24,6 +24,10 @@ Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
 // Send prospect pipeline emails every hour (max 10 per run)
 Schedule::command('docfacil:send-prospect-emails')->hourly();
 
+// Recalcular lead_score de prospects cada noche para reflejar
+// engagement reciente (clicks de correos) y decay automático.
+Schedule::command('docfacil:recalculate-lead-scores')->dailyAt('02:30');
+
 // SPEI: recordatorio 5 días antes del vencimiento del plan (solo método SPEI; Stripe se renueva solo)
 Schedule::command('docfacil:send-spei-reminders')->dailyAt('09:30');
 
