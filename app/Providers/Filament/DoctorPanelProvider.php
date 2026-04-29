@@ -52,6 +52,7 @@ class DoctorPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Doctor/Widgets'), for: 'App\\Filament\\Doctor\\Widgets')
             ->widgets([
                 \App\Filament\Doctor\Widgets\DashboardHeroWidget::class,
+                \App\Filament\Doctor\Widgets\SetupChecklistWidget::class,
                 \App\Filament\Doctor\Widgets\InviteDoctorsWidget::class,
                 \App\Filament\Doctor\Widgets\AIInsightsWidget::class,
                 \App\Filament\Doctor\Widgets\NextAppointment::class,
