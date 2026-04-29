@@ -62,6 +62,88 @@ class LeadScoringService
         'Cancún', 'Metepec', 'Cuernavaca',
     ];
 
+    /**
+     * Recalcula score, persiste, y dispara alertas si el lead cruzó a caliente.
+     * Idempotente — no duplica alertas: solo manda si hot_alerted_at es null.
+     * Si el lead enfría debajo de WARM_THRESHOLD, resetea hot_alerted_at para
+     * permitir alerta futura cuando vuelva a calentar.
+     *
+     * Devuelve ['old' => int|null, 'new' => int, 'alerted' => bool].
+     */
+    public function updateAndNotify(Prospect $p): array
+    {
+        $oldScore = $p->lead_score;
+        $newScore = $this->calculate($p);
+
+        $update = ['lead_score' => $newScore];
+        $alerted = false;
+
+        // Cruce hacia caliente: dispara alerta una sola vez por evento de calentamiento.
+        if ($newScore >= self::HOT_THRESHOLD && $p->hot_alerted_at === null) {
+            $update['hot_alerted_at'] = now();
+            $alerted = true;
+        }
+
+        // Si vuelve a enfriarse debajo del umbral tibio, resetea para permitir
+        // que vuelva a alertar si recalienta más tarde.
+        if ($newScore < self::WARM_THRESHOLD && $p->hot_alerted_at !== null) {
+            $update['hot_alerted_at'] = null;
+        }
+
+        $p->updateQuietly($update);
+
+        if ($alerted) {
+            $this->dispatchAlerts($p->fresh(), $newScore);
+        }
+
+        return ['old' => $oldScore, 'new' => $newScore, 'alerted' => $alerted];
+    }
+
+    /**
+     * Manda email + WhatsApp a Omar avisando que el lead se calentó.
+     * Cualquier fallo se loggea pero no rompe la actualización del score.
+     */
+    protected function dispatchAlerts(Prospect $p, int $score): void
+    {
+        $adminEmail = collect(explode(',', (string) config('services.notifications.emails', '')))
+            ->map(fn ($e) => trim($e))->filter()->first();
+        $adminPhone = config('services.notifications.phone');
+        $name = $p->cleanName() ?: 'Sin nombre';
+
+        // Email — siempre se intenta (Gmail SMTP funciona)
+        if (! empty($adminEmail)) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($adminEmail)
+                    ->send(new \App\Mail\LeadHeatedUpMail($p, $score));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('LeadHeatedUpMail failed', [
+                    'prospect_id' => $p->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        // WhatsApp — solo si está configurado el número y la API funciona
+        if (! empty($adminPhone) && ! empty(config('services.whatsapp.token'))) {
+            try {
+                $msg = "🔥 *Lead caliente · Score {$score}*\n\n" .
+                    "*{$name}*" .
+                    ($p->specialty ? " · {$p->specialty}" : '') .
+                    ($p->city ? "\n📍 {$p->city}" : '') .
+                    ($p->phone ? "\n📱 {$p->phone}" : '') .
+                    "\n\n⚡ Contacta en las próximas 2 horas — speed-to-lead 21× más conversión." .
+                    "\n\n" . url("/ventas/prospectos/{$p->id}/edit");
+
+                app(\App\Services\WhatsAppService::class)->sendMessage($adminPhone, $msg);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Lead heated up WhatsApp failed', [
+                    'prospect_id' => $p->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+
     public function calculate(Prospect $p): int
     {
         // Overrides absolutos

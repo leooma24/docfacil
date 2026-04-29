@@ -28,19 +28,23 @@ class RecalculateLeadScores extends Command
 
         $this->info("Recalculando scores para {$total} prospectos...");
 
-        Prospect::with('emailEvents')->chunkById($chunk, function ($batch) use ($scorer, &$processed, &$changed) {
+        $alerted = 0;
+        Prospect::with('emailEvents')->chunkById($chunk, function ($batch) use ($scorer, &$processed, &$changed, &$alerted) {
             foreach ($batch as $p) {
-                $newScore = $scorer->calculate($p);
-                if ($p->lead_score !== $newScore) {
-                    $p->updateQuietly(['lead_score' => $newScore]);
+                $result = $scorer->updateAndNotify($p);
+                if ($result['old'] !== $result['new']) {
                     $changed++;
+                }
+                if ($result['alerted']) {
+                    $alerted++;
                 }
                 $processed++;
             }
         });
 
         $elapsed = round(microtime(true) - $start, 2);
-        $this->info("✅ Procesados: {$processed} · Cambiaron: {$changed} · Tiempo: {$elapsed}s");
+        $alertedNote = $alerted > 0 ? " · 🔥 Alertas enviadas: {$alerted}" : '';
+        $this->info("✅ Procesados: {$processed} · Cambiaron: {$changed}{$alertedNote} · Tiempo: {$elapsed}s");
 
         // Distribución por bucket (insight para Omar)
         $hot = Prospect::where('lead_score', '>=', LeadScoringService::HOT_THRESHOLD)->count();

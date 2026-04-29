@@ -44,12 +44,11 @@ class TrackController extends Controller
                 'user_agent' => substr((string) $request->userAgent(), 0, 500),
             ]);
 
-            // Recalcular score en tiempo real — el click es señal de intent caliente,
-            // queremos que Omar lo vea HOY en su panel sin esperar al cron de las 2:30am.
+            // Recalcular score en tiempo real — el click es señal de intent caliente.
+            // Si cruza umbral 80, dispara alerta WhatsApp + email a Omar.
             $prospectForScore = Prospect::find($prospectId);
             if ($prospectForScore) {
-                $newScore = app(\App\Services\LeadScoringService::class)->calculate($prospectForScore);
-                $prospectForScore->updateQuietly(['lead_score' => $newScore]);
+                app(\App\Services\LeadScoringService::class)->updateAndNotify($prospectForScore);
             }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('TrackController click log failed', [

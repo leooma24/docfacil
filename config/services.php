@@ -32,6 +32,9 @@ return [
         // Destinatarios para avisos internos (nuevos leads landing, etc.).
         // CSV en NOTIFY_EMAILS. Cuando el dominio tenga buzón real, agregar admin@docfacil.com.
         'emails' => env('NOTIFY_EMAILS', 'leooma24@gmail.com'),
+        // Teléfono de Omar para alertas WhatsApp (formato 10 dígitos sin +52).
+        // Si vacío, las alertas solo se envían por email.
+        'phone' => env('NOTIFY_PHONE', '6682493398'),
     ],
 
     'slack' => [
