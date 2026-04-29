@@ -184,7 +184,7 @@
                 class="block w-full py-2 px-4 text-left text-teal-700 border border-teal-200 rounded-lg font-semibold">
                 📲 Instalar como app
             </button>
-            <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesion</a>
+            <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesión</a>
             <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar_mobile" data-track-text="prueba_gratis" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
         </div>
     </nav>
@@ -382,7 +382,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-animate>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 animate-fade-up">
-                    &iquest;Te suena familiar?
+                    ¿Te suena familiar?
                 </h2>
             </div>
             <div class="grid md:grid-cols-2 gap-12 items-start">
@@ -390,7 +390,7 @@
                 <div class="space-y-6" data-animate>
                     <div class="text-center mb-6">
                         <span class="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-full text-sm font-semibold border border-red-100">
-                            Sin DocFacil
+                            Sin DocFácil
                         </span>
                     </div>
                     @php
@@ -417,7 +417,7 @@
                 <div class="space-y-6" data-animate>
                     <div class="text-center mb-6">
                         <span class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-700 rounded-full text-sm font-semibold border border-teal-100">
-                            Con DocFacil
+                            Con DocFácil
                         </span>
                     </div>
                     @php
@@ -795,7 +795,7 @@
                         return this.timeSavings + this.retentionGain;
                     },
                     onChange() {
-                        // GA: solo 1 fire por sesion (engagement marker, no flood de eventos)
+                        // GA: solo 1 fire por sesión (engagement marker, no flood de eventos)
                         if (this._trackedRoi || !window.trackEvent) return;
                         this._trackedRoi = true;
                         window.trackEvent('roi_calculator_used', {
@@ -1105,11 +1105,11 @@
                 <div data-animate>
                     <span class="inline-flex items-center px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full mb-4 border border-teal-100">CONTACTO</span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
-                        Quieres saber mas?<br>
+                        ¿Quieres saber más?<br>
                         <span class="text-teal-600">Hablemos.</span>
                     </h2>
                     <p class="mt-4 text-gray-600 leading-relaxed">
-                        Dejanos tus datos y un asesor te contactara para mostrarte como DocFacil puede transformar tu consultorio. Sin compromiso.
+                        Déjanos tus datos y un asesor te contactará para mostrarte cómo DocFácil puede transformar tu consultorio. Sin compromiso.
                     </p>
 
                     <div class="mt-10 space-y-6">
@@ -1118,7 +1118,7 @@
                                 <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             </div>
                             <div>
-                                <div class="font-bold text-gray-900">WhatsApp / Telefono</div>
+                                <div class="font-bold text-gray-900">WhatsApp / Teléfono</div>
                                 <a href="https://wa.me/526682493398" target="_blank" data-track="whatsapp_clicked" data-track-location="contact_section" class="text-teal-600 hover:text-teal-700 transition font-medium">668 249 3398</a>
                             </div>
                         </div>
@@ -1136,7 +1136,7 @@
                                 <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <div>
-                                <div class="font-bold text-gray-900">Horario de atencion</div>
+                                <div class="font-bold text-gray-900">Horario de atención</div>
                                 <span class="text-gray-600">Lunes a Viernes, 9:00 - 18:00</span>
                             </div>
                         </div>
@@ -1148,8 +1148,8 @@
                     @if(session('contact_success'))
                     <div class="bg-teal-50 border border-teal-200 rounded-2xl p-8 text-center">
                         <div class="text-5xl mb-4">&#10003;</div>
-                        <h3 class="text-xl font-bold text-teal-800 mb-2">Mensaje enviado!</h3>
-                        <p class="text-teal-700">Gracias por tu interes. Te contactaremos pronto.</p>
+                        <h3 class="text-xl font-bold text-teal-800 mb-2">¡Mensaje enviado!</h3>
+                        <p class="text-teal-700">Gracias por tu interés. Te contactaremos pronto.</p>
                     </div>
                     @else
                     {{-- Form simplificado: solo 3 campos visibles + detalles colapsables.
@@ -1238,11 +1238,11 @@
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10" data-animate>
             <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-                Tu competencia ya se digitalizo.<br>
-                <span class="text-teal-200">&iquest;Tu cuando?</span>
+                Tu competencia ya se digitalizó.<br>
+                <span class="text-teal-200">¿Tú cuándo?</span>
             </h2>
             <p class="mt-6 text-lg text-teal-100 max-w-2xl mx-auto">
-                Cada dia que sigues con papel y Excel, pierdes pacientes, pierdes dinero y pierdes tiempo.
+                Cada día que sigues con papel y Excel, pierdes pacientes, pierdes dinero y pierdes tiempo.
                 Empieza gratis hoy y ve la diferencia esta misma semana.
             </p>
             <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="final_cta" data-track-text="crear_mi_cuenta_gratis" class="mt-10 inline-flex items-center px-10 py-4 bg-white text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition-all shadow-2xl hover:-translate-y-1 text-lg animate-pulse-glow">
@@ -1256,8 +1256,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8 mb-12">
                 <div>
-                    <img src="{{ asset('images/logo_doc_facil.png') }}" alt="DocFacil" class="h-10 mb-4 brightness-200" loading="lazy" decoding="async">
-                    <p class="text-sm text-gray-500">Software para consultorios medicos y dentales. Hecho en Mexico.</p>
+                    <img src="{{ asset('images/logo_doc_facil.png') }}" alt="DocFácil" class="h-10 mb-4 brightness-200" loading="lazy" decoding="async">
+                    <p class="text-sm text-gray-500">Software para consultorios médicos y dentales. Hecho en México.</p>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-300 mb-3">Producto</h4>
@@ -1286,7 +1286,7 @@
                     <ul class="space-y-2 text-sm text-gray-500">
                         <li><a href="/doctor/login" class="hover:text-teal-400 transition">Panel Doctor</a></li>
                         <li><a href="/paciente/login" class="hover:text-teal-400 transition">Portal Paciente</a></li>
-                        <li><a href="/admin/login" class="hover:text-teal-400 transition">Administracion</a></li>
+                        <li><a href="/admin/login" class="hover:text-teal-400 transition">Administración</a></li>
                     </ul>
                 </div>
             </div>
@@ -1298,7 +1298,7 @@
                     <span class="text-gray-700">&middot;</span>
                     <a href="/terminos" class="text-gray-400 hover:text-teal-400 transition">Términos y Condiciones</a>
                 </div>
-                <p class="text-sm text-gray-600">&copy; {{ date('Y') }} DocFacil. Todos los derechos reservados.</p>
+                <p class="text-sm text-gray-600">&copy; {{ date('Y') }} DocFácil. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
@@ -1393,7 +1393,7 @@ window.addEventListener('scroll', () => {
 
 </script>
 
-{{-- Toast de estatus honesto — rota 3 mensajes reales sobre el estado de DocFacil.
+{{-- Toast de estatus honesto — rota 3 mensajes reales sobre el estado de DocFácil.
      Sin datos inventados: se que hoy vamos arrancando, lo uso a favor para generar
      urgencia genuina ('se de los primeros'). Desktop: esquina inferior-izquierda.
      Mobile: arriba debajo del navbar. --}}
