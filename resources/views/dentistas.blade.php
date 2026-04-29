@@ -1271,15 +1271,43 @@
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-300 mb-3">Ciudades</h4>
-                    <ul class="space-y-2 text-sm text-gray-500">
-                        <li><a href="/software-dental/culiacan" class="hover:text-teal-400 transition">Culiacán</a></li>
-                        <li><a href="/software-dental/mazatlan" class="hover:text-teal-400 transition">Mazatlán</a></li>
-                        <li><a href="/software-dental/los-mochis" class="hover:text-teal-400 transition">Los Mochis</a></li>
-                        <li><a href="/software-dental/cdmx" class="hover:text-teal-400 transition">CDMX</a></li>
-                        <li><a href="/software-dental/guadalajara" class="hover:text-teal-400 transition">Guadalajara</a></li>
-                        <li><a href="/software-dental/monterrey" class="hover:text-teal-400 transition">Monterrey</a></li>
-                        <li><a href="/software-dental/merida" class="hover:text-teal-400 transition">Mérida</a></li>
-                    </ul>
+                    @php
+                        $cityLinks = [
+                            ['slug' => 'cdmx',                  'name' => 'CDMX'],
+                            ['slug' => 'guadalajara',           'name' => 'Guadalajara'],
+                            ['slug' => 'monterrey',             'name' => 'Monterrey'],
+                            ['slug' => 'merida',                'name' => 'Mérida'],
+                            ['slug' => 'culiacan',              'name' => 'Culiacán'],
+                            ['slug' => 'queretaro',             'name' => 'Querétaro'],
+                            ['slug' => 'tijuana',               'name' => 'Tijuana'],
+                            ['slug' => 'cancun',                'name' => 'Cancún'],
+                            ['slug' => 'leon',                  'name' => 'León'],
+                            ['slug' => 'puebla',                'name' => 'Puebla'],
+                            ['slug' => 'hermosillo',            'name' => 'Hermosillo'],
+                            ['slug' => 'ciudad-obregon',        'name' => 'Cd. Obregón'],
+                            ['slug' => 'ciudad-juarez',         'name' => 'Cd. Juárez'],
+                            ['slug' => 'saltillo',              'name' => 'Saltillo'],
+                            ['slug' => 'torreon',               'name' => 'Torreón'],
+                            ['slug' => 'mazatlan',              'name' => 'Mazatlán'],
+                            ['slug' => 'los-mochis',            'name' => 'Los Mochis'],
+                            ['slug' => 'aguascalientes',        'name' => 'Aguascalientes'],
+                            ['slug' => 'cuernavaca',            'name' => 'Cuernavaca'],
+                            ['slug' => 'metepec',               'name' => 'Metepec'],
+                            ['slug' => 'toluca',                'name' => 'Toluca'],
+                            ['slug' => 'morelia',               'name' => 'Morelia'],
+                            ['slug' => 'chihuahua',             'name' => 'Chihuahua'],
+                            ['slug' => 'san-luis-potosi',       'name' => 'SLP'],
+                            ['slug' => 'boca-del-rio',          'name' => 'Boca del Río'],
+                            ['slug' => 'playa-del-carmen',      'name' => 'Playa del Carmen'],
+                            ['slug' => 'zapopan',               'name' => 'Zapopan'],
+                            ['slug' => 'san-pedro-garza-garcia','name' => 'San Pedro G.G.'],
+                        ];
+                    @endphp
+                    <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-sm">
+                        @foreach ($cityLinks as $c)
+                            <a href="/software-dental/{{ $c['slug'] }}" class="text-gray-500 hover:text-teal-400 transition">{{ $c['name'] }}</a>
+                        @endforeach
+                    </div>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-300 mb-3">Acceso</h4>

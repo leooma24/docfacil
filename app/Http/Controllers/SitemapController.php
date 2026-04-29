@@ -7,29 +7,11 @@ use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    private array $cities = [
-        'culiacan' => 'Culiacán',
-        'cdmx' => 'Ciudad de México',
-        'guadalajara' => 'Guadalajara',
-        'monterrey' => 'Monterrey',
-        'puebla' => 'Puebla',
-        'tijuana' => 'Tijuana',
-        'leon' => 'León',
-        'merida' => 'Mérida',
-        'cancun' => 'Cancún',
-        'queretaro' => 'Querétaro',
-        'aguascalientes' => 'Aguascalientes',
-        'chihuahua' => 'Chihuahua',
-        'morelia' => 'Morelia',
-        'toluca' => 'Toluca',
-        'hermosillo' => 'Hermosillo',
-        'saltillo' => 'Saltillo',
-        'mazatlan' => 'Mazatlán',
-        'los-mochis' => 'Los Mochis',
-    ];
-
     public function index()
     {
+        // Source of truth de ciudades = CityLandingController. Evita drift.
+        $cities = (new CityLandingController())->getCitiesForFooter();
+
         $urls = [
             ['loc' => url('/'), 'priority' => '1.0', 'changefreq' => 'weekly'],
             ['loc' => url('/dentistas'), 'priority' => '0.95', 'changefreq' => 'weekly'],
@@ -44,8 +26,8 @@ class SitemapController extends Controller
             $urls[] = ['loc' => url("/blog/{$slug}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
         }
 
-        foreach ($this->cities as $slug => $name) {
-            $urls[] = ['loc' => url("/software-dental/{$slug}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
+        foreach ($cities as $c) {
+            $urls[] = ['loc' => url("/software-dental/{$c['slug']}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
