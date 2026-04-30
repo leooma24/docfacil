@@ -306,7 +306,7 @@ class ProspectResource extends Resource
                     Tables\Actions\Action::make('advance_contact')
                         ->label('Registrar contacto')
                         ->icon('heroicon-o-phone-arrow-up-right')
-                        ->visible(fn (Prospect $r) => $r->status === 'contacted' && !in_array($r->status, ['converted', 'lost']))
+                        ->visible(fn (Prospect $r) => !in_array($r->status, ['converted', 'lost']))
                         ->form([
                             Forms\Components\Select::make('method')
                                 ->label('¿Cómo lo contactaste?')
@@ -323,6 +323,29 @@ class ProspectResource extends Resource
                                 $record->update(['notes' => trim(($record->notes ? $record->notes . "\n" : '') . '[' . now()->format('d/m H:i') . '] ' . $data['contact_notes'])]);
                             }
                             Notification::make()->title("Contacto D{$record->contact_day} registrado")->success()->send();
+                        }),
+
+                    Tables\Actions\Action::make('add_note')
+                        ->label('Agregar nota')
+                        ->icon('heroicon-o-pencil-square')
+                        ->visible(fn (Prospect $r) => !in_array($r->status, ['converted']))
+                        ->form([
+                            Forms\Components\Textarea::make('note')
+                                ->label('Nota')
+                                ->required()
+                                ->rows(3)
+                                ->placeholder('Ej: Pidió retomar más tarde, estaba en urgencia con paciente'),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $stamp = now()->format('d/m H:i');
+                            $existing = $record->notes ? $record->notes . "\n" : '';
+                            $record->update([
+                                'notes' => trim($existing . "[{$stamp}] {$data['note']}"),
+                            ]);
+                            Notification::make()
+                                ->title('Nota agregada')
+                                ->success()
+                                ->send();
                         }),
 
                     Tables\Actions\Action::make('mark_no_whatsapp')
