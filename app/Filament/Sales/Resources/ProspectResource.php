@@ -297,8 +297,7 @@ class ProspectResource extends Resource
                         // mandar "Dr. Consultorio" sería bochornoso.
                         $opener = self::buildSalutation($record);
                         $name = $opener['name']; // string vacío si no hay persona
-                        $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
-                            || str_contains(strtolower($record->specialty ?? ''), 'odont');
+                        $isDentist = self::detectDentist($record);
                         $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
                         $vndCode = auth()->user()->sales_rep_code ?? '';
                         $registerUrl = url('/doctor/register') . ($vndCode ? "?vnd={$vndCode}" : '');
@@ -461,6 +460,29 @@ class ProspectResource extends Resource
     }
 
     /**
+     * Detecta si el prospect es dental, mirando specialty + name + clinic_name.
+     * Importante: muchos prospects no tienen specialty pobladada porque vienen
+     * de directorios, pero su nombre/razón social claramente dice "Dental X".
+     */
+    protected static function detectDentist(Prospect $record): bool
+    {
+        $haystack = strtolower(
+            ($record->specialty ?? '') . ' '
+            . ($record->name ?? '') . ' '
+            . ($record->clinic_name ?? '')
+        );
+
+        // Cualquiera de estos en cualquier campo → dental
+        $dentalKeywords = ['dent', 'odont', 'ortodon', 'endo', 'period', 'implant'];
+        foreach ($dentalKeywords as $kw) {
+            if (str_contains($haystack, $kw)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Construye saludo apropiado dependiendo de si el `name` del prospect
      * es de persona ("Dr. Carlos Pérez") o de negocio ("Consultorio Dental X").
      *
@@ -475,8 +497,9 @@ class ProspectResource extends Resource
         $rawName = trim((string) $record->name);
 
         // Detectar si el name empieza con palabra de negocio (no persona).
-        // Es un "name" que en realidad es razón social del consultorio.
-        $businessPattern = '/^(consultorio|cl[ií]nica|dental|centro|hospital|odontolog[ií]a|ortodoncia|endodoncia|periodoncia|sonr[ií]e|smile)\b/iu';
+        // Sin \b al final para que también matchee marcas tipo "Dentalisima",
+        // "Dentalix", "Sonriente", "Smile Center", etc.
+        $businessPattern = '/^(consultorio|cl[ií]nica|dental|centro|hospital|odontolog|ortodoncia|endodoncia|periodoncia|sonr[ií]|smile|dent[ai])/iu';
         $isBusiness = preg_match($businessPattern, $rawName);
 
         $hour = now()->hour;
@@ -523,8 +546,7 @@ class ProspectResource extends Resource
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
         $opener = self::buildSalutation($record);
-        $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
-            || str_contains(strtolower($record->specialty ?? ''), 'odont');
+        $isDentist = self::detectDentist($record);
         $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
 
         // Plantilla profesional clean (sin emojis ni jerga). Documentada en
