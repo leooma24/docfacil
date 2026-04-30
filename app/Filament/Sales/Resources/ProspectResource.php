@@ -311,7 +311,7 @@ class ProspectResource extends Resource
                         $msg = match ($record->contact_day) {
                             0, 1 => "{$greeting}.\n\n"
                                 . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-                                . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?",
+                                . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?",
                             3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
                                 . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
                                 . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
@@ -531,7 +531,7 @@ class ProspectResource extends Resource
         // .agents/wa-templates.md — actualizar ambos lados al cambiar.
         $msg = "{$opener['greeting']}.\n\n"
             . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-            . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?";
+            . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?";
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }

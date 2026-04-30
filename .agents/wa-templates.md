@@ -24,8 +24,14 @@ Buenas tardes, Dr. {Nombre}.
 
 Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para consultorios dentales y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.
 
-Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?
+Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?
 ```
+
+**Por qué esta pregunta y no "¿cuántos le fallan al mes?":**
+- Es OPERATIVA (cómo lo hace), no FINANCIERA (cuánto pierde) → más fácil de contestar
+- Una vez que conteste, TÚ calculas el costo y lo conectas a la solución
+- "Si me da chance" + "decide si quiere seguir" = permission-based, respeta su autonomía
+- En cultura MX la primera pregunta debe ser cordial, no inquisitiva
 
 ---
 
@@ -100,9 +106,9 @@ bit.ly/omar-15min
 - ❌ Emojis (👋 🙏 🙌) — restan profesionalismo
 - ❌ "Le caigo" — demasiado casual
 - ❌ "Le late" — jerga MX
-- ❌ "Pitch" / "tip" / "feedback" — anglicismos
+- ❌ "Pitch" / "tip" / "feedback" / "chance" — anglicismos. Decir "presentación" / "consejo" / "retroalimentación" / "oportunidad"
 - ❌ "Estamos invitando" — corporativo plural
-- ❌ "Beta gratuito" — suena a no-listo
+- ❌ "Beta gratuito" / "beta" — suena a no-listo, asusta a doctores con datos clínicos. Reemplaza con "15 días Pro gratis" o "Plan Free de por vida" o "primeros 50 consultorios" (founder program)
 - ❌ Repetir el nombre del consultorio (parece template automático)
 - ❌ Saludar al negocio en vez de a la persona
 - ❌ Saludar con "Hola" seco — preferir "Buenas tardes" o "Buenos días"
