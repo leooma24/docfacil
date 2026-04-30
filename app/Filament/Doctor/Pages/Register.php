@@ -189,11 +189,16 @@ class Register extends BaseRegister
             \App\Models\Referral::processReferral($user, $queryRef);
         }
 
-        // Send welcome email
+        // Send welcome email — no rompemos registro si falla, pero loggeamos
+        // para que sepamos cuando hay degradación silenciosa del onboarding.
         try {
             Mail::to($user->email)->send(new WelcomeOnboardingMail($user));
-        } catch (\Exception $e) {
-            // Don't block registration if email fails
+        } catch (\Throwable $e) {
+            Log::error('WelcomeOnboardingMail failed at registration', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
         }
 
         // Analytics: flash event para que el partial lo dispare en el proximo

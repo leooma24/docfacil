@@ -64,9 +64,9 @@ class LeadScoringService
 
     /**
      * Recalcula score, persiste, y dispara alertas si el lead cruzó a caliente.
-     * Idempotente — no duplica alertas: solo manda si hot_alerted_at es null.
-     * Si el lead enfría debajo de WARM_THRESHOLD, resetea hot_alerted_at para
-     * permitir alerta futura cuando vuelva a calentar.
+     * Idempotente — solo marca hot_alerted_at si al menos UN canal de alerta
+     * (email o WhatsApp) salió exitoso. Si todo falló, deja hot_alerted_at
+     * null para que el próximo recalc lo reintente.
      *
      * Devuelve ['old' => int|null, 'new' => int, 'alerted' => bool].
      */
@@ -76,54 +76,57 @@ class LeadScoringService
         $newScore = $this->calculate($p);
 
         $update = ['lead_score' => $newScore];
-        $alerted = false;
+        $crossedHot = ($newScore >= self::HOT_THRESHOLD && $p->hot_alerted_at === null);
 
-        // Cruce hacia caliente: dispara alerta una sola vez por evento de calentamiento.
-        if ($newScore >= self::HOT_THRESHOLD && $p->hot_alerted_at === null) {
-            $update['hot_alerted_at'] = now();
-            $alerted = true;
-        }
-
-        // Si vuelve a enfriarse debajo del umbral tibio, resetea para permitir
-        // que vuelva a alertar si recalienta más tarde.
+        // Si enfría debajo del umbral tibio, resetea para permitir re-alerta futura.
         if ($newScore < self::WARM_THRESHOLD && $p->hot_alerted_at !== null) {
             $update['hot_alerted_at'] = null;
         }
 
         $p->updateQuietly($update);
 
-        if ($alerted) {
-            $this->dispatchAlerts($p->fresh(), $newScore);
+        $alertSucceeded = false;
+        if ($crossedHot) {
+            $alertSucceeded = $this->dispatchAlerts($p->fresh(), $newScore);
+            // Solo marcamos como alertado si al menos un canal salió. Si todos
+            // fallaron, queda null y el próximo recalc lo reintenta.
+            if ($alertSucceeded) {
+                $p->updateQuietly(['hot_alerted_at' => now()]);
+            }
         }
 
-        return ['old' => $oldScore, 'new' => $newScore, 'alerted' => $alerted];
+        return ['old' => $oldScore, 'new' => $newScore, 'alerted' => $alertSucceeded];
     }
 
     /**
-     * Manda email + WhatsApp a Omar avisando que el lead se calentó.
-     * Cualquier fallo se loggea pero no rompe la actualización del score.
+     * Manda email + WhatsApp a Omar. Devuelve true si AL MENOS UN canal salió
+     * exitoso (para que updateAndNotify decida si marcar hot_alerted_at).
      */
-    protected function dispatchAlerts(Prospect $p, int $score): void
+    protected function dispatchAlerts(Prospect $p, int $score): bool
     {
         $adminEmail = collect(explode(',', (string) config('services.notifications.emails', '')))
             ->map(fn ($e) => trim($e))->filter()->first();
         $adminPhone = config('services.notifications.phone');
         $name = $p->cleanName() ?: 'Sin nombre';
+        $emailOk = false;
+        $whatsappOk = false;
 
         // Email — siempre se intenta (Gmail SMTP funciona)
         if (! empty($adminEmail)) {
             try {
                 \Illuminate\Support\Facades\Mail::to($adminEmail)
                     ->send(new \App\Mail\LeadHeatedUpMail($p, $score));
+                $emailOk = true;
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('LeadHeatedUpMail failed', [
+                \Illuminate\Support\Facades\Log::error('LeadHeatedUpMail failed', [
                     'prospect_id' => $p->id,
+                    'score' => $score,
                     'error' => $e->getMessage(),
                 ]);
             }
         }
 
-        // WhatsApp — solo si está configurado el número y la API funciona
+        // WhatsApp — sendMessage devuelve bool: false en token expirado o API 4xx/5xx
         if (! empty($adminPhone) && ! empty(config('services.whatsapp.token'))) {
             try {
                 $msg = "🔥 *Lead caliente · Score {$score}*\n\n" .
@@ -134,14 +137,33 @@ class LeadScoringService
                     "\n\n⚡ Contacta en las próximas 2 horas — speed-to-lead 21× más conversión." .
                     "\n\n" . url("/ventas/prospectos/{$p->id}/edit");
 
-                app(\App\Services\WhatsAppService::class)->sendMessage($adminPhone, $msg);
+                $whatsappOk = (bool) app(\App\Services\WhatsAppService::class)->sendMessage($adminPhone, $msg);
+                if (! $whatsappOk) {
+                    \Illuminate\Support\Facades\Log::warning('Lead heated up WhatsApp returned false', [
+                        'prospect_id' => $p->id,
+                        'score' => $score,
+                    ]);
+                }
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('Lead heated up WhatsApp failed', [
+                \Illuminate\Support\Facades\Log::error('Lead heated up WhatsApp threw', [
                     'prospect_id' => $p->id,
+                    'score' => $score,
                     'error' => $e->getMessage(),
                 ]);
             }
         }
+
+        // Si los dos canales fallan, log explícito — Omar no se va a enterar
+        // del lead caliente. Crítico para speed-to-lead.
+        if (! $emailOk && ! $whatsappOk) {
+            \Illuminate\Support\Facades\Log::error('Lead heated up — ALL CHANNELS FAILED', [
+                'prospect_id' => $p->id,
+                'score' => $score,
+                'will_retry_next_cron' => true,
+            ]);
+        }
+
+        return $emailOk || $whatsappOk;
     }
 
     public function calculate(Prospect $p): int
@@ -254,10 +276,17 @@ class LeadScoringService
 
     private function penaltyDecay(Prospect $p): int
     {
-        $lastTouch = $p->last_followup_at ?? $p->contacted_at ?? $p->created_at;
-        if (!$lastTouch) return 0;
+        // Decay aplica solo si ya HUBO un toque (followup o contacted).
+        // Un lead importado pero nunca contactado no se "enfría" — se queda
+        // neutral hasta que arranque el outreach. Esto evita penalizar
+        // imports masivos donde created_at es viejo pero el outreach apenas
+        // empieza.
+        $lastTouch = $p->last_followup_at ?? $p->contacted_at;
+        if (! $lastTouch) {
+            return 0;
+        }
 
-        $days = abs(now()->diffInDays($lastTouch));
+        $days = abs((int) now()->diffInDays($lastTouch));
         return match (true) {
             $days >= 60 => 15,
             $days >= 30 => 10,

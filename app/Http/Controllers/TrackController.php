@@ -34,6 +34,8 @@ class TrackController extends Controller
 
         [$prospectId, $emailType, $destination] = $verified;
 
+        // Log del click — métrica clave del pipeline. Try/catch separado
+        // para que falla del scoring no oculte falla del log (mensaje engañoso).
         try {
             ProspectEmailEvent::create([
                 'prospect_id' => $prospectId,
@@ -43,16 +45,24 @@ class TrackController extends Controller
                 'ip' => $request->ip(),
                 'user_agent' => substr((string) $request->userAgent(), 0, 500),
             ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('TrackController click event create failed', [
+                'token_prefix' => substr($token, 0, 12),
+                'prospect_id' => $prospectId,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
-            // Recalcular score en tiempo real — el click es señal de intent caliente.
-            // Si cruza umbral 80, dispara alerta WhatsApp + email a Omar.
+        // Recalcular score en tiempo real — el click es señal de intent caliente.
+        // Try/catch propio: si el scoring revienta, el click ya quedó loggeado.
+        try {
             $prospectForScore = Prospect::find($prospectId);
             if ($prospectForScore) {
                 app(\App\Services\LeadScoringService::class)->updateAndNotify($prospectForScore);
             }
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('TrackController click log failed', [
-                'token_prefix' => substr($token, 0, 12),
+            \Illuminate\Support\Facades\Log::error('TrackController score recalc failed', [
+                'prospect_id' => $prospectId,
                 'error' => $e->getMessage(),
             ]);
         }

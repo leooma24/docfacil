@@ -29,22 +29,39 @@ class RecalculateLeadScores extends Command
         $this->info("Recalculando scores para {$total} prospectos...");
 
         $alerted = 0;
-        Prospect::with('emailEvents')->chunkById($chunk, function ($batch) use ($scorer, &$processed, &$changed, &$alerted) {
+        $failed = 0;
+        Prospect::with('emailEvents')->chunkById($chunk, function ($batch) use ($scorer, &$processed, &$changed, &$alerted, &$failed) {
             foreach ($batch as $p) {
-                $result = $scorer->updateAndNotify($p);
-                if ($result['old'] !== $result['new']) {
-                    $changed++;
-                }
-                if ($result['alerted']) {
-                    $alerted++;
+                // Try/catch por prospect: un row con data corrupta (ej:
+                // objections_faced JSON inválido) NO debe abortar todo el batch.
+                try {
+                    $result = $scorer->updateAndNotify($p);
+                    if ($result['old'] !== $result['new']) {
+                        $changed++;
+                    }
+                    if ($result['alerted']) {
+                        $alerted++;
+                    }
+                } catch (\Throwable $e) {
+                    $failed++;
+                    \Illuminate\Support\Facades\Log::error('RecalculateLeadScores: prospect failed', [
+                        'prospect_id' => $p->id,
+                        'error' => $e->getMessage(),
+                    ]);
                 }
                 $processed++;
             }
         });
 
         $elapsed = round(microtime(true) - $start, 2);
-        $alertedNote = $alerted > 0 ? " · 🔥 Alertas enviadas: {$alerted}" : '';
-        $this->info("✅ Procesados: {$processed} · Cambiaron: {$changed}{$alertedNote} · Tiempo: {$elapsed}s");
+        $alertedNote = $alerted > 0 ? " · 🔥 Alertas: {$alerted}" : '';
+        $failedNote = $failed > 0 ? " · ⚠️ Fallidos: {$failed}" : '';
+        $this->info("✅ Procesados: {$processed} · Cambiaron: {$changed}{$alertedNote}{$failedNote} · Tiempo: {$elapsed}s");
+
+        // Exit code 1 si hubo fallos para que el cron no marque verde un job parcialmente roto.
+        if ($failed > 0) {
+            $this->warn("⚠️  Algunos prospectos fallaron — revisa storage/logs/laravel.log");
+        }
 
         // Distribución por bucket (insight para Omar)
         $hot = Prospect::where('lead_score', '>=', LeadScoringService::HOT_THRESHOLD)->count();
@@ -59,6 +76,6 @@ class RecalculateLeadScores extends Command
         $this->line("   🧊 Fríos (30-49):    {$cold}");
         $this->line("   ❄️ Congelados (<30): {$frozen}");
 
-        return 0;
+        return $failed > 0 ? 1 : 0;
     }
 }
