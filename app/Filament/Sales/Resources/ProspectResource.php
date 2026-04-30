@@ -290,10 +290,13 @@ class ProspectResource extends Resource
                     ->url(function (Prospect $record) {
                         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $name = $record->firstName();
-                        // Detectar Dr./Dra. del nombre original (antes de stripTitles).
-                        // Si el name tenía "Dra" al inicio → mujer. Default Dr.
-                        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
+
+                        // Detectar si name es persona vs nombre de negocio.
+                        // Muchos prospects importados de directorios tienen
+                        // "Consultorio Dental X" o "Clínica Y" como name —
+                        // mandar "Dr. Consultorio" sería bochornoso.
+                        $opener = self::buildSalutation($record);
+                        $name = $opener['name']; // string vacío si no hay persona
                         $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
                             || str_contains(strtolower($record->specialty ?? ''), 'odont');
                         $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
@@ -302,24 +305,27 @@ class ProspectResource extends Resource
 
                         // Plantillas profesional clean (sin emojis, sin jerga MX). Documentadas
                         // en .agents/wa-templates.md — actualizar ambos lados al cambiar.
+                        $greeting = $opener['greeting']; // "Buenas tardes, Dr. Carlos" o "Buenas tardes" si no hay persona
+                        $followCall = $opener['followCall']; // "Dr. Carlos" o "" para frases tipo "{name}, le escribo de nuevo"
+
                         $msg = match ($record->contact_day) {
-                            0, 1 => "Buenas tardes, {$title} {$name}.\n\n"
+                            0, 1 => "{$greeting}.\n\n"
                                 . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
                                 . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?",
-                            3 => "{$title} {$name}, le escribo de nuevo.\n\n"
+                            3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
                                 . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
                                 . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
-                            7 => "{$title} {$name}, último mensaje y no le insisto más.\n\n"
+                            7 => ($followCall ? "{$followCall}, último mensaje y no le insisto más." : "Último mensaje y no le insisto más.") . "\n\n"
                                 . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
                                 . "{$registerUrl}\n\n"
                                 . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
-                            14 => "{$title} {$name}, le escribo de nuevo después de unas semanas.\n\n"
+                            14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
                                 . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
                                 . "- Odontograma interactivo con 13 condiciones\n"
                                 . "- Recetas PDF firmadas con cédula en 10 segundos\n"
                                 . "- Más dentistas activos cada semana\n\n"
                                 . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
-                            default => "{$title} {$name}, soy Omar de DocFácil. Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
+                            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
                         };
                         return "https://wa.me/{$phone}?text=" . urlencode($msg);
                     })
@@ -455,6 +461,59 @@ class ProspectResource extends Resource
     }
 
     /**
+     * Construye saludo apropiado dependiendo de si el `name` del prospect
+     * es de persona ("Dr. Carlos Pérez") o de negocio ("Consultorio Dental X").
+     *
+     * Retorna ['greeting', 'followCall', 'name', 'title']:
+     *   - greeting: línea completa de apertura ("Buenas tardes, Dr. Carlos" / "Buenas tardes")
+     *   - followCall: forma corta para frases tipo "{X}, le escribo de nuevo" ("Dr. Carlos" / "")
+     *   - name: nombre solo (vacío si es negocio)
+     *   - title: "Dr." o "Dra." o ""
+     */
+    protected static function buildSalutation(Prospect $record): array
+    {
+        $rawName = trim((string) $record->name);
+
+        // Detectar si el name empieza con palabra de negocio (no persona).
+        // Es un "name" que en realidad es razón social del consultorio.
+        $businessPattern = '/^(consultorio|cl[ií]nica|dental|centro|hospital|odontolog[ií]a|ortodoncia|endodoncia|periodoncia|sonr[ií]e|smile)\b/iu';
+        $isBusiness = preg_match($businessPattern, $rawName);
+
+        $hour = now()->hour;
+        $timeGreeting = $hour < 12 ? 'Buenos días' : 'Buenas tardes';
+
+        if ($isBusiness) {
+            // No hay persona identificada — saludo neutro
+            return [
+                'greeting' => $timeGreeting,
+                'followCall' => '',
+                'name' => '',
+                'title' => '',
+            ];
+        }
+
+        $title = preg_match('/^(dra|doctora)[\.\s]/iu', $rawName) ? 'Dra.' : 'Dr.';
+        $name = $record->firstName(); // ya hace stripTitles
+
+        // Edge case extra: si después de stripTitles no queda nada útil
+        if (empty($name) || mb_strlen($name) < 2) {
+            return [
+                'greeting' => $timeGreeting,
+                'followCall' => '',
+                'name' => '',
+                'title' => '',
+            ];
+        }
+
+        return [
+            'greeting' => "{$timeGreeting}, {$title} {$name}",
+            'followCall' => "{$title} {$name}",
+            'name' => $name,
+            'title' => $title,
+        ];
+    }
+
+    /**
      * URL wa.me con mensaje de intro cuando el rep marca primer contacto
      * por WhatsApp. Tono humano, no spam, opcion de salir abierta.
      */
@@ -463,15 +522,14 @@ class ProspectResource extends Resource
         $phone = preg_replace('/\D/', '', (string) $record->phone);
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
-        $name = $record->firstName();
-        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
+        $opener = self::buildSalutation($record);
         $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
             || str_contains(strtolower($record->specialty ?? ''), 'odont');
         $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
 
         // Plantilla profesional clean (sin emojis ni jerga). Documentada en
         // .agents/wa-templates.md — actualizar ambos lados al cambiar.
-        $msg = "Buenas tardes, {$title} {$name}.\n\n"
+        $msg = "{$opener['greeting']}.\n\n"
             . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
             . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?";
 
@@ -489,12 +547,14 @@ class ProspectResource extends Resource
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
         $code = auth()->user()->sales_rep_code ?? '';
-        $name = $record->firstName();
-        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
+        $opener = self::buildSalutation($record);
         $url = url('/doctor/register') . ($code ? "?vnd={$code}" : '');
+        $personalAddress = $opener['followCall']
+            ? "Aquí está su acceso, {$opener['followCall']}."
+            : "Aquí está su acceso.";
 
         // Plantilla profesional clean (ver .agents/wa-templates.md).
-        $msg = "Aquí está su acceso, {$title} {$name}.\n\n"
+        $msg = "{$personalAddress}\n\n"
             . "15 días Pro gratis, sin tarjeta:\n"
             . "{$url}\n\n"
             . "Detalle: el wizard de bienvenida le pre-llena los datos que ya me compartió. Tarda 2 minutos en configurarlo. Si en algún paso se atora, envíeme captura por aquí y lo resuelvo en el momento.";
