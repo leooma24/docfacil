@@ -279,39 +279,25 @@ class ProspectResource extends Resource
                         && $r->has_whatsapp !== false  // si lo marcaron explícitamente sin WA, ocultamos
                         && !in_array($r->status, ['converted', 'lost']))
                     ->action(function (Prospect $record, $livewire) {
-                        // El botón verde es smart: el mensaje cambia según el status del
-                        // prospect, no solo el contact_day. Esto evita confusión donde
-                        // un prospect en 'interested' recibía mensaje cold D0/D3 en vez
-                        // del trial link.
-                        if (in_array($record->status, ['interested', 'trial'])) {
-                            // Listo para recibir la liga del trial
-                            $waUrl = self::buildRegisterLinkWhatsappUrl($record);
-                            if ($record->status === 'interested') {
-                                $record->update(['status' => 'trial']);
-                            }
-                            $title = 'Mandando liga del trial';
-                            $body = 'Status → trial · esperando registro del doctor';
-                        } else {
-                            // Cold cadence: D0/D3/D7/D14 según contact_day
-                            $waUrl = self::buildContextualWhatsappUrl($record);
-                            if ($record->status === 'new') {
-                                $record->update([
-                                    'status' => 'contacted',
-                                    'contacted_at' => $record->contacted_at ?? now(),
-                                ]);
-                            }
-                            $record->advanceContactDay('whatsapp');
-                            $title = 'Contacto registrado · abriendo WhatsApp';
-                            $body = "Día {$record->contact_day} · próximo seguimiento agendado";
-                        }
+                        // El botón verde SOLO abre wa.me con el mensaje correcto.
+                        // NO avanza contact_day ni cambia status — eso lo hace Omar
+                        // manualmente con la acción "Registrar contacto" cuando
+                        // confirma que mandó. Esto evita data corruption cuando
+                        // abre wa.me y luego cierra sin enviar.
+                        //
+                        // El mensaje cambia según el status:
+                        // - interested/trial → trial link con vnd
+                        // - new/contacted → cadencia D0/D3/D7 según contact_day
+                        $waUrl = in_array($record->status, ['interested', 'trial'])
+                            ? self::buildRegisterLinkWhatsappUrl($record)
+                            : self::buildContextualWhatsappUrl($record);
 
-                        // Cliente: abrir wa.me en pestaña nueva via JS, panel se queda visible.
                         $livewire->js('window.open(' . json_encode($waUrl) . ', "_blank");');
 
                         Notification::make()
-                            ->title($title)
-                            ->body($body)
-                            ->success()
+                            ->title('WhatsApp abierto')
+                            ->body('Si lo enviaste, click en "Registrar contacto" del menú "..." para guardar')
+                            ->info()
                             ->send();
                     }),
 
