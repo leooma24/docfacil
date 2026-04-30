@@ -291,18 +291,35 @@ class ProspectResource extends Resource
                         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         $name = $record->firstName();
+                        // Detectar Dr./Dra. del nombre original (antes de stripTitles).
+                        // Si el name tenía "Dra" al inicio → mujer. Default Dr.
+                        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
                         $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
                             || str_contains(strtolower($record->specialty ?? ''), 'odont');
+                        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
+                        $vndCode = auth()->user()->sales_rep_code ?? '';
+                        $registerUrl = url('/doctor/register') . ($vndCode ? "?vnd={$vndCode}" : '');
 
+                        // Plantillas profesional clean (sin emojis, sin jerga MX). Documentadas
+                        // en .agents/wa-templates.md — actualizar ambos lados al cambiar.
                         $msg = match ($record->contact_day) {
-                            0, 1 => "Hola {$name}, soy de DocFacil. Vi su consultorio" . ($record->city ? " en {$record->city}" : '')
-                                . " y queria preguntarle: como lleva el control de citas? Estamos ayudando a " . ($isDentist ? 'dentistas' : 'doctores')
-                                . " a recuperar citas perdidas con recordatorios WhatsApp. Se lo muestro en 10 min?",
-                            3 => "Hola {$name}, le doy seguimiento. " . ($isDentist ? "Dentistas" : "Doctores")
-                                . " que usan DocFacil recuperan 8-12 citas/mes. Son \$4,800+ extra por \$499/mes y garantia de 30 dias. Le hago una demo?",
-                            7 => "{$name}, ultimo mensaje. Le dejo acceso gratuito: https://docfacil.tu-app.co/doctor/register — Aqui estoy si lo necesita.",
-                            14 => "Hola {$name}, seguimos mejorando DocFacil. Si sigue con el pendiente de organizar su consultorio, sigo disponible.",
-                            default => "Hola {$name}, soy de DocFacil. Agenda, expedientes, recetas PDF y WhatsApp auto + 1 clic. Todo en uno. Le interesa una demo?",
+                            0, 1 => "Buenas tardes, {$title} {$name}.\n\n"
+                                . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
+                                . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?",
+                            3 => "{$title} {$name}, le escribo de nuevo.\n\n"
+                                . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
+                                . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
+                            7 => "{$title} {$name}, último mensaje y no le insisto más.\n\n"
+                                . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
+                                . "{$registerUrl}\n\n"
+                                . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
+                            14 => "{$title} {$name}, le escribo de nuevo después de unas semanas.\n\n"
+                                . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
+                                . "- Odontograma interactivo con 13 condiciones\n"
+                                . "- Recetas PDF firmadas con cédula en 10 segundos\n"
+                                . "- Más dentistas activos cada semana\n\n"
+                                . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
+                            default => "{$title} {$name}, soy Omar de DocFácil. Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
                         };
                         return "https://wa.me/{$phone}?text=" . urlencode($msg);
                     })
@@ -447,12 +464,16 @@ class ProspectResource extends Resource
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
         $name = $record->firstName();
-        $cityPart = $record->city ? " en {$record->city}" : '';
+        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
+        $isDentist = str_contains(strtolower($record->specialty ?? ''), 'dent')
+            || str_contains(strtolower($record->specialty ?? ''), 'odont');
+        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
 
-        $msg = "Hola Dr. {$name},\n\n"
-            . "Soy Omar de DocFácil. Vi su consultorio{$cityPart} y le escribo breve — sé que su tiempo vale.\n\n"
-            . "Es un sistema mexicano que ayuda a consultorios a recuperar las citas que no llegan (1 de cada 3 pacientes no llega = $500-1500 perdidos cada uno).\n\n"
-            . "Si tiene 30 segundos, ¿le mando una liga rápida? Si no le late, me avisa y lo dejo en paz.";
+        // Plantilla profesional clean (sin emojis ni jerga). Documentada en
+        // .agents/wa-templates.md — actualizar ambos lados al cambiar.
+        $msg = "Buenas tardes, {$title} {$name}.\n\n"
+            . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
+            . "Una pregunta directa antes de presentarle nada: ¿cuántos pacientes le fallan al mes sin avisar?";
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
@@ -469,11 +490,14 @@ class ProspectResource extends Resource
 
         $code = auth()->user()->sales_rep_code ?? '';
         $name = $record->firstName();
-
+        $title = preg_match('/^(dra|doctora)[\.\s]/iu', (string) $record->name) ? 'Dra.' : 'Dr.';
         $url = url('/doctor/register') . ($code ? "?vnd={$code}" : '');
-        $msg = "Hola {$name}, aquí le dejo su acceso a DocFácil para que lo pruebe gratis 15 días:\n\n"
+
+        // Plantilla profesional clean (ver .agents/wa-templates.md).
+        $msg = "Aquí está su acceso, {$title} {$name}.\n\n"
+            . "15 días Pro gratis, sin tarjeta:\n"
             . "{$url}\n\n"
-            . "Se registra en 2 minutos. Cualquier duda me dice por aquí.";
+            . "Detalle: el wizard de bienvenida le pre-llena los datos que ya me compartió. Tarda 2 minutos en configurarlo. Si en algún paso se atora, envíeme captura por aquí y lo resuelvo en el momento.";
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
