@@ -222,11 +222,10 @@ class ProspectResource extends Resource
                         'trial' => '¿El prospecto pagó y se convirtió en cliente?',
                         default => null,
                     })
-                    ->action(function (Prospect $record, array $data) {
-                        // URL de WhatsApp opcional. Si se setea, retornamos redirect()
-                        // al final del action para que el navegador abra wa.me en
-                        // pestana nueva sin que el rep tenga que copiar/pegar.
-                        $whatsappRedirect = null;
+                    ->action(function (Prospect $record, array $data, $livewire) {
+                        // Si Omar eligió WhatsApp en el form, abrimos wa.me en
+                        // pestaña nueva via JS (no redirect que pierde el panel).
+                        $waUrlForNewTab = null;
 
                         switch ($record->status) {
                             case 'new':
@@ -245,12 +244,11 @@ class ProspectResource extends Resource
                                         'notes' => trim(($record->notes ? $record->notes . "\n" : '') . "[{$dateStr} · {$methodLabel}] {$data['contact_notes']}"),
                                     ]);
                                 }
-                                // Si eligio WhatsApp como metodo, abrir wa.me con mensaje de intro
                                 if ($data['method'] === 'whatsapp' && !empty($record->phone)) {
-                                    $whatsappRedirect = static::buildIntroWhatsappUrl($record);
+                                    $waUrlForNewTab = self::buildContextualWhatsappUrl($record);
                                 }
                                 Notification::make()
-                                    ->title($whatsappRedirect ? 'Status actualizado · abriendo WhatsApp...' : 'Contacto registrado. Próximo seguimiento agendado.')
+                                    ->title($waUrlForNewTab ? 'Status actualizado · abriendo WhatsApp' : 'Contacto registrado. Próximo seguimiento agendado.')
                                     ->success()->send();
                                 break;
 
@@ -262,10 +260,10 @@ class ProspectResource extends Resource
                             case 'interested':
                                 $record->update(['status' => 'trial']);
                                 if (!empty($record->phone)) {
-                                    $whatsappRedirect = static::buildRegisterLinkWhatsappUrl($record);
+                                    $waUrlForNewTab = self::buildRegisterLinkWhatsappUrl($record);
                                 }
                                 Notification::make()
-                                    ->title($whatsappRedirect ? 'Movido a trial · abriendo WhatsApp con el link' : 'Movido a trial')
+                                    ->title($waUrlForNewTab ? 'Movido a trial · abriendo WhatsApp con el link' : 'Movido a trial')
                                     ->success()->send();
                                 break;
 
@@ -275,60 +273,42 @@ class ProspectResource extends Resource
                                 break;
                         }
 
-                        if ($whatsappRedirect) {
-                            return redirect()->away($whatsappRedirect);
+                        // Abrir WhatsApp en pestaña nueva via JS — el panel se queda visible.
+                        if ($waUrlForNewTab) {
+                            $livewire->js('window.open(' . json_encode($waUrlForNewTab) . ', "_blank");');
+                            return null;
                         }
                     }),
 
-                // ═══ BOTÓN 2: WhatsApp (siempre visible) ═══
+                // ═══ BOTÓN 2: WhatsApp (manda + registra contacto + avanza cadencia en 1 click) ═══
                 Tables\Actions\Action::make('whatsapp')
                     ->label('')
-                    ->tooltip('WhatsApp con mensaje listo')
+                    ->tooltip('WhatsApp: manda y registra contacto en 1 click')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
                     ->visible(fn (Prospect $r) => !empty($r->phone) && !in_array($r->status, ['converted', 'lost']))
-                    ->url(function (Prospect $record) {
-                        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
+                    ->action(function (Prospect $record, $livewire) {
+                        $waUrl = self::buildContextualWhatsappUrl($record);
 
-                        // Detectar si name es persona vs nombre de negocio.
-                        // Muchos prospects importados de directorios tienen
-                        // "Consultorio Dental X" o "Clínica Y" como name —
-                        // mandar "Dr. Consultorio" sería bochornoso.
-                        $opener = self::buildSalutation($record);
-                        $name = $opener['name']; // string vacío si no hay persona
-                        $isDentist = self::detectDentist($record);
-                        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
-                        $vndCode = auth()->user()->sales_rep_code ?? '';
-                        $registerUrl = url('/doctor/register') . ($vndCode ? "?vnd={$vndCode}" : '');
+                        // Server: avanzar cadencia + status si era nuevo. Esto evita
+                        // que Omar tenga que hacer 2 clicks (manda WA + registrar contacto).
+                        if ($record->status === 'new') {
+                            $record->update([
+                                'status' => 'contacted',
+                                'contacted_at' => $record->contacted_at ?? now(),
+                            ]);
+                        }
+                        $record->advanceContactDay('whatsapp');
 
-                        // Plantillas profesional clean (sin emojis, sin jerga MX). Documentadas
-                        // en .agents/wa-templates.md — actualizar ambos lados al cambiar.
-                        $greeting = $opener['greeting']; // "Buenas tardes, Dr. Carlos" o "Buenas tardes" si no hay persona
-                        $followCall = $opener['followCall']; // "Dr. Carlos" o "" para frases tipo "{name}, le escribo de nuevo"
+                        // Cliente: abrir wa.me en pestaña nueva via JS, panel se queda visible.
+                        $livewire->js('window.open(' . json_encode($waUrl) . ', "_blank");');
 
-                        $msg = match ($record->contact_day) {
-                            0, 1 => "{$greeting}.\n\n"
-                                . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-                                . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?",
-                            3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
-                                . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
-                                . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
-                            7 => ($followCall ? "{$followCall}, último mensaje y no le insisto más." : "Último mensaje y no le insisto más.") . "\n\n"
-                                . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
-                                . "{$registerUrl}\n\n"
-                                . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
-                            14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
-                                . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
-                                . "- Odontograma interactivo con 13 condiciones\n"
-                                . "- Recetas PDF firmadas con cédula en 10 segundos\n"
-                                . "- Más dentistas activos cada semana\n\n"
-                                . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
-                            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
-                        };
-                        return "https://wa.me/{$phone}?text=" . urlencode($msg);
-                    })
-                    ->openUrlInNewTab(),
+                        Notification::make()
+                            ->title('Contacto registrado · abriendo WhatsApp')
+                            ->body("Día {$record->contact_day} · próximo seguimiento agendado")
+                            ->success()
+                            ->send();
+                    }),
 
                 // ═══ BOTÓN 3: Menú "Más" con todo lo demás ═══
                 Tables\Actions\ActionGroup::make([
@@ -457,6 +437,46 @@ class ProspectResource extends Resource
             'create' => Pages\CreateProspect::route('/create'),
             'edit' => Pages\EditProspect::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * URL de wa.me con el mensaje correcto según el contact_day del prospect.
+     * Centralizado aquí para que el botón verde de WA y el panel ventas usen
+     * la misma plantilla — fuente de verdad.
+     */
+    protected static function buildContextualWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
+        if (strlen($phone) === 10) $phone = '52' . $phone;
+
+        $opener = self::buildSalutation($record);
+        $isDentist = self::detectDentist($record);
+        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
+        $vndCode = auth()->user()->sales_rep_code ?? '';
+        $registerUrl = url('/doctor/register') . ($vndCode ? "?vnd={$vndCode}" : '');
+        $greeting = $opener['greeting'];
+        $followCall = $opener['followCall'];
+
+        $msg = match ($record->contact_day) {
+            0, 1 => "{$greeting}.\n\n"
+                . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
+                . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?",
+            3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
+                . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
+                . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
+            7 => ($followCall ? "{$followCall}, último mensaje y no le insisto más." : "Último mensaje y no le insisto más.") . "\n\n"
+                . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
+                . "{$registerUrl}\n\n"
+                . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
+            14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
+                . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
+                . "- Odontograma interactivo con 13 condiciones\n"
+                . "- Recetas PDF firmadas con cédula en 10 segundos\n"
+                . "- Más dentistas activos cada semana\n\n"
+                . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
+            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
+        };
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
 
     /**
