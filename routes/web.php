@@ -126,6 +126,12 @@ Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::clas
     ->middleware('throttle:5,1')
     ->name('tools.calculadora_roi.lead');
 Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
+
+// Páginas de comparativa vs competidores (alta intención SEO + AI-SEO)
+Route::get('/vs/{competitor}', [\App\Http\Controllers\ComparisonController::class, 'versus'])
+    ->name('comparison.versus');
+Route::get('/alternativas-a-{competitor}', [\App\Http\Controllers\ComparisonController::class, 'alternatives'])
+    ->name('comparison.alternatives');
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 Route::get('/sales/proposal/{prospect}/pdf', [\App\Http\Controllers\ProposalPdfController::class, '__invoke'])

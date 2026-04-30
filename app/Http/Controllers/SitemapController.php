@@ -30,6 +30,13 @@ class SitemapController extends Controller
             $urls[] = ['loc' => url("/software-dental/{$c['slug']}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
         }
 
+        // Páginas de comparativa vs competidores
+        $competitors = (new ComparisonController())->publicCompetitors();
+        foreach ($competitors as $c) {
+            $urls[] = ['loc' => url("/vs/{$c['slug']}"), 'priority' => '0.8', 'changefreq' => 'monthly'];
+            $urls[] = ['loc' => url("/alternativas-a-{$c['slug']}"), 'priority' => '0.8', 'changefreq' => 'monthly'];
+        }
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
