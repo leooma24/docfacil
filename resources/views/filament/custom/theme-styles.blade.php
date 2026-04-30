@@ -697,9 +697,18 @@
     }
 
     /* Garantizar espacio mínimo abajo de la última fila para que el dropdown
-       pueda abrirse hacia abajo sin recortarse. */
-    .fi-ta:has([aria-expanded="true"]) {
-        min-height: 320px;
+       pueda abrirse hacia abajo sin recortarse. SIEMPRE (no solo cuando está
+       abierto), porque Floating UI calcula el placement al abrir y necesita
+       ver el espacio libre antes. */
+    .fi-ta-content,
+    .fi-ta-ctn {
+        min-height: 480px !important;
+    }
+
+    /* Dropdown panel SIEMPRE flota arriba de cualquier fila/header */
+    .fi-dropdown-panel {
+        z-index: 99999 !important;
+        position: absolute !important;
     }
 
     /* Modales por encima de todo (incluyendo dropdowns) */
