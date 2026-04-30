@@ -222,10 +222,11 @@ class ProspectResource extends Resource
                         'trial' => '¿El prospecto pagó y se convirtió en cliente?',
                         default => null,
                     })
-                    ->action(function (Prospect $record, array $data, $livewire) {
-                        // Si Omar eligió WhatsApp en el form, abrimos wa.me en
-                        // pestaña nueva via JS (no redirect que pierde el panel).
-                        $waUrlForNewTab = null;
+                    ->action(function (Prospect $record, array $data) {
+                        // 'Iniciar contacto' SOLO registra. Nunca abre WhatsApp —
+                        // para eso está el botón verde dedicado. Si Omar ya mandó
+                        // el WA por otro lado (botón verde, app móvil, etc.) este
+                        // form solo deja constancia del contacto.
 
                         switch ($record->status) {
                             case 'new':
@@ -244,11 +245,8 @@ class ProspectResource extends Resource
                                         'notes' => trim(($record->notes ? $record->notes . "\n" : '') . "[{$dateStr} · {$methodLabel}] {$data['contact_notes']}"),
                                     ]);
                                 }
-                                if ($data['method'] === 'whatsapp' && !empty($record->phone)) {
-                                    $waUrlForNewTab = self::buildContextualWhatsappUrl($record);
-                                }
                                 Notification::make()
-                                    ->title($waUrlForNewTab ? 'Status actualizado · abriendo WhatsApp' : 'Contacto registrado. Próximo seguimiento agendado.')
+                                    ->title('Contacto registrado · próximo seguimiento agendado')
                                     ->success()->send();
                                 break;
 
@@ -259,11 +257,8 @@ class ProspectResource extends Resource
 
                             case 'interested':
                                 $record->update(['status' => 'trial']);
-                                if (!empty($record->phone)) {
-                                    $waUrlForNewTab = self::buildRegisterLinkWhatsappUrl($record);
-                                }
                                 Notification::make()
-                                    ->title($waUrlForNewTab ? 'Movido a trial · abriendo WhatsApp con el link' : 'Movido a trial')
+                                    ->title('Movido a trial · usa el botón verde para mandarle el link por WhatsApp')
                                     ->success()->send();
                                 break;
 
@@ -271,12 +266,6 @@ class ProspectResource extends Resource
                                 $record->update(['status' => 'converted', 'converted_at' => now()]);
                                 Notification::make()->title('¡Convertido! Tu comisión se genera automáticamente.')->success()->send();
                                 break;
-                        }
-
-                        // Abrir WhatsApp en pestaña nueva via JS — el panel se queda visible.
-                        if ($waUrlForNewTab) {
-                            $livewire->js('window.open(' . json_encode($waUrlForNewTab) . ', "_blank");');
-                            return null;
                         }
                     }),
 
@@ -286,7 +275,9 @@ class ProspectResource extends Resource
                     ->tooltip('WhatsApp: manda y registra contacto en 1 click')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
-                    ->visible(fn (Prospect $r) => !empty($r->phone) && !in_array($r->status, ['converted', 'lost']))
+                    ->visible(fn (Prospect $r) => !empty($r->phone)
+                        && $r->has_whatsapp !== false  // si lo marcaron explícitamente sin WA, ocultamos
+                        && !in_array($r->status, ['converted', 'lost']))
                     ->action(function (Prospect $record, $livewire) {
                         $waUrl = self::buildContextualWhatsappUrl($record);
 
@@ -332,6 +323,26 @@ class ProspectResource extends Resource
                                 $record->update(['notes' => trim(($record->notes ? $record->notes . "\n" : '') . '[' . now()->format('d/m H:i') . '] ' . $data['contact_notes'])]);
                             }
                             Notification::make()->title("Contacto D{$record->contact_day} registrado")->success()->send();
+                        }),
+
+                    Tables\Actions\Action::make('mark_no_whatsapp')
+                        ->label('Marcar sin WhatsApp')
+                        ->icon('heroicon-o-no-symbol')
+                        ->color('danger')
+                        ->visible(fn (Prospect $r) => $r->has_whatsapp !== false && !empty($r->phone))
+                        ->requiresConfirmation()
+                        ->modalHeading('Marcar este número como sin WhatsApp')
+                        ->modalDescription('Después de esto, el botón verde de WhatsApp se oculta para este prospect. Úsalo para llamada o email en su lugar.')
+                        ->modalSubmitActionLabel('Marcar')
+                        ->action(function (Prospect $record) {
+                            $record->update(['has_whatsapp' => false]);
+                            $note = '[' . now()->format('d/m H:i') . '] Número sin WhatsApp confirmado';
+                            $record->update(['notes' => trim(($record->notes ? $record->notes . "\n" : '') . $note)]);
+                            Notification::make()
+                                ->title('Marcado sin WhatsApp')
+                                ->body('Considera llamada o email para este prospect')
+                                ->warning()
+                                ->send();
                         }),
 
                     Tables\Actions\Action::make('schedule_demo')
