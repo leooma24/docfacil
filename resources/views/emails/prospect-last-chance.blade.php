@@ -18,22 +18,26 @@
 <body>
     <div class="container">
         <div class="content">
-            <p>Dr. <strong>{{ $firstName }}</strong>,</p>
+            @if($followCall)
+                <p>{{ $followCall }}, último mensaje y le dejo en paz.</p>
+            @else
+                <p>Último mensaje y le dejo en paz.</p>
+            @endif
 
             <p>No le sigo escribiendo, no quiero robarle más tiempo.</p>
 
             <p>Dos cosas antes de cerrar:</p>
 
             <ol>
-                <li>Si algún día el cuaderno deja de servirle, aquí estoy: <a href="https://wa.me/526682493398" style="color:#14b8a6;">668 249 3398</a> (mi WhatsApp directo).</li>
-                <li>Si no es para usted pero conoce a un colega al que le pueda servir, le regalo <strong>1 mes</strong> cuando se suscriba con su recomendación.</li>
+                <li>Si algún día el cuaderno o el Excel deja de servirle, aquí estoy: <a href="https://wa.me/526682493398" style="color:#14b8a6;">668 249 3398</a> (mi WhatsApp directo).</li>
+                <li>Si no es para usted pero conoce a un colega al que le pueda servir, le regalo <strong>1 mes gratis</strong> cuando se suscriba con su recomendación.</li>
             </ol>
 
             <p>Gracias por leerme.</p>
 
             <p class="signature">
                 — <strong>Omar Lerma</strong><br>
-                DocFácil
+                Fundador de DocFácil
             </p>
         </div>
         <div class="footer">

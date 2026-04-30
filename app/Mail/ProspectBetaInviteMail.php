@@ -20,19 +20,23 @@ class ProspectBetaInviteMail extends Mailable
 
     public function envelope(): Envelope
     {
-        // A/B subject: si hay ciudad, alternamos 50/50 con "su agenda"
-        // (deterministico por prospect_id para que el mismo prospect siempre
-        // reciba el mismo subject, util para analytics).
+        // Subject A/B 50/50 deterministico por prospect_id para tracking estable.
+        // Más claros que los anteriores ("su agenda" / "consultorio en X" eran
+        // crípticos y bajaban open rate). Ahora tono pregunta-personal.
         $city = trim((string) ($this->prospect->city ?? ''));
-        $subject = ($city !== '' && $this->prospect->id % 2 === 0)
-            ? "consultorio en {$city}"
-            : 'su agenda';
+        $first = $this->prospect->firstName();
+        $personalize = (! $this->prospect->isBusinessName() && ! empty($first))
+            ? "Dr. {$first}, "
+            : '';
+
+        $subject = $this->prospect->id % 2 === 0
+            ? "{$personalize}una pregunta sobre su consultorio"
+            : ($city !== ''
+                ? "Para consultorios dentales en {$city}"
+                : "{$personalize}le escribo desde Sinaloa");
 
         return new Envelope(
             subject: $subject,
-            // Reply-To al inbox real de Omar (Gmail). El From puede ser
-            // fundador@docfacil.tu-app.co (Resend) pero las respuestas
-            // llegan al inbox que si tiene buzón.
             replyTo: ['leooma24@gmail.com' => 'Omar Lerma'],
         );
     }
@@ -72,8 +76,11 @@ class ProspectBetaInviteMail extends Mailable
         return new Content(
             view: 'emails.prospect-beta-invite',
             with: [
-                'firstName' => $this->prospect->firstName(),
+                'salutation' => $this->prospect->salutationGreeting(),
+                'followCall' => $this->prospect->salutationFollowCall(),
+                'isBusiness' => $this->prospect->isBusinessName(),
                 'cityPart' => $this->prospect->city ? " en {$this->prospect->city}" : '',
+                'sector' => $this->prospect->sectorLabel(),
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],

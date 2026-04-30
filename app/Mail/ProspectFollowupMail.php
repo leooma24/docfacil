@@ -20,11 +20,16 @@ class ProspectFollowupMail extends Mailable
 
     public function envelope(): Envelope
     {
-        // A/B subject 50/50: el ID par recibe la cifra cruda, el impar la
-        // pregunta. Deterministico por prospect_id para analytics estables.
+        // Subject A/B 50/50 deterministico. Más descriptivos que los anteriores
+        // ('$8,000 al mes' / 'haga la cuenta' eran muy crípticos, parecían spam).
+        $first = $this->prospect->firstName();
+        $personalize = (! $this->prospect->isBusinessName() && ! empty($first))
+            ? "Dr. {$first}, "
+            : '';
+
         $subject = $this->prospect->id % 2 === 0
-            ? '$8,000 al mes'
-            : 'haga la cuenta';
+            ? "{$personalize}los pacientes que no llegan al mes"
+            : "{$personalize}una cuenta rápida sobre su consultorio";
 
         return new Envelope(
             subject: $subject,
@@ -59,7 +64,10 @@ class ProspectFollowupMail extends Mailable
         return new Content(
             view: 'emails.prospect-followup',
             with: [
-                'firstName' => $this->prospect->firstName(),
+                'salutation' => $this->prospect->salutationGreeting(),
+                'followCall' => $this->prospect->salutationFollowCall(),
+                'isBusiness' => $this->prospect->isBusinessName(),
+                'sector' => $this->prospect->sectorLabel(),
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],

@@ -17,15 +17,17 @@
 <body>
     <div class="container">
         <div class="content">
-            <p>Hola Dr. <strong>{{ $firstName }}</strong>,</p>
+            <p>{{ $salutation }}.</p>
 
-            <p>Vi su consultorio{{ $cityPart }}. Le escribo breve.</p>
+            <p>Soy Omar Lerma, ingeniero mexicano de Los Mochis. Construí un sistema para {{ $sector }} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.</p>
 
-            <p>Si esta semana se le quedó algún paciente sin llegar, ya sabe el costo: $500-$1,500 por hueco, sin contar el tratamiento que no siguió.</p>
+            <p>Le escribo breve porque sé que su tiempo vale: si esta semana se le quedó algún paciente sin llegar a su cita, ya conoce el costo — entre $500 y $1,500 por hueco, sin contar el tratamiento que dejó a la mitad.</p>
 
-            <p>Hice <strong>DocFácil</strong> para que eso pase menos. A 1 clic desde su agenda manda el recordatorio por WhatsApp; el paciente confirma con un link. Hecho en México, sin tarjeta para probar 15 días.</p>
+            <p>Lo que construí básicamente abre su propio WhatsApp con el mensaje listo y solo le da enviar. El paciente confirma su cita con un link. Cumple NOM-004 para el expediente, incluye odontograma digital y recetas PDF con cédula. Hecho 100% en México, sin tarjeta para empezar.</p>
 
-            <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">¿Le paso la liga? →</a></p>
+            <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">Probar 15 días sin tarjeta</a></p>
+
+            <p>Si en 30 días no le sirve, le devuelvo su dinero completo. Plan Free de por vida si prefiere ir más despacio.</p>
 
             <p class="signature">
                 — <strong>Omar Lerma</strong>, fundador de DocFácil<br>

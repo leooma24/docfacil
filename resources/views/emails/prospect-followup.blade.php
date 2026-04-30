@@ -18,23 +18,27 @@
 <body>
     <div class="container">
         <div class="content">
-            <p>Dr. <strong>{{ $firstName }}</strong>,</p>
+            @if($followCall)
+                <p>{{ $followCall }}, le escribo de nuevo.</p>
+            @else
+                <p>Le escribo de nuevo.</p>
+            @endif
 
-            <p>La cuenta rápida del mes promedio en un consultorio dental:</p>
+            <p>Sé que están saturados, no le robo tiempo. La cuenta rápida del consultorio promedio:</p>
 
             <div class="math">
-                8 pacientes que no llegan × $1,000 = <strong>$8,000</strong><br>
+                8 pacientes que no llegan al mes × $1,000 = <strong>$8,000</strong><br>
                 En un año: <strong>$96,000</strong> que se evaporan.
             </div>
 
-            <p><strong>DocFácil</strong> cuesta $499/mes. Si recupera 1 cita al mes ya pagó el plan; lo demás es ganancia neta.</p>
+            <p>Por <strong>$499 al mes</strong>, DocFácil le manda recordatorios WhatsApp a sus pacientes con un solo clic. Si recupera 1 cita al mes ya pagó el plan; las demás son ganancia neta.</p>
 
-            <p>15 días gratis con todo, sin tarjeta. Si no le sirve, un clic y lo cancela.</p>
+            <p>15 días gratis con todas las funciones, sin tarjeta. Si no le sirve, un clic y lo cancela.</p>
 
-            <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">¿Le paso la liga? →</a></p>
+            <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">Probar 15 días gratis</a></p>
 
             <p class="signature">
-                — <strong>Omar</strong><br>
+                — <strong>Omar Lerma</strong><br>
                 WhatsApp directo: <a href="https://wa.me/526682493398">668 249 3398</a>
             </p>
         </div>

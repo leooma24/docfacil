@@ -20,10 +20,16 @@ class ProspectLastChanceMail extends Mailable
 
     public function envelope(): Envelope
     {
-        // A/B subject 50/50 entre dos variantes calmadas
+        // Subject A/B 50/50, tono cordial de cierre — no "cierro este hilo"
+        // que sonaba transaccional.
+        $first = $this->prospect->firstName();
+        $personalize = (! $this->prospect->isBusinessName() && ! empty($first))
+            ? "Dr. {$first}, "
+            : '';
+
         $subject = $this->prospect->id % 2 === 0
-            ? 'cierro este hilo'
-            : 'última nota';
+            ? "{$personalize}último mensaje y le dejo en paz"
+            : "{$personalize}antes de cerrar este hilo";
 
         return new Envelope(
             subject: $subject,
@@ -58,7 +64,10 @@ class ProspectLastChanceMail extends Mailable
         return new Content(
             view: 'emails.prospect-last-chance',
             with: [
-                'firstName' => $this->prospect->firstName(),
+                'salutation' => $this->prospect->salutationGreeting(),
+                'followCall' => $this->prospect->salutationFollowCall(),
+                'isBusiness' => $this->prospect->isBusinessName(),
+                'sector' => $this->prospect->sectorLabel(),
                 'ctaUrl' => $token ? route('track.click', ['token' => $token]) : $registerUrl,
                 'unsubscribeUrl' => $unsubscribeUrl,
             ],
