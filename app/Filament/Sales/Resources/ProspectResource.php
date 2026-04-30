@@ -437,7 +437,9 @@ class ProspectResource extends Resource
                     ->label('')
                     ->tooltip('Más opciones')
                     ->icon('heroicon-o-ellipsis-vertical')
-                    ->color('gray'),
+                    ->color('gray')
+                    ->dropdownPlacement('bottom-end')
+                    ->dropdownWidth(\Filament\Support\Enums\MaxWidth::ExtraSmall),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

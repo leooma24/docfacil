@@ -687,6 +687,21 @@
         overflow-y: visible !important;
     }
 
+    /* Cuando una sección/card de Filament tiene un dropdown abierto, el
+       contenedor parent NO debe recortar. Crítico cuando solo hay 1-2 filas
+       y el dropdown se acerca a los límites de la card. */
+    .fi-ta-ctn:has([aria-expanded="true"]),
+    .fi-section-content-ctn:has([aria-expanded="true"]),
+    .fi-section:has([aria-expanded="true"]) {
+        overflow: visible !important;
+    }
+
+    /* Garantizar espacio mínimo abajo de la última fila para que el dropdown
+       pueda abrirse hacia abajo sin recortarse. */
+    .fi-ta:has([aria-expanded="true"]) {
+        min-height: 320px;
+    }
+
     /* Modales por encima de todo (incluyendo dropdowns) */
     .fi-modal,
     .fi-modal-window {
