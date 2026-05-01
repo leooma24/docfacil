@@ -279,31 +279,43 @@ class ProspectResource extends Resource
                         && $r->has_whatsapp !== false  // si lo marcaron explícitamente sin WA, ocultamos
                         && !in_array($r->status, ['converted', 'lost']))
                     ->action(function (Prospect $record, $livewire) {
-                        // El botón verde abre wa.me con el mensaje correcto según
-                        // status. Cambia status 'new' → 'contacted' para que el
-                        // prospect se vaya del filtro 'Nuevo'. PERO NO avanza
-                        // contact_day — eso lo hace 'Registrar contacto' formal
-                        // (evita el bug donde clicks múltiples inflan la cadencia
-                        // a D3/D7 sin haber enviado realmente los mensajes).
+                        // 1 click hace TODO: abre wa.me + avanza status + cadencia.
+                        //
+                        // Protección anti-clicks-múltiples: si ya se cliqueó al
+                        // MISMO prospect en los últimos 5 minutos, solo abre
+                        // wa.me sin avanzar (evita el bug donde 3 clicks rápidos
+                        // saltaban la cadencia a D7 sin enviar realmente).
                         $waUrl = in_array($record->status, ['interested', 'trial'])
                             ? self::buildRegisterLinkWhatsappUrl($record)
                             : self::buildContextualWhatsappUrl($record);
 
-                        $statusChanged = false;
-                        if ($record->status === 'new') {
-                            $record->update([
-                                'status' => 'contacted',
-                                'contacted_at' => $record->contacted_at ?? now(),
-                            ]);
-                            $statusChanged = true;
+                        $recentClick = $record->last_followup_at
+                            && $record->last_followup_at->isAfter(now()->subMinutes(5));
+
+                        if (! $recentClick) {
+                            // Primer click (o pasaron 5+ min): avanza estado completo
+                            if ($record->status === 'new') {
+                                $record->update([
+                                    'status' => 'contacted',
+                                    'contacted_at' => $record->contacted_at ?? now(),
+                                ]);
+                            }
+                            $record->advanceContactDay('whatsapp');
+                            $title = "WhatsApp abierto · día {$record->contact_day} registrado";
+                            $body = $record->next_contact_at
+                                ? 'Próximo seguimiento: ' . $record->next_contact_at->format('d/m')
+                                : 'Cadencia completada';
+                        } else {
+                            $title = 'WhatsApp abierto (re-click)';
+                            $body = 'Cadencia ya registrada hace minutos · no se duplica';
                         }
 
                         $livewire->js('window.open(' . json_encode($waUrl) . ', "_blank");');
 
                         Notification::make()
-                            ->title($statusChanged ? 'WhatsApp abierto · status → Contactado' : 'WhatsApp abierto')
-                            ->body('Si lo enviaste, registra el contacto formal en "..." para avanzar la cadencia')
-                            ->info()
+                            ->title($title)
+                            ->body($body)
+                            ->success()
                             ->send();
                     }),
 
