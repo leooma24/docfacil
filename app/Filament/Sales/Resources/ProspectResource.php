@@ -279,24 +279,30 @@ class ProspectResource extends Resource
                         && $r->has_whatsapp !== false  // si lo marcaron explícitamente sin WA, ocultamos
                         && !in_array($r->status, ['converted', 'lost']))
                     ->action(function (Prospect $record, $livewire) {
-                        // El botón verde SOLO abre wa.me con el mensaje correcto.
-                        // NO avanza contact_day ni cambia status — eso lo hace Omar
-                        // manualmente con la acción "Registrar contacto" cuando
-                        // confirma que mandó. Esto evita data corruption cuando
-                        // abre wa.me y luego cierra sin enviar.
-                        //
-                        // El mensaje cambia según el status:
-                        // - interested/trial → trial link con vnd
-                        // - new/contacted → cadencia D0/D3/D7 según contact_day
+                        // El botón verde abre wa.me con el mensaje correcto según
+                        // status. Cambia status 'new' → 'contacted' para que el
+                        // prospect se vaya del filtro 'Nuevo'. PERO NO avanza
+                        // contact_day — eso lo hace 'Registrar contacto' formal
+                        // (evita el bug donde clicks múltiples inflan la cadencia
+                        // a D3/D7 sin haber enviado realmente los mensajes).
                         $waUrl = in_array($record->status, ['interested', 'trial'])
                             ? self::buildRegisterLinkWhatsappUrl($record)
                             : self::buildContextualWhatsappUrl($record);
 
+                        $statusChanged = false;
+                        if ($record->status === 'new') {
+                            $record->update([
+                                'status' => 'contacted',
+                                'contacted_at' => $record->contacted_at ?? now(),
+                            ]);
+                            $statusChanged = true;
+                        }
+
                         $livewire->js('window.open(' . json_encode($waUrl) . ', "_blank");');
 
                         Notification::make()
-                            ->title('WhatsApp abierto')
-                            ->body('Si lo enviaste, click en "Registrar contacto" del menú "..." para guardar')
+                            ->title($statusChanged ? 'WhatsApp abierto · status → Contactado' : 'WhatsApp abierto')
+                            ->body('Si lo enviaste, registra el contacto formal en "..." para avanzar la cadencia')
                             ->info()
                             ->send();
                     }),
