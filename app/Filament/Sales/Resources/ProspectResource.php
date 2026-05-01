@@ -299,9 +299,17 @@ class ProspectResource extends Resource
                                     'status' => 'contacted',
                                     'contacted_at' => $record->contacted_at ?? now(),
                                 ]);
+                            } elseif ($record->status === 'interested') {
+                                // Mandar la liga = ya está en trial
+                                $record->update(['status' => 'trial']);
                             }
                             $record->advanceContactDay('whatsapp');
-                            $title = "WhatsApp abierto · día {$record->contact_day} registrado";
+                            $statusLabel = match ($record->status) {
+                                'trial' => 'liga trial enviada',
+                                'contacted' => "día {$record->contact_day} registrado",
+                                default => "día {$record->contact_day} registrado",
+                            };
+                            $title = "WhatsApp abierto · {$statusLabel}";
                             $body = $record->next_contact_at
                                 ? 'Próximo seguimiento: ' . $record->next_contact_at->format('d/m')
                                 : 'Cadencia completada';
