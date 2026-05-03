@@ -1176,48 +1176,20 @@
     <p class="text-center text-xs text-gray-500 mt-1.5">Sin tarjeta · 15 días gratis · garantía 30 días</p>
 </div>
 
-{{-- Sticky desktop CTA — aparece tras scroll 1800px (zona pricing/comparativa) hasta el final.
-     Empuja al visitante que ya investigó a la acción con garantía visible. --}}
-<div id="sticky-cta-desktop" class="hidden md:block fixed bottom-6 right-6 z-40 opacity-0 pointer-events-none translate-y-4 transition-all duration-300" style="max-width:340px;">
-    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 flex items-center gap-3" style="box-shadow:0 25px 50px -12px rgba(0,0,0,0.2);">
-        <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#0d9488,#0891b2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <div class="flex-1 min-w-0">
-            <div class="text-sm font-bold text-gray-900 leading-tight">¿Listo para empezar?</div>
-            <div class="text-xs text-gray-500 mt-0.5">15 días gratis · Garantía 30 días</div>
-        </div>
-        <a href="{{ url('/doctor/register') }}" class="inline-flex items-center gap-1 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-sm font-bold rounded-lg hover:shadow-lg hover:shadow-teal-200 transition-all whitespace-nowrap flex-shrink-0">
-            Ir →
-        </a>
-    </div>
-</div>
-
 <script>
 // PWA
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 
-// Sticky CTA mobile: aparece tras scrollear 500px. Sticky desktop CTA: aparece tras 1800px
-// (después de que el user pasó pricing/comparativa y sigue buscando motivos).
+// Sticky CTA mobile: aparece tras scrollear 500px. (Desktop usa el chatbot bubble — no compite con el sticky aquí.)
 (function() {
     const stickyCta = document.getElementById('sticky-cta');
-    const stickyCtaDesktop = document.getElementById('sticky-cta-desktop');
+    if (!stickyCta) return;
 
     function update() {
-        const y = window.scrollY;
-        if (stickyCta) {
-            if (y > 500) {
-                stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-            } else {
-                stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-            }
-        }
-        if (stickyCtaDesktop) {
-            if (y > 1800) {
-                stickyCtaDesktop.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-            } else {
-                stickyCtaDesktop.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-            }
+        if (window.scrollY > 500) {
+            stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+        } else {
+            stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
         }
     }
 
