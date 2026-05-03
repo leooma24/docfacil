@@ -1,13 +1,7 @@
 @if(config('services.ai.chatbot_enabled', true))
-<div x-data="{ ...docfacilChatbot(), scrolled: false }"
-     x-init="
-        const check = () => scrolled = window.scrollY > 500;
-        check();
-        window.addEventListener('scroll', check, { passive: true });
-     "
-     x-cloak>
-    <!-- Burbuja flotante — solo aparece tras scroll 500px para no tapar hero CTAs -->
-    <button type="button" x-show="!open && scrolled" x-transition.opacity @click="toggle()" aria-label="Abrir chat"
+<div x-data="docfacilChatbot()" x-cloak>
+    <!-- Burbuja flotante visible desde el inicio (la sticky CTA desktop ya no compite) -->
+    <button type="button" x-show="!open" x-transition.opacity @click="toggle()" aria-label="Abrir chat"
         style="position:fixed;right:22px;bottom:96px;z-index:9998;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
         :style="window.innerWidth >= 768 ? 'bottom:22px; width:64px; height:64px;' : ''"
         onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
