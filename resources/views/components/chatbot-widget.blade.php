@@ -1,19 +1,21 @@
 @if(config('services.ai.chatbot_enabled', true))
-<div x-data="docfacilChatbot()">
-    <!-- Burbuja flotante visible desde el inicio (sin x-cloak: si Alpine fallara, el botón sigue visible) -->
-    <button type="button" x-show="!open" x-transition.opacity @click="toggle()" aria-label="Abrir chat"
-        style="position:fixed;right:22px;bottom:96px;z-index:9998;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
-        :style="window.innerWidth >= 768 ? 'bottom:22px; width:64px; height:64px;' : ''"
-        onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:block;">
-            <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-3 4-3-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
-            <circle cx="8" cy="11" r="1.3" fill="#0d9488"/>
-            <circle cx="12" cy="11" r="1.3" fill="#0d9488"/>
-            <circle cx="16" cy="11" r="1.3" fill="#0d9488"/>
-        </svg>
-        <span x-show="hasUnread" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
-    </button>
+<!-- Burbuja flotante VANILLA — fuera de Alpine, así si Alpine falla la burbuja siempre se ve -->
+<button type="button"
+    id="df-chat-bubble"
+    aria-label="Asistente DocFacil"
+    onclick="window.dispatchEvent(new CustomEvent('df-open-chat'))"
+    style="position:fixed;right:22px;bottom:22px;z-index:9998;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;display:flex;align-items:center;justify-content:center;"
+    onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
+        <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-3 4-3-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+        <circle cx="8" cy="11" r="1.3" fill="#0d9488"/>
+        <circle cx="12" cy="11" r="1.3" fill="#0d9488"/>
+        <circle cx="16" cy="11" r="1.3" fill="#0d9488"/>
+    </svg>
+    <span id="df-chat-badge" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
+</button>
 
+<div x-data="docfacilChatbot()" x-init="$watch('open', v => { document.getElementById('df-chat-bubble').style.display = v ? 'none' : 'flex'; })" @df-open-chat.window="toggle()">
     <!-- Panel — x-cloak previene flash del panel abierto antes de que Alpine procese -->
     <div x-show="open" x-cloak x-transition.opacity
         style="position:fixed;right:22px;bottom:22px;z-index:9999;width:380px;max-width:calc(100vw - 28px);height:580px;max-height:calc(100vh - 80px);background:#fff;border-radius:18px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);display:flex;flex-direction:column;overflow:hidden;border:1px solid #e5e7eb;">
