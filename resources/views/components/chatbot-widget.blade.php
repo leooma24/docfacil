@@ -1,6 +1,6 @@
 @if(config('services.ai.chatbot_enabled', true))
-<div x-data="docfacilChatbot()" x-cloak>
-    <!-- Burbuja flotante visible desde el inicio (la sticky CTA desktop ya no compite) -->
+<div x-data="docfacilChatbot()">
+    <!-- Burbuja flotante visible desde el inicio (sin x-cloak: si Alpine fallara, el botón sigue visible) -->
     <button type="button" x-show="!open" x-transition.opacity @click="toggle()" aria-label="Abrir chat"
         style="position:fixed;right:22px;bottom:96px;z-index:9998;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0891b2);color:#fff;border:0;box-shadow:0 12px 32px -8px rgba(13,148,136,0.6);cursor:pointer;padding:0;margin:0;font-size:0;line-height:0;box-sizing:border-box;transition:transform .2s;"
         :style="window.innerWidth >= 768 ? 'bottom:22px; width:64px; height:64px;' : ''"
@@ -14,8 +14,8 @@
         <span x-show="hasUnread" style="position:absolute;top:-2px;right:-2px;background:#ef4444;color:#fff;border-radius:50%;width:22px;height:22px;font-size:11px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25);">1</span>
     </button>
 
-    <!-- Panel -->
-    <div x-show="open" x-transition.opacity
+    <!-- Panel — x-cloak previene flash del panel abierto antes de que Alpine procese -->
+    <div x-show="open" x-cloak x-transition.opacity
         style="position:fixed;right:22px;bottom:22px;z-index:9999;width:380px;max-width:calc(100vw - 28px);height:580px;max-height:calc(100vh - 80px);background:#fff;border-radius:18px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);display:flex;flex-direction:column;overflow:hidden;border:1px solid #e5e7eb;">
 
         <!-- Header -->
