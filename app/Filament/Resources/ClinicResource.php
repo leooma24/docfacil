@@ -226,8 +226,8 @@ class ClinicResource extends Resource
                     ->label('Ocultar clínicas demo')
                     ->default(true)
                     ->toggle()
-                    ->query(fn ($q) => $q->where(function ($q2) {
-                        $q2->where('slug', 'not like', 'demo-sales-%')
+                    ->query(fn ($query) => $query->where(function ($q) {
+                        $q->where('slug', 'not like', 'demo-sales-%')
                             ->orWhereNull('slug');
                     })),
                 Tables\Filters\TernaryFilter::make('is_beta')->label('Beta testers'),

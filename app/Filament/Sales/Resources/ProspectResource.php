@@ -152,20 +152,20 @@ class ProspectResource extends Resource
                     ]),
                 Tables\Filters\Filter::make('pending_contact')
                     ->label('Seguimiento pendiente')
-                    ->query(fn ($q) => $q->where(function ($q) {
+                    ->query(fn ($query) => $query->where(function ($q) {
                         $q->whereNotNull('next_contact_at')->where('next_contact_at', '<=', now());
                     })->orWhere(function ($q) {
                         $q->where('contact_day', 0)->where('status', 'new');
                     })),
                 Tables\Filters\Filter::make('no_started')
                     ->label('Sin iniciar cadencia')
-                    ->query(fn ($q) => $q->where('contact_day', 0)->whereIn('status', ['new', 'contacted'])),
+                    ->query(fn ($query) => $query->where('contact_day', 0)->whereIn('status', ['new', 'contacted'])),
                 Tables\Filters\Filter::make('hot_leads')
                     ->label('🔥 Calientes (80+)')
-                    ->query(fn ($q) => $q->where('lead_score', '>=', \App\Services\LeadScoringService::HOT_THRESHOLD)),
+                    ->query(fn ($query) => $query->where('lead_score', '>=', \App\Services\LeadScoringService::HOT_THRESHOLD)),
                 Tables\Filters\Filter::make('warm_leads')
                     ->label('🌡️ Tibios (50-79)')
-                    ->query(fn ($q) => $q->whereBetween('lead_score', [
+                    ->query(fn ($query) => $query->whereBetween('lead_score', [
                         \App\Services\LeadScoringService::WARM_THRESHOLD,
                         \App\Services\LeadScoringService::HOT_THRESHOLD - 1,
                     ])),
