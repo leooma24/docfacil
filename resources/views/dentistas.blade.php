@@ -178,6 +178,11 @@
         [data-animate] { opacity:0; }
         [data-animate].visible { opacity:1; }
         [x-cloak] { display: none !important; }
+
+        /* Prevenir scroll horizontal en mobile causado por elementos
+           fixed/absolute (chatbot panel, sticky CTAs, etc.) que excedan
+           viewport. overflow-x:hidden solo en body no basta; necesita html. */
+        html, body { overflow-x: hidden; max-width: 100vw; }
     </style>
     @include('partials.analytics')
 </head>
