@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
@@ -44,24 +45,24 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 
     private static function generateReferralCode(?string $name): string
     {
-        $base = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'DOC'), 0, 6));
-        $code = $base . rand(100, 999);
+        // Base humanizada (mantiene branding) + 6 chars random (alfanumérico).
+        // Espacio: ~57 mil millones de combinaciones por base — no enumerable.
+        $base = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'DOC'), 0, 4));
 
-        while (self::where('referral_code', $code)->exists()) {
-            $code = $base . rand(100, 999);
-        }
+        do {
+            $code = $base . strtoupper(Str::random(6));
+        } while (self::where('referral_code', $code)->exists());
 
         return $code;
     }
 
     private static function generateSalesRepCode(?string $name): string
     {
-        $base = 'VND-' . strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'VENTAS'), 0, 5));
-        $code = $base . rand(10, 99);
+        $base = 'VND-' . strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $name ?? 'VENTAS'), 0, 4));
 
-        while (self::where('sales_rep_code', $code)->exists()) {
-            $code = $base . rand(10, 99);
-        }
+        do {
+            $code = $base . strtoupper(Str::random(6));
+        } while (self::where('sales_rep_code', $code)->exists());
 
         return $code;
     }

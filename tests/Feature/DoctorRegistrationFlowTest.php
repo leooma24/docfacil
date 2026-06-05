@@ -31,8 +31,8 @@ class DoctorRegistrationFlowTest extends TestCase
             ->fillForm([
                 'name' => 'Dr. Juan Pérez',
                 'email' => 'juan@test.com',
-                'password' => 'secreta123',
-                'passwordConfirmation' => 'secreta123',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Consultorio Dental Sonrisas',
                 'terms_accepted' => true,
             ])
@@ -80,8 +80,8 @@ class DoctorRegistrationFlowTest extends TestCase
             ->fillForm([
                 'name' => 'Dra. Ana López',
                 'email' => 'ana@test.com',
-                'password' => 'secreta123',
-                'passwordConfirmation' => 'secreta123',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Clínica Dental Ana',
                 'terms_accepted' => true,
             ])
@@ -101,8 +101,8 @@ class DoctorRegistrationFlowTest extends TestCase
                 ->fillForm([
                     'name' => 'Bot Spam',
                     'email' => 'bot@spam.com',
-                    'password' => 'secreta123',
-                    'passwordConfirmation' => 'secreta123',
+                    'password' => 'Secreta123!',
+                    'passwordConfirmation' => 'Secreta123!',
                     'clinic_name' => 'Bot Clinic',
                     'website_url_backup' => 'http://spam.com',
                     'terms_accepted' => true,
@@ -123,8 +123,8 @@ class DoctorRegistrationFlowTest extends TestCase
             ->fillForm([
                 'name' => 'Dr. Sin Términos',
                 'email' => 'noterms@test.com',
-                'password' => 'secreta123',
-                'passwordConfirmation' => 'secreta123',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Test Clinic',
                 'terms_accepted' => false,
             ])
@@ -163,8 +163,8 @@ class DoctorRegistrationFlowTest extends TestCase
             ->fillForm([
                 'name' => 'Dr. Vendido',
                 'email' => 'vendido@test.com',
-                'password' => 'secreta123',
-                'passwordConfirmation' => 'secreta123',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Clínica Vendida',
                 'terms_accepted' => true,
             ])

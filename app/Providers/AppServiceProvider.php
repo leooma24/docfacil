@@ -8,6 +8,7 @@ use App\Observers\AppointmentObserver;
 use App\Observers\ClinicObserver;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // En producción, todas las URLs generadas (incluyendo signed routes,
+        // emails, redirects) usan https. Defensa-en-profundidad sobre el
+        // proxy Apache/nginx que ya hace 80→443. Previene cookies en HTTP
+        // si por alguna razón llega un request por puerto 80.
+        if (app()->isProduction()) {
+            URL::forceScheme('https');
+        }
+
         Clinic::observe(ClinicObserver::class);
         Appointment::observe(AppointmentObserver::class);
 

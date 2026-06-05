@@ -150,7 +150,15 @@
                         @if(str_starts_with($consent->signature, 'data:image'))
                         <img src="{{ $consent->signature }}" class="sig-img">
                         @else
-                        <img src="{{ storage_path('app/public/' . $consent->signature) }}" class="sig-img">
+                            @php
+                                // Firmas nuevas → disk 'local' (storage/app/private/)
+                                // Firmas viejas → disk 'public' (storage/app/public/)
+                                // Probamos local primero; si no existe, fallback a public legacy.
+                                $localPath = storage_path('app/private/' . $consent->signature);
+                                $publicPath = storage_path('app/public/' . $consent->signature);
+                                $sigPath = file_exists($localPath) ? $localPath : $publicPath;
+                            @endphp
+                        <img src="{{ $sigPath }}" class="sig-img">
                         @endif
                     @endif
                     <div class="sig-line">

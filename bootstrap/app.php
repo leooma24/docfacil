@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhooks/whatsapp',
             'billing/stripe/webhook',
         ]);
+
+        // Security headers en TODAS las respuestas (X-Frame-Options,
+        // X-Content-Type-Options, Referrer-Policy, HSTS en prod, etc.)
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

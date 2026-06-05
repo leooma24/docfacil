@@ -34,7 +34,8 @@ class Register extends BaseRegister
                     ->placeholder('doctor@email.com'),
                 $this->getPasswordFormComponent()
                     ->revealable() // Show/hide toggle — mejor UX que confirmation
-                    ->helperText('Mínimo 8 caracteres'),
+                    ->rule(\Illuminate\Validation\Rules\Password::min(10)->mixedCase()->numbers())
+                    ->helperText('Mínimo 10 caracteres con mayúsculas, minúsculas y números'),
                 $this->getPasswordConfirmationFormComponent()
                     ->revealable(),
                 Forms\Components\TextInput::make('clinic_name')

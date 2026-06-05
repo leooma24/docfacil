@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * Commission NO usa BelongsToClinic porque tiene relación dual:
+ *  - `clinic_id` = la clínica VENDIDA
+ *  - `user_id` = el sales rep que ganó la comisión
+ * El sales rep (rol 'sales') tiene su PROPIO clinic_id (clínica admin/demo).
+ * Aplicar BelongsToClinic filtraría por SU clinic, excluyendo las
+ * comisiones de clínicas a las que vendió. El filtrado se hace por
+ * Resource:
+ *   - Sales/CommissionResource → where('user_id', auth()->id())
+ *   - Admin/CommissionResource → super_admin only, sin filtro
+ */
 class Commission extends Model
 {
     use LogsActivity;

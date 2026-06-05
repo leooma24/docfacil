@@ -43,9 +43,15 @@ Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.
 
 // Billing: Stripe Checkout (autenticado) + webhook (sin CSRF) + comprobantes SPEI privados
 Route::middleware(['auth'])->group(function () {
-    // CIE-10 catalog para autocompletado en la consulta médica (no-dental)
-    Route::get('/api/cie10/search', [Cie10SearchController::class, 'search'])->name('cie10.search');
-    Route::get('/api/cie10/resolve', [Cie10SearchController::class, 'resolve'])->name('cie10.resolve');
+    // CIE-10 catalog para autocompletado en la consulta médica (no-dental).
+    // Rate limit: 60 búsquedas por minuto por usuario — suficiente para tipear
+    // pero corta DoS si un user logueado intenta abusar.
+    Route::get('/api/cie10/search', [Cie10SearchController::class, 'search'])
+        ->middleware('throttle:60,1')
+        ->name('cie10.search');
+    Route::get('/api/cie10/resolve', [Cie10SearchController::class, 'resolve'])
+        ->middleware('throttle:60,1')
+        ->name('cie10.resolve');
 
     Route::get('/billing/stripe/checkout/{plan}/{cycle}', [StripeCheckoutController::class, 'checkout'])
         ->name('stripe.checkout')

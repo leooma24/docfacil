@@ -61,10 +61,12 @@ class ClinicSettings extends Page implements HasForms
                             ->label('Logo del consultorio')
                             ->image()
                             ->imageEditor()
+                            // Solo PNG/JPG/WebP — SVG explícitamente excluido por riesgo de XSS embebido
+                            ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp'])
                             ->disk('public')
                             ->directory('clinic-logos')
                             ->maxSize(2048)
-                            ->helperText('PNG o JPG, máximo 2 MB. Se usa en el portal público y en correos.'),
+                            ->helperText('PNG, JPG o WebP, máximo 2 MB. Se usa en el portal público y en correos.'),
                     ]),
                 Section::make('Integraciones')
                     ->description('URLs públicas de tu consultorio para que DocFácil te ayude a aprovecharlas.')

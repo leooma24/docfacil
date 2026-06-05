@@ -30,12 +30,27 @@ class SignaturePad extends Component
             return;
         }
 
-        // Decode base64 and save as file
-        $image = str_replace('data:image/png;base64,', '', $imageData);
-        $image = str_replace(' ', '+', $image);
-        $fileName = 'signatures/firma-' . $consent->id . '-' . time() . '.png';
+        // Validar formato base64 PNG/JPEG (anti-arbitrary-file-upload)
+        if (! preg_match('/^data:image\/(png|jpeg);base64,/i', $imageData, $matches)) {
+            $this->dispatch('signature-error', message: 'Formato inválido');
+            return;
+        }
+        $ext = strtolower($matches[1]) === 'jpeg' ? 'jpg' : 'png';
 
-        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, base64_decode($image));
+        $payload = preg_replace('/^data:image\/(png|jpeg);base64,/i', '', $imageData);
+        $payload = str_replace(' ', '+', $payload);
+        $binary = base64_decode($payload, true);
+
+        // Sanity: tamaño máximo 2 MB (suficiente para firma manuscrita)
+        if (! $binary || strlen($binary) > 2 * 1024 * 1024) {
+            $this->dispatch('signature-error', message: 'Firma demasiado grande');
+            return;
+        }
+
+        // Disk PRIVADO (storage/app/private/signatures) — no public.
+        // Servida por SignedRoute con verificación de clinic_id en SignatureController.
+        $fileName = 'signatures/firma-' . $consent->id . '-' . time() . '.' . $ext;
+        \Illuminate\Support\Facades\Storage::disk('local')->put($fileName, $binary);
 
         $consent->update([
             'signature' => $fileName,
