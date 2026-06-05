@@ -9,6 +9,7 @@ use App\Models\Prescription;
 use App\Models\PrescriptionItem;
 use App\Models\Service;
 use App\Services\ConsultationAIService;
+use App\Services\SpecialtyService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -54,17 +55,29 @@ class Consultation extends Page implements HasForms
     // Search
     public string $patientSearch = '';
 
-    // Step 1: Vital signs
+    // Step 1: Vital signs + somatometry (visibilidad controlada por $enabledFields)
     public ?string $blood_pressure = '';
     public ?string $heart_rate = '';
     public ?string $temperature = '';
+    public ?string $respiratory_rate = '';
+    public ?string $oxygen_saturation = '';
     public ?string $weight = '';
+    public ?string $height = '';
+    public ?string $head_circumference = '';
 
     // Step 2: Diagnosis
     public ?string $chief_complaint = '';
     public ?string $diagnosis = '';
     public ?string $treatment = '';
     public ?string $medical_notes = '';
+    public array $cie10_codes = [];
+
+    /**
+     * Lista de campos habilitados para ESTE doctor en SU pantalla de consulta.
+     * Se resuelve en mount() con cascada doctor → clinic → defaults por especialidad.
+     * Se usa en la vista con isFieldEnabled('campo') para condicionar el render.
+     */
+    public array $enabledFields = [];
 
     // Step 3: Prescription
     public array $medications = [];
@@ -83,7 +96,11 @@ class Consultation extends Page implements HasForms
     {
         $appointmentId = request('appointment');
         $clinicId = auth()->user()->clinic_id;
-        $doctorId = auth()->user()->doctor?->id;
+        $doctor = auth()->user()->doctor;
+        $doctorId = $doctor?->id;
+
+        // Resolver qué campos mostrar (cascada doctor → clínica → defaults por especialidad)
+        $this->enabledFields = SpecialtyService::resolveEnabledFields($doctor);
 
         if ($appointmentId) {
             $this->appointment = Appointment::with(['patient', 'doctor.user', 'service', 'clinic'])
@@ -119,11 +136,16 @@ class Consultation extends Page implements HasForms
             $this->blood_pressure = $saved['blood_pressure'] ?? '';
             $this->heart_rate = $saved['heart_rate'] ?? '';
             $this->temperature = $saved['temperature'] ?? '';
+            $this->respiratory_rate = $saved['respiratory_rate'] ?? '';
+            $this->oxygen_saturation = $saved['oxygen_saturation'] ?? '';
             $this->weight = $saved['weight'] ?? '';
+            $this->height = $saved['height'] ?? '';
+            $this->head_circumference = $saved['head_circumference'] ?? '';
             $this->chief_complaint = $saved['chief_complaint'] ?? '';
             $this->diagnosis = $saved['diagnosis'] ?? '';
             $this->treatment = $saved['treatment'] ?? '';
             $this->medical_notes = $saved['medical_notes'] ?? '';
+            $this->cie10_codes = $saved['cie10_codes'] ?? [];
             $this->medications = $saved['medications'] ?? [];
             $this->prescription_notes = $saved['prescription_notes'] ?? '';
             $this->payment_service_id = $saved['payment_service_id'] ?? null;
@@ -413,23 +435,40 @@ class Consultation extends Page implements HasForms
         }
     }
 
+    /**
+     * Helper para Blade: ¿este campo está habilitado para mostrarse?
+     * Se llama como $this->isFieldEnabled('temperature') desde la vista.
+     */
+    public function isFieldEnabled(string $field): bool
+    {
+        return in_array($field, $this->enabledFields, true);
+    }
+
     protected function saveConsultationState(): void
     {
         if (!$this->appointment || $this->completed) {
             return;
         }
 
+        // Persistimos TODOS los campos en consultation_data (no filtramos por
+        // enabledFields) para preservar datos si un campo se desactiva con
+        // una consulta en progreso.
         $this->appointment->update([
             'consultation_data' => [
                 'currentStep' => $this->currentStep,
                 'blood_pressure' => $this->blood_pressure,
                 'heart_rate' => $this->heart_rate,
                 'temperature' => $this->temperature,
+                'respiratory_rate' => $this->respiratory_rate,
+                'oxygen_saturation' => $this->oxygen_saturation,
                 'weight' => $this->weight,
+                'height' => $this->height,
+                'head_circumference' => $this->head_circumference,
                 'chief_complaint' => $this->chief_complaint,
                 'diagnosis' => $this->diagnosis,
                 'treatment' => $this->treatment,
                 'medical_notes' => $this->medical_notes,
+                'cie10_codes' => $this->cie10_codes,
                 'medications' => $this->medications,
                 'prescription_notes' => $this->prescription_notes,
                 'payment_service_id' => $this->payment_service_id,
@@ -445,13 +484,14 @@ class Consultation extends Page implements HasForms
     {
         $clinicId = auth()->user()->clinic_id;
 
-        // Save medical record
-        $vitalSigns = array_filter([
-            'blood_pressure' => $this->blood_pressure,
-            'heart_rate' => $this->heart_rate,
-            'temperature' => $this->temperature,
-            'weight' => $this->weight,
-        ]);
+        // Solo guardamos los signos vitales que están habilitados Y tienen valor.
+        // Si un campo no está enabled, lo ignoramos al persistir (no contaminamos BD).
+        $vitalSigns = [];
+        foreach (['blood_pressure', 'heart_rate', 'temperature', 'weight'] as $vital) {
+            if ($this->isFieldEnabled($vital) && !empty($this->{$vital})) {
+                $vitalSigns[$vital] = $this->{$vital};
+            }
+        }
 
         $medicalRecord = MedicalRecord::create([
             'clinic_id' => $clinicId,
@@ -464,6 +504,12 @@ class Consultation extends Page implements HasForms
             'treatment' => $this->treatment ?: null,
             'notes' => $this->medical_notes ?: null,
             'vital_signs' => !empty($vitalSigns) ? $vitalSigns : null,
+            // Campos extendidos: solo persistimos los habilitados con valor
+            'respiratory_rate' => $this->isFieldEnabled('respiratory_rate') && $this->respiratory_rate !== '' ? (int) $this->respiratory_rate : null,
+            'oxygen_saturation' => $this->isFieldEnabled('oxygen_saturation') && $this->oxygen_saturation !== '' ? (int) $this->oxygen_saturation : null,
+            'height' => $this->isFieldEnabled('height') && $this->height !== '' ? (float) $this->height : null,
+            'head_circumference' => $this->isFieldEnabled('head_circumference') && $this->head_circumference !== '' ? (float) $this->head_circumference : null,
+            'cie10_codes' => $this->isFieldEnabled('cie10_codes') && !empty($this->cie10_codes) ? $this->cie10_codes : null,
         ]);
 
         // Save prescription if medications exist

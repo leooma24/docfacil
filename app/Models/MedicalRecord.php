@@ -26,6 +26,9 @@ class MedicalRecord extends Model
         'clinic_id', 'patient_id', 'doctor_id', 'appointment_id',
         'visit_date', 'chief_complaint', 'diagnosis', 'treatment',
         'notes', 'vital_signs', 'attachments',
+        // Extended vitals (configurables por especialidad — ver SpecialtyService::FIELD_CATALOG)
+        'respiratory_rate', 'oxygen_saturation', 'height',
+        'head_circumference', 'cie10_codes',
     ];
 
     protected function casts(): array
@@ -35,6 +38,7 @@ class MedicalRecord extends Model
             'vital_signs' => 'array',
             'attachments' => 'array',
             'locked_at' => 'datetime',
+            'cie10_codes' => 'array',
         ];
     }
 

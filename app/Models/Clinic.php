@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Clinic extends Model
@@ -75,6 +76,11 @@ class Clinic extends Model
     public function patients(): HasMany
     {
         return $this->hasMany(Patient::class);
+    }
+
+    public function consultationSettings(): HasOne
+    {
+        return $this->hasOne(ClinicConsultationSettings::class);
     }
 
     public function services(): HasMany

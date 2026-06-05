@@ -369,18 +369,36 @@
 
     <div class="step-card" style="--step-accent: {{ $stepConfig[$currentStep]['color'] ?? '#0d9488' }}; --step-accent-2: {{ $stepConfig[$currentStep]['colorDark'] ?? '#0891b2' }};">
 
-        {{-- Step 1: Vital Signs --}}
+        {{-- Step 1: Vital Signs + Somatometry (configurable por especialidad) --}}
         @if($currentStep === 1)
         <div class="step-title">
             <span class="step-title-icon">❤️</span>
             <span class="step-title-text">Signos Vitales</span>
         </div>
         <p class="step-subtitle">Opcional. Registra los signos vitales del paciente.</p>
-        <div class="vitals-grid">
+
+        {{-- Banners de alerta (dental) --}}
+        @if($this->isFieldEnabled('allergies_alert') && $this->appointment?->patient?->allergies)
+            <div style="background:#fef2f2;border-left:4px solid #ef4444;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:18px;">⚠️</span>
+                <div style="font-size:13px;color:#991b1b;"><strong>Alergias:</strong> {{ $this->appointment->patient->allergies }}</div>
+            </div>
+        @endif
+        @if($this->isFieldEnabled('anticoagulants_alert') && $this->appointment?->patient?->current_medications && \Illuminate\Support\Str::contains(mb_strtolower($this->appointment->patient->current_medications), ['warfarin','acenocumarol','sintrom','rivaroxaban','apixaban','dabigatran','heparin','aspirin','clopidogrel','anticoagul']))
+            <div style="background:#fff7ed;border-left:4px solid #f97316;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:18px;">🩸</span>
+                <div style="font-size:13px;color:#9a3412;"><strong>Toma anticoagulantes:</strong> precaución con procedimientos invasivos</div>
+            </div>
+        @endif
+
+        <div class="vitals-grid" x-data="bmiCalc()" x-init="watch()">
+            @if($this->isFieldEnabled('blood_pressure'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Presión arterial</label>
                 <input type="text" wire:model="blood_pressure" placeholder="120/80" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm">
             </div>
+            @endif
+            @if($this->isFieldEnabled('heart_rate'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frec. cardíaca</label>
                 <div class="relative">
@@ -388,6 +406,8 @@
                     <span class="absolute right-3 top-2.5 text-xs text-gray-400">bpm</span>
                 </div>
             </div>
+            @endif
+            @if($this->isFieldEnabled('temperature'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Temperatura</label>
                 <div class="relative">
@@ -395,14 +415,90 @@
                     <span class="absolute right-3 top-2.5 text-xs text-gray-400">°C</span>
                 </div>
             </div>
+            @endif
+            @if($this->isFieldEnabled('respiratory_rate'))
+            <div>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frec. respiratoria</label>
+                <div class="relative">
+                    <input type="number" wire:model="respiratory_rate" placeholder="16" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-12 text-sm">
+                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">rpm</span>
+                </div>
+            </div>
+            @endif
+            @if($this->isFieldEnabled('oxygen_saturation'))
+            <div>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Saturación O₂</label>
+                <div class="relative">
+                    <input type="number" wire:model="oxygen_saturation" placeholder="98" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
+                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">%</span>
+                </div>
+            </div>
+            @endif
+            @if($this->isFieldEnabled('weight'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peso</label>
                 <div class="relative">
-                    <input type="number" step="0.1" wire:model="weight" placeholder="70" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
+                    <input type="number" step="0.1" wire:model="weight" x-ref="weightInput" @input="recalc()" placeholder="70" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
                     <span class="absolute right-3 top-2.5 text-xs text-gray-400">kg</span>
                 </div>
             </div>
+            @endif
+            @if($this->isFieldEnabled('height'))
+            <div>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Talla</label>
+                <div class="relative">
+                    <input type="number" step="0.1" wire:model="height" x-ref="heightInput" @input="recalc()" placeholder="170" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
+                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                </div>
+            </div>
+            @endif
+            @if($this->isFieldEnabled('bmi'))
+            <div>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IMC <span class="text-[10px] text-gray-400 normal-case">(calculado)</span></label>
+                <div class="relative">
+                    <input type="text" :value="bmi || '—'" readonly class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm bg-gray-50 dark:bg-gray-800 cursor-not-allowed pr-20">
+                    <span class="absolute right-3 top-2.5 text-xs font-semibold" :class="bmiColor" x-text="bmiCategory"></span>
+                </div>
+            </div>
+            @endif
+            @if($this->isFieldEnabled('head_circumference'))
+            <div>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Perímetro cefálico</label>
+                <div class="relative">
+                    <input type="number" step="0.1" wire:model="head_circumference" placeholder="35" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
+                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                </div>
+            </div>
+            @endif
         </div>
+
+        <script>
+            // IMC calculator client-side. NO persiste en BD — solo lectura visual.
+            function bmiCalc() {
+                return {
+                    bmi: '',
+                    bmiCategory: '',
+                    bmiColor: 'text-gray-400',
+                    recalc() {
+                        const w = parseFloat(this.$refs.weightInput?.value || @json($weight ?? ''));
+                        const hCm = parseFloat(this.$refs.heightInput?.value || @json($height ?? ''));
+                        if (!w || !hCm || hCm < 50) {
+                            this.bmi = ''; this.bmiCategory = ''; this.bmiColor = 'text-gray-400'; return;
+                        }
+                        const hM = hCm / 100;
+                        const val = w / (hM * hM);
+                        this.bmi = val.toFixed(1);
+                        if (val < 18.5) { this.bmiCategory = 'Bajo'; this.bmiColor = 'text-blue-500'; }
+                        else if (val < 25) { this.bmiCategory = 'Normal'; this.bmiColor = 'text-green-600'; }
+                        else if (val < 30) { this.bmiCategory = 'Sobrepeso'; this.bmiColor = 'text-amber-500'; }
+                        else { this.bmiCategory = 'Obesidad'; this.bmiColor = 'text-red-500'; }
+                    },
+                    watch() {
+                        this.recalc();
+                    }
+                }
+            }
+        </script>
         @endif
 
         {{-- Step 2: Diagnosis --}}
@@ -546,6 +642,107 @@
                     </button>
                 </div>
             </div>
+
+            @if($this->isFieldEnabled('cie10_codes'))
+            <div x-data="cie10Search()" x-init="loadInitial()">
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Códigos CIE-10
+                    <span class="text-[10px] text-gray-400 normal-case">(busca por código o nombre)</span>
+                </label>
+
+                {{-- Selected codes chips --}}
+                <div class="flex flex-wrap gap-1 mb-2" x-show="selected.length > 0">
+                    <template x-for="(code, i) in selected" :key="code.code">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded text-xs">
+                            <strong x-text="code.code"></strong>
+                            <span x-text="code.name" class="max-w-[200px] truncate"></span>
+                            <button type="button" @click="remove(i)" class="ml-1 text-teal-600 hover:text-teal-900">×</button>
+                        </span>
+                    </template>
+                </div>
+
+                {{-- Search input + results --}}
+                <div class="relative">
+                    <input type="text" x-model="query" @input.debounce.300ms="search()" @focus="showResults = true" @click.away="showResults = false"
+                        placeholder="Ej: K02.1 o cefalea"
+                        class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm">
+
+                    <div x-show="showResults && results.length > 0" x-cloak
+                        style="position:absolute;top:100%;left:0;right:0;z-index:50;margin-top:4px;background:white;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.12);max-height:240px;overflow-y:auto;">
+                        <template x-for="r in results" :key="r.code">
+                            <button type="button" @click="add(r)" class="block w-full text-left px-3 py-2 hover:bg-teal-50 dark:hover:bg-gray-700 text-xs border-b border-gray-100 last:border-b-0">
+                                <span class="font-bold text-teal-700" x-text="r.code"></span>
+                                <span class="text-gray-600 dark:text-gray-300 ml-2" x-text="r.name"></span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <div x-show="showResults && query.length >= 2 && results.length === 0 && !loading" x-cloak
+                        style="position:absolute;top:100%;left:0;right:0;z-index:50;margin-top:4px;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:8px 12px;font-size:12px;color:#9ca3af;">
+                        Sin resultados para "<span x-text="query"></span>"
+                    </div>
+                </div>
+
+                <input type="hidden" wire:model="cie10_codes">
+
+                <script>
+                    function cie10Search() {
+                        return {
+                            query: '',
+                            results: [],
+                            selected: [],
+                            showResults: false,
+                            loading: false,
+                            async loadInitial() {
+                                // Hidratar selected desde el modelo Livewire al cargar
+                                const initial = @json($cie10_codes ?? []);
+                                if (Array.isArray(initial) && initial.length > 0) {
+                                    // Resolver los códigos a sus labels via el endpoint (devuelve code+name)
+                                    try {
+                                        const res = await fetch('/api/cie10/resolve?codes=' + encodeURIComponent(initial.join(',')));
+                                        if (res.ok) {
+                                            this.selected = await res.json();
+                                        } else {
+                                            this.selected = initial.map(c => ({code: c, name: ''}));
+                                        }
+                                    } catch (e) {
+                                        this.selected = initial.map(c => ({code: c, name: ''}));
+                                    }
+                                }
+                            },
+                            async search() {
+                                if (this.query.length < 2) { this.results = []; return; }
+                                this.loading = true;
+                                try {
+                                    const res = await fetch('/api/cie10/search?q=' + encodeURIComponent(this.query));
+                                    if (res.ok) {
+                                        this.results = await res.json();
+                                    }
+                                } finally {
+                                    this.loading = false;
+                                }
+                            },
+                            add(item) {
+                                if (this.selected.find(s => s.code === item.code)) return;
+                                this.selected.push(item);
+                                this.sync();
+                                this.query = '';
+                                this.results = [];
+                                this.showResults = false;
+                            },
+                            remove(i) {
+                                this.selected.splice(i, 1);
+                                this.sync();
+                            },
+                            sync() {
+                                // Push solo los códigos a Livewire (no los nombres)
+                                @this.set('cie10_codes', this.selected.map(s => s.code));
+                            }
+                        }
+                    }
+                </script>
+            </div>
+            @endif
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tratamiento realizado</label>
                 <div class="field-with-mic">

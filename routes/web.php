@@ -9,6 +9,7 @@ use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CheckInController;
+use App\Http\Controllers\Cie10SearchController;
 use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemoModeController;
@@ -42,6 +43,10 @@ Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.
 
 // Billing: Stripe Checkout (autenticado) + webhook (sin CSRF) + comprobantes SPEI privados
 Route::middleware(['auth'])->group(function () {
+    // CIE-10 catalog para autocompletado en la consulta médica (no-dental)
+    Route::get('/api/cie10/search', [Cie10SearchController::class, 'search'])->name('cie10.search');
+    Route::get('/api/cie10/resolve', [Cie10SearchController::class, 'resolve'])->name('cie10.resolve');
+
     Route::get('/billing/stripe/checkout/{plan}/{cycle}', [StripeCheckoutController::class, 'checkout'])
         ->name('stripe.checkout')
         ->where('plan', 'basico|profesional|clinica')

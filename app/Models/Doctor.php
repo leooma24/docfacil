@@ -6,6 +6,7 @@ use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Doctor extends Model
 {
@@ -36,6 +37,11 @@ class Doctor extends Model
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function consultationSettings(): HasOne
+    {
+        return $this->hasOne(DoctorConsultationSettings::class);
     }
 
     public function getFullNameAttribute(): string
