@@ -1,5 +1,23 @@
 <style>
     /* ===== DOCFACIL CUSTOM THEME ===== */
+
+    /* x-cloak: oculta elementos hasta que Alpine los procesa.
+       Esto es CRÍTICO para el botón hamburguesa del topbar de Filament
+       que usa x-cloak + x-show — sin esta regla, queda visible 1 frame
+       antes de que Alpine lo procese, causando flash. Con esta regla,
+       Alpine remueve x-cloak automáticamente en init() y el botón
+       aparece correctamente. */
+    [x-cloak] { display: none !important; }
+
+    /* Garantiza que el botón hamburguesa (mobile) y close-sidebar siempre
+       sean visibles cuando deben — sobre-especificidad para vencer cualquier
+       conflicto con el resto del theme. */
+    .fi-topbar .fi-topbar-open-sidebar-btn,
+    .fi-topbar .fi-topbar-close-sidebar-btn {
+        color: #0f172a !important;
+        opacity: 1 !important;
+    }
+
     /* Sidebar ALWAYS dark - both light and dark mode */
 
     aside.fi-sidebar,
