@@ -212,6 +212,104 @@ class AppointmentResource extends Resource
                         ->color('primary')
                         ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
                         ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress'])),
+
+                    // Visita rápida: para ortodoncia / controles / chequeos repetitivos.
+                    // 3 clicks: nota opcional + próxima cita auto-sugerida + (opcional) cobro.
+                    Tables\Actions\Action::make('quick_visit')
+                        ->label('Visita rápida')
+                        ->icon('heroicon-o-bolt')
+                        ->color('info')
+                        ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress']))
+                        ->fillForm(function (Appointment $record): array {
+                            $suggested = \App\Services\AppointmentPatternService::suggestNextDate(
+                                $record->patient_id,
+                                $record->clinic_id
+                            );
+                            return [
+                                'note' => '',
+                                'next_appointment_date' => $suggested?->format('Y-m-d\TH:i'),
+                                'next_service_id' => $record->service_id,
+                                'charge' => false,
+                                'amount' => $record->service?->price,
+                                'payment_method' => 'cash',
+                            ];
+                        })
+                        ->form(fn (Appointment $record) => [
+                            Forms\Components\Placeholder::make('paciente_info')
+                                ->label('')
+                                ->content(fn () => new \Illuminate\Support\HtmlString(
+                                    '<div style="padding:10px 14px;background:#f0fdfa;border-left:4px solid #0d9488;border-radius:8px;">'
+                                    . '<div style="font-size:11px;text-transform:uppercase;color:#0d9488;font-weight:700;letter-spacing:0.05em;">Visita rápida</div>'
+                                    . '<div style="font-size:15px;font-weight:700;color:#0f172a;margin-top:2px;">'
+                                    . e($record->patient->first_name . ' ' . $record->patient->last_name)
+                                    . '</div>'
+                                    . '<div style="font-size:12px;color:#64748b;margin-top:2px;">'
+                                    . e($record->service?->name ?? 'Sin servicio') . ' · ' . $record->starts_at->format('d/m/Y H:i')
+                                    . '</div>'
+                                    . '</div>'
+                                )),
+                            Forms\Components\Textarea::make('note')
+                                ->label('Nota (opcional)')
+                                ->placeholder('Ej. Ajuste de ligas, sin novedad. Higiene buena.')
+                                ->rows(2)
+                                ->maxLength(500)
+                                ->helperText('1 línea es suficiente. Esto se guarda en el expediente.'),
+                            Forms\Components\Section::make('Próxima cita')
+                                ->description(fn () => \App\Services\AppointmentPatternService::suggestNextDate($record->patient_id, $record->clinic_id)
+                                    ? 'Pre-sugerimos la fecha basados en el patrón de visitas anteriores de este paciente.'
+                                    : 'Sin patrón previo — captura la fecha si quieres agendar.')
+                                ->schema([
+                                    Forms\Components\DateTimePicker::make('next_appointment_date')
+                                        ->label('Fecha y hora')
+                                        ->seconds(false)
+                                        ->minutesStep(15)
+                                        ->native(false)
+                                        ->displayFormat('d/m/Y H:i'),
+                                    Forms\Components\Select::make('next_service_id')
+                                        ->label('Servicio para la próxima cita')
+                                        ->options(\App\Models\Service::where('clinic_id', auth()->user()->clinic_id)
+                                            ->where('is_active', true)
+                                            ->pluck('name', 'id'))
+                                        ->searchable(),
+                                ])
+                                ->columns(2)
+                                ->collapsible(),
+                            Forms\Components\Section::make('Cobro')
+                                ->description('Solo marca si esta visita NO está pre-pagada (ej. ortodoncia mensualidad ya cobrada).')
+                                ->schema([
+                                    Forms\Components\Toggle::make('charge')
+                                        ->label('Registrar cobro de esta visita')
+                                        ->live(),
+                                    Forms\Components\TextInput::make('amount')
+                                        ->label('Monto')
+                                        ->numeric()
+                                        ->prefix('$')
+                                        ->visible(fn (Forms\Get $get) => $get('charge')),
+                                    Forms\Components\Select::make('payment_method')
+                                        ->label('Método de pago')
+                                        ->options([
+                                            'cash' => 'Efectivo',
+                                            'card' => 'Tarjeta',
+                                            'transfer' => 'Transferencia',
+                                        ])
+                                        ->visible(fn (Forms\Get $get) => $get('charge')),
+                                ])
+                                ->columns(2)
+                                ->collapsible()
+                                ->collapsed(),
+                        ])
+                        ->modalHeading('Visita rápida')
+                        ->modalSubmitActionLabel('Registrar y cerrar')
+                        ->modalWidth('xl')
+                        ->action(function (Appointment $record, array $data) {
+                            \App\Services\AppointmentPatternService::executeQuickVisit($record, $data);
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Visita registrada')
+                                ->body('La cita se marcó como completada' . (! empty($data['next_appointment_date']) ? ' y se agendó la siguiente.' : '.'))
+                                ->success()
+                                ->send();
+                        }),
                 Tables\Actions\Action::make('charge')
                     ->label('Cobrar')
                     ->icon('heroicon-o-banknotes')
