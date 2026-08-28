@@ -13,9 +13,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Doctor\Concerns\SearchesPatientName;
 
 class WaitlistEntryResource extends Resource
 {
+    use SearchesPatientName;
+
     protected static ?string $slug = 'lista-de-espera';
 
     protected static ?string $model = WaitlistEntry::class;
@@ -110,7 +113,7 @@ class WaitlistEntryResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient?->first_name} {$record->patient?->last_name}")
-                    ->searchable(),
+                    ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('service.name')
                     ->label('Servicio')
                     ->placeholder('Cualquiera'),
@@ -169,7 +172,12 @@ class WaitlistEntryResource extends Resource
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')
-                            ->minutesStep(15),
+                            ->minutesStep(15)
+                            // Ofrecer un horario que ya pasó deja muy mal
+                            // frente al paciente; el calendario abre en el
+                            // mes actual y era facil picarle a un dia viejo.
+                            ->minDate(now())
+                            ->default(now()->addDay()->setTime(10, 0)),
                     ])
                     ->action(function (WaitlistEntry $record, array $data) {
                         $phone = preg_replace('/\D/', '', $record->patient->phone);

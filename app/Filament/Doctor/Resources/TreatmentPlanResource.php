@@ -14,9 +14,12 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\URL;
+use App\Filament\Doctor\Concerns\SearchesPatientName;
 
 class TreatmentPlanResource extends Resource
 {
+    use SearchesPatientName;
+
     protected static ?string $slug = 'presupuestos';
 
     protected static ?string $model = TreatmentPlan::class;
@@ -172,7 +175,7 @@ class TreatmentPlanResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient?->first_name} {$record->patient?->last_name}")
-                    ->searchable(),
+                    ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Título')
                     ->limit(40)

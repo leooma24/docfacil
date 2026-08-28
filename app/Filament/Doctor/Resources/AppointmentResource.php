@@ -12,9 +12,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use App\Filament\Doctor\Concerns\SearchesPatientName;
 
 class AppointmentResource extends Resource
 {
+    use SearchesPatientName;
+
     protected static ?string $slug = 'citas';
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
@@ -160,7 +163,7 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
-                    ->searchable(),
+                    ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('doctor.user.name')
                     ->label('Doctor')
                     ->searchable(),

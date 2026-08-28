@@ -13,9 +13,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use App\Filament\Doctor\Concerns\SearchesPatientName;
 
 class ConsentFormResource extends Resource
 {
+    use SearchesPatientName;
+
     use GatedByPlanFeature;
 
     protected static ?string $slug = 'consentimientos';
@@ -169,7 +172,7 @@ class ConsentFormResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
-                    ->searchable(),
+                    ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Documento')
                     ->limit(30),

@@ -435,6 +435,48 @@ class DemoSeeder extends Seeder
             'risks' => 'Descalcificación dental por mala higiene, resorción radicular, recidiva post-tratamiento.',
             'alternatives' => 'Alineadores transparentes (Invisalign). No tratar (maloclusión puede empeorar).',
         ]);
+
+        // =============================================
+        // LISTA DE ESPERA (3 pacientes)
+        //
+        // Sin esto el módulo sale vacío en las demos, que es justo donde
+        // se explica cómo se llena un hueco cuando alguien cancela.
+        // =============================================
+        \App\Models\WaitlistEntry::create([
+            'clinic_id' => $clinic->id,
+            'patient_id' => $patients[2]->id,
+            'service_id' => $services[5]->id,
+            'doctor_id' => $doctor->id,
+            'desired_from' => now()->toDateString(),
+            'desired_to' => now()->addDays(21)->toDateString(),
+            'priority' => 'urgent',
+            'status' => 'waiting',
+            'notes' => 'Dolor fuerte. Avisarle en cuanto se libere cualquier horario.',
+        ]);
+
+        \App\Models\WaitlistEntry::create([
+            'clinic_id' => $clinic->id,
+            'patient_id' => $patients[7]->id,
+            'service_id' => $services[1]->id,
+            'desired_from' => now()->addDays(3)->toDateString(),
+            'desired_to' => now()->addDays(30)->toDateString(),
+            'priority' => 'normal',
+            'status' => 'waiting',
+            'notes' => 'Solo puede por las tardes, después de las 5.',
+        ]);
+
+        \App\Models\WaitlistEntry::create([
+            'clinic_id' => $clinic->id,
+            'patient_id' => $patients[11]->id,
+            'service_id' => $services[3]->id,
+            'doctor_id' => $doctor2->id,
+            'desired_from' => now()->subDays(2)->toDateString(),
+            'desired_to' => now()->addDays(14)->toDateString(),
+            'priority' => 'normal',
+            'status' => 'notified',
+            'notified_at' => now()->subHours(6),
+            'notes' => 'Ya se le ofreció el jueves, quedó de confirmar.',
+        ]);
     }
 }
 

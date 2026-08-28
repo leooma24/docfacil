@@ -14,9 +14,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Doctor\Concerns\SearchesPatientName;
 
 class OdontogramResource extends Resource
 {
+    use SearchesPatientName;
+
     use GatedByPlanFeature;
 
     protected static ?string $slug = 'odontogramas';
@@ -99,7 +102,7 @@ class OdontogramResource extends Resource
                 Tables\Columns\TextColumn::make('patient.first_name')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
-                    ->searchable(),
+                    ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('doctor.user.name')
                     ->label('Doctor'),
                 Tables\Columns\TextColumn::make('teeth_count')
