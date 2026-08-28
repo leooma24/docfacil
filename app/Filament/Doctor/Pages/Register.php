@@ -22,6 +22,35 @@ class Register extends BaseRegister
      */
     public ?string $website_url_backup = null;
 
+    /**
+     * Datos que llegan por query string en la liga de registro:
+     * ?vnd= (vendedor), ?ref= (referido) y los que pre-llenan el formulario
+     * desde los correos del pipeline.
+     *
+     * Se capturan en mount(), que corre en el GET de la página. handleRegistration()
+     * corre después, en el POST de Livewire a /livewire/update — una petición
+     * distinta, sin query string. Leerlos ahí devolvía siempre null y la venta se
+     * registraba sin vendedor, o sea sin comisión.
+     */
+    public ?string $ligaVendedor = null;
+
+    public ?string $ligaReferido = null;
+
+    public array $ligaDatosClinicos = [];
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        $this->ligaVendedor = request()->query('vnd');
+        $this->ligaReferido = request()->query('ref');
+        $this->ligaDatosClinicos = [
+            'phone' => request()->query('phone'),
+            'city' => request()->query('city'),
+            'specialty' => request()->query('specialty'),
+        ];
+    }
+
     public function form(Form $form): Form
     {
         return $form
@@ -93,7 +122,7 @@ class Register extends BaseRegister
         // Validamos formato del código para evitar enumeración con SQL caro:
         // el formato real es VND-XXXXX## (4-20 chars alfanuméricos con guion).
         $salesRep = null;
-        $vndCode = request()->query('vnd');
+        $vndCode = $this->ligaVendedor;
         if ($vndCode && is_string($vndCode) && preg_match('/^VND-[A-Z0-9]{3,16}$/i', $vndCode)) {
             $salesRep = \App\Models\User::where('role', 'sales')
                 ->where('sales_rep_code', strtoupper($vndCode))
@@ -105,10 +134,10 @@ class Register extends BaseRegister
         // query string (cuando un correo del pipeline pre-llena el registro).
         // Los campos clínicos (specialty, license, phone, city) se completan
         // en el wizard de onboarding después del registro.
-        $queryPhone = request()->query('phone');
-        $queryCity = request()->query('city');
-        $querySpecialty = request()->query('specialty');
-        $queryRef = request()->query('ref');
+        $queryPhone = $this->ligaDatosClinicos['phone'] ?? null;
+        $queryCity = $this->ligaDatosClinicos['city'] ?? null;
+        $querySpecialty = $this->ligaDatosClinicos['specialty'] ?? null;
+        $queryRef = $this->ligaReferido;
 
         // Create clinic (sold_by_user_id NO está en fillable — requiere forceFill)
         $clinic = new Clinic();

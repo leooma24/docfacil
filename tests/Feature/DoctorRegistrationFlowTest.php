@@ -183,4 +183,95 @@ class DoctorRegistrationFlowTest extends TestCase
             'assigned_to_sales_rep_id' => $salesRep->id,
         ]);
     }
+
+    // ══════════════════════════════════════════════════════════════
+    //  Atribución por liga (?vnd=, ?ref=)
+    //
+    //  handleRegistration() corre en el POST de Livewire, que es una
+    //  petición distinta a la que trajo el query string. Leer ahí
+    //  request()->query('vnd') daba siempre null: la venta se guardaba
+    //  sin vendedor y por lo tanto sin comisión.
+    // ══════════════════════════════════════════════════════════════
+
+    public function test_la_liga_con_vnd_atribuye_la_venta_al_vendedor(): void
+    {
+        $vendedor = User::forceCreate([
+            'name' => 'Juan Ventas',
+            'email' => 'juan.ventas@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'sales',
+            'sales_rep_code' => 'VND-JUAN01',
+            'is_active_sales_rep' => true,
+            'email_verified_at' => now(),
+        ]);
+
+        Livewire::withQueryParams(['vnd' => 'VND-JUAN01'])
+            ->test(Register::class)
+            ->fillForm([
+                'name' => 'Dra. Atribuida',
+                'email' => 'atribuida@test.com',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
+                'clinic_name' => 'Consultorio Atribuido',
+                'terms_accepted' => true,
+            ])
+            ->call('register')
+            ->assertHasNoFormErrors();
+
+        $prospect = Prospect::where('email', 'atribuida@test.com')->firstOrFail();
+
+        $this->assertSame(
+            $vendedor->id,
+            $prospect->assigned_to_sales_rep_id,
+            'El prospect quedó sin vendedor: la venta no generaría comisión.'
+        );
+        $this->assertSame('prospecting', $prospect->source);
+    }
+
+    public function test_un_codigo_de_vendedor_inexistente_no_rompe_el_registro(): void
+    {
+        Livewire::withQueryParams(['vnd' => 'VND-NOEXISTE'])
+            ->test(Register::class)
+            ->fillForm([
+                'name' => 'Dr. Sin Vendedor',
+                'email' => 'sinvendedor@test.com',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
+                'clinic_name' => 'Consultorio Sin Vendedor',
+                'terms_accepted' => true,
+            ])
+            ->call('register')
+            ->assertHasNoFormErrors();
+
+        $prospect = Prospect::where('email', 'sinvendedor@test.com')->firstOrFail();
+        $this->assertNull($prospect->assigned_to_sales_rep_id);
+        $this->assertSame('landing', $prospect->source);
+    }
+
+    public function test_los_datos_de_la_liga_del_pipeline_llegan_al_prospect(): void
+    {
+        Livewire::withQueryParams([
+                'phone' => '6681234567',
+                'city' => 'Culiacán',
+                'specialty' => 'Odontología',
+            ])
+            ->test(Register::class)
+            ->fillForm([
+                'name' => 'Dr. Pipeline',
+                'email' => 'pipeline@test.com',
+                'password' => 'Secreta123!',
+                'passwordConfirmation' => 'Secreta123!',
+                'clinic_name' => 'Consultorio Pipeline',
+                'terms_accepted' => true,
+            ])
+            ->call('register')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('prospects', [
+            'email' => 'pipeline@test.com',
+            'phone' => '6681234567',
+            'city' => 'Culiacán',
+        ]);
+    }
+
 }
