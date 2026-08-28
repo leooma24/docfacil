@@ -1,3 +1,35 @@
+{{-- Cierra el menu lateral en pantallas chicas.
+
+     Filament guarda si el menu esta abierto en localStorage (clave "isOpen")
+     y lo aplica sin importar el tamano de pantalla. En un celular el menu
+     mide 320px y tapa casi toda la pantalla, dejando al doctor sin ver el
+     contenido. Aqui lo cerramos cuando el ancho es menor al breakpoint lg
+     (1024px), que es donde Filament deja de mostrarlo fijo.
+
+     En escritorio "cerrado" solo significa colapsado a iconos, asi que no
+     se pierde nada al volver a una pantalla grande. --}}
+<script>
+    (function () {
+        var LG = 1024;
+
+        function cerrarMenuEnPantallaChica() {
+            if (window.innerWidth >= LG) return;
+            var menu = window.Alpine && window.Alpine.store
+                ? window.Alpine.store('sidebar')
+                : null;
+            if (menu && menu.isOpen) {
+                menu.isOpen = false;
+            }
+        }
+
+        document.addEventListener('alpine:initialized', cerrarMenuEnPantallaChica);
+        window.addEventListener('resize', cerrarMenuEnPantallaChica);
+
+        // Por si Alpine ya arranco antes de que corriera este script.
+        if (window.Alpine) cerrarMenuEnPantallaChica();
+    })();
+</script>
+
 <style>
     /* ===== DOCFACIL CUSTOM THEME ===== */
 

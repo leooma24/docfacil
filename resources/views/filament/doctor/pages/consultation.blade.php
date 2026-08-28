@@ -365,6 +365,22 @@
         .step-title-text { font-size: 1.25rem; font-weight: 800; color: #111; letter-spacing: -0.015em; }
         .dark .step-title-text { color: #f3f4f6; }
         .step-subtitle { font-size: 0.82rem; color: #6b7280; margin-bottom: 18px; }
+
+        /* Etiquetas de unidad dentro de los campos (bpm, kg, $...).
+           Van en CSS y no en utilidades de Tailwind porque en produccion
+           right-3/top-2.5/pr-12 no compilan y la etiqueta se sale del campo. */
+        .campo-unidad { position: relative; }
+        .campo-unidad .unidad,
+        .campo-unidad .unidad-bmi,
+        .campo-unidad .unidad-prefijo {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            font-size: 0.75rem; pointer-events: none;
+        }
+        .campo-unidad .unidad { right: 12px; color: #9ca3af; }
+        .campo-unidad .unidad-bmi { right: 12px; font-weight: 600; }
+        .campo-unidad .unidad-prefijo { left: 12px; font-size: 0.875rem; color: #9ca3af; }
+        .campo-unidad input.con-unidad { padding-right: 3rem; }
+        .campo-unidad input.con-prefijo { padding-left: 1.75rem; }
     </style>
 
     <div class="step-card" style="--step-accent: {{ $stepConfig[$currentStep]['color'] ?? '#0d9488' }}; --step-accent-2: {{ $stepConfig[$currentStep]['colorDark'] ?? '#0891b2' }};">
@@ -401,72 +417,72 @@
             @if($this->isFieldEnabled('heart_rate'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frec. cardíaca</label>
-                <div class="relative">
-                    <input type="number" wire:model="heart_rate" placeholder="72" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-12 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">bpm</span>
+                <div class="relative campo-unidad">
+                    <input type="number" wire:model="heart_rate" placeholder="72" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 con-unidad text-sm">
+                    <span class="unidad">bpm</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('temperature'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Temperatura</label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="number" step="0.1" wire:model="temperature" placeholder="36.5" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">°C</span>
+                    <span class="unidad">°C</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('respiratory_rate'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frec. respiratoria</label>
-                <div class="relative">
-                    <input type="number" wire:model="respiratory_rate" placeholder="16" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-12 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">rpm</span>
+                <div class="relative campo-unidad">
+                    <input type="number" wire:model="respiratory_rate" placeholder="16" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 con-unidad text-sm">
+                    <span class="unidad">rpm</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('oxygen_saturation'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Saturación O₂</label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="number" wire:model="oxygen_saturation" placeholder="98" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">%</span>
+                    <span class="unidad">%</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('weight'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peso</label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="number" step="0.1" wire:model="weight" x-ref="weightInput" @input="recalc()" placeholder="70" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">kg</span>
+                    <span class="unidad">kg</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('height'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Talla</label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="number" step="0.1" wire:model="height" x-ref="heightInput" @input="recalc()" placeholder="170" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                    <span class="unidad">cm</span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('bmi'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IMC <span class="text-[10px] text-gray-400 normal-case">(calculado)</span></label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="text" :value="bmi || '—'" readonly class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm bg-gray-50 dark:bg-gray-800 cursor-not-allowed pr-20">
-                    <span class="absolute right-3 top-2.5 text-xs font-semibold" :class="bmiColor" x-text="bmiCategory"></span>
+                    <span class="unidad-bmi" :class="bmiColor" x-text="bmiCategory"></span>
                 </div>
             </div>
             @endif
             @if($this->isFieldEnabled('head_circumference'))
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Perímetro cefálico</label>
-                <div class="relative">
+                <div class="relative campo-unidad">
                     <input type="number" step="0.1" wire:model="head_circumference" placeholder="35" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pr-10 text-sm">
-                    <span class="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                    <span class="unidad">cm</span>
                 </div>
             </div>
             @endif
@@ -825,9 +841,9 @@
             </div>
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monto</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
-                    <input type="number" wire:model="payment_amount" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 pl-7 text-sm" placeholder="0.00">
+                <div class="relative campo-unidad">
+                    <span class="unidad-prefijo">$</span>
+                    <input type="number" wire:model="payment_amount" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 con-prefijo text-sm" placeholder="0.00">
                 </div>
             </div>
             <div>

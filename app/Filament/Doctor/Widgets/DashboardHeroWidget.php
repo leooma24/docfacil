@@ -54,7 +54,9 @@ class DashboardHeroWidget extends Widget
 
         return [
             'greeting' => $greeting,
-            'name' => $user->name ?? 'Doctor',
+            // Nombre corto ya con su título (si el doctor lo escribió). La
+            // vista NO debe anteponer otro "Dr." — ver User::shortDisplayName().
+            'name' => $user?->shortDisplayName() ?? 'Doctor',
             'date' => now()->translatedFormat('l d \d\e F'),
             'today_appts' => $todayAppts,
             'today_income' => $todayIncome,

@@ -31,7 +31,7 @@
                             </span>
                             @endif
                             @if($next->doctor?->user)
-                            <span style="opacity:0.7;">Dr. {{ $next->doctor->user->name }}</span>
+                            <span style="opacity:0.7;">{{ $next->doctor->user->displayName() }}</span>
                             @endif
                         </div>
                     </div>

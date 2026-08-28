@@ -141,13 +141,13 @@
                 <div style="flex:1;min-width:0;">
                     <div class="dh-hero-kicker">{{ $d['date'] }}</div>
                     @if($d['empty_state'] === 'fresh')
-                        <h2 class="dh-hero-title">Bienvenido, Dr. {{ explode(' ', trim($d['name']))[0] }}</h2>
+                        <h2 class="dh-hero-title">Bienvenido, {{ $d['name'] }}</h2>
                         <div class="dh-hero-subtitle">Tu consultorio está listo. Empieza por aquí — te toma 5 minutos y ya tendrás corriendo el sistema.</div>
                     @elseif($d['empty_state'] === 'has_patients')
-                        <h2 class="dh-hero-title">Buen avance, Dr. {{ explode(' ', trim($d['name']))[0] }}</h2>
+                        <h2 class="dh-hero-title">Buen avance, {{ $d['name'] }}</h2>
                         <div class="dh-hero-subtitle">Ya tienes {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente' : 'pacientes' }}. Falta agendar su primera cita y mandar su primer recordatorio.</div>
                     @else
-                        <h2 class="dh-hero-title">{{ $d['greeting'] }}, Dr. {{ explode(' ', trim($d['name']))[0] }}</h2>
+                        <h2 class="dh-hero-title">{{ $d['greeting'] }}, {{ $d['name'] }}</h2>
                         <div class="dh-hero-subtitle">Este es el resumen de tu consultorio de hoy. Que tengas un gran día.</div>
                     @endif
                 </div>

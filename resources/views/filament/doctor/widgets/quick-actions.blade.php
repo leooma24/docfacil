@@ -2,7 +2,9 @@
     <style>
         .qa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         @media (min-width: 640px) { .qa-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1024px) { .qa-grid { grid-template-columns: repeat(5, 1fr); } }
+        /* 5 columnas hasta 1280px: a 1024 el menu lateral se come 320px
+           y las tarjetas quedaban de 116px, con el texto en 5 renglones. */
+        @media (min-width: 1280px) { .qa-grid { grid-template-columns: repeat(5, 1fr); } }
         .qa-card { position: relative; display: flex; align-items: center; gap: 12px; padding: 18px 16px; border-radius: 1.25rem; text-decoration: none; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); backdrop-filter: blur(14px) saturate(180%); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 4px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9); }
         .qa-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
         .qa-card::before { content: ''; position: absolute; inset: 0; opacity: 0.7; z-index: 0; }
@@ -26,6 +28,11 @@
         .qa-text-emerald { color: #064e3b; }
         .qa-text-purple { color: #4c1d95; }
         .qa-text-amber { color: #78350f; }
+
+        /* El texto debe poder partirse en dos lineas: con 5 columnas
+           "Consulta rapida" no cabe en una sola y se cortaba, porque
+           el card tiene overflow:hidden. */
+        .qa-card > span { min-width: 0; line-height: 1.15; overflow-wrap: break-word; }
     </style>
 
     <div class="qa-grid">

@@ -147,6 +147,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- El plugin collapse va ANTES del core de Alpine (asi lo pide con defer).
+         Sin el, el acordeon del FAQ abre de golpe en vez de deslizarse. --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
@@ -1000,7 +1003,15 @@
                             <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         @endif
-                        <a href="{{ url('/doctor/register') }}"
+                        @php
+                            // El plan Clinica no se contrata solo: se cotiza por
+                            // WhatsApp porque depende de cuantos doctores son.
+                            $planUrl = ($plan['cta'] ?? '') === 'Contactar ventas'
+                                ? 'https://wa.me/526682493398?text=' . urlencode('Hola Omar, me interesa el plan Clinica de DocFacil para mi consultorio')
+                                : url('/doctor/register');
+                        @endphp
+                        <a href="{{ $planUrl }}"
+                            @if(str_starts_with($planUrl, 'https://wa.me')) target="_blank" rel="noopener" @endif
                             data-track="pricing_tier_clicked"
                             data-track-tier="{{ $plan['slug'] ?? strtolower($plan['name']) }}"
                             data-track-cycle="{{ $plan['popular'] ? 'pro' : ($plan['name'] ?? 'unknown') }}"
@@ -1097,7 +1108,10 @@
             </div>
 
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
-                <table class="w-full text-sm">
+                {{-- En celular la tabla no cabe: se desliza dentro de su caja
+                     en vez de quedar cortada por el overflow-x del body. --}}
+                <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                <table class="w-full text-sm" style="min-width:340px;">
                     <thead>
                         <tr class="border-b-2 border-gray-200">
                             <th class="py-3 px-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Concepto</th>
@@ -1156,6 +1170,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
                 <div class="mt-6 text-center">
                     <a href="#pricing" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-200 transition">

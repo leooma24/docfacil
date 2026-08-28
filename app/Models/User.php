@@ -67,6 +67,73 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $code;
     }
 
+    // ─────────────────────────────────────────────────────────────
+    //  Nombre para mostrar
+    //
+    //  En México la mayoría de los doctores se registran escribiendo
+    //  su título ("Dr. Roberto García"). Si la interfaz antepone otro
+    //  "Dr." queda "Dr. Dr. Roberto". Estos helpers respetan el título
+    //  que el doctor ya escribió y no inventan uno cuando no lo puso
+    //  (así nunca le decimos "Dr." a una doctora).
+    // ─────────────────────────────────────────────────────────────
+
+    /** Títulos que un doctor puede haber escrito al inicio de su nombre. */
+    private const TITULOS = ['dr', 'dra', 'doctor', 'doctora', 'c.d', 'cd', 'mc', 'esp'];
+
+    /**
+     * Separa el título del resto del nombre.
+     *
+     * @return array{titulo: string, resto: string}
+     */
+    private function separarTitulo(): array
+    {
+        $nombre = trim((string) $this->name);
+        if ($nombre === '') {
+            return ['titulo' => '', 'resto' => ''];
+        }
+
+        $partes = preg_split('/\s+/', $nombre);
+        $primera = rtrim(mb_strtolower($partes[0]), '.');
+
+        if (in_array($primera, self::TITULOS, true) && count($partes) > 1) {
+            return [
+                'titulo' => $partes[0],
+                'resto' => implode(' ', array_slice($partes, 1)),
+            ];
+        }
+
+        return ['titulo' => '', 'resto' => $nombre];
+    }
+
+    /**
+     * Nombre completo listo para mostrar, sin duplicar el título.
+     * "Dr. Roberto García" → "Dr. Roberto García"
+     * "Roberto García"     → "Roberto García"
+     */
+    public function displayName(): string
+    {
+        return trim((string) $this->name) ?: 'Doctor';
+    }
+
+    /**
+     * Nombre corto para saludar, respetando el título escrito.
+     * "Dr. Roberto García"  → "Dr. Roberto"
+     * "Dra. Ana López Ruiz" → "Dra. Ana"
+     * "Roberto García"      → "Roberto"
+     */
+    public function shortDisplayName(): string
+    {
+        ['titulo' => $titulo, 'resto' => $resto] = $this->separarTitulo();
+
+        if ($resto === '') {
+            return $titulo ?: 'Doctor';
+        }
+
+        $primerNombre = preg_split('/\s+/', $resto)[0];
+
+        return trim($titulo . ' ' . $primerNombre);
+    }
+
     protected $hidden = [
         'password',
         'remember_token',
