@@ -37,6 +37,7 @@ class ConsultationTest extends TestCase
             'email' => 'doctor@test.com',
             'password' => bcrypt('password'),
             'role' => 'doctor',
+            'email_verified_at' => now(),
             'clinic_id' => $this->clinic->id,
         ]);
         $this->doctor = Doctor::create([
@@ -519,6 +520,7 @@ class ConsultationTest extends TestCase
             'email' => 'other@test.com',
             'password' => bcrypt('password'),
             'role' => 'doctor',
+            'email_verified_at' => now(),
             'clinic_id' => $otherClinic->id,
         ]);
         $otherDoctor = Doctor::create([

@@ -15,24 +15,29 @@ class LandingTest extends TestCase
         $response->assertSee('DocFacil');
     }
 
-    public function test_beta_page_loads(): void
+    /**
+     * El programa beta se retiró el 2026-04-24 (contradecía el pricing de
+     * planes pagados). /beta ahora es un redirect 301 permanente a la
+     * landing dental, para no perder el SEO de los links viejos.
+     */
+    public function test_beta_page_redirects_to_dentistas(): void
     {
         $response = $this->get('/beta');
-        $response->assertStatus(200);
-        $response->assertSee('Programa Beta');
+        $response->assertStatus(301);
+        $response->assertRedirect('/dentistas');
     }
 
-    public function test_demo_route_redirects(): void
+    /**
+     * /demo prellena las credenciales de la cuenta demo en sesión y manda
+     * al login del panel doctor. NO entra directo — el usuario ve el login
+     * con los datos ya puestos y solo da click en "Entrar".
+     */
+    public function test_demo_route_redirects_to_doctor_login(): void
     {
-        \App\Models\User::forceCreate([
-            'name' => 'Demo',
-            'email' => 'demo@docfacil.com',
-            'password' => bcrypt('demo2026'),
-            'role' => 'doctor',
-        ]);
-
         $response = $this->get('/demo');
-        $response->assertRedirect('/doctor');
+
+        $response->assertRedirect('/doctor/login');
+        $response->assertSessionHas('demo_credentials');
     }
 
     public function test_sitemap_returns_xml(): void
@@ -79,7 +84,12 @@ class LandingTest extends TestCase
         $this->assertDatabaseMissing('prospects', ['email' => 'bot@spam.com']);
     }
 
-    public function test_beta_registration_creates_prospect(): void
+    /**
+     * POST /beta también quedó como redirect 301 tras retirar el programa
+     * beta. Ya no crea prospects — la captura de leads ahora pasa por el
+     * formulario de contacto y por el registro directo.
+     */
+    public function test_beta_post_redirects_and_creates_no_prospect(): void
     {
         $response = $this->post('/beta', [
             'name' => 'Dr. Beta',
@@ -87,10 +97,9 @@ class LandingTest extends TestCase
             'phone' => '5559876543',
         ]);
 
-        $response->assertRedirect();
-        $this->assertDatabaseHas('prospects', [
+        $response->assertRedirect('/dentistas');
+        $this->assertDatabaseMissing('prospects', [
             'email' => 'beta@doctor.com',
-            'status' => 'interested',
         ]);
     }
 }

@@ -25,6 +25,7 @@ class PlanLimitsTest extends TestCase
             'email' => 'plan-test-' . rand(1000, 9999) . '@test.com',
             'password' => bcrypt('password'),
             'role' => 'doctor',
+            'email_verified_at' => now(),
             'clinic_id' => $clinic->id,
         ]);
 

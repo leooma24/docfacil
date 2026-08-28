@@ -22,6 +22,7 @@ class MultiTenancyTest extends TestCase
             'email' => $email,
             'password' => bcrypt('password'),
             'role' => 'doctor',
+            'email_verified_at' => now(),
             'clinic_id' => $clinic->id,
         ]);
         $doctor = Doctor::create([

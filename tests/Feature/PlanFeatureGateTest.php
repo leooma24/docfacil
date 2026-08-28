@@ -51,12 +51,18 @@ class PlanFeatureGateTest extends TestCase
         $this->assertTrue($clinic->hasFeature('whatsapp_reminders'));
         $this->assertTrue($clinic->hasFeature('whatsapp_payment'));
         $this->assertTrue($clinic->hasFeature('qr_checkin'));
+        $this->assertTrue($clinic->hasFeature('basic_dashboard'));
+
+        // El odontograma vive en Básico a propósito: es el diferenciador
+        // dental clave y el dentista solo (90% del ICP) debe tenerlo.
+        $this->assertTrue($clinic->hasFeature('odontogram'));
 
         // Exclusivos de Pro+: Básico NO debería tenerlos
-        $this->assertFalse($clinic->hasFeature('odontogram'));
         $this->assertFalse($clinic->hasFeature('consent_forms'));
-        $this->assertFalse($clinic->hasFeature('patient_portal'));
         $this->assertFalse($clinic->hasFeature('multi_doctor'));
+        $this->assertFalse($clinic->hasFeature('advanced_reports'));
+        $this->assertFalse($clinic->hasFeature('waitlist'));
+        $this->assertFalse($clinic->hasFeature('public_booking'));
     }
 
     public function test_pro_unlocks_all_basico_plus_pro_features(): void
@@ -67,18 +73,20 @@ class PlanFeatureGateTest extends TestCase
         $this->assertTrue($clinic->hasFeature('pdf_prescriptions'));
         $this->assertTrue($clinic->hasFeature('whatsapp_reminders'));
         $this->assertTrue($clinic->hasFeature('qr_checkin'));
+        $this->assertTrue($clinic->hasFeature('odontogram'));
 
         // Exclusivos de Pro
-        $this->assertTrue($clinic->hasFeature('odontogram'));
         $this->assertTrue($clinic->hasFeature('consent_forms'));
-        $this->assertTrue($clinic->hasFeature('patient_portal'));
         $this->assertTrue($clinic->hasFeature('multi_doctor'));
         $this->assertTrue($clinic->hasFeature('advanced_reports'));
         $this->assertTrue($clinic->hasFeature('smart_alerts'));
+        $this->assertTrue($clinic->hasFeature('waitlist'));
+        $this->assertTrue($clinic->hasFeature('public_booking'));
 
         // Exclusivos de Clínica: Pro NO debería tenerlos
         $this->assertFalse($clinic->hasFeature('unlimited_doctors'));
-        $this->assertFalse($clinic->hasFeature('multi_branch'));
+        $this->assertFalse($clinic->hasFeature('per_doctor_reports'));
+        $this->assertFalse($clinic->hasFeature('dedicated_onboarding'));
     }
 
     public function test_clinica_has_everything(): void
@@ -86,10 +94,14 @@ class PlanFeatureGateTest extends TestCase
         $clinic = $this->clinic('clinica');
 
         $allFeatures = [
-            'pdf_prescriptions', 'whatsapp_reminders', 'whatsapp_payment', 'qr_checkin',
-            'odontogram', 'consent_forms', 'patient_portal', 'multi_doctor',
-            'advanced_reports', 'smart_alerts',
-            'unlimited_doctors', 'multi_branch', 'commissions_between_doctors', 'dedicated_onboarding',
+            // Básico
+            'pdf_prescriptions', 'whatsapp_reminders', 'whatsapp_payment',
+            'qr_checkin', 'basic_dashboard', 'odontogram',
+            // Pro
+            'consent_forms', 'multi_doctor', 'advanced_reports', 'smart_alerts',
+            'priority_support', 'waitlist', 'public_booking',
+            // Clínica
+            'unlimited_doctors', 'per_doctor_reports', 'dedicated_onboarding',
         ];
 
         foreach ($allFeatures as $feature) {
