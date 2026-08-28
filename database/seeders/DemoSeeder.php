@@ -449,7 +449,7 @@ class DemoSeeder extends Seeder
             'doctor_id' => $doctor->id,
             'desired_from' => now()->toDateString(),
             'desired_to' => now()->addDays(21)->toDateString(),
-            'priority' => 'urgent',
+            'priority' => 1, // urgente
             'status' => 'waiting',
             'notes' => 'Dolor fuerte. Avisarle en cuanto se libere cualquier horario.',
         ]);
@@ -460,7 +460,7 @@ class DemoSeeder extends Seeder
             'service_id' => $services[1]->id,
             'desired_from' => now()->addDays(3)->toDateString(),
             'desired_to' => now()->addDays(30)->toDateString(),
-            'priority' => 'normal',
+            'priority' => 0,
             'status' => 'waiting',
             'notes' => 'Solo puede por las tardes, después de las 5.',
         ]);
@@ -472,7 +472,7 @@ class DemoSeeder extends Seeder
             'doctor_id' => $doctor2->id,
             'desired_from' => now()->subDays(2)->toDateString(),
             'desired_to' => now()->addDays(14)->toDateString(),
-            'priority' => 'normal',
+            'priority' => 0,
             'status' => 'notified',
             'notified_at' => now()->subHours(6),
             'notes' => 'Ya se le ofreció el jueves, quedó de confirmar.',
