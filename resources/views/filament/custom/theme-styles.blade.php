@@ -1,32 +1,54 @@
 {{-- Cierra el menu lateral en pantallas chicas.
 
-     Filament guarda si el menu esta abierto en localStorage (clave "isOpen")
-     y lo aplica sin importar el tamano de pantalla. En un celular el menu
-     mide 320px y tapa casi toda la pantalla, dejando al doctor sin ver el
-     contenido. Aqui lo cerramos cuando el ancho es menor al breakpoint lg
-     (1024px), que es donde Filament deja de mostrarlo fijo.
+     Filament guarda una sola bandera en localStorage ("isOpen") y la usa
+     para dos cosas distintas: en escritorio decide si el menu esta ancho o
+     colapsado a iconos, y en celular si esta abierto encima del contenido.
+     Como no mira el tamano de pantalla, un menu abierto en la laptop llegaba
+     abierto al celular y tapaba casi toda la vista.
 
-     En escritorio "cerrado" solo significa colapsado a iconos, asi que no
-     se pierde nada al volver a una pantalla grande. --}}
+     Aqui lo cerramos debajo del breakpoint lg (1024px), pero guardamos aparte
+     como lo tenia el doctor en escritorio para devolverselo tal cual cuando
+     vuelva a una pantalla grande. --}}
 <script>
     (function () {
         var LG = 1024;
+        var MEMORIA = 'docfacil.sidebarEscritorio';
 
-        function cerrarMenuEnPantallaChica() {
-            if (window.innerWidth >= LG) return;
-            var menu = window.Alpine && window.Alpine.store
+        function menu() {
+            return window.Alpine && window.Alpine.store
                 ? window.Alpine.store('sidebar')
                 : null;
-            if (menu && menu.isOpen) {
-                menu.isOpen = false;
+        }
+
+        function ajustarSegunPantalla() {
+            var m = menu();
+            if (!m) return;
+
+            if (window.innerWidth < LG) {
+                // Guardamos la preferencia de escritorio antes de cerrarlo,
+                // una sola vez: si ya hay algo guardado, el usuario sigue en
+                // pantalla chica y lo que tenga ahora no es su preferencia.
+                if (m.isOpen) {
+                    if (localStorage.getItem(MEMORIA) === null) {
+                        localStorage.setItem(MEMORIA, '1');
+                    }
+                    m.isOpen = false;
+                }
+                return;
+            }
+
+            var guardado = localStorage.getItem(MEMORIA);
+            if (guardado !== null) {
+                localStorage.removeItem(MEMORIA);
+                m.isOpen = guardado === '1';
             }
         }
 
-        document.addEventListener('alpine:initialized', cerrarMenuEnPantallaChica);
-        window.addEventListener('resize', cerrarMenuEnPantallaChica);
+        document.addEventListener('alpine:initialized', ajustarSegunPantalla);
+        window.addEventListener('resize', ajustarSegunPantalla);
 
         // Por si Alpine ya arranco antes de que corriera este script.
-        if (window.Alpine) cerrarMenuEnPantallaChica();
+        if (window.Alpine) ajustarSegunPantalla();
     })();
 </script>
 
