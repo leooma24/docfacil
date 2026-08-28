@@ -60,6 +60,29 @@ class WhatsAppService
      */
     private function handleHttpFailure(string $to, int $status, $body): void
     {
+        $metaCode = data_get($body, 'error.code');
+
+        // (#131030) "Recipient phone number not in allowed list" — la cuenta de
+        // WhatsApp Business sigue en modo desarrollo y solo puede escribir a los
+        // números dados de alta en Meta. NO es un fallo transitorio: hasta que la
+        // cuenta salga de modo desarrollo, TODOS los envíos a números no listados
+        // van a fallar igual.
+        //
+        // Loguearlo como ERROR en cada intento infló el log a miles de entradas
+        // y escondía los errores que sí importan. Lo bajamos a warning throttleado
+        // (1 por hora) para que quede el rastro sin ahogar el log.
+        if ($metaCode === 131030) {
+            $key = 'whatsapp:not_in_allowed_list_logged';
+            if (! Cache::has($key)) {
+                Cache::put($key, now()->toIso8601String(), now()->addHour());
+                Log::warning('WhatsApp en modo desarrollo: destinatario no está en la lista permitida de Meta. Los envíos a números no registrados seguirán fallando hasta sacar la cuenta de modo desarrollo.', [
+                    'ejemplo_destinatario' => $to,
+                    'meta_code' => 131030,
+                ]);
+            }
+            return;
+        }
+
         Log::error("WhatsApp: Failed to send to {$to}", ['status' => $status, 'body' => $body]);
 
         if ($status !== 401) {
