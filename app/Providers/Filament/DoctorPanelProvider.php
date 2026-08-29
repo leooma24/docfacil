@@ -44,6 +44,8 @@ class DoctorPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('30s')
             ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles') . view('partials.analytics'))
             ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat') . \Livewire\Livewire::mount('command-palette'))
+            // Ayuda por WhatsApp: el doctor no tenia a donde acudir si se atoraba.
+            ->renderHook('panels::body.end', fn () => view('filament.custom.boton-ayuda'))
             ->discoverResources(in: app_path('Filament/Doctor/Resources'), for: 'App\\Filament\\Doctor\\Resources')
             ->discoverPages(in: app_path('Filament/Doctor/Pages'), for: 'App\\Filament\\Doctor\\Pages')
             ->pages([

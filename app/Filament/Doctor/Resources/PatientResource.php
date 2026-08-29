@@ -68,26 +68,37 @@ class PatientResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Datos Personales')
+                    // Con el nombre y el telefono ya se puede agendar y
+                    // recordarle la cita. Lo demas se llena cuando lo tengas.
+                    ->description('Con el nombre y el teléfono es suficiente para empezar. Lo demás lo llenas cuando lo tengas.')
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('first_name')
                             ->label('Nombre')
+                            ->placeholder('María Elena')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('last_name')
                             ->label('Apellidos')
+                            ->placeholder('García López')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
+                            ->placeholder('maria@correo.com')
+                            ->helperText('Lo necesitas si le vas a dar acceso al portal.')
                             ->email()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
                             ->label('Teléfono')
+                            ->placeholder('55 1234 5678')
+                            ->helperText('A este número le llegan los recordatorios por WhatsApp.')
                             ->tel()
                             ->maxLength(255),
                         Forms\Components\DatePicker::make('birth_date')
                             ->label('Fecha de nacimiento')
+                            ->placeholder('dd/mm/aaaa')
+                            ->helperText('Con esto le felicitas el cumpleaños automáticamente.')
                             ->native(false)
                             ->displayFormat('d/m/Y'),
                         Forms\Components\Select::make('gender')
@@ -110,12 +121,17 @@ class PatientResource extends Resource
                             ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Información Médica')
+                    ->description('Opcional, pero lo que pongas aquí te sale como alerta antes de cada consulta.')
                     ->schema([
                         Forms\Components\Textarea::make('allergies')
                             ->label('Alergias')
+                            ->placeholder('Penicilina, látex, anestesia...')
+                            ->helperText('Te aparece en rojo al abrir su consulta.')
                             ->rows(2),
                         Forms\Components\Textarea::make('medical_notes')
                             ->label('Notas médicas')
+                            ->placeholder('Toma anticoagulantes. Diabético. Hipertenso...')
+                            ->helperText('Lo que quieras tener presente antes de atenderlo.')
                             ->rows(3),
                     ]),
                 Forms\Components\Toggle::make('is_active')
