@@ -26,6 +26,9 @@ class DoctorPanelProvider extends PanelProvider
             ->id('doctor')
             ->path('doctor')
             ->login(\App\Filament\Doctor\Pages\Login::class)
+            // Sin esto, quien olvida su contraseña no tiene forma de
+            // recuperarla: no hay ruta de reset en todo el panel.
+            ->passwordReset()
             ->registration(\App\Filament\Doctor\Pages\Register::class)
             ->emailVerification(\Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt::class)
             ->brandName('DocFácil')

@@ -27,6 +27,9 @@ class PacientePanelProvider extends PanelProvider
             ->id('paciente')
             ->path('paciente')
             ->login()
+            // Sin esto, quien olvida su contraseña no tiene forma de
+            // recuperarla: no hay ruta de reset en todo el panel.
+            ->passwordReset()
             ->brandName('DocFácil - Portal Paciente')
             ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')

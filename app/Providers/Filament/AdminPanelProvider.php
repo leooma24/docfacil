@@ -27,6 +27,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Sin esto, quien olvida su contraseña no tiene forma de
+            // recuperarla: no hay ruta de reset en todo el panel.
+            ->passwordReset()
             ->brandName('DocFácil Admin')
             ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')

@@ -24,6 +24,9 @@ class SalesPanelProvider extends PanelProvider
             ->id('ventas')
             ->path('ventas')
             ->login()
+            // Sin esto, quien olvida su contraseña no tiene forma de
+            // recuperarla: no hay ruta de reset en todo el panel.
+            ->passwordReset()
             ->brandName('DocFácil · Ventas')
             ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')
