@@ -43,9 +43,11 @@ class PacientePanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Paciente/Widgets'), for: 'App\\Filament\\Paciente\\Widgets')
+            // Sin FilamentInfoWidget: es el widget de ejemplo de Filament,
+            // con su version y ligas a su documentacion. No es algo que deba
+            // ver el paciente de un consultorio.
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

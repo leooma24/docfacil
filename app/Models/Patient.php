@@ -25,6 +25,10 @@ class Patient extends Model
         'clinic_id', 'first_name', 'last_name', 'email', 'phone',
         'birth_date', 'gender', 'address', 'allergies',
         'medical_notes', 'blood_type', 'is_active',
+        // Cuenta del paciente en el portal. Faltaba aqui, asi que Eloquent
+        // descartaba la asignacion sin decir nada y el paciente nunca
+        // quedaba ligado a su usuario.
+        'user_id',
     ];
 
     protected function casts(): array

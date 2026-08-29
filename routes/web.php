@@ -5,6 +5,7 @@ use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\AppointmentConfirmationController;
+use App\Http\Controllers\PatientPortalActivationController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
@@ -151,6 +152,16 @@ Route::get('/sales/proposal/{prospect}/pdf', [\App\Http\Controllers\ProposalPdfC
 Route::middleware('throttle:10,1')->group(function () {
     Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitation.accept');
     Route::post('/invitation/{token}', [InvitationController::class, 'store'])->name('invitation.store');
+});
+
+// El paciente elige su contraseña para entrar al portal. La liga la manda su
+// consultorio por WhatsApp y va firmada (caduca a los 7 dias), asi que no
+// guardamos tokens en ninguna tabla.
+Route::middleware(['signed', 'throttle:10,1'])->group(function () {
+    Route::get('/paciente/activar/{patient}', [PatientPortalActivationController::class, 'show'])
+        ->name('paciente.activar');
+    Route::post('/paciente/activar/{patient}', [PatientPortalActivationController::class, 'store'])
+        ->name('paciente.activar.store');
 });
 
 // Demo mode for sales reps - creates a temporary clinic with fake data

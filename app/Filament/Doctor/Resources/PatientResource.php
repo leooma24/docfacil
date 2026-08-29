@@ -3,7 +3,13 @@
 namespace App\Filament\Doctor\Resources;
 
 use App\Filament\Doctor\Resources\PatientResource\Pages;
+use App\Mail\PatientPortalInviteMail;
 use App\Models\Patient;
+use App\Models\User;
+use App\Services\PatientPortalInvite;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -172,6 +178,67 @@ class PatientResource extends Resource
                             return "https://wa.me/{$phone}";
                         })
                         ->openUrlInNewTab(),
+
+                    // Portal del paciente: le manda su liga por WhatsApp para
+                    // que elija contrasena. Solo aparece si el plan lo incluye
+                    // y si el paciente todavia no tiene cuenta.
+                    Tables\Actions\Action::make('dar_acceso_portal')
+                        ->label('Dar acceso al portal')
+                        ->icon('heroicon-o-key')
+                        ->color('info')
+                        ->visible(fn ($record) => empty($record->user_id)
+                            && ! empty($record->phone)
+                            && auth()->user()->clinic?->hasFeature('patient_portal'))
+                        ->modalHeading('Dar acceso al portal')
+                        ->modalDescription('Le mandamos su liga por WhatsApp para que elija su contrasena. Ahi va a poder ver sus citas, recetas y pagos.')
+                        ->modalSubmitActionLabel('Abrir WhatsApp')
+                        ->form([
+                            // El correo es con lo que entra despues, asi que es
+                            // obligatorio aunque el paciente no lo tuviera.
+                            Forms\Components\TextInput::make('email')
+                                ->label('Correo del paciente')
+                                ->email()
+                                ->required()
+                                ->default(fn ($record) => $record->email)
+                                ->helperText('Con este correo va a entrar al portal.'),
+                        ])
+                        ->action(function (Patient $record, array $data) {
+                            $correo = trim($data['email']);
+
+                            if (User::where('email', $correo)->exists()) {
+                                Notification::make()
+                                    ->title('Ese correo ya tiene cuenta en DocFacil')
+                                    ->body('Registra otro correo para este paciente.')
+                                    ->danger()
+                                    ->send();
+
+                                return null;
+                            }
+
+                            $record->update(['email' => $correo]);
+
+                            // El correo es refuerzo: si falla, el paciente
+                            // igual recibe su liga por WhatsApp.
+                            try {
+                                Mail::to($correo)->send(new PatientPortalInviteMail($record));
+                            } catch (\Throwable $e) {
+                                Log::warning('PatientPortalInviteMail fallo', [
+                                    'patient_id' => $record->id,
+                                    'error' => $e->getMessage(),
+                                ]);
+                            }
+
+                            return redirect()->away(PatientPortalInvite::urlWhatsApp($record));
+                        }),
+
+                    // Ya tiene cuenta: se lo decimos, sin accion que ejecutar.
+                    Tables\Actions\Action::make('portal_activo')
+                        ->label('Portal activo')
+                        ->icon('heroicon-o-check-badge')
+                        ->color('gray')
+                        ->disabled()
+                        ->visible(fn ($record) => ! empty($record->user_id)
+                            && auth()->user()->clinic?->hasFeature('patient_portal')),
                 ])
                     ->label('Acciones')
                     ->icon('heroicon-o-ellipsis-vertical')
