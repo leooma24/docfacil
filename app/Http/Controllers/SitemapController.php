@@ -15,7 +15,8 @@ class SitemapController extends Controller
         $urls = [
             ['loc' => url('/'), 'priority' => '1.0', 'changefreq' => 'weekly'],
             ['loc' => url('/dentistas'), 'priority' => '0.95', 'changefreq' => 'weekly'],
-            ['loc' => url('/doctor/login'), 'priority' => '0.8', 'changefreq' => 'monthly'],
+            // El login no va en el sitemap: no aporta nada en busqueda y le
+            // quita peso al resto. El registro si, porque es donde convierte.
             ['loc' => url('/doctor/register'), 'priority' => '0.9', 'changefreq' => 'monthly'],
             ['loc' => url('/blog'), 'priority' => '0.8', 'changefreq' => 'weekly'],
             // Herramientas gratis (activos SEO permanentes)

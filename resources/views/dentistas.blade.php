@@ -1398,6 +1398,29 @@
                     </div>
                 </div>
                 <div>
+                    {{-- Las paginas de comparativa estaban huerfanas: existian en el
+                         sitemap pero nadie las enlazaba, ni la landing ni las de
+                         ciudad. Son las de mayor intencion de compra (quien busca
+                         "alternativas a X" ya se quiere cambiar), asi que valen un
+                         lugar en el footer. --}}
+                    @php
+                        $competidores = [
+                            ['slug' => 'dentalink',  'name' => 'Dentalink'],
+                            ['slug' => 'doctorum',   'name' => 'Doctorum'],
+                            ['slug' => 'eaglesoft',  'name' => 'Eaglesoft'],
+                        ];
+                    @endphp
+                    <h4 class="font-semibold text-gray-300 mb-3">Comparativas</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        @foreach ($competidores as $comp)
+                            <li><a href="/vs/{{ $comp['slug'] }}" class="hover:text-teal-400 transition">DocFácil vs {{ $comp['name'] }}</a></li>
+                        @endforeach
+                        @foreach ($competidores as $comp)
+                            <li><a href="/alternativas-a-{{ $comp['slug'] }}" class="hover:text-teal-400 transition">Alternativas a {{ $comp['name'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div>
                     <h4 class="font-semibold text-gray-300 mb-3">Acceso</h4>
                     <ul class="space-y-2 text-sm text-gray-500">
                         <li><a href="/doctor/login" class="hover:text-teal-400 transition">Panel Doctor</a></li>
