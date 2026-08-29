@@ -2,9 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
+
 class BlogController extends Controller
 {
-    public static function articles(): array
+    /**
+     * Los artículos tal como vivían escritos a mano, antes de que el blog
+     * tuviera tabla propia. Solo lo usa la migración que los pasó a la base;
+     * el sitio ya lee de blog_posts.
+     *
+     * Se conserva para que la migración siga siendo reproducible en un
+     * entorno nuevo. No agregues artículos aquí.
+     */
+    public static function articulosHeredados(): array
     {
         return [
             'cuanto-cuesta-abrir-consultorio-dental-mexico' => [
@@ -204,6 +214,21 @@ class BlogController extends Controller
         ];
     }
 
+    /**
+     * Artículos publicados, en la forma que espera la vista.
+     *
+     * Sigue devolviendo un arreglo indexado por slug porque asi nació el
+     * blog y asi lo consumen las vistas y el sitemap.
+     */
+    public static function articles(): array
+    {
+        return BlogPost::query()
+            ->publicados()
+            ->get()
+            ->mapWithKeys(fn (BlogPost $post) => [$post->slug => $post->paraLaVista()])
+            ->all();
+    }
+
     public function index()
     {
         return view('blog.index', ['articles' => self::articles()]);
@@ -211,15 +236,16 @@ class BlogController extends Controller
 
     public function show(string $slug)
     {
-        $articles = self::articles();
-        if (!isset($articles[$slug])) {
+        $post = BlogPost::query()->publicados()->where('slug', $slug)->first();
+
+        if (! $post) {
             abort(404);
         }
 
         return view('blog.show', [
-            'article' => $articles[$slug],
+            'article' => $post->paraLaVista(),
             'slug' => $slug,
-            'related' => collect($articles)->except($slug)->take(2)->all(),
+            'related' => collect(self::articles())->except($slug)->take(2)->all(),
         ]);
     }
 }

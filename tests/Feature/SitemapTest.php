@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
@@ -11,6 +12,9 @@ use Tests\TestCase;
  */
 class SitemapTest extends TestCase
 {
+    // El sitemap incluye los articulos del blog, que ahora salen de la base.
+    use RefreshDatabase;
+
     private function sitemap(): string
     {
         return $this->get('/sitemap.xml')->assertSuccessful()->getContent();
