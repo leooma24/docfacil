@@ -7,6 +7,91 @@ class BlogController extends Controller
     public static function articles(): array
     {
         return [
+            'cuanto-cuesta-abrir-consultorio-dental-mexico' => [
+                'title' => 'Cuánto cuesta abrir un consultorio dental en México (números reales 2026)',
+                'description' => 'Desglose honesto de la inversión: equipo, permisos COFEPRIS, adecuación del local y los gastos mensuales que casi nadie menciona. Incluye el cálculo de cuántos pacientes necesitas al mes para no perder dinero.',
+                'image' => '/images/blog/costo-consultorio-dental.jpg',
+                'date' => '2026-08-29',
+                'read_time' => '9 min',
+                'category' => 'Finanzas',
+                'content' => [
+                    ['type' => 'p', 'text' => 'La respuesta corta que vas a encontrar en todos lados es "entre 200 y 300 mil pesos". Es cierta, y a la vez es la que más consultorios ha quebrado, porque solo cuenta el equipo. Deja fuera los permisos, la adecuación del local, los tres o cuatro meses en que todavía no tienes pacientes, y los gastos fijos que llegan puntuales aunque tu agenda esté vacía.'],
+                    ['type' => 'p', 'text' => 'En México operan 76,188 consultorios dentales, según datos de la Secretaría de Economía a mayo de 2026. Es un mercado enorme y también muy competido. Aquí está el desglose de lo que de verdad cuesta abrir uno, con precios de 2026, y al final el número que casi nadie calcula antes de firmar la renta: cuántos pacientes al mes necesitas para no estar perdiendo dinero.'],
+
+                    ['type' => 'h2', 'text' => '1. El equipo: de dónde salen los 200 mil'],
+                    ['type' => 'p', 'text' => 'El equipamiento es la parte más visible y la que más varía. Depende menos de tu gusto que de una decisión clínica: qué procedimientos vas a hacer tú y cuáles vas a referir.'],
+                    ['type' => 'table',
+                     'head' => ['Nivel', 'Inversión en equipo', 'Qué incluye'],
+                     'rows' => [
+                        ['Básico', '$250,000 – $600,000', 'Unidad dental, compresor, autoclave, piezas de mano, cámara intraoral, rayos X periapical'],
+                        ['Intermedio', '$700,000 – $1,600,000', 'Lo anterior + radiovisiógrafo, endomotor, lámpara de fotocurado, cavitador'],
+                        ['Especializado', '$1,200,000 – $3,000,000+', 'Lo anterior + escáner intraoral, CAD/CAM, fresadora, láser, tomógrafo'],
+                     ],
+                     'caption' => 'Precios de referencia 2026 en pesos mexicanos. Varían por marca, ciudad y si compras de contado o a crédito.'],
+                    ['type' => 'p', 'text' => 'La unidad dental sola —el sillón con su equipo esencial— va de 55,900 a 170,900 pesos en paquete, y las premium rondan los 190 mil. Aquí se decide buena parte de tu inversión inicial, y es donde más gente se endeuda de más.'],
+                    ['type' => 'h3', 'text' => 'Dos formas de bajar el número sin bajar la calidad'],
+                    ['type' => 'p', 'text' => 'La primera es arrancar con una unidad reacondicionada de buena procedencia y cambiarla cuando el consultorio ya produzca. Muchos dentistas con consultorio propio empezaron así y no se les nota en el resultado clínico.'],
+                    ['type' => 'p', 'text' => 'La segunda es rentar sillón por horas en un consultorio establecido durante los primeros meses. No inviertes en equipo, construyes cartera de pacientes, y das el salto cuando ya tienes con qué sostenerlo.'],
+                    ['type' => 'p', 'text' => 'Ninguna de las dos es un atajo de mala calidad. Son la diferencia entre abrir con una deuda manejable o abrir debiendo el equivalente a dos años de tus utilidades.'],
+
+                    ['type' => 'h2', 'text' => '2. Los permisos: baratos, pero te clausuran sin ellos'],
+                    ['type' => 'p', 'text' => 'Esta es la parte que casi nadie presupuesta y que, irónicamente, sale barata. Lo caro no es el trámite: es no tenerlo.'],
+                    ['type' => 'p', 'text' => 'El documento central es el Aviso de Funcionamiento y de Responsable Sanitario ante COFEPRIS (trámite COFEPRIS-05-036). Se hace en línea por la plataforma DIGIPRiS con tu RFC y tu firma electrónica, y tiene que estar a la vista dentro del consultorio. Es obligatorio antes de empezar a operar, no después.'],
+                    ['type' => 'ul', 'items' => [
+                        'Título y cédula profesional vigentes.',
+                        'Alta en el SAT y RFC del consultorio.',
+                        'Uso de suelo compatible con servicios de salud, que otorga tu municipio.',
+                        'Condiciones mínimas de sanidad, ventilación e iluminación.',
+                        'Aviso de Funcionamiento y Responsable Sanitario ante COFEPRIS.',
+                    ]],
+                    ['type' => 'p', 'text' => 'Operar sin el aviso te expone a multa administrativa y, en casos serios, a clausura temporal o definitiva. Hay quien lo deja para después porque el trámite es gratuito y en línea; el problema es que después llega una visita de verificación.'],
+                    ['type' => 'p', 'text' => 'Un consejo que vale los nueve minutos de este artículo: revisa el uso de suelo antes de firmar el contrato de arrendamiento, no después. Es el error más caro y más común, porque implica mudarte con todo el equipo ya instalado.'],
+
+                    ['type' => 'h2', 'text' => '3. La adecuación del local'],
+                    ['type' => 'p', 'text' => 'Un consultorio dental necesita instalaciones que un local vacío no trae: tomas de agua y drenaje donde va el sillón, instalación eléctrica que aguante el compresor y el autoclave, y muros con protección radiológica si vas a tener rayos X.'],
+                    ['type' => 'p', 'text' => 'Según cómo recibas el local, aquí se van entre 80 y 250 mil pesos. Si encuentras un espacio que ya fue consultorio dental te ahorras buena parte de esto, y por eso esos locales se rentan tan rápido.'],
+
+                    ['type' => 'h2', 'text' => '4. Los gastos mensuales: donde de verdad se decide'],
+                    ['type' => 'p', 'text' => 'La inversión inicial la calculas una vez. Los gastos fijos llegan cada mes, tengas pacientes o no, y son los que determinan si el consultorio sobrevive al primer año.'],
+                    ['type' => 'table',
+                     'head' => ['Concepto', 'Rango mensual', 'Nota'],
+                     'rows' => [
+                        ['Renta', '$8,000 – $35,000', 'Según ciudad y zona. Es tu gasto menos flexible.'],
+                        ['Asistente dental', '$9,000 – $14,000', 'El salario promedio del sector es de $9,170 (Secretaría de Economía, 2026).'],
+                        ['Insumos y material', '$8,000 – $20,000', 'Sube con tu producción: es un costo variable disfrazado de fijo.'],
+                        ['Servicios y limpieza', '$3,000 – $6,000', 'Luz, agua, internet y recolección de RPBI.'],
+                        ['Software de gestión', '$0 – $2,000', 'Agenda, expediente, recordatorios y cobros.'],
+                        ['Marketing', '$2,000 – $8,000', 'El primer año no es opcional: nadie sabe que existes.'],
+                        ['Depreciación de equipo', '$2,000 – $21,000', 'El que casi nadie aparta, y el que te deja sin con qué renovar.'],
+                     ],
+                     'caption' => 'Pesos mexicanos al mes. Un consultorio de un solo dentista suele caer entre $35,000 y $60,000 de gasto fijo.'],
+                    ['type' => 'h3', 'text' => 'La depreciación: el gasto que no ves salir'],
+                    ['type' => 'p', 'text' => 'Tu unidad dental se va a desgastar. En unos ocho o diez años vas a tener que reemplazarla, y ese día el dinero tiene que salir de algún lado. Si nunca lo apartaste mes con mes, sale de tu bolsillo o de un crédito.'],
+                    ['type' => 'p', 'text' => 'Por eso la depreciación aparece en la tabla aunque nunca la veas salir de tu cuenta. Si tu equipo costó 400 mil pesos y esperas que dure diez años, estás consumiendo unos 3,300 pesos al mes de ese equipo. Cóbralo en tus precios y guárdalo, o en una década vas a sentir que el consultorio nunca fue tan rentable como parecía.'],
+
+                    ['type' => 'h2', 'text' => '5. El número que casi nadie calcula'],
+                    ['type' => 'p', 'text' => 'Tu punto de equilibrio es cuántos pacientes necesitas al mes para que los ingresos igualen a los gastos. Todo lo que atiendas por encima de ese número es utilidad; todo lo que quede por debajo lo estás pagando tú.'],
+                    ['type' => 'p', 'text' => 'La cuenta es más simple de lo que parece: toma tus gastos fijos mensuales y divídelos entre lo que te deja cada paciente después de descontar el material que usaste con él.'],
+                    ['type' => 'p', 'text' => 'Con un gasto fijo de 45,000 pesos al mes y un ticket promedio de 900 pesos por consulta, de los cuales unos 250 se van en material, cada paciente te deja 650. Divides 45,000 entre 650 y te da 70 pacientes al mes: unos 18 por semana, entre tres y cuatro al día.'],
+                    ['type' => 'p', 'text' => 'Ese es tu piso, no tu meta. Debajo de esos 70 pacientes estás poniendo dinero de tu bolsa para tener abierto el consultorio.'],
+                    ['type' => 'p', 'text' => 'Haz esta cuenta con tus propios números antes de abrir. Si te sale que necesitas 140 pacientes al mes para no perder, ya sabes que la renta que estás por firmar es demasiado cara para el ticket que vas a cobrar.'],
+
+                    ['type' => 'h2', 'text' => '6. Los tres errores que más caro salen'],
+                    ['type' => 'h3', 'text' => 'Presupuestar solo la apertura'],
+                    ['type' => 'p', 'text' => 'Un consultorio nuevo tarda entre tres y seis meses en llenar la agenda. Si gastaste hasta el último peso en equipo, esos meses los vas a vivir con la angustia de no poder pagar la renta. Aparta desde el principio seis meses de gastos fijos, aunque eso signifique comprar menos equipo al inicio.'],
+                    ['type' => 'h3', 'text' => 'Mezclar el dinero del consultorio con el personal'],
+                    ['type' => 'p', 'text' => 'Es el error más común en consultorios chicos y hace imposible saber si de verdad estás ganando. Cuando todo sale de la misma cuenta, un mes bueno se siente igual que uno malo. Abre una cuenta aparte desde el día uno y págate un sueldo fijo, aunque sea pequeño.'],
+                    ['type' => 'h3', 'text' => 'No medir las sillas vacías'],
+                    ['type' => 'p', 'text' => 'Entre tres y cinco pacientes por semana no llegan a su cita. Con un ticket de 900 pesos, eso son entre 10,800 y 18,000 pesos al mes que ya tenías apartados en la agenda y que no entraron. No es mala suerte: es falta de recordatorios, y se resuelve con un mensaje el día anterior.'],
+
+                    ['type' => 'h2', 'text' => 'El resumen honesto'],
+                    ['type' => 'p', 'text' => 'Abrir un consultorio dental básico en México en 2026 cuesta, de forma realista, entre 400 y 700 mil pesos: equipo, adecuación del local, permisos y un colchón de seis meses. Puedes empezar con bastante menos si rentas sillón por horas o compras equipo reacondicionado, y en muchos casos esa es la decisión más sensata.'],
+                    ['type' => 'p', 'text' => 'Pero el número que va a decidir si tu consultorio funciona no es la inversión inicial: es tu punto de equilibrio y qué tan rápido lo alcanzas. Un consultorio con equipo modesto y agenda llena gana dinero. Uno con equipo de exposición y agenda a la mitad, no.'],
+                    ['type' => 'p', 'text' => 'Si vas a abrir, haz hoy la cuenta del punto de equilibrio con tus precios y tus gastos. Es media hora de trabajo y te va a decir más sobre tu proyecto que cualquier catálogo de equipo.'],
+                    ['type' => 'cta', 'text' => 'DocFácil te lleva la agenda, el expediente y los cobros, y manda los recordatorios por WhatsApp para que esas sillas no se queden vacías. 15 días gratis con todo incluido, sin tarjeta.'],
+                ],
+            ],
+
             'como-reducir-inasistencias-consultorio' => [
                 'title' => 'Cómo reducir inasistencias en tu consultorio un 40%',
                 'description' => 'Estrategias probadas para que tus pacientes lleguen a sus citas. Recordatorios WhatsApp, confirmación automática y más.',

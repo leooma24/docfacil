@@ -43,6 +43,14 @@
 
         .article-body { padding-bottom:48px; }
         .article-body p { font-size:1rem; line-height:1.8; color:#374151; margin-bottom:20px; }
+        .article-body ul { margin: 0 0 18px; padding-left: 22px; }
+        .article-body li { margin-bottom: 8px; line-height: 1.7; }
+        .tabla-scroll { overflow-x: auto; margin: 0 0 8px; -webkit-overflow-scrolling: touch; }
+        .article-body table { width: 100%; min-width: 420px; border-collapse: collapse; font-size: 0.95rem; }
+        .article-body th { text-align: left; padding: 10px 12px; background: #f0fdfa; color: #0f766e; font-weight: 700; border-bottom: 2px solid #99f6e4; }
+        .article-body td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+        .article-body tr:last-child td { border-bottom: none; }
+        .tabla-nota { font-size: 0.82rem; color: #6b7280; margin: 0 0 20px; }
         .article-body h2 { font-size:1.4rem; font-weight:800; color:#0f172a; margin:32px 0 12px; letter-spacing:-0.01em; }
         .article-body h3 { font-size:1.1rem; font-weight:700; color:#0f172a; margin:24px 0 8px; }
 
@@ -104,6 +112,38 @@
                     <h2>{{ $block['text'] }}</h2>
                 @elseif($block['type'] === 'h3')
                     <h3>{{ $block['text'] }}</h3>
+                @elseif($block['type'] === 'ul')
+                    <ul>
+                        @foreach($block['items'] as $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                @elseif($block['type'] === 'table')
+                    {{-- Con overflow propio: en celular la tabla se desliza
+                         dentro de su caja en vez de romper la pagina. --}}
+                    <div class="tabla-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    @foreach($block['head'] as $col)
+                                        <th>{{ $col }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($block['rows'] as $fila)
+                                    <tr>
+                                        @foreach($fila as $celda)
+                                            <td>{{ $celda }}</td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if(!empty($block['caption']))
+                        <p class="tabla-nota">{{ $block['caption'] }}</p>
+                    @endif
                 @elseif($block['type'] === 'cta')
                     <div class="article-cta">
                         <p>{{ $block['text'] }}</p>
