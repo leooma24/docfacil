@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Bloquea el acceso al portal del paciente cuando la clínica del usuario
- * no tiene el feature `patient_portal` (solo Pro y Clínica lo incluyen).
+ * no tiene el feature `patient_portal` (lo incluyen todos los planes de pago).
  *
  * Si la clínica dueña del paciente está en Free o Básico, el paciente ve una
  * página 403 con mensaje y un enlace a contactar la clínica para que actualice.

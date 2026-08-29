@@ -193,6 +193,9 @@ class Clinic extends Model
             'odontogram',              // Odontograma FDI interactivo — diferenciador
                                        // dental clave; va en Basico para que el
                                        // dentista solo (90% del ICP) lo tenga.
+            'patient_portal',          // Portal del paciente. Va en Basico: lo
+                                       // tienen todos los planes de pago, no
+                                       // Free.
         ];
         // Nota: recall_automation y treatment_plans son ADD-ONS de pago
         // ($49 y $129/mes), gestionados via ClinicAddon. Ya no estan en
