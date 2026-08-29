@@ -18,7 +18,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>¡Bienvenido a DocFácil!</h1>
+            <h1>¡Te damos la bienvenida a DocFácil!</h1>
         </div>
         <div class="content">
             <p>Hola <strong>{{ $user->name }}</strong>,</p>

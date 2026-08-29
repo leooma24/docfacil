@@ -115,6 +115,14 @@ class OdontogramResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Sin odontogramas')
+            ->emptyStateDescription('Marca el estado de cada diente en un esquema y queda guardado en el expediente del paciente.')
+            ->emptyStateIcon('heroicon-o-sparkles')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('evaluation_date', 'desc');
     }
 

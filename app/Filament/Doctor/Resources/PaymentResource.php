@@ -346,6 +346,14 @@ class PaymentResource extends Resource
                     ->color('gray')
                     ->button(),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Aún no registras cobros')
+            ->emptyStateDescription('Cada consulta que cobres queda aquí, con lo pagado y lo que falta por cobrar.')
+            ->emptyStateIcon('heroicon-o-banknotes')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('payment_date', 'desc');
     }
 

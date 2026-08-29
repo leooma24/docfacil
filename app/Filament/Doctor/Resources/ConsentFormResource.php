@@ -216,6 +216,14 @@ class ConsentFormResource extends Resource
                         );
                     }),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Sin consentimientos')
+            ->emptyStateDescription('Generas el formato, el paciente firma con el dedo en tu tablet y se guarda en PDF.')
+            ->emptyStateIcon('heroicon-o-pencil-square')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 

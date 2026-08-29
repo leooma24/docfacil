@@ -200,6 +200,14 @@ class WaitlistEntryResource extends Resource
                     }),
                 Tables\Actions\EditAction::make(),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Nadie en lista de espera')
+            ->emptyStateDescription('Anota aquí a quien quiera adelantar su cita. Cuando alguien te cancele, sabes a quién ofrecerle el hueco.')
+            ->emptyStateIcon('heroicon-o-clock')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 

@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Bienvenido al programa beta!</h1>
+            <h1>¡Te damos la bienvenida al programa beta!</h1>
         </div>
         <div class="content">
             <p>Hola <strong>{{ $doctorName }}</strong>,</p>

@@ -250,6 +250,14 @@ class PatientResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Todavía no tienes pacientes')
+            ->emptyStateDescription('Agrega el primero con su nombre y teléfono. Lo demás lo llenas cuando lo tengas a la mano.')
+            ->emptyStateIcon('heroicon-o-users')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 

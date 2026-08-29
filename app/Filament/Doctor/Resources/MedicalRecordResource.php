@@ -153,6 +153,11 @@ class MedicalRecordResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Sin expedientes todavía')
+            ->emptyStateDescription('El expediente se llena solo: cada consulta que termines queda registrada aquí.')
+            ->emptyStateIcon('heroicon-o-folder-open')
             ->defaultSort('visit_date', 'desc');
     }
 

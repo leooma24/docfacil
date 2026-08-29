@@ -170,6 +170,14 @@ class PrescriptionResource extends Resource
                         );
                     }),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Aún no has hecho recetas')
+            ->emptyStateDescription('Tus recetas salen en PDF con tu cédula y el logo de tu consultorio, listas para imprimir o mandar.')
+            ->emptyStateIcon('heroicon-o-document-text')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('prescription_date', 'desc');
     }
 

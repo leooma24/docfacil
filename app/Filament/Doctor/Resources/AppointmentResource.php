@@ -437,6 +437,14 @@ class AppointmentResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            // Sin esto Filament dice "No se encontraron registros", que no
+            // le dice al doctor que hacer ni con que llenarlo.
+            ->emptyStateHeading('Tu agenda está vacía')
+            ->emptyStateDescription('Crea tu primera cita: eliges paciente, día y servicio, y la duración se calcula sola.')
+            ->emptyStateIcon('heroicon-o-calendar-days')
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->defaultSort('starts_at', 'asc');
     }
 

@@ -141,7 +141,7 @@
                 <div style="flex:1;min-width:0;">
                     <div class="dh-hero-kicker">{{ $d['date'] }}</div>
                     @if($d['empty_state'] === 'fresh')
-                        <h2 class="dh-hero-title">Bienvenido, {{ $d['name'] }}</h2>
+                        <h2 class="dh-hero-title">Te damos la bienvenida, {{ $d['name'] }}</h2>
                         <div class="dh-hero-subtitle">Tu consultorio está listo. Empieza por aquí — te toma 5 minutos y ya tendrás corriendo el sistema.</div>
                     @elseif($d['empty_state'] === 'has_patients')
                         <h2 class="dh-hero-title">Buen avance, {{ $d['name'] }}</h2>
