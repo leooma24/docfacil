@@ -477,6 +477,28 @@ class DemoSeeder extends Seeder
             'notified_at' => now()->subHours(6),
             'notes' => 'Ya se le ofreció el jueves, quedó de confirmar.',
         ]);
+
+        // =============================================
+        // PACIENTE CON PORTAL ACTIVO
+        //
+        // Para poder enseñar el portal en una demo sin activarlo en vivo.
+        // Los demás pacientes salen sin cuenta, que es como se ve el boton
+        // "Dar acceso al portal".
+        //   paciente@docfacil.com / demo2026
+        // =============================================
+        $portalUser = new \App\Models\User();
+        $portalUser->name = trim($patients[0]->first_name . ' ' . $patients[0]->last_name);
+        $portalUser->email = 'paciente@docfacil.com';
+        $portalUser->password = bcrypt('demo2026');
+        $portalUser->role = 'patient';
+        $portalUser->clinic_id = $clinic->id;
+        $portalUser->email_verified_at = now();
+        $portalUser->save();
+
+        $patients[0]->update([
+            'user_id' => $portalUser->id,
+            'email' => 'paciente@docfacil.com',
+        ]);
     }
 }
 

@@ -86,4 +86,5 @@ Two payment methods coexist in `/doctor/actualizar-plan`:
 - **Filament Resource slugs are Spanish**: `'pacientes'`, `'citas'`, `'recetas'`, `'cobros'`, `'expediente-clinico'`, `'consentimientos'`, `'servicios'`, `'odontogramas'`.
 - **EditOdontogram has a custom Livewire view** — don't add `HasFormHero` to it; it has its own interactive canvas editor.
 - **Production deploy** is manual SSH: `ssh root@tu-app.co`, `cd /var/www/docfacil`, `git pull`, clear caches, run migrations.
+- **Filament caches its panel components on prod** (`bootstrap/cache/filament/`). Changes to a `*PanelProvider` — widgets, pages, resource registration — do NOT take effect with `view:clear` + `config:clear` alone. Run `php artisan filament:clear-cached-components && php artisan filament:cache-components` too, or the old panel definition keeps serving.
 - **Commission model is the pricing source of truth** — update `Commission::monthlyPriceForPlan()` first, then propagate to landing, emails, docs, ClinicResource, and Upgrade page.
