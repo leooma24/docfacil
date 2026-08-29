@@ -97,4 +97,47 @@ class CorreosDeAccesoTest extends TestCase
         $this->assertStringNotContainsString('Reset Password', $html);
         $this->assertStringContainsString('DocFácil', $html);
     }
+
+    /**
+     * La liga tiene que llevar a SU panel. Se armaba con
+     * Filament::getCurrentPanel(), que desde la cola ya no sabe de donde vino
+     * el usuario y cae al panel por defecto: a un doctor le llegaba una liga
+     * a /admin, donde ni siquiera puede entrar.
+     */
+    public static function rolesYPaneles(): array
+    {
+        return [
+            'doctor'  => ['doctor', '/doctor/password-reset/reset'],
+            'staff'   => ['staff', '/doctor/password-reset/reset'],
+            'paciente' => ['patient', '/paciente/password-reset/reset'],
+            'ventas'  => ['sales', '/ventas/password-reset/reset'],
+            'admin'   => ['super_admin', '/admin/password-reset/reset'],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('rolesYPaneles')]
+    public function test_la_liga_de_contrasena_lleva_a_su_panel(string $rol, string $ruta): void
+    {
+        $usuario = User::forceCreate([
+            'name' => 'Persona Prueba',
+            'email' => "{$rol}@test.com",
+            'password' => bcrypt('password'),
+            'role' => $rol,
+        ]);
+
+        $html = (new ResetPassword('token-de-prueba'))->toMail($usuario)->render();
+
+        $this->assertStringContainsString($ruta, $html);
+    }
+
+    public function test_la_liga_es_correcta_aunque_no_haya_panel_activo(): void
+    {
+        // Asi corre en la cola: sin peticion HTTP detras.
+        Filament::setCurrentPanel(null);
+
+        $html = (new ResetPassword('token-de-prueba'))->toMail($this->doctor)->render();
+
+        $this->assertStringContainsString('/doctor/password-reset/reset', $html);
+        $this->assertStringNotContainsString('/admin/password-reset', $html);
+    }
 }

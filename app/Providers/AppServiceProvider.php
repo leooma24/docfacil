@@ -79,13 +79,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         ResetPassword::toMailUsing(function (object $notifiable, string $token) {
-            $panel = Filament::getCurrentPanel();
+            // El panel sale del rol del usuario, no de getCurrentPanel(): este
+            // correo se manda desde la cola, donde ya no hay peticion HTTP y
+            // Filament cae al panel por defecto. A un doctor le llegaba una
+            // liga a /admin, donde ni siquiera puede entrar.
+            $panel = Filament::getPanel(
+                method_exists($notifiable, 'panelId') ? $notifiable->panelId() : 'doctor'
+            );
 
             return (new MailMessage())
                 ->subject('Restablece tu contraseña de DocFácil')
                 ->view('emails.restablecer-contrasena', [
                     'nombre' => $this->primerNombre($notifiable),
-                    'url' => $panel?->getResetPasswordUrl($token, $notifiable) ?? url('/doctor/login'),
+                    'url' => $panel->getResetPasswordUrl($token, $notifiable),
                     'minutos' => config('auth.passwords.users.expire', 60),
                 ]);
         });

@@ -159,6 +159,25 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->two_factor_enabled && $this->two_factor_confirmed_at !== null;
     }
 
+    /**
+     * Panel al que pertenece este usuario segun su rol.
+     *
+     * Hace falta para armar ligas fuera de una peticion HTTP — por ejemplo el
+     * correo de restablecer contraseña, que se manda desde la cola. Ahi
+     * Filament::getCurrentPanel() ya no sabe de donde venia el usuario y cae
+     * al panel por defecto: a un doctor le llegaba una liga a /admin, donde
+     * ni siquiera puede entrar.
+     */
+    public function panelId(): string
+    {
+        return match ($this->role) {
+            'super_admin' => 'admin',
+            'patient' => 'paciente',
+            'sales' => 'ventas',
+            default => 'doctor',
+        };
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {
