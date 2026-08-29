@@ -23,7 +23,18 @@ class VerifyClinicPlan
         }
 
         // Allow access to special pages
-        if ($request->routeIs('filament.doctor.pages.actualizar-plan', 'filament.doctor.pages.configuracion')) {
+        //
+        // Las rutas de verificacion de correo van en la lista porque si no,
+        // el doctor recien registrado quedaba en un bucle: aqui lo mandabamos
+        // a /doctor/configuracion por tener el onboarding pendiente, y de alli
+        // Filament lo regresaba a verificar su correo, que otra vez caia aqui.
+        // El navegador cortaba con ERR_TOO_MANY_REDIRECTS y la cuenta nueva
+        // quedaba inservible.
+        if ($request->routeIs(
+            'filament.doctor.pages.actualizar-plan',
+            'filament.doctor.pages.configuracion',
+            'filament.doctor.auth.email-verification.*',
+        )) {
             return $next($request);
         }
 

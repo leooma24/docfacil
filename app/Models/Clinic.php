@@ -149,6 +149,18 @@ class Clinic extends Model
         return in_array($this->plan, ['basico', 'profesional', 'clinica'], true);
     }
 
+    /**
+     * ¿El consultorio sigue dentro de su prueba gratis de 15 días?
+     *
+     * Solo aplica al plan free: quien ya paga no está "en prueba".
+     */
+    public function enPruebaVigente(): bool
+    {
+        return $this->plan === 'free'
+            && $this->trial_ends_at !== null
+            && $this->trial_ends_at->isFuture();
+    }
+
     public function planIsActive(): bool
     {
         if (!$this->planIsPaid()) {
@@ -246,6 +258,18 @@ class Clinic extends Model
         }
         if ($this->is_beta && $this->beta_ends_at && $this->beta_ends_at->isPast()) {
             return false;
+        }
+
+        // Durante la prueba de 15 dias el consultorio nuevo trae Pro completo,
+        // para que alcance a ver todo lo que el producto hace antes de decidir.
+        // Al vencer se queda con lo que pague (Pro o Basico) o cae a Free, que
+        // no incluye features pagados.
+        //
+        // Ojo: esto NO cambia featuresForPlan('free'), que es lo que la landing
+        // y la pagina de planes muestran como "Free". Es solo el permiso real
+        // mientras la prueba sigue viva.
+        if ($this->enPruebaVigente()) {
+            return in_array($feature, self::featuresForPlan('profesional'), true);
         }
 
         // 1) Feature incluido en el plan base
