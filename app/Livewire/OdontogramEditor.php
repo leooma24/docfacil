@@ -13,7 +13,18 @@ class OdontogramEditor extends Component
     public ?int $selectedTooth = null;
     public string $selectedCondition = 'healthy';
     public string $toothNotes = '';
-    public string $activeTool = 'healthy';
+    /**
+     * Herramienta activa. Ademas de las condiciones (decay, filling, ...)
+     * existe INSPECCIONAR, que es el modo por defecto: al entrar, tocar un
+     * diente solo lo abre para verlo, sin cambiarle nada.
+     *
+     * Antes el default era 'healthy' y applyTool() lo trataba como
+     * inspeccion, asi que el boton "Sano" de la barra no despintaba nada:
+     * el doctor que se equivocaba no tenia como corregirlo desde ahi.
+     */
+    public const INSPECCIONAR = 'inspect';
+
+    public string $activeTool = self::INSPECCIONAR;
 
     // Dientes adultos: FDI notation
     // Cuadrante 1 (superior derecho): 18-11
@@ -65,14 +76,12 @@ class OdontogramEditor extends Component
 
     public function applyTool(int $toothNumber): void
     {
-        // If a tool other than 'healthy' is selected, apply it
-        // Otherwise just select the tooth for viewing/editing
-        if ($this->activeTool !== 'healthy') {
+        if ($this->activeTool === self::INSPECCIONAR) {
+            $this->selectedCondition = $this->teeth[$toothNumber]['condition'] ?? 'healthy';
+        } else {
             $this->teeth[$toothNumber]['condition'] = $this->activeTool;
             $this->selectedCondition = $this->activeTool;
             $this->dispatch('teeth-updated', teeth: $this->teeth);
-        } else {
-            $this->selectedCondition = $this->teeth[$toothNumber]['condition'] ?? 'healthy';
         }
 
         $this->selectedTooth = $toothNumber;

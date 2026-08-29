@@ -3,6 +3,22 @@
     <div class="bg-white border border-gray-200 rounded-xl p-3 md:p-4">
         <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-500 uppercase mb-2.5">Selecciona herramienta</div>
         <div class="flex flex-wrap gap-2">
+            {{-- Modo por defecto: tocar un diente solo lo abre, no lo cambia.
+                 Va explicito en la barra para que se vea que es un modo mas,
+                 y para que "Sano" quede libre de despintar de verdad. --}}
+            @php $inspeccionando = $activeTool === \App\Livewire\OdontogramEditor::INSPECCIONAR; @endphp
+            <button
+                wire:click="setTool('{{ \App\Livewire\OdontogramEditor::INSPECCIONAR }}')"
+                type="button"
+                title="Solo ver el diente, sin cambiarlo"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border-2 transition
+                    {{ $inspeccionando ? 'shadow-sm scale-105' : 'bg-white hover:scale-105' }}"
+                style="border-color: #64748b;
+                    {{ $inspeccionando ? 'background-color: #64748b20; color: #64748b;' : 'color: #4b5563;' }}"
+            >
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Ver
+            </button>
             @foreach($conditionLabels as $key => $label)
             <button
                 wire:click="setTool('{{ $key }}')"
