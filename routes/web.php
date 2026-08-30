@@ -188,6 +188,12 @@ Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
     ->name('checkin.store');
 
 // Public booking portal (Pro+): solicitud de cita sin auth, feature-gated
+// Horarios libres del consultorio, para que el paciente elija de una lista
+// en vez de escribir una hora a ciegas.
+Route::get('/clinica/{slug}/horarios-libres', [PublicBookingController::class, 'horariosLibres'])
+    ->middleware('throttle:60,1')
+    ->name('public-booking.horarios');
+
 Route::get('/clinica/{slug}/agendar', [PublicBookingController::class, 'show'])
     ->middleware('throttle:20,1')
     ->name('public.booking.show');

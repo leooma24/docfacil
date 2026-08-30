@@ -61,6 +61,28 @@
         .cta-box strong { color: #0f766e; }
 
         label { display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 6px; margin-top: 14px; }
+
+        .df-huecos-nota { font-size: 0.82rem; color: #64748b; margin: 4px 0 10px; }
+        .df-hueco-dia { margin-bottom: 14px; }
+        .df-hueco-dia h4 {
+            font-size: 0.82rem; font-weight: 700; color: #0f766e;
+            margin: 0 0 6px;   /* la mayuscula inicial la pone el servidor:
+                                  capitalize dejaba "Lunes 31 De Agosto" */
+        }
+        .df-hueco-horas { display: flex; flex-wrap: wrap; gap: 6px; }
+        .df-hueco {
+            padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 9px;
+            background: #fff; color: #0f172a; font: 600 0.85rem/1 inherit;
+            cursor: pointer; transition: all 0.12s ease;
+        }
+        .df-hueco:hover { border-color: #14b8a6; color: #0f766e; }
+        .df-hueco[aria-pressed="true"] {
+            background: #0d9488; border-color: #0d9488; color: #fff;
+        }
+        .df-ver-mas {
+            background: none; border: none; color: #14b8a6; cursor: pointer;
+            font: 600 0.82rem/1 inherit; padding: 6px 0;
+        }
         input[type=text], input[type=email], input[type=tel], input[type=datetime-local], select, textarea {
             width: 100%;
             padding: 10px 12px;
@@ -195,10 +217,37 @@
             </select>
             @endif
 
-            <label>Fecha y hora preferida <span class="required">*</span></label>
-            <input type="datetime-local" name="preferred_at" value="{{ old('preferred_at') }}" required
-                   min="{{ now()->addHour()->format('Y-m-d\TH:i') }}"
-                   max="{{ now()->addMonths(3)->format('Y-m-d\TH:i') }}">
+            {{-- Horarios disponibles.
+
+                 Antes era un datetime-local donde el paciente escribia una
+                 hora a ciegas y se la rechazabamos si estaba ocupada o fuera
+                 de horario. Cada rebote de esos es una oportunidad de que se
+                 vaya, asi que ahora solo le enseñamos lo que si puede elegir.
+
+                 Si el JavaScript no corre, queda el campo de siempre: mas vale
+                 una solicitud imperfecta que un formulario que no se puede
+                 enviar. --}}
+            <label>¿Cuándo te acomoda? <span class="required">*</span></label>
+
+            <div id="df-huecos" hidden>
+                <p class="df-huecos-nota" id="df-huecos-estado">Buscando horarios disponibles...</p>
+                <div id="df-huecos-dias"></div>
+            </div>
+
+            <input type="hidden" name="preferred_at" id="df-preferred-at" value="{{ old('preferred_at') }}">
+
+            <noscript>
+                <input type="datetime-local" name="preferred_at" value="{{ old('preferred_at') }}" required
+                       min="{{ now()->addHour()->format('Y-m-d\TH:i') }}"
+                       max="{{ now()->addMonths(3)->format('Y-m-d\TH:i') }}">
+            </noscript>
+
+            <div id="df-huecos-respaldo" hidden>
+                <input type="datetime-local" id="df-respaldo-input"
+                       min="{{ now()->addHour()->format('Y-m-d\TH:i') }}"
+                       max="{{ now()->addMonths(3)->format('Y-m-d\TH:i') }}">
+                <p class="df-huecos-nota">Escribe la fecha y hora que te acomode y el consultorio te confirma.</p>
+            </div>
 
             <label>Notas (opcional)</label>
             <textarea name="notes" rows="3" maxlength="500" placeholder="Algo que el doctor debe saber antes de la cita...">{{ old('notes') }}</textarea>
@@ -214,5 +263,128 @@
         </a>
     </div>
 </div>
+
+<script>
+(function () {
+    var caja = document.getElementById('df-huecos');
+    var estado = document.getElementById('df-huecos-estado');
+    var contenedor = document.getElementById('df-huecos-dias');
+    var campo = document.getElementById('df-preferred-at');
+    var respaldo = document.getElementById('df-huecos-respaldo');
+    var entradaRespaldo = document.getElementById('df-respaldo-input');
+    var formulario = campo.closest('form');
+    var servicio = formulario.querySelector('select[name="service_id"]');
+    var doctor = formulario.querySelector('select[name="doctor_id"]');
+
+    if (!caja) return;
+    caja.hidden = false;
+
+    var DIAS_VISIBLES = 3;
+    var todosLosDias = [];
+
+    // Si algo falla, dejamos el campo de siempre para que el paciente pueda
+    // pedir su cita de todos modos.
+    function usarRespaldo(mensaje) {
+        caja.hidden = true;
+        respaldo.hidden = false;
+        entradaRespaldo.required = true;
+        entradaRespaldo.addEventListener('change', function () {
+            campo.value = entradaRespaldo.value;
+        });
+        if (mensaje) { estado.textContent = mensaje; }
+    }
+
+    function pintar() {
+        contenedor.innerHTML = '';
+
+        if (todosLosDias.length === 0) {
+            estado.textContent = 'No hay horarios disponibles en las próximas semanas. Escríbenos por WhatsApp y te acomodamos.';
+            usarRespaldo();
+            return;
+        }
+
+        estado.textContent = 'Elige el horario que te acomode:';
+
+        todosLosDias.slice(0, DIAS_VISIBLES).forEach(function (dia) {
+            var bloque = document.createElement('div');
+            bloque.className = 'df-hueco-dia';
+
+            var titulo = document.createElement('h4');
+            titulo.textContent = dia.nombre;
+            bloque.appendChild(titulo);
+
+            var horas = document.createElement('div');
+            horas.className = 'df-hueco-horas';
+
+            dia.horas.forEach(function (hora) {
+                var boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = 'df-hueco';
+                boton.textContent = hora;
+                boton.setAttribute('aria-pressed', 'false');
+                boton.addEventListener('click', function () {
+                    contenedor.querySelectorAll('.df-hueco').forEach(function (b) {
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    boton.setAttribute('aria-pressed', 'true');
+                    campo.value = dia.fecha + ' ' + hora;
+                });
+                horas.appendChild(boton);
+            });
+
+            bloque.appendChild(horas);
+            contenedor.appendChild(bloque);
+        });
+
+        if (todosLosDias.length > DIAS_VISIBLES) {
+            var mas = document.createElement('button');
+            mas.type = 'button';
+            mas.className = 'df-ver-mas';
+            mas.textContent = 'Ver más días';
+            mas.addEventListener('click', function () {
+                DIAS_VISIBLES = todosLosDias.length;
+                pintar();
+            });
+            contenedor.appendChild(mas);
+        }
+    }
+
+    function cargar() {
+        estado.textContent = 'Buscando horarios disponibles...';
+        contenedor.innerHTML = '';
+        campo.value = '';
+
+        var params = new URLSearchParams();
+        if (servicio && servicio.value) { params.set('service_id', servicio.value); }
+        if (doctor && doctor.value) { params.set('doctor_id', doctor.value); }
+
+        fetch('{{ route('public-booking.horarios', $clinic->slug) }}?' + params.toString(), {
+            headers: { 'Accept': 'application/json' }
+        })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+            .then(function (datos) {
+                todosLosDias = datos.dias || [];
+                DIAS_VISIBLES = 3;
+                pintar();
+            })
+            .catch(function () {
+                usarRespaldo('No pudimos cargar los horarios. Escribe la fecha que te acomode.');
+            });
+    }
+
+    if (servicio) { servicio.addEventListener('change', cargar); }
+    if (doctor) { doctor.addEventListener('change', cargar); }
+
+    formulario.addEventListener('submit', function (e) {
+        if (!campo.value && !respaldo.hidden === false) {
+            e.preventDefault();
+            estado.textContent = 'Elige un horario para continuar.';
+            caja.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+    cargar();
+})();
+</script>
 </body>
 </html>

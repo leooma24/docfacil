@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
+use App\Services\HuecosDisponibles;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
@@ -40,6 +41,40 @@ class PublicBookingController extends Controller
         ]);
 
         return view('public-booking.form', compact('clinic', 'services', 'doctors'));
+    }
+
+    /**
+     * Horarios libres para que el paciente elija de una lista en vez de
+     * escribir una fecha a ciegas y que se la rechacemos.
+     *
+     * Lo consume el JavaScript del formulario cada vez que el paciente
+     * cambia de servicio o de doctor.
+     */
+    public function horariosLibres(Request $request, string $slug)
+    {
+        $clinic = Clinic::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        abort_unless($clinic->hasFeature('public_booking'), 403);
+
+        $duracion = 30;
+        if ($request->filled('service_id')) {
+            $servicio = $clinic->services()->find($request->input('service_id'));
+            $duracion = (int) ($servicio->duration_minutes ?? 30) ?: 30;
+        }
+
+        $doctorId = $request->filled('doctor_id') ? (int) $request->input('doctor_id') : null;
+
+        $agenda = HuecosDisponibles::proximosDias($clinic, $doctorId, $duracion);
+
+        return response()->json([
+            'dias' => collect($agenda)->map(fn (array $horas, string $fecha) => [
+                'fecha' => $fecha,
+                'nombre' => HuecosDisponibles::nombreDelDia($fecha),
+                'horas' => $horas,
+            ])->values(),
+        ]);
     }
 
     public function store(Request $request, string $slug)
