@@ -3,6 +3,9 @@
 namespace App\Filament\Doctor\Pages;
 
 use App\Models\Clinic;
+use App\Models\ClinicClosure;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TimePicker;
@@ -47,7 +50,12 @@ class ClinicSettings extends Page implements HasForms
             'city' => $clinic->city,
             'logo' => $clinic->logo,
             'google_review_url' => $clinic->google_review_url,
-        ] + $this->horarioParaElFormulario($clinic));
+        ] + $this->horarioParaElFormulario($clinic) + [
+            'cierres' => $clinic->closures()
+                ->orderBy('starts_on')
+                ->get(['starts_on', 'ends_on', 'reason'])
+                ->toArray(),
+        ]);
     }
 
     public function form(Form $form): Form
@@ -92,10 +100,52 @@ class ClinicSettings extends Page implements HasForms
                                         ->seconds(false)
                                         ->native(false)
                                         ->visible(fn (callable $get) => $get("horario_{$clave}_abre_ese_dia")),
+                                    Toggle::make("horario_{$clave}_cierra_a_comer")
+                                        ->label('Cierran a comer')
+                                        ->live()
+                                        ->visible(fn (callable $get) => $get("horario_{$clave}_abre_ese_dia")),
+                                    TimePicker::make("horario_{$clave}_descanso_de")
+                                        ->label('Comida de')
+                                        ->seconds(false)
+                                        ->native(false)
+                                        ->visible(fn (callable $get) => $get("horario_{$clave}_abre_ese_dia")
+                                            && $get("horario_{$clave}_cierra_a_comer")),
+                                    TimePicker::make("horario_{$clave}_descanso_a")
+                                        ->label('Comida a')
+                                        ->seconds(false)
+                                        ->native(false)
+                                        ->visible(fn (callable $get) => $get("horario_{$clave}_abre_ese_dia")
+                                            && $get("horario_{$clave}_cierra_a_comer")),
                                 ]))
                             ->values()
                             ->all()
                     ),
+
+                Section::make('Días que cierras')
+                    ->description('Vacaciones, días feriados, un congreso. Estos días no aparecen disponibles para tus pacientes aunque sea tu horario normal.')
+                    ->schema([
+                        Repeater::make('cierres')
+                            ->label('')
+                            ->addActionLabel('Agregar días cerrados')
+                            ->columns(3)
+                            ->defaultItems(0)
+                            ->schema([
+                                DatePicker::make('starts_on')
+                                    ->label('Del')
+                                    ->native(false)
+                                    ->displayFormat('d/m/Y')
+                                    ->required(),
+                                DatePicker::make('ends_on')
+                                    ->label('Al')
+                                    ->native(false)
+                                    ->displayFormat('d/m/Y')
+                                    ->helperText('El mismo día si es uno solo.')
+                                    ->required(),
+                                TextInput::make('reason')
+                                    ->label('Motivo (opcional)')
+                                    ->placeholder('Vacaciones'),
+                            ]),
+                    ]),
 
                 Section::make('Integraciones')
                     ->description('URLs públicas de tu consultorio para que DocFácil te ayude a aprovecharlas.')
@@ -130,6 +180,8 @@ class ClinicSettings extends Page implements HasForms
             'working_hours' => $this->horarioDesdeElFormulario($data),
         ]);
 
+        $this->guardarCierres($clinic, $data['cierres'] ?? []);
+
         Notification::make()
             ->title('Configuración guardada')
             ->success()
@@ -150,6 +202,9 @@ class ClinicSettings extends Page implements HasForms
             $campos["horario_{$dia}_abre_ese_dia"] = $rango !== null;
             $campos["horario_{$dia}_abre"] = $rango['abre'] ?? '09:00';
             $campos["horario_{$dia}_cierra"] = $rango['cierra'] ?? '19:00';
+            $campos["horario_{$dia}_cierra_a_comer"] = ! empty($rango['descanso_de']);
+            $campos["horario_{$dia}_descanso_de"] = $rango['descanso_de'] ?? '14:00';
+            $campos["horario_{$dia}_descanso_a"] = $rango['descanso_a'] ?? '16:00';
         }
 
         return $campos;
@@ -170,8 +225,37 @@ class ClinicSettings extends Page implements HasForms
                 'abre' => substr((string) $datos["horario_{$dia}_abre"], 0, 5),
                 'cierra' => substr((string) $datos["horario_{$dia}_cierra"], 0, 5),
             ];
+
+            if (! empty($datos["horario_{$dia}_cierra_a_comer"])) {
+                $horario[$dia]['descanso_de'] = substr((string) $datos["horario_{$dia}_descanso_de"], 0, 5);
+                $horario[$dia]['descanso_a'] = substr((string) $datos["horario_{$dia}_descanso_a"], 0, 5);
+            }
         }
 
         return $horario;
+    }
+
+    /**
+     * Deja los cierres tal como quedaron en el formulario.
+     *
+     * Se borran y se vuelven a crear porque son pocos y sin historial que
+     * cuidar: es más simple que reconciliar altas, bajas y cambios.
+     */
+    private function guardarCierres(Clinic $clinic, array $cierres): void
+    {
+        $clinic->closures()->delete();
+
+        foreach ($cierres as $cierre) {
+            if (empty($cierre['starts_on']) || empty($cierre['ends_on'])) {
+                continue;
+            }
+
+            ClinicClosure::create([
+                'clinic_id' => $clinic->id,
+                'starts_on' => $cierre['starts_on'],
+                'ends_on' => $cierre['ends_on'],
+                'reason' => $cierre['reason'] ?? null,
+            ]);
+        }
     }
 }

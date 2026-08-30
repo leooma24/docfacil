@@ -489,4 +489,134 @@ class TraslapeDeCitasTest extends TestCase
         $this->assertStringContainsString('09:00', $este);
         $this->assertStringContainsString('19:00', $este);
     }
+
+    // ── Descanso de comida ───────────────────────────────────────
+
+    private function conComida(): void
+    {
+        $this->clinica->update(['working_hours' => [
+            'martes' => ['abre' => '09:00', 'cierra' => '19:00', 'descanso_de' => '14:00', 'descanso_a' => '16:00'],
+        ]]);
+        $this->clinica = $this->clinica->fresh();
+    }
+
+    public function test_a_la_hora_de_comida_no_atiende(): void
+    {
+        $this->conComida();
+
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 13:00')));
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 15:00')));
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 16:30')));
+    }
+
+    public function test_una_cita_no_puede_cruzar_la_comida(): void
+    {
+        // Empezar a las 13:30 una consulta de una hora, comiendo de 14:00 a
+        // 16:00, deja al paciente esperando en el sillón.
+        $this->conComida();
+
+        $this->assertFalse($this->clinica->cabeLaCita(
+            new \DateTimeImmutable('2026-09-08 13:30'),
+            new \DateTimeImmutable('2026-09-08 14:30'),
+        ));
+
+        $this->assertTrue($this->clinica->cabeLaCita(
+            new \DateTimeImmutable('2026-09-08 13:00'),
+            new \DateTimeImmutable('2026-09-08 14:00'),
+        ));
+    }
+
+    public function test_el_mensaje_menciona_los_dos_bloques(): void
+    {
+        $this->conComida();
+
+        $mensaje = $this->clinica->horarioDelDia(new \DateTimeImmutable('2026-09-08 15:00'));
+
+        $this->assertStringContainsString('09:00 a 14:00', $mensaje);
+        $this->assertStringContainsString('16:00 a 19:00', $mensaje);
+    }
+
+    public function test_el_paciente_no_puede_pedir_cita_a_la_hora_de_comida(): void
+    {
+        $this->conComida();
+
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-08 15:00',
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(0, Appointment::count());
+    }
+
+    // ── Vacaciones y días cerrados ───────────────────────────────
+
+    private function cerrarDel(string $del, string $al, ?string $motivo = null): \App\Models\ClinicClosure
+    {
+        return \App\Models\ClinicClosure::create([
+            'clinic_id' => $this->clinica->id,
+            'starts_on' => $del,
+            'ends_on' => $al,
+            'reason' => $motivo,
+        ]);
+    }
+
+    public function test_en_vacaciones_no_atiende_aunque_sea_su_horario(): void
+    {
+        $this->cerrarDel('2026-09-14', '2026-09-18', 'Vacaciones');
+
+        // Martes normal: abierto. Martes de vacaciones: cerrado.
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 11:00')));
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-15 11:00')));
+    }
+
+    public function test_el_cierre_cubre_todo_el_rango_incluidos_los_extremos(): void
+    {
+        $this->cerrarDel('2026-09-14', '2026-09-18');
+
+        foreach (['2026-09-14', '2026-09-16', '2026-09-18'] as $dia) {
+            $this->assertFalse(
+                $this->clinica->atiendeEn(new \DateTimeImmutable("{$dia} 11:00")),
+                "El {$dia} debería estar cerrado."
+            );
+        }
+
+        // El día siguiente ya no.
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-21 11:00')));
+    }
+
+    public function test_un_dia_feriado_suelto_se_puede_cerrar(): void
+    {
+        $this->cerrarDel('2026-09-16', '2026-09-16', 'Día de la Independencia');
+
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-16 11:00')));
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-17 11:00')));
+    }
+
+    public function test_el_mensaje_dice_el_motivo_del_cierre(): void
+    {
+        $this->cerrarDel('2026-09-16', '2026-09-16', 'Día de la Independencia');
+
+        $mensaje = $this->clinica->horarioDelDia(new \DateTimeImmutable('2026-09-16 11:00'));
+
+        $this->assertStringContainsString('cerrado', $mensaje);
+        $this->assertStringContainsString('Día de la Independencia', $mensaje);
+    }
+
+    public function test_el_paciente_no_puede_pedir_cita_en_vacaciones(): void
+    {
+        $this->cerrarDel('2026-09-14', '2026-09-18', 'Vacaciones');
+
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-15 11:00',
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(0, Appointment::count());
+    }
 }

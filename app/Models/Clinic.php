@@ -246,6 +246,27 @@ class Clinic extends Model
         return array_keys(self::DIAS)[(int) $momento->format('N') - 1];
     }
 
+    public function closures(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ClinicClosure::class);
+    }
+
+    /**
+     * ¿Ese día el consultorio está cerrado por vacaciones, feriado o similar?
+     *
+     * Sin esto, el portal público seguía aceptando citas para toda la semana
+     * que el doctor se iba de vacaciones.
+     */
+    public function cierraEse(\DateTimeInterface $momento): ?\App\Models\ClinicClosure
+    {
+        $dia = $momento->format('Y-m-d');
+
+        return $this->closures()
+            ->whereDate('starts_on', '<=', $dia)
+            ->whereDate('ends_on', '>=', $dia)
+            ->first();
+    }
+
     /**
      * ¿El consultorio atiende en ese momento?
      *
@@ -254,6 +275,11 @@ class Clinic extends Model
      */
     public function atiendeEn(\DateTimeInterface $momento): bool
     {
+        // Vacaciones y feriados le ganan al horario normal.
+        if ($this->cierraEse($momento)) {
+            return false;
+        }
+
         $dia = $this->horario()[self::nombreDelDia($momento)] ?? null;
 
         if (! $dia || empty($dia['abre']) || empty($dia['cierra'])) {
@@ -262,7 +288,23 @@ class Clinic extends Model
 
         $hora = $momento->format('H:i');
 
-        return $hora >= $dia['abre'] && $hora < $dia['cierra'];
+        if ($hora < $dia['abre'] || $hora >= $dia['cierra']) {
+            return false;
+        }
+
+        // Muchos consultorios cierran a comer. Sin esto, el sistema aceptaba
+        // citas a media hora de comida como si nada.
+        if (self::hayDescanso($dia) && $hora >= $dia['descanso_de'] && $hora < $dia['descanso_a']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** ¿Ese día tienen hora de comida configurada? */
+    private static function hayDescanso(array $dia): bool
+    {
+        return ! empty($dia['descanso_de']) && ! empty($dia['descanso_a']);
     }
 
     /**
@@ -284,7 +326,20 @@ class Clinic extends Model
             return false;
         }
 
-        return $fin->format('H:i') <= $dia['cierra'];
+        if ($fin->format('H:i') > $dia['cierra']) {
+            return false;
+        }
+
+        // Tampoco puede cruzar la hora de comida: empezar a las 13:30 una
+        // consulta de una hora, comiendo de 14:00 a 16:00, deja al paciente
+        // esperando en el sillón.
+        if (self::hayDescanso($dia)
+            && $inicio->format('H:i') < $dia['descanso_de']
+            && $fin->format('H:i') > $dia['descanso_de']) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -306,12 +361,23 @@ class Clinic extends Model
     /** Frase para decirle al paciente cuándo sí puede venir. */
     public function horarioDelDia(\DateTimeInterface $momento): string
     {
+        if ($cierre = $this->cierraEse($momento)) {
+            $motivo = $cierre->reason ? " ({$cierre->reason})" : '';
+
+            return "Ese día el consultorio está cerrado{$motivo}. Elige otra fecha y con gusto te atendemos.";
+        }
+
         $clave = self::nombreDelDia($momento);
         $dia = $this->horario()[$clave] ?? null;
         $nombre = self::DIAS_EN_PLURAL[$clave];
 
         if (! $dia) {
             return "Los {$nombre} el consultorio no abre. Elige otro día y con gusto te atendemos.";
+        }
+
+        if (self::hayDescanso($dia)) {
+            return "Los {$nombre} atendemos de {$dia['abre']} a {$dia['descanso_de']} "
+                . "y de {$dia['descanso_a']} a {$dia['cierra']}.";
         }
 
         return "Los {$nombre} atendemos de {$dia['abre']} a {$dia['cierra']}.";
