@@ -287,15 +287,31 @@ class Clinic extends Model
         return $fin->format('H:i') <= $dia['cierra'];
     }
 
+    /**
+     * Cómo se dicen los días en plural.
+     *
+     * De lunes a viernes no cambian ("los lunes"), pero sábado y domingo sí
+     * ("los sábados"). Sin esto salía "Los Domingo el consultorio no abre".
+     */
+    private const DIAS_EN_PLURAL = [
+        'lunes' => 'lunes',
+        'martes' => 'martes',
+        'miercoles' => 'miércoles',
+        'jueves' => 'jueves',
+        'viernes' => 'viernes',
+        'sabado' => 'sábados',
+        'domingo' => 'domingos',
+    ];
+
     /** Frase para decirle al paciente cuándo sí puede venir. */
     public function horarioDelDia(\DateTimeInterface $momento): string
     {
         $clave = self::nombreDelDia($momento);
         $dia = $this->horario()[$clave] ?? null;
-        $nombre = self::DIAS[$clave];
+        $nombre = self::DIAS_EN_PLURAL[$clave];
 
         if (! $dia) {
-            return "Los {$nombre} el consultorio no abre.";
+            return "Los {$nombre} el consultorio no abre. Elige otro día y con gusto te atendemos.";
         }
 
         return "Los {$nombre} atendemos de {$dia['abre']} a {$dia['cierra']}.";
