@@ -11,6 +11,7 @@ class Clinic extends Model
 {
     protected $fillable = [
         'name', 'slug', 'phone', 'email', 'address', 'country',
+        'working_hours',
         'city', 'state', 'zip_code', 'logo', 'google_review_url', 'plan',
         'trial_ends_at', 'is_active',
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',
@@ -34,6 +35,7 @@ class Clinic extends Model
     protected function casts(): array
     {
         return [
+            'working_hours' => 'array',
             'trial_ends_at' => 'datetime',
             'beta_starts_at' => 'datetime',
             'beta_ends_at' => 'datetime',
@@ -194,6 +196,111 @@ class Clinic extends Model
      *
      * Si agregas un feature aquí, agrégalo también a la landing y al brochure.
      */
+    // ─────────────────────────────────────────────────────────────
+    //  Horario de atención
+    //
+    //  Antes no existía: un paciente podía pedir cita el domingo a las 3 de
+    //  la mañana desde el portal público y el sistema la aceptaba. El
+    //  07:00–21:00 del calendario solo pinta la cuadrícula, no impide nada.
+    // ─────────────────────────────────────────────────────────────
+
+    /** Días de la semana, en el orden en que los espera un mexicano. */
+    public const DIAS = [
+        'lunes' => 'Lunes',
+        'martes' => 'Martes',
+        'miercoles' => 'Miércoles',
+        'jueves' => 'Jueves',
+        'viernes' => 'Viernes',
+        'sabado' => 'Sábado',
+        'domingo' => 'Domingo',
+    ];
+
+    /**
+     * Horario típico de un consultorio, para que un consultorio nuevo no
+     * arranque sin nada y acepte citas a cualquier hora.
+     */
+    public static function horarioPorDefecto(): array
+    {
+        $entreSemana = ['abre' => '09:00', 'cierra' => '19:00'];
+
+        return [
+            'lunes' => $entreSemana,
+            'martes' => $entreSemana,
+            'miercoles' => $entreSemana,
+            'jueves' => $entreSemana,
+            'viernes' => $entreSemana,
+            'sabado' => ['abre' => '09:00', 'cierra' => '14:00'],
+            'domingo' => null,   // cerrado
+        ];
+    }
+
+    /** El horario configurado, o el típico si el consultorio no lo ha tocado. */
+    public function horario(): array
+    {
+        return array_merge(self::horarioPorDefecto(), $this->working_hours ?? []);
+    }
+
+    /** Cómo se llama aquí el día de una fecha. */
+    private static function nombreDelDia(\DateTimeInterface $momento): string
+    {
+        return array_keys(self::DIAS)[(int) $momento->format('N') - 1];
+    }
+
+    /**
+     * ¿El consultorio atiende en ese momento?
+     *
+     * La hora de cierre es el límite: si cierran a las 19:00, una cita puede
+     * empezar a las 18:45 pero no a las 19:00.
+     */
+    public function atiendeEn(\DateTimeInterface $momento): bool
+    {
+        $dia = $this->horario()[self::nombreDelDia($momento)] ?? null;
+
+        if (! $dia || empty($dia['abre']) || empty($dia['cierra'])) {
+            return false;
+        }
+
+        $hora = $momento->format('H:i');
+
+        return $hora >= $dia['abre'] && $hora < $dia['cierra'];
+    }
+
+    /**
+     * ¿Cabe completa una cita entre esas horas?
+     *
+     * Que empiece dentro del horario no basta: una limpieza de una hora a
+     * las 18:30, cerrando a las 19:00, deja al paciente a media consulta.
+     */
+    public function cabeLaCita(\DateTimeInterface $inicio, \DateTimeInterface $fin): bool
+    {
+        if (! $this->atiendeEn($inicio)) {
+            return false;
+        }
+
+        $dia = $this->horario()[self::nombreDelDia($inicio)];
+
+        // Una cita que cruza la medianoche nunca cabe en un día de trabajo.
+        if ($fin->format('Y-m-d') !== $inicio->format('Y-m-d')) {
+            return false;
+        }
+
+        return $fin->format('H:i') <= $dia['cierra'];
+    }
+
+    /** Frase para decirle al paciente cuándo sí puede venir. */
+    public function horarioDelDia(\DateTimeInterface $momento): string
+    {
+        $clave = self::nombreDelDia($momento);
+        $dia = $this->horario()[$clave] ?? null;
+        $nombre = self::DIAS[$clave];
+
+        if (! $dia) {
+            return "Los {$nombre} el consultorio no abre.";
+        }
+
+        return "Los {$nombre} atendemos de {$dia['abre']} a {$dia['cierra']}.";
+    }
+
     public static function featuresForPlan(string $plan): array
     {
         $basico = [

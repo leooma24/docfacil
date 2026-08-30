@@ -384,4 +384,109 @@ class TraslapeDeCitasTest extends TestCase
             \App\Models\WaitlistEntry::candidatosPara($hueco)->contains('id', $yaAvisado->id)
         );
     }
+
+    // ── Horario de atención ──────────────────────────────────────
+
+    public function test_por_defecto_el_domingo_esta_cerrado(): void
+    {
+        // Un consultorio nuevo no debe aceptar citas a cualquier hora solo
+        // porque todavía no configuró su horario.
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-06 11:00'))); // domingo
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 11:00')));  // martes
+    }
+
+    public function test_de_madrugada_esta_cerrado(): void
+    {
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 03:00')));
+    }
+
+    public function test_a_la_hora_de_cierre_ya_no_atiende(): void
+    {
+        // Cierran a las 19:00: a las 18:45 todavía puedes entrar, a las 19:00 no.
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 18:45')));
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-08 19:00')));
+    }
+
+    public function test_una_cita_que_no_termina_antes_de_cerrar_no_cabe(): void
+    {
+        // Empezar dentro del horario no basta: una limpieza de una hora a las
+        // 18:30 deja al paciente a media consulta cuando cierran a las 19:00.
+        $this->assertFalse($this->clinica->cabeLaCita(
+            new \DateTimeImmutable('2026-09-08 18:30'),
+            new \DateTimeImmutable('2026-09-08 19:30'),
+        ));
+
+        $this->assertTrue($this->clinica->cabeLaCita(
+            new \DateTimeImmutable('2026-09-08 18:00'),
+            new \DateTimeImmutable('2026-09-08 19:00'),
+        ));
+    }
+
+    public function test_el_sabado_cierra_mas_temprano(): void
+    {
+        $this->assertTrue($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-12 10:00')));
+        $this->assertFalse($this->clinica->atiendeEn(new \DateTimeImmutable('2026-09-12 16:00')));
+    }
+
+    public function test_el_consultorio_puede_cambiar_su_horario(): void
+    {
+        $this->clinica->update(['working_hours' => [
+            'domingo' => ['abre' => '10:00', 'cierra' => '14:00'],
+            'lunes' => null,
+        ]]);
+
+        $this->assertTrue($this->clinica->fresh()->atiendeEn(new \DateTimeImmutable('2026-09-06 11:00')));
+        $this->assertFalse($this->clinica->fresh()->atiendeEn(new \DateTimeImmutable('2026-09-07 11:00')));
+    }
+
+    public function test_el_paciente_no_puede_pedir_cita_en_domingo(): void
+    {
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-06 11:00',   // domingo
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(0, Appointment::count());
+    }
+
+    public function test_el_paciente_no_puede_pedir_cita_de_madrugada(): void
+    {
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-08 03:00',
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(0, Appointment::count());
+    }
+
+    public function test_el_paciente_si_puede_pedir_dentro_del_horario(): void
+    {
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-08 11:00',   // martes
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame(1, Appointment::count());
+    }
+
+    public function test_el_mensaje_le_dice_al_paciente_cuando_si_puede_venir(): void
+    {
+        $this->assertStringContainsString(
+            'no abre',
+            $this->clinica->horarioDelDia(new \DateTimeImmutable('2026-09-06 11:00'))
+        );
+
+        $este = $this->clinica->horarioDelDia(new \DateTimeImmutable('2026-09-08 03:00'));
+        $this->assertStringContainsString('09:00', $este);
+        $this->assertStringContainsString('19:00', $este);
+    }
 }

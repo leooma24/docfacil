@@ -114,6 +114,16 @@ class PublicBookingController extends Controller
         }
         $endsAt = $startsAt->copy()->addMinutes($minutos);
 
+        // Que no pida cita cuando el consultorio esta cerrado. Sin esto se
+        // podia apartar el domingo a las 3 de la mañana. Al doctor no se lo
+        // bloqueamos: el es el dueño de su agenda y puede atender una
+        // urgencia fuera de horario si asi lo decide.
+        if (! $clinic->cabeLaCita($startsAt, $endsAt)) {
+            return back()
+                ->withInput()
+                ->withErrors(['preferred_at' => $clinic->horarioDelDia($startsAt)]);
+        }
+
         // Que no aparte un horario que el doctor ya tiene ocupado. Sin esto
         // dos pacientes podian pedir la misma hora y nadie se enteraba hasta
         // que llegaban los dos.

@@ -268,9 +268,35 @@ class CalendarWidget extends FullCalendarWidget
             return true;
         }
 
+        $inicio = \Carbon\Carbon::parse($event['start']);
+        $fin = isset($event['end'])
+            ? \Carbon\Carbon::parse($event['end'])
+            : $inicio->copy()->addMinutes(30);
+
+        // Arrastrar tambien puede encimar dos citas, y por aqui no pasa el
+        // formulario: antes se guardaba el traslape sin decir nada.
+        $choque = Appointment::mensajeDeTraslape(
+            $appointment->clinic_id,
+            $appointment->doctor_id,
+            $inicio,
+            $fin,
+            $appointment->id,
+        );
+
+        if ($choque) {
+            \Filament\Notifications\Notification::make()
+                ->title('No se movió la cita')
+                ->body($choque)
+                ->danger()
+                ->send();
+
+            // En este calendario, devolver true regresa la cita a su lugar.
+            return true;
+        }
+
         $appointment->update([
-            'starts_at' => $event['start'],
-            'ends_at' => $event['end'] ?? \Carbon\Carbon::parse($event['start'])->addMinutes(30),
+            'starts_at' => $inicio,
+            'ends_at' => $fin,
         ]);
 
         // Disparar refetch explícitamente — el JS de la página escucha este
