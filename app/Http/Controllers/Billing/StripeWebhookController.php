@@ -79,9 +79,30 @@ class StripeWebhookController extends Controller
         return response('ok', 200);
     }
 
+    /**
+     * La metadata de un evento, como arreglo plano.
+     *
+     * Stripe la entrega como StripeObject, y castearlo con (array) NO da las
+     * llaves: da las propiedades protegidas del objeto (_values, _opts...).
+     * El resultado era que clinic_id y plan salian null en cada cobro con
+     * tarjeta: al cliente se le cobraba y se quedaba en Free, y como el
+     * webhook respondia 200, Stripe daba el evento por bueno y nunca
+     * reintentaba.
+     */
+    private function metadataDe($objeto): array
+    {
+        $metadata = $objeto->metadata ?? null;
+
+        if ($metadata instanceof \Stripe\StripeObject) {
+            return $metadata->toArray();
+        }
+
+        return (array) ($metadata ?? []);
+    }
+
     private function handleCheckoutCompleted($session): void
     {
-        $metadata = (array) ($session->metadata ?? []);
+        $metadata = $this->metadataDe($session);
 
         // Caso 1: compra de servicio premium del marketplace
         if (!empty($metadata['premium_purchase_id'])) {
@@ -186,7 +207,7 @@ class StripeWebhookController extends Controller
     private function handleSubscriptionDeleted($subscription): void
     {
         $subId = $subscription->id ?? null;
-        $subMetadata = (array) ($subscription->metadata ?? []);
+        $subMetadata = $this->metadataDe($subscription);
 
         // Caso 1: era una suscripción de servicio premium recurrente (campañas, etc.)
         if (!empty($subMetadata['premium_purchase_id'])) {
