@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
 use Filament\Forms;
+use Filament\Notifications\Notification;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -124,6 +125,30 @@ class AppointmentResource extends Resource
                                 }
                                 $end = \Carbon\Carbon::parse($state)->addMinutes($minutes);
                                 $set('ends_at', $end->format('Y-m-d H:i:s'));
+                            })
+                            // No dejar encimar dos citas del mismo doctor. Antes
+                            // se guardaban las dos sin decir nada, y el traslape
+                            // se descubria cuando llegaban los dos pacientes.
+                            ->rule(function (Forms\Get $get, ?Appointment $record) {
+                                return function (string $attribute, $value, \Closure $fail) use ($get, $record) {
+                                    $fin = $get('ends_at');
+
+                                    if (! $value || ! $fin) {
+                                        return;
+                                    }
+
+                                    $choque = Appointment::mensajeDeTraslape(
+                                        auth()->user()->clinic_id,
+                                        $get('doctor_id') ? (int) $get('doctor_id') : null,
+                                        \Carbon\Carbon::parse($value),
+                                        \Carbon\Carbon::parse($fin),
+                                        $record?->id,
+                                    );
+
+                                    if ($choque) {
+                                        $fail($choque);
+                                    }
+                                };
                             }),
                         Forms\Components\DateTimePicker::make('ends_at')
                             ->label('Fin')
@@ -424,7 +449,46 @@ class AppointmentResource extends Resource
                     ->color('danger')
                     ->requiresConfirmation()
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed']))
-                    ->action(fn (Appointment $record) => $record->update(['status' => 'cancelled'])),
+                    ->action(function (Appointment $record) {
+                        $record->update(['status' => 'cancelled']);
+
+                        // Al cancelar queda un hueco. En vez de esperar a que
+                        // el doctor se acuerde de a quien le urgia esa fecha,
+                        // le decimos quien de la lista de espera cabe ahi.
+                        $candidatos = \App\Models\WaitlistEntry::candidatosPara($record);
+
+                        if ($candidatos->isEmpty()) {
+                            Notification::make()
+                                ->title('Cita cancelada')
+                                ->body('Nadie de tu lista de espera pedía ese día.')
+                                ->success()
+                                ->send();
+
+                            return;
+                        }
+
+                        $lista = $candidatos
+                            ->map(function ($entrada) {
+                                $nombre = trim(($entrada->patient->first_name ?? '') . ' ' . ($entrada->patient->last_name ?? ''));
+                                $urgente = (int) $entrada->priority === 1 ? ' — urgente' : '';
+
+                                return '• ' . $nombre . $urgente;
+                            })
+                            ->implode("\n");
+
+                        Notification::make()
+                            ->title('Se liberó el ' . $record->starts_at->translatedFormat('l d \d\e F, H:i'))
+                            ->body("Estos pacientes esperaban ese día:\n" . $lista)
+                            ->info()
+                            ->persistent()
+                            ->actions([
+                                \Filament\Notifications\Actions\Action::make('lista')
+                                    ->label('Ofrecer el horario')
+                                    ->url(route('filament.doctor.resources.lista-de-espera.index'))
+                                    ->button(),
+                            ])
+                            ->send();
+                    }),
                     Tables\Actions\EditAction::make()->label('Editar detalles'),
                 ])
                     ->label('Acciones')

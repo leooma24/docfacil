@@ -43,6 +43,77 @@ class Appointment extends Model
         ];
     }
 
+    /**
+     * Estados que de verdad ocupan el sillón.
+     *
+     * Una cita cancelada o a la que el paciente no llegó libera el horario;
+     * una completada ya pasó y no estorba para agendar de nuevo ahí.
+     */
+    public const ESTADOS_QUE_OCUPAN = ['scheduled', 'confirmed', 'in_progress'];
+
+    /**
+     * Citas del mismo doctor que chocan con este horario.
+     *
+     * Dos citas se traslapan si una empieza antes de que la otra termine y
+     * termina después de que la otra empieza. Que una acabe justo cuando la
+     * siguiente empieza (11:00 y 11:00) no es traslape.
+     *
+     * @param  int|null  $exceptoId  La cita que se está editando, para que no
+     *                               choque consigo misma.
+     */
+    public static function traslapes(
+        int $clinicId,
+        ?int $doctorId,
+        \DateTimeInterface $inicio,
+        \DateTimeInterface $fin,
+        ?int $exceptoId = null,
+    ): \Illuminate\Database\Eloquent\Collection {
+        if (! $doctorId) {
+            return new \Illuminate\Database\Eloquent\Collection();
+        }
+
+        return static::withoutGlobalScopes()
+            ->with('patient')
+            ->where('clinic_id', $clinicId)
+            ->where('doctor_id', $doctorId)
+            ->whereIn('status', self::ESTADOS_QUE_OCUPAN)
+            ->when($exceptoId, fn ($q) => $q->where('id', '!=', $exceptoId))
+            ->where('starts_at', '<', $fin)
+            ->where('ends_at', '>', $inicio)
+            ->orderBy('starts_at')
+            ->get();
+    }
+
+    /**
+     * Mensaje listo para mostrarle al doctor, o null si el horario está libre.
+     */
+    public static function mensajeDeTraslape(
+        int $clinicId,
+        ?int $doctorId,
+        \DateTimeInterface $inicio,
+        \DateTimeInterface $fin,
+        ?int $exceptoId = null,
+    ): ?string {
+        $choques = self::traslapes($clinicId, $doctorId, $inicio, $fin, $exceptoId);
+
+        if ($choques->isEmpty()) {
+            return null;
+        }
+
+        $primera = $choques->first();
+        $paciente = trim(($primera->patient->first_name ?? '') . ' ' . ($primera->patient->last_name ?? ''));
+        $horario = $primera->starts_at->format('H:i') . ' a ' . $primera->ends_at->format('H:i');
+
+        $mensaje = "Ese horario choca con la cita de {$horario}";
+        $mensaje .= $paciente !== '' ? " de {$paciente}." : '.';
+
+        if ($choques->count() > 1) {
+            $mensaje .= ' (y ' . ($choques->count() - 1) . ' más)';
+        }
+
+        return $mensaje;
+    }
+
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);

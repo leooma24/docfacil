@@ -103,7 +103,34 @@ class PublicBookingController extends Controller
         }
 
         $startsAt = \Carbon\Carbon::parse($data['preferred_at']);
-        $endsAt = $startsAt->copy()->addMinutes(30);
+
+        // La duracion sale del servicio que pidio el paciente. Antes se
+        // apartaban 30 minutos fijos, asi que una endodoncia de 90 minutos
+        // dejaba el sillon ocupado con media hora en la agenda.
+        $minutos = 30;
+        if (! empty($data['service_id'])) {
+            $servicio = $clinic->services()->find($data['service_id']);
+            $minutos = (int) ($servicio->duration_minutes ?? 30) ?: 30;
+        }
+        $endsAt = $startsAt->copy()->addMinutes($minutos);
+
+        // Que no aparte un horario que el doctor ya tiene ocupado. Sin esto
+        // dos pacientes podian pedir la misma hora y nadie se enteraba hasta
+        // que llegaban los dos.
+        if (! empty($data['doctor_id'])) {
+            $ocupado = Appointment::traslapes(
+                $clinic->id,
+                (int) $data['doctor_id'],
+                $startsAt,
+                $endsAt,
+            )->isNotEmpty();
+
+            if ($ocupado) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['preferred_at' => 'Ese horario ya está apartado. Elige otra hora y con gusto te atendemos.']);
+            }
+        }
 
         $appointment = Appointment::create([
             'clinic_id' => $clinic->id,
