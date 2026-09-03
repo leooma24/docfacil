@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class CheckInController extends Controller
@@ -51,6 +52,20 @@ class CheckInController extends Controller
                 ]);
             }
             return view('checkin.success', ['clinic' => $clinic, 'returning' => true]);
+        }
+
+        // El que llegó al tope es el consultorio, pero quien está parado
+        // frente a la pantalla es el paciente. A él no le sirve saber de
+        // planes: se le manda con la recepción y ya el doctor verá.
+        if (! $clinic->puedeAgregarPacientes()) {
+            Log::warning('Check-in rechazado: el consultorio llegó al tope de pacientes', [
+                'clinic_id' => $clinic->id,
+                'plan' => $clinic->plan,
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['first_name' => 'No pudimos registrarte desde aquí. Pasa con recepción y con gusto te dan de alta.']);
         }
 
         Patient::create([

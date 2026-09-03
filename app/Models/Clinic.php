@@ -610,4 +610,84 @@ class Clinic extends Model
             'hay' => ($total - $tomados) > 0,
         ];
     }
+
+    /**
+     * Cuántos pacientes caben en cada plan. null = sin tope.
+     *
+     * Es lo que la landing promete desde siempre, pero nada lo impedía: un
+     * consultorio en Free podía capturar mil pacientes, y con el importador
+     * podía subirlos de un jalón.
+     */
+    public const LIMITE_PACIENTES = [
+        'free' => 15,
+        'basico' => 200,
+        'profesional' => null,
+        'clinica' => null,
+    ];
+
+    /**
+     * El tope de este consultorio, o null si no tiene.
+     */
+    public function limitePacientes(): ?int
+    {
+        // Durante la prueba de 15 días trae Pro completo. Ponerle tope ahí
+        // sería justo al revés de lo que queremos: que alcance a meter sus
+        // pacientes y vea el sistema lleno antes de decidir.
+        if ($this->enPruebaVigente()) {
+            return null;
+        }
+
+        // Plan de pago vencido: se le trata como Free hasta que renueve.
+        if ($this->planIsPaid() && ! $this->planIsActive()) {
+            return self::LIMITE_PACIENTES['free'];
+        }
+
+        if (! array_key_exists($this->plan, self::LIMITE_PACIENTES)) {
+            return self::LIMITE_PACIENTES['free'];
+        }
+
+        return self::LIMITE_PACIENTES[$this->plan];
+    }
+
+    /**
+     * Cuántos le faltan para llegar al tope. null si no tiene tope.
+     *
+     * Nunca es negativo: un consultorio que ya venía con más pacientes de los
+     * que su plan permite —porque se le acabó la prueba, por ejemplo— no
+     * pierde a ninguno. Nada más ya no puede agregar.
+     */
+    public function pacientesRestantes(): ?int
+    {
+        $limite = $this->limitePacientes();
+
+        if ($limite === null) {
+            return null;
+        }
+
+        return max(0, $limite - $this->pacientesActuales());
+    }
+
+    public function pacientesActuales(): int
+    {
+        return Patient::withoutGlobalScopes()->where('clinic_id', $this->id)->count();
+    }
+
+    public function puedeAgregarPacientes(int $cuantos = 1): bool
+    {
+        $restantes = $this->pacientesRestantes();
+
+        return $restantes === null || $restantes >= $cuantos;
+    }
+
+    /**
+     * El mensaje que ve el doctor cuando ya no caben más.
+     */
+    public function mensajeDeTopeDePacientes(): string
+    {
+        $limite = $this->limitePacientes();
+        $plan = self::displayNameForPlan($this->plan);
+
+        return "Llegaste a los {$limite} pacientes que incluye tu plan {$plan}. "
+            . 'Actualiza tu plan para seguir agregando — los que ya tienes se quedan como están.';
+    }
 }

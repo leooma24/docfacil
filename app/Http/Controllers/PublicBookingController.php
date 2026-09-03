@@ -131,6 +131,21 @@ class PublicBookingController extends Controller
             ->first();
 
         if (!$patient) {
+            // Igual que en el check-in: el que llegó al tope es el
+            // consultorio, pero quien está del otro lado es un paciente que
+            // solo quiere su cita. Se le manda a llamar, no se le explica el
+            // plan del doctor.
+            if (! $clinic->puedeAgregarPacientes()) {
+                Log::warning('Agenda pública rechazada: el consultorio llegó al tope de pacientes', [
+                    'clinic_id' => $clinic->id,
+                    'plan' => $clinic->plan,
+                ]);
+
+                return back()
+                    ->withInput()
+                    ->withErrors(['phone' => 'No pudimos registrarte desde aquí. Llámanos y con gusto te agendamos.']);
+            }
+
             $patient = Patient::create([
                 'clinic_id' => $clinic->id,
                 'first_name' => $data['first_name'],

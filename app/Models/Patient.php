@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\LimiteDePacientesAlcanzado;
 use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,35 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Patient extends Model
 {
     use LogsActivity, BelongsToClinic;
+
+    /**
+     * El tope de pacientes del plan se cierra aquí, no en las pantallas.
+     *
+     * Hay siete caminos que crean pacientes —el formulario, el importador, la
+     * consulta, la visita sin cita, agendar, el check-in con QR y el portal
+     * público— y parcharlos uno por uno deja huecos. Este es el único lugar
+     * por el que pasan todos.
+     *
+     * Solo bloquea agregar. A un consultorio que ya venía con más pacientes
+     * de los que su plan permite —porque se le acabó la prueba, por ejemplo—
+     * no se le esconde ni uno: son expedientes clínicos suyos.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (self $paciente) {
+            // Corre después del trait, que ya rellenó clinic_id.
+            if (empty($paciente->clinic_id)) {
+                return;
+            }
+
+            $clinica = Clinic::withoutGlobalScopes()->find($paciente->clinic_id);
+
+            if ($clinica && ! $clinica->puedeAgregarPacientes()) {
+                throw new LimiteDePacientesAlcanzado($clinica);
+            }
+        });
+    }
+
 
     public function getActivitylogOptions(): LogOptions
     {

@@ -168,6 +168,25 @@ class PatientImporter extends Importer
         }
     }
 
+    /**
+     * Antes de crear: que quepa en el plan.
+     *
+     * El modelo ya lo impide, pero si no se atrapa aquí la importación
+     * revienta con un error feo. Así, las filas que no caben quedan en el
+     * archivo de errores con la razón escrita, y el doctor ve exactamente
+     * cuáles se quedaron fuera.
+     */
+    protected function beforeCreate(): void
+    {
+        $clinica = \App\Models\Clinic::withoutGlobalScopes()->find($this->clinicId());
+
+        if ($clinica && ! $clinica->puedeAgregarPacientes()) {
+            throw new \Filament\Actions\Imports\Exceptions\RowImportFailedException(
+                $clinica->mensajeDeTopeDePacientes()
+            );
+        }
+    }
+
     /** El consultorio de quien subió el archivo. */
     protected function clinicId(): int
     {
