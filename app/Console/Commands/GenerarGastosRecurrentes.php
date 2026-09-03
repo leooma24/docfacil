@@ -62,6 +62,8 @@ class GenerarGastosRecurrentes extends Command
             $this->line("  {$plantilla->concept} → {$siguiente->toDateString()} (\${$plantilla->amount})");
 
             if ($seco) {
+                $creados++;
+
                 continue;
             }
 
@@ -76,7 +78,7 @@ class GenerarGastosRecurrentes extends Command
         }
 
         $this->info($seco
-            ? "Se generarían {$plantillas->count()} revisados."
+            ? "Se generarían {$creados} de {$plantillas->count()} gastos recurrentes."
             : "Gastos recurrentes generados: {$creados}");
 
         return self::SUCCESS;
