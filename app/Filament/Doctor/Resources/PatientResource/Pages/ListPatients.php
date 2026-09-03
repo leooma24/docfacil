@@ -3,10 +3,12 @@
 namespace App\Filament\Doctor\Resources\PatientResource\Pages;
 
 use App\Filament\Doctor\Concerns\HasListHero;
+use App\Filament\Doctor\Imports\PatientImporter;
 use App\Filament\Doctor\Resources\PatientResource;
 use App\Models\Patient;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\HtmlString;
 
 class ListPatients extends ListRecords
 {
@@ -19,6 +21,22 @@ class ListPatients extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            // Sin esto, un dentista con 300 pacientes tendría que capturarlos
+            // a mano uno por uno. Es la razón más común de que alguien diga
+            // "sí, se ve bien" y nunca empiece.
+            Actions\ImportAction::make()
+                ->importer(PatientImporter::class)
+                ->label('Importar de Excel')
+                ->icon('heroicon-o-arrow-up-tray')
+                ->color('gray')
+                ->modalHeading('Importar tus pacientes')
+                ->modalDescription(new HtmlString(
+                    '<p style="margin-bottom:.5rem;">Sube el archivo con los pacientes que ya tenías. Sirve Excel, Google Sheets o cualquier sistema viejo.</p>'
+                    . '<p style="margin-bottom:.5rem;"><strong>Si los tienes en Google Sheets:</strong> Archivo → Descargar → Valores separados por comas (.csv).</p>'
+                    . '<p style="margin-bottom:.5rem;"><strong>Si los tienes en Excel:</strong> Archivo → Guardar como → CSV UTF-8.</p>'
+                    . '<p>Después te dejamos decir qué columna es cuál. No importa el orden ni cómo se llamen.</p>'
+                ))
+                ->modalSubmitActionLabel('Importar'),
             Actions\CreateAction::make()->label('Nuevo Paciente'),
         ];
     }
