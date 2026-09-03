@@ -619,4 +619,131 @@ class TraslapeDeCitasTest extends TestCase
 
         $this->assertSame(0, Appointment::count());
     }
+
+    // ── Anticipación mínima ──────────────────────────────────────
+
+    public function test_no_se_puede_apartar_una_cita_para_dentro_de_dos_minutos(): void
+    {
+        // Al paciente no le sirve: no alcanza a llegar y el doctor no alcanza
+        // a verla en su agenda.
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Nuevo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => now()->addMinutes(2)->toDateTimeString(),
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(0, Appointment::count());
+    }
+
+    // ── "Cualquiera": sin doctor elegido ─────────────────────────
+
+    public function test_sin_doctor_elegido_se_le_asigna_uno_libre(): void
+    {
+        // Antes traslapes() salía vacío sin doctor y no se revisaba nada: dos
+        // pacientes podían apartar la misma hora eligiendo "cualquiera".
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Sin',
+            'last_name' => 'Preferencia',
+            'phone' => '5599887766',
+            'preferred_at' => '2026-09-08 11:00',
+        ])->assertSessionHasNoErrors();
+
+        $cita = Appointment::firstOrFail();
+        $this->assertSame($this->doctor->id, $cita->doctor_id, 'Debe quedar asignada a un doctor real.');
+    }
+
+    public function test_sin_doctor_elegido_y_todos_ocupados_se_rechaza(): void
+    {
+        $this->cita('2026-09-08 11:00', '2026-09-08 12:00');
+
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Sin',
+            'last_name' => 'Preferencia',
+            'phone' => '5599887766',
+            'preferred_at' => '2026-09-08 11:30',
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(1, Appointment::count());
+    }
+
+    public function test_sin_doctor_elegido_toma_al_que_si_esta_libre(): void
+    {
+        // El primer doctor ocupado, el segundo libre: la cita va al segundo.
+        $this->cita('2026-09-08 11:00', '2026-09-08 12:00');
+
+        $otroUsuario = User::forceCreate([
+            'name' => 'Dra. Segunda',
+            'email' => 'segunda@test.com',
+            'password' => bcrypt('password'),
+            'role' => 'doctor',
+            'clinic_id' => $this->clinica->id,
+        ]);
+        $segundo = Doctor::create([
+            'user_id' => $otroUsuario->id,
+            'clinic_id' => $this->clinica->id,
+            'specialty' => 'Ortodoncia',
+        ]);
+
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Sin',
+            'last_name' => 'Preferencia',
+            'phone' => '5599887766',
+            'preferred_at' => '2026-09-08 11:30',
+        ]);
+
+        $nueva = Appointment::where('starts_at', '2026-09-08 11:30:00')->firstOrFail();
+        $this->assertSame($segundo->id, $nueva->doctor_id);
+    }
+
+    public function test_doctorLibreEn_devuelve_null_cuando_no_hay_nadie(): void
+    {
+        $this->cita('2026-09-08 11:00', '2026-09-08 12:00');
+
+        $this->assertNull(Appointment::doctorLibreEn(
+            $this->clinica->id,
+            new \DateTimeImmutable('2026-09-08 11:30'),
+            new \DateTimeImmutable('2026-09-08 12:00'),
+        ));
+    }
+
+    // ── La carrera de dos pacientes ──────────────────────────────
+
+    public function test_la_reserva_revisa_el_traslape_dentro_de_la_transaccion(): void
+    {
+        // Simula la carrera: alguien aparta el horario justo entre que el
+        // segundo paciente vio la lista y le dio enviar.
+        $this->cita('2026-09-08 11:00', '2026-09-08 12:00');
+
+        $this->post("/clinica/{$this->clinica->slug}/agendar", [
+            'first_name' => 'Segundo',
+            'last_name' => 'Paciente',
+            'phone' => '5599887766',
+            'doctor_id' => $this->doctor->id,
+            'preferred_at' => '2026-09-08 11:00',
+        ])->assertSessionHasErrors('preferred_at');
+
+        $this->assertSame(1, Appointment::count(), 'No debe crearse la segunda.');
+    }
+
+    // ── El selector respeta la anticipación ──────────────────────
+
+    public function test_el_selector_no_ofrece_huecos_inmediatos(): void
+    {
+        $huecos = \App\Services\HuecosDisponibles::delDia(
+            $this->clinica->fresh(),
+            \Carbon\CarbonImmutable::today(),
+            $this->doctor->id,
+        );
+
+        $limite = now()->addMinutes(Appointment::ANTICIPACION_MINIMA_MINUTOS);
+
+        foreach ($huecos as $hora) {
+            $this->assertTrue(
+                \Carbon\Carbon::parse(today()->toDateString() . ' ' . $hora)->greaterThanOrEqualTo($limite),
+                "El hueco de las {$hora} está demasiado cerca de ahora."
+            );
+        }
+    }
 }

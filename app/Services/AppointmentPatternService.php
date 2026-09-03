@@ -104,15 +104,36 @@ class AppointmentPatternService
             $serviceId = $data['next_service_id'] ?? $appointment->service_id;
             $duration = \App\Models\Service::find($serviceId)?->duration_minutes ?? 30;
 
-            \App\Models\Appointment::create([
-                'clinic_id' => $clinicId,
-                'doctor_id' => $appointment->doctor_id,
-                'patient_id' => $appointment->patient_id,
-                'service_id' => $serviceId,
-                'starts_at' => $starts,
-                'ends_at' => $starts->copy()->addMinutes($duration),
-                'status' => 'scheduled',
-            ]);
+            $fin = $starts->copy()->addMinutes($duration);
+
+            // Por aqui no pasaba el formulario, asi que el traslape se guardaba
+            // en silencio. Si choca, la visita si se registra pero la siguiente
+            // cita no: mas vale que el doctor la agende a mano que encimarla.
+            $choque = \App\Models\Appointment::mensajeDeTraslape(
+                $clinicId,
+                $appointment->doctor_id,
+                $starts,
+                $fin,
+            );
+
+            if ($choque) {
+                \Filament\Notifications\Notification::make()
+                    ->title('No se agendó la siguiente cita')
+                    ->body($choque . ' La visita de hoy sí quedó registrada.')
+                    ->warning()
+                    ->persistent()
+                    ->send();
+            } else {
+                \App\Models\Appointment::create([
+                    'clinic_id' => $clinicId,
+                    'doctor_id' => $appointment->doctor_id,
+                    'patient_id' => $appointment->patient_id,
+                    'service_id' => $serviceId,
+                    'starts_at' => $starts,
+                    'ends_at' => $fin,
+                    'status' => 'scheduled',
+                ]);
+            }
         }
     }
 }

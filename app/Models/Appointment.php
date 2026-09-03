@@ -85,6 +85,42 @@ class Appointment extends Model
     }
 
     /**
+     * Cuánto antes, como mínimo, se puede apartar una cita.
+     *
+     * Sin esto el portal aceptaba una cita para dentro de dos minutos, que
+     * no le sirve a nadie: el paciente no alcanza a llegar y el doctor no
+     * alcanza a verla.
+     */
+    public const ANTICIPACION_MINIMA_MINUTOS = 60;
+
+    /**
+     * Un doctor del consultorio que tenga ese horario libre.
+     *
+     * Cuando el paciente elige "cualquiera" en el portal no había a quién
+     * revisar: traslapes() salía vacío sin doctor y dos pacientes podían
+     * apartar la misma hora. Ahora se le asigna uno que de verdad esté libre,
+     * y si no hay ninguno, el horario simplemente no se ofrece.
+     */
+    public static function doctorLibreEn(
+        int $clinicId,
+        \DateTimeInterface $inicio,
+        \DateTimeInterface $fin,
+    ): ?int {
+        $doctores = \App\Models\Doctor::withoutGlobalScopes()
+            ->where('clinic_id', $clinicId)
+            ->orderBy('id')
+            ->pluck('id');
+
+        foreach ($doctores as $doctorId) {
+            if (self::traslapes($clinicId, $doctorId, $inicio, $fin)->isEmpty()) {
+                return $doctorId;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Mensaje listo para mostrarle al doctor, o null si el horario está libre.
      */
     public static function mensajeDeTraslape(

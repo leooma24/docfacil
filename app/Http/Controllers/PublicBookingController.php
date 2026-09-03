@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HorarioYaApartado;
 use App\Models\Appointment;
+use Illuminate\Support\Facades\DB;
 use App\Models\Clinic;
 use App\Models\Patient;
 use App\Services\HuecosDisponibles;
@@ -92,7 +94,9 @@ class PublicBookingController extends Controller
             'email' => 'nullable|email|max:100',
             'service_id' => 'nullable|exists:services,id',
             'doctor_id' => 'nullable|exists:doctors,id',
-            'preferred_at' => 'required|date|after:now',
+            // Con anticipacion minima: una cita para dentro de dos minutos
+            // no le sirve a nadie.
+            'preferred_at' => 'required|date|after:' . now()->addMinutes(Appointment::ANTICIPACION_MINIMA_MINUTOS - 1)->toDateTimeString(),
             'notes' => 'nullable|string|max:500',
             'honeypot' => 'nullable|size:0',
         ]);
@@ -108,18 +112,18 @@ class PublicBookingController extends Controller
             $svcOk = $clinic->services()->where('id', $data['service_id'])->exists();
             abort_unless($svcOk, 422);
         }
-        if (!empty($data['doctor_id'])) {
+        if (! empty($data['doctor_id'])) {
             $docOk = $clinic->doctors()->where('id', $data['doctor_id'])->exists();
             abort_unless($docOk, 422);
-        } else {
-            // Si no se especifica doctor, asignar el primero activo
-            $firstDoctor = $clinic->doctors()->first();
-            $data['doctor_id'] = $firstDoctor?->id;
-        }
-
-        if (empty($data['doctor_id'])) {
+        } elseif ($clinic->doctors()->doesntExist()) {
             abort(422, 'El consultorio no tiene doctores configurados.');
         }
+
+        // Cuando el paciente elige "cualquiera" NO se le asigna el primer
+        // doctor aqui. Antes se hacia asi, sin mirar si estaba libre: al
+        // primer doctor se le apilaban todas las solicitudes encimadas.
+        // Mas abajo, ya dentro de la transaccion, se busca uno que si tenga
+        // el horario libre.
 
         // Match paciente existente por telefono en esta clinica, o crear nuevo
         $patient = Patient::where('clinic_id', $clinic->id)
@@ -159,34 +163,57 @@ class PublicBookingController extends Controller
                 ->withErrors(['preferred_at' => $clinic->horarioDelDia($startsAt)]);
         }
 
-        // Que no aparte un horario que el doctor ya tiene ocupado. Sin esto
-        // dos pacientes podian pedir la misma hora y nadie se enteraba hasta
-        // que llegaban los dos.
-        if (! empty($data['doctor_id'])) {
-            $ocupado = Appointment::traslapes(
-                $clinic->id,
-                (int) $data['doctor_id'],
-                $startsAt,
-                $endsAt,
-            )->isNotEmpty();
+        // La reserva va dentro de una transaccion con candado, y el traslape se
+        // vuelve a revisar adentro.
+        //
+        // Sin esto habia una carrera real: dos pacientes que ven la misma lista
+        // de horarios pasan los dos la validacion y se crean las dos citas. El
+        // selector de horarios lo hace mas probable, porque los dos ven
+        // exactamente los mismos botones.
+        //
+        // Si el paciente eligio "cualquiera", aqui se le asigna un doctor que
+        // de verdad este libre: antes no se revisaba nada y dos pacientes
+        // podian apartar la misma hora sin doctor.
+        $doctorId = ! empty($data['doctor_id']) ? (int) $data['doctor_id'] : null;
 
-            if ($ocupado) {
-                return back()
-                    ->withInput()
-                    ->withErrors(['preferred_at' => 'Ese horario ya está apartado. Elige otra hora y con gusto te atendemos.']);
-            }
+        try {
+            $appointment = DB::transaction(function () use ($clinic, $patient, $data, $startsAt, $endsAt, $doctorId) {
+                // El candado serializa las reservas del mismo consultorio y dia,
+                // que es donde puede haber choque.
+                Appointment::withoutGlobalScopes()
+                    ->where('clinic_id', $clinic->id)
+                    ->whereDate('starts_at', $startsAt->toDateString())
+                    ->lockForUpdate()
+                    ->get(['id']);
+
+                if ($doctorId) {
+                    if (Appointment::traslapes($clinic->id, $doctorId, $startsAt, $endsAt)->isNotEmpty()) {
+                        throw new HorarioYaApartado();
+                    }
+                } else {
+                    $doctorId = Appointment::doctorLibreEn($clinic->id, $startsAt, $endsAt);
+
+                    if (! $doctorId) {
+                        throw new HorarioYaApartado();
+                    }
+                }
+
+                return Appointment::create([
+                    'clinic_id' => $clinic->id,
+                    'patient_id' => $patient->id,
+                    'doctor_id' => $doctorId,
+                    'service_id' => $data['service_id'] ?? null,
+                    'starts_at' => $startsAt,
+                    'ends_at' => $endsAt,
+                    'status' => 'scheduled',
+                    'notes' => trim('[Solicitud portal público] ' . ($data['notes'] ?? '')),
+                ]);
+            });
+        } catch (HorarioYaApartado) {
+            return back()
+                ->withInput()
+                ->withErrors(['preferred_at' => 'Ese horario se acaba de apartar. Elige otra hora y con gusto te atendemos.']);
         }
-
-        $appointment = Appointment::create([
-            'clinic_id' => $clinic->id,
-            'patient_id' => $patient->id,
-            'doctor_id' => $data['doctor_id'],
-            'service_id' => $data['service_id'] ?? null,
-            'starts_at' => $startsAt,
-            'ends_at' => $endsAt,
-            'status' => 'scheduled',
-            'notes' => trim('[Solicitud portal público] ' . ($data['notes'] ?? '')),
-        ]);
 
         $this->notifyClinic($clinic, $appointment, $patient);
 

@@ -111,8 +111,10 @@ class HuecosDisponibles
         CarbonImmutable $fin,
         \Illuminate\Support\Collection $ocupadas,
     ): bool {
-        // Hoy no tiene caso ofrecer una hora que ya pasó.
-        if ($inicio->isPast()) {
+        // No ofrecer horas que ya pasaron, ni las de los próximos minutos: al
+        // paciente no le sirve una cita para dentro de dos minutos porque no
+        // alcanza a llegar.
+        if ($inicio->lessThan(now()->addMinutes(Appointment::ANTICIPACION_MINIMA_MINUTOS))) {
             return false;
         }
 

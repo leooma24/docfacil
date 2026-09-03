@@ -263,9 +263,22 @@ class Consultation extends Page implements HasForms
         $clinicId = auth()->user()->clinic_id;
         $doctor = auth()->user()->doctor;
 
+        // Antes esto era "$doctor?->id ?? 1": si el usuario no tenia ficha de
+        // doctor, la consulta se le asignaba al doctor con ID 1, que puede ser
+        // de otro consultorio. Mejor no crear nada y decirlo.
+        if (! $doctor) {
+            Notification::make()
+                ->title('Tu cuenta no tiene ficha de doctor')
+                ->body('Pídele al administrador del consultorio que te la cree para poder atender consultas.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
         $this->appointment = Appointment::create([
             'clinic_id' => $clinicId,
-            'doctor_id' => $doctor?->id ?? 1,
+            'doctor_id' => $doctor->id,
             'patient_id' => $patientId,
             'service_id' => $serviceId ?: null,
             'starts_at' => now(),
@@ -554,15 +567,40 @@ class Consultation extends Page implements HasForms
 
         // Create next appointment if date set
         if (!empty($this->next_appointment_date)) {
-            Appointment::create([
-                'clinic_id' => $clinicId,
-                'doctor_id' => $this->appointment->doctor_id,
-                'patient_id' => $this->appointment->patient_id,
-                'service_id' => $this->next_appointment_service_id ?: null,
-                'starts_at' => $this->next_appointment_date,
-                'ends_at' => \Carbon\Carbon::parse($this->next_appointment_date)->addMinutes(30),
-                'status' => 'scheduled',
-            ]);
+            $inicio = \Carbon\Carbon::parse($this->next_appointment_date);
+
+            // La duracion sale del servicio, no 30 minutos fijos: agendar 30
+            // para una endodoncia de 90 encimaba las dos citas siguientes.
+            $minutos = Service::find($this->next_appointment_service_id)?->duration_minutes ?? 30;
+            $fin = $inicio->copy()->addMinutes((int) $minutos ?: 30);
+
+            // Y por aqui tampoco pasaba el formulario, asi que el traslape se
+            // guardaba sin decir nada.
+            $choque = Appointment::mensajeDeTraslape(
+                $clinicId,
+                $this->appointment->doctor_id,
+                $inicio,
+                $fin,
+            );
+
+            if ($choque) {
+                Notification::make()
+                    ->title('No se agendó la siguiente cita')
+                    ->body($choque . ' Todo lo demás sí se guardó.')
+                    ->warning()
+                    ->persistent()
+                    ->send();
+            } else {
+                Appointment::create([
+                    'clinic_id' => $clinicId,
+                    'doctor_id' => $this->appointment->doctor_id,
+                    'patient_id' => $this->appointment->patient_id,
+                    'service_id' => $this->next_appointment_service_id ?: null,
+                    'starts_at' => $inicio,
+                    'ends_at' => $fin,
+                    'status' => 'scheduled',
+                ]);
+            }
         }
 
         // Mark appointment as completed and clear saved state
