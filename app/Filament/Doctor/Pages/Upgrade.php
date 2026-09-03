@@ -109,6 +109,7 @@ class Upgrade extends Page
                     'Odontograma interactivo',
                     'Portal del paciente',
                     'Consentimientos digitales',
+                    'Recall: a quién ya le toca volver',
                     'Reportes avanzados',
                     'Soporte prioritario',
                     'Todo lo del Básico',

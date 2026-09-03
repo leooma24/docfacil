@@ -12,6 +12,7 @@ class Clinic extends Model
     protected $fillable = [
         'name', 'slug', 'phone', 'email', 'address', 'country',
         'working_hours',
+        'minutos_entre_citas',
         'city', 'state', 'zip_code', 'logo', 'google_review_url', 'plan',
         'trial_ends_at', 'is_active',
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',
@@ -36,6 +37,7 @@ class Clinic extends Model
     {
         return [
             'working_hours' => 'array',
+            'minutos_entre_citas' => 'integer',
             'trial_ends_at' => 'datetime',
             'beta_starts_at' => 'datetime',
             'beta_ends_at' => 'datetime',
@@ -240,6 +242,21 @@ class Clinic extends Model
         return array_merge(self::horarioPorDefecto(), $this->working_hours ?? []);
     }
 
+    /**
+     * Minutos de aire entre un paciente y el siguiente.
+     *
+     * Limpiar el sillón, esterilizar y guardar toma tiempo, y ese tiempo no
+     * es la cita: si no se aparta, el doctor arranca tarde y se le cae el
+     * resto del día.
+     *
+     * Se topa a 120 para que un dedo pesado no deje la agenda sin huecos.
+     */
+    public function minutosEntreCitas(): int
+    {
+        return max(0, min(120, (int) ($this->minutos_entre_citas ?? 0)));
+    }
+
+
     /** Cómo se llama aquí el día de una fecha. */
     private static function nombreDelDia(\DateTimeInterface $momento): string
     {
@@ -398,10 +415,15 @@ class Clinic extends Model
                                        // tienen todos los planes de pago, no
                                        // Free.
         ];
-        // Nota: recall_automation y treatment_plans son ADD-ONS de pago
-        // ($49 y $129/mes), gestionados via ClinicAddon. Ya no estan en
-        // featuresForPlan — Clinic::hasFeature() consulta addons activos
-        // adicionalmente al plan base.
+        // Nota: treatment_plans sigue siendo ADD-ON de pago ($129/mes),
+        // gestionado via ClinicAddon. Clinic::hasFeature() consulta addons
+        // activos adicionalmente al plan base.
+        //
+        // recall_automation SI viene en Pro. Estaba escondido como add-on de
+        // $49 que nadie compro, siendo que es lo que mas dinero le genera a un
+        // dentista: el paciente que debia volver a los 6 meses y no volvio ya
+        // es suyo, nada mas hay que hablarle. Sigue en config/addons.php para
+        // que un Basico lo pueda comprar suelto.
         $profesional = array_merge($basico, [
             'consent_forms',           // Consentimientos + firma digital
             'multi_doctor',            // Hasta 3 doctores
@@ -410,6 +432,8 @@ class Clinic extends Model
             'priority_support',
             'waitlist',                // Lista de espera + notificacion auto al cancelar
             'public_booking',          // Portal publico /clinica/{slug}/agendar
+            'recall_automation',       // A quien ya le toca volver. Lo que mas
+                                       // ingreso le genera a un consultorio dental.
         ]);
         $clinica = array_merge($profesional, [
             'unlimited_doctors',
@@ -434,6 +458,26 @@ class Clinic extends Model
      * funcionar aunque figuren en featuresForPlan(). Así evitamos que un user
      * siga usando Pro después de que su trial expiró y no pagó.
      */
+    /**
+     * ¿Este feature viene en el plan, sin contar add-ons comprados?
+     *
+     * Sirve para no venderle a alguien algo que ya trae incluido: el
+     * marketplace de add-ons enseñaba "Recall automático $49/mes" a un Pro
+     * que ya lo tiene.
+     */
+    public function planIncluyeFeature(string $feature): bool
+    {
+        if ($this->enPruebaVigente()) {
+            return in_array($feature, self::featuresForPlan('profesional'), true);
+        }
+
+        if ($this->planIsPaid() && ! $this->planIsActive()) {
+            return false;
+        }
+
+        return in_array($feature, self::featuresForPlan($this->plan), true);
+    }
+
     public function hasFeature(string $feature): bool
     {
         // Feature de plan pagado pero el plan ya venció → bloquear.

@@ -325,7 +325,7 @@
 
         <div class="cta-section">
             <h3>DocFácil te ayuda a recuperar esto</h3>
-            <p>Agenda + recordatorios WhatsApp a 1 clic + expediente digital + recetas PDF + cobros por WhatsApp + recall de pacientes perdidos — desde <strong>$499/mes</strong>. Pagarías menos del 10% de lo que hoy pierdes.</p>
+            <p>Agenda + recordatorios WhatsApp a 1 clic + expediente digital + recetas PDF + cobros por WhatsApp — desde <strong>$499/mes</strong>. Pagarías menos del 10% de lo que hoy pierdes.</p>
             <a href="{{ url('/dentistas?utm_source=calculadora&utm_medium=tools&utm_campaign=roi_calculator') }}" class="cta-btn">Probar DocFácil 15 días gratis →</a>
             <div class="cta-footnote">Sin tarjeta · sin compromisos · 15 días con todo desbloqueado</div>
         </div>

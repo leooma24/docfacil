@@ -12,6 +12,34 @@ class Appointment extends Model
 {
     use LogsActivity, BelongsToClinic;
 
+    /**
+     * Cuántas veces se mueve una cita antes de que ya no valga la pena.
+     *
+     * Tres es donde se nota: el que ya movió tres veces casi nunca llega a
+     * la cuarta. No es una regla dura, es cuándo conviene llamarle.
+     */
+    public const REAGENDADAS_PARA_PREOCUPARSE = 3;
+
+    protected static function booted(): void
+    {
+        // Cada vez que a una cita le cambian la hora, se cuenta.
+        //
+        // El dato ya quedaba en la bitácora de actividad, pero ahí nadie lo
+        // mira: para el doctor era invisible que el paciente de las 4 ya
+        // había movido su cita tres veces.
+        static::updating(function (self $cita) {
+            if ($cita->isDirty('starts_at') && $cita->getOriginal('starts_at')) {
+                $cita->veces_reagendada = (int) $cita->veces_reagendada + 1;
+            }
+        });
+    }
+
+    /** ¿Esta cita ya se movió tantas veces que conviene confirmarla a mano? */
+    public function seHaMovidoDeMas(): bool
+    {
+        return (int) $this->veces_reagendada >= self::REAGENDADAS_PARA_PREOCUPARSE;
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -26,6 +54,7 @@ class Appointment extends Model
         'consultation_data',
         'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
         'review_request_sent_at',
+        'veces_reagendada',
     ];
 
     protected function casts(): array
@@ -40,6 +69,7 @@ class Appointment extends Model
             'followup_sent_at' => 'datetime',
             'review_request_sent_at' => 'datetime',
             'confirmed_at' => 'datetime',
+            'veces_reagendada' => 'integer',
         ];
     }
 
@@ -67,10 +97,17 @@ class Appointment extends Model
         \DateTimeInterface $inicio,
         \DateTimeInterface $fin,
         ?int $exceptoId = null,
+        int $margenMinutos = 0,
     ): \Illuminate\Database\Eloquent\Collection {
         if (! $doctorId) {
             return new \Illuminate\Database\Eloquent\Collection();
         }
+
+        // El margen es el tiempo de limpiar y esterilizar entre pacientes: no
+        // es parte de la cita, pero tampoco se puede regalar. Con margen, dos
+        // citas que solo se tocan de punta a punta ya cuentan como choque.
+        $desde = \Carbon\CarbonImmutable::instance(\Carbon\Carbon::instance($inicio))->subMinutes($margenMinutos);
+        $hasta = \Carbon\CarbonImmutable::instance(\Carbon\Carbon::instance($fin))->addMinutes($margenMinutos);
 
         return static::withoutGlobalScopes()
             ->with('patient')
@@ -78,10 +115,52 @@ class Appointment extends Model
             ->where('doctor_id', $doctorId)
             ->whereIn('status', self::ESTADOS_QUE_OCUPAN)
             ->when($exceptoId, fn ($q) => $q->where('id', '!=', $exceptoId))
-            ->where('starts_at', '<', $fin)
-            ->where('ends_at', '>', $inicio)
+            ->where('starts_at', '<', $hasta)
+            ->where('ends_at', '>', $desde)
             ->orderBy('starts_at')
             ->get();
+    }
+
+    /**
+     * Aviso cuando la cita cabe, pero queda pegada a la de junto.
+     *
+     * No bloquea: al doctor que está viendo su propia agenda hay que dejarlo
+     * meter la urgencia de las 3 de la tarde. Nada más se le dice, para que
+     * sepa que ese día va a arrancar corriendo.
+     *
+     * Devuelve null si no hay margen configurado o si el espacio alcanza.
+     */
+    public static function avisoDeEspacio(
+        int $clinicId,
+        ?int $doctorId,
+        \DateTimeInterface $inicio,
+        \DateTimeInterface $fin,
+        ?int $exceptoId = null,
+    ): ?string {
+        $margen = Clinic::withoutGlobalScopes()->find($clinicId)?->minutosEntreCitas() ?? 0;
+
+        if ($margen < 1) {
+            return null;
+        }
+
+        $conMargen = self::traslapes($clinicId, $doctorId, $inicio, $fin, $exceptoId, $margen);
+        $sinMargen = self::traslapes($clinicId, $doctorId, $inicio, $fin, $exceptoId);
+
+        // Lo que choca de verdad ya lo reporta mensajeDeTraslape. Aquí solo
+        // interesa lo que entró por el margen.
+        $pegadas = $conMargen->whereNotIn('id', $sinMargen->pluck('id'));
+
+        if ($pegadas->isEmpty()) {
+            return null;
+        }
+
+        $vecina = $pegadas->first();
+        $paciente = trim(($vecina->patient->first_name ?? '') . ' ' . ($vecina->patient->last_name ?? ''));
+        $de = $paciente !== '' ? " de {$paciente}" : '';
+
+        return "Queda pegada a la cita de {$vecina->starts_at->format('H:i')} a "
+            . "{$vecina->ends_at->format('H:i')}{$de}. Tienes {$margen} minutos "
+            . 'configurados entre citas para limpiar y esterilizar.';
     }
 
     /**
@@ -111,8 +190,10 @@ class Appointment extends Model
             ->orderBy('id')
             ->pluck('id');
 
+        $margen = Clinic::withoutGlobalScopes()->find($clinicId)?->minutosEntreCitas() ?? 0;
+
         foreach ($doctores as $doctorId) {
-            if (self::traslapes($clinicId, $doctorId, $inicio, $fin)->isEmpty()) {
+            if (self::traslapes($clinicId, $doctorId, $inicio, $fin, null, $margen)->isEmpty()) {
                 return $doctorId;
             }
         }
@@ -129,8 +210,9 @@ class Appointment extends Model
         \DateTimeInterface $inicio,
         \DateTimeInterface $fin,
         ?int $exceptoId = null,
+        int $margenMinutos = 0,
     ): ?string {
-        $choques = self::traslapes($clinicId, $doctorId, $inicio, $fin, $exceptoId);
+        $choques = self::traslapes($clinicId, $doctorId, $inicio, $fin, $exceptoId, $margenMinutos);
 
         if ($choques->isEmpty()) {
             return null;

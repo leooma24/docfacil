@@ -52,6 +52,27 @@ class AppointmentResource extends Resource
                             ->searchable(['first_name', 'last_name'])
                             ->preload()
                             ->required()
+                            ->live()
+                            // Antes de apartarle el horario, decirle al doctor
+                            // si este paciente ya movio sus citas varias veces:
+                            // el que reagenda tres veces casi nunca llega a la
+                            // cuarta, y eso conviene saberlo antes, no despues.
+                            ->helperText(function (Forms\Get $get) {
+                                $paciente = $get('patient_id')
+                                    ? Patient::find($get('patient_id'))
+                                    : null;
+
+                                if (! $paciente || ! $paciente->reagendaDeMas()) {
+                                    return null;
+                                }
+
+                                $veces = $paciente->vecesQueHaMovidoCitas();
+
+                                return new \Illuminate\Support\HtmlString(
+                                    '<span style="color:#b45309;font-weight:600;">⚠️ Ha movido sus citas '
+                                    . $veces . ' veces en los últimos 6 meses. Confírmale por WhatsApp antes de apartarle el horario.</span>'
+                                );
+                            })
                             // Pre-fill desde ?patient= cuando se llega desde
                             // el profile del paciente. Closure para que se
                             // evalue por request, no en compile.
@@ -195,6 +216,17 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('service.name')
                     ->label('Servicio')
                     ->placeholder('Sin servicio'),
+                // Solo aparece cuando la cita ya se movio: el que reagenda
+                // tres veces casi nunca llega a la cuarta.
+                Tables\Columns\TextColumn::make('veces_reagendada')
+                    ->label('Movida')
+                    ->badge()
+                    ->sortable()
+                    ->color(fn (?int $state) => $state >= Appointment::REAGENDADAS_PARA_PREOCUPARSE ? 'danger' : 'warning')
+                    ->tooltip('Veces que esta cita ha cambiado de horario')
+                    ->formatStateUsing(fn (?int $state) => $state === 1 ? '1 vez' : "{$state} veces")
+                    ->placeholder('')
+                    ->getStateUsing(fn (Appointment $record) => (int) $record->veces_reagendada ?: null),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
                     ->colors([
@@ -438,11 +470,61 @@ class AppointmentResource extends Resource
                     ->action(function (Appointment $record, array $data) {
                         $duration = $record->starts_at->diffInMinutes($record->ends_at);
                         $newStart = \Carbon\Carbon::parse($data['new_date']);
+                        $newEnd = $newStart->copy()->addMinutes($duration);
+
+                        // Por aquí no pasaba el formulario: re-agendar encimaba
+                        // dos citas y se guardaba sin decir nada. Es la misma
+                        // puerta que ya se cerró en el form y en el calendario.
+                        $choque = Appointment::mensajeDeTraslape(
+                            $record->clinic_id,
+                            $record->doctor_id,
+                            $newStart,
+                            $newEnd,
+                            $record->id,
+                        );
+
+                        if ($choque) {
+                            Notification::make()
+                                ->title('No se movió la cita')
+                                ->body($choque)
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
                         $record->update([
                             'starts_at' => $newStart,
-                            'ends_at' => $newStart->copy()->addMinutes($duration),
+                            'ends_at' => $newEnd,
                         ]);
+
+                        $movida = $record->fresh();
+
+                        // Cabe, pero quizá quedó sin tiempo de limpiar.
+                        $pegada = Appointment::avisoDeEspacio(
+                            $record->clinic_id,
+                            $record->doctor_id,
+                            $newStart,
+                            $newEnd,
+                            $record->id,
+                        );
+
+                        Notification::make()
+                            ->title('Cita movida al ' . $newStart->format('d/m/Y H:i'))
+                            ->body($pegada ?? '')
+                            ->color($pegada ? 'warning' : 'success')
+                            ->send();
+
+                        if ($movida->seHaMovidoDeMas()) {
+                            Notification::make()
+                                ->title('Esta cita ya se movió ' . $movida->veces_reagendada . ' veces')
+                                ->body('Conviene confirmársela por WhatsApp antes de apartarle el lugar.')
+                                ->warning()
+                                ->persistent()
+                                ->send();
+                        }
                     }),
+
                 Tables\Actions\Action::make('cancel')
                     ->label('Cancelar cita')
                     ->icon('heroicon-o-x-circle')

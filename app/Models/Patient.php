@@ -68,4 +68,24 @@ class Patient extends Model
     {
         return "{$this->first_name} {$this->last_name}";
     }
+
+    /**
+     * Cuántas veces este paciente ha movido sus citas en los últimos meses.
+     *
+     * Es la señal más barata de que no va a llegar: el que reagenda tres
+     * veces casi nunca aparece a la cuarta. Al doctor le sirve saberlo
+     * ANTES de guardarle el lugar, no después.
+     */
+    public function vecesQueHaMovidoCitas(int $meses = 6): int
+    {
+        return (int) $this->appointments()
+            ->where('starts_at', '>=', now()->subMonths($meses))
+            ->sum('veces_reagendada');
+    }
+
+    /** ¿Conviene confirmarle la cita a mano antes de apartarle el horario? */
+    public function reagendaDeMas(int $meses = 6): bool
+    {
+        return $this->vecesQueHaMovidoCitas($meses) >= Appointment::REAGENDADAS_PARA_PREOCUPARSE;
+    }
 }

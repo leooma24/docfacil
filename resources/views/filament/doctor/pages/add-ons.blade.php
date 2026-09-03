@@ -17,7 +17,8 @@
             <div @class([
                 'rounded-2xl p-6 transition',
                 'bg-white border-2 border-teal-400 shadow-lg shadow-teal-100' => $addon['is_active'],
-                'bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg' => !$addon['is_active'],
+                'bg-white border-2 border-emerald-300' => $addon['incluido_en_plan'] && !$addon['is_active'],
+                'bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg' => !$addon['is_active'] && !$addon['incluido_en_plan'],
             ])>
                 <div class="flex items-start justify-between gap-3 mb-4">
                     <div class="text-4xl">{{ $addon['icon'] }}</div>
@@ -29,6 +30,10 @@
                                 @else
                                     ✓ Activo
                                 @endif
+                            </span>
+                        @elseif($addon['incluido_en_plan'])
+                            <span class="inline-block text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+                                ✓ Incluido en tu plan
                             </span>
                         @else
                             <span class="inline-block text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">
@@ -48,7 +53,11 @@
                 </div>
                 @endif
 
-                @if($addon['is_active'])
+                @if($addon['incluido_en_plan'] && !$addon['is_active'])
+                    <div class="w-full px-4 py-2.5 text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg text-center">
+                        Ya lo tienes activo — no pagas extra
+                    </div>
+                @elseif($addon['is_active'])
                     <button
                         wire:click="cancelAddon('{{ $addon['slug'] }}')"
                         wire:confirm="¿Seguro que quieres cancelar {{ $addon['name'] }}? Conservarás acceso hasta el fin del periodo."

@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
  * un servicio con recall_months y ya les toca regresar. Lista compacta
  * con click-to-wa.me para abrir el mensaje en el WhatsApp del doctor.
  *
- * Feature-gated por recall_automation (add-on $49/mes).
+ * Feature-gated por recall_automation: viene en el plan Pro, y un Basico
+ * lo puede comprar suelto como add-on ($49/mes).
  *
  * Query logic: para cada paciente, encontramos su CITA MAS RECIENTE
  * que haya sido completada con un servicio que tiene recall_months.

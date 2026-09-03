@@ -746,4 +746,44 @@ class TraslapeDeCitasTest extends TestCase
             );
         }
     }
+
+    // ── La acción "Re-agendar" de la tabla ───────────────────────
+
+    public function test_reagendar_no_deja_encimar_la_cita(): void
+    {
+        // Por aquí no pasa el formulario: re-agendar encimaba dos citas y se
+        // guardaba sin decir nada.
+        $ocupada = $this->cita('2026-09-10 10:00', '2026-09-10 11:00');
+        $mover = $this->cita('2026-09-12 09:00', '2026-09-12 10:00');
+
+        Filament::setCurrentPanel(Filament::getPanel('doctor'));
+        $this->actingAs($this->usuario);
+
+        Livewire::test(AppointmentResource\Pages\ListAppointments::class)
+            ->callTableAction('reschedule', $mover, ['new_date' => '2026-09-10 10:30']);
+
+        $this->assertSame(
+            '2026-09-12 09:00:00',
+            $mover->fresh()->starts_at->format('Y-m-d H:i:s'),
+            'La cita no debió moverse encima de la otra.'
+        );
+    }
+
+    public function test_reagendar_si_mueve_a_un_hueco_libre(): void
+    {
+        $this->cita('2026-09-10 10:00', '2026-09-10 11:00');
+        $mover = $this->cita('2026-09-12 09:00', '2026-09-12 10:00');
+
+        Filament::setCurrentPanel(Filament::getPanel('doctor'));
+        $this->actingAs($this->usuario);
+
+        Livewire::test(AppointmentResource\Pages\ListAppointments::class)
+            ->callTableAction('reschedule', $mover, ['new_date' => '2026-09-10 14:00']);
+
+        $movida = $mover->fresh();
+
+        $this->assertSame('2026-09-10 14:00:00', $movida->starts_at->format('Y-m-d H:i:s'));
+        $this->assertSame('2026-09-10 15:00:00', $movida->ends_at->format('Y-m-d H:i:s'), 'Debe conservar la duración.');
+        $this->assertSame(1, (int) $movida->veces_reagendada, 'Y contar el movimiento.');
+    }
 }

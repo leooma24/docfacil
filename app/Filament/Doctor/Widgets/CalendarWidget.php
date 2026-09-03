@@ -299,6 +299,36 @@ class CalendarWidget extends FullCalendarWidget
             'ends_at' => $fin,
         ]);
 
+        // Arrastrar es reagendar: si esta cita ya lleva varias, decirlo.
+        $movida = $appointment->fresh();
+
+        if ($movida->seHaMovidoDeMas()) {
+            \Filament\Notifications\Notification::make()
+                ->title('Esta cita ya se movió ' . $movida->veces_reagendada . ' veces')
+                ->body('Conviene confirmársela por WhatsApp antes de apartarle el lugar.')
+                ->warning()
+                ->send();
+        }
+
+        // Cabe, pero quizá quedó sin tiempo de limpiar. Se avisa y se deja
+        // pasar: el doctor sabe por qué la está moviendo ahí.
+        $pegada = Appointment::avisoDeEspacio(
+            $appointment->clinic_id,
+            $appointment->doctor_id,
+            $inicio,
+            $fin,
+            $appointment->id,
+        );
+
+        if ($pegada) {
+            \Filament\Notifications\Notification::make()
+                ->title('Cita movida, pero quedó sin tiempo de limpieza')
+                ->body($pegada)
+                ->warning()
+                ->persistent()
+                ->send();
+        }
+
         // Disparar refetch explícitamente — el JS de la página escucha este
         // evento y llama calendar.refetchEvents() para repintar con datos
         // frescos de BD.

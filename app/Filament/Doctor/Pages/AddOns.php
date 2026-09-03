@@ -38,9 +38,18 @@ class AddOns extends Page
             ->pluck('addon_slug')
             ->toArray();
 
+        $clinic = auth()->user()->clinic;
+
         return collect($catalog)->filter(fn ($a) => $a['available'] ?? true)
-            ->map(function ($a) use ($activeAddons) {
+            ->map(function ($a) use ($activeAddons, $clinic) {
                 $a['is_active'] = in_array($a['slug'], $activeAddons, true);
+
+                // Lo que el plan ya trae no se vuelve a vender. Recall paso de
+                // add-on a venir en Pro, y esta pagina le seguia ofreciendo al
+                // Pro pagar $49 por algo que ya tenia.
+                $a['incluido_en_plan'] = $clinic
+                    ? $clinic->planIncluyeFeature($a['feature_flag'] ?? '')
+                    : false;
                 $addon = ClinicAddon::where('clinic_id', auth()->user()->clinic_id)
                     ->where('addon_slug', $a['slug'])
                     ->latest()
@@ -56,6 +65,20 @@ class AddOns extends Page
         $catalog = config('addons', []);
         $addonCfg = $catalog[$slug] ?? null;
         abort_unless($addonCfg && ($addonCfg['available'] ?? false), 404);
+
+        // Que nadie pague por lo que su plan ya incluye, ni aunque le pique
+        // al boton dos veces o llegue por otro lado.
+        $clinic = auth()->user()->clinic;
+
+        if ($clinic && $clinic->planIncluyeFeature($addonCfg['feature_flag'] ?? '')) {
+            Notification::make()
+                ->title($addonCfg['name'] . ' ya viene en tu plan')
+                ->body('No tienes que pagar extra: ya lo puedes usar.')
+                ->success()
+                ->send();
+
+            return;
+        }
 
         $clinicId = auth()->user()->clinic_id;
         $trialDays = (int) ($addonCfg['beta_trial_days'] ?? 0);

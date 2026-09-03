@@ -57,6 +57,11 @@ class HuecosDisponibles
 
         $ocupadas = self::citasDelDia($clinic, $dia, $doctorId);
 
+        // Los minutos de limpiar y esterilizar entre pacientes. Sin esto el
+        // portal ofrecia las 11:00 y las 12:00 seguidas y el doctor se
+        // quedaba sin un respiro entre uno y otro.
+        $margen = $clinic->minutosEntreCitas();
+
         $huecos = [];
         $cursor = $dia->setTimeFromTimeString($horario['abre']);
         $cierre = $dia->setTimeFromTimeString($horario['cierra']);
@@ -64,7 +69,7 @@ class HuecosDisponibles
         while ($cursor->addMinutes($duracion)->lessThanOrEqualTo($cierre)) {
             $fin = $cursor->addMinutes($duracion);
 
-            if (self::esOfrecible($clinic, $cursor, $fin, $ocupadas)) {
+            if (self::esOfrecible($clinic, $cursor, $fin, $ocupadas, $margen)) {
                 $huecos[] = $cursor->format('H:i');
             }
 
@@ -110,6 +115,7 @@ class HuecosDisponibles
         CarbonImmutable $inicio,
         CarbonImmutable $fin,
         \Illuminate\Support\Collection $ocupadas,
+        int $margen = 0,
     ): bool {
         // No ofrecer horas que ya pasaron, ni las de los próximos minutos: al
         // paciente no le sirve una cita para dentro de dos minutos porque no
@@ -123,10 +129,12 @@ class HuecosDisponibles
             return false;
         }
 
-        // Y que el doctor no lo tenga ya tomado.
+        // Y que el doctor no lo tenga ya tomado, contando el margen: una cita
+        // que empieza justo cuando termina la anterior no deja tiempo de
+        // limpiar, asi que no se ofrece.
         return $ocupadas->every(
-            fn (array $cita) => $inicio->greaterThanOrEqualTo($cita['fin'])
-                || $fin->lessThanOrEqualTo($cita['inicio'])
+            fn (array $cita) => $inicio->greaterThanOrEqualTo($cita['fin']->addMinutes($margen))
+                || $fin->addMinutes($margen)->lessThanOrEqualTo($cita['inicio'])
         );
     }
 

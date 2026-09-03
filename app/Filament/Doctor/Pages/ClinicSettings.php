@@ -50,6 +50,7 @@ class ClinicSettings extends Page implements HasForms
             'city' => $clinic->city,
             'logo' => $clinic->logo,
             'google_review_url' => $clinic->google_review_url,
+            'minutos_entre_citas' => $clinic->minutosEntreCitas(),
         ] + $this->horarioParaElFormulario($clinic) + [
             'cierres' => $clinic->closures()
                 ->orderBy('starts_on')
@@ -121,6 +122,20 @@ class ClinicSettings extends Page implements HasForms
                             ->all()
                     ),
 
+                Section::make('Tiempo entre pacientes')
+                    ->description('El rato que necesitas para limpiar el sillón, esterilizar y guardar. Se aparta solo: tu página de agendamiento deja de ofrecer horarios pegados.')
+                    ->schema([
+                        TextInput::make('minutos_entre_citas')
+                            ->label('Minutos entre una cita y la siguiente')
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(120)
+                            ->step(5)
+                            ->suffix('minutos')
+                            ->default(0)
+                            ->helperText('Déjalo en 0 si no lo necesitas. La mayoría de los consultorios usa entre 10 y 15.'),
+                    ]),
+
                 Section::make('Días que cierras')
                     ->description('Vacaciones, días feriados, un congreso. Estos días no aparecen disponibles para tus pacientes aunque sea tu horario normal.')
                     ->schema([
@@ -178,6 +193,7 @@ class ClinicSettings extends Page implements HasForms
             'logo' => $data['logo'] ?? null,
             'google_review_url' => $data['google_review_url'] ?? null,
             'working_hours' => $this->horarioDesdeElFormulario($data),
+            'minutos_entre_citas' => (int) ($data['minutos_entre_citas'] ?? 0),
         ]);
 
         $this->guardarCierres($clinic, $data['cierres'] ?? []);

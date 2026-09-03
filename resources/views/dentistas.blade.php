@@ -948,7 +948,7 @@
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
                     ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Odontograma FDI interactivo', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Consentimientos + firma digital', 'Lista de espera con notif. auto', 'Portal público de agendamiento', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
+                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Consentimientos + firma digital', 'Lista de espera con notif. auto', 'Portal público de agendamiento', 'Recall de pacientes que no regresan', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
                     ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Pacientes ilimitados', 'Todo del Pro +', 'Reportes por doctor', 'Producción individual por doctor', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 7 días/semana'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp
@@ -1058,10 +1058,10 @@
                     <div class="rounded-2xl p-6 bg-white border border-gray-200 hover:border-teal-300 hover:shadow-lg transition">
                         <div class="flex items-start justify-between gap-3 mb-3">
                             <div class="text-3xl">🦷</div>
-                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">$49/mes</span>
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">Incluido en Pro</span>
                         </div>
                         <h4 class="font-extrabold text-gray-900 text-lg mb-1.5">Recall automático</h4>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Tus pacientes que hace meses no regresan aparecen listados cada semana. Un clic abre WhatsApp con el mensaje para invitarlos de vuelta.</p>
+                        <p class="text-sm text-gray-600 leading-relaxed mb-3">Tus pacientes que hace meses no regresan aparecen listados cada semana. Un clic abre WhatsApp con el mensaje para invitarlos de vuelta. Viene en el plan Pro; en Básico lo activas por $49/mes.</p>
                         <div class="text-xs font-semibold text-teal-700 bg-teal-50 rounded-lg p-2.5">
                             💰 Recupera $10-30k/mes en limpiezas perdidas
                         </div>

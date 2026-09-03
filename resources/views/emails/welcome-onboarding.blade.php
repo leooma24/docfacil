@@ -40,7 +40,7 @@
 
             <div style="background:#f0fdfa;border-left:3px solid #14b8a6;padding:14px 16px;margin:20px 0;border-radius:4px;">
                 <p style="margin:0 0 8px;font-weight:700;color:#0d9488;">🎁 Como beta tester tienes acceso gratis a los nuevos add-ons por 30 días:</p>
-                <p style="margin:0;font-size:14px;color:#4b5563;"><strong>Recall automático</strong> ($49/mes): pacientes que no regresan aparecen listados cada semana.<br><strong>Plan de tratamiento</strong> ($129/mes): arma presupuestos con PDF bonito y el paciente acepta en línea.</p>
+                <p style="margin:0;font-size:14px;color:#4b5563;"><strong>Recall automático</strong> (incluido en Pro, $49/mes en Básico): pacientes que no regresan aparecen listados cada semana.<br><strong>Plan de tratamiento</strong> ($129/mes): arma presupuestos con PDF bonito y el paciente acepta en línea.</p>
             </div>
 
             <p>Si tienes dudas, responde este correo o escríbeme al WhatsApp <strong>668 249 3398</strong>. Contesto yo personalmente.</p>

@@ -187,7 +187,11 @@ class PublicBookingController extends Controller
                     ->get(['id']);
 
                 if ($doctorId) {
-                    if (Appointment::traslapes($clinic->id, $doctorId, $startsAt, $endsAt)->isNotEmpty()) {
+                    // Con el margen del consultorio: lo que se le ofrece al
+                    // paciente y lo que se le acepta tienen que ser lo mismo.
+                    $margen = $clinic->minutosEntreCitas();
+
+                    if (Appointment::traslapes($clinic->id, $doctorId, $startsAt, $endsAt, null, $margen)->isNotEmpty()) {
                         throw new HorarioYaApartado();
                     }
                 } else {
