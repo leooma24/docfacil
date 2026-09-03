@@ -895,55 +895,78 @@
                 <p class="mt-4 text-lg text-gray-600">Un plan que te ahorra horas cada semana. Empieza gratis.</p>
             </div>
 
-            {{-- Banner ahorro anual + countdown de lanzamiento (termina al cierre del mes) --}}
-            <div x-data="launchCountdown()" x-init="tick()" class="max-w-2xl mx-auto mb-10 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm" data-animate>
-                <div class="text-3xl flex-shrink-0">⏰</div>
-                <div class="flex-1">
-                    <div class="font-bold text-amber-900">Paga anual y ahorra 2 meses</div>
-                    <div class="text-sm text-amber-800 mb-2">Oferta de lanzamiento — anual a 10 meses (ahorras 16.7%).</div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-bold text-amber-900 uppercase tracking-wider">
-                        <span class="opacity-70">Termina en:</span>
-                        <span class="inline-flex items-center gap-0.5">
-                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="days"></span>d
-                        </span>
-                        <span class="inline-flex items-center gap-0.5">
-                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="hours"></span>h
-                        </span>
-                        <span class="inline-flex items-center gap-0.5">
-                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="minutes"></span>m
-                        </span>
-                        <span class="inline-flex items-center gap-0.5">
-                            <span class="bg-amber-900 text-amber-50 px-2 py-1 rounded font-mono tabular-nums" x-text="seconds"></span>s
-                        </span>
+            {{-- Programa Fundador.
+                 Antes aquí había un reloj de "oferta de lanzamiento" que
+                 terminaba cada fin de mes y volvía a empezar — el anual a 10
+                 meses no es promoción, es el precio de siempre, así que el
+                 reloj le ponía fecha a algo que no iba a cambiar.
+                 Lo que sí es escaso son los lugares, y el número sale de
+                 contar fundadores reales: no se reinicia y no puede mentir. --}}
+            @php
+                $fundador = \App\Models\Clinic::lugaresDeFundador();
+                $mesesGratis = (int) config('founders.free_months', 6);
+                $precioFundador = (float) config('founders.monthly_price', 499);
+                $precioPro = (float) \App\Models\Commission::monthlyPriceForPlan('profesional');
+                $waFundador = 'https://wa.me/526682493398?text=' . urlencode(
+                    'Hola Omar, vi lo del programa Fundador de DocFacil y quiero un lugar. Soy dentista y me interesa usarlo en mi consultorio.'
+                );
+            @endphp
+
+            @if ($fundador['hay'])
+            <div class="max-w-2xl mx-auto mb-10 rounded-2xl p-6" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border:2px solid #fbbf24; box-shadow:0 10px 25px -12px rgba(217,119,6,.35);" data-animate>
+                <div class="flex items-start gap-4">
+                    <div class="text-4xl flex-shrink-0">🏅</div>
+                    <div class="flex-1">
+                        <div class="text-[11px] font-extrabold text-amber-800 uppercase tracking-widest">Programa Fundador</div>
+                        <div class="font-extrabold text-amber-900 text-xl mt-0.5">
+                            @if ($fundador['tomados'] > 0)
+                                Quedan {{ $fundador['quedan'] }} de {{ $fundador['total'] }} lugares
+                            @else
+                                Busco los primeros {{ $fundador['total'] }} consultorios
+                            @endif
+                        </div>
+
+                        {{-- Los lugares, a la vista. Solo cuando ya hay alguien
+                             dentro: diez círculos vacíos no dicen nada bueno. --}}
+                        @if ($fundador['tomados'] > 0)
+                        <div style="display:flex; gap:5px; margin:.7rem 0; flex-wrap:wrap;">
+                            @for ($i = 0; $i < $fundador['total']; $i++)
+                                <span style="width:13px; height:13px; border-radius:50%; {{ $i < $fundador['tomados'] ? 'background:#d97706;' : 'background:transparent; border:2px solid #fcd34d;' }}"></span>
+                            @endfor
+                        </div>
+                        @else
+                        <div style="height:.7rem;"></div>
+                        @endif
+
+                        <p class="text-sm text-amber-900 leading-relaxed">
+                            <strong>{{ $mesesGratis }} meses sin costo</strong> y después
+                            <strong>${{ number_format($precioFundador) }}/mes de por vida</strong>, congelado —
+                            la mitad de los ${{ number_format($precioPro) }} del plan Pro.
+                        </p>
+                        <p class="text-sm text-amber-800 mt-1.5 leading-relaxed">
+                            A cambio te pido dos cosas: que lo uses en serio y que me digas la verdad,
+                            aunque la verdad sea que no te sirve.
+                        </p>
+
+                        <a href="{{ $waFundador }}" target="_blank" rel="noopener"
+                           data-track="founder_seat_clicked"
+                           class="inline-block mt-4 px-5 py-2.5 rounded-xl font-bold text-white transition-all hover:shadow-lg"
+                           style="background:linear-gradient(135deg,#d97706,#b45309);">
+                            Quiero un lugar →
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <script>
-                function launchCountdown() {
-                    return {
-                        days: '00', hours: '00', minutes: '00', seconds: '00',
-                        tick() {
-                            const update = () => {
-                                // Termina el último día del mes actual a las 23:59:59
-                                const now = new Date();
-                                const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-                                let diff = Math.max(0, end - now);
-                                const d = Math.floor(diff / 86400000); diff -= d * 86400000;
-                                const h = Math.floor(diff / 3600000); diff -= h * 3600000;
-                                const m = Math.floor(diff / 60000); diff -= m * 60000;
-                                const s = Math.floor(diff / 1000);
-                                this.days = String(d).padStart(2, '0');
-                                this.hours = String(h).padStart(2, '0');
-                                this.minutes = String(m).padStart(2, '0');
-                                this.seconds = String(s).padStart(2, '0');
-                            };
-                            update();
-                            setInterval(update, 1000);
-                        },
-                    };
-                }
-            </script>
+            @else
+            {{-- Ya se llenaron. El ahorro anual es el precio de siempre, sin reloj. --}}
+            <div class="max-w-2xl mx-auto mb-10 rounded-xl p-4 flex items-center gap-4" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5); border:1px solid #6ee7b7;" data-animate>
+                <div class="text-3xl flex-shrink-0">💰</div>
+                <div>
+                    <div class="font-bold text-emerald-900">Paga anual y ahorra 2 meses</div>
+                    <div class="text-sm text-emerald-800">El año te sale en 10 meses — ahorras 16.7%, todo el año.</div>
+                </div>
+            </div>
+            @endif
 
             <div class="pricing-grid grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php

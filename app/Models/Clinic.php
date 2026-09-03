@@ -565,4 +565,38 @@ class Clinic extends Model
                 });
             });
     }
+
+    /**
+     * Cómo va el programa Fundador.
+     *
+     * El número sale de contar las clínicas marcadas como fundadoras, no de
+     * un texto que alguien tenga que acordarse de actualizar. Por eso no
+     * puede mentir, y por eso no se reinicia como lo hacía el reloj de
+     * "oferta de lanzamiento" que terminaba cada fin de mes y volvía a
+     * empezar.
+     *
+     * Se cachea 5 minutos: la landing recibe tráfico de buscadores y este
+     * conteo no cambia de un minuto a otro.
+     *
+     * @return array{total:int, tomados:int, quedan:int, hay:bool}
+     */
+    public static function lugaresDeFundador(): array
+    {
+        $total = max(0, (int) config('founders.seats', 10));
+
+        $tomados = \Illuminate\Support\Facades\Cache::remember(
+            'fundadores.tomados',
+            now()->addMinutes(5),
+            fn () => static::withoutGlobalScopes()->where('is_founder', true)->count(),
+        );
+
+        $tomados = min($tomados, $total);
+
+        return [
+            'total' => $total,
+            'tomados' => $tomados,
+            'quedan' => $total - $tomados,
+            'hay' => ($total - $tomados) > 0,
+        ];
+    }
 }

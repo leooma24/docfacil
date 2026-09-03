@@ -116,6 +116,86 @@ class Prospect extends Model
         return self::stripTitles($this->name);
     }
 
+    /**
+     * Detecta si el `name` es razón social de negocio (no persona).
+     * Muchos prospects importados de directorios tienen "Consultorio Dental X"
+     * o "Dentalisima" como name — saludarlos con "Dr. Consultorio" es bochornoso.
+     */
+    public function isBusinessName(): bool
+    {
+        $rawName = trim((string) $this->name);
+        // Sin \b al final para matchear marcas tipo "Dentalisima", "Dentalix"
+        $pattern = '/^(consultorio|cl[ií]nica|dental|centro|hospital|odontolog|ortodoncia|endodoncia|periodoncia|sonr[ií]|smile|dent[ai])/iu';
+        return (bool) preg_match($pattern, $rawName);
+    }
+
+    /**
+     * Detecta si el prospect es del sector dental, mirando specialty + name +
+     * clinic_name. Muchos no tienen specialty pero su nombre claramente es dental.
+     */
+    public function isDentist(): bool
+    {
+        $haystack = strtolower(
+            ($this->specialty ?? '') . ' '
+            . ($this->name ?? '') . ' '
+            . ($this->clinic_name ?? '')
+        );
+
+        $kws = ['dent', 'odont', 'ortodon', 'endo', 'period', 'implant'];
+        foreach ($kws as $kw) {
+            if (str_contains($haystack, $kw)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determina título Dr./Dra. del nombre original. Default Dr. si no hay match.
+     */
+    public function honorific(): string
+    {
+        return preg_match('/^(dra|doctora)[\.\s]/iu', (string) $this->name) ? 'Dra.' : 'Dr.';
+    }
+
+    /**
+     * Saludo completo para apertura: "Buenas tardes, Dr. Carlos" o "Buenas tardes"
+     * (si name es de negocio o no se identifica persona). Detecta hora del día.
+     */
+    public function salutationGreeting(): string
+    {
+        $time = now()->hour < 12 ? 'Buenos días' : 'Buenas tardes';
+        if ($this->isBusinessName()) {
+            return $time;
+        }
+
+        $first = $this->firstName();
+        if (empty($first) || mb_strlen($first) < 2) {
+            return $time;
+        }
+
+        return "{$time}, {$this->honorific()} {$first}";
+    }
+
+    /**
+     * Forma corta para frases tipo "{X}, le escribo de nuevo": "Dr. Carlos" o "" si negocio.
+     */
+    public function salutationFollowCall(): string
+    {
+        if ($this->isBusinessName()) return '';
+        $first = $this->firstName();
+        if (empty($first) || mb_strlen($first) < 2) return '';
+        return "{$this->honorific()} {$first}";
+    }
+
+    /**
+     * Sector apropiado para el body: "consultorios dentales" o "consultorios médicos".
+     */
+    public function sectorLabel(): string
+    {
+        return $this->isDentist() ? 'consultorios dentales' : 'consultorios médicos';
+    }
+
     public function advanceContactDay(string $method): void
     {
         $nextDay = self::CADENCE[$this->contact_day] ?? null;

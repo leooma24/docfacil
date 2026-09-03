@@ -29,6 +29,12 @@ class ClinicObserver
 
     public function updated(Clinic $clinic): void
     {
+        // La landing enseña "quedan N de 10 lugares" leyendo este conteo, y
+        // lo cachea 5 minutos. Si un fundador acaba de entrar, que se vea ya.
+        if ($clinic->wasChanged('is_founder')) {
+            \Illuminate\Support\Facades\Cache::forget('fundadores.tomados');
+        }
+
         // Tier 1: primer pago recibido
         if ($clinic->wasChanged('first_payment_received_at')
             && $clinic->first_payment_received_at
