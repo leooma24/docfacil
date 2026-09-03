@@ -175,4 +175,18 @@ class LugaresDeFundadorTest extends TestCase
 
         $this->get('/')->assertSee('$499/mes de por vida', false);
     }
+
+    public function test_la_portada_no_se_cae_si_la_base_no_contesta(): void
+    {
+        // Antes de esto, meter el conteo en la landing la volvia dependiente
+        // de la base: sin tablas, la portada daba 500. Una pagina de
+        // marketing que truena por un conteo es peor que un numero bajo.
+        \Illuminate\Support\Facades\Cache::forget('fundadores.tomados');
+        \Illuminate\Support\Facades\DB::statement('DROP TABLE IF EXISTS clinics');
+
+        $lugares = Clinic::lugaresDeFundador();
+
+        $this->assertSame(0, $lugares['tomados']);
+        $this->assertTrue($lugares['hay']);
+    }
 }

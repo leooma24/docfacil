@@ -584,13 +584,24 @@ class Clinic extends Model
     {
         $total = max(0, (int) config('founders.seats', 10));
 
-        $tomados = \Illuminate\Support\Facades\Cache::remember(
-            'fundadores.tomados',
-            now()->addMinutes(5),
-            fn () => static::withoutGlobalScopes()->where('is_founder', true)->count(),
-        );
+        // Si la base no contesta, la portada NO se cae: se enseña el programa
+        // como si no hubiera nadie dentro. Una página de marketing que da 500
+        // por un conteo es mucho peor que un número momentáneamente bajo.
+        try {
+            $tomados = \Illuminate\Support\Facades\Cache::remember(
+                'fundadores.tomados',
+                now()->addMinutes(5),
+                fn () => static::withoutGlobalScopes()->where('is_founder', true)->count(),
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('No se pudo contar los lugares de fundador', [
+                'error' => $e->getMessage(),
+            ]);
 
-        $tomados = min($tomados, $total);
+            $tomados = 0;
+        }
+
+        $tomados = min((int) $tomados, $total);
 
         return [
             'total' => $total,
