@@ -65,7 +65,17 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // Hora de México, no UTC.
+    //
+    // Corriendo en UTC, now() iba 6 horas adelante de la hora local, con dos
+    // efectos que costaban dinero: el portal publico le escondia al paciente
+    // las horas de la mañana como si ya hubieran pasado (7 horas de agenda
+    // invisible en Sinaloa), y los correos programados "a las 9am" salian a
+    // las 3 de la madrugada.
+    //
+    // Las fechas se guardan en hora local y se muestran igual, asi que este
+    // cambio no reinterpreta nada de lo ya guardado.
+    'timezone' => env('APP_TIMEZONE', 'America/Mexico_City'),
 
     /*
     |--------------------------------------------------------------------------
