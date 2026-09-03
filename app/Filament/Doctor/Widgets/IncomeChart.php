@@ -19,11 +19,11 @@ class IncomeChart extends ChartWidget
         for ($i = 5; $i >= 0; $i--) {
             $date = now()->subMonths($i);
 
-            $income = Payment::where('clinic_id', $clinicId)
-                ->where('status', 'paid')
-                ->whereMonth('payment_date', $date->month)
-                ->whereYear('payment_date', $date->year)
-                ->sum('amount');
+            $income = Payment::cobradoEntre(
+                $clinicId,
+                $date->copy()->startOfMonth(),
+                $date->copy()->endOfMonth(),
+            );
 
             $months->push([
                 'label' => $date->translatedFormat('M Y'),

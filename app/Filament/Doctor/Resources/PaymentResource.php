@@ -139,11 +139,11 @@ class PaymentResource extends Resource
                     ->placeholder('Sin servicio'),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('remaining')
                     ->label('Restante')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'warning' : 'success')
                     ->placeholder('—')

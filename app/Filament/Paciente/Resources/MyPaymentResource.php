@@ -49,7 +49,7 @@ class MyPaymentResource extends Resource
                     ->placeholder('Sin servicio'),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')

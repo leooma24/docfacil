@@ -112,7 +112,7 @@ class ServiceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Precio')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('duration_minutes')
                     ->label('Duración')

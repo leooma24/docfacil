@@ -25,11 +25,9 @@ class StatsOverview extends BaseWidget
 
         $totalPatients = Patient::where('clinic_id', $clinicId)->count();
 
-        $monthlyIncome = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'paid')
-            ->whereMonth('payment_date', now()->month)
-            ->whereYear('payment_date', now()->year)
-            ->sum('amount');
+        // Un solo lugar decide que cuenta como ingreso, para que el
+        // escritorio y el corte del mes no digan numeros distintos.
+        $monthlyIncome = Payment::cobradoEntre($clinicId, now()->startOfMonth(), now()->endOfMonth());
 
         $pendingPayments = Payment::where('clinic_id', $clinicId)
             ->where('status', 'pending')

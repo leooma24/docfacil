@@ -182,7 +182,7 @@ class TreatmentPlanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total')
                     ->label('Total')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->weight('bold'),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')

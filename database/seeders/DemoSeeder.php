@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Models\Expense;
 use App\Models\MedicalRecord;
 use App\Models\Patient;
 use App\Models\Payment;
@@ -338,6 +339,55 @@ class DemoSeeder extends Seeder
             'payment_date' => now()->subDays(3)->toDateString(),
             'notes' => 'Blanqueamiento - pagó 50%, resta $1,250',
         ]);
+
+        // =============================================
+        // GASTOS (para que el corte del mes tenga que mostrar)
+        // =============================================
+        // Sin esto la página de Corte sale vacía en el demo, que es justo
+        // donde se le enseña al dentista cuánto le quedó de verdad.
+        //
+        // Los montos son los de un consultorio de una plaza: renta y
+        // laboratorio se llevan la mitad, que es lo que a un dentista le
+        // suena real.
+        $gastosDemo = [
+            ['renta',        'Renta del consultorio',                18000, 1,  true],
+            ['laboratorio',  'Coronas y prótesis — Lab Dental Norte', 12400, 5,  false],
+            ['nomina',       'Sueldo de la asistente',                9500, 1,  true],
+            ['materiales',   'Resinas, anestesia y guantes',          6800, 8,  false],
+            ['servicios',    'Luz, agua e internet',                  2900, 3,  true],
+            ['equipo',       'Mantenimiento de la unidad dental',     4200, 12, false],
+            ['publicidad',   'Anuncios en Facebook',                  1500, 10, false],
+        ];
+
+        foreach ($gastosDemo as [$categoria, $concepto, $monto, $dia, $cadaMes]) {
+            // Este mes, hasta hoy: un gasto con fecha futura se ve raro.
+            $fecha = now()->startOfMonth()->addDays($dia - 1);
+
+            if ($fecha->lessThanOrEqualTo(now())) {
+                Expense::create([
+                    'clinic_id' => $clinic->id,
+                    'created_by' => $doctorUser->id,
+                    'category' => $categoria,
+                    'concept' => $concepto,
+                    'amount' => $monto,
+                    'expense_date' => $fecha->toDateString(),
+                    'payment_method' => 'transfer',
+                    'is_recurring' => $cadaMes,
+                ]);
+            }
+
+            // Y el mes pasado, para que el corte tenga contra qué comparar.
+            Expense::create([
+                'clinic_id' => $clinic->id,
+                'created_by' => $doctorUser->id,
+                'category' => $categoria,
+                'concept' => $concepto,
+                'amount' => round($monto * 0.92, 2),
+                'expense_date' => now()->subMonthNoOverflow()->startOfMonth()->addDays($dia - 1)->toDateString(),
+                'payment_method' => 'transfer',
+            ]);
+        }
+
         // =============================================
         // ODONTOGRAMAS (2 pacientes)
         // =============================================

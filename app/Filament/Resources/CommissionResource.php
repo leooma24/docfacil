@@ -55,7 +55,7 @@ class CommissionResource extends Resource
                     ->formatStateUsing(fn ($state) => $state === 'first' ? '1ra mitad' : '2da mitad')
                     ->colors(['primary' => 'first', 'info' => 'second']),
                 Tables\Columns\TextColumn::make('plan_at_sale')->label('Plan')->formatStateUsing(fn ($state) => ucfirst($state)),
-                Tables\Columns\TextColumn::make('amount')->label('Monto')->money('MXN')->weight('bold')->sortable(),
+                Tables\Columns\TextColumn::make('amount')->label('Monto')->money('MXN', locale: 'es_MX')->weight('bold')->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
                     ->colors([

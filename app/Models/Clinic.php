@@ -414,6 +414,9 @@ class Clinic extends Model
             'patient_portal',          // Portal del paciente. Va en Basico: lo
                                        // tienen todos los planes de pago, no
                                        // Free.
+            'expenses',                // Gastos y corte del mes. Va en Basico
+                                       // porque es justo lo que hace que el
+                                       // doctor deje su hoja de calculo.
         ];
         // Nota: treatment_plans sigue siendo ADD-ON de pago ($129/mes),
         // gestionado via ClinicAddon. Clinic::hasFeature() consulta addons

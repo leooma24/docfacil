@@ -32,10 +32,7 @@ class DashboardHeroWidget extends Widget
             ->whereIn('status', ['scheduled', 'confirmed', 'in_progress', 'completed'])
             ->count();
 
-        $todayIncome = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'paid')
-            ->whereDate('payment_date', today())
-            ->sum('amount');
+        $todayIncome = Payment::cobradoEntre($clinicId, today(), today());
 
         $pendingPayments = Payment::where('clinic_id', $clinicId)
             ->where('status', 'pending')

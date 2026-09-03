@@ -65,7 +65,7 @@ class SpeiPaymentResource extends Resource
                     ->color(fn ($state) => $state === 'annual' ? 'success' : 'gray'),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->weight('bold')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('reference_code')
@@ -157,7 +157,7 @@ class SpeiPaymentResource extends Resource
                     Infolists\Components\TextEntry::make('user.name')->label('Usuario que subió')->placeholder('—'),
                     Infolists\Components\TextEntry::make('plan')->formatStateUsing(fn ($state) => \App\Models\Clinic::displayNameForPlan($state)),
                     Infolists\Components\TextEntry::make('billing_cycle')->label('Ciclo')->formatStateUsing(fn ($state) => $state === 'annual' ? 'Anual' : 'Mensual'),
-                    Infolists\Components\TextEntry::make('amount')->money('MXN'),
+                    Infolists\Components\TextEntry::make('amount')->money('MXN', locale: 'es_MX'),
                     Infolists\Components\TextEntry::make('reference_code')->label('Referencia')->copyable(),
                     Infolists\Components\TextEntry::make('client_notes')->label('Notas del cliente')->placeholder('—')->columnSpanFull(),
                 ])

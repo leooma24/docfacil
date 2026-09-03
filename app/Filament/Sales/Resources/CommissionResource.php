@@ -59,7 +59,7 @@ class CommissionResource extends Resource
                     ->formatStateUsing(fn ($state) => ucfirst($state)),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->weight('bold')
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('status')

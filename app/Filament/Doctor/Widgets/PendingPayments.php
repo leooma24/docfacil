@@ -35,7 +35,7 @@ class PendingPayments extends BaseWidget
                     ->limit(20),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->weight('bold'),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('')

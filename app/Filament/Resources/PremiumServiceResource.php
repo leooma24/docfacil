@@ -125,7 +125,7 @@ class PremiumServiceResource extends Resource
                     ->label('Categoría')
                     ->formatStateUsing(fn ($state) => PremiumService::CATEGORIES[$state] ?? $state)
                     ->badge(),
-                Tables\Columns\TextColumn::make('price_mxn')->label('Precio')->money('MXN')->sortable(),
+                Tables\Columns\TextColumn::make('price_mxn')->label('Precio')->money('MXN', locale: 'es_MX')->sortable(),
                 Tables\Columns\TextColumn::make('pricing_type')
                     ->label('Tipo')
                     ->formatStateUsing(fn ($state) => PremiumService::PRICING_TYPES[$state] ?? $state)

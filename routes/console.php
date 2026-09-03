@@ -43,3 +43,7 @@ Schedule::command('app:demo-reset')->dailyAt('04:00');
 // Auditoría de retención legal (LFPDPPP + NOM-004): reporte semanal,
 // solo informativo. El borrado efectivo se hace manualmente con --force.
 Schedule::command('app:retention-report')->weekly()->sundays()->at('05:00');
+
+// Gastos que se repiten cada mes (renta, nomina, internet). Temprano, para
+// que el doctor ya los vea capturados cuando abra el corte.
+Schedule::command('docfacil:gastos-recurrentes')->dailyAt('05:30');

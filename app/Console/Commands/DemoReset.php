@@ -41,7 +41,7 @@ class DemoReset extends Command
 
                 foreach ([
                     'prescriptions', 'consent_forms', 'odontograms',
-                    'payments', 'medical_records', 'appointments',
+                    'payments', 'expenses', 'medical_records', 'appointments',
                     'patients', 'services', 'doctors',
                 ] as $table) {
                     if (Schema::hasTable($table)) {

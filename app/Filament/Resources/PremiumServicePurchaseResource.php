@@ -59,7 +59,7 @@ class PremiumServicePurchaseResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount_mxn')
                     ->label('Monto')
-                    ->money('MXN')
+                    ->money('MXN', locale: 'es_MX')
                     ->weight('bold')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
