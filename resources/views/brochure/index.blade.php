@@ -579,7 +579,7 @@
                 <div class="mt-auto">
                     @if (count($hidden) > 0)
                     <button type="button" @click="expanded = !expanded" class="w-full mb-3 text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center justify-center gap-1">
-                        <span x-show="!expanded">Ver {{ count($hidden) }} features más</span>
+                        <span x-show="!expanded">Ver {{ count($hidden) }} {{ count($hidden) === 1 ? 'función' : 'funciones' }} más</span>
                         <span x-show="expanded" x-cloak>Ver menos</span>
                         <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>

@@ -948,32 +948,123 @@
             <div class="pricing-grid grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto" data-animate>
                 @php
                 $plans = [
-                    ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Odontograma FDI interactivo', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Gastos y corte del mes', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Consentimientos + firma digital', 'Lista de espera con notif. auto', 'Portal público de agendamiento', 'Recall de pacientes que no regresan', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
-                    ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Pacientes ilimitados', 'Todo del Pro +', 'Reportes por doctor', 'Producción individual por doctor', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 7 días/semana'], 'cta' => 'Contactar ventas', 'popular' => false],
+                    // Los limites (doctores, pacientes) salen de la lista de
+                    // features y se van a su propio renglon. Antes ocupaban 2
+                    // de los 4 espacios visibles de cada tarjeta: en el lugar
+                    // mas caro de la pagina se le decia al dentista lo que NO
+                    // puede hacer, en vez de por que le conviene pagar.
+                    [
+                        'name' => 'Free',
+                        'price' => '0',
+                        'annual' => 0,
+                        'subtitle' => 'Para siempre',
+                        'ideal' => 'Para conocerlo sin prisa',
+                        'limits' => '1 doctor · 15 pacientes · 10 citas al mes',
+                        'lead' => null,
+                        'features' => [
+                            'Agenda y calendario de citas',
+                            'Expediente de cada paciente',
+                            'Sin tarjeta y sin vencimiento',
+                            'Subes de plan cuando quieras',
+                        ],
+                        'cta' => 'Empezar gratis',
+                        'popular' => false,
+                    ],
+                    [
+                        'name' => 'Básico',
+                        'price' => '499',
+                        'annual' => 4990,
+                        'subtitle' => 'por mes · cancelas cuando quieras',
+                        'ideal' => 'Para el dentista que trabaja solo',
+                        'limits' => '1 doctor · 200 pacientes · citas ilimitadas',
+                        'lead' => null,
+                        // De mayor a menor por lo que le mueve la aguja a un
+                        // dentista: primero lo que le trae o le cuida dinero,
+                        // luego lo que lo hace verse profesional.
+                        'features' => [
+                            'Recordatorios WhatsApp a 1 clic',
+                            'Gastos y corte del mes',
+                            'Odontograma FDI interactivo',
+                            'Recetas PDF con cédula y logo',
+                            'Cobro por WhatsApp a 1 clic',
+                            'Confirmar cita con link',
+                            'Check-in con QR',
+                            'Dashboard con tus números',
+                        ],
+                        'cta' => 'Probar 15 días gratis',
+                        'popular' => false,
+                    ],
+                    [
+                        'name' => 'Pro',
+                        'price' => '999',
+                        'annual' => 9990,
+                        'subtitle' => 'por mes · cancelas cuando quieras',
+                        'ideal' => 'Para consultorios de 2 o 3 doctores',
+                        'limits' => 'Hasta 3 doctores · pacientes ilimitados',
+                        'lead' => 'Todo lo del Básico, y además:',
+                        'features' => [
+                            'Tus pacientes agendan solos, 24/7',
+                            'Recall: a quién ya le toca volver',
+                            'Lista de espera que llena los huecos',
+                            'Consentimientos con firma digital',
+                            'Reportes avanzados',
+                            'Alertas inteligentes',
+                            'Soporte prioritario por WhatsApp',
+                        ],
+                        'cta' => 'Probar Pro 15 días gratis',
+                        'popular' => true,
+                    ],
+                    [
+                        'name' => 'Clínica',
+                        'price' => '1,999',
+                        'annual' => 19990,
+                        'subtitle' => 'por mes · cancelas cuando quieras',
+                        'ideal' => 'Para clínicas con varios doctores',
+                        'limits' => 'Doctores y pacientes ilimitados',
+                        'lead' => 'Todo lo del Pro, y además:',
+                        'features' => [
+                            'Producción individual por doctor',
+                            'Reportes por doctor',
+                            'Onboarding 1 a 1 dedicado',
+                            'Soporte prioritario 7 días a la semana',
+                        ],
+                        'cta' => 'Contactar ventas',
+                        'popular' => false,
+                    ],
                 ];
                 @endphp
                 @foreach($plans as $i => $plan)
                 @php $visible = array_slice($plan['features'], 0, 4); $hidden = array_slice($plan['features'], 4); @endphp
-                <div x-data="{ expanded: false }" class="pricing-card relative flex flex-col rounded-2xl p-7 animate-fade-up {{ $plan['popular'] ? 'popular md:scale-110 md:-my-2 z-10' : '' }}" style="animation-delay:{{ $i * 0.1 }}s; {{ $plan['popular'] ? 'background:linear-gradient(180deg,#ffffff 0%,#f0fdfa 100%); border:3px solid #0d9488; box-shadow:0 25px 50px -12px rgba(13,148,136,0.35), 0 0 0 1px rgba(13,148,136,0.1);' : 'background:#fff; border:1px solid #e5e7eb;' }}">
+                <div x-data="{ expanded: false }" class="pricing-card relative flex flex-col rounded-2xl p-7 animate-fade-up {{ $plan['popular'] ? 'popular md:scale-110 md:-my-2 z-10' : '' }}" style="animation-delay:{{ $i * 0.1 }}s; {{ $plan['popular'] ? 'background:linear-gradient(180deg,#ffffff 0%,#f0fdfa 100%); border:3px solid #0d9488; padding-top:2.25rem; box-shadow:0 25px 50px -12px rgba(13,148,136,0.35), 0 0 0 1px rgba(13,148,136,0.1);' : 'background:#fff; border:1px solid #e5e7eb;' }}">
                     @if($plan['popular'])
-                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-5 py-2 text-white text-xs font-extrabold rounded-full uppercase tracking-wider whitespace-nowrap" style="background:linear-gradient(135deg,#0d9488,#0891b2); box-shadow:0 10px 25px -5px rgba(13,148,136,0.5);">
+                    <div class="absolute left-1/2 flex items-center gap-1.5 px-5 py-2 text-white text-xs font-extrabold rounded-full uppercase tracking-wider whitespace-nowrap" style="top:-1.1rem; transform:translateX(-50%); background:linear-gradient(135deg,#0d9488,#0891b2); box-shadow:0 10px 25px -5px rgba(13,148,136,0.5);">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         El más elegido
                     </div>
                     @endif
                     <h3 class="text-lg font-bold text-gray-900">{{ $plan['name'] }}</h3>
+                    {{-- Contesta "¿cuál me toca a mí?" antes de que lo pregunte --}}
+                    <div class="text-xs text-gray-500 mt-0.5">{{ $plan['ideal'] }}</div>
                     <div class="mt-4 mb-1">
                         <span class="text-4xl font-extrabold text-gray-900">${{ $plan['price'] }}</span>
                     </div>
                     <div class="text-sm text-gray-500 mb-2">{{ $plan['subtitle'] }}</div>
                     @if($plan['annual'] > 0)
-                    <div class="mb-5 inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-md text-xs font-semibold text-emerald-700">
+                    <div class="mb-3 inline-flex items-center gap-1 px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-md text-xs font-semibold text-emerald-700">
                         o ${{ number_format($plan['annual']) }}/año · 2 meses gratis
                     </div>
                     @else
-                    <div class="mb-5 text-xs text-gray-400">sin tarjeta · sin compromiso</div>
+                    <div class="mb-3 text-xs text-gray-400">sin tarjeta · sin compromiso</div>
+                    @endif
+
+                    {{-- Los límites, en su renglón. Informan sin quitarle
+                         lugar a un beneficio. --}}
+                    <div class="mb-4 pb-4 border-b border-gray-100 text-xs text-gray-500 leading-relaxed">
+                        {{ $plan['limits'] }}
+                    </div>
+
+                    @if($plan['lead'])
+                    <div class="mb-3 text-xs font-bold text-teal-700 uppercase tracking-wide">{{ $plan['lead'] }}</div>
                     @endif
 
                     <ul class="space-y-3 mb-4">
@@ -1000,7 +1091,7 @@
                     <div class="mt-auto">
                         @if(count($hidden) > 0)
                         <button type="button" @click="expanded = !expanded" class="w-full mb-3 text-xs font-semibold text-teal-600 hover:text-teal-700 flex items-center justify-center gap-1">
-                            <span x-show="!expanded">Ver {{ count($hidden) }} features más</span>
+                            <span x-show="!expanded">Ver {{ count($hidden) }} {{ count($hidden) === 1 ? 'función' : 'funciones' }} más</span>
                             <span x-show="expanded" x-cloak>Ver menos</span>
                             <svg class="w-3 h-3 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -1020,6 +1111,13 @@
                             class="block w-full text-center px-4 py-3 rounded-xl font-semibold transition-all {{ $plan['popular'] ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:shadow-lg hover:shadow-teal-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                             {{ $plan['cta'] }}
                         </a>
+                        {{-- El miedo no es el precio, es la tarjeta. Aquí es
+                             donde duda, así que aquí se le quita. --}}
+                        @if($plan['annual'] > 0 && $plan['cta'] !== 'Contactar ventas')
+                        <div class="mt-2 text-center text-[11px] text-gray-500">
+                            15 días con todo · sin tarjeta
+                        </div>
+                        @endif
                     </div>
                 </div>
                 @endforeach

@@ -444,7 +444,7 @@
                 <li>{{ $feat }}</li>
                 @endforeach
                 @if ($extraCount > 0)
-                <li style="color:#0d9488; font-weight:600; list-style:none; margin-left:-14px;">+ {{ $extraCount }} features más</li>
+                <li style="color:#0d9488; font-weight:600; list-style:none; margin-left:-14px;">+ {{ $extraCount }} {{ $extraCount === 1 ? 'función' : 'funciones' }} más</li>
                 @endif
             </ul>
         </td>
