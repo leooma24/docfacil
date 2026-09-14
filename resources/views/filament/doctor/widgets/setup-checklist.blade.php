@@ -153,6 +153,9 @@
                                 {{ $item['cta'] }} →
                             @endif
                         </a>
+                        @if(! $item['done'] && ! empty($item['cta2']))
+                            <a href="{{ $item['url2'] }}" class="sc-item-cta sc-item-cta-alterno">o {{ $item['cta2'] }}</a>
+                        @endif
                     </div>
                 </div>
             @endforeach

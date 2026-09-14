@@ -91,17 +91,23 @@ class SetupChecklistWidget extends Widget
                 'url' => \App\Filament\Doctor\Resources\ServiceResource::getUrl('index'),
                 'icon' => '🦷',
             ],
+            // Lo primero que se ofrece es subir el Excel, no capturar uno por
+            // uno: el dentista que ya tiene 300 pacientes en una hoja no va a
+            // empezar tecleando el primero. `?action=import` abre directo la
+            // ventana del importador en la lista de pacientes.
             [
                 'key' => 'patient',
-                'title' => 'Agrega tu primer paciente',
+                'title' => 'Sube tus pacientes',
                 'desc' => $patientsCount > 0
                     ? "Tienes {$patientsCount} " . ($patientsCount === 1 ? 'paciente' : 'pacientes') . '.'
-                    : 'Solo nombre y teléfono. Lo demás lo llenas en su expediente.',
+                    : '¿Los tienes en Excel o Google Sheets? Súbelos todos de una vez. Si no, captura el primero: solo nombre y teléfono.',
                 'done' => $patientsCount > 0,
-                'cta' => $patientsCount > 0 ? 'Ver pacientes' : 'Crear paciente',
+                'cta' => $patientsCount > 0 ? 'Ver pacientes' : 'Importar de Excel',
                 'url' => $patientsCount > 0
                     ? \App\Filament\Doctor\Resources\PatientResource::getUrl('index')
-                    : \App\Filament\Doctor\Resources\PatientResource::getUrl('create'),
+                    : \App\Filament\Doctor\Resources\PatientResource::getUrl('index') . '?action=import',
+                'cta2' => $patientsCount > 0 ? null : 'Crear uno',
+                'url2' => $patientsCount > 0 ? null : \App\Filament\Doctor\Resources\PatientResource::getUrl('create'),
                 'icon' => '👤',
             ],
             [
