@@ -13,7 +13,14 @@ Schedule::command('docfacil:send-engagement')->dailyAt('10:00');
 // (config/services.php:whatsapp). En el setup actual esto es solo para demo/
 // testing — los widgets del Doctor panel usan click-to-wa.me manual para que
 // cada clinica use su propio WhatsApp personal sin costar API calls.
-Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
+//
+// APAGADO el 2026-09-14. En produccion estan puestas las credenciales de la
+// API, asi que cada hora intentaba mandar a Meta nombre, telefono, fecha y
+// servicio de los pacientes. Eso contradice lo decidido (recordatorios a
+// 1 clic desde el WhatsApp del consultorio, sin costo por mensaje) y lo que
+// dice el aviso de privacidad. Si se decide activar recordatorios automaticos,
+// antes hay que agregar a Meta a la lista de proveedores del aviso.
+// Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
 
 // Cumpleanos: el comando existe para cuando una clinica conecte su propia
 // WA Business API. Por default NO se programa — los doctores ven los

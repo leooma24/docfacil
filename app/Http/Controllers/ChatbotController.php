@@ -158,10 +158,14 @@ class ChatbotController extends Controller
                     Log::warning('WelcomeOnboardingMail failed', ['error' => $e->getMessage()]);
                 }
 
-                // User implements MustVerifyEmail — dispatch Registered para que
-                // Laravel mande el correo de verificacion. forceCreate no lo
-                // dispara automaticamente.
-                event(new \Illuminate\Auth\Events\Registered($user));
+                // El correo de verificacion, con la liga del panel del doctor,
+                // igual que en el registro normal. Antes se disparaba el evento
+                // Registered de Laravel, cuya notificacion busca la ruta
+                // verification.verify, que aqui no existe: tronaba en la cola,
+                // la cuenta quedaba creada y el correo nunca llegaba.
+                $verificacion = app(\Filament\Notifications\Auth\VerifyEmail::class);
+                $verificacion->url = \Filament\Facades\Filament::getPanel('doctor')->getVerifyEmailUrl($user);
+                $user->notify($verificacion);
 
                 $this->notifyAdminNewLead(
                     $prospect,

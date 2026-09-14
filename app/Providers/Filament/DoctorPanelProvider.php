@@ -45,7 +45,10 @@ class DoctorPanelProvider extends PanelProvider
             ->globalSearchFieldSuffix(fn () => 'Ctrl+K')
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
-            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles') . view('partials.analytics'))
+            // Sin Google Analytics dentro del panel: los títulos de las páginas
+            // llevan nombres de pacientes ("Editar Juan Pérez") y se mandaban a
+            // Google. El sitio público sí lo sigue midiendo.
+            ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
             ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat') . \Livewire\Livewire::mount('command-palette'))
             // Ayuda por WhatsApp: el doctor no tenia a donde acudir si se atoraba.
             ->renderHook('panels::body.end', fn () => view('filament.custom.boton-ayuda'))

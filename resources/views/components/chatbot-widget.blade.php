@@ -105,6 +105,12 @@
             <!-- CTA hot path -->
             <div x-show="tags.create_data" style="background:linear-gradient(135deg,#fefce8,#fff7ed);padding:14px;border-radius:12px;border:1px solid #fcd34d;">
                 <div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:10px;">¡Listo para crear tu cuenta!</div>
+                {{-- La contraseña se escribe aquí y va directo a crear la cuenta. Antes se
+                     escribía como mensaje del chat: pasaba por el proveedor de IA y quedaba
+                     guardada en la conversación. --}}
+                <input x-ref="password" type="password" autocomplete="new-password" minlength="8" maxlength="72"
+                    placeholder="Elige tu contraseña (mínimo 8 caracteres)"
+                    style="width:100%;box-sizing:border-box;border:1px solid #fcd34d;border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:10px;background:#fff;">
                 <button type="button" @click="finalizeHot()" :disabled="creating"
                     :style="creating ? 'width:100%;background:#d1d5db;color:#6b7280;border:0;padding:12px;border-radius:10px;font-weight:700;cursor:wait;font-size:14px;' : 'width:100%;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;border:0;padding:12px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;'">
                     <span x-show="!creating">🎉 Crear mi cuenta</span>
@@ -116,8 +122,8 @@
 
         <!-- Input -->
         <form @submit.prevent="send()" style="padding:12px;background:#fff;border-top:1px solid #e5e7eb;display:flex;gap:8px;">
-            <input x-ref="input" x-model="draft" :type="tags.input_type === 'password' ? 'password' : 'text'"
-                :placeholder="tags.input_type === 'password' ? 'Contraseña (mín 8 caracteres)' : 'Escribe tu mensaje...'"
+            <input x-ref="input" x-model="draft" type="text"
+                placeholder="Escribe tu mensaje..."
                 :disabled="typing || disabled"
                 maxlength="2000"
                 style="flex:1;border:1px solid #d1d5db;border-radius:10px;padding:10px 12px;font-size:14px;outline:none;"
@@ -158,10 +164,10 @@
             showFaqChips: false,
             faqs: [
                 { q: '¿Cuánto cuesta?', a: 'Tenemos 4 planes: Free (1 doctor, 15 pacientes, 10 citas/mes), Básico $499/mes, Pro $999/mes (multi-doctor) y Clínica $1,999/mes (multi-sucursal). 15 días de prueba gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
-                { q: '¿Cómo funcionan los recordatorios?', a: 'Automáticos por WhatsApp: 24h y 2h antes de la cita, más seguimiento si no asistió. Reduce inasistencias hasta 40%. También puedes mandarlos manual con un clic desde tu agenda cuando quieras.' },
+                { q: '¿Cómo funcionan los recordatorios?', a: 'Desde tu agenda, con un clic se abre tu WhatsApp con el mensaje listo (24h o 2h antes de la cita) y tú le das enviar. Así es más fácil que no se te olvide confirmar ninguna.' },
                 { q: '¿Para qué especialidades funciona?', a: '¡Para todas! Odontología, medicina general, pediatría, dermatología, ginecología y más. Los dentistas tienen odontograma interactivo; los demás tienen expediente clínico completo. Todo en español mexicano.' },
                 { q: '¿Los pacientes pueden firmar digital?', a: '¡Sí! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },
-                { q: '¿Mis datos están seguros?', a: 'Servidores en México, cifrado TLS, backups automáticos diarios, historial de cambios por usuario, separación por clínica (tus datos nunca se cruzan con otra). Cumplimos LFPDPPP y NOM-004-SSA3.' },
+                { q: '¿Mis datos están seguros?', a: 'La conexión va cifrada (HTTPS), hay respaldo automático diario, cada consultorio está aislado (tus datos nunca se cruzan con otro) y puedes activar la verificación en dos pasos. Las notas y recetas se bloquean a las 24 horas y queda historial de cambios. Los servidores están en Estados Unidos.' },
                 { q: '¿Puedo tener varios doctores?', a: 'Sí. Desde el plan Pro ($999/mes) hasta 3 doctores, o plan Clínica ($1,999/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
                 { q: '¿Hay garantía?', a: '¡Sí! Garantía de 30 días: si no ves resultados en el primer mes, te devolvemos tu dinero completo sin preguntas.' },
                 { q: '¿Puedo probarlo sin registrarme?', a: '¡Sí! Hay un modo demo que crea una clínica temporal con 35 pacientes falsos, 60 citas históricas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
@@ -338,7 +344,8 @@
                         },
                         body: JSON.stringify({
                             session_id: this.sessionId,
-                            name: d.name, email: d.email, password: d.password,
+                            // Del cuadro de contraseña, nunca de la conversación.
+                            name: d.name, email: d.email, password: this.$refs.password?.value || '',
                             clinic_name: d.clinic_name, license_number: d.license_number,
                             specialty: d.specialty, phone: d.phone, city: d.city,
                             terms_accepted: true
