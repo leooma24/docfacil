@@ -81,13 +81,26 @@ class PrescriptionResource extends Resource
                             ->relationship()
                             ->label('')
                             ->schema([
+                                // Lo que pide el Reglamento de Insumos: denominación
+                                // genérica (art. 31); dosis, presentación, vía,
+                                // frecuencia y duración (art. 30).
                                 Forms\Components\TextInput::make('medication')
-                                    ->label('Medicamento')
+                                    ->label('Medicamento (nombre genérico)')
+                                    ->placeholder('Amoxicilina')
                                     ->required()
+                                    ->live(onBlur: true)
+                                    ->helperText(fn (Forms\Get $get) => \App\Support\Receta::avisoDeControl($get('medication')))
                                     ->columnSpan(2),
+                                Forms\Components\TextInput::make('presentacion')
+                                    ->label('Presentación')
+                                    ->placeholder('Cápsulas de 500 mg'),
                                 Forms\Components\TextInput::make('dosage')
                                     ->label('Dosis')
-                                    ->placeholder('500mg'),
+                                    ->placeholder('1 cápsula'),
+                                Forms\Components\Select::make('via_administracion')
+                                    ->label('Vía')
+                                    ->options(\App\Support\Receta::VIAS)
+                                    ->native(false),
                                 Forms\Components\TextInput::make('frequency')
                                     ->label('Frecuencia')
                                     ->placeholder('Cada 8 horas'),
@@ -96,9 +109,10 @@ class PrescriptionResource extends Resource
                                     ->placeholder('7 días'),
                                 Forms\Components\TextInput::make('instructions')
                                     ->label('Indicaciones')
-                                    ->placeholder('Tomar con alimentos'),
+                                    ->placeholder('Tomar con alimentos')
+                                    ->columnSpan(2),
                             ])
-                            ->columns(6)
+                            ->columns(4)
                             ->defaultItems(1)
                             ->addActionLabel('Agregar medicamento')
                             ->reorderable()
@@ -162,6 +176,24 @@ class PrescriptionResource extends Resource
                         }
 
                         $record->load(['patient', 'doctor.user', 'doctor.clinic', 'items']);
+
+                        // La receta tiene que llevar cédula e institución del
+                        // título (RIS art. 29; reglamento de atención médica,
+                        // art. 64). Sin eso no se imprime: se dice qué falta.
+                        if ($faltan = \App\Support\Receta::datosQueFaltan($record->doctor)) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('A la receta le falta ' . implode(' y ', $faltan))
+                                ->body('La ley pide que la receta los lleve. Captúralos una vez en tu perfil profesional y ya salen en todas.')
+                                ->warning()
+                                ->actions([
+                                    \Filament\Notifications\Actions\Action::make('perfil')
+                                        ->label('Completar mi perfil')
+                                        ->url(\App\Filament\Doctor\Pages\PerfilProfesional::getUrl()),
+                                ])
+                                ->send();
+
+                            return null;
+                        }
 
                         $pdf = Pdf::loadView('pdf.prescription', [
                             'prescription' => $record,

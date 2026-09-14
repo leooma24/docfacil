@@ -67,6 +67,7 @@ class DemoSeeder extends Seeder
             'clinic_id' => $clinic->id,
             'specialty' => 'Odontología General',
             'license_number' => 'CED-98765432',
+            'institucion_titulo' => 'Universidad Nacional Autónoma de México',
             'phone' => '55 9876 5432',
             'appointment_duration' => 30,
             'working_hours' => [

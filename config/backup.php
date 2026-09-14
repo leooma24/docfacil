@@ -211,7 +211,8 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            // Antes iba a your@example.com: si un respaldo fallaba, nadie se enteraba.
+            'to' => env('BACKUP_NOTIFY_EMAIL', 'leooma24@gmail.com'),
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),

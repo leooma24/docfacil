@@ -542,7 +542,9 @@ class Consultation extends Page implements HasForms
                     PrescriptionItem::create([
                         'prescription_id' => $prescription->id,
                         'medication' => $med['medication'],
+                        'presentacion' => $med['presentacion'] ?? null,
                         'dosage' => $med['dosage'] ?? null,
+                        'via_administracion' => $med['via_administracion'] ?? null,
                         'frequency' => $med['frequency'] ?? null,
                         'duration' => $med['duration'] ?? null,
                         'instructions' => $med['instructions'] ?? null,

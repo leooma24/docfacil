@@ -796,16 +796,27 @@
                     <span class="font-medium text-xs md:text-sm">Medicamento {{ $i + 1 }}</span>
                     <button wire:click="$set('medications', {{ json_encode(collect($medications)->forget($i)->values()->toArray()) }})" class="text-red-500 text-xs hover:text-red-700">Quitar</button>
                 </div>
+                {{-- Genérico, presentación, dosis, vía, frecuencia y duración: lo que pide el Reglamento de Insumos (arts. 30 y 31). --}}
                 <div class="meds-grid">
-                    <input type="text" wire:model="medications.{{ $i }}.medication" placeholder="Medicamento" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
-                    <input type="text" wire:model="medications.{{ $i }}.dosage" placeholder="Dosis (500mg)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
+                    <input type="text" wire:model.blur="medications.{{ $i }}.medication" placeholder="Medicamento (nombre genérico)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
+                    <input type="text" wire:model="medications.{{ $i }}.presentacion" placeholder="Presentación (cápsulas 500 mg)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
+                    <input type="text" wire:model="medications.{{ $i }}.dosage" placeholder="Dosis (1 cápsula)" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
+                    <select wire:model="medications.{{ $i }}.via_administracion" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
+                        <option value="">Vía</option>
+                        @foreach(\App\Support\Receta::VIAS as $via)
+                            <option value="{{ $via }}">{{ $via }}</option>
+                        @endforeach
+                    </select>
                     <input type="text" wire:model="medications.{{ $i }}.frequency" placeholder="Cada 8 horas" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.duration" placeholder="7 días" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
+                @if($aviso = \App\Support\Receta::avisoDeControl($med['medication'] ?? null))
+                    <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;">⚠️ {{ $aviso }}</div>
+                @endif
             </div>
             @endforeach
-            <button wire:click="$set('medications', {{ json_encode(array_merge($medications, [['medication' => '', 'dosage' => '', 'frequency' => '', 'duration' => '', 'instructions' => '']])) }})"
+            <button wire:click="$set('medications', {{ json_encode(array_merge($medications, [['medication' => '', 'presentacion' => '', 'dosage' => '', 'via_administracion' => '', 'frequency' => '', 'duration' => '', 'instructions' => '']])) }})"
                 class="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-xs md:text-sm text-gray-500 hover:border-teal-400 hover:text-teal-600 transition">
                 + Agregar medicamento
             </button>

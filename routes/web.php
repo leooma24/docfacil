@@ -240,6 +240,14 @@ Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
 Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
     abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);
     $prescription->load(['patient', 'doctor.user', 'doctor.clinic', 'items']);
+
+    // Sin cédula ni institución del título la receta no lleva lo que pide la
+    // ley (RIS art. 29; reglamento de atención médica, art. 64). En vez de
+    // imprimirla incompleta, se manda a completar el perfil.
+    if ($faltan = \App\Support\Receta::datosQueFaltan($prescription->doctor)) {
+        return redirect(\App\Filament\Doctor\Pages\PerfilProfesional::getUrl(panel: 'doctor'))
+            ->with('falta_para_receta', $faltan);
+    }
     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.prescription', ['prescription' => $prescription]);
     return $pdf->stream("receta-{$prescription->id}.pdf");
 })->middleware('auth')->name('prescription.pdf');

@@ -1,3 +1,11 @@
+@php
+    $doctor = $prescription->doctor;
+    $clinica = $doctor?->clinic;
+    // Domicilio completo del consultorio (Reglamento de Insumos, art. 29).
+    $domicilio = $clinica
+        ? collect([$clinica->address, $clinica->city, $clinica->state, $clinica->zip_code ? 'C.P. ' . $clinica->zip_code : null])->filter()->implode(', ')
+        : '';
+@endphp
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -36,6 +44,7 @@
         .med-table td { padding: 6px 8px; border: 1px solid #eee; vertical-align: top; font-size: 10px; }
         .med-table .med-num { width: 25px; text-align: center; font-weight: bold; color: #14b8a6; }
         .med-table .med-name { font-weight: bold; font-size: 11px; color: #111; }
+        .med-table .med-pres { font-weight: normal; color: #555; }
         .med-table .med-info { color: #555; }
         .med-table .med-info strong { color: #333; }
         .med-table .med-instr { font-size: 9px; color: #777; font-style: italic; margin-top: 2px; }
@@ -47,9 +56,10 @@
 
         /* Signature */
         .signature { margin-top: 50px; text-align: center; }
-        .sig-line { border-top: 1px solid #333; width: 200px; margin: 0 auto; padding-top: 4px; }
+        .sig-line { border-top: 1px solid #333; width: 240px; margin: 0 auto; padding-top: 4px; }
         .sig-name { font-size: 11px; font-weight: bold; }
         .sig-detail { font-size: 9px; color: #666; }
+        .sig-label { font-size: 8px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
 
         /* Footer */
         .footer { position: fixed; bottom: 15px; left: 40px; right: 40px; text-align: center; font-size: 7px; color: #ccc; border-top: 1px solid #eee; padding-top: 5px; }
@@ -58,22 +68,23 @@
 <body>
     <div class="page">
 
-        {{-- Header --}}
+        {{-- Header: quién prescribe (RIS art. 29; reglamento de atención médica, arts. 64 y 65) --}}
         <table class="header-table">
             <tr>
                 <td style="width:55%;">
                     <div class="brand">DocFácil</div>
                     <div class="brand-sub">Receta Médica</div>
-                    <div class="doc-name">{{ $prescription->doctor->user->name ?? '' }}</div>
-                    <div class="doc-detail">{{ $prescription->doctor->specialty ?? '' }}</div>
-                    <div class="doc-detail">Céd. Prof. {{ $prescription->doctor->license_number ?? '' }}</div>
+                    <div class="doc-name">{{ $doctor->user->name ?? '' }}</div>
+                    @if($doctor?->specialty)<div class="doc-detail">{{ $doctor->specialty }}</div>@endif
+                    <div class="doc-detail">Céd. Prof. {{ $doctor->license_number ?? '' }}</div>
+                    @if($doctor?->cedula_especialidad)<div class="doc-detail">Céd. de Especialidad {{ $doctor->cedula_especialidad }}</div>@endif
+                    @if($doctor?->institucion_titulo)<div class="doc-detail">Título expedido por {{ $doctor->institucion_titulo }}</div>@endif
                 </td>
                 <td style="width:45%; text-align:right;">
-                    @if($prescription->doctor->clinic)
-                    <div class="clinic-name">{{ $prescription->doctor->clinic->name }}</div>
-                    <div class="clinic-detail">{{ $prescription->doctor->clinic->address ?? '' }}</div>
-                    <div class="clinic-detail">{{ $prescription->doctor->clinic->city ?? '' }}{{ $prescription->doctor->clinic->state ? ', ' . $prescription->doctor->clinic->state : '' }}</div>
-                    <div class="clinic-detail">Tel: {{ $prescription->doctor->clinic->phone ?? '' }}</div>
+                    @if($clinica)
+                    <div class="clinic-name">{{ $clinica->name }}</div>
+                    <div class="clinic-detail">{{ $domicilio }}</div>
+                    @if($clinica->phone)<div class="clinic-detail">Tel: {{ $clinica->phone }}</div>@endif
                     @endif
                 </td>
             </tr>
@@ -106,7 +117,7 @@
         </div>
         @endif
 
-        {{-- Medications --}}
+        {{-- Medications: genérico, presentación, dosis, vía, frecuencia y duración (RIS arts. 30 y 31) --}}
         @if($prescription->items->count())
         <div class="rx-title">Rx — Medicamentos</div>
         <table class="med-table">
@@ -114,9 +125,12 @@
             <tr>
                 <td class="med-num">{{ $index + 1 }}</td>
                 <td>
-                    <div class="med-name">{{ $item->medication }}</div>
+                    <div class="med-name">
+                        {{ $item->medication }}@if($item->presentacion) <span class="med-pres">— {{ $item->presentacion }}</span>@endif
+                    </div>
                     <div class="med-info">
                         @if($item->dosage)<strong>Dosis:</strong> {{ $item->dosage }} &nbsp; @endif
+                        @if($item->via_administracion)<strong>Vía:</strong> {{ $item->via_administracion }} &nbsp; @endif
                         @if($item->frequency)<strong>Frecuencia:</strong> {{ $item->frequency }} &nbsp; @endif
                         @if($item->duration)<strong>Duración:</strong> {{ $item->duration }}@endif
                     </div>
@@ -140,16 +154,16 @@
         {{-- Signature --}}
         <div class="signature">
             <div class="sig-line">
-                <div class="sig-name">{{ $prescription->doctor->user->name ?? '' }}</div>
-                <div class="sig-detail">{{ $prescription->doctor->specialty ?? '' }}</div>
-                <div class="sig-detail">Céd. Prof. {{ $prescription->doctor->license_number ?? '' }}</div>
+                <div class="sig-name">{{ $doctor->user->name ?? '' }}</div>
+                <div class="sig-detail">Céd. Prof. {{ $doctor->license_number ?? '' }}</div>
+                <div class="sig-label">Firma autógrafa</div>
             </div>
         </div>
 
     </div>
 
     <div class="footer">
-        Receta generada por DocFácil | docfacil.tu-app.co | {{ now()->format('d/m/Y H:i') }} | Este documento no es válido sin firma del médico
+        Receta generada con DocFácil | {{ now()->format('d/m/Y H:i') }} | Este documento no es válido sin la firma autógrafa del médico
     </div>
 </body>
 </html>

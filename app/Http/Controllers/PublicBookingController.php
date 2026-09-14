@@ -40,6 +40,11 @@ class PublicBookingController extends Controller
             'id' => $d->id,
             'name' => $d->user?->name ?? 'Doctor',
             'specialty' => $d->specialty,
+            // La publicidad del profesional debe decir su cédula y la institución
+            // que le dio el título (LGS art. 83; Reglamento de Publicidad, art. 19).
+            'cedula' => $d->license_number,
+            'cedula_especialidad' => $d->cedula_especialidad,
+            'institucion' => $d->institucion_titulo,
         ]);
 
         return view('public-booking.form', compact('clinic', 'services', 'doctors'));

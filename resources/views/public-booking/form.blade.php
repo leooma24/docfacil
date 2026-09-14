@@ -157,6 +157,15 @@
                 @if($clinic->address){{ $clinic->address }}@if($clinic->city) · {{ $clinic->city }}@endif @elseif($clinic->city){{ $clinic->city }}@endif
                 @if($clinic->phone)<br>📞 {{ $clinic->phone }}@endif
             </p>
+            {{-- Quién atiende, con su cédula y la institución de su título (LGS art. 83; Reglamento de Publicidad, art. 19). --}}
+            @if($doctors->isNotEmpty())
+                <p class="clinic-meta" style="margin-top:8px;font-size:12px;">
+                    @foreach($doctors as $doc)
+                        {{ $doc['name'] }}@if($doc['specialty']) · {{ $doc['specialty'] }}@endif@if($doc['cedula']) · Céd. Prof. {{ $doc['cedula'] }}@endif@if($doc['cedula_especialidad']) · Céd. Esp. {{ $doc['cedula_especialidad'] }}@endif@if($doc['institucion']) · {{ $doc['institucion'] }}@endif
+                        @if(! $loop->last)<br>@endif
+                    @endforeach
+                </p>
+            @endif
         </div>
 
         <div class="cta-box">

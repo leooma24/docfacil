@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PrescriptionItem extends Model
 {
     protected $fillable = [
-        'prescription_id', 'medication', 'dosage',
-        'frequency', 'duration', 'instructions',
+        'prescription_id', 'medication', 'presentacion', 'dosage',
+        'via_administracion', 'frequency', 'duration', 'instructions',
     ];
 
     public function prescription(): BelongsTo
