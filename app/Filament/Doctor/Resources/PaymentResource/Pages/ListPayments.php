@@ -26,14 +26,16 @@ class ListPayments extends ListRecords
     public function getHeroConfig(): array
     {
         $clinicId = auth()->user()->clinic_id;
-        $base = Payment::where('clinic_id', $clinicId);
 
-        $today = (clone $base)->where('status', 'paid')->whereDate('payment_date', today())->sum('amount');
-        $month = (clone $base)->where('status', 'paid')
-            ->where('payment_date', '>=', now()->startOfMonth())->sum('amount');
-        $pending = (clone $base)->where('status', 'pending')->sum('amount');
-        $countMonth = (clone $base)->where('status', 'paid')
-            ->where('payment_date', '>=', now()->startOfMonth())->count();
+        // Los mismos cálculos que el escritorio y el corte: aquí contaban
+        // solo los liquidados, y un abono de hoy no aparecía en "Cobrado hoy".
+        $today = Payment::cobradoEntre($clinicId, today(), today());
+        $month = Payment::cobradoEntre($clinicId, now()->startOfMonth(), now()->endOfMonth());
+        $pending = Payment::saldoPorCobrar($clinicId);
+        $countMonth = Payment::where('clinic_id', $clinicId)
+            ->whereBetween('payment_date', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()])
+            ->where(fn ($q) => $q->where('status', 'paid')->orWhere('amount_paid', '>', 0))
+            ->count();
 
         return [
             'title'    => 'Cobros',

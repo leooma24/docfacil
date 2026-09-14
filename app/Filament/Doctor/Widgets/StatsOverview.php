@@ -29,9 +29,7 @@ class StatsOverview extends BaseWidget
         // escritorio y el corte del mes no digan numeros distintos.
         $monthlyIncome = Payment::cobradoEntre($clinicId, now()->startOfMonth(), now()->endOfMonth());
 
-        $pendingPayments = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'pending')
-            ->sum('amount');
+        $pendingPayments = Payment::saldoPorCobrar($clinicId);
 
         $noShows = Appointment::where('clinic_id', $clinicId)
             ->where('status', 'no_show')

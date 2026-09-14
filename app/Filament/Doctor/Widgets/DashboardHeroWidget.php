@@ -34,9 +34,7 @@ class DashboardHeroWidget extends Widget
 
         $todayIncome = Payment::cobradoEntre($clinicId, today(), today());
 
-        $pendingPayments = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'pending')
-            ->sum('amount');
+        $pendingPayments = Payment::saldoPorCobrar($clinicId);
 
         $newPatients = Patient::where('clinic_id', $clinicId)
             ->whereDate('created_at', today())

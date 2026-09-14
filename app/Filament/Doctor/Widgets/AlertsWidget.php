@@ -37,9 +37,9 @@ class AlertsWidget extends Widget
             ];
         }
 
-        // Overdue payments
+        // Overdue payments — con abono también cuentan: siguen debiendo.
         $overduePayments = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'pending')
+            ->withBalance()
             ->where('payment_date', '<', now()->subDays(7))
             ->count();
 
@@ -69,10 +69,7 @@ class AlertsWidget extends Widget
         }
 
         // Today's income
-        $todayIncome = Payment::where('clinic_id', $clinicId)
-            ->where('status', 'paid')
-            ->whereDate('payment_date', today())
-            ->sum('amount');
+        $todayIncome = Payment::cobradoEntre($clinicId, today(), today());
 
         if ($todayIncome > 0) {
             $alerts[] = [

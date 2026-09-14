@@ -107,7 +107,9 @@ class Payment extends Model
     ): float {
         return (float) static::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
-            ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d')])
+            // Hasta el final del día: SQLite guarda la fecha con hora, y un
+            // periodo de un solo día (el "cobrado hoy") salía en cero.
+            ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d') . ' 23:59:59'])
             ->selectRaw('SUM(CASE WHEN status = ? THEN amount ELSE amount_paid END) as cobrado', ['paid'])
             ->value('cobrado');
     }
@@ -123,7 +125,25 @@ class Payment extends Model
         return (float) static::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
             ->whereIn('status', ['pending', 'partial'])
-            ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d')])
+            // Hasta el final del día, igual que en cobradoEntre().
+            ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d') . ' 23:59:59'])
+            ->selectRaw('SUM(amount - amount_paid) as saldo')
+            ->value('saldo');
+    }
+
+    /**
+     * Todo lo que le deben al consultorio hoy, sea del mes que sea.
+     *
+     * Antes el escritorio sumaba el monto de los cobros 'pending' y se
+     * saltaba los abonos: un tratamiento de $2,500 con $1,000 dados no salía
+     * en "Por cobrar", y el doctor veía $0 con pacientes debiéndole. Igual
+     * que con cobradoEntre(), todo lo que muestre saldos usa esto.
+     */
+    public static function saldoPorCobrar(int $clinicId): float
+    {
+        return (float) static::withoutGlobalScopes()
+            ->where('clinic_id', $clinicId)
+            ->withBalance()
             ->selectRaw('SUM(amount - amount_paid) as saldo')
             ->value('saldo');
     }

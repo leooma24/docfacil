@@ -91,7 +91,9 @@ class Expense extends Model
     {
         return $query->whereBetween('expense_date', [
             $desde->format('Y-m-d'),
-            $hasta->format('Y-m-d'),
+            // Hasta el final del día: SQLite guarda la fecha con hora, y un
+            // periodo de un solo día dejaba fuera los gastos de ese día.
+            $hasta->format('Y-m-d') . ' 23:59:59',
         ]);
     }
 

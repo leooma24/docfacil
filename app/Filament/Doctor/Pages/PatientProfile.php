@@ -132,8 +132,15 @@ class PatientProfile extends Page
         return [
             'total_visits' => MedicalRecord::where('patient_id', $this->patient->id)->count(),
             'total_appointments' => Appointment::where('patient_id', $this->patient->id)->count(),
-            'total_paid' => Payment::where('patient_id', $this->patient->id)->where('status', 'paid')->sum('amount'),
-            'pending' => Payment::where('patient_id', $this->patient->id)->whereIn('status', ['pending', 'partial'])->sum('amount'),
+            // Lo pagado cuenta los abonos, y lo pendiente es lo que falta, no
+            // el monto completo: con $1,000 abonados de $2,500 debe $1,500.
+            'total_paid' => (float) Payment::where('patient_id', $this->patient->id)
+                ->selectRaw('SUM(CASE WHEN status = ? THEN amount ELSE amount_paid END) as pagado', ['paid'])
+                ->value('pagado'),
+            'pending' => (float) Payment::where('patient_id', $this->patient->id)
+                ->withBalance()
+                ->selectRaw('SUM(amount - amount_paid) as saldo')
+                ->value('saldo'),
             'last_visit' => MedicalRecord::where('patient_id', $this->patient->id)->max('visit_date'),
         ];
     }

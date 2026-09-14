@@ -123,6 +123,17 @@ class GastosYCorteTest extends TestCase
         ));
     }
 
+    public function test_un_periodo_de_un_solo_dia_cuenta_lo_de_ese_dia(): void
+    {
+        // Es el "cobrado hoy" del escritorio. En SQLite la fecha se guarda con
+        // hora y el rango de un día la dejaba fuera: salía $0.
+        $this->cobro(1800);
+        $this->gasto(600);
+
+        $this->assertSame(1800.0, Payment::cobradoEntre($this->clinica->id, today(), today()));
+        $this->assertSame(600.0, Expense::totalEntre($this->clinica->id, today(), today()));
+    }
+
     public function test_lo_que_deben_se_reporta_aparte(): void
     {
         $this->cobro(5000, 'partial', abonado: 2000);

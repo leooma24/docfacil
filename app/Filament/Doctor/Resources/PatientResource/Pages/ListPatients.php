@@ -73,7 +73,7 @@ class ListPatients extends ListRecords
             ->where('created_at', '>=', now()->startOfMonth())
             ->count();
         $withBalance = Patient::where('clinic_id', $clinicId)
-            ->whereHas('payments', fn ($q) => $q->where('status', 'pending'))
+            ->whereHas('payments', fn ($q) => $q->withBalance())
             ->count();
 
         $clinica = auth()->user()->clinic;
