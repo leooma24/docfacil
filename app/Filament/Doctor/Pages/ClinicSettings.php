@@ -51,6 +51,7 @@ class ClinicSettings extends Page implements HasForms
             'logo' => $clinic->logo,
             'google_review_url' => $clinic->google_review_url,
             'minutos_entre_citas' => $clinic->minutosEntreCitas(),
+            'corte_por_correo' => $clinic->corte_por_correo ?? true,
         ] + $this->horarioParaElFormulario($clinic) + [
             'cierres' => $clinic->closures()
                 ->orderBy('starts_on')
@@ -80,6 +81,13 @@ class ClinicSettings extends Page implements HasForms
                             ->directory('clinic-logos')
                             ->maxSize(2048)
                             ->helperText('PNG, JPG o WebP, máximo 2 MB. Se usa en el portal público y en correos.'),
+                    ]),
+                Section::make('Correos')
+                    ->visible(fn () => (bool) auth()->user()->clinic?->hasFeature('expenses'))
+                    ->schema([
+                        Toggle::make('corte_por_correo')
+                            ->label('Mandarme el corte del mes por correo')
+                            ->helperText('El día 1 te llega cuánto entró, cuánto salió y cuánto te quedó el mes anterior.'),
                     ]),
                 Section::make('Horario de atención')
                     ->description('Con esto, tus pacientes no pueden pedir cita cuando estás cerrado desde tu página de agendamiento.')
@@ -185,7 +193,7 @@ class ClinicSettings extends Page implements HasForms
         $data = $this->form->getState();
         $clinic = auth()->user()->clinic;
 
-        $clinic->update([
+        $cambios = [
             'name' => $data['name'],
             'phone' => $data['phone'] ?? null,
             'address' => $data['address'] ?? null,
@@ -194,7 +202,15 @@ class ClinicSettings extends Page implements HasForms
             'google_review_url' => $data['google_review_url'] ?? null,
             'working_hours' => $this->horarioDesdeElFormulario($data),
             'minutos_entre_citas' => (int) ($data['minutos_entre_citas'] ?? 0),
-        ]);
+        ];
+
+        // Solo viene si su plan trae el corte. Si no viene, no se toca: no
+        // hay que volver a prenderle un correo que apagó desde la liga.
+        if (array_key_exists('corte_por_correo', $data)) {
+            $cambios['corte_por_correo'] = (bool) $data['corte_por_correo'];
+        }
+
+        $clinic->update($cambios);
 
         $this->guardarCierres($clinic, $data['cierres'] ?? []);
 

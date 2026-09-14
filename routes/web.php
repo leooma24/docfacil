@@ -179,6 +179,12 @@ Route::get('/c/{appointment}', [AppointmentConfirmationController::class, 'show'
     ->middleware(['signed', 'throttle:30,1'])
     ->name('appointment.confirm');
 
+// "Ya no quiero recibirlo" desde el correo del corte del mes. Va firmada:
+// sin firma, cualquiera podría apagarle el correo a otro consultorio.
+Route::get('/corte/sin-correo/{clinic}', \App\Http\Controllers\CorteSinCorreoController::class)
+    ->middleware(['signed', 'throttle:10,1'])
+    ->name('corte.sin-correo');
+
 // Public check-in for patients
 Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])
     ->middleware('throttle:20,1')

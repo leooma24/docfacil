@@ -20,4 +20,11 @@ return [
     // Lo que paga de por vida después, congelado. Debe coincidir con el que
     // pone ClinicResource al marcar la clínica como fundadora.
     'monthly_price' => (float) env('FOUNDER_PRICE', 499),
+
+    // A quién le llega la frase que deja un fundador a los 30 días. Varios,
+    // separados por coma. admin@docfacil.com todavía no es un buzón real.
+    'avisar_a' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', (string) env('FOUNDERS_NOTIFY', 'leooma24@gmail.com')),
+    ))),
 ];

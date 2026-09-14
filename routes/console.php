@@ -47,3 +47,7 @@ Schedule::command('app:retention-report')->weekly()->sundays()->at('05:00');
 // Gastos que se repiten cada mes (renta, nomina, internet). Temprano, para
 // que el doctor ya los vea capturados cuando abra el corte.
 Schedule::command('docfacil:gastos-recurrentes')->dailyAt('05:30');
+
+// El corte del mes que acaba de terminar, por correo al doctor. El dia 1 en
+// la manana, despues de los gastos recurrentes, para que ya esten sumados.
+Schedule::command('docfacil:corte-mensual')->monthlyOn(1, '08:00');

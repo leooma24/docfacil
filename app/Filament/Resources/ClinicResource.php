@@ -140,6 +140,17 @@ class ClinicResource extends Resource
                             ->icon('heroicon-o-star')
                             ->columns(2)
                             ->schema([
+                                // La frase puede llegar sola: a los 30 días el
+                                // escritorio se la pide a cada fundador. Lo que
+                                // dice si se puede publicar es el permiso.
+                                Forms\Components\Placeholder::make('permiso_de_la_frase')
+                                    ->label('Permiso de publicar su frase')
+                                    ->content(fn (?\App\Models\Clinic $record) => match (true) {
+                                        blank($record?->case_study_testimonial) => 'Todavía no deja frase.',
+                                        $record->testimonio_permiso_at !== null => '✅ Dio permiso el ' . $record->testimonio_permiso_at->format('d/m/Y'),
+                                        default => '⛔ Dejó su frase pero NO dio permiso de publicarla. No la uses en la landing ni en anuncios.',
+                                    })
+                                    ->columnSpanFull(),
                                 Forms\Components\Toggle::make('show_as_case_study')
                                     ->label('Mostrar como caso de éxito en landing')
                                     ->helperText('Con permiso del doctor')
@@ -155,7 +166,12 @@ class ClinicResource extends Resource
                                     ->rows(3)
                                     ->columnSpanFull()
                                     ->placeholder('"DocFácil me ahorra 2 horas al día..." — Dr. Juan Pérez')
-                                    ->visible(fn (Forms\Get $get) => $get('show_as_case_study')),
+                                    ->visible(fn (Forms\Get $get) => $get('show_as_case_study') || filled($get('case_study_testimonial'))),
+                                Forms\Components\TextInput::make('testimonio_firma')
+                                    ->label('Cómo quiere que aparezca su nombre')
+                                    ->maxLength(120)
+                                    ->columnSpanFull()
+                                    ->visible(fn (Forms\Get $get) => $get('show_as_case_study') || filled($get('case_study_testimonial'))),
                             ]),
                     ]),
             ]);

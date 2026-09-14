@@ -58,6 +58,7 @@ class DoctorPanelProvider extends PanelProvider
             ->widgets([
                 \App\Filament\Doctor\Widgets\DashboardHeroWidget::class,
                 \App\Filament\Doctor\Widgets\SetupChecklistWidget::class,
+                \App\Filament\Doctor\Widgets\TestimonioFundadorWidget::class,
                 \App\Filament\Doctor\Widgets\InviteDoctorsWidget::class,
                 \App\Filament\Doctor\Widgets\AIInsightsWidget::class,
                 \App\Filament\Doctor\Widgets\NextAppointment::class,

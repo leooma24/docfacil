@@ -18,6 +18,9 @@ class Clinic extends Model
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',
         'beta_starts_at', 'beta_ends_at', 'beta_notes',
         'show_as_case_study', 'case_study_logo', 'case_study_testimonial',
+        'testimonio_firma', 'testimonio_permiso_at',
+        'testimonio_pospuesto_hasta', 'testimonio_descartado_at',
+        'corte_por_correo',
         'onboarding_status',
         'sold_at',
         'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
@@ -45,6 +48,10 @@ class Clinic extends Model
             'is_beta' => 'boolean',
             'is_founder' => 'boolean',
             'show_as_case_study' => 'boolean',
+            'testimonio_permiso_at' => 'datetime',
+            'testimonio_pospuesto_hasta' => 'datetime',
+            'testimonio_descartado_at' => 'datetime',
+            'corte_por_correo' => 'boolean',
             'founder_price' => 'decimal:2',
             'sold_at' => 'datetime',
             'first_payment_received_at' => 'datetime',
@@ -609,6 +616,35 @@ class Clinic extends Model
             'quedan' => $total - $tomados,
             'hay' => ($total - $tomados) > 0,
         ];
+    }
+
+    /**
+     * ¿Ya toca pedirle a este fundador una frase sobre DocFácil?
+     *
+     * A los 30 días: antes no lo ha usado lo suficiente para decir algo que
+     * valga, y mucho después ya no se acuerda de cómo era sin el sistema. Si
+     * dice "ahora no" se le pregunta otra vez en dos semanas; si dice que no,
+     * ya no se le pregunta.
+     */
+    public function tocaPedirTestimonio(): bool
+    {
+        if (! $this->is_founder) {
+            return false;
+        }
+
+        // Si ya hay frase —la dejó él o Omar la capturó de un WhatsApp—, no
+        // se le vuelve a pedir.
+        if (filled($this->case_study_testimonial) || $this->testimonio_descartado_at) {
+            return false;
+        }
+
+        if ($this->testimonio_pospuesto_hasta?->isFuture()) {
+            return false;
+        }
+
+        $desde = $this->beta_starts_at ?? $this->created_at;
+
+        return $desde !== null && $desde->lte(now()->subDays(30));
     }
 
     /**

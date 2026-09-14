@@ -2,8 +2,7 @@
 
 namespace App\Filament\Doctor\Pages;
 
-use App\Models\Expense;
-use App\Models\Payment;
+use App\Services\NumerosDelCorte;
 use Carbon\CarbonImmutable;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -49,6 +48,20 @@ class Corte extends Page implements HasForms
     public function mount(): void
     {
         abort_unless(auth()->user()?->clinic?->hasFeature('expenses'), 403);
+
+        // El correo del corte mensual trae ?desde=&hasta= para abrir justo en
+        // el mes del que habla, y no en el mes que va corriendo.
+        [$desde, $hasta] = self::rangoDeLaLiga(request()->query('desde'), request()->query('hasta'));
+
+        if ($desde) {
+            $this->form->fill([
+                'periodo' => 'personalizado',
+                'desde' => $desde->toDateString(),
+                'hasta' => $hasta->toDateString(),
+            ]);
+
+            return;
+        }
 
         $this->form->fill([
             'periodo' => 'este_mes',
@@ -115,15 +128,44 @@ class Corte extends Page implements HasForms
     }
 
     /**
-     * Los números del corte.
+     * Las fechas que vienen en la liga, solo si son fechas de verdad y van en
+     * orden. Cualquier otra cosa abre el mes en curso, sin error.
      *
-     * El "por cobrar" va aparte a propósito: es dinero que todavía no entra,
-     * y meterlo en el ingreso le pintaría al doctor un mes que no tuvo.
+     * @return array{0: ?CarbonImmutable, 1: ?CarbonImmutable}
+     */
+    private static function rangoDeLaLiga(mixed $desde, mixed $hasta): array
+    {
+        $fecha = function (mixed $valor): ?CarbonImmutable {
+            if (! is_string($valor) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor)) {
+                return null;
+            }
+
+            try {
+                $f = CarbonImmutable::createFromFormat('!Y-m-d', $valor);
+            } catch (\Throwable) {
+                return null;
+            }
+
+            // createFromFormat acepta 2026-02-31 y lo vuelve 3 de marzo.
+            return $f && $f->format('Y-m-d') === $valor ? $f : null;
+        };
+
+        $d = $fecha($desde);
+        $h = $fecha($hasta);
+
+        if (! $d || ! $h || $d->greaterThan($h)) {
+            return [null, null];
+        }
+
+        return [$d, $h];
+    }
+
+    /**
+     * Los números del corte. La cuenta vive en NumerosDelCorte, que es la
+     * misma que usa el correo de cada mes.
      */
     public function getNumeros(): array
     {
-        $clinicId = auth()->user()->clinic_id;
-
         $desde = CarbonImmutable::parse($this->data['desde'] ?? now()->startOfMonth());
         $hasta = CarbonImmutable::parse($this->data['hasta'] ?? now()->endOfMonth());
 
@@ -132,42 +174,6 @@ class Corte extends Page implements HasForms
         $antesHasta = $desde->subDay();
         $antesDesde = $antesHasta->subDays($dias - 1);
 
-        $ingresos = Payment::cobradoEntre($clinicId, $desde, $hasta);
-        $gastos = Expense::totalEntre($clinicId, $desde, $hasta);
-        $utilidad = $ingresos - $gastos;
-
-        $ingresosAntes = Payment::cobradoEntre($clinicId, $antesDesde, $antesHasta);
-        $gastosAntes = Expense::totalEntre($clinicId, $antesDesde, $antesHasta);
-
-        return [
-            'desde' => $desde,
-            'hasta' => $hasta,
-            'ingresos' => $ingresos,
-            'gastos' => $gastos,
-            'utilidad' => $utilidad,
-            // Margen: de cada $100 que entraron, cuánto se quedó el doctor.
-            'margen' => $ingresos > 0 ? ($utilidad / $ingresos) * 100 : null,
-            'por_cobrar' => Payment::porCobrarEntre($clinicId, $desde, $hasta),
-            'categorias' => Expense::porCategoria($clinicId, $desde, $hasta),
-            'ingresos_antes' => $ingresosAntes,
-            'gastos_antes' => $gastosAntes,
-            'utilidad_antes' => $ingresosAntes - $gastosAntes,
-            'cambio_ingresos' => self::cambio($ingresos, $ingresosAntes),
-            'cambio_gastos' => self::cambio($gastos, $gastosAntes),
-            'cambio_utilidad' => self::cambio($utilidad, $ingresosAntes - $gastosAntes),
-            'hay_datos' => $ingresos > 0 || $gastos > 0,
-        ];
-    }
-
-    /** Cuánto cambió contra el periodo anterior, en porcentaje. */
-    private static function cambio(float $ahora, float $antes): ?float
-    {
-        // Sin base contra qué comparar, el porcentaje no dice nada: un mes
-        // que arranca de cero siempre saldría "+100%".
-        if (abs($antes) < 0.01) {
-            return null;
-        }
-
-        return (($ahora - $antes) / abs($antes)) * 100;
+        return NumerosDelCorte::calcular(auth()->user()->clinic_id, $desde, $hasta, $antesDesde, $antesHasta);
     }
 }

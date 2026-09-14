@@ -21,7 +21,9 @@
                 <svg width="32" height="32" fill="none" stroke="#059669" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             </div>
             <h1>Listo, lo dimos de baja.</h1>
-            @if(!empty($email))
+            @if(!empty($mensaje))
+                <p>{{ $mensaje }}</p>
+            @elseif(!empty($email))
                 <p>Ya no enviaremos más correos a <span class="email">{{ $email }}</span>.</p>
             @else
                 <p>Ya no le enviaremos más correos.</p>
