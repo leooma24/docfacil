@@ -14,6 +14,7 @@ use App\Models\PrescriptionItem;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DemoSeeder extends Seeder
 {
@@ -22,9 +23,15 @@ class DemoSeeder extends Seeder
         // =============================================
         // CLINICA DEMO
         // =============================================
+        // Con logo, el checklist de arranque llega al 100% y ya no le dice
+        // "Casi listo · falta 1 paso" a cada prospecto que entra al demo.
+        $logo = 'clinic-logos/demo-sonrisas-cdmx.png';
+        Storage::disk('public')->put($logo, file_get_contents(database_path('seeders/demo/logo-clinica-sonrisas.png')));
+
         $clinic = Clinic::create([
             'name' => 'Clínica Dental Sonrisas CDMX',
             'slug' => 'clinica-dental-sonrisas-cdmx',
+            'logo' => $logo,
             'phone' => '55 1234 5678',
             'email' => 'contacto@sonrisascdmx.com',
             'address' => 'Av. Insurgentes Sur 1234, Col. Del Valle',
@@ -146,6 +153,13 @@ class DemoSeeder extends Seeder
         $patients = [];
         foreach ($patientData as $p) {
             $patients[] = Patient::create(array_merge($p, ['clinic_id' => $clinic->id]));
+        }
+
+        // Un consultorio real junta a sus pacientes a lo largo de meses. Si
+        // todos nacen hoy, el escritorio del demo dice "20 registrados hoy".
+        foreach (array_slice($patients, 0, -2) as $i => $patient) {
+            $patient->created_at = now()->subDays(8 + $i * 9)->setTime(9 + $i % 8, 30);
+            $patient->saveQuietly();
         }
 
         // =============================================
@@ -305,17 +319,21 @@ class DemoSeeder extends Seeder
         }
 
         // =============================================
-        // PAGOS PENDIENTES (para mostrar en reportes)
+        // COBROS DE HOY Y PENDIENTES
         // =============================================
+        // Uno liquidado y un abono. Con los dos pendientes, el escritorio del
+        // demo abría diciendo "Cobrado hoy $0", que es lo primero que ve el
+        // prospecto.
         Payment::create([
             'clinic_id' => $clinic->id,
             'patient_id' => $patients[3]->id,
             'service_id' => $services[3]->id,
             'amount' => 2500,
+            'amount_paid' => 1000,
             'payment_method' => 'card',
-            'status' => 'pending',
+            'status' => 'partial',
             'payment_date' => now()->toDateString(),
-            'notes' => 'Pendiente - extracción de muela del juicio programada',
+            'notes' => 'Extracción de muela del juicio - abonó $1,000, resta $1,500',
         ]);
 
         Payment::create([
@@ -323,17 +341,20 @@ class DemoSeeder extends Seeder
             'patient_id' => $patients[10]->id,
             'service_id' => $services[14]->id,
             'amount' => 800,
+            'amount_paid' => 800,
             'payment_method' => 'transfer',
-            'status' => 'pending',
+            'status' => 'paid',
             'payment_date' => now()->toDateString(),
-            'notes' => 'Mensualidad ortodoncia - abril',
+            'notes' => 'Mensualidad de ortodoncia',
         ]);
 
+        // La nota dice que pagó la mitad: sin amount_paid contaba como cero.
         Payment::create([
             'clinic_id' => $clinic->id,
             'patient_id' => $patients[6]->id,
             'service_id' => $services[8]->id,
-            'amount' => 1250,
+            'amount' => 2500,
+            'amount_paid' => 1250,
             'payment_method' => 'card',
             'status' => 'partial',
             'payment_date' => now()->subDays(3)->toDateString(),
