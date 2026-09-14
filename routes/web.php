@@ -193,6 +193,20 @@ Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('checkin.store');
 
+// Aviso de privacidad del consultorio para sus pacientes, y la liga firmada
+// para que el paciente lo acepte desde su celular (ley de datos, arts. 8 y 16).
+Route::get('/clinica/{slug}/aviso-de-privacidad', [\App\Http\Controllers\AvisoDePrivacidadController::class, 'show'])
+    ->middleware('throttle:30,1')
+    ->name('aviso-privacidad.show');
+Route::middleware(['signed', 'throttle:10,1'])->group(function () {
+    Route::get('/clinica/{slug}/aviso-de-privacidad/aceptar/{paciente}', [\App\Http\Controllers\AvisoDePrivacidadController::class, 'formulario'])
+        ->whereNumber('paciente')
+        ->name('aviso-privacidad.formulario');
+    Route::post('/clinica/{slug}/aviso-de-privacidad/aceptar/{paciente}', [\App\Http\Controllers\AvisoDePrivacidadController::class, 'aceptar'])
+        ->whereNumber('paciente')
+        ->name('aviso-privacidad.aceptar');
+});
+
 // Public booking portal (Pro+): solicitud de cita sin auth, feature-gated
 // Horarios libres del consultorio, para que el paciente elija de una lista
 // en vez de escribir una hora a ciegas.

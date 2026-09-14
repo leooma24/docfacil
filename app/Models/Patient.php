@@ -69,6 +69,8 @@ class Patient extends Model
         // descartaba la asignacion sin decir nada y el paciente nunca
         // quedaba ligado a su usuario.
         'user_id',
+        // Prueba de que aceptó el aviso de privacidad (ver AvisoDePrivacidad).
+        'aviso_privacidad_aceptado_at', 'aviso_privacidad_version', 'aviso_privacidad_medio',
     ];
 
     protected function casts(): array
@@ -76,6 +78,7 @@ class Patient extends Model
         return [
             'birth_date' => 'date',
             'is_active' => 'boolean',
+            'aviso_privacidad_aceptado_at' => 'datetime',
         ];
     }
 

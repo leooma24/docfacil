@@ -122,12 +122,14 @@
                     <textarea name="reason_for_visit" placeholder="Describe tu molestia o motivo de visita" required>{{ old('reason_for_visit') }}</textarea>
                 </div>
 
+                @include('aviso-privacidad._casilla', ['clinic' => $clinic])
+
                 <button type="submit">Completar check-in →</button>
             </form>
         </div>
 
         <div class="footer">
-            Tus datos son privados y solo los ve tu doctor.<br>
+            Tus datos los cuida {{ $clinic->name }}. <a href="{{ route('aviso-privacidad.show', $clinic->slug) }}">Aviso de privacidad</a><br>
             <a href="https://docfacil.tu-app.co">Powered by DocFácil</a>
         </div>
     </div>

@@ -269,6 +269,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-10 10:30',
         ])->assertSessionHasErrors('preferred_at');
@@ -291,6 +292,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'service_id' => $servicio->id,
             'preferred_at' => '2026-09-10 10:00',
@@ -450,6 +452,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-06 11:00',   // domingo
         ])->assertSessionHasErrors('preferred_at');
@@ -463,6 +466,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-08 03:00',
         ])->assertSessionHasErrors('preferred_at');
@@ -476,6 +480,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-08 11:00',   // martes
         ])->assertSessionHasNoErrors();
@@ -549,6 +554,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-08 15:00',
         ])->assertSessionHasErrors('preferred_at');
@@ -618,6 +624,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-15 11:00',
         ])->assertSessionHasErrors('preferred_at');
@@ -635,6 +642,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => now()->addMinutes(2)->toDateTimeString(),
         ])->assertSessionHasErrors('preferred_at');
@@ -652,6 +660,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Sin',
             'last_name' => 'Preferencia',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'preferred_at' => '2026-09-08 11:00',
         ])->assertSessionHasNoErrors();
 
@@ -667,6 +676,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Sin',
             'last_name' => 'Preferencia',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'preferred_at' => '2026-09-08 11:30',
         ])->assertSessionHasErrors('preferred_at');
 
@@ -695,6 +705,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Sin',
             'last_name' => 'Preferencia',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'preferred_at' => '2026-09-08 11:30',
         ]);
 
@@ -725,6 +736,7 @@ class TraslapeDeCitasTest extends TestCase
             'first_name' => 'Segundo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => '2026-09-08 11:00',
         ])->assertSessionHasErrors('preferred_at');

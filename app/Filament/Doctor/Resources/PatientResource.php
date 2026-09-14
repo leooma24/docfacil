@@ -247,6 +247,28 @@ class PatientResource extends Resource
                             return redirect()->away(PatientPortalInvite::urlWhatsApp($record));
                         }),
 
+                    // El paciente que el doctor capturó o importó no ha aceptado
+                    // el aviso de privacidad (ley de datos, arts. 8 y 17). Se le
+                    // manda por WhatsApp con una liga firmada, o se registra que
+                    // lo firmó en papel.
+                    Tables\Actions\Action::make('aviso_whatsapp')
+                        ->label('Mandar aviso de privacidad')
+                        ->icon('heroicon-o-shield-check')
+                        ->color('warning')
+                        ->visible(fn ($record) => filled($record->phone)
+                            && ! \App\Support\AvisoDePrivacidad::aceptoElVigente($record))
+                        ->url(fn ($record) => \App\Support\AvisoDePrivacidad::urlWhatsApp($record))
+                        ->openUrlInNewTab(),
+                    Tables\Actions\Action::make('aviso_en_papel')
+                        ->label('Firmó el aviso en papel')
+                        ->icon('heroicon-o-document-check')
+                        ->color('gray')
+                        ->requiresConfirmation()
+                        ->modalHeading('¿Firmó el aviso de privacidad en papel?')
+                        ->modalDescription('Úsalo solo si el paciente firmó la hoja del aviso en el consultorio. Guárdala en su expediente.')
+                        ->visible(fn ($record) => ! \App\Support\AvisoDePrivacidad::aceptoElVigente($record))
+                        ->action(fn ($record) => \App\Support\AvisoDePrivacidad::registrarAceptacion($record, 'consultorio')),
+
                     // Ya tiene cuenta: se lo decimos, sin accion que ejecutar.
                     Tables\Actions\Action::make('portal_activo')
                         ->label('Portal activo')

@@ -230,6 +230,7 @@ class TiempoEntreCitasTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'doctor_id' => $this->doctor->id,
             'preferred_at' => $lunes->setTime(11, 0)->toDateTimeString(),
         ])->assertSessionHasErrors('preferred_at');
@@ -251,6 +252,7 @@ class TiempoEntreCitasTest extends TestCase
             'first_name' => 'Sin',
             'last_name' => 'Preferencia',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'preferred_at' => $lunes->setTime(11, 0)->toDateTimeString(),
         ])->assertSessionHasErrors('preferred_at');
     }

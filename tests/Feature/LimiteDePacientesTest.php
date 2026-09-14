@@ -190,6 +190,7 @@ class LimiteDePacientesTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
         ])->assertSessionHasErrors('first_name');
 
         $this->assertSame(200, Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count());
@@ -223,6 +224,7 @@ class LimiteDePacientesTest extends TestCase
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',
+            'acepta_aviso' => '1',
             'preferred_at' => now()->addWeek()->setTime(11, 0)->toDateTimeString(),
         ]);
 

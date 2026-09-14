@@ -99,6 +99,11 @@ class PublicBookingController extends Controller
             'preferred_at' => 'required|date|after:' . now()->addMinutes(Appointment::ANTICIPACION_MINIMA_MINUTOS - 1)->toDateTimeString(),
             'notes' => 'nullable|string|max:500',
             'honeypot' => 'nullable|size:0',
+            // En las notas el paciente escribe lo que le duele: datos de salud.
+            // Sin su consentimiento expreso no se guardan (ley de datos, art. 8).
+            'acepta_aviso' => 'accepted',
+        ], [
+            'acepta_aviso.accepted' => 'Para agendar, acepta el aviso de privacidad.',
         ]);
 
         // Honeypot: humanos dejan vacio este campo; bots lo llenan.
@@ -155,6 +160,9 @@ class PublicBookingController extends Controller
                 'is_active' => true,
             ]);
         }
+
+        // Aceptó el aviso en este formulario: queda la prueba en su ficha.
+        \App\Support\AvisoDePrivacidad::registrarAceptacion($patient, 'agenda_publica');
 
         $startsAt = \Carbon\Carbon::parse($data['preferred_at']);
 

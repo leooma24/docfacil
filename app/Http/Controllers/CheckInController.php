@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use App\Models\Patient;
+use App\Support\AvisoDePrivacidad;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,12 @@ class CheckInController extends Controller
             'allergies' => 'nullable|string|max:500',
             'reason_for_visit' => 'nullable|string|max:500',
             'honeypot' => 'nullable|size:0',
+            // Aquí el paciente escribe alergias, tipo de sangre y por qué viene:
+            // datos de salud. Antes se guardaban sin aviso ni casilla; sin su
+            // consentimiento expreso ya no (ley de datos personales, art. 8).
+            'acepta_aviso' => 'accepted',
+        ], [
+            'acepta_aviso.accepted' => 'Para registrarte, acepta el aviso de privacidad.',
         ]);
 
         if (!empty($data['honeypot'])) {
@@ -51,6 +58,9 @@ class CheckInController extends Controller
                     'medical_notes' => trim(($existing->medical_notes ?? '') . "\n[" . now()->format('d/m/Y H:i') . "] Motivo: " . $data['reason_for_visit']),
                 ]);
             }
+
+            AvisoDePrivacidad::registrarAceptacion($existing, 'check_in');
+
             return view('checkin.success', ['clinic' => $clinic, 'returning' => true]);
         }
 
@@ -68,7 +78,7 @@ class CheckInController extends Controller
                 ->withErrors(['first_name' => 'No pudimos registrarte desde aquí. Pasa con recepción y con gusto te dan de alta.']);
         }
 
-        Patient::create([
+        $paciente = Patient::create([
             'clinic_id' => $clinic->id,
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -83,6 +93,8 @@ class CheckInController extends Controller
                 : null,
             'is_active' => true,
         ]);
+
+        AvisoDePrivacidad::registrarAceptacion($paciente, 'check_in');
 
         return view('checkin.success', ['clinic' => $clinic, 'returning' => false]);
     }

@@ -252,6 +252,8 @@
             <label>Notas (opcional)</label>
             <textarea name="notes" rows="3" maxlength="500" placeholder="Algo que el doctor debe saber antes de la cita...">{{ old('notes') }}</textarea>
 
+            @include('aviso-privacidad._casilla', ['clinic' => $clinic])
+
             <button type="submit">Solicitar cita</button>
         </form>
     </div>
