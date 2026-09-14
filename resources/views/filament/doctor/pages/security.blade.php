@@ -13,6 +13,9 @@
                         Habilitada el {{ auth()->user()->two_factor_confirmed_at->translatedFormat('d/m/Y H:i') }}.
                         Tu cuenta está protegida con un código que cambia cada 30 segundos.
                     </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Si cambias o pierdes tu celular, escríbenos por WhatsApp al 668 249 3398 y te ayudamos a entrar.
+                    </p>
                     <button
                         wire:click="disable2FA"
                         wire:confirm="¿Seguro que quieres deshabilitar 2FA? Tu cuenta quedará menos protegida."
