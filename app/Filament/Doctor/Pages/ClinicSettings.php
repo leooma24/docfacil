@@ -52,6 +52,7 @@ class ClinicSettings extends Page implements HasForms
             'google_review_url' => $clinic->google_review_url,
             'minutos_entre_citas' => $clinic->minutosEntreCitas(),
             'corte_por_correo' => $clinic->corte_por_correo ?? true,
+            'timezone' => \App\Support\ZonaHoraria::delConsultorio($clinic),
         ] + $this->horarioParaElFormulario($clinic) + [
             'cierres' => $clinic->closures()
                 ->orderBy('starts_on')
@@ -71,6 +72,17 @@ class ClinicSettings extends Page implements HasForms
                         TextInput::make('phone')->label('Teléfono')->tel()->maxLength(20),
                         TextInput::make('address')->label('Dirección')->maxLength(255)->columnSpanFull(),
                         TextInput::make('city')->label('Ciudad')->maxLength(100),
+                        // Sin esto, en Los Mochis o Cancún la agenda pública y
+                        // el escritorio iban con la hora del centro.
+                        \Filament\Forms\Components\Select::make('timezone')
+                            ->label('Zona horaria')
+                            ->options(\App\Support\ZonaHoraria::OPCIONES)
+                            ->native(false)
+                            ->required()
+                            ->live()
+                            ->helperText(fn (callable $get) => 'Ahí son las '
+                                . now($get('timezone') ?: \App\Support\ZonaHoraria::CENTRO)->format('H:i')
+                                . '. Tu agenda pública y tu escritorio usan esta hora.'),
                         FileUpload::make('logo')
                             ->label('Logo del consultorio')
                             ->image()
@@ -202,6 +214,7 @@ class ClinicSettings extends Page implements HasForms
             'google_review_url' => $data['google_review_url'] ?? null,
             'working_hours' => $this->horarioDesdeElFormulario($data),
             'minutos_entre_citas' => (int) ($data['minutos_entre_citas'] ?? 0),
+            'timezone' => $data['timezone'] ?? null,
         ];
 
         // Solo viene si su plan trae el corte. Si no viene, no se toca: no

@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // X-Content-Type-Options, Referrer-Policy, HSTS en prod, etc.)
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
+        // Cada consultorio a su hora (Los Mochis va una hora atrás del centro,
+        // Cancún una adelante). En el grupo web para que alcance las páginas
+        // públicas del consultorio y las peticiones de Livewire del panel.
+        $middleware->appendToGroup('web', \App\Http\Middleware\UsarHoraDelConsultorio::class);
+
         // A dónde mandar a un visitante NO autenticado.
         //
         // Laravel por defecto busca una ruta llamada 'login', que aquí no

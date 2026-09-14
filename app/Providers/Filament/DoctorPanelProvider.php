@@ -87,6 +87,8 @@ class DoctorPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                // Las páginas del panel no pasan por el grupo web.
+                \App\Http\Middleware\UsarHoraDelConsultorio::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

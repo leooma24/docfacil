@@ -13,7 +13,7 @@ class Clinic extends Model
         'name', 'slug', 'phone', 'email', 'address', 'country',
         'working_hours',
         'minutos_entre_citas',
-        'city', 'state', 'zip_code', 'logo', 'google_review_url', 'plan',
+        'city', 'state', 'timezone', 'zip_code', 'logo', 'google_review_url', 'plan',
         'trial_ends_at', 'is_active',
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',
         'beta_starts_at', 'beta_ends_at', 'beta_notes',
