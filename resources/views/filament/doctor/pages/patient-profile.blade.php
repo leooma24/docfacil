@@ -249,7 +249,8 @@
                 <div class="flex items-start justify-between mb-1.5 md:mb-2">
                     <div>
                         <span class="text-xs md:text-sm font-bold text-gray-900 dark:text-white">{{ $record->visit_date->format('d/m/Y') }}</span>
-                        <span class="text-[10px] md:text-xs text-gray-500 ml-2">{{ $record->doctor->user->name ?? '' }}</span>
+                        {{-- NOM-004 5.10: quién la elaboró, con cédula, fecha y hora. --}}
+                        <span class="text-[10px] md:text-xs text-gray-500 ml-2">Elaboró: {{ $record->autoria() }}</span>
                     </div>
                 </div>
                 @if($record->chief_complaint)<div class="text-xs md:text-sm"><span class="text-gray-500">Motivo:</span> {{ $record->chief_complaint }}</div>@endif

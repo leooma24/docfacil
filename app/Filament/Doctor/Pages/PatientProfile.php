@@ -42,6 +42,49 @@ class PatientProfile extends Page
         }
     }
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('descargar_expediente')
+                ->label('Descargar expediente (PDF)')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('gray')
+                ->visible(fn () => $this->patient !== null)
+                ->action(fn () => $this->descargarExpediente()),
+        ];
+    }
+
+    /**
+     * El expediente del paciente completo, en un PDF.
+     *
+     * Para cuando el paciente pide su información (ley de datos personales,
+     * art. 29), un resumen clínico (NOM-013 5.15) o se cambia de consultorio.
+     * Antes no había forma de sacarlo de la plataforma. Queda registrado quién
+     * lo descargó y cuándo.
+     */
+    public function descargarExpediente()
+    {
+        $paciente = $this->patient->load([
+            'clinic',
+            'medicalRecords' => fn ($q) => $q->with('doctor.user')->orderByDesc('visit_date')->orderByDesc('created_at'),
+            'prescriptions' => fn ($q) => $q->with(['doctor.user', 'items'])->orderByDesc('prescription_date'),
+            'consentForms' => fn ($q) => $q->orderByDesc('created_at'),
+            'odontograms' => fn ($q) => $q->with(['doctor.user', 'teeth'])->orderByDesc('evaluation_date'),
+        ]);
+
+        activity()
+            ->performedOn($paciente)
+            ->causedBy(auth()->user())
+            ->log('Descargó el expediente en PDF');
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.expediente', ['patient' => $paciente]);
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'expediente-' . \Illuminate\Support\Str::slug($paciente->full_name) . '.pdf'
+        );
+    }
+
     public function setTab(string $tab): void
     {
         $this->activeTab = $tab;

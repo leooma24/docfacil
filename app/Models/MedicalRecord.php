@@ -66,4 +66,22 @@ class MedicalRecord extends Model
     {
         return $this->hasMany(Prescription::class);
     }
+
+    /**
+     * Quién elaboró la nota y cuándo quedó registrada.
+     *
+     * La NOM-004 (5.10) pide que toda nota lleve fecha, hora y nombre completo
+     * de quien la elabora. La fecha de consulta es solo el día: la hora sale de
+     * cuándo se guardó, que además ya no se puede cambiar.
+     */
+    public function autoria(): string
+    {
+        $doctor = $this->doctor;
+
+        return collect([
+            $doctor?->user?->name ?? 'Médico sin registrar',
+            $doctor?->license_number ? 'Céd. Prof. ' . $doctor->license_number : null,
+            $this->created_at ? $this->created_at->format('d/m/Y') . ' a las ' . $this->created_at->format('H:i') : null,
+        ])->filter()->implode(' · ');
+    }
 }

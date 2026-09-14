@@ -44,6 +44,12 @@ class MedicalRecordResource extends Resource
                 Forms\Components\Section::make('Datos de la Consulta')
                     ->columns(2)
                     ->schema([
+                        // NOM-004 5.10: fecha, hora y nombre de quien elabora la nota.
+                        Forms\Components\Placeholder::make('registrada_por')
+                            ->label('Registrada por')
+                            ->content(fn (?MedicalRecord $record) => $record?->autoria())
+                            ->visible(fn (?MedicalRecord $record) => $record !== null)
+                            ->columnSpanFull(),
                         Forms\Components\Select::make('patient_id')
                             ->label('Paciente')
                             ->relationship('patient')
