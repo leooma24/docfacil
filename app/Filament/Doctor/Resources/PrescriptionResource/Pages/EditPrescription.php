@@ -5,6 +5,7 @@ namespace App\Filament\Doctor\Resources\PrescriptionResource\Pages;
 use App\Filament\Doctor\Concerns\HasFormHero;
 use App\Filament\Doctor\Resources\PrescriptionResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPrescription extends EditRecord
@@ -15,10 +16,27 @@ class EditPrescription extends EditRecord
 
     protected static string $view = 'filament.doctor.resources.edit-with-hero';
 
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+
+        // Igual que las notas: a las 24 horas la receta queda bloqueada.
+        if ($this->record->isLocked()) {
+            Notification::make()
+                ->title('Esta receta ya no se puede editar')
+                ->body('Pasaron 24 horas desde que se hizo. Si hay que corregirla, haz una receta nueva.')
+                ->warning()
+                ->send();
+
+            $this->redirect(PrescriptionResource::getUrl('index'));
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $this->record->isLocked()),
         ];
     }
 

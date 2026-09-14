@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\ExpedienteQueSeConserva;
 use App\Exceptions\LimiteDePacientesAlcanzado;
 use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,15 @@ class Patient extends Model
 
             if ($clinica && ! $clinica->puedeAgregarPacientes()) {
                 throw new LimiteDePacientesAlcanzado($clinica);
+            }
+        });
+
+        // Borrar al paciente se llevaba en cascada todo su expediente, porque
+        // así están las llaves foráneas. Igual que el tope, se cierra aquí
+        // para que ningún camino —la ficha, el borrado en grupo— se lo salte.
+        static::deleting(function (self $paciente) {
+            if ($paciente->tieneExpediente()) {
+                throw new ExpedienteQueSeConserva($paciente->id);
             }
         });
     }
@@ -92,6 +102,36 @@ class Patient extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function consentForms(): HasMany
+    {
+        return $this->hasMany(ConsentForm::class);
+    }
+
+    public function odontograms(): HasMany
+    {
+        return $this->hasMany(Odontogram::class);
+    }
+
+    public function treatmentPlans(): HasMany
+    {
+        return $this->hasMany(TreatmentPlan::class);
+    }
+
+    /**
+     * ¿Ya tiene algo de expediente clínico? Entonces se conserva.
+     *
+     * Sin filtro de consultorio a propósito: esto decide si se puede borrar,
+     * y un filtro mal puesto diría "no tiene nada" y lo dejaría borrar.
+     */
+    public function tieneExpediente(): bool
+    {
+        return $this->medicalRecords()->withoutGlobalScopes()->exists()
+            || $this->prescriptions()->withoutGlobalScopes()->exists()
+            || $this->consentForms()->withoutGlobalScopes()->exists()
+            || $this->odontograms()->withoutGlobalScopes()->exists()
+            || $this->treatmentPlans()->withoutGlobalScopes()->exists();
     }
 
     public function getFullNameAttribute(): string

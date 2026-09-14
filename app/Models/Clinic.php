@@ -72,6 +72,19 @@ class Clinic extends Model
                 $clinic->slug = Str::slug($clinic->name);
             }
         });
+
+        // Borrar un consultorio desde el admin se llevaba en cascada todos sus
+        // expedientes. La NOM-004 pide conservarlos 5 años: con notas clínicas
+        // no se borra; se desactiva. El reinicio del demo borra con consultas
+        // directas y no pasa por aquí.
+        static::deleting(function (Clinic $clinic) {
+            if (MedicalRecord::withoutGlobalScopes()->where('clinic_id', $clinic->id)->exists()) {
+                throw new \LogicException(
+                    'Este consultorio tiene expedientes clínicos y no se puede borrar: '
+                    . 'la NOM-004 pide conservarlos al menos 5 años. Desactívalo en su lugar.'
+                );
+            }
+        });
     }
 
     public function users(): HasMany

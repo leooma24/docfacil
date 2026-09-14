@@ -5,6 +5,7 @@ namespace App\Filament\Doctor\Resources\MedicalRecordResource\Pages;
 use App\Filament\Doctor\Concerns\HasFormHero;
 use App\Filament\Doctor\Resources\MedicalRecordResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditMedicalRecord extends EditRecord
@@ -15,10 +16,29 @@ class EditMedicalRecord extends EditRecord
 
     protected static string $view = 'filament.doctor.resources.edit-with-hero';
 
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+
+        // Pasadas 24 horas la nota queda bloqueada (NOM-004). Si alguien llega
+        // por la liga directa, se le explica en vez de dejarlo escribir y
+        // reventar al guardar.
+        if ($this->record->isLocked()) {
+            Notification::make()
+                ->title('Esta nota ya no se puede editar')
+                ->body('Pasaron 24 horas desde que se guardó. Si hay que corregir o agregar algo, registra una nota nueva.')
+                ->warning()
+                ->send();
+
+            $this->redirect(MedicalRecordResource::getUrl('index'));
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $this->record->isLocked()),
         ];
     }
 

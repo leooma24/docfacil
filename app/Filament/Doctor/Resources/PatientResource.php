@@ -263,7 +263,31 @@ class PatientResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Antes borraba a todos los seleccionados, y con ellos su
+                    // expediente en cascada. Ahora solo a los que no tienen
+                    // nada clínico, y dice cuántos se conservaron y por qué.
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->action(function ($records) {
+                            [$conExpediente, $sinExpediente] = $records->partition(fn ($paciente) => $paciente->tieneExpediente());
+
+                            $sinExpediente->each->delete();
+
+                            if ($sinExpediente->isNotEmpty()) {
+                                Notification::make()
+                                    ->title($sinExpediente->count() === 1 ? 'Se borró 1 paciente' : "Se borraron {$sinExpediente->count()} pacientes")
+                                    ->success()
+                                    ->send();
+                            }
+
+                            if ($conExpediente->isNotEmpty()) {
+                                Notification::make()
+                                    ->title($conExpediente->count() === 1 ? '1 paciente no se borró' : "{$conExpediente->count()} pacientes no se borraron")
+                                    ->body('Tienen expediente clínico, y la NOM-004 pide conservarlo al menos 5 años.')
+                                    ->warning()
+                                    ->persistent()
+                                    ->send();
+                            }
+                        }),
                 ]),
             ])
             // Sin esto Filament dice "No se encontraron registros", que no

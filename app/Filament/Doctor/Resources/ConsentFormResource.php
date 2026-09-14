@@ -145,10 +145,28 @@ class ConsentFormResource extends Resource
                             ->placeholder('Describa las alternativas disponibles...'),
                     ]),
                 Forms\Components\Section::make('Firma Digital')
+                    ->description('Al guardar con la firma, se registran la fecha y la hora, y el documento ya no se puede cambiar.')
                     ->schema([
                         \Saade\FilamentAutograph\Forms\Components\SignaturePad::make('signature')
                             ->label('Firma del paciente')
                             ->helperText('El paciente firma aquí con el dedo o mouse.')
+                            ->dotSize(2.0)
+                            ->lineMinWidth(0.5)
+                            ->lineMaxWidth(2.5)
+                            ->throttle(16)
+                            ->backgroundColor('rgb(255,255,255)')
+                            ->penColor('rgb(0,0,0)')
+                            ->exportPenColor('rgb(0,0,0)')
+                            ->exportBackgroundColor('rgb(255,255,255)'),
+                        // La NOM-013 (9.6.9.11) pide en dental la firma de un
+                        // testigo. También se puede agregar después, desde la
+                        // tabla, si el testigo firma cuando el paciente ya lo hizo.
+                        Forms\Components\TextInput::make('testigo_nombre')
+                            ->label('Nombre completo del testigo')
+                            ->helperText('En odontología la NOM-013 pide la firma de un testigo.')
+                            ->maxLength(150),
+                        \Saade\FilamentAutograph\Forms\Components\SignaturePad::make('testigo_firma')
+                            ->label('Firma del testigo')
                             ->dotSize(2.0)
                             ->lineMinWidth(0.5)
                             ->lineMaxWidth(2.5)
@@ -187,7 +205,32 @@ class ConsentFormResource extends Resource
                     ->label('Doctor'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Firmado ya no se edita: el paciente autorizó ese texto.
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (ConsentForm $record) => ! $record->isSigned()),
+                Tables\Actions\Action::make('firma_testigo')
+                    ->label('Firma del testigo')
+                    ->icon('heroicon-o-user-plus')
+                    ->color('warning')
+                    ->visible(fn (ConsentForm $record) => $record->isSigned() && blank($record->testigo_firma))
+                    ->modalDescription('El testigo firma después del paciente. Una vez guardada, la firma del testigo tampoco se puede cambiar.')
+                    ->form([
+                        Forms\Components\TextInput::make('testigo_nombre')
+                            ->label('Nombre completo del testigo')
+                            ->required()
+                            ->maxLength(150),
+                        \Saade\FilamentAutograph\Forms\Components\SignaturePad::make('testigo_firma')
+                            ->label('Firma del testigo')
+                            ->required()
+                            ->backgroundColor('rgb(255,255,255)')
+                            ->penColor('rgb(0,0,0)')
+                            ->exportPenColor('rgb(0,0,0)')
+                            ->exportBackgroundColor('rgb(255,255,255)'),
+                    ])
+                    ->action(fn (ConsentForm $record, array $data) => $record->update([
+                        'testigo_nombre' => $data['testigo_nombre'],
+                        'testigo_firma' => $data['testigo_firma'],
+                    ])),
                 Tables\Actions\Action::make('mark_signed')
                     ->label('Marcar firmado')
                     ->icon('heroicon-o-pencil-square')

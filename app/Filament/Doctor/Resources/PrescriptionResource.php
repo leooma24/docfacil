@@ -133,7 +133,10 @@ class PrescriptionResource extends Resource
                     ->suffix(' med.'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // A las 24 horas la receta queda bloqueada. Antes el botón seguía
+                // ahí y al guardar salía un error.
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (\App\Models\Prescription $record) => ! $record->isLocked()),
                 // Descarga PDF con cédula y logo: prometida desde Básico en adelante.
                 // Free ve el ícono pero con tooltip indicando que se requiere upgrade.
                 Tables\Actions\Action::make('download_pdf')

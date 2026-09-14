@@ -164,6 +164,9 @@
                     <div class="sig-line">
                         <div class="sig-name">{{ $consent->patient->first_name }} {{ $consent->patient->last_name }}</div>
                         <div class="sig-detail">Paciente</div>
+                        @if($consent->signed_at)
+                            <div class="sig-detail">Firmó el {{ $consent->signed_at->format('d/m/Y') }} a las {{ $consent->signed_at->format('H:i') }}</div>
+                        @endif
                     </div>
                 </td>
                 <td class="spacer"></td>
@@ -176,6 +179,25 @@
                 </td>
             </tr>
         </table>
+
+        {{-- Testigo (NOM-013 9.6.9.11) --}}
+        @if($consent->testigo_nombre || $consent->testigo_firma)
+        <table class="sig-table">
+            <tr>
+                <td>
+                    @if($consent->testigo_firma && str_starts_with($consent->testigo_firma, 'data:image'))
+                        <img src="{{ $consent->testigo_firma }}" class="sig-img">
+                    @endif
+                    <div class="sig-line">
+                        <div class="sig-name">{{ $consent->testigo_nombre }}</div>
+                        <div class="sig-detail">Testigo</div>
+                    </div>
+                </td>
+                <td class="spacer"></td>
+                <td></td>
+            </tr>
+        </table>
+        @endif
 
     </div>
 

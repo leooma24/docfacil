@@ -151,7 +151,10 @@ class MedicalRecordResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // A las 24 horas la nota queda bloqueada (NOM-004). Antes el
+                // botón seguía ahí y al guardar salía un error.
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (\App\Models\MedicalRecord $record) => ! $record->isLocked()),
             ])
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.

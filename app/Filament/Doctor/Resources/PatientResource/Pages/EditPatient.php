@@ -18,7 +18,17 @@ class EditPatient extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            // Con expediente no se ofrece borrar: se le dice por qué, en vez
+            // de un botón que al final no hace nada.
+            Actions\Action::make('tiene_expediente')
+                ->label('Tiene expediente')
+                ->icon('heroicon-o-lock-closed')
+                ->color('gray')
+                ->disabled()
+                ->tooltip('No se puede borrar: la NOM-004 pide conservar su expediente al menos 5 años.')
+                ->visible(fn () => $this->record->tieneExpediente()),
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $this->record->tieneExpediente()),
         ];
     }
 
