@@ -31,7 +31,7 @@
             <div>
                 <h3 class="text-lg font-bold">Habilitar autenticación de dos factores</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Protege tu cuenta con un código que cambia cada 30 segundos. Recomendado por LFPDPPP para datos sensibles de salud.
+                    Protege tu cuenta con un código que cambia cada 30 segundos. La NOM-024 lo recomienda para los sistemas de expediente electrónico.
                 </p>
             </div>
 

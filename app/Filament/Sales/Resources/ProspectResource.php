@@ -533,10 +533,10 @@ class ProspectResource extends Resource
             14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
                 . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
                 . "- Odontograma interactivo con 13 condiciones\n"
-                . "- Recetas PDF firmadas con cédula en 10 segundos\n"
+                . "- Recetas PDF con cédula en 10 segundos\n"
                 . "- Más dentistas activos cada semana\n\n"
                 . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
-            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente NOM-004). ¿Le interesa una demo de 10 minutos?",
+            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente pensado para la NOM-004). ¿Le interesa una demo de 10 minutos?",
         };
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }

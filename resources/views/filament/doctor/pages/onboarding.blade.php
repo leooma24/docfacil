@@ -40,7 +40,7 @@
 
             {{-- Logo upload --}}
             <div style="margin-top:0.5rem;padding-top:1rem;border-top:1px dashed #e5e7eb;">
-                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.7rem;">(opcional · se imprime en recetas y aparece en el portal)</span></label>
+                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.7rem;">(opcional · aparece en tu página pública de citas)</span></label>
                 <div style="display:flex;align-items:center;gap:1rem;">
                     <div style="width:64px;height:64px;border-radius:50%;border:2px dashed #d1d5db;background:#f9fafb;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
                         @if($logo && method_exists($logo, 'temporaryUrl'))

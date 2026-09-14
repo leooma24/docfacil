@@ -42,7 +42,7 @@
         "@@context": "https://schema.org",
         "@@type": "Article",
         "headline": "DocFácil vs {{ $competitor['name'] }}: Comparativa para Consultorios Dentales en México",
-        "description": "Comparativa honesta entre DocFácil y {{ $competitor['name'] }}: funciones, precio, soporte, cumplimiento NOM-004 y casos de uso ideales.",
+        "description": "Comparativa honesta entre DocFácil y {{ $competitor['name'] }}: funciones, precio, soporte, herramientas para la NOM-004 y casos de uso ideales.",
         "datePublished": "2026-04-29",
         "dateModified": "{{ now()->toDateString() }}",
         "author": { "@@type": "Organization", "name": "DocFácil" },
@@ -62,12 +62,12 @@
             {
                 "@@type": "Question",
                 "name": "¿Cuál es la diferencia principal entre DocFácil y {{ $competitor['name'] }}?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil está hecho 100% para consultorios dentales en México: cumple NOM-004 y LFPDPPP, integra SPEI, tiene WhatsApp 1-clic nativo y precio en pesos. {{ $competitor['name'] }} está orientado a {{ $competitor['origin'] }} y no aborda el contexto regulatorio mexicano de la misma forma." }
+                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil está hecho 100% para consultorios dentales en México: pensado para la NOM-004 (notas que se bloquean y recetas con cédula), integra SPEI, tiene WhatsApp 1-clic nativo y precio en pesos. {{ $competitor['name'] }} está orientado a {{ $competitor['origin'] }} y no aborda el contexto regulatorio mexicano de la misma forma." }
             },
             {
                 "@@type": "Question",
                 "name": "¿{{ $competitor['name'] }} cumple con NOM-004 y LFPDPPP en México?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "{{ $competitor['name'] }} no fue diseñado para el marco regulatorio mexicano. DocFácil sí: estructura de expediente alineada a NOM-004-SSA3-2012, servidores en México, cumplimiento LFPDPPP." }
+                "acceptedAnswer": { "@@type": "Answer", "text": "{{ $competitor['name'] }} no fue diseñado para el marco regulatorio mexicano. DocFácil sí está pensado para él: notas clínicas y recetas que se bloquean 24 horas después de creadas, recetas con cédula profesional, diagnósticos con catálogo CIE-10 y contrato de encargado para los datos de tus pacientes." }
             },
             {
                 "@@type": "Question",
@@ -77,7 +77,7 @@
             {
                 "@@type": "Question",
                 "name": "¿Para quién es mejor DocFácil que {{ $competitor['name'] }}?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil es la mejor opción para consultorios dentales mexicanos de 1 a 3 sillones, dentistas independientes, y clínicas que quieren WhatsApp 1-clic, NOM-004 y soporte directo del fundador en español MX. {{ $competitor['name'] }} puede ser mejor para: {{ $competitor['best_for'] }}" }
+                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil es la mejor opción para consultorios dentales mexicanos de 1 a 3 sillones, dentistas independientes, y clínicas que quieren WhatsApp 1-clic, un expediente pensado para la NOM-004 (notas que se bloquean) y soporte directo del fundador en español MX. {{ $competitor['name'] }} puede ser mejor para: {{ $competitor['best_for'] }}" }
             }
         ]
     }
@@ -132,7 +132,7 @@
             <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/60 p-6 sm:p-8">
                 <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">TL;DR · Resumen ejecutivo</div>
                 <p class="text-gray-800 leading-relaxed">
-                    <strong>DocFácil</strong> está hecho 100% para consultorios dentales en México: cumple NOM-004 y LFPDPPP, integra SPEI, tiene WhatsApp 1-clic nativo, soporte directo del fundador y precio en pesos. Plan Free de por vida + Básico desde $499 MXN/mes.
+                    <strong>DocFácil</strong> está hecho 100% para consultorios dentales en México: pensado para la NOM-004 (notas que se bloquean y recetas con cédula), integra SPEI, tiene WhatsApp 1-clic nativo, soporte directo del fundador y precio en pesos. Plan Free de por vida + Básico desde $499 MXN/mes.
                     <br><br>
                     <strong>{{ $competitor['name'] }}</strong> es {{ $competitor['tagline'] }} ({{ $competitor['origin'] }}). {{ $competitor['pricing'] }}. Es opción válida para {{ \Illuminate\Support\Str::lower($competitor['best_for']) }}, pero no fue diseñado para el contexto regulatorio mexicano.
                 </p>
@@ -161,14 +161,14 @@
                             <td class="py-3 px-4 sm:px-6">{{ $competitor['origin'] }}</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Cumple NOM-004 (México)</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Estructura nativa</td>
+                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Pensado para la NOM-004 (México)</td>
+                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Notas que se bloquean a las 24 h y recetas con cédula</td>
                             <td class="py-3 px-4 sm:px-6 text-amber-700">No aplicable / requiere customización</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Cumple LFPDPPP</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Servidores en MX, TLS 1.3</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">Servidores fuera de MX</td>
+                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Aviso de privacidad y contrato de encargado para tus pacientes</td>
+                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Incluidos en nuestros términos y aviso de privacidad</td>
+                            <td class="py-3 px-4 sm:px-6 text-amber-700">Revisa sus términos</td>
                         </tr>
                         <tr>
                             <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">WhatsApp recordatorios</td>
@@ -187,7 +187,7 @@
                         </tr>
                         <tr>
                             <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Recetas con cédula profesional</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ PDF + firma digital</td>
+                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ PDF con cédula y espacio para firma</td>
                             <td class="py-3 px-4 sm:px-6 text-amber-700">Genérica (no formato MX)</td>
                         </tr>
                         <tr>
@@ -225,7 +225,7 @@
                     <h3 class="text-xl font-extrabold text-teal-900 mb-4">DocFácil — fortalezas</h3>
                     <ul class="space-y-3 text-sm text-gray-700">
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>WhatsApp 1-clic nativo</strong> — abre tu propio WhatsApp con mensaje pre-armado, sin API cara de Meta</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Hecho 100% para México</strong> — NOM-004, LFPDPPP, SPEI, español MX, soporte MX</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Hecho 100% para México</strong> — pensado para la NOM-004 (notas y recetas que se bloquean), SPEI, español MX, soporte MX</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Founder-led</strong> — Omar Lerma responde directo en su WhatsApp personal</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Plan Free de por vida</strong> — 1 doctor + 15 pacientes sin tarjeta</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Precio en pesos</strong> — desde $499 MXN/mes, sin riesgo cambiario</span></li>
@@ -268,7 +268,7 @@
                     <ul class="space-y-2.5 text-sm text-gray-700">
                         <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Tu consultorio está en México (1-3 sillones)</li>
                         <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quieres recordatorios WhatsApp sin pagar API a Meta</li>
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Necesitas cumplimiento NOM-004 y LFPDPPP de fábrica</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quieres un expediente pensado para la NOM-004 (notas que se bloquean, recetas con cédula)</li>
                         <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Prefieres precio en pesos sin sobresaltos cambiarios</li>
                         <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Valoras hablar directo con el fundador del software</li>
                     </ul>

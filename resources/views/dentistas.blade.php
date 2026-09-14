@@ -28,7 +28,7 @@
 
     {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:title" content="DocFácil — Software para Consultorio Dental en México">
-    <meta property="og:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con firma. 15 días gratis para dentistas.">
+    <meta property="og:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
     <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
     <meta property="og:image:type" content="image/png">
@@ -43,7 +43,7 @@
     {{-- Twitter --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil — Software para Consultorio Dental en México">
-    <meta name="twitter:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con firma. 15 días gratis para dentistas.">
+    <meta name="twitter:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
     <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
     <meta name="twitter:image:alt" content="DocFácil — Software para consultorios dentales">
     <script type="application/ld+json">
@@ -51,7 +51,7 @@
         "@@context": "https://schema.org",
         "@@type": "SoftwareApplication",
         "name": "DocFácil para Dentistas",
-        "description": "Software para consultorios dentales en México. Odontograma digital FDI, recordatorios WhatsApp 1-clic, expediente clínico NOM-004, recetas PDF con cédula y cobros por WhatsApp.",
+        "description": "Software para consultorios dentales en México. Odontograma digital FDI, recordatorios WhatsApp 1-clic, expediente clínico pensado para la NOM-004 (notas que se bloquean a las 24 horas), recetas PDF con cédula y cobros por WhatsApp.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "url": "{{ url('/dentistas') }}",
@@ -105,9 +105,9 @@
     @php
     $landingFaqsForSchema = [
         ['q' => '¿Cuánto cuesta DocFácil?', 'a' => 'Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico desde $499 MXN/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pro $999 MXN/mes para hasta 3 doctores. Clínica $1,999 MXN/mes ilimitado. Pago anual = 2 meses gratis. Garantía 30 días.'],
-        ['q' => '¿DocFácil cumple con NOM-004 y LFPDPPP?', 'a' => 'Sí. La estructura del expediente está alineada a NOM-004-SSA3-2012 (recetas con cédula, notas SOAP, diagnósticos, tratamientos). Cumple LFPDPPP con servidores en México, cifrado TLS 1.3, backups diarios y aislamiento total entre clínicas.'],
+        ['q' => '¿DocFácil me ayuda con la NOM-004 y con la protección de datos?', 'a' => 'Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas y ya no se pueden editar ni borrar, queda historial de cambios del motivo, el diagnóstico y el tratamiento, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula profesional. Para los datos: conexión cifrada (HTTPS), respaldo automático diario, cada consultorio aislado de los demás y verificación en dos pasos opcional. Los servidores están en Estados Unidos (DigitalOcean).'],
         ['q' => '¿El odontograma de DocFácil es interactivo?', 'a' => 'Sí. Es un editor visual FDI con 13 condiciones dentales (caries, corona, extracción, endodoncia, implante, sellante, carilla, fractura, entre otras). Funciona en tablet, laptop y celular. Soporta los 32 dientes adultos con notación FDI internacional.'],
-        ['q' => '¿Qué hace DocFácil diferente a Dentalink, Doctorum o Eaglesoft?', 'a' => 'DocFácil está hecho 100% para México: cumple NOM-004 y LFPDPPP, integra SPEI, soporta WhatsApp 1-clic sin requerir API cara de Meta, tiene servidores en México y soporte directo por WhatsApp con el fundador. Las opciones extranjeras cobran en USD y no entienden el contexto mexicano.'],
+        ['q' => '¿Qué hace DocFácil diferente a Dentalink, Doctorum o Eaglesoft?', 'a' => 'DocFácil está hecho 100% para México: pensado para la NOM-004 (notas que se bloquean a las 24 horas y recetas con cédula), integra SPEI, soporta WhatsApp 1-clic sin requerir API cara de Meta y tiene soporte directo por WhatsApp con el fundador. Las opciones extranjeras cobran en USD y no entienden el contexto mexicano.'],
         ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, con 1 clic y sin penalizaciones. Garantía de 30 días: si no ves resultados, devolvemos tu dinero completo. Sin contratos forzosos.'],
         ['q' => '¿Necesito instalar algo?', 'a' => 'No. DocFácil funciona en cualquier navegador y se instala como app (PWA) en iPhone y Android sin pasar por App Store. Sin instalación local.'],
         ['q' => '¿Quién está detrás de DocFácil?', 'a' => 'Omar Lerma, ingeniero mexicano de Los Mochis, Sinaloa. Soporte directo por WhatsApp en +52 668 249 3398. Programa fundadores para los primeros 50 consultorios.'],
@@ -500,7 +500,7 @@
                     $solutions = [
                         ['title' => 'Recupera miles al mes', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda (24h y 2h antes). Clínicas que confirman por WhatsApp reportan bajar inasistencias hasta 70% — usa el calculador de abajo con tus números reales.'],
                         ['title' => 'Odontograma digital FDI siempre al día', 'desc' => 'Editor visual interactivo con 13 condiciones (caries, corona, extracción, endodoncia, implante, carilla, sellante y más). Se actualiza en el momento desde tablet o laptop.'],
-                        ['title' => 'Recetas con firma que dan confianza', 'desc' => 'Recetas PDF con tu cédula, firma digital y logo. Llegan al paciente por WhatsApp en un clic. Te ves como clínica premium — no consultorio improvisado.'],
+                        ['title' => 'Recetas que dan confianza', 'desc' => 'Recetas PDF con tu nombre, especialidad, cédula y los datos de tu consultorio, con espacio para tu firma. Llegan al paciente por WhatsApp en un clic. Te ves como clínica premium — no consultorio improvisado.'],
                         ['title' => 'Sabes si ganas o pierdes', 'desc' => 'Lo que entró, lo que salió y lo que te quedó. Anotas renta, laboratorio y materiales, y el corte del mes te dice de cada $100 cuánto se quedó en tu bolsa — sin sacar la calculadora.'],
                     ];
                     @endphp
@@ -535,19 +535,19 @@
                 @php
                 $featuresTop = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda: abres el mensaje armado y lo mandas desde tu propio WhatsApp. Menos huecos, más sillón lleno.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y firma digital, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y espacio para tu firma, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobros claros y al día', 'desc' => 'Registras cobros en segundos y envías el monto por WhatsApp al paciente en un clic. Ves quién te debe y quién ya pagó sin revisar tu libreta.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Alineado a NOM-004-SSA3.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Cada nota se bloquea 24 horas después de guardarla.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>', 'title' => 'Odontograma en 1 clic', 'desc' => 'Diagrama dental con 13 condiciones. El diente que sea, lo marcas con un clic y lo compartes con tu paciente por WhatsApp.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', 'title' => 'Sabes si ganas o pierdes', 'desc' => 'Registras tus gastos —renta, laboratorio, materiales— y el corte del mes te dice cuánto te quedó de verdad. Con el desglose de en qué se te fue.'],
                 ];
                 $featuresMore = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m0 14v1m-8-9H3m18 0h-1M5.636 5.636l-.707-.707m12.728 12.728l-.707-.707M5.636 18.364l-.707.707M18.364 5.636l.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>', 'title' => 'Check-in con QR', 'desc' => 'Un QR en recepción, el paciente llena sus datos desde su celular. Sin papel, sin filas.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma digital legal', 'desc' => 'El paciente firma consentimientos con el dedo. Válido con timestamp e IP.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma en pantalla', 'desc' => 'El paciente firma consentimientos con el dedo. Se guardan la fecha, la hora y la IP, y el consentimiento queda bloqueado al firmarse.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', 'title' => 'Lista de espera inteligente', 'desc' => 'Cuando se cancela una cita, te avisamos qué pacientes en espera podrían tomarla. Cero slots vacíos.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas y cumpleaños', 'desc' => 'Cobros vencidos, citas sin confirmar y pacientes que cumplen años hoy con botón para felicitar desde tu WhatsApp.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor con reportes', 'desc' => 'Varios doctores desde un panel. Producción individual por doctor: citas, completadas, ingresos del mes.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente NOM-004', 'desc' => 'Estructura alineada a la norma mexicana NOM-004-SSA3. Diagnósticos, tratamientos, notas SOAP.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente pensado para la NOM-004', 'desc' => 'Diagnósticos con catálogo CIE-10, tratamientos y notas SOAP. Cada nota se bloquea a las 24 horas y queda historial de cambios.'],
                 ];
                 @endphp
 
@@ -601,10 +601,10 @@
                     ['file' => '01-dashboard.png', 'title' => 'Tu día en un vistazo', 'desc' => 'Ingresos, próximas citas y alertas. Sin abrir 5 archivos de Excel.'],
                     ['file' => '12-corte.png', 'title' => 'Cuánto te quedó, de verdad', 'desc' => 'Lo que entró menos lo que salió. Y en qué se te fue, de mayor a menor.'],
                     ['file' => '03-calendario.png', 'title' => 'Arrastra y reagendas en 2 segundos', 'desc' => 'Agenda visual por día, semana o mes. Colores por estado.'],
-                    ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Alineado a NOM-004.'],
+                    ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Las notas se bloquean a las 24 horas.'],
                     ['file' => '07-odontograma-editor.png', 'title' => 'El diente que sea, con 1 clic', 'desc' => '13 condiciones dentales. Se guarda solo y lo mandas al paciente por WhatsApp.'],
                     ['file' => '08-cobros.png', 'title' => 'Cuánto te deben, listo para cobrar', 'desc' => 'Pendientes por paciente + envío del monto por WhatsApp en un clic.'],
-                    ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, firma y logo. El paciente la recibe por WhatsApp.'],
+                    ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, los datos del consultorio y espacio para tu firma. El paciente la recibe por WhatsApp.'],
                     ['file' => '09-consulta.png', 'title' => 'La consulta, paso a paso', 'desc' => 'Motivo, exploración, tratamiento y cobro. Se guarda solo si te interrumpen.'],
                 ];
                 @endphp
@@ -662,7 +662,7 @@
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Recuperas cada peso</strong> que hoy se te escapa sin recordatorios</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Ahorras 8 horas/semana</strong> — papeleo en minutos</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Cobras por WhatsApp el mismo día de la consulta</span></li>
-                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Recetas con cédula y firma — te ves como clínica grande</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Recetas con tu cédula y espacio para tu firma — te ves como clínica grande</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Reportes en tiempo real — decides con datos</span></li>
                     </ul>
                 </div>
@@ -712,17 +712,17 @@
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>',
-                        'title' => 'Servidores en MX · LFPDPPP',
+                        'title' => 'Datos aislados por consultorio',
                         'bg' => '#eff6ff', 'color' => '#1d4ed8',
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
-                        'title' => 'Alineado a NOM-004',
+                        'title' => 'Notas bloqueadas a las 24 h',
                         'bg' => '#ecfdf5', 'color' => '#059669',
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>',
-                        'title' => 'Cifrado TLS 1.3',
+                        'title' => 'Conexión cifrada (HTTPS)',
                         'bg' => '#f0fdfa', 'color' => '#0d9488',
                     ],
                     [
@@ -776,8 +776,8 @@
                     ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para dentistas, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. El diseño es deliberadamente simple — sin menús infinitos ni configuración compleja.'],
                     ['q' => '¿Puedo migrar mis pacientes de Excel o papel?', 'a' => 'Sí, y lo hacemos por ti. Me mandas tu Excel o CSV por WhatsApp y yo lo subo a tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas. Si están en libreta, te ayudo a armar la lista inicial con los datos clave.'],
                     ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días. Si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica. Tu riesgo es cero.'],
-                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos. Sin contratos forzosos.'],
-                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Conexión cifrada end-to-end, backups diarios automáticos, auditoría de accesos por usuario y aislamiento total entre clínicas (tus datos nunca se mezclan con los de otro consultorio). Estructura alineada a LFPDPPP y NOM-004-SSA3.'],
+                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres pedirnos una copia. Sin contratos forzosos.'],
+                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'La conexión va cifrada (HTTPS), hay respaldo automático diario y cada consultorio está aislado: tus datos nunca se mezclan con los de otro. Puedes activar la verificación en dos pasos con una app de códigos. Las notas clínicas y las recetas se bloquean 24 horas después de creadas y queda historial de cambios. Los servidores están en Estados Unidos (DigitalOcean); en el aviso de privacidad te decimos qué otros proveedores intervienen.'],
                     ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil se instala como app en iPhone o Android (PWA, sin pasar por App Store). Si pierdes conexión un momento, DocFácil te avisa y recupera tu sesión cuando vuelve la señal — no pierdes lo que estabas escribiendo.'],
                     ['q' => '¿Puedo usarlo con mi recepcionista/asistente?', 'a' => 'Sí, cada plan incluye al menos 1 cuenta de recepcionista sin costo adicional. Cada quien ve solo lo que necesita — tu asistente agenda y tú ves el expediente clínico.'],
                     ['q' => '¿Hay capacitación?', 'a' => 'Sí. El plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos cortos tutoriales y soporte directo por WhatsApp con el equipo (incluido el fundador).'],
@@ -1008,7 +1008,7 @@
                             'Recordatorios WhatsApp a 1 clic',
                             'Gastos y corte del mes',
                             'Odontograma FDI interactivo',
-                            'Recetas PDF con cédula y logo',
+                            'Recetas PDF con cédula',
                             'Cobro por WhatsApp a 1 clic',
                             'Confirmar cita con link',
                             'Check-in con QR',
@@ -1029,7 +1029,7 @@
                             'Tus pacientes agendan solos, 24/7',
                             'Recall: a quién ya le toca volver',
                             'Lista de espera que llena los huecos',
-                            'Consentimientos con firma digital',
+                            'Consentimientos firmados en pantalla',
                             'Reportes avanzados',
                             'Alertas inteligentes',
                             'Soporte prioritario por WhatsApp',

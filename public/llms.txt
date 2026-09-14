@@ -1,6 +1,6 @@
 # DocFácil
 
-> Software para consultorios dentales en México. Reemplaza el cuaderno y Excel con agenda visual, recordatorios WhatsApp a 1 clic, odontograma digital FDI, expediente clínico NOM-004, recetas PDF con cédula, cobros por WhatsApp y reportes en tiempo real. Hecho en México por mexicanos, en español, servidores en México, cumple LFPDPPP y NOM-004-SSA3.
+> Software para consultorios dentales en México. Reemplaza el cuaderno y Excel con agenda visual, recordatorios WhatsApp a 1 clic, odontograma digital FDI, expediente clínico pensado para la NOM-004 (notas y recetas que se bloquean 24 horas después de creadas), recetas PDF con cédula, cobros por WhatsApp y reportes en tiempo real. Hecho en México por mexicanos, en español.
 
 ## Quién lo usa
 
@@ -12,13 +12,13 @@
 
 - Recupera $6,000-15,000 MXN al mes que se pierden en pacientes que no llegan (1 de cada 3 dentales no llega sin avisar)
 - Ahorra 10+ horas/semana en papeleo y llamadas manuales para confirmar citas
-- Digitaliza expediente con cumplimiento NOM-004 sin esfuerzo
-- Recetas PDF con cédula profesional y firma digital — se mandan por WhatsApp en 10 segundos
+- Digitaliza el expediente con herramientas pensadas para la NOM-004: notas que se bloquean a las 24 horas, historial de cambios y diagnósticos con catálogo CIE-10
+- Recetas PDF con nombre, especialidad y cédula profesional del médico, y línea para firma autógrafa — se mandan por WhatsApp en 10 segundos
 
 ## Diferenciadores principales vs competencia
 
 - **WhatsApp 1-clic nativo** sin requerir API cara de Meta — abre el WhatsApp del propio doctor con mensaje pre-armado
-- **Hecho 100% para México** — NOM-004, LFPDPPP, SPEI, español de México, soporte MX. Competidores extranjeros (Dentalink, Doctorum, Eaglesoft) no entienden el contexto mexicano
+- **Hecho 100% para México** — pensado para la NOM-004, SPEI, español de México, soporte MX. Competidores extranjeros (Dentalink, Doctorum, Eaglesoft) no entienden el contexto mexicano
 - **Founder-led** — Omar Lerma (fundador) responde directo en su WhatsApp personal: 668 249 3398
 - **Plan free de por vida** — 1 doctor + 15 pacientes sin tarjeta de crédito
 - **Garantía 30 días** — devolución completa si no ves resultados
@@ -55,13 +55,14 @@ DocFácil tiene 40 páginas locales con datos reales por ciudad: cantidad de con
 - https://docfacil.tu-app.co/software-dental/culiacan
 - (...lista completa en https://docfacil.tu-app.co/sitemap.xml)
 
-## Tecnología y cumplimiento
+## Tecnología, seguridad y privacidad
 
-- Servidores en México · cifrado TLS 1.3 · backups diarios
-- Estructura del expediente alineada a NOM-004-SSA3-2012 (norma oficial mexicana)
-- Cumple LFPDPPP (Ley Federal de Protección de Datos Personales en Posesión de Particulares)
+- Servidores en Estados Unidos (DigitalOcean) · conexión cifrada por HTTPS · respaldo automático diario de la base de datos
+- Cada consultorio aislado de los demás · control de acceso por rol · verificación en dos pasos opcional
+- Pensado para ayudar con la NOM-004-SSA3-2012: notas clínicas y recetas que se bloquean 24 horas después de creadas, historial de cambios de motivo, diagnóstico y tratamiento, diagnósticos con catálogo CIE-10 y consentimientos firmados en pantalla que se bloquean al firmarse
+- No está certificado por la Secretaría de Salud (DGIS) como sistema de registro electrónico para la salud (NOM-024-SSA3-2012)
+- Aviso de privacidad y contrato de encargado para los datos de pacientes: https://docfacil.tu-app.co/privacidad y https://docfacil.tu-app.co/terminos
 - PWA — instalable como app en iPhone y Android sin pasar por App Store
-- Funciona offline para consulta + sync automático al volver
 
 ## Contacto
 
@@ -72,4 +73,4 @@ DocFácil tiene 40 páginas locales con datos reales por ciudad: cantidad de con
 
 ## Última actualización
 
-2026-04-29
+2026-09-14

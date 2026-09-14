@@ -151,7 +151,7 @@
 
     <div class="hero">
         <h1>Deja de perder $15,000 al mes en citas que no llegan</h1>
-        <p>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana — sin que muevas un dedo.</p>
+        <p>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios por WhatsApp a 1 clic, cobra por ti y te ahorra 8 horas a la semana.</p>
     </div>
 
     <img src="{{ $screens['dashboard'] }}" alt="Escritorio DocFácil" class="shot shot-hero">
@@ -217,7 +217,7 @@
     <div class="feat-big">
         <span class="feat-num">02</span>
         <h3>Recetas PDF profesionales</h3>
-        <p>Con logo del consultorio, cédula y firma digital. El paciente las recibe por WhatsApp en un clic — adiós letra ilegible y papeles perdidos.</p>
+        <p>Con tu nombre, especialidad, cédula, datos del consultorio y espacio para tu firma. El paciente las recibe por WhatsApp en un clic — adiós letra ilegible y papeles perdidos.</p>
         <img src="{{ $screens['recetas'] }}" alt="Recetas PDF" class="shot">
     </div>
 
@@ -253,11 +253,11 @@
     <table class="features">
         <tr>
             <td><span class="icon">✓</span> <strong>Agenda de citas</strong> Calendario visual, multi-doctor, drag &amp; drop</td>
-            <td><span class="icon">✓</span> <strong>Recordatorios WhatsApp</strong> Automáticos 24h y 2h antes</td>
+            <td><span class="icon">✓</span> <strong>Recordatorios WhatsApp</strong> A 1 clic desde tu WhatsApp, 24h y 2h antes</td>
         </tr>
         <tr>
             <td><span class="icon">✓</span> <strong>Expediente clínico</strong> Historial, alergias, notas SOAP</td>
-            <td><span class="icon">✓</span> <strong>Recetas PDF</strong> Con cédula y firma digital</td>
+            <td><span class="icon">✓</span> <strong>Recetas PDF</strong> Con cédula y espacio para firma</td>
         </tr>
         <tr>
             <td><span class="icon">✓</span> <strong>Odontograma interactivo</strong> 13 condiciones, compartible</td>
@@ -265,7 +265,7 @@
         </tr>
         <tr>
             <td><span class="icon">✓</span> <strong>Check-in con QR</strong> Sin papeleo, el paciente escanea</td>
-            <td><span class="icon">✓</span> <strong>Firma digital</strong> En tablet o celular, timestamp legal</td>
+            <td><span class="icon">✓</span> <strong>Firma en pantalla</strong> En tablet o celular, con fecha y hora</td>
         </tr>
         <tr>
             <td><span class="icon">✓</span> <strong>Portal del paciente</strong> Citas, recetas, pagos</td>

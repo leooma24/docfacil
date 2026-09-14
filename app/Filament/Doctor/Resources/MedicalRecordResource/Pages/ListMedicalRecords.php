@@ -37,7 +37,7 @@ class ListMedicalRecords extends ListRecords
             'title'    => 'Expediente Clínico',
             'icon'     => '📋',
             'kicker'   => '🩺 Historial médico',
-            'subtitle' => 'Todas las consultas, diagnósticos y tratamientos registrados. Cumple con la NOM-004 y es inmutable.',
+            'subtitle' => 'Todas las consultas, diagnósticos y tratamientos registrados. Cada nota queda bloqueada 24 horas después de guardarla.',
             'gradient' => '#ef4444 0%, #f97316 40%, #f59e0b 100%',
             'accent'   => '#ef4444',
             'stats' => [

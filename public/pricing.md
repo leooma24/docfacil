@@ -2,7 +2,7 @@
 
 > Software para consultorios dentales en México. Plan free de por vida, planes pagados desde $499 MXN/mes. Garantía 30 días, sin contratos forzosos, sin tarjeta para empezar.
 
-Última actualización: 2026-04-29
+Última actualización: 2026-09-14
 
 ## Free
 
@@ -25,7 +25,7 @@
 - **Citas:** Ilimitadas
 - **Incluye TODO del Free, más:**
   - Odontograma digital FDI interactivo (13 condiciones dentales)
-  - Recetas PDF con cédula profesional y firma digital
+  - Recetas PDF con cédula profesional y línea para firma autógrafa
   - Recordatorios WhatsApp a 1 clic (24h y 2h antes de cita)
   - Cobros por WhatsApp con link de pago
   - Confirmación de cita por link
@@ -77,7 +77,7 @@ Todos los add-ons son opcionales y se pueden activar/desactivar mes a mes desde 
 - **Sin contratos forzosos:** Cancelación con 1 clic, sin penalizaciones
 - **Pago anual = 2 meses gratis:** Anual cuesta 10× la mensualidad
 - **Sin tarjeta de crédito** para registrarse en plan Free o probar 15 días gratis las funciones Pro
-- **Servidores en México** · Cumple LFPDPPP · NOM-004-SSA3-2012
+- **Datos:** servidores en Estados Unidos (DigitalOcean), conexión cifrada (HTTPS) y respaldo diario · Pensado para la NOM-004-SSA3-2012 (notas y recetas que se bloquean a las 24 horas) · Aviso de privacidad: https://docfacil.tu-app.co/privacidad
 - **Métodos de pago:** Tarjeta vía Stripe, transferencia SPEI manual
 
 ## Programa fundadores

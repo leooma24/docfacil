@@ -84,7 +84,7 @@
         <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight leading-tight">Deja de perder<br><span class="text-amber-200">$15,000 al mes</span><br>en citas que no llegan.</h1>
         <div class="w-16 h-1 bg-white/70 mx-auto rounded-full mb-6"></div>
         <p class="text-lg sm:text-xl opacity-95 max-w-3xl mx-auto leading-relaxed">
-            Cada cita perdida son $600 que se van. <strong>DocFácil recupera ese dinero</strong> con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana — sin que muevas un dedo.
+            Cada cita perdida son $600 que se van. <strong>DocFácil recupera ese dinero</strong> con recordatorios por WhatsApp a 1 clic, cobra por ti y te ahorra 8 horas a la semana.
         </p>
 
         <div class="flex flex-wrap justify-center gap-3 mt-8">
@@ -207,11 +207,11 @@
             <div class="md:order-1 order-2">
                 <span class="inline-block bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full mb-4">01 · AGENDA</span>
                 <h3 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Calendario inteligente + recordatorios WhatsApp</h3>
-                <p class="text-gray-600 mb-5 leading-relaxed">Vista diaria, semanal, mensual. Arrastra citas para reagendar, colores por estado. Los pacientes reciben recordatorios automáticos 24h y 2h antes, o los mandas tú con un clic desde tu agenda. Hasta 40% menos inasistencias.</p>
+                <p class="text-gray-600 mb-5 leading-relaxed">Vista diaria, semanal, mensual. Arrastra citas para reagendar, colores por estado. Mandas los recordatorios de 24h y 2h antes con un clic desde tu agenda. Hasta 40% menos inasistencias.</p>
                 <ul class="space-y-2 text-sm text-gray-700">
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Multi-doctor con colores por profesional</li>
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Acceso desde PC, tablet o celular</li>
-                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Recordatorios automáticos o manuales con un clic</li>
+                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Recordatorios con un clic desde tu WhatsApp</li>
                 </ul>
             </div>
             <div class="md:order-2 order-1 relative">
@@ -235,7 +235,7 @@
             <div>
                 <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-bold px-3 py-1 rounded-full mb-4">02 · EXPEDIENTE</span>
                 <h3 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Expediente clínico digital completo</h3>
-                <p class="text-gray-600 mb-5 leading-relaxed">Historial completo por paciente: diagnósticos, tratamientos, alergias, fotos clínicas, notas SOAP. Búsqueda instantánea y cumplimiento con NOM-004-SSA3.</p>
+                <p class="text-gray-600 mb-5 leading-relaxed">Historial completo por paciente: diagnósticos, tratamientos, alergias, fotos clínicas, notas SOAP. Búsqueda instantánea, diagnósticos con CIE-10 y notas que se bloquean 24 horas después de guardarlas.</p>
                 <ul class="space-y-2 text-sm text-gray-700">
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Todo organizado por paciente y consulta</li>
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Fotos antes/después sin límite</li>
@@ -249,11 +249,11 @@
             <div class="md:order-1 order-2">
                 <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full mb-4">03 · RECETAS</span>
                 <h3 class="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">Recetas PDF profesionales y legibles</h3>
-                <p class="text-gray-600 mb-5 leading-relaxed">Generadas con logo, cédula profesional y firma digital. Se descargan en un clic y se envían al paciente por WhatsApp o email — sin papel, sin letra ilegible.</p>
+                <p class="text-gray-600 mb-5 leading-relaxed">Generadas con tu nombre, especialidad, cédula profesional, datos del consultorio y espacio para tu firma. Se descargan en un clic y se envían al paciente por WhatsApp o email — sin papel, sin letra ilegible.</p>
                 <ul class="space-y-2 text-sm text-gray-700">
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Plantilla personalizada por doctor</li>
                     <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Historial de recetas por paciente</li>
-                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Firma digital con validez legal</li>
+                    <li class="flex items-start gap-2"><span class="text-teal-500 font-bold">✓</span> Se bloquean 24 horas después de creadas</li>
                 </ul>
             </div>
             <div class="md:order-2 order-1 relative">
@@ -341,7 +341,7 @@
             @php
                 $extras = [
                     ['icon' => '📱', 'title' => 'Check-in con QR', 'desc' => 'El paciente escanea al llegar, firma consentimiento en tablet.'],
-                    ['icon' => '✍', 'title' => 'Firma digital legal', 'desc' => 'Consentimientos con timestamp y respaldo legal.'],
+                    ['icon' => '✍', 'title' => 'Firma en pantalla', 'desc' => 'Consentimientos firmados con el dedo, con fecha y hora. Se bloquean al firmarse.'],
                     ['icon' => '👥', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas e historial.'],
                     ['icon' => '📊', 'title' => 'Dashboard con gráficas', 'desc' => 'Ingresos, citas por doctor, pacientes activos.'],
                     ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Inactivos, cumpleaños, cobros atrasados.'],
@@ -486,39 +486,39 @@
 <section class="py-20 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
-            <span class="inline-block text-xs font-bold text-teal-300 tracking-wider uppercase mb-3">Seguridad y cumplimiento</span>
+            <span class="inline-block text-xs font-bold text-teal-300 tracking-wider uppercase mb-3">Seguridad y privacidad</span>
             <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Tus datos y los de tus pacientes,<br>protegidos</h2>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
                 <div class="text-2xl mb-3">🔒</div>
-                <h4 class="font-bold mb-1">Cifrado TLS 1.3</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Todas las conexiones y datos en tránsito viajan cifrados extremo a extremo.</p>
+                <h4 class="font-bold mb-1">Conexión cifrada (HTTPS)</h4>
+                <p class="text-sm text-gray-300 leading-relaxed">La información viaja cifrada entre tu navegador y nuestros servidores.</p>
             </div>
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-                <div class="text-2xl mb-3">🇲🇽</div>
-                <h4 class="font-bold mb-1">Datos en servidores mexicanos</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Cumplimiento total con LFPDPPP (Ley Federal de Protección de Datos).</p>
+                <div class="text-2xl mb-3">🗂</div>
+                <h4 class="font-bold mb-1">Cada consultorio aislado</h4>
+                <p class="text-sm text-gray-300 leading-relaxed">Tus datos nunca se mezclan con los de otro consultorio. Aviso de privacidad y contrato de encargado para los datos de tus pacientes.</p>
             </div>
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
                 <div class="text-2xl mb-3">📋</div>
-                <h4 class="font-bold mb-1">NOM-004-SSA3</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Expediente clínico estructurado conforme a la norma oficial mexicana.</p>
+                <h4 class="font-bold mb-1">Pensado para la NOM-004</h4>
+                <p class="text-sm text-gray-300 leading-relaxed">Notas clínicas y recetas que se bloquean 24 horas después de creadas, con historial de cambios y diagnósticos con CIE-10.</p>
             </div>
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
                 <div class="text-2xl mb-3">💾</div>
-                <h4 class="font-bold mb-1">Backups diarios automáticos</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Restauración punto-en-el-tiempo hasta 30 días atrás.</p>
+                <h4 class="font-bold mb-1">Respaldo diario automático</h4>
+                <p class="text-sm text-gray-300 leading-relaxed">Cada día se hace un respaldo automático de la base de datos.</p>
             </div>
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
                 <div class="text-2xl mb-3">🔐</div>
                 <h4 class="font-bold mb-1">Roles y permisos</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Cada usuario ve solo lo que necesita. Auditoría de accesos.</p>
+                <p class="text-sm text-gray-300 leading-relaxed">Cada usuario ve solo lo que necesita. Verificación en dos pasos opcional.</p>
             </div>
             <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
                 <div class="text-2xl mb-3">📤</div>
-                <h4 class="font-bold mb-1">Exportación libre</h4>
-                <p class="text-sm text-gray-300 leading-relaxed">Descarga todos tus datos cuando quieras, en CSV o PDF. Tú eres dueño.</p>
+                <h4 class="font-bold mb-1">Tus datos son tuyos</h4>
+                <p class="text-sm text-gray-300 leading-relaxed">Recetas, consentimientos y presupuestos se descargan en PDF. Si necesitas todos tus datos, se los pides a soporte.</p>
             </div>
         </div>
     </div>
@@ -624,7 +624,7 @@
             <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition border border-gray-100">
                 <div class="w-12 h-12 bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white rounded-xl flex items-center justify-center text-2xl font-extrabold mb-4 shadow-lg">3</div>
                 <h4 class="font-bold text-gray-900 mb-2 text-lg">Agenda tu primer día</h4>
-                <p class="text-sm text-gray-600 mb-4 leading-relaxed">Abre la agenda, crea tu primera cita, recibe tu primer recordatorio WhatsApp automático.</p>
+                <p class="text-sm text-gray-600 mb-4 leading-relaxed">Abre la agenda, crea tu primera cita, manda tu primer recordatorio por WhatsApp con un clic.</p>
                 <div class="rounded-lg overflow-hidden border border-gray-200">
                     <img src="{{ $screens['calendario'] }}" alt="Agenda" class="w-full block">
                 </div>

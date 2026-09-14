@@ -167,13 +167,13 @@
                 </div>
                 <p class="mt-4 text-gray-700 leading-relaxed">
                     DocFácil es el único de esta lista hecho 100% para México. WhatsApp 1-clic nativo (sin API cara de Meta),
-                    NOM-004 estructurado, LFPDPPP de fábrica, integración SPEI, soporte directo del fundador en su WhatsApp personal.
+                    expediente pensado para la NOM-004 (notas que se bloquean, recetas con cédula), contrato de encargado para los datos de tus pacientes, integración SPEI, soporte directo del fundador en su WhatsApp personal.
                     Plan Free real (1 doctor + 15 pacientes), garantía 30 días.
                 </p>
                 <div class="mt-5 grid sm:grid-cols-2 gap-2 text-sm">
                     <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> WhatsApp 1-clic nativo</div>
-                    <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Cumple NOM-004 + LFPDPPP</div>
-                    <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Servidores en MX</div>
+                    <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Pensado para la NOM-004 (notas que se bloquean)</div>
+                    <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Datos aislados por consultorio</div>
                     <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Soporte por WhatsApp del fundador</div>
                     <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Odontograma FDI con 13 condiciones</div>
                     <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> Recetas PDF con cédula</div>

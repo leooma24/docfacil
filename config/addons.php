@@ -33,7 +33,7 @@ return [
         'name' => 'Plan de tratamiento / Presupuestos',
         'feature_flag' => 'treatment_plans',
         'short_description' => 'Arma presupuestos multi-cita, genera PDF bonito y el paciente acepta en línea.',
-        'long_description' => 'Ideal para ortodoncia, rehabilitación, implantes. Armas el plan completo con tus servicios + precios + descuento, el paciente recibe un PDF con tu marca por WhatsApp y acepta dándole clic a un link. Registra IP y timestamp como respaldo legal.',
+        'long_description' => 'Ideal para ortodoncia, rehabilitación, implantes. Armas el plan completo con tus servicios + precios + descuento, el paciente recibe un PDF con tu marca por WhatsApp y acepta dándole clic a un link. Registra la IP, la fecha y la hora en que el paciente acepta.',
         'monthly_price' => 129.00,
         'annual_price' => 1290.00,
         'icon' => '📋',

@@ -31,7 +31,7 @@
     </div>
     <div class="content">
         <p>Hola <strong>{{ $doctorName }}</strong>,</p>
-        <p style="margin-top:12px;">Ya tienes pacientes registrados en <strong>{{ $clinic->name }}</strong>. El siguiente paso es agendar tu primera cita y mandar el primer recordatorio WhatsApp — automático o con un clic desde tu agenda.</p>
+        <p style="margin-top:12px;">Ya tienes pacientes registrados en <strong>{{ $clinic->name }}</strong>. El siguiente paso es agendar tu primera cita y mandar el primer recordatorio WhatsApp con un clic desde tu agenda.</p>
 
         <div class="stat-box">
             <div class="number">40%</div>

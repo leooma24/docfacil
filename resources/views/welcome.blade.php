@@ -327,7 +327,7 @@
                     $solutions = [
                         ['title' => 'Recupera miles al mes', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda (24h y 2h antes). Clínicas que confirman por WhatsApp reportan bajar inasistencias hasta 70% — usa el calculador con tus números reales.'],
                         ['title' => 'Recuperas 8 horas a la semana', 'desc' => 'Agenda en la nube, expedientes digitales, recetas PDF en 10 segundos. El papeleo que te quitaba 2h/día se reduce a minutos.'],
-                        ['title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula, firma digital y logo del consultorio. Llegan al paciente por WhatsApp en un clic. Te ven como clínica grande.'],
+                        ['title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula, los datos del consultorio y espacio para tu firma. Llegan al paciente por WhatsApp en un clic. Te ven como clínica grande.'],
                         ['title' => 'Sabes cuánto ganas cada día', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes. Al entrar ves cómo va tu consultorio — sin adivinar.'],
                     ];
                     @endphp
@@ -362,19 +362,19 @@
                 @php
                 $featuresTop = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>', 'title' => 'Tus pacientes sí llegan', 'desc' => 'Recordatorios por WhatsApp a 1 clic desde la agenda: abres el mensaje armado y lo mandas desde tu propio WhatsApp. Menos huecos, más sillón lleno.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y firma digital, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>', 'title' => 'Recetas que dan confianza', 'desc' => 'Con tu cédula y espacio para tu firma, las mandas al paciente por WhatsApp en 10 segundos. Cero letra ilegible, cero errores.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'title' => 'Cobros claros y al día', 'desc' => 'Registras cobros en segundos y envías el monto por WhatsApp al paciente en un clic. Ves quién te debe y quién ya pagó sin revisar tu libreta.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Cumple NOM-004.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expedientes a 2 clics', 'desc' => 'Historial, alergias, notas SOAP y fotos del paciente. Lo buscas, lo ves en 2 segundos. Cada nota se bloquea 24 horas después de guardarla.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>', 'title' => 'Odontograma en 1 clic', 'desc' => 'Diagrama dental con 13 condiciones. El diente que sea, lo marcas con un clic y lo compartes con tu paciente por WhatsApp.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', 'title' => 'Sabes cuánto ganas', 'desc' => 'Ingresos del mes, servicios más rentables, cobros pendientes, pacientes activos. Al entrar lo ves — sin hojas de Excel.'],
                 ];
                 $featuresMore = [
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m0 14v1m-8-9H3m18 0h-1M5.636 5.636l-.707-.707m12.728 12.728l-.707-.707M5.636 18.364l-.707.707M18.364 5.636l.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>', 'title' => 'Check-in con QR', 'desc' => 'Un QR en recepción, el paciente llena sus datos desde su celular. Sin papel, sin filas.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma digital legal', 'desc' => 'El paciente firma consentimientos con el dedo. Válido con timestamp e IP.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>', 'title' => 'Firma en pantalla', 'desc' => 'El paciente firma consentimientos con el dedo. Se guardan la fecha, la hora y la IP, y el consentimiento queda bloqueado al firmarse.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>', 'title' => 'Lista de espera inteligente', 'desc' => 'Cuando se cancela una cita, te avisamos qué pacientes en espera podrían tomarla. Cero slots vacíos.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, cobros vencidos, cumpleaños, citas sin confirmar. Nada se te escapa.'],
                     ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>', 'title' => 'Multi-doctor / Multi-sede', 'desc' => 'Varios doctores o sucursales desde un panel. Comisiones entre doctores incluidas.'],
-                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente NOM-004', 'desc' => 'Cumple con la norma mexicana. Diagnósticos, tratamientos, notas SOAP estructuradas.'],
+                    ['svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'title' => 'Expediente pensado para la NOM-004', 'desc' => 'Diagnósticos con catálogo CIE-10, tratamientos y notas SOAP. Cada nota se bloquea a las 24 horas y queda historial de cambios.'],
                 ];
                 @endphp
 
@@ -427,10 +427,10 @@
                 $shots = [
                     ['file' => '01-dashboard.png', 'title' => 'Tu día en un vistazo', 'desc' => 'Ingresos, próximas citas y alertas. Sin abrir 5 archivos de Excel.'],
                     ['file' => '03-calendario.png', 'title' => 'Arrastra y reagendas en 2 segundos', 'desc' => 'Agenda visual por día, semana o mes. Colores por estado.'],
-                    ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Cumple NOM-004.'],
+                    ['file' => '05-expediente.png', 'title' => 'Historia completa en 2 clics', 'desc' => 'Alergias, tratamientos, notas SOAP, fotos. Las notas se bloquean a las 24 horas.'],
                     ['file' => '07-odontograma-editor.png', 'title' => 'El diente que sea, con 1 clic', 'desc' => '13 condiciones dentales. Se guarda solo y lo mandas al paciente por WhatsApp.'],
                     ['file' => '08-cobros.png', 'title' => 'Cuánto te deben, listo para cobrar', 'desc' => 'Pendientes por paciente + envío del monto por WhatsApp en un clic.'],
-                    ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, firma y logo. El paciente la recibe por WhatsApp.'],
+                    ['file' => '06-recetas.png', 'title' => 'Recetas profesionales en 10 segundos', 'desc' => 'Con tu cédula, los datos del consultorio y espacio para tu firma. El paciente la recibe por WhatsApp.'],
                 ];
                 @endphp
                 @foreach ($shots as $i => $s)
@@ -487,7 +487,7 @@
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Recuperas $11,500/mes</strong> (inasistencia cae a 8%)</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span><strong>Ahorras 8 horas/semana</strong> — papeleo en minutos</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Cobras por WhatsApp el mismo día de la consulta</span></li>
-                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Recetas con cédula y firma — te ves como clínica grande</span></li>
+                        <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Recetas con tu cédula y espacio para tu firma — te ves como clínica grande</span></li>
                         <li class="flex items-start gap-2"><svg style="width:18px;height:18px;color:#0d9488;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> <span>Reportes en tiempo real — decides con datos</span></li>
                     </ul>
                 </div>
@@ -537,17 +537,17 @@
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>',
-                        'title' => 'Servidores en MX · LFPDPPP',
+                        'title' => 'Datos aislados por consultorio',
                         'bg' => '#eff6ff', 'color' => '#1d4ed8',
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
-                        'title' => 'Cumple NOM-004-SSA3',
+                        'title' => 'Notas bloqueadas a las 24 h',
                         'bg' => '#ecfdf5', 'color' => '#059669',
                     ],
                     [
                         'svg' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>',
-                        'title' => 'Cifrado TLS 1.3',
+                        'title' => 'Conexión cifrada (HTTPS)',
                         'bg' => '#f0fdfa', 'color' => '#0d9488',
                     ],
                     [
@@ -598,9 +598,9 @@
                     ['q' => '¿Qué pasa si no soy bueno con la tecnología?', 'a' => 'DocFácil está hecho para doctores, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Además te acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra. El diseño es deliberadamente simple — sin menús infinitos ni configuración compleja.'],
                     ['q' => '¿Puedo migrar mis pacientes de Excel?', 'a' => 'Sí, y lo hacemos por ti. Subes tu archivo (Excel, CSV o una foto de tu libreta) y lo cargamos en tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas.'],
                     ['q' => '¿Qué pasa si me arrepiento?', 'a' => 'Garantía de 30 días. Si no ves resultados en el primer mes, te devolvemos tu dinero completo. Sin preguntas, sin letra chica. Tu riesgo es cero.'],
-                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres exportarlos. Sin contratos forzosos.'],
-                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'Conexión cifrada end-to-end, backups diarios automáticos, auditoría de accesos por usuario y aislamiento total entre clínicas (tus datos nunca se mezclan con los de otro consultorio). Estructura alineada a LFPDPPP y NOM-004-SSA3.'],
-                    ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil se instala como app en iPhone o Android (PWA, sin pasar por App Store). Funciona incluso con internet intermitente — los cambios se sincronizan cuando vuelves a tener señal.'],
+                    ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión o quieres pedirnos una copia. Sin contratos forzosos.'],
+                    ['q' => '¿Mis datos y los de mis pacientes están seguros?', 'a' => 'La conexión va cifrada (HTTPS), hay respaldo automático diario y cada consultorio está aislado: tus datos nunca se mezclan con los de otro. Puedes activar la verificación en dos pasos con una app de códigos. Las notas clínicas y las recetas se bloquean 24 horas después de creadas y queda historial de cambios. Los servidores están en Estados Unidos (DigitalOcean); en el aviso de privacidad te decimos qué otros proveedores intervienen.'],
+                    ['q' => '¿Funciona en celular? ¿Y si no tengo buena internet?', 'a' => 'Sí, DocFácil funciona desde el navegador de tu celular, sin instalar nada. Necesita internet para guardar los cambios.'],
                     ['q' => '¿Puedo usarlo con mi recepcionista/asistente?', 'a' => 'Sí, cada plan incluye al menos 1 cuenta de recepcionista sin costo adicional. Cada quien ve solo lo que necesita — tu asistente agenda y tú ves el expediente clínico.'],
                     ['q' => '¿Cuánto cuesta?', 'a' => 'Free para siempre (1 doctor, 15 pacientes). Básico $499/mes, Pro $999/mes, Clínica $1,999/mes. Paga anual y te ahorras 2 meses. Con garantía de 30 días: si no te sirve, te devolvemos tu dinero.'],
                     ['q' => '¿Hay capacitación?', 'a' => 'Sí. El plan Clínica incluye onboarding 1 a 1 dedicado. Todos los planes tienen videos cortos tutoriales y soporte directo por WhatsApp con el equipo (incluido el fundador).'],
@@ -762,8 +762,8 @@
                 @php
                 $plans = [
                     ['name' => 'Free', 'price' => '0', 'annual' => 0, 'subtitle' => 'Para siempre', 'features' => ['1 doctor', '15 pacientes', '10 citas/mes', 'Agenda básica'], 'cta' => 'Empezar gratis', 'popular' => false],
-                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula y logo', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
-                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos + firma digital', 'Lista de espera', 'Adeudos + plan de pagos', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
+                    ['name' => 'Básico', 'price' => '499', 'annual' => 4990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF con cédula', 'Recordatorios WhatsApp a 1 clic', 'Cobro por WhatsApp a 1 clic', 'Confirmar cita con link', 'Check-in con QR', 'Dashboard básico'], 'cta' => 'Probar 15 días gratis', 'popular' => false],
+                    ['name' => 'Pro', 'price' => '999', 'annual' => 9990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico +', 'Odontograma interactivo', 'Consentimientos firmados en pantalla', 'Lista de espera', 'Adeudos + plan de pagos', 'Reportes avanzados', 'Alertas inteligentes', 'Soporte prioritario WhatsApp'], 'cta' => 'Empezar con Pro →', 'popular' => true],
                     ['name' => 'Clínica', 'price' => '1,999', 'annual' => 19990, 'subtitle' => 'por mes · cancelas cuando quieras', 'features' => ['Doctores ilimitados', 'Pacientes ilimitados', 'Todo del Pro +', 'Reportes por doctor', 'Producción individual por doctor', 'Onboarding 1 a 1 dedicado', 'Soporte prioritario 7 días/semana'], 'cta' => 'Contactar ventas', 'popular' => false],
                 ];
                 @endphp

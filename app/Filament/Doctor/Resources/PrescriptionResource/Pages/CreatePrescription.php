@@ -27,7 +27,7 @@ class CreatePrescription extends CreateRecord
             'title'    => 'Nueva receta',
             'icon'     => '💊',
             'kicker'   => '➕ Crear receta',
-            'subtitle' => 'Genera una receta con tu cédula, clínica y firma. Descargable como PDF al guardar.',
+            'subtitle' => 'Genera una receta con tu cédula y los datos del consultorio, con espacio para tu firma. Descargable como PDF al guardar.',
             'gradient' => '#8b5cf6 0%, #a855f7 40%, #c084fc 100%',
             'accent'   => '#8b5cf6',
         ];

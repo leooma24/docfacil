@@ -23,7 +23,7 @@
 
             <p>Le escribo breve porque sé que su tiempo vale: si esta semana se le quedó algún paciente sin llegar a su cita, ya conoce el costo — entre $500 y $1,500 por hueco, sin contar el tratamiento que dejó a la mitad.</p>
 
-            <p>Lo que construí básicamente abre su propio WhatsApp con el mensaje listo y solo le da enviar. El paciente confirma su cita con un link. Cumple NOM-004 para el expediente, incluye odontograma digital y recetas PDF con cédula. Hecho 100% en México, sin tarjeta para empezar.</p>
+            <p>Lo que construí básicamente abre su propio WhatsApp con el mensaje listo y solo le da enviar. El paciente confirma su cita con un link. El expediente está pensado para la NOM-004 (las notas se bloquean a las 24 horas), e incluye odontograma digital y recetas PDF con cédula. Hecho en México, sin tarjeta para empezar.</p>
 
             <p><a href="{{ $ctaUrl ?? url('/doctor/register') }}" class="btn">Probar 15 días sin tarjeta</a></p>
 
@@ -37,7 +37,7 @@
         <div class="footer">
             DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
             @if(!empty($unsubscribeUrl))
-                <small>¿Ya no desea recibir correos? <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">Dése de baja aquí</a> · 1 clic.</small>
+                <small>¿Ya no desea recibir correos? <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">Dése de baja aquí</a> · 1 clic. · <a href="{{ url('/privacidad') }}" style="color:#6b7280;text-decoration:underline;">Aviso de privacidad</a></small>
             @endif
         </div>
     </div>

@@ -62,7 +62,7 @@ class SpeiCheckout extends Page implements HasForms
                     ->directory('spei-receipts/' . auth()->user()->clinic_id)
                     ->visibility('private')
                     ->required()
-                    ->helperText('Sube la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB. Tu comprobante se guarda cifrado y solo lo vemos nosotros para aprobar el pago.'),
+                    ->helperText('Sube la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB. Tu comprobante se guarda en un espacio privado del servidor y solo lo vemos nosotros para aprobar el pago.'),
 
                 Textarea::make('notes')
                     ->label('Notas (opcional)')

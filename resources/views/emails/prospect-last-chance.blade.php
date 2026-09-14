@@ -44,7 +44,7 @@
             DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
             <small>Este es el último correo automático que recibirá de nosotros.</small>
             @if(!empty($unsubscribeUrl))
-                <br><small>O <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">déme de baja ya mismo</a> si prefiere.</small>
+                <br><small>O <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">déme de baja ya mismo</a> si prefiere. · <a href="{{ url('/privacidad') }}" style="color:#6b7280;text-decoration:underline;">Aviso de privacidad</a></small>
             @endif
         </div>
     </div>

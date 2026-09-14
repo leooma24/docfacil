@@ -45,7 +45,7 @@
         <div class="footer">
             DocFácil · <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
             @if(!empty($unsubscribeUrl))
-                <small>¿Ya no desea recibir correos? <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">Dése de baja aquí</a> · 1 clic.</small>
+                <small>¿Ya no desea recibir correos? <a href="{{ $unsubscribeUrl }}" style="color:#6b7280;text-decoration:underline;">Dése de baja aquí</a> · 1 clic. · <a href="{{ url('/privacidad') }}" style="color:#6b7280;text-decoration:underline;">Aviso de privacidad</a></small>
             @endif
         </div>
     </div>

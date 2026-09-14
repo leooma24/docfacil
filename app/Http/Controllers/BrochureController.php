@@ -65,13 +65,13 @@ class BrochureController extends Controller
         return [
             'features' => [
                 ['icon' => '📅', 'title' => 'Agenda inteligente', 'desc' => 'Calendario visual multi-doctor, arrastrar y soltar citas, acceso desde cualquier dispositivo. Vista diaria, semanal, mensual.'],
-                ['icon' => '💬', 'title' => 'Recordatorios WhatsApp', 'desc' => 'Mensajes automáticos 24h y 2h antes de la cita. Los consultorios reportan hasta 40% menos inasistencias.'],
+                ['icon' => '💬', 'title' => 'Recordatorios WhatsApp', 'desc' => 'Mensaje listo 24h y 2h antes de la cita; lo mandas con un clic desde tu WhatsApp. Los consultorios reportan hasta 40% menos inasistencias.'],
                 ['icon' => '📋', 'title' => 'Expediente clínico digital', 'desc' => 'Historial completo, alergias, padecimientos, notas SOAP. Todo organizado por paciente y consulta.'],
-                ['icon' => '📄', 'title' => 'Recetas PDF profesionales', 'desc' => 'Con logo del consultorio, cédula profesional y firma digital. El paciente recibe PDF por WhatsApp.'],
+                ['icon' => '📄', 'title' => 'Recetas PDF profesionales', 'desc' => 'Con tu nombre, especialidad, cédula profesional, datos del consultorio y espacio para tu firma. El paciente recibe PDF por WhatsApp.'],
                 ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => '13 condiciones dentales, colores por estado, compartible con el paciente. Historial visual de cada pieza.'],
                 ['icon' => '💰', 'title' => 'Cobro por WhatsApp', 'desc' => 'Envía el monto y link de pago directo al chat. Control automático de cobros pendientes por paciente.'],
                 ['icon' => '📱', 'title' => 'Check-in con QR', 'desc' => 'El paciente escanea al llegar, firma consentimiento en tablet o celular. Sin papel, sin filas.'],
-                ['icon' => '✍', 'title' => 'Firma digital legal', 'desc' => 'Consentimientos informados firmados en pantalla táctil, con timestamp y respaldo legal.'],
+                ['icon' => '✍', 'title' => 'Firma en pantalla', 'desc' => 'Consentimientos informados firmados con el dedo en pantalla táctil, con fecha y hora. Quedan bloqueados al firmarse.'],
                 ['icon' => '👥', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas, pagos e historial. Reduce llamadas de consulta rutinaria.'],
                 ['icon' => '📊', 'title' => 'Dashboard con gráficas', 'desc' => 'Ingresos, citas por doctor, cobros pendientes, pacientes activos. Datos del mes vs. mes anterior.'],
                 ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, recetas vencidas, cumpleaños, cobros atrasados. El sistema te avisa.'],

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Software para Consultorios Dentales en {{ $city }} — DocFácil</title>
-    <meta name="description" content="Software para dentistas en {{ $city }}, {{ $state }}. Recordatorios WhatsApp, odontograma digital FDI, expediente NOM-004 y recetas PDF con cédula. 15 días gratis, sin tarjeta. Desde $499/mes.">
+    <meta name="description" content="Software para dentistas en {{ $city }}, {{ $state }}. Recordatorios WhatsApp, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean) y recetas PDF con cédula. 15 días gratis, sin tarjeta. Desde $499/mes.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
@@ -50,7 +50,7 @@
         "@@context": "https://schema.org",
         "@@type": "SoftwareApplication",
         "name": "DocFácil — Software para dentistas en {{ $city }}",
-        "description": "Software dental para consultorios en {{ $city }}, {{ $state }}. Agenda con recordatorios WhatsApp, odontograma digital FDI, expediente NOM-004, recetas PDF con cédula y cobros por WhatsApp.",
+        "description": "Software dental para consultorios en {{ $city }}, {{ $state }}. Agenda con recordatorios WhatsApp, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean a las 24 horas), recetas PDF con cédula y cobros por WhatsApp.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "url": "{{ url("/software-dental/{$slug}") }}",
@@ -78,8 +78,8 @@
               "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico desde $499/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pago anual = 2 meses gratis. Garantía 30 días." } },
             { "@@type": "Question", "name": "¿Funciona para consultorios pequeños en {{ $city }}?",
               "acceptedAnswer": { "@@type": "Answer", "text": "Sí. La mayoría de nuestros usuarios son consultorios de 1 a 3 sillones. El plan Free está hecho para consultorios pequeños que apenas empiezan." } },
-            { "@@type": "Question", "name": "¿Cumple con NOM-004 y LFPDPPP en México?",
-              "acceptedAnswer": { "@@type": "Answer", "text": "Sí. DocFácil tiene estructura de expediente alineada a NOM-004-SSA3, cumplimiento LFPDPPP, servidores en México y cifrado TLS 1.3." } },
+            { "@@type": "Question", "name": "¿DocFácil me ayuda con la NOM-004 y con la protección de datos?",
+              "acceptedAnswer": { "@@type": "Answer", "text": "Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos." } },
             { "@@type": "Question", "name": "¿Necesito instalar algo?",
               "acceptedAnswer": { "@@type": "Answer", "text": "No. DocFácil funciona en cualquier navegador y se puede instalar como app (PWA) en celular. No requiere instalación local." } }
         ]
@@ -126,7 +126,7 @@
 
             <p class="mt-6 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up" style="animation-delay:0.2s;">
                 Recordatorios WhatsApp <strong class="text-gray-900">a 1 clic</strong>, odontograma digital FDI,
-                expediente NOM-004 y recetas PDF con cédula.
+                expediente pensado para la NOM-004 (notas que se bloquean) y recetas PDF con cédula.
                 <strong class="text-gray-900">Hecho en México</strong> — pensado para dentistas que quieren recuperar pacientes que no llegan.
             </p>
 
@@ -178,7 +178,7 @@
                 Los consultorios dentales en {{ $city }} pierden en promedio
                 <strong class="text-gray-900">15-25 citas al mes</strong> porque pacientes no llegan sin avisar
                 — eso son <strong class="text-gray-900">$6-15,000 al mes</strong> que se van por la coladera.
-                DocFácil te lo recupera con recordatorios automáticos por WhatsApp.
+                DocFácil te ayuda a recuperarlo con recordatorios por WhatsApp a 1 clic.
                 @if(!empty($stats['top_specialties']))
                 Ya investigamos a más de {{ $stats['rounded_consultorios'] >= 10 ? $stats['rounded_consultorios'].'+' : count($stats['top_specialties']) }} consultorios en {{ $city }} —
                 las especialidades más comunes son
@@ -199,8 +199,8 @@
                 $features = [
                     ['icon' => '📱', 'title' => 'Recordatorios WhatsApp 1-clic', 'desc' => 'Abres el mensaje armado y lo mandas desde tu propio WhatsApp. Sin API cara de Meta.'],
                     ['icon' => '🦷', 'title' => 'Odontograma digital FDI', 'desc' => '13 condiciones (caries, corona, implante, sellante…). Editor visual interactivo.'],
-                    ['icon' => '📋', 'title' => 'Expediente NOM-004', 'desc' => 'Estructura alineada a la norma mexicana. Notas SOAP, alergias, fotos.'],
-                    ['icon' => '💊', 'title' => 'Recetas PDF con cédula', 'desc' => 'Logo, firma digital y cédula. Llegan al paciente por WhatsApp en 10 segundos.'],
+                    ['icon' => '📋', 'title' => 'Expediente pensado para la NOM-004', 'desc' => 'Notas SOAP, alergias y fotos. Diagnósticos con CIE-10 y notas que se bloquean a las 24 horas.'],
+                    ['icon' => '💊', 'title' => 'Recetas PDF con cédula', 'desc' => 'Tu nombre, especialidad, cédula y espacio para tu firma. Llegan al paciente por WhatsApp en 10 segundos.'],
                     ['icon' => '💰', 'title' => 'Cobros por WhatsApp', 'desc' => 'Registras cobros en segundos y mandas el monto al paciente con un clic.'],
                     ['icon' => '📊', 'title' => 'Reportes claros', 'desc' => 'Ingresos del mes, servicios más rentables, pacientes activos. Sin hojas de Excel.'],
                 ];
@@ -254,15 +254,15 @@
                 $faqs = [
                     [
                         'q' => "¿DocFácil funciona en {$city}?",
-                        'a' => "Sí. DocFácil funciona en cualquier ciudad de México con conexión a internet. Servidores en México, soporte en español, soporte directo por WhatsApp con el fundador.",
+                        'a' => "Sí. DocFácil funciona en cualquier ciudad de México con conexión a internet, con soporte en español y directo por WhatsApp con el fundador.",
                     ],
                     [
                         'q' => "¿Cuánto cuesta DocFácil para un consultorio en {$city}?",
                         'a' => "Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico $499/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pro $999/mes para 3 doctores. Clínica $1,999/mes. Pago anual = 2 meses gratis. Garantía 30 días.",
                     ],
                     [
-                        'q' => "¿Cumple con NOM-004 y la LFPDPPP?",
-                        'a' => "Sí. La estructura del expediente está alineada a NOM-004-SSA3-2012 (recetas con cédula, notas SOAP, diagnósticos, tratamientos). Cumplimos LFPDPPP con servidores en México, cifrado TLS 1.3, backups diarios y aislamiento total entre clínicas.",
+                        'q' => "¿DocFácil me ayuda con la NOM-004 y con la protección de datos?",
+                        'a' => "Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos.",
                     ],
                     [
                         'q' => "¿Tengo que firmar un contrato?",

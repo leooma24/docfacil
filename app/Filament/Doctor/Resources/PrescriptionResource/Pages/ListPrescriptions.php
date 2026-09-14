@@ -37,7 +37,7 @@ class ListPrescriptions extends ListRecords
             'title'    => 'Recetas',
             'icon'     => '💊',
             'kicker'   => '📝 Recetas digitales',
-            'subtitle' => 'Genera recetas PDF con tu membrete, cédula y firma. Descarga o envía por WhatsApp.',
+            'subtitle' => 'Recetas PDF con tu cédula, la institución de tu título y los datos del consultorio, con espacio para tu firma.',
             'gradient' => '#8b5cf6 0%, #a855f7 40%, #c084fc 100%',
             'accent'   => '#8b5cf6',
             'stats' => [

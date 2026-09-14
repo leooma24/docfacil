@@ -158,7 +158,7 @@
         <div class="tag">BROCHURE · EDICIÓN 2026</div>
         <h1>DocFácil</h1>
         <div class="divider"></div>
-        <p class="sub"><strong>Deja de perder $15,000 al mes en citas que no llegan.</strong><br>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios automáticos por WhatsApp, cobra por ti y te ahorra 8 horas a la semana.</p>
+        <p class="sub"><strong>Deja de perder $15,000 al mes en citas que no llegan.</strong><br>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios por WhatsApp a 1 clic, cobra por ti y te ahorra 8 horas a la semana.</p>
 
         <div class="hero-shot">
             <img src="{{ $screens['dashboard'] }}" alt="Panel de control DocFácil">
@@ -255,7 +255,7 @@
             <td class="feat-text">
                 <span class="feat-num">01</span>
                 <h3>Agenda inteligente + recordatorios WhatsApp</h3>
-                <p>Calendario visual multi-doctor, arrastrar y soltar, vista diaria/semanal/mensual. Recordatorios WhatsApp automáticos 24h y 2h antes, o con un clic manual desde tu agenda.</p>
+                <p>Calendario visual multi-doctor, arrastrar y soltar, vista diaria/semanal/mensual. Recordatorios WhatsApp 24h y 2h antes, con un clic desde tu agenda.</p>
                 <ul>
                     <li>Hasta 40% menos inasistencias</li>
                     <li>Acceso desde PC, tablet o celular</li>
@@ -271,7 +271,7 @@
             <td class="feat-text">
                 <span class="feat-num">02</span>
                 <h3>Expediente clínico digital completo</h3>
-                <p>Historial por paciente, alergias, padecimientos, notas SOAP, fotos clínicas. Búsqueda instantánea y cumplimiento con NOM-004-SSA3.</p>
+                <p>Historial por paciente, alergias, padecimientos, notas SOAP, fotos clínicas. Búsqueda instantánea, diagnósticos con CIE-10 y notas que se bloquean a las 24 horas.</p>
                 <ul>
                     <li>Todo organizado por paciente y consulta</li>
                     <li>Fotos antes/después sin límite</li>
@@ -287,11 +287,11 @@
             <td class="feat-text">
                 <span class="feat-num">03</span>
                 <h3>Recetas PDF profesionales</h3>
-                <p>Generadas con logo, cédula profesional y firma digital. Se descargan en un clic y se envían al paciente por WhatsApp o email.</p>
+                <p>Generadas con tu nombre, especialidad, cédula profesional, datos del consultorio y espacio para tu firma. Se descargan en un clic y se envían al paciente por WhatsApp o email.</p>
                 <ul>
                     <li>Plantilla personalizada por doctor</li>
                     <li>Historial de recetas por paciente</li>
-                    <li>Firma digital con validez legal</li>
+                    <li>Se bloquean 24 horas después de creadas</li>
                 </ul>
             </td>
         </tr></table>
@@ -450,7 +450,7 @@
         </td>
         @endforeach
     </tr></table>
-    <p style="font-size:8.5pt; color:#6b7280; margin-top:4px;">14 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso. Precios en pesos mexicanos.</p>
+    <p style="font-size:8.5pt; color:#6b7280; margin-top:4px;">15 días gratis con todas las funciones del plan Pro. Sin tarjeta. Sin compromiso. Precios en pesos mexicanos.</p>
 
     <h2 class="section" style="font-size:14pt; margin-top:14px;">Vs. la competencia</h2>
     <table class="compare">
@@ -464,7 +464,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr><td>Precio (MXN/mes)</td><td><span class="yes">$149-499</span></td><td>~$3,000</td><td>~$2,500</td><td>~$4,000</td></tr>
+            <tr><td>Precio (MXN/mes)</td><td><span class="yes">$0-1,999</span></td><td>~$3,000</td><td>~$2,500</td><td>~$4,000</td></tr>
             <tr><td>100% en la nube</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">✓</span></td></tr>
             <tr><td>Soporte en español</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td></tr>
             <tr><td>Recordatorios WhatsApp</td><td><span class="yes">✓</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td></tr>
@@ -524,19 +524,19 @@
         </td>
     </tr></table>
 
-    <h2 class="section" style="font-size:16pt; margin-top:14px;">Seguridad y cumplimiento</h2>
+    <h2 class="section" style="font-size:16pt; margin-top:14px;">Seguridad y privacidad</h2>
     <div style="background:#f9fafb; border-radius:10px; padding:14px 16px; border:1px solid #e5e7eb; font-size:9.5pt;">
         <table style="width:100%;">
             <tr>
                 <td style="vertical-align:top; width:50%; padding-right:10px;">
-                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔒 Cifrado TLS 1.3</strong><br>Todas las conexiones y datos en tránsito viajan cifrados.</p>
-                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🇲🇽 Datos en servidores mexicanos</strong><br>Cumplimiento con LFPDPPP (Ley Federal de Protección de Datos).</p>
-                    <p style="margin:0;"><strong style="color:#0d9488;">📋 NOM-004-SSA3</strong><br>Expediente clínico estructurado conforme a norma oficial.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔒 Conexión cifrada (HTTPS)</strong><br>La información viaja cifrada entre tu navegador y nuestros servidores.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🗂 Cada consultorio aislado</strong><br>Tus datos nunca se mezclan con los de otro consultorio.</p>
+                    <p style="margin:0;"><strong style="color:#0d9488;">📋 Pensado para la NOM-004</strong><br>Notas clínicas y recetas que se bloquean a las 24 horas, con historial de cambios.</p>
                 </td>
                 <td style="vertical-align:top; width:50%;">
-                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">💾 Backups diarios automáticos</strong><br>Restauración punto-en-el-tiempo hasta 30 días atrás.</p>
-                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔐 Roles y permisos</strong><br>Cada usuario ve solo lo que necesita ver.</p>
-                    <p style="margin:0;"><strong style="color:#0d9488;">📤 Exportación libre</strong><br>Descarga todos tus datos cuando quieras, en CSV o PDF.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">💾 Respaldo diario automático</strong><br>Cada día se respalda la base de datos.</p>
+                    <p style="margin:0 0 6px 0;"><strong style="color:#0d9488;">🔐 Roles y permisos</strong><br>Cada usuario ve solo lo que necesita ver. Verificación en dos pasos opcional.</p>
+                    <p style="margin:0;"><strong style="color:#0d9488;">📤 Tus datos son tuyos</strong><br>Recetas, consentimientos y presupuestos en PDF; la copia completa se pide a soporte.</p>
                 </td>
             </tr>
         </table>

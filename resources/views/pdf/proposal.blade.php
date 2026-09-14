@@ -58,7 +58,7 @@
         <div class="benefits">
             <div class="benefit">
                 <div class="benefit-title">📅 Citas que se pierden</div>
-                <div class="benefit-desc">El 30% de pacientes no llegan porque se les olvida. Nuestros recordatorios WhatsApp automáticos reducen esto un 40%.</div>
+                <div class="benefit-desc">El 30% de pacientes no llegan porque se les olvida. Los recordatorios por WhatsApp a 1 clic ayudan a reducirlo hasta un 40%.</div>
             </div>
             <div class="benefit">
                 <div class="benefit-title">📝 Tiempo en papeleo</div>
@@ -70,7 +70,7 @@
             </div>
             <div class="benefit">
                 <div class="benefit-title">📄 Recetas ilegibles</div>
-                <div class="benefit-desc">Recetas PDF profesionales con su cédula, membrete y firma digital. El paciente las recibe por WhatsApp.</div>
+                <div class="benefit-desc">Recetas PDF profesionales con su cédula, los datos de su consultorio y espacio para su firma. El paciente las recibe por WhatsApp.</div>
             </div>
         </div>
 
