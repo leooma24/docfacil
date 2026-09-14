@@ -112,7 +112,7 @@
                 <div class="sc-kicker">⚡ Pon a punto tu DocFácil</div>
                 <h3 class="sc-title">
                     @if($percent >= 80)
-                        Casi listo · faltan {{ $total_count - $completed_count }} {{ ($total_count - $completed_count) === 1 ? 'paso' : 'pasos' }}
+                        Casi listo · {{ ($total_count - $completed_count) === 1 ? 'falta 1 paso' : 'faltan ' . ($total_count - $completed_count) . ' pasos' }}
                     @elseif($percent >= 40)
                         Buen avance · {{ $completed_count }} de {{ $total_count }} hechos
                     @else
