@@ -38,6 +38,11 @@ class TraslapeDeCitasTest extends TestCase
     {
         parent::setUp();
 
+        // Las citas de estas pruebas van del 8 al 16 de septiembre de 2026.
+        // Sin fijar el día, el 14 de septiembre ya eran fechas pasadas y la
+        // agenda las rechazaba por anticipación: pruebas que caducaban solas.
+        $this->travelTo(\Carbon\CarbonImmutable::parse('2026-09-07 08:00'));
+
         $this->clinica = Clinic::create([
             'name' => 'Consultorio Test',
             'slug' => 'consultorio-test',
