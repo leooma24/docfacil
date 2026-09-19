@@ -186,7 +186,11 @@ class LimiteDePacientesTest extends TestCase
         $clinica = $this->clinica('basico');
         $this->llenar($clinica, 200);
 
-        $this->post("/clinica/{$clinica->slug}/check-in", [
+        // La liga del check-in va firmada desde el QR del consultorio, así que
+        // la prueba entra por donde entra el paciente de verdad.
+        $liga = \Illuminate\Support\Facades\URL::signedRoute('checkin.store', ['slug' => $clinica->slug]);
+
+        $this->post($liga, [
             'first_name' => 'Nuevo',
             'last_name' => 'Paciente',
             'phone' => '5599887766',

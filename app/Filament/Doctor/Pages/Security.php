@@ -82,6 +82,23 @@ class Security extends Page
 
     public function disable2FA(): void
     {
+        // Apagarlo pide el código, igual que encenderlo. Antes bastaba un clic:
+        // quien se sentara en la computadora del consultorio con la sesión
+        // abierta quitaba el segundo factor y se quedaba con la cuenta.
+        $google2fa = new Google2FA();
+
+        $valido = $this->verificationCode
+            && $google2fa->verifyKey(auth()->user()->two_factor_secret, $this->verificationCode);
+
+        if (! $valido) {
+            Notification::make()
+                ->title('Escribe tu código para desactivarlo')
+                ->body('Por seguridad, necesitamos el código de tu app para apagar la verificación en dos pasos.')
+                ->danger()
+                ->send();
+            return;
+        }
+
         auth()->user()->forceFill([
             'two_factor_enabled' => false,
             'two_factor_secret' => null,

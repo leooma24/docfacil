@@ -14,9 +14,12 @@ class DemoMode
     private const ALLOWED_LIVEWIRE_METHODS = [
         'gotoPage', 'previousPage', 'nextPage', 'sortTable',
         'tableSearch', 'resetTableSearch', 'toggleTableReorder',
+        // Abrir el modal de una accion se permite (para que la demo se vea
+        // completa), ejecutarla no: callMountedAction y callMountedTableAction
+        // son justo los metodos con los que Filament borra registros, exporta
+        // datos y manda correos de invitacion al portal del paciente.
         'mountTableAction', 'unmountTableAction',
         'mountAction', 'unmountAction',
-        'callMountedAction', 'callMountedTableAction',
         'goToStep', 'prevStep', 'nextStep',
         'setTab', 'setTool', 'selectTooth', 'applyTool',
         'toggleChat', 'askFaq',

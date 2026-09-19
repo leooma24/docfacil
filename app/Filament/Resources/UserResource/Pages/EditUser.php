@@ -16,4 +16,15 @@ class EditUser extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    /**
+     * Igual que al crear: `role` está en $guarded y el update normal lo tiraba
+     * sin avisar, así que cambiar el rol desde el panel no hacía nada.
+     */
+    protected function handleRecordUpdate(\Illuminate\Database\Eloquent\Model $record, array $data): \Illuminate\Database\Eloquent\Model
+    {
+        $record->forceFill($data)->save();
+
+        return $record;
+    }
 }

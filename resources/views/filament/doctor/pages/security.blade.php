@@ -16,13 +16,25 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
                         Si cambias o pierdes tu celular, escríbenos por WhatsApp al 668 249 3398 y te ayudamos a entrar.
                     </p>
-                    <button
-                        wire:click="disable2FA"
-                        wire:confirm="¿Seguro que quieres deshabilitar 2FA? Tu cuenta quedará menos protegida."
-                        class="mt-4 px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 rounded-lg hover:bg-red-100 border border-red-200"
-                    >
-                        Deshabilitar 2FA
-                    </button>
+                    {{-- Para apagarlo pedimos el código, igual que para encenderlo:
+                         si no, cualquiera que agarre la sesión abierta lo quita. --}}
+                    <div class="mt-4 flex flex-wrap items-center gap-3">
+                        <input
+                            type="text"
+                            inputmode="numeric"
+                            maxlength="6"
+                            wire:model="verificationCode"
+                            placeholder="Código de 6 dígitos"
+                            class="w-44 px-3 py-2 text-sm border rounded-lg tracking-widest"
+                        >
+                        <button
+                            wire:click="disable2FA"
+                            wire:confirm="¿Seguro que quieres deshabilitar 2FA? Tu cuenta quedará menos protegida."
+                            class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 rounded-lg hover:bg-red-100 border border-red-200"
+                        >
+                            Deshabilitar 2FA
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

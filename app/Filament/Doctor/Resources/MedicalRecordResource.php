@@ -118,6 +118,12 @@ class MedicalRecordResource extends Resource
                             ->label('Radiografías / Fotos')
                             ->multiple()
                             ->image()
+                            // Disco privado: sin esto Filament las guardaba en
+                            // el disco público y quedaban descargables desde
+                            // internet con solo tener la dirección, sin sesión.
+                            // Son imágenes clínicas del paciente.
+                            ->disk('local')
+                            ->visibility('private')
                             ->directory('medical-records')
                             ->maxFiles(10)
                             ->maxSize(5120)

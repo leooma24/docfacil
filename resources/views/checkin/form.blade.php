@@ -49,7 +49,9 @@
             <h1>Check-in rápido</h1>
             <p class="subtitle">Llena tus datos mientras esperas. Solo toma 30 segundos.</p>
 
-            <form method="POST" action="{{ route('checkin.store', $clinic->slug) }}">
+            {{-- Se postea a la misma direccion firmada que abrio el QR, para que
+                 la firma viaje con el envio y nadie pueda llamar a esta ruta de fuera. --}}
+            <form method="POST" action="{{ url()->full() }}">
                 @csrf
 
                 {{-- Honeypot for bots --}}

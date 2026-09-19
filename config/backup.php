@@ -26,6 +26,17 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
+
+                    // Los .env traen APP_KEY, la contraseña de MySQL y las
+                    // llaves de Stripe. Iban dentro del zip del respaldo, así
+                    // que quien consiguiera un respaldo se llevaba la base y
+                    // además las llaves para descifrar lo que va cifrado.
+                    base_path('.env'),
+                    base_path('.env.production'),
+                    base_path('.env.backup'),
+
+                    // El log guarda datos de pacientes y no aporta al respaldo.
+                    storage_path('logs'),
                 ],
 
                 /*
@@ -164,6 +175,10 @@ return [
          * The password to be used for archive encryption.
          * Set to `null` to disable encryption.
          */
+        // Sin contraseña, Spatie NO cifra nada aunque 'encryption' diga
+        // 'default'. Con el respaldo guardado en el mismo servidor, eso deja
+        // la base completa de pacientes en claro dentro de un zip.
+        // Hay que definir BACKUP_ARCHIVE_PASSWORD en producción.
         'password' => env('BACKUP_ARCHIVE_PASSWORD'),
 
         /*

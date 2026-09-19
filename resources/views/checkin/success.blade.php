@@ -25,13 +25,11 @@
         <div class="check-icon">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
         </div>
-        @if($returning)
-        <h1>¡Hola de nuevo!</h1>
-        <p>Ya tenemos tus datos. El doctor te atenderá en un momento.</p>
-        @else
+        {{-- El mensaje es el mismo para un paciente nuevo y para uno que ya
+             estaba registrado. Antes decia "Hola de nuevo", y eso confirmaba a
+             quien fuera si un telefono pertenece a un paciente del consultorio. --}}
         <h1>¡Check-in completado!</h1>
         <p>Toma asiento, el doctor te atenderá en un momento.</p>
-        @endif
 
         <div class="info-box">
             <strong>Estás en:</strong>

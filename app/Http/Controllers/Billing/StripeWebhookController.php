@@ -50,9 +50,24 @@ class StripeWebhookController extends Controller
                 'received_at' => now(),
             ]);
         } catch (\Illuminate\Database\QueryException $e) {
-            // Violación de unique constraint = ya recibido, Stripe retry.
-            Log::info('Stripe webhook duplicado ignorado', ['event_id' => $event->id, 'type' => $event->type]);
-            return response('ok (duplicate)', 200);
+            // Violación de unique constraint = ya lo recibimos antes. Pero solo
+            // se ignora si ademas quedó PROCESADO: si el intento anterior murió
+            // a la mitad, la fila quedaba ahí y el reintento de Stripe rebotaba
+            // como duplicado. El cliente pagaba y su plan nunca se activaba.
+            $yaProcesado = DB::table('stripe_webhook_events')
+                ->where('event_id', $event->id)
+                ->whereNotNull('processed_at')
+                ->exists();
+
+            if ($yaProcesado) {
+                Log::info('Stripe webhook duplicado ignorado', ['event_id' => $event->id, 'type' => $event->type]);
+                return response('ok (duplicate)', 200);
+            }
+
+            Log::warning('Stripe webhook a medio procesar, se reintenta', [
+                'event_id' => $event->id,
+                'type' => $event->type,
+            ]);
         }
 
         try {
@@ -236,10 +251,58 @@ class StripeWebhookController extends Controller
             return;
         }
 
+        // Un consultorio que cambia de plan termina con la suscripción vieja
+        // cancelándose días después de estrenar la nueva. Como aquí buscamos
+        // por cliente y no por suscripción, sin esta comprobación dábamos por
+        // cancelado a alguien que sí está pagando, y además el observer le
+        // quitaba la comisión al vendedor.
+        if ($this->tieneOtraSuscripcionActiva($customerId, $subId)) {
+            Log::info('Stripe sub.deleted ignorado: el consultorio tiene otra suscripción activa', [
+                'clinic_id' => $clinic->id,
+                'sub_id' => $subId,
+            ]);
+            return;
+        }
+
         $clinic->update([
             'auto_renew' => false,
             'cancelled_at' => now(),
         ]);
         Log::info('Plan SaaS cancelado vía Stripe', ['clinic_id' => $clinic->id, 'sub_id' => $subId]);
+    }
+
+    /**
+     * ¿Al cliente de Stripe le queda alguna otra suscripción viva, aparte de
+     * la que se acaba de cancelar? Si Stripe no contesta, devolvemos false
+     * para conservar el comportamiento anterior y no dejar planes zombis.
+     */
+    private function tieneOtraSuscripcionActiva(string $customerId, ?string $subIdCancelada): bool
+    {
+        $secret = config('services.stripe.secret');
+
+        if (! $secret) {
+            return false;
+        }
+
+        try {
+            $suscripciones = (new \Stripe\StripeClient($secret))->subscriptions->all([
+                'customer' => $customerId,
+                'status' => 'active',
+                'limit' => 10,
+            ]);
+
+            foreach ($suscripciones->data as $suscripcion) {
+                if ($suscripcion->id !== $subIdCancelada) {
+                    return true;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('No se pudo consultar las suscripciones del cliente en Stripe', [
+                'customer_id' => $customerId,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return false;
     }
 }

@@ -42,14 +42,14 @@ class WhatsAppService
                 ]);
 
             if ($response->successful()) {
-                Log::info("WhatsApp: Message sent to {$to}");
+                Log::info('WhatsApp: mensaje enviado', ['destinatario' => self::telefonoParaLog($to)]);
                 return true;
             }
 
             $this->handleHttpFailure($to, $response->status(), $response->json());
             return false;
         } catch (\Exception $e) {
-            Log::error("WhatsApp: Exception sending to {$to}: {$e->getMessage()}");
+            Log::error('WhatsApp: excepcion al enviar', ['destinatario' => self::telefonoParaLog($to), 'error' => $e->getMessage()]);
             return false;
         }
     }
@@ -76,14 +76,14 @@ class WhatsAppService
             if (! Cache::has($key)) {
                 Cache::put($key, now()->toIso8601String(), now()->addHour());
                 Log::warning('WhatsApp en modo desarrollo: destinatario no está en la lista permitida de Meta. Los envíos a números no registrados seguirán fallando hasta sacar la cuenta de modo desarrollo.', [
-                    'ejemplo_destinatario' => $to,
+                    'ejemplo_destinatario' => self::telefonoParaLog($to),
                     'meta_code' => 131030,
                 ]);
             }
             return;
         }
 
-        Log::error("WhatsApp: Failed to send to {$to}", ['status' => $status, 'body' => $body]);
+        Log::error('WhatsApp: fallo el envio', ['destinatario' => self::telefonoParaLog($to), 'status' => $status, 'body' => $body]);
 
         if ($status !== 401) {
             return;
@@ -194,5 +194,17 @@ class WhatsAppService
         }
 
         return $phone;
+    }
+
+    /**
+     * El telefono del paciente no se escribe completo en el log: ahi queda en
+     * texto plano y el archivo se va en los respaldos. Con los ultimos cuatro
+     * digitos se depura igual, y ya no se puede reconstruir quien tuvo cita.
+     */
+    protected static function telefonoParaLog(?string $telefono): string
+    {
+        $digitos = preg_replace('/\D/', '', (string) $telefono);
+
+        return $digitos === '' ? 'sin numero' : '***' . substr($digitos, -4);
     }
 }

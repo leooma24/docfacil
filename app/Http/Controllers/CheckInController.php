@@ -12,14 +12,14 @@ class CheckInController extends Controller
 {
     public function show(string $slug)
     {
-        $clinic = Clinic::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $clinic = $this->consultorioConCheckIn($slug);
 
         return view('checkin.form', compact('clinic'));
     }
 
     public function store(Request $request, string $slug)
     {
-        $clinic = Clinic::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $clinic = $this->consultorioConCheckIn($slug);
 
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
@@ -53,15 +53,15 @@ class CheckInController extends Controller
         }
 
         if ($existing) {
-            if (!empty($data['reason_for_visit'])) {
-                $existing->update([
-                    'medical_notes' => trim(($existing->medical_notes ?? '') . "\n[" . now()->format('d/m/Y H:i') . "] Motivo: " . $data['reason_for_visit']),
-                ]);
-            }
-
+            // Al paciente que ya existe no se le escribe en el expediente desde
+            // aqui: esta pantalla no sabe quien esta del otro lado. Antes se le
+            // anexaba el motivo a sus notas medicas, asi que cualquiera con su
+            // telefono podia escribirle texto libre en el historial.
+            // La aceptacion del aviso si se registra, porque la liga viene
+            // firmada desde el QR que esta pegado en la recepcion.
             AvisoDePrivacidad::registrarAceptacion($existing, 'check_in');
 
-            return view('checkin.success', ['clinic' => $clinic, 'returning' => true]);
+            return view('checkin.success', ['clinic' => $clinic]);
         }
 
         // El que llegó al tope es el consultorio, pero quien está parado
@@ -96,6 +96,20 @@ class CheckInController extends Controller
 
         AvisoDePrivacidad::registrarAceptacion($paciente, 'check_in');
 
-        return view('checkin.success', ['clinic' => $clinic, 'returning' => false]);
+        return view('checkin.success', ['clinic' => $clinic]);
+    }
+
+    /**
+     * El consultorio del slug, solo si esta activo y su plan incluye el
+     * check-in por QR. Antes la ruta estaba abierta para cualquier
+     * consultorio, incluidos los del plan gratis que no lo pagan.
+     */
+    protected function consultorioConCheckIn(string $slug): Clinic
+    {
+        $clinic = Clinic::where('slug', $slug)->where('is_active', true)->firstOrFail();
+
+        abort_unless($clinic->hasFeature('qr_checkin'), 404);
+
+        return $clinic;
     }
 }

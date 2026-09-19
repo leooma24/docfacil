@@ -93,10 +93,15 @@ class DoctorPanelProvider extends PanelProvider
                 // Las páginas del panel no pasan por el grupo web.
                 \App\Http\Middleware\UsarHoraDelConsultorio::class,
             ])
+            // isPersistent: true para que tambien corran en las peticiones de
+            // Livewire (/livewire/update). Sin eso, el candado de solo lectura
+            // de la cuenta demo y el bloqueo de consultorios desactivados no se
+            // evaluaban en ninguna escritura, porque en Filament todo guardado
+            // pasa por Livewire y no por una carga de pagina.
             ->authMiddleware([
                 Authenticate::class,
                 \App\Http\Middleware\VerifyClinicPlan::class,
                 \App\Http\Middleware\DemoMode::class,
-            ]);
+            ], isPersistent: true);
     }
 }

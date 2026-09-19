@@ -81,7 +81,10 @@ class AvisoDePrivacidadPacienteTest extends TestCase
 
     private function checkIn(array $extra = [])
     {
-        return $this->post("/clinica/{$this->clinica->slug}/check-in", array_merge([
+        // La liga del check-in va firmada desde el QR del consultorio.
+        $liga = \Illuminate\Support\Facades\URL::signedRoute('checkin.store', ['slug' => $this->clinica->slug]);
+
+        return $this->post($liga, array_merge([
             'first_name' => 'Lucía',
             'last_name' => 'Hernández',
             'phone' => '5599887766',

@@ -79,6 +79,11 @@ return [
     ],
 
     // Datos bancarios para pagos por SPEI (transferencia manual con aprobación)
+    // Llave de la demo para vendedores (/demo-vendedor?k=...). Sin ella la
+    // ruta responde 404: crea consultorios con datos sembrados y deja sesion
+    // iniciada, asi que no puede quedar abierta a internet.
+    'demo_vendedor_token' => env('DEMO_VENDEDOR_TOKEN'),
+
     'spei' => [
         'enabled'   => env('SPEI_ENABLED', true),
         'banco'     => env('SPEI_BANCO', 'BanBajío'),

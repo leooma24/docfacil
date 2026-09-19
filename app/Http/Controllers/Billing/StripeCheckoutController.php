@@ -50,6 +50,12 @@ class StripeCheckoutController extends Controller
                 $clinic->update(['stripe_id' => $customer->id]);
             }
 
+            // Si el consultorio ya tiene suscripciones activas, se cancelan al
+            // terminar el periodo que ya pagó. Sin esto, cambiar de plan creaba
+            // una segunda suscripción sobre el mismo cliente y Stripe le cobraba
+            // las dos cada mes (por ejemplo $499 de Básico + $999 de Pro).
+            $this->cancelarSuscripcionesAnteriores($stripe, $clinic);
+
             $session = $stripe->checkout->sessions->create([
                 'mode' => 'subscription',
                 'customer' => $clinic->stripe_id,
@@ -114,5 +120,39 @@ class StripeCheckoutController extends Controller
         return redirect()
             ->route('filament.doctor.pages.actualizar-plan')
             ->with('success', '¡Pago recibido! Tu plan se activará en unos segundos. Si no ves el cambio, recarga la página.');
+    }
+
+    /**
+     * Programa la cancelación de las suscripciones que el consultorio ya tenga
+     * en Stripe, al terminar el periodo pagado.
+     *
+     * Se cancela "al final del periodo" y no de inmediato para no quitarle
+     * días que ya pagó. Si Stripe falla aquí no se detiene la compra: es peor
+     * dejarlo sin poder pagar que arrastrar una suscripción vieja, y queda en
+     * el log para revisarla a mano.
+     */
+    protected function cancelarSuscripcionesAnteriores(StripeClient $stripe, $clinic): void
+    {
+        try {
+            $suscripciones = $stripe->subscriptions->all([
+                'customer' => $clinic->stripe_id,
+                'status' => 'active',
+                'limit' => 10,
+            ]);
+
+            foreach ($suscripciones->data as $suscripcion) {
+                $stripe->subscriptions->update($suscripcion->id, ['cancel_at_period_end' => true]);
+
+                Log::info('Suscripción anterior programada para cancelar', [
+                    'clinic_id' => $clinic->id,
+                    'subscription' => $suscripcion->id,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            Log::error('No se pudieron cancelar las suscripciones anteriores', [
+                'clinic_id' => $clinic->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }

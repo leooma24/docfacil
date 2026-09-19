@@ -41,7 +41,11 @@ class CheckInQR extends Page
     public function getCheckInUrl(): string
     {
         $clinic = auth()->user()->clinic;
-        return route('checkin.show', ['slug' => $clinic->slug]);
+
+        // Firmada y sin caducidad: el QR se imprime una vez y vive pegado en
+        // la recepcion, pero la direccion deja de ser adivinable a partir del
+        // nombre del consultorio.
+        return \Illuminate\Support\Facades\URL::signedRoute('checkin.show', ['slug' => $clinic->slug]);
     }
 
     public function getQrCodeUrl(): string

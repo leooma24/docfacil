@@ -159,19 +159,30 @@ class Commission extends Model
             return [];
         }
 
-        // Guardia de idempotencia: si ya hay comisiones vivas para esta venta, no duplicar.
-        $alreadyHasCommissions = self::query()
+        // Guardia de idempotencia. Mira SOLO clinic_id, porque la tabla tiene
+        // un unique (clinic_id, tier): un consultorio nunca puede tener dos
+        // comisiones del mismo tier, aunque cambie de plan o vuelva a contratar.
+        //
+        // Antes esta guardia filtraba además por plan y por estado, así que en
+        // un cambio de plan (o al recontratar después de una cancelación) no
+        // veía las comisiones viejas, intentaba crearlas otra vez y reventaba
+        // contra el unique. En SPEI eso corre dentro de una transacción: el
+        // error revertía la aprobación completa y el cliente se quedaba pagado
+        // y sin plan.
+        $comisionesPrevias = self::query()
             ->where('clinic_id', $clinic->id)
-            ->where('user_id', $userId)
-            ->where('plan_at_sale', $plan)
-            ->whereIn('status', ['pending', 'paid'])
-            ->exists();
+            ->get(['id', 'tier', 'user_id', 'plan_at_sale', 'status']);
 
-        if ($alreadyHasCommissions) {
-            \Log::info('Commission::generateForSale skipped (ya existen comisiones)', [
+        if ($comisionesPrevias->isNotEmpty()) {
+            \Log::info('Commission::generateForSale skipped (el consultorio ya tiene comisiones)', [
                 'clinic_id' => $clinic->id,
                 'user_id' => $userId,
                 'plan' => $plan,
+                'previas' => $comisionesPrevias->map(fn ($c) => [
+                    'tier' => $c->tier,
+                    'plan_at_sale' => $c->plan_at_sale,
+                    'status' => $c->status,
+                ])->all(),
             ]);
             return [];
         }

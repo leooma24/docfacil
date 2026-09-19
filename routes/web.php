@@ -164,8 +164,17 @@ Route::middleware(['signed', 'throttle:10,1'])->group(function () {
         ->name('paciente.activar.store');
 });
 
-// Demo mode for sales reps - creates a temporary clinic with fake data
-Route::get('/demo-vendedor', [DemoModeController::class, 'start'])
+// Demo para vendedores: crea un consultorio temporal con datos falsos y deja
+// la sesion iniciada. Estaba abierta a internet, y cada visita sembraba ~180
+// registros en la base y regalaba una sesion de doctor a un desconocido.
+// Ahora pide la llave de DEMO_VENDEDOR_TOKEN; sin esa variable queda apagada.
+Route::get('/demo-vendedor', function (\Illuminate\Http\Request $request, DemoModeController $demo) {
+    $llave = config('services.demo_vendedor_token');
+
+    abort_unless($llave && hash_equals($llave, (string) $request->query('k')), 404);
+
+    return $demo->start();
+})
     ->middleware('throttle:10,60')
     ->name('demo.vendedor');
 
@@ -185,12 +194,15 @@ Route::get('/corte/sin-correo/{clinic}', \App\Http\Controllers\CorteSinCorreoCon
     ->middleware(['signed', 'throttle:10,1'])
     ->name('corte.sin-correo');
 
-// Public check-in for patients
+// Check-in del paciente en la sala de espera. Va firmado: la liga sale del QR
+// que imprime el consultorio y no se puede adivinar con el nombre del negocio.
+// Sin la firma, cualquiera podia preguntar por un telefono y la pantalla le
+// decia si esa persona era paciente de ese consultorio.
 Route::get('/clinica/{slug}/check-in', [CheckInController::class, 'show'])
-    ->middleware('throttle:20,1')
+    ->middleware(['signed', 'throttle:20,1'])
     ->name('checkin.show');
 Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
-    ->middleware('throttle:5,1')
+    ->middleware(['signed', 'throttle:5,1'])
     ->name('checkin.store');
 
 // Aviso de privacidad del consultorio para sus pacientes, y la liga firmada
