@@ -99,7 +99,7 @@
             <div class="flex items-center gap-3 sm:gap-5">
                 <a href="{{ url('/') }}#pricing" class="hidden sm:inline text-sm text-gray-600 hover:text-teal-600 font-medium">Precios</a>
                 <a href="{{ url('/doctor/login') }}" class="hidden sm:inline text-sm text-gray-500 hover:text-teal-600 font-medium">Iniciar sesión</a>
-                <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="city_navbar" data-track-city="{{ $slug }}"
+                <a href="{{ url('/doctor/register?city=' . urlencode($city) . '&state=' . urlencode($state)) }}" data-track="cta_clicked" data-track-location="city_navbar" data-track-city="{{ $slug }}"
                    class="px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition shadow hover:shadow-lg hover:shadow-teal-200">
                     Prueba gratis
                 </a>
@@ -131,7 +131,7 @@
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up" style="animation-delay:0.3s;">
-                <a href="{{ url('/doctor/register') }}"
+                <a href="{{ url('/doctor/register?city=' . urlencode($city) . '&state=' . urlencode($state)) }}"
                    data-track="cta_clicked" data-track-location="city_hero" data-track-city="{{ $slug }}"
                    class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-teal-300/50 transition-all hover:-translate-y-1 text-lg">
                     Probar 15 días gratis →
@@ -304,7 +304,7 @@
             <p class="mt-4 text-lg text-teal-100">
                 Configúralo en 2 minutos. Plan gratis de por vida. Sin tarjeta.
             </p>
-            <a href="{{ url('/doctor/register') }}"
+            <a href="{{ url('/doctor/register?city=' . urlencode($city) . '&state=' . urlencode($state)) }}"
                data-track="cta_clicked" data-track-location="city_final_cta" data-track-city="{{ $slug }}"
                class="mt-8 inline-flex items-center px-10 py-4 bg-white text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition-all shadow-2xl hover:-translate-y-1 text-lg">
                 Crear mi cuenta gratis →

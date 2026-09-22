@@ -47,6 +47,7 @@ class Register extends BaseRegister
         $this->ligaDatosClinicos = [
             'phone' => request()->query('phone'),
             'city' => request()->query('city'),
+            'state' => request()->query('state'),
             'specialty' => request()->query('specialty'),
         ];
     }
@@ -136,6 +137,10 @@ class Register extends BaseRegister
         // en el wizard de onboarding después del registro.
         $queryPhone = $this->ligaDatosClinicos['phone'] ?? null;
         $queryCity = $this->ligaDatosClinicos['city'] ?? null;
+        // El estado es el respaldo de ZonaHoraria para las ciudades ambiguas
+        // (La Paz, Nogales, Loreto): sin él, un consultorio de BCS o Sonora
+        // nacía con la hora del centro sin que nadie se enterara.
+        $queryState = $this->ligaDatosClinicos['state'] ?? null;
         $querySpecialty = $this->ligaDatosClinicos['specialty'] ?? null;
         $queryRef = $this->ligaReferido;
 
@@ -145,6 +150,7 @@ class Register extends BaseRegister
             'name' => $data['clinic_name'],
             'phone' => $queryPhone,
             'city' => $queryCity,
+            'state' => $queryState,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
             'sold_by_user_id' => $salesRep?->id,

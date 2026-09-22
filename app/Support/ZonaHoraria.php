@@ -29,6 +29,8 @@ class ZonaHoraria
         'America/Tijuana' => 'Baja California: Tijuana, Mexicali, Ensenada',
         'America/Cancun' => 'Quintana Roo: Cancún, Playa del Carmen, Chetumal',
         'America/Ciudad_Juarez' => 'Ciudad Juárez',
+        'America/Matamoros' => 'Tamaulipas frontera: Matamoros, Reynosa, Nuevo Laredo',
+        'America/Ojinaga' => 'Ojinaga, Chihuahua',
     ];
 
     /**
@@ -42,8 +44,19 @@ class ZonaHoraria
         'America/Hermosillo' => ['hermosillo', 'ciudad obregon', 'cd obregon', 'navojoa', 'guaymas', 'san luis rio colorado', 'caborca', 'huatabampo'],
         'America/Tijuana' => ['tijuana', 'mexicali', 'ensenada', 'tecate', 'rosarito'],
         'America/Cancun' => ['cancun', 'playa del carmen', 'chetumal', 'tulum', 'cozumel', 'isla mujeres', 'bacalar'],
+        'America/Matamoros' => ['matamoros', 'reynosa', 'nuevo laredo', 'rio bravo', 'valle hermoso', 'ciudad miguel aleman'],
+        'America/Ojinaga' => ['ojinaga'],
     ];
 
+    /**
+     * Los estados que van con otra hora.
+     *
+     * Tamaulipas y Chihuahua NO están aquí a propósito: la mayor parte de los
+     * dos va con la hora del centro, y solo sus municipios fronterizos siguen
+     * el horario de verano de Estados Unidos. Esos entran por ciudad, en
+     * POR_CIUDAD — mapear el estado entero mandaría Tampico o Delicias a la
+     * hora equivocada media mitad del año.
+     */
     private const POR_ESTADO = [
         'sinaloa' => 'America/Mazatlan',
         'nayarit' => 'America/Mazatlan',

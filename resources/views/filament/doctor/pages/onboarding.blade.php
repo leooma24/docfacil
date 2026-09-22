@@ -38,6 +38,22 @@
                 <input type="text" wire:model="clinic_address" placeholder="Av. Reforma 100, Col. Centro" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:0.75rem;font-size:0.875rem;">
             </div>
 
+            {{-- La hora del consultorio. Sin esto, un consultorio de Los Mochis
+                 o de Cancún agendaba con la hora del centro. El reloj en vivo es
+                 lo que le permite confirmar en vez de adivinar. --}}
+            <div>
+                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.375rem;">Zona horaria *</label>
+                <select wire:model.live="clinic_timezone" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:0.75rem;font-size:0.875rem;background:#fff;">
+                    @foreach(\App\Support\ZonaHoraria::OPCIONES as $zona => $etiqueta)
+                        <option value="{{ $zona }}">{{ $etiqueta }}</option>
+                    @endforeach
+                </select>
+                <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">
+                    Ahí son las <strong style="color:#0d9488;">{{ now($clinic_timezone ?: \App\Support\ZonaHoraria::CENTRO)->format('H:i') }}</strong>.
+                    Tu agenda pública y tu escritorio usan esta hora.
+                </p>
+            </div>
+
             {{-- Logo upload --}}
             <div style="margin-top:0.5rem;padding-top:1rem;border-top:1px dashed #e5e7eb;">
                 <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.7rem;">(opcional · aparece en tu página pública de citas)</span></label>

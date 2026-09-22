@@ -30,6 +30,7 @@ class Onboarding extends Page implements HasForms
     public string $clinic_phone = '';
     public string $clinic_address = '';
     public string $clinic_city = '';
+    public string $clinic_timezone = '';
 
     /** @var \Livewire\TemporaryUploadedFile|null Logo subido en step 1 (opcional) */
     public $logo = null;
@@ -93,7 +94,7 @@ class Onboarding extends Page implements HasForms
             ['name' => 'Retratamiento endodóntico', 'price' => 4000, 'duration' => 120],
         ],
         'periodoncia' => [
-            ['name' => 'Curetaje (por cuadrante)', 'price' => 800, 'duration' => 45, 'recall_months' => 6],
+            ['name' => 'Curetaje (por cuadrante)', 'price' => 800, 'duration' => 45, 'recall_months' => 6, 'unit' => 'quadrant'],
             ['name' => 'Cirugía periodontal', 'price' => 3500, 'duration' => 90],
             ['name' => 'Mantenimiento periodontal', 'price' => 600, 'duration' => 45, 'recall_months' => 3],
         ],
@@ -120,6 +121,10 @@ class Onboarding extends Page implements HasForms
             $this->clinic_phone = $clinic->phone ?? '';
             $this->clinic_address = $clinic->address ?? '';
             $this->clinic_city = $clinic->city ?? '';
+            // Se propone la zona que le toca por su ciudad o su estado, pero el
+            // doctor la confirma viendo su propia hora en pantalla: así un
+            // default equivocado se nota aquí y no tres semanas después.
+            $this->clinic_timezone = \App\Support\ZonaHoraria::delConsultorio($clinic);
         }
 
         if ($doctor) {
@@ -223,6 +228,7 @@ class Onboarding extends Page implements HasForms
                 'phone' => $this->clinic_phone ?: null,
                 'address' => $this->clinic_address ?: null,
                 'city' => $this->clinic_city ?: null,
+                'timezone' => $this->clinic_timezone ?: null,
                 'onboarding_status' => 'completed',
             ];
 
@@ -256,6 +262,9 @@ class Onboarding extends Page implements HasForms
                     'clinic_id' => $clinic->id,
                     'name' => $svc['name'],
                     'price' => (float) $svc['price'],
+                    'unit' => \App\Support\WorkUnit::isBillable($svc['unit'] ?? null)
+                        ? $svc['unit']
+                        : \App\Support\WorkUnit::VISIT,
                     'duration_minutes' => (int) ($svc['duration'] ?: 30),
                     'recall_months' => isset($svc['recall_months']) ? (int) $svc['recall_months'] : null,
                     'is_active' => true,
