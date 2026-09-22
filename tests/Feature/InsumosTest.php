@@ -225,6 +225,75 @@ class InsumosTest extends TestCase
         $this->assertSame(0.0, $insumo->entryCost(250, 0));
     }
 
+    // ── La precisión del costo ───────────────────────────────────
+    //
+    // El costo es por unidad de consumo (un mililitro, un guante), no por
+    // caja. Un insumo de $0.008 el ml es normal —el hipoclorito, por
+    // ejemplo— y a dos decimales se guarda como $0.01: 25% de error,
+    // multiplicado por cada consulta.
+    //
+    // Para que el número llegue entero hacen falta dos cosas: el cast a
+    // `decimal:4` y el redondeo a 4 en el cálculo. El cast redondea al leer y
+    // al escribir, pero no sirve de nada si el cálculo ya recortó antes.
+    //
+    // Ojo con lo que estas pruebas alcanzan a cubrir: el redondeo y el cast,
+    // que son PHP. El ancho de la columna no se prueba aquí porque SQLite no
+    // recorta los decimales —eso solo se ve en MySQL, como avisa el CLAUDE.md
+    // del repo—; de eso se encarga la migración
+    // 2026_09_23_100000_widen_inventory_columns.
+
+    public function test_el_costo_por_mililitro_conserva_sus_cuatro_decimales(): void
+    {
+        // Bidón de $3,000 con 375,000 ml: $0.008 el ml.
+        $insumo = $this->insumo($this->consultorio(), [
+            'unit' => 'ml',
+            'purchase_unit' => 'ml',
+            'units_per_purchase' => 1,
+        ]);
+
+        $this->assertSame(0.008, $insumo->costPerConsumptionUnit(3000, 375000));
+        $this->assertSame(0.008, $insumo->entryCost(3000, 375000));
+    }
+
+    public function test_un_costo_barato_sobrevive_el_viaje_a_la_base(): void
+    {
+        $insumo = $this->insumo($this->consultorio(), [
+            'unit' => 'ml',
+            'purchase_unit' => 'ml',
+            'units_per_purchase' => 1,
+        ]);
+
+        $movimiento = $insumo->register('in', 375000, ['unit_cost' => 0.008]);
+
+        // Se relee de la base, que es donde el cast hace su trabajo.
+        $this->assertEqualsWithDelta(0.008, (float) $movimiento->fresh()->unit_cost, 0.00001);
+    }
+
+    public function test_el_costo_del_catalogo_tambien_guarda_cuatro_decimales(): void
+    {
+        $insumo = $this->insumo($this->consultorio(), [
+            'unit' => 'ml',
+            'cost_per_unit' => 0.008,
+        ]);
+
+        $this->assertEqualsWithDelta(0.008, (float) $insumo->fresh()->cost_per_unit, 0.00001);
+    }
+
+    public function test_el_costo_de_un_lote_tambien_guarda_cuatro_decimales(): void
+    {
+        $insumo = $this->insumo($this->consultorio(), ['unit' => 'ml']);
+
+        $lote = $insumo->lots()->create([
+            'clinic_id' => $insumo->clinic_id,
+            'lot_number' => 'HIP-0001',
+            'expires_on' => now()->addYear(),
+            'quantity' => 375000,
+            'unit_cost' => 0.008,
+        ]);
+
+        $this->assertEqualsWithDelta(0.008, (float) $lote->fresh()->unit_cost, 0.00001);
+    }
+
     // ── El punto de reorden ──────────────────────────────────────
 
     public function test_sin_punto_de_reorden_no_hay_alerta(): void

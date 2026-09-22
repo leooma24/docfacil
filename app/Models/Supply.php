@@ -171,12 +171,20 @@ class Supply extends Model
         return round($purchaseQuantity * ($factor > 0 ? $factor : 1), 3);
     }
 
-    /** Lo que sale una unidad de consumo, si la compra costó $precioDeCompra. */
+    /**
+     * Lo que sale una unidad de consumo, si la compra costó $precioDeCompra.
+     *
+     * Se redondea a 4 decimales y no a 2: el costo es por unidad de consumo
+     * (un mililitro, un guante), no por caja. A 2 decimales un insumo de
+     * $0.008 el ml se guarda como $0.01 —25% de error— y el error se
+     * multiplica por cada consulta. El cast a `decimal:4` no alcanza solo:
+     * este redondeo corre antes de que el valor llegue a la columna.
+     */
     public function costPerConsumptionUnit(float $purchasePrice, float $purchaseQuantity): float
     {
         $unidades = $this->toConsumptionUnits($purchaseQuantity);
 
-        return $unidades > 0 ? round($purchasePrice / $unidades, 2) : 0.0;
+        return $unidades > 0 ? round($purchasePrice / $unidades, 4) : 0.0;
     }
 
     /**
@@ -189,7 +197,7 @@ class Supply extends Model
     public function entryCost(float $totalPrice, float $consumptionUnits): float
     {
         return $consumptionUnits > 0
-            ? round($totalPrice / $consumptionUnits, 2)
+            ? round($totalPrice / $consumptionUnits, 4)
             : 0.0;
     }
 
