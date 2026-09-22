@@ -35,6 +35,20 @@ class HazardousWasteResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
+    /**
+     * El inventario va en Pro. Se cierran las dos puertas: la navegacion y el
+     * acceso por URL, porque esconder el menu no cierra nada.
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return (bool) auth()->user()?->clinic?->hasFeature('inventory');
+    }
+
+    public static function canAccess(): bool
+    {
+        return (bool) auth()->user()?->clinic?->hasFeature('inventory');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);

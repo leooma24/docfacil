@@ -33,6 +33,10 @@ class SeguridadDeLaAnestesiaTest extends TestCase
         return Clinic::create(array_merge([
             'name' => 'Consultorio Test',
             'slug' => 'consultorio-' . uniqid(),
+            // La propuesta de insumos —de donde salen los cartuchos que se
+            // cuentan aquí— va en Pro.
+            'plan' => 'profesional',
+            'plan_ends_at' => now()->addYear(),
             'onboarding_status' => 'completed',
         ], $atributos));
     }

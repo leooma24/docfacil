@@ -791,8 +791,20 @@ class Consultation extends Page implements HasForms
      * cambiado: si capturó un diente más, la cantidad sugerida es nueva y
      * manda ella; si no, se queda con lo que él puso.
      */
+    /** El inventario va en Pro: sin el plan no se propone ni se descuenta nada. */
+    public function llevaInventario(): bool
+    {
+        return (bool) auth()->user()?->clinic?->hasFeature('inventory');
+    }
+
     public function refreshProposal(): void
     {
+        if (! $this->llevaInventario()) {
+            $this->supplies = [];
+
+            return;
+        }
+
         $propuesta = SupplyProposal::for($this->draftProcedures());
         $previos = collect($this->supplies)->keyBy('supply_id');
 

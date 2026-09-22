@@ -464,6 +464,11 @@ class Clinic extends Model
             'public_booking',          // Portal publico /clinica/{slug}/agendar
             'recall_automation',       // A quien ya le toca volver. Lo que mas
                                        // ingreso le genera a un consultorio dental.
+            'inventory',               // Insumos, kardex, lotes y residuos. Va en
+                                       // Pro porque es lo que pide la clinica con
+                                       // varios doctores —donde el material se
+                                       // va sin que nadie sepa quien lo saco— y
+                                       // es la razon para subir de Basico.
         ]);
         $clinica = array_merge($profesional, [
             'unlimited_doctors',

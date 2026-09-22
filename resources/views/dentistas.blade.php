@@ -1034,6 +1034,7 @@
                             'Recall: a quién ya le toca volver',
                             'Lista de espera que llena los huecos',
                             'Consentimientos firmados en pantalla',
+                            'Inventario de insumos: qué hay, qué se acabó y qué caduca',
                             'Reportes avanzados',
                             'Alertas inteligentes',
                             'Soporte prioritario por WhatsApp',

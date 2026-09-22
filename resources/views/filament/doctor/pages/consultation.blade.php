@@ -912,7 +912,7 @@
              de los dientes capturados y el doctor desmarca lo que no usó: una
              propuesta que se revisa en cinco segundos vale más que una
              automatización que nadie ve. --}}
-        @if(count($procedures) > 0)
+        @if(count($procedures) > 0 && $this->llevaInventario())
         <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:0.9rem;background:#f0fdfa;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
                 <div>

@@ -35,9 +35,12 @@ class ResiduosPeligrososTest extends TestCase
     {
         parent::setUp();
 
+        // El inventario va en Pro.
         $this->clinica = Clinic::create([
             'name' => 'Consultorio Test',
             'slug' => 'consultorio-' . uniqid(),
+            'plan' => 'profesional',
+            'plan_ends_at' => now()->addYear(),
             'onboarding_status' => 'completed',
         ]);
 

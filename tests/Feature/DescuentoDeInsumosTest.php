@@ -41,7 +41,13 @@ class DescuentoDeInsumosTest extends TestCase
     {
         parent::setUp();
 
-        $this->clinic = Clinic::create(['name' => 'Test Clinic', 'onboarding_status' => 'completed']);
+        // El inventario va en Pro.
+        $this->clinic = Clinic::create([
+            'name' => 'Test Clinic',
+            'plan' => 'profesional',
+            'plan_ends_at' => now()->addYear(),
+            'onboarding_status' => 'completed',
+        ]);
 
         $this->user = User::forceCreate([
             'name' => 'Dr. Test',
