@@ -270,7 +270,7 @@ class InsumosPantallasTest extends TestCase
         $this->assertSame(Expense::class, $movimiento->reference_type);
         $this->assertSame($gasto->id, $movimiento->reference_id);
         // Caja de 50 a $250: cada guante entra a $5.
-        $this->assertSame('5.00', (string) $movimiento->unit_cost);
+        $this->assertEquals(5.00, (float) $movimiento->unit_cost);
         $this->assertStringContainsString('Dental Supply', $movimiento->reason);
     }
 

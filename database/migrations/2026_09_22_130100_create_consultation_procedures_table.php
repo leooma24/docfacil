@@ -32,7 +32,11 @@ return new class extends Migration
             $table->foreignId('appointment_id')->constrained()->cascadeOnDelete();
             $table->foreignId('service_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->string('tooth_number', 10)->nullable();
+            // 60 y no 10: SupplyScope::teeth() parte listas ("16, 15, 14, 13")
+            // y rangos ("46-47, 36-37"), que es el flujo previsto. Con 10,
+            // MySQL corta el cierre de la consulta a media escritura; SQLite,
+            // donde corren las pruebas, se lo traga sin decir nada.
+            $table->string('tooth_number', 60)->nullable();
             $table->unsignedSmallInteger('quantity')->default(1);
 
             // Congelados al momento del procedimiento.

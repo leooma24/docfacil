@@ -49,7 +49,7 @@
                     @endforeach
                 </select>
                 <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">
-                    Ahí son las <strong style="color:#0d9488;">{{ now($clinic_timezone ?: \App\Support\ZonaHoraria::CENTRO)->format('H:i') }}</strong>.
+                    Ahí son las <strong style="color:#0d9488;">{{ now($this->zonaElegida())->format('H:i') }}</strong>.
                     Tu agenda pública y tu escritorio usan esta hora.
                 </p>
             </div>

@@ -40,12 +40,18 @@ return new class extends Migration
             $table->decimal('quantity', 12, 3);
 
             // Solo para entradas: lo que costó esa compra por unidad.
-            $table->decimal('unit_cost', 10, 2)->nullable();
+            $table->decimal('unit_cost', 12, 4)->nullable();
 
             $table->string('reason')->nullable();
-            $table->string('reference_type')->nullable();
+            // 64 y no 255: aqui solo caben nombres de clase (App\Models\Appointment,
+            // App\Models\Expense) y la columna entra en el indice unico de
+            // abajo con holgura en cualquier motor.
+            $table->string('reference_type', 64)->nullable();
             $table->unsignedBigInteger('reference_id')->nullable();
-            $table->timestamp('occurred_at');
+            // dateTime y no timestamp: TIMESTAMP se convierte con la zona horaria
+            // de la sesion de MySQL, y desde que cada consultorio tiene su propia
+            // hora eso es una fuente de ruido innecesaria. Ademas no topa en 2038.
+            $table->dateTime('occurred_at');
             $table->timestamps();
 
             $table->index(['clinic_id', 'supply_id', 'occurred_at']);

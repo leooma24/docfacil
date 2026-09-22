@@ -33,7 +33,7 @@ class SupplyLot extends Model
         return [
             'expires_on' => 'date',
             'quantity' => 'decimal:3',
-            'unit_cost' => 'decimal:2',
+            'unit_cost' => 'decimal:4',
         ];
     }
 

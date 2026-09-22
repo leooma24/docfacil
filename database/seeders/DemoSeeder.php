@@ -22,8 +22,28 @@ use Illuminate\Support\Facades\Storage;
 
 class DemoSeeder extends Seeder
 {
+    /**
+     * Estos datos son de mentiras. En produccion hay consultorios reales, y
+     * una clinica sembrada aqui entraria en los conteos del admin y en los
+     * lugares de fundador como si fuera un cliente.
+     */
+    private function enProduccionNoVa(): bool
+    {
+        if (! app()->isProduction()) {
+            return false;
+        }
+
+        $this->command?->error('Este seeder siembra datos de prueba y no corre en produccion.');
+
+        return true;
+    }
+
     public function run(): void
     {
+        if ($this->enProduccionNoVa()) {
+            return;
+        }
+
         // =============================================
         // CLINICA DEMO
         // =============================================
@@ -49,6 +69,10 @@ class DemoSeeder extends Seeder
             // capado y no podemos mostrar las funciones que vendemos en Pro.
             'plan_ends_at' => now()->addYears(10),
             'onboarding_status' => 'completed',
+            // Marcada como demo: sin esto queda indistinguible de un cliente
+            // real en los conteos y en los lugares de fundador.
+            'is_demo' => true,
+            'demo_expires_at' => now()->addYears(10),
         ]);
 
         // =============================================

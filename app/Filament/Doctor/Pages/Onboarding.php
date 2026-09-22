@@ -32,6 +32,21 @@ class Onboarding extends Page implements HasForms
     public string $clinic_city = '';
     public string $clinic_timezone = '';
 
+    /**
+     * La zona que se va a guardar, ya filtrada.
+     *
+     * El campo es una lista, pero el valor llega del navegador y Livewire lo
+     * acepta tal cual: si viene algo que no es una zona real, la pantalla
+     * truena al pintar el reloj y la columna se ensucia. Aqui se cae a la
+     * hora del centro y ya.
+     */
+    public function zonaElegida(): string
+    {
+        return \App\Support\ZonaHoraria::esValida($this->clinic_timezone)
+            ? $this->clinic_timezone
+            : \App\Support\ZonaHoraria::CENTRO;
+    }
+
     /** @var \Livewire\TemporaryUploadedFile|null Logo subido en step 1 (opcional) */
     public $logo = null;
 
@@ -228,7 +243,7 @@ class Onboarding extends Page implements HasForms
                 'phone' => $this->clinic_phone ?: null,
                 'address' => $this->clinic_address ?: null,
                 'city' => $this->clinic_city ?: null,
-                'timezone' => $this->clinic_timezone ?: null,
+                'timezone' => $this->zonaElegida(),
                 'onboarding_status' => 'completed',
             ];
 

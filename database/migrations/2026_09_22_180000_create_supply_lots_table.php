@@ -33,7 +33,7 @@ return new class extends Migration
 
             // Lo que entró en este lote, en unidad de consumo.
             $table->decimal('quantity', 12, 3);
-            $table->decimal('unit_cost', 10, 2)->nullable();
+            $table->decimal('unit_cost', 12, 4)->nullable();
             $table->string('supplier')->nullable();
             $table->timestamps();
 

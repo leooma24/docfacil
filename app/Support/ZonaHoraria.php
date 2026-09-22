@@ -127,7 +127,8 @@ class ZonaHoraria
         }
     }
 
-    private static function esValida(?string $zona): bool
+    /** Pública porque el onboarding filtra con ella lo que llega del navegador. */
+    public static function esValida(?string $zona): bool
     {
         return $zona !== null
             && array_key_exists($zona, self::OPCIONES)

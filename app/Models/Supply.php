@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 /**
  * Un insumo del consultorio.
@@ -31,7 +32,7 @@ class Supply extends Model
         return [
             'units_per_purchase' => 'decimal:3',
             'min_stock' => 'decimal:3',
-            'cost_per_unit' => 'decimal:2',
+            'cost_per_unit' => 'decimal:4',
             'is_active' => 'boolean',
         ];
     }
@@ -220,13 +221,17 @@ class Supply extends Model
             $data['unit_cost'] ??= $this->cost_per_unit;
         }
 
+        // Lo que se acaba de validar no se deja pisar: con el merge al revés,
+        // un register('out', 5, ['quantity' => -5]) le sumaba cinco al
+        // inventario, y el clinic_id del insumo es el que manda siempre.
         return $this->movements()->create(array_merge([
+            'occurred_at' => now(),
+            'user_id' => auth()->id(),
+        ], Arr::except($data, ['clinic_id', 'type', 'quantity']), [
             'clinic_id' => $this->clinic_id,
             'type' => $type,
             'quantity' => $quantity,
-            'occurred_at' => now(),
-            'user_id' => auth()->id(),
-        ], $data));
+        ]));
     }
 
     public function scopeActive(Builder $query): Builder

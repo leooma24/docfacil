@@ -53,6 +53,9 @@ class ClinicSettings extends Page implements HasForms
             'minutos_entre_citas' => $clinic->minutosEntreCitas(),
             'corte_por_correo' => $clinic->corte_por_correo ?? true,
             'timezone' => \App\Support\ZonaHoraria::delConsultorio($clinic),
+            'anesthetic_max_mg_kg' => $clinic->anesthetic_max_mg_kg,
+            'anesthetic_mg_ml' => $clinic->anesthetic_mg_ml,
+            'anesthetic_ml_per_cartridge' => $clinic->anesthetic_ml_per_cartridge,
         ] + $this->horarioParaElFormulario($clinic) + [
             'cierres' => $clinic->closures()
                 ->orderBy('starts_on')
@@ -243,6 +246,12 @@ class ClinicSettings extends Page implements HasForms
             'working_hours' => $this->horarioDesdeElFormulario($data),
             'minutos_entre_citas' => (int) ($data['minutos_entre_citas'] ?? 0),
             'timezone' => $data['timezone'] ?? null,
+            // Sin estas tres, la vigilancia de dosis que se le promete al
+            // doctor en la consulta no se puede encender: la página las pedía
+            // y las tiraba a la basura al guardar.
+            'anesthetic_max_mg_kg' => ($data['anesthetic_max_mg_kg'] ?? '') !== '' ? (float) $data['anesthetic_max_mg_kg'] : null,
+            'anesthetic_mg_ml' => ($data['anesthetic_mg_ml'] ?? '') !== '' ? (float) $data['anesthetic_mg_ml'] : null,
+            'anesthetic_ml_per_cartridge' => ($data['anesthetic_ml_per_cartridge'] ?? '') !== '' ? (float) $data['anesthetic_ml_per_cartridge'] : null,
         ];
 
         // Solo viene si su plan trae el corte. Si no viene, no se toca: no

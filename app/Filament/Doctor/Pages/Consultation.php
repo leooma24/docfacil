@@ -21,6 +21,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\DB;
 
 class Consultation extends Page implements HasForms
 {
@@ -522,7 +523,22 @@ class Consultation extends Page implements HasForms
         ]);
     }
 
+    /**
+     * El cierre de la consulta, completo o nada.
+     *
+     * Sin la transacción, el orden de escritura era una trampa: el expediente
+     * y el cobro se crean primero, y los procedimientos y el kardex después.
+     * Si algo fallaba en la segunda mitad —un diente capturado como "16, 15,
+     * 14" que no cabía en la columna—, el doctor veía el error, corregía y
+     * volvía a darle Finalizar: segundo expediente y segundo cobro por la
+     * misma consulta, y el corte del mes con el doble.
+     */
     public function saveAndComplete(): void
+    {
+        DB::transaction(fn () => $this->cerrarLaConsulta());
+    }
+
+    private function cerrarLaConsulta(): void
     {
         $clinicId = auth()->user()->clinic_id;
 

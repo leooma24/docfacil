@@ -328,7 +328,9 @@ class InsumosTest extends TestCase
 
         $merma = $insumo->register('waste', 3, ['waste_reason' => 'lost']);
 
-        $this->assertSame('12.50', (string) $merma->unit_cost);
+        // Se compara el número, no el texto: la columna lleva 4 decimales
+        // porque el costo es por unidad de consumo (un ml, un guante).
+        $this->assertEquals(12.50, (float) $merma->unit_cost);
         $this->assertSame(37.5, $merma->value());
     }
 

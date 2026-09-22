@@ -39,7 +39,10 @@ return new class extends Migration
 
             // Punto de reorden y costo, ambos en unidad de consumo.
             $table->decimal('min_stock', 12, 3)->default(0);
-            $table->decimal('cost_per_unit', 10, 2)->default(0);
+            // 4 decimales: el costo es por unidad de consumo (un ml, un guante),
+            // y a 2 decimales un insumo de $0.008 el ml se guarda como $0.01,
+            // 25% de error multiplicado por cada consulta.
+            $table->decimal('cost_per_unit', 12, 4)->default(0);
 
             $table->string('preferred_supplier')->nullable();
             $table->boolean('is_active')->default(true);

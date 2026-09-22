@@ -41,6 +41,12 @@ class Clinic extends Model
     {
         return [
             'working_hours' => 'array',
+            // MySQL devuelve los decimales como texto y SQLite como float; sin
+            // estos tres, la dosis de anestesia se calcularia distinto en las
+            // pruebas y en produccion.
+            'anesthetic_max_mg_kg' => 'decimal:2',
+            'anesthetic_mg_ml' => 'decimal:2',
+            'anesthetic_ml_per_cartridge' => 'decimal:2',
             'minutos_entre_citas' => 'integer',
             'trial_ends_at' => 'datetime',
             'beta_starts_at' => 'datetime',

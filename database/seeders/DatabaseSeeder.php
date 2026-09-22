@@ -12,8 +12,28 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * Estos datos son de mentiras. En produccion hay consultorios reales, y
+     * una clinica sembrada aqui entraria en los conteos del admin y en los
+     * lugares de fundador como si fuera un cliente.
+     */
+    private function enProduccionNoVa(): bool
+    {
+        if (! app()->isProduction()) {
+            return false;
+        }
+
+        $this->command?->error('Este seeder siembra datos de prueba y no corre en produccion.');
+
+        return true;
+    }
+
     public function run(): void
     {
+        if ($this->enProduccionNoVa()) {
+            return;
+        }
+
         // Super Admin
         $admin = User::forceCreate([
             'name' => 'Admin DocFácil',
