@@ -123,6 +123,24 @@ class LotesYCaducidadesTest extends TestCase
         $this->assertSame(18.0, $reparto['untracked']);
     }
 
+    public function test_el_consumo_de_antes_no_vacia_los_lotes_nuevos(): void
+    {
+        // El caso normal, no el raro: el consultorio lleva meses moviendo
+        // inventario y apenas ahora empieza a capturar caducidades. Ese
+        // consumo de antes no pudo salir de un lote que todavía no existía,
+        // así que no puede vaciarlo. Si lo vacía, el lote nace con cero
+        // existencia y el aviso de caducidad no sale nunca.
+        $this->insumo->register('in', 500);
+        $this->insumo->register('out', 500);
+
+        $this->lote(100, now()->addDays(10)->toDateString(), 'NUEVO');
+
+        $reparto = $this->insumo->fefoAllocation();
+
+        $this->assertSame(100.0, (float) $reparto['lots']->first()->remaining);
+        $this->assertCount(1, $this->insumo->lotsExpiringSoon(30));
+    }
+
     public function test_la_merma_tambien_consume_lotes(): void
     {
         $this->lote(10, now()->addMonth()->toDateString(), 'CON FECHA');

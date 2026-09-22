@@ -232,7 +232,7 @@ class ExpenseResource extends Resource
                     ->color('gray')
                     ->tooltip('Suma al inventario lo que compraste en este gasto')
                     ->modalHeading(fn (Expense $record) => 'Entrada de insumos — ' . $record->concept)
-                    ->modalDescription('Solo se puede registrar una vez por insumo desde el mismo gasto.')
+                    ->modalDescription('Un gasto puede traer varios insumos: registra cada uno y reparte el monto. Entre todos no pueden sumar más de lo que pagaste.')
                     ->modalSubmitActionLabel('Registrar entrada')
                     ->visible(fn () => \App\Models\Supply::where('clinic_id', auth()->user()->clinic_id)->active()->exists())
                     ->form(fn (Expense $record) => [
@@ -266,18 +266,33 @@ class ExpenseResource extends Resource
                                         . rtrim(rtrim(number_format($factor, 3), '0'), '.') . " {$insumo->unit}s."
                                     : "En {$insumo->unit}s.";
                             }),
+                        Forms\Components\TextInput::make('amount')
+                            ->label('Monto de este insumo')
+                            ->numeric()
+                            ->prefix('$')
+                            ->required()
+                            ->minValue(0.01)
+                            // El tope es lo que queda del gasto: si el ticket
+                            // trajo tres insumos, entre los tres no pueden
+                            // sumar más de lo que se pagó.
+                            ->maxValue(fn () => $record->unallocatedSupplyAmount())
+                            ->default(fn () => $record->unallocatedSupplyAmount())
+                            ->live(onBlur: true)
+                            ->helperText(fn () => 'Quedan $' . number_format($record->unallocatedSupplyAmount(), 2)
+                                . ' de este gasto por repartir.'),
                         Forms\Components\Placeholder::make('unit_cost')
                             ->label('Costo por unidad')
                             ->content(function (callable $get) use ($record) {
                                 $insumo = \App\Models\Supply::find($get('supply_id'));
                                 $cantidad = (float) ($get('quantity') ?? 0);
+                                $monto = (float) ($get('amount') ?? $record->unallocatedSupplyAmount());
 
                                 if (! $insumo || $cantidad <= 0) {
                                     return '—';
                                 }
 
-                                return '$' . number_format($insumo->entryCost((float) $record->amount, $cantidad), 2)
-                                    . " por {$insumo->unit}, del total del gasto.";
+                                return '$' . number_format($insumo->entryCost($monto, $cantidad), 4)
+                                    . " por {$insumo->unit}.";
                             }),
                     ])
                     ->action(function (Expense $record, array $data) {
@@ -304,7 +319,7 @@ class ExpenseResource extends Resource
                         }
 
                         $insumo->register('in', $cantidad, [
-                            'unit_cost' => $insumo->entryCost((float) $record->amount, $cantidad),
+                            'unit_cost' => $insumo->entryCost((float) $data['amount'], $cantidad),
                             'reason' => 'Compra: ' . $record->concept . ($record->supplier ? " ({$record->supplier})" : ''),
                             'reference_type' => Expense::class,
                             'reference_id' => $record->id,

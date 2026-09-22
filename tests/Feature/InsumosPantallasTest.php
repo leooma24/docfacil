@@ -238,6 +238,46 @@ class InsumosPantallasTest extends TestCase
             ->assertCanNotSeeTableRecords(Supply::where('clinic_id', $otra->id)->get());
     }
 
+    // ── Dar de baja en vez de borrar ─────────────────────────────
+
+    public function test_un_insumo_con_kardex_se_da_de_baja_y_no_se_borra(): void
+    {
+        $conHistoria = $this->insumo(['name' => 'Con historia']);
+        $conHistoria->register('in', 10);
+
+        $sinUsar = $this->insumo(['name' => 'Capturado por error']);
+
+        // Desde la base: la tabla de Filament hidrata así, y `create()` no
+        // trae los defaults de la base (is_active llega null en memoria).
+        $conHistoria = $conHistoria->fresh();
+        $sinUsar = $sinUsar->fresh();
+
+        Livewire::test(ListSupplies::class)
+            // El que ya tiene movimientos no ofrece borrarse...
+            ->assertTableActionHidden('delete', $conHistoria)
+            // ...y a cambio ofrece darse de baja.
+            ->assertTableActionVisible('deactivate', $conHistoria)
+            // El que nunca se usó sí se borra: fue un error de captura.
+            ->assertTableActionVisible('delete', $sinUsar);
+    }
+
+    public function test_dar_de_baja_saca_el_insumo_de_la_lista_sin_borrarlo(): void
+    {
+        $insumo = $this->insumo(['name' => 'Con historia']);
+        $insumo->register('in', 10);
+
+        // Igual que arriba: el récord que ve la pantalla viene de la base.
+        $insumo = $insumo->fresh();
+
+        Livewire::test(ListSupplies::class)
+            ->callTableAction('deactivate', $insumo);
+
+        $this->assertFalse($insumo->fresh()->is_active);
+
+        // El kardex sigue completo.
+        $this->assertSame(1, SupplyMovement::where('supply_id', $insumo->id)->count());
+    }
+
     // ── La compra entra desde el gasto ───────────────────────────
 
     private function gasto(float $monto = 250): Expense
@@ -272,6 +312,43 @@ class InsumosPantallasTest extends TestCase
         // Caja de 50 a $250: cada guante entra a $5.
         $this->assertEquals(5.00, (float) $movimiento->unit_cost);
         $this->assertStringContainsString('Dental Supply', $movimiento->reason);
+    }
+
+    public function test_un_gasto_de_varios_insumos_no_multiplica_su_valor(): void
+    {
+        // Un ticket de $3,000 trajo tres insumos. Cada uno se registra por
+        // separado —el modal lo permite a propósito— pero cada uno se lleva
+        // sólo su parte: el inventario no puede quedar valuado en más de lo
+        // que costó el ticket.
+        $gasto = $this->gasto(3000);
+
+        $guantes = $this->insumo(['name' => 'Guantes', 'units_per_purchase' => 1]);
+        $agujas = $this->insumo(['name' => 'Agujas', 'units_per_purchase' => 1]);
+        $anestesia = $this->insumo(['name' => 'Anestesia', 'units_per_purchase' => 1]);
+
+        Livewire::test(ListExpenses::class)
+            ->callTableAction('supply_entry', $gasto, [
+                'supply_id' => $guantes->id,
+                'quantity' => 50,
+                'amount' => 1000,
+            ])
+            ->callTableAction('supply_entry', $gasto, [
+                'supply_id' => $agujas->id,
+                'quantity' => 100,
+                'amount' => 1500,
+            ])
+            ->callTableAction('supply_entry', $gasto, [
+                'supply_id' => $anestesia->id,
+                'quantity' => 30,
+                'amount' => 500,
+            ]);
+
+        $valuado = SupplyMovement::where('reference_type', Expense::class)
+            ->where('reference_id', $gasto->id)
+            ->get()
+            ->sum(fn (SupplyMovement $movimiento) => $movimiento->value());
+
+        $this->assertEquals(3000.0, $valuado);
     }
 
     public function test_el_mismo_gasto_no_entra_dos_veces(): void

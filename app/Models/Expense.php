@@ -130,4 +130,33 @@ class Expense extends Model
             ])
             ->all();
     }
+
+    // ── Lo que este gasto metió al inventario ────────────────────
+
+    /**
+     * Lo que ya se cargó al inventario desde este gasto.
+     *
+     * Un ticket puede traer varios insumos y cada uno se registra por
+     * separado, así que el gasto se reparte entre ellos. Se mide por el valor
+     * de los movimientos, que es justo lo que el inventario acabó valiendo.
+     *
+     * Sin el scope de consultorio a propósito: son cuentas, y el resultado no
+     * debe depender de quién esté autenticado. Mismo criterio que totalEntre().
+     */
+    public function supplyMovementsValue(): float
+    {
+        return (float) SupplyMovement::withoutGlobalScopes()
+            ->where('clinic_id', $this->clinic_id)
+            ->where('reference_type', self::class)
+            ->where('reference_id', $this->id)
+            ->where('type', 'in')
+            ->get()
+            ->sum(fn (SupplyMovement $movement) => $movement->value());
+    }
+
+    /** Lo que queda del gasto por repartir entre insumos. */
+    public function unallocatedSupplyAmount(): float
+    {
+        return round(max(0, (float) $this->amount - $this->supplyMovementsValue()), 2);
+    }
 }

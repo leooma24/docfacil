@@ -301,7 +301,29 @@ class SupplyResource extends Resource
                             ->send();
                     }),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Borrar sólo se ofrece cuando no hay nada que perder. El que
+                // ya tiene movimientos se da de baja, que lo saca de la lista
+                // sin tocar su kardex.
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn (Supply $record) => ! $record->movements()->exists()),
+                Tables\Actions\Action::make('deactivate')
+                    ->label('Dar de baja')
+                    ->icon('heroicon-o-archive-box')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Dar de baja el insumo')
+                    ->modalDescription('Sale de la lista y deja de proponerse en las consultas, pero su kardex queda intacto: los movimientos son hechos y no se borran.')
+                    ->modalSubmitActionLabel('Dar de baja')
+                    ->visible(fn (Supply $record) => (bool) $record->is_active)
+                    ->action(function (Supply $record) {
+                        $record->update(['is_active' => false]);
+
+                        Notification::make()
+                            ->title('Insumo dado de baja')
+                            ->body($record->name . ' ya no aparece en la lista. Su kardex sigue completo.')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

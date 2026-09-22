@@ -294,6 +294,48 @@ class InsumosTest extends TestCase
         $this->assertEqualsWithDelta(0.008, (float) $lote->fresh()->unit_cost, 0.00001);
     }
 
+    // ── No se borra la historia ──────────────────────────────────
+
+    public function test_un_insumo_con_kardex_no_se_borra(): void
+    {
+        // Un movimiento es un hecho: pasó, alguien lo capturó, y el stock que
+        // hay hoy depende de él. Borrar el insumo no puede reescribir eso.
+        $insumo = $this->insumo($this->consultorio());
+        $insumo->register('in', 10);
+
+        $insumo->delete();
+
+        $this->assertDatabaseHas('supplies', ['id' => $insumo->id]);
+        $this->assertSame(1, SupplyMovement::where('supply_id', $insumo->id)->count());
+    }
+
+    public function test_un_insumo_sin_kardex_si_se_borra(): void
+    {
+        // El que se capturó mal y nunca se usó no tiene historia que cuidar.
+        $insumo = $this->insumo($this->consultorio());
+
+        $insumo->delete();
+
+        $this->assertDatabaseMissing('supplies', ['id' => $insumo->id]);
+    }
+
+    public function test_borrar_un_insumo_tampoco_se_lleva_sus_lotes(): void
+    {
+        $insumo = $this->insumo($this->consultorio());
+        $insumo->register('in', 10);
+
+        $lote = $insumo->lots()->create([
+            'clinic_id' => $insumo->clinic_id,
+            'lot_number' => 'L-1',
+            'expires_on' => now()->addYear(),
+            'quantity' => 10,
+        ]);
+
+        $insumo->delete();
+
+        $this->assertDatabaseHas('supply_lots', ['id' => $lote->id]);
+    }
+
     // ── El punto de reorden ──────────────────────────────────────
 
     public function test_sin_punto_de_reorden_no_hay_alerta(): void

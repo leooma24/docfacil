@@ -37,6 +37,26 @@ class Supply extends Model
         ];
     }
 
+    /**
+     * Un insumo con kardex no se borra: se da de baja.
+     *
+     * Las claves foráneas están en `cascadeOnDelete`, así que borrar el insumo
+     * se llevaba por delante todo su historial —los movimientos y los lotes—
+     * que es justo lo contrario de lo que el kardex promete: un movimiento es
+     * un hecho, y el stock de hoy depende de él. Se cancela el borrado y el
+     * insumo se apaga con `is_active`, que para eso está.
+     *
+     * Un insumo que nunca se usó sí se borra: ahí no hay historia que cuidar.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (Supply $supply) {
+            if ($supply->movements()->exists()) {
+                return false;
+            }
+        });
+    }
+
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);
@@ -75,8 +95,21 @@ class Supply extends Model
             ->orderBy('id')
             ->get();
 
+        // Desde que este insumo empezó a llevar lotes: el primer movimiento
+        // del kardex que trae uno. Antes de eso todo el stock estaba sin lote,
+        // así que ese consumo no pudo salir de un lote. Contarlo vaciaba los
+        // lotes nuevos en cuanto el consultorio empezaba a capturar
+        // caducidades —el caso normal: primero mueve inventario y después se
+        // pone ordenado— y el aviso de caducidad no salía nunca.
+        //
+        // Se ordena por `id` y no por fecha a propósito: capturar la entrada y
+        // el consumo seguidos es lo normal, y el kardex entero cabe en el mismo
+        // segundo. La fecha no distingue el orden; el id sí.
+        $primerLote = $this->movements()->whereNotNull('supply_lot_id')->min('id');
+
         $consumido = (float) $this->movements()
             ->whereIn('type', ['out', 'waste'])
+            ->when($primerLote, fn ($query) => $query->where('id', '>', $primerLote))
             ->sum('quantity');
 
         foreach ($lotes as $lote) {
@@ -86,14 +119,14 @@ class Supply extends Model
             $consumido = round($consumido - $deEsteLote, 3);
         }
 
-        $entradoSinLote = (float) $this->movements()
-            ->where('type', 'in')
-            ->whereNull('supply_lot_id')
-            ->sum('quantity');
+        // El stock sin lote sale por diferencia y no restando el consumo: así
+        // el reparto siempre cuadra con el kardex, sin importar en qué momento
+        // el consultorio empezó a capturar lotes.
+        $enLotes = (float) $lotes->sum(fn (SupplyLot $lote) => $lote->remaining);
 
         return [
             'lots' => $lotes,
-            'untracked' => round(max(0, $entradoSinLote - $consumido), 3),
+            'untracked' => round(max(0, $this->currentStock() - $enLotes), 3),
         ];
     }
 
