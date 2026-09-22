@@ -103,6 +103,10 @@
          $landingFaqs que aparece más abajo, generando JSON-LD válido para extracción
          por AI Overviews / Perplexity / ChatGPT. --}}
     @php
+    // Los lugares del programa Fundador salen de config/founders.php, no del
+    // copy: así el número que promete la página no puede desfasarse del que
+    // cuenta `Clinic::lugaresDeFundador()`.
+    $founderSeats = (int) config('founders.seats', 10);
     $landingFaqsForSchema = [
         ['q' => '¿Cuánto cuesta DocFácil?', 'a' => 'Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico desde $499 MXN/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pro $999 MXN/mes para hasta 3 doctores. Clínica $1,999 MXN/mes ilimitado. Pago anual = 2 meses gratis. Garantía 30 días.'],
         ['q' => '¿DocFácil me ayuda con la NOM-004 y con la protección de datos?', 'a' => 'Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas y ya no se pueden editar ni borrar, queda historial de cambios del motivo, el diagnóstico y el tratamiento, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula profesional. Para los datos: conexión cifrada (HTTPS), respaldo automático diario, cada consultorio aislado de los demás y verificación en dos pasos opcional. Los servidores están en Estados Unidos (DigitalOcean).'],
@@ -110,7 +114,7 @@
         ['q' => '¿Qué hace DocFácil diferente a Dentalink, Doctorum o Eaglesoft?', 'a' => 'DocFácil está hecho 100% para México: pensado para la NOM-004 (notas que se bloquean a las 24 horas y recetas con cédula), integra SPEI, soporta WhatsApp 1-clic sin requerir API cara de Meta y tiene soporte directo por WhatsApp con el fundador. Las opciones extranjeras cobran en USD y no entienden el contexto mexicano.'],
         ['q' => '¿Puedo cancelar cuando quiera?', 'a' => 'Sí, con 1 clic y sin penalizaciones. Garantía de 30 días: si no ves resultados, devolvemos tu dinero completo. Sin contratos forzosos.'],
         ['q' => '¿Necesito instalar algo?', 'a' => 'No. DocFácil funciona en cualquier navegador y se instala como app (PWA) en iPhone y Android sin pasar por App Store. Sin instalación local.'],
-        ['q' => '¿Quién está detrás de DocFácil?', 'a' => 'Omar Lerma, ingeniero mexicano de Los Mochis, Sinaloa. Soporte directo por WhatsApp en +52 668 249 3398. Programa fundadores para los primeros 50 consultorios.'],
+        ['q' => '¿Quién está detrás de DocFácil?', 'a' => 'Omar Lerma, ingeniero mexicano de Los Mochis, Sinaloa. Soporte directo por WhatsApp en +52 668 249 3398. Programa fundadores para los primeros ' . $founderSeats . ' consultorios.'],
     ];
     @endphp
     <script type="application/ld+json">
@@ -330,7 +334,7 @@
                     {{-- Founder badge: scarcity real, sin inventar testimoniales --}}
                     <div class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-xs font-semibold text-amber-800 animate-fade-up delay-400">
                         <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-                        Programa fundadores · onboarding 1:1 con Omar para los primeros 50
+                        Programa fundadores · onboarding 1:1 con Omar para los primeros {{ $founderSeats }}
                     </div>
 
                     <div class="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 text-sm text-gray-500 animate-fade-up delay-400">
@@ -422,11 +426,11 @@
                             Estamos apenas empezando
                         </div>
                         <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 leading-tight">
-                            Programa fundadores · primeros 50 dentistas
+                            Programa fundadores · primeros {{ $founderSeats }} dentistas
                         </h2>
                         <p class="mt-3 text-gray-600 leading-relaxed">
                             DocFácil arrancó en abril 2026. No tengo cientos de reseñas todavía —
-                            tengo el WhatsApp directo conmigo y un compromiso con los primeros 50.
+                            tengo el WhatsApp directo conmigo y un compromiso con los primeros {{ $founderSeats }}.
                             Si entras hoy, eres uno de ellos:
                         </p>
                         <ul class="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-gray-700">
@@ -1217,7 +1221,7 @@
                     </div>
                 </div>
 
-                <p class="text-center text-xs text-gray-500 mt-6 italic">Primeros 50 consultorios: activamos add-ons gratis por 30 días como founding members.</p>
+                <p class="text-center text-xs text-gray-500 mt-6 italic">Primeros {{ $founderSeats }} consultorios: activamos add-ons gratis por 30 días como founding members.</p>
             </div>
         </div>
     </section>
@@ -1683,7 +1687,7 @@ function socialProofToast() {
         dismissed: sessionStorage.getItem('docfacil_toast_dismissed') === '1',
         index: 0,
         events: [
-            { icon: '🚀', title: 'Apenas arrancamos — sé de los primeros',      sub: 'Los primeros 50 consultorios reciben atención 1:1 directa de Omar.' },
+            { icon: '🚀', title: 'Apenas arrancamos — sé de los primeros',      sub: 'Los primeros {{ $founderSeats }} consultorios reciben atención 1:1 directa de Omar.' },
             { icon: '📋', title: 'Garantía de 30 días sin letra chica',          sub: 'Si en el primer mes no ves resultados, te devolvemos tu dinero completo.' },
             { icon: '💬', title: 'Contesto yo personalmente',                    sub: 'Omar — WhatsApp directo 668 249 3398. Sin equipos de soporte impersonales.' },
         ],

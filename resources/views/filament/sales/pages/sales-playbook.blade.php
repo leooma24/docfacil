@@ -311,7 +311,7 @@
                 <div class="sp-tip">📱 <strong>Mejor hora WhatsApp:</strong> Mar-Jue 1:00-2:30 PM (hora de comida entre pacientes)</div>
                 <div class="sp-tip">🚪 <strong>Visita presencial:</strong> Habla primero con la secretaria. Si te ganas a ella, te ganas al doctor.</div>
                 <div class="sp-tip">🎯 <strong>Demo killer:</strong> Muestra el recordatorio WhatsApp EN VIVO. Manda uno al doctor ahí mismo.</div>
-                <div class="sp-tip">💰 <strong>Nunca digas el precio primero.</strong> Primero el dolor, luego la demo, y al final "son $149/mes".</div>
+                <div class="sp-tip">💰 <strong>Nunca digas el precio primero.</strong> Primero el dolor, luego la demo, y al final "son $499/mes".</div>
                 <div class="sp-tip">🔄 <strong>Regla de 3:</strong> Si no responde al 3er mensaje (Día 7), espera 7 días más. No insistas antes.</div>
                 <div class="sp-tip">📊 <strong>Meta diaria:</strong> 5 contactos nuevos + 3 follow-ups = 8 actividades. Haz esto y llegas a 50 en 12 semanas.</div>
                 <div class="sp-tip">🎪 <strong>Post-visita:</strong> Manda WhatsApp de agradecimiento + link demo EL MISMO DÍA. No al día siguiente.</div>

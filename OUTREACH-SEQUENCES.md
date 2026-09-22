@@ -2,7 +2,7 @@
 
 > **Objetivo:** Cerrar los primeros 50 clientes de pago.
 > **Mercado:** Consultorios medicos y dentales en Culiacan, Sinaloa (y expansion nacional).
-> **Planes:** Gratis $0 | Basico $149/mes | Profesional $299/mes | Clinica $499/mes
+> **Planes:** Gratis $0 | Basico $499/mes | Profesional $999/mes | Clinica $1,999/mes
 
 ---
 
@@ -19,7 +19,7 @@
 | `[LINK_TRIAL]` | https://docfacil.com/registro |
 | `[TELEFONO_VENDEDOR]` | 668-XXX-XXXX |
 | `[PLAN_RECOMENDADO]` | Basico / Profesional / Clinica |
-| `[PRECIO]` | $149 / $299 / $499 |
+| `[PRECIO]` | $499 / $999 / $1,999 |
 | `[DESCUENTO]` | 30% los primeros 3 meses |
 
 ---
@@ -53,7 +53,7 @@ Hola [NOMBRE_DOCTOR], le escribo de nuevo rapido.
 
 Le comparto un dato que nos dicen los dentistas que ya usan DocFacil: en promedio recuperan entre 8 y 12 citas al mes nada mas con los recordatorios automaticos por WhatsApp.
 
-Si cada cita suya vale $500-$800, estamos hablando de $4,000 a $9,000 pesos mas al mes. Y el sistema cuesta $149.
+Si cada cita suya vale $500-$800, estamos hablando de $4,000 a $9,000 pesos mas al mes. Y el sistema cuesta $499.
 
 Le dejo este video de 2 minutos donde se ve como funciona: [LINK_DEMO]
 
@@ -105,7 +105,7 @@ Hola [NOMBRE_DOCTOR], le doy seguimiento rapido.
 
 Un doctor aqui en Culiacan nos conto que antes de DocFacil tenia 5-6 pacientes a la semana que no llegaban. Con los recordatorios automaticos, bajo a 1-2.
 
-Haga la cuenta: 4 pacientes recuperados x $400-$600 la consulta = $1,600-$2,400 mas a la semana. El sistema cuesta $149 al mes.
+Haga la cuenta: 4 pacientes recuperados x $400-$600 la consulta = $1,600-$2,400 mas a la semana. El sistema cuesta $499 al mes.
 
 Si quiere verlo funcionando: [LINK_DEMO]
 
@@ -218,7 +218,7 @@ Le platico algo rapido: un [dentista/medico] aqui en Culiacan empezo a usar DocF
 
 Antes perdia como 6-8 citas a la semana porque los pacientes no llegaban. Ahora les llega un WhatsApp automatico un dia antes y sus faltas bajaron a 1-2 por semana.
 
-El calcula que eso le representa unos $8,000-$10,000 pesos mas al mes. Y paga $149 por el sistema.
+El calcula que eso le representa unos $8,000-$10,000 pesos mas al mes. Y paga $499 por el sistema.
 
 Si quiere lo prueba gratis y ve los resultados usted mismo: [LINK_TRIAL]
 
@@ -321,9 +321,9 @@ Un consultorio dental en Culiacan con DocFacil:
 - Antes: 6-8 citas perdidas por semana
 - Ahora: 1-2 citas perdidas por semana
 - Recupero: ~$8,000/mes en consultas que antes perdia
-- Paga: $149/mes por DocFacil
+- Paga: $499/mes por DocFacil
 
-Retorno: 50x lo que invierte.
+Retorno: 16x lo que invierte.
 
 Usted como va? Ha notado alguna diferencia? Me gustaria saber su experiencia.
 ```
@@ -387,7 +387,7 @@ Que me dice?
 
 Ya somos [X] consultorios usando DocFacil en [Culiacan/Sinaloa/Mexico]. Los doctores nos dicen que en promedio ahorran 5-8 horas a la semana en temas administrativos.
 
-Si su situacion cambio y ahora si le interesa organizar mejor su consultorio, el plan basico empieza en $149/mes y puede probarlo gratis primero.
+Si su situacion cambio y ahora si le interesa organizar mejor su consultorio, el plan basico empieza en $499/mes y puede probarlo gratis primero.
 
 [LINK_TRIAL]
 
@@ -586,7 +586,7 @@ que sus faltas bajaron entre un 40 y 60 por ciento.
 
 Ademas le organiza expedientes, agenda y le genera recetas PDF.
 
-El plan basico esta en $149 al mes y puede probarlo gratis.
+El plan basico esta en $499 al mes y puede probarlo gratis.
 
 Doctor, tiene 10 minutos esta semana para que se lo muestre? Puede ser en 
 su consultorio o por videollamada, lo que le quede mejor.
@@ -627,4 +627,4 @@ Muchas gracias por su tiempo, [NOMBRE_DOCTOR]. Que le vaya muy bien."
 
 9. **Siempre cierren con una pregunta** o un CTA claro. Nunca terminen un mensaje en el aire.
 
-10. **El precio de $149 se vende solo si primero venden el problema.** Siempre hablen primero de citas perdidas y dinero que se va, luego de la solucion, y al final del precio.
+10. **El precio de $499 se vende solo si primero venden el problema.** Siempre hablen primero de citas perdidas y dinero que se va, luego de la solucion, y al final del precio.

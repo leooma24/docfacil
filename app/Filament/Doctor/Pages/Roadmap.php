@@ -67,7 +67,7 @@ class Roadmap extends Page
             $data['author_initials'] = strtoupper(mb_substr($f->submittedByUser?->name ?? 'D', 0, 1));
             $data['author_clinic'] = $f->submittedByClinic?->name ?? '';
             $data['is_mine'] = $f->submitted_by_user_id === auth()->id();
-            $data['price_label'] = FeatureRequest::PRICE_TIERS[$f->proposed_price_tier] ?? null;
+            $data['price_label'] = FeatureRequest::tierLabel($f->proposed_price_tier);
             return $data;
         })->toArray();
     }

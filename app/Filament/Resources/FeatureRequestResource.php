@@ -76,7 +76,7 @@ class FeatureRequestResource extends Resource
         if ($votes->isEmpty()) return 'Sin votos aún.';
 
         $breakdown = [];
-        foreach (FeatureRequest::PRICE_TIERS as $tier => $label) {
+        foreach (FeatureRequest::PRICE_TIERS + FeatureRequest::LEGACY_PRICE_TIERS as $tier => $label) {
             $count = $votes->where('willingness_to_pay', $tier)->count();
             if ($count > 0) $breakdown[] = "{$label}: {$count} voto" . ($count !== 1 ? 's' : '');
         }

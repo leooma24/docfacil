@@ -17,21 +17,57 @@ class FeatureRequest extends Model
         'rejected' => 'No viable',
     ];
 
+    /**
+     * Escalera del poll "¿Cuánto pagarías al mes por esta feature?".
+     * El último escalón es abierto ("+") y su valor debe alcanzar al menos
+     * el plan más barato (Básico, $499/mes; ver Commission::monthlyPriceForPlan),
+     * para que la señal de pricing no quede sesgada a la baja.
+     */
     public const PRICE_TIERS = [
         'free' => 'Gratis en mi plan',
-        '49' => '$49/mes',
         '99' => '$99/mes',
+        '249' => '$249/mes',
+        '499' => '$499/mes',
+        '999plus' => '$999+/mes',
+    ];
+
+    /**
+     * Valor numérico (MXN/mes) de cada escalón. Incluye los escalones de la
+     * escalera anterior ('49', '199', '299plus') para que los votos y propuestas
+     * ya guardados sigan resolviendo su valor real en vez de caer a 0.
+     */
+    public const PRICE_TIER_VALUES = [
+        'free' => 0,
+        '49' => 49,        // histórico
+        '99' => 99,
+        '199' => 199,      // histórico
+        '249' => 249,
+        '299plus' => 299,  // histórico
+        '499' => 499,
+        '999plus' => 999,
+    ];
+
+    /**
+     * Etiquetas de escalones históricos que ya no se ofrecen como opción pero
+     * pueden seguir presentes en registros viejos. Solo para mostrar.
+     */
+    public const LEGACY_PRICE_TIERS = [
+        '49' => '$49/mes',
         '199' => '$199/mes',
         '299plus' => '$299+/mes',
     ];
 
-    public const PRICE_TIER_VALUES = [
-        'free' => 0,
-        '49' => 49,
-        '99' => 99,
-        '199' => 199,
-        '299plus' => 299,
-    ];
+    /**
+     * Etiqueta legible de un escalón, vigente o histórico.
+     */
+    public static function tierLabel(?string $tier): ?string
+    {
+        if ($tier === null) {
+            return null;
+        }
+
+        return self::PRICE_TIERS[$tier] ?? self::LEGACY_PRICE_TIERS[$tier] ?? null;
+    }
 
     public const RELEASE_TYPES = [
         'paid' => 'Add-on de pago',

@@ -329,7 +329,7 @@ $summary->getColumnDimension('F')->setWidth(22);
 // ============================================================
 createPlanSheet($spreadsheet, 'Básico', [
     'plan_name'   => 'Básico',
-    'price'       => 149,
+    'price'       => 499,
     'reps'        => 3,
     'sales_per_rep' => 10,
     'multiplier'  => 3,
@@ -339,7 +339,7 @@ createPlanSheet($spreadsheet, 'Básico', [
 
 createPlanSheet($spreadsheet, 'Profesional', [
     'plan_name'   => 'Pro',
-    'price'       => 299,
+    'price'       => 999,
     'reps'        => 3,
     'sales_per_rep' => 10,
     'multiplier'  => 3,
@@ -349,7 +349,7 @@ createPlanSheet($spreadsheet, 'Profesional', [
 
 createPlanSheet($spreadsheet, 'Clínica', [
     'plan_name'   => 'Clínica',
-    'price'       => 499,
+    'price'       => 1999,
     'reps'        => 3,
     'sales_per_rep' => 10,
     'multiplier'  => 3,

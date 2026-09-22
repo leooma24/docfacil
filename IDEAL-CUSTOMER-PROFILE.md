@@ -40,15 +40,15 @@
 6. **Buscan "software para consultorio dental" en Google** -- intencion directa
 
 ### Ticket promedio esperado
-- **Entrada:** Plan Gratis -> convertir a **Basico ($149/mes)** en 30-60 dias
-- **LTV primer ano:** $149 x 10 meses (considerando 2 meses trial/gratis) = **$1,490 MXN**
-- **Upgrade a Pro:** 20% subira a Pro cuando agregue un asociado = $299/mes
+- **Entrada:** Plan Gratis -> convertir a **Basico ($499/mes)** en 30-60 dias
+- **LTV primer ano:** $499 x 10 meses (considerando 2 meses trial/gratis) = **$4,990 MXN**
+- **Upgrade a Pro:** 20% subira a Pro cuando agregue un asociado = $999/mes
 
 ### Por que este ICP convierte mas facil
 - Hay **miles** de consultorios dentales en Sinaloa (solo en Culiacan 800+)
 - Los dentistas son **independientes** y toman decisiones rapido (no hay comite)
 - El odontograma interactivo es un diferenciador fuerte vs competencia
-- Ticket de $149 es una decision facil (equivale a 1 consulta dental)
+- Ticket de $499 es una decision facil (equivale a 1 consulta dental)
 - La asistente adopta el sistema porque le simplifica su trabajo
 
 ---
@@ -85,9 +85,9 @@
 5. **Tiene recepcionista** -- alguien operara el sistema
 
 ### Ticket promedio esperado
-- **Plan Basico ($149/mes)** -- mayoria se queda aqui
+- **Plan Basico ($499/mes)** -- mayoria se queda aqui
 - **10% sube a Pro** si comparte consultorio con otro doctor
-- **LTV primer ano:** $1,490 MXN
+- **LTV primer ano:** $4,990 MXN
 
 ### Por que es ICP secundario y no primario
 - Ciclo de venta mas largo (los medicos son mas escepticos con software)
@@ -127,7 +127,7 @@
 ### 3.4. Consultorios de ultra-bajo costo ($200 por consulta o menos)
 
 **Por que NO:**
-- Margen tan bajo que $149/mes les parece caro
+- Margen tan bajo que $499/mes les parece caro
 - Volumen alto pero disposicion de pago baja
 - Alta probabilidad de churn en mes 2-3
 - Incluye: doctores de farmacias Similares, consultorios de farmacia
@@ -147,13 +147,13 @@
 
 | Segmento | Clientes objetivo | Plan esperado | Ingreso mensual |
 |---|---|---|---|
-| ICP Primario (Dentistas) | 30 | Basico $149 | $4,470 |
-| ICP Primario (Dentistas en Pro) | 5 | Pro $299 | $1,495 |
-| ICP Secundario (Medicos) | 12 | Basico $149 | $1,788 |
-| ICP Secundario (Medicos en Pro) | 3 | Pro $299 | $897 |
-| **Total** | **50** | -- | **$8,650/mes** |
+| ICP Primario (Dentistas) | 30 | Basico $499 | $14,970 |
+| ICP Primario (Dentistas en Pro) | 5 | Pro $999 | $4,995 |
+| ICP Secundario (Medicos) | 12 | Basico $499 | $5,988 |
+| ICP Secundario (Medicos en Pro) | 3 | Pro $999 | $2,997 |
+| **Total** | **50** | -- | **$28,950/mes** |
 
-**MRR al mes 6: ~$8,650 MXN** (~$500 USD aprox.)
+**MRR al mes 6: ~$28,950 MXN** (~$1,650 USD aprox.)
 
 ### Embudo de ventas completo
 
@@ -326,7 +326,7 @@ Convierten a plan pagado:        50 (10% del total, 67% del trial)
 |---|---|---|---|
 | Trials activos | 10 | 30 | 60 |
 | Clientes pagados | 5 | 20 | 50 |
-| MRR | $745 | $2,980 | $8,650 |
+| MRR | $2,900 | $11,600 | $28,950 |
 | Churn mensual | <10% | <8% | <5% |
 | NPS | >8 | >8 | >8 |
 | Referidos por cliente | 0.5 | 1.0 | 1.5 |

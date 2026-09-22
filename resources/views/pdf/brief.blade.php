@@ -301,20 +301,20 @@
             </tr>
             <tr>
                 <td><strong>Básico</strong></td>
-                <td class="price">$149 / mes</td>
-                <td class="price" style="color:#059669;">$1,490 / año</td>
+                <td class="price">$499 / mes</td>
+                <td class="price" style="color:#059669;">$4,990 / año</td>
                 <td>1 doctor · 200 pacientes · WhatsApp · recetas PDF</td>
             </tr>
             <tr class="popular">
                 <td><strong>Pro ★</strong></td>
-                <td class="price">$299 / mes</td>
-                <td class="price" style="color:#059669;">$2,990 / año</td>
+                <td class="price">$999 / mes</td>
+                <td class="price" style="color:#059669;">$9,990 / año</td>
                 <td>3 doctores · ilimitados · odontograma · portal paciente</td>
             </tr>
             <tr>
                 <td><strong>Clínica</strong></td>
-                <td class="price">$499 / mes</td>
-                <td class="price" style="color:#059669;">$4,990 / año</td>
+                <td class="price">$1,999 / mes</td>
+                <td class="price" style="color:#059669;">$19,990 / año</td>
                 <td>Doctores ilimitados · multi-sucursal · comisiones</td>
             </tr>
         </tbody>

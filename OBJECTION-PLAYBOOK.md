@@ -2,7 +2,7 @@
 
 > Para vendedores en campo y outreach por WhatsApp.
 > Target: doctores y dentistas con 1-5 consultorios en Mexico.
-> Planes: Free / Basico $149 / Pro $299 / Clinica $499 MXN al mes.
+> Planes: Free / Basico $499 / Pro $999 / Clinica $1,999 MXN al mes.
 
 ---
 
@@ -38,7 +38,7 @@ Nunca digas esto:
 
 | Prohibido | Por que | Mejor di |
 |---|---|---|
-| "Esta barato" / "Es baratisimo" | Invalida su percepcion de dinero | "La inversion es de $149 al mes" |
+| "Esta barato" / "Es baratisimo" | Invalida su percepcion de dinero | "La inversion es de $499 al mes" |
 | "Confia en mi" | Genera desconfianza inmediata | "Le muestro para que usted mismo vea" |
 | "Todos los doctores lo usan" | Mentira detectable y presion social | "Tenemos doctores en Culiacan que..." |
 | "Es facil, cualquiera puede" | Minimiza su preocupacion real | "Lo diseñamos para que sea intuitivo" |
@@ -82,7 +82,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Entiendo, doctor, $149 al mes no es poquito. Permitame preguntarle algo: ¿cuantos pacientes le faltan al mes a sus citas? Porque lo que hemos visto con otros consultorios es que nada mas con los recordatorios automaticos por WhatsApp recuperan 3 o 4 pacientes que no iban a ir. Si una consulta le cobra $500 pesos, con un solo paciente recuperado al mes ya pago DocFacil y le sobra. Y eso sin contar que deja de pagar papeleria, se ahorra tiempo en agendar y sus pacientes lo ven mas profesional."
+"Entiendo, doctor, $499 al mes no es poquito. Permitame preguntarle algo: ¿cuantos pacientes le faltan al mes a sus citas? Porque lo que hemos visto con otros consultorios es que nada mas con los recordatorios automaticos por WhatsApp recuperan 3 o 4 pacientes que no iban a ir. Si una consulta le cobra $500 pesos, con un solo paciente recuperado al mes ya pago el plan Basico ($499), y con dos ya le sobra. Y eso sin contar que deja de pagar papeleria, se ahorra tiempo en agendar y sus pacientes lo ven mas profesional."
 
 **Pregunta de seguimiento:** "Digame, ¿mas o menos cuanto cobra por consulta? Asi le calculo cuantos pacientes necesita para que se pague solo."
 
@@ -186,7 +186,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 |---|---|---|---|---|
 | 100% web | Si | No | No | Si |
 | Soporte en español MX | Si | No | No | No |
-| Precio desde | $149/mes MXN | ~USD $400 | ~USD $350 | ~USD $299 |
+| Precio desde | $499/mes MXN | ~USD $400 | ~USD $350 | ~USD $299 |
 
 ---
 

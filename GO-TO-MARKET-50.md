@@ -46,7 +46,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Martes: Grabar video demo de 3 minutos (pantalla + voz) mostrando: agendar cita → recordatorio WhatsApp → cobro → receta PDF. Subir a YouTube (no listado) y tener link listo para WhatsApp.
 - Miércoles: Crear 3 volantes PDF/impresos (tamaño media carta):
   - Volante A: "¿Tus pacientes faltan a sus citas? Recordatorios automáticos por WhatsApp" + QR a landing
-  - Volante B: "Tu consultorio digital desde $5/día" + QR + teléfono WhatsApp
+  - Volante B: "Tu consultorio digital desde $16 al día" + QR + teléfono WhatsApp
   - Volante C: "Expediente clínico + Recetas + Cobros en un solo lugar" + QR
 - Jueves: Imprimir 200 volantes (costo: ~$300 MXN en impresión digital). Mandar hacer 100 tarjetas de presentación con QR al demo ($150 MXN).
 - Viernes: Crear 5 mensajes plantilla de WhatsApp para outreach frío (ver sección de templates abajo). Configurar respuestas rápidas en WhatsApp Business.
@@ -231,7 +231,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Miércoles: Presentación en el Colegio de Dentistas (si se logró agendar en semana 4). Formato:
   - 5 min: "El problema de las citas perdidas en México" (estadísticas)
   - 5 min: Demo en vivo de DocFácil
-  - 5 min: Oferta especial para agremiados ($99/mes primer año en plan Básico)
+  - 5 min: Oferta especial para agremiados ($499/mes en plan Básico, 6 meses gratis si entran al programa Fundador)
   - Recoger WhatsApp de todos los asistentes
 - Jueves-Viernes: Demos con leads del evento + leads de Facebook Ads.
 
@@ -270,7 +270,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 | Consultorios visitados en Mazatlán | 10 |
 | Demos (semana) | 7 |
 | Clientes pagados (acumulado) | **25-28** |
-| MRR | ~$4,000-$5,500 MXN |
+| MRR cobrado | $0 (los clientes pagados son fundadores dentro de sus 6 meses gratis; empiezan a pagar $499/mes en el mes 7) |
 | Trials activos sin convertir | <8 (seguimiento agresivo) |
 
 ---
@@ -330,7 +330,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 #### SEMANA 11 — "Sprint final: cerrar pipeline"
 
 **SC:**
-- Lunes: Lista de TODOS los prospectos en pipeline que alguna vez mostraron interés pero no cerraron. Contactar a cada uno con oferta de cierre: "Doctor, esta semana es la última del precio fundador ($99/mes en Básico). La próxima semana volvemos a $149."
+- Lunes: Lista de TODOS los prospectos en pipeline que alguna vez mostraron interés pero no cerraron. Contactar a cada uno con oferta de cierre: "Doctor, quedan 3 lugares del programa Fundador: 6 meses gratis y después $499/mes congelado de por vida. Cuando se llenen, ya no hay forma de entrar."
 - Martes-Jueves: Demos y cierres intensivos. Meta: 10 demos en 3 días.
 - Viernes: Tercer viaje a Los Mochis o Mazatlán para cerrar deals presenciales.
 
@@ -350,7 +350,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 #### SEMANA 12 — "Cerrar los 50 + planear Q3"
 
 **SC:**
-- Lunes-Miércoles: Cierre de los últimos 4-8 deals. Llamadas directas, visitas si es necesario. Usar urgencia real: "El precio fundador termina esta semana."
+- Lunes-Miércoles: Cierre de los últimos 4-8 deals. Llamadas directas, visitas si es necesario. Usar urgencia real: "El programa Fundador cierra en cuanto se llenen los 10 lugares."
 - Jueves: Celebrar el milestone de 50 clientes. Publicar en redes: "50 consultorios en Sinaloa ya son digitales con DocFácil. Gracias." Etiquetar a los clientes que dieron permiso.
 - Viernes: Sesión de planeación Q3:
   - ¿Contratar un vendedor de tiempo completo?
@@ -367,7 +367,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 | Métrica | Meta |
 |---|---|
 | **Clientes pagados (acumulado)** | **50** |
-| MRR | **$7,500-$10,000 MXN** |
+| MRR cobrado | **~$31,960 MXN/mes** en la semana 12 (40 clientes pagando × $799 de ARPU; los 10 fundadores siguen en sus 6 meses gratis) → **~$39,950 MXN/mes** al mes 7, cuando los fundadores empiezan a pagar |
 | Trials activos pendientes | 5-8 (pipeline para semana 13) |
 | Tasa de retención | >90% |
 | NPS promedio | >8 |
@@ -421,13 +421,13 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 **Templates probados (usar en rotación):**
 
 **Template A — El Directo:**
-> Buen día Dr. [nombre], soy [tu nombre] de DocFácil. Hacemos software para consultorios dentales: agenda con recordatorios automáticos por WhatsApp a sus pacientes, expediente digital y cobros. Desde $149/mes. ¿Le puedo mandar un video de 3 min mostrando cómo funciona?
+> Buen día Dr. [nombre], soy [tu nombre] de DocFácil. Hacemos software para consultorios dentales: agenda con recordatorios automáticos por WhatsApp a sus pacientes, expediente digital y cobros. Desde $499/mes. ¿Le puedo mandar un video de 3 min mostrando cómo funciona?
 
 **Template B — El Problema:**
-> Dr. [nombre], ¿le pasa que los pacientes faltan a sus citas sin avisar? Un software de recordatorios automáticos por WhatsApp reduce las citas perdidas hasta un 50%. Se llama DocFácil y cuesta menos que $5 al día. ¿Le interesa ver cómo funciona?
+> Dr. [nombre], ¿le pasa que los pacientes faltan a sus citas sin avisar? Un software de recordatorios automáticos por WhatsApp reduce las citas perdidas hasta un 50%. Se llama DocFácil y cuesta menos que $17 al día. ¿Le interesa ver cómo funciona?
 
 **Template C — La Referencia Social:**
-> Dr. [nombre], X consultorios en Culiacán ya están usando DocFácil para su agenda y recordatorios de citas por WhatsApp. Cuesta $149/mes y la prueba es gratis. ¿Le mando info?
+> Dr. [nombre], X consultorios en Culiacán ya están usando DocFácil para su agenda y recordatorios de citas por WhatsApp. Cuesta $499/mes y la prueba es gratis. ¿Le mando info?
 
 **Template D — La Recepcionista:**
 > Buen día, ¿esta es la línea del consultorio del Dr. [nombre]? Soy [tu nombre] de DocFácil, un sistema que le facilita la vida a las recepcionistas: agenda digital con recordatorios automáticos a los pacientes. ¿Se lo podría comentar al doctor? Le puedo mandar un video cortito.
@@ -469,14 +469,14 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
 
 | Aspecto | Detalle |
 |---|---|
-| Costo | 1 mes gratis por referido ($149-$299 de descuento) |
+| Costo | 1 mes gratis por referido ($499 de descuento) |
 | Tiempo para resultados | Semana 4 en adelante |
 | Dificultad | Baja una vez que tienes clientes satisfechos |
 | Responsable | Ambos |
 
 **Ejecución paso a paso:**
 1. Desde el cliente #1, activar el programa. Cada cliente recibe un código único de referido.
-2. Incentivo: "Por cada colega que se suscriba con tu código, te regalamos 1 mes gratis." Esto es un CAC de $149-$299, excelente para SaaS.
+2. Incentivo: "Por cada colega que se suscriba con tu código, te regalamos 1 mes gratis." Esto es un CAC de $499 (el mes que regalas), excelente para SaaS.
 3. Pedir referidos activamente, no esperar que lleguen solos:
    - Al momento de cerrar la venta: "Doctor, ¿tiene algún colega que también le serviría?"
    - A los 14 días de uso: "¿Cómo le ha ido? ¿Conoce algún colega que ande batallando con la agenda?"
@@ -506,7 +506,7 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
    - Presupuesto: $100 MXN/día
    - Audiencia: Sinaloa, 28-55 años, intereses: odontología, dentista, consultorio dental, ortodoncia
    - Formato: Video de 30-60 segundos mostrando la interfaz + voz explicando
-   - Copy: "Recordatorios automáticos por WhatsApp a tus pacientes. Agenda digital. Cobros. Recetas. Desde $149/mes. Prueba gratis 14 días. Escríbenos."
+   - Copy: "Recordatorios automáticos por WhatsApp a tus pacientes. Agenda digital. Cobros. Recetas. Desde $499/mes. Prueba gratis 14 días. Escríbenos."
    - CTA: Botón de WhatsApp
 3. Campaña 2 — Retargeting (semana 8+):
    - Audiencia: Personas que visitaron docfacil.com en los últimos 30 días
@@ -580,7 +580,7 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
 2. Propuesta: presentación gratuita de 15 min en su junta mensual. "Queremos aportar valor a sus agremiados enseñándoles a digitalizar su consultorio."
 3. En la presentación:
    - NO vender 15 minutos. Dar valor 10 minutos + demo 5 minutos.
-   - Ofrecer precio especial para agremiados ($99/mes primer año en plan Básico).
+   - Ofrecer precio especial para agremiados ($499/mes en plan Básico, 6 meses gratis si entran al programa Fundador).
    - Recoger WhatsApp de TODOS los asistentes: "¿Quién quiere que le mande el link de la prueba gratis?"
 4. Congresos/expos dentales: estar atento a eventos locales. Si hay un congreso dental en Mazatlán o Culiacán, asistir aunque sea como visitante. Llevar tarjetas y volantes. Platicar en los pasillos.
 
@@ -743,36 +743,42 @@ Los 58 esperados te dan un buffer cómodo para llegar a 50.
 
 ### Estrategia: "Precio Fundador" (NO regalar todo)
 
-**Principio:** No regales el producto. Un doctor que no paga no valora. Un doctor que paga $99 se comporta muy diferente a uno que usa algo gratis. El compromiso financiero activa el compromiso de uso.
+**Principio:** No regales el producto. Un doctor que no paga no valora. Un doctor que paga $499/mes se comporta muy diferente a uno que usa algo gratis. El compromiso financiero activa el compromiso de uso.
 
 ### Oferta para los Primeros 50 Clientes
+
+**Dos niveles distintos — no confundirlos:**
+
+- **Primeros 10 → programa Fundador.** Es el beneficio caro: 6 meses gratis y precio congelado de por vida, con onboarding 1:1 de Omar. Es el número real de `config/founders.php`, y es chico a propósito: el compromiso es permanente y la atención la da una sola persona.
+- **Los siguientes 40 → clientes normales.** Pagan desde su primer mes. Conservan los beneficios de abajo (trial, migración, onboarding), pero **sin** el congelamiento de precio.
 
 | Concepto | Oferta |
 |---|---|
 | **Trial** | 14 días gratis, sin tarjeta (reduce fricción al máximo) |
-| **Precio Fundador (Básico)** | $99/mes (vs $149 normal) — solo para primeros 50 |
-| **Precio Fundador (Pro)** | $199/mes (vs $299 normal) — solo para primeros 50 |
-| **Precio Fundador (Clínica)** | $399/mes (vs $499 normal) — solo para primeros 50 |
-| **Lock-in del precio** | "Este precio se te queda PARA SIEMPRE mientras mantengas tu suscripción activa" |
+| **Precio Fundador (Básico)** | 6 meses gratis y después $499/mes congelado de por vida — solo para los primeros 10 (así está definido en `config/founders.php`) |
+| **Precio Fundador (Pro)** | $999/mes si sube a Pro (el precio fundador congela el plan contratado, no el catálogo) |
+| **Precio Fundador (Clínica)** | $1,999/mes si sube a Clínica (mismo criterio) |
+| **Protección de precio** | "Este precio se te queda PARA SIEMPRE mientras mantengas tu suscripción activa: si el catálogo sube, tu mensualidad no sube" |
 | **Migración gratis** | "Te cargamos tus primeros 50 pacientes al sistema sin costo" |
 | **Onboarding personalizado** | Llamada 1-a-1 de 30 min para configurar todo |
 
 ### Por Qué Funciona
 
-1. **$99 vs $0:** El doctor que paga $99 tiene 5x más probabilidad de usar el sistema que uno en plan gratuito. Y un usuario activo refiere a colegas.
-2. **"Para siempre":** Elimina el miedo a que suba el precio. El doctor siente que está ganando algo exclusivo.
-3. **"Primeros 50":** Crea urgencia real. "Ya van 37 consultorios con precio fundador. Quedan 13 lugares."
-4. **Migración gratis:** El mayor miedo del doctor es "voy a tener que meter TODO desde cero". Quítalelo.
+1. **6 meses gratis, no "gratis para siempre":** el doctor entra sin riesgo, pero ya sabe que a partir del mes 7 paga $499/mes. El que nunca paga no valora; el que se compromete usa el sistema en serio desde el día 1.
+2. **"Para siempre":** Elimina el miedo a que suba el precio. El doctor siente que está ganando algo exclusivo: su mensualidad queda congelada de por vida.
+3. **"Primeros 10":** Crea urgencia real. "Ya van 7 consultorios con precio fundador. Quedan 3 lugares." No es escasez de teatro: son los lugares reales del programa, contados contra la base de fundadores.
+4. **Migración gratis:** El mayor miedo del doctor es "voy a tener que meter TODO desde cero". Quítalo.
+5. **El trato es explícito:** 6 meses gratis a cambio de retroalimentación y testimonial. El doctor entiende qué recibe y qué da a cambio.
 
 ### Estrategia de Upgrade: Free → Básico → Pro
 
-**Free a Básico ($99-$149/mes):**
+**Free a Básico ($499/mes):**
 - El plan Free tiene 30 pacientes y 20 citas/mes. Un consultorio activo llega a ese límite en 2-3 semanas.
-- Cuando el doctor llegue al límite, mostrar mensaje: "Llegaste al límite del plan gratuito. Actualiza a Básico por $99/mes para pacientes ilimitados. [Actualizar ahora]"
+- Cuando el doctor llegue al límite, mostrar mensaje: "Llegaste al límite del plan gratuito. Actualiza a Básico por $499/mes para pacientes ilimitados. [Actualizar ahora]"
 - NUNCA bloquear funciones críticas (no borrar datos, no impedir ver pacientes existentes). Solo bloquear CREAR nuevos.
 - WhatsApp automático al fundador cuando un usuario Free llegue al 80% de su límite: para que llame proactivamente.
 
-**Básico a Pro ($199-$299/mes):**
+**Básico a Pro ($999/mes):**
 - Trigger: cuando el consultorio agrega un segundo doctor o necesita reportes avanzados.
 - No empujar el upgrade activamente durante los primeros 3 meses. Primero que adopten, después que crezcan.
 - A los 3 meses, enviar: "Doctor, vi que ya tiene [X pacientes]. ¿Sabía que con el plan Pro tiene reportes de ingresos y puede agregar más doctores? Le cuento cómo funciona."
@@ -781,20 +787,23 @@ Los 58 esperados te dan un buffer cómodo para llegar a 50.
 
 - **NO dar trials de 30 días.** 14 días es suficiente. Trials largos = menos urgencia = menor conversión.
 - **NO regalar meses gratis** a prospectos que no han probado (regálalos solo como incentivo de referidos a clientes existentes).
-- **NO hacer descuentos adicionales** sobre el precio fundador. Si el doctor regatear, la respuesta es: "El precio fundador ya tiene $50/mes de descuento. Es el mejor precio que vamos a tener."
+- **NO hacer descuentos adicionales** sobre el precio fundador. Si el doctor regatea, la respuesta es: "El programa fundador ya incluye 6 meses gratis y tu precio queda congelado de por vida. Es el mejor trato que vamos a tener."
+- **NO prometer un descuento que no existe.** El precio de lista del Básico es $499/mes, igual que el del fundador: lo que distingue al fundador son los 6 meses gratis y la garantía de precio, no una mensualidad más baja. Nunca decir "precio fundador con descuento".
 - **NO cobrar anualidad** todavía. Mensual reduce la barrera de entrada. Puedes ofrecer anual (con 2 meses gratis) después del cliente #100.
 
 ### Proyección de MRR con 50 Clientes
 
-| Plan | % distribución | # clientes | Precio fundador | MRR |
+Con el catálogo vigente: Básico $499, Pro $999, Clínica $1,999.
+
+| Plan | % distribución | # clientes | Precio mensual | MRR |
 |---|---|---|---|---|
 | Free | 0% (no cuenta) | 0 | $0 | $0 |
-| Básico | 60% | 30 | $99 | $2,970 |
-| Pro | 30% | 15 | $199 | $2,985 |
-| Clínica | 10% | 5 | $399 | $1,995 |
-| **Total** | | **50** | | **$7,950 MXN/mes** |
+| Básico | 60% | 30 | $499 | $14,970 |
+| Pro | 30% | 15 | $999 | $14,985 |
+| Clínica | 10% | 5 | $1,999 | $9,995 |
+| **Total** | | **50** | | **$39,950 MXN/mes** |
 
-Con precio normal (post-fundador), los mismos 50 clientes serían ~$10,750 MXN/mes.
+Solo los **10 fundadores** tienen 6 meses gratis; los otros **40 pagan desde su primer mes**. Por eso el MRR cobrado en la semana 12 es de **~$31,960 MXN/mes** (40 × $799 de ARPU), no $0. A partir del mes 7, cuando los 10 fundadores empiezan a pagar, los 50 clientes suman **$39,950 MXN/mes** con la mezcla 60/30/10 de arriba.
 
 ---
 
@@ -881,7 +890,7 @@ NUEVO → CONTACTADO → RESPONDIÓ → DEMO_AGENDADA → DEMO_REALIZADA → TRI
 - Meta: obtener feedback + detectar problemas antes de que decida no renovar.
 
 **Día 10:**
-- WhatsApp: "Doctor, su prueba gratis termina en 4 días. ¿Quiere continuar con el plan Básico a precio fundador ($99/mes)? Le mando el link de pago."
+- WhatsApp: "Doctor, su prueba gratis termina en 4 días. ¿Quiere continuar con el plan Básico a $499/mes? Le mando el link de pago."
 - Si no responde en 24 hrs: LLAMAR por teléfono.
 
 **Día 14 (fin de trial):**
@@ -929,7 +938,7 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 **Si el problema es trial → paid:**
 - Llamar a los 3 trials más recientes que no convirtieron. Preguntar directamente: "¿Qué le faltó? ¿Por qué no continuó?"
 - Si dicen "no tuve tiempo de probarlo": ofrecer onboarding donde TÚ configuras todo. "Yo le doy de alta sus pacientes, le configuro la agenda y usted solo llega a usarlo."
-- Si dicen "está caro": bajar temporalmente a $79/mes para validar si el precio es realmente el freno (si aún no compran a $79, el problema NO es el precio).
+- Si dicen "está caro": bajar temporalmente a $299/mes para validar si el precio es realmente el freno (si aún no compran a $299, el problema NO es el precio).
 - Si dicen "le falta X feature": evaluar si es una feature que puedes hacer en 1-2 días. Si sí, hazla y recontacta: "Doctor, ya tenemos [lo que pidió]."
 
 ### Riesgo 2: Visitas presenciales no funcionan
@@ -959,7 +968,7 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 - Mazatlán tiene la ventaja de que está a 3 hrs y puedes ir presencialmente.
 
 **Pivote C — Cambiar el modelo de venta:**
-- De "SaaS mensual" a "setup + mensualidad": cobrar $2,000-$3,000 de instalación + $99/mes. Algunos doctores prefieren pagar más upfront y menos mensual.
+- De "SaaS mensual" a "setup + mensualidad": cobrar $2,000-$3,000 de instalación + $499/mes. Algunos doctores prefieren pagar más upfront y menos mensual.
 - De "self-service trial" a "done-for-you setup": el doctor no toca nada, tú configuras todo y le entregas su consultorio digital funcionando.
 
 **Pivote D — Cambiar el feature principal:**
@@ -973,7 +982,7 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 **Acción inmediata:**
 1. Llamar a CADA churned customer. "Doctor, lamentamos que se fue. ¿Qué pasó? ¿Qué podríamos haber hecho diferente?"
 2. Clasificar razones: ¿precio? ¿no lo usaban? ¿falta feature? ¿bug?
-3. Si es precio: re-evaluar si $99 es demasiado para el segmento. Considerar $49/mes como plan entry-level.
+3. Si es precio: re-evaluar si $499 es demasiado para el segmento. Considerar $199/mes como plan entry-level.
 4. Si es adopción: el onboarding está fallando. Agregar más touchpoints humanos (llamada día 1, día 3, día 7).
 5. Si es falta de feature: priorizar desarrollo de esa feature.
 
@@ -1002,7 +1011,7 @@ SEM 8  ████████████ MITAD: 25-28 paid, Mazatlán visitas
 SEM 9  ████████████ Referidos como motor: 30-33 paid
 SEM 10 ████████████ Médicos no-dentales, segundo Colegio: 35-38 paid
 SEM 11 ████████████ Sprint de cierre: 42-46 paid
-SEM 12 ████████████ META: 50 CLIENTES PAGADOS 🎯 MRR: ~$7,950
+SEM 12 ████████████ META: 50 CLIENTES PAGADOS 🎯 MRR cobrado: ~$31,960 (40 pagando; los 10 fundadores en sus 6 meses gratis); MRR al mes 18: ~$39,950
 ```
 
 ## APÉNDICE B: PRESUPUESTO TOTAL ESTIMADO (12 SEMANAS)
@@ -1023,9 +1032,9 @@ SEM 12 ████████████ META: 50 CLIENTES PAGADOS 🎯 MRR: 
 
 **Costo de adquisición promedio (CAC):** $19,400 / 50 = **$388 MXN por cliente** (~$22 USD).
 
-Con un ARPU de ~$159 MXN/mes y retención estimada de 12+ meses, el LTV es ~$1,900 MXN.
+Con un ARPU de ~$799 MXN/mes (mezcla 60/30/10: 0.60 × $499 + 0.30 × $999 + 0.10 × $1,999 = $799), un promedio de 10.8 meses pagados dentro de los primeros 12 (los 10 fundadores tienen 6 meses gratis; los otros 40 pagan desde el mes 1) y retención estimada de 12+ meses, el LTV del primer año es 10.8 × $799 = ~$8,629 MXN.
 
-**Ratio LTV:CAC = 4.9:1** (excelente; todo arriba de 3:1 es sano para SaaS).
+**Ratio LTV:CAC = $8,629 / $388 = 22.2:1** (excelente; todo arriba de 3:1 es sano para SaaS).
 
 ## APÉNDICE C: DECISIONES CLAVE SEMANA POR SEMANA
 

@@ -98,9 +98,9 @@ $ws->getRowDimension(3)->setRowHeight(25);
 
 $planes = [
     ['FREE', '$0', '—', '1', '30', 'Doctores curiosos. Sin comisión. Gancho para conversión.'],
-    ['BÁSICO', '$149', '$74 (50% off)', '1', '200', 'Doctores individuales. Comisión: $447 por venta.'],
-    ['PRO ⭐', '$299', '$149 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Odontograma + Portal + Multi-doctor. Comisión: $897 por venta.'],
-    ['CLÍNICA', '$499', '$249 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $1,497 por venta.'],
+    ['BÁSICO', '$499', '$249 (50% off)', '1', '200', 'Doctores individuales. Comisión: $1,497 por venta.'],
+    ['PRO ⭐', '$999', '$499 (50% off)', '3', 'Ilimitados', 'EL QUE MÁS VENDE. Odontograma + Portal + Multi-doctor. Comisión: $2,997 por venta.'],
+    ['CLÍNICA', '$1,999', '$999 (50% off)', 'Ilimitados', 'Ilimitados', 'Clínicas grandes. Comisión: $5,997 por venta.'],
 ];
 
 $row = 4;
@@ -147,9 +147,9 @@ $ws->getRowDimension(1)->setRowHeight(40);
 
 $ws->setCellValue('A3', 'Feature');
 $ws->setCellValue('B3', 'Free');
-$ws->setCellValue('C3', 'Básico $149');
-$ws->setCellValue('D3', 'Pro $299');
-$ws->setCellValue('E3', 'Clínica $499');
+$ws->setCellValue('C3', 'Básico $499');
+$ws->setCellValue('D3', 'Pro $999');
+$ws->setCellValue('E3', 'Clínica $1,999');
 $ws->getStyle('A3:E3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
 $ws->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($DARK);
 $ws->getStyle('A3:E3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -229,7 +229,7 @@ $ws->getStyle('A3:G3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 $ws->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 $compet = [
-    ['DocFácil PRO ⭐', '$299', '✅', '✅', '✅ Automático', '✅', '✅'],
+    ['DocFácil PRO ⭐', '$999', '✅', '✅', '✅ Automático', '✅', '✅'],
     ['SimplyBook.me', '$800+', '❌', '❌', '⚠️ Básico', '⚠️', '✅'],
     ['Abysmed', '$1,200+', '✅', '⚠️', '❌', '✅', '✅'],
     ['Doctoralia', '$1,500+', '❌', '❌', '⚠️ Básico', '❌', '✅'],
@@ -292,11 +292,11 @@ $script = [
     ['Punto 5', 'Muestra ODONTOGRAMA/EXPEDIENTE: "Todo el historial clínico del paciente en una pantalla, con alertas de alergias y antecedentes."'],
     ['', ''],
     ['CIERRE', ''],
-    ['Frase de cierre', '"Doctor, por $299 al mes ahorras 2 horas al día y recuperas 8 pacientes que antes no llegaban = $4,800 extra al mes. DocFácil se paga 16 veces."'],
+    ['Frase de cierre', '"Doctor, por $999 al mes ahorras 2 horas al día y recuperas 8 pacientes que antes no llegaban = $4,800 extra al mes. DocFácil se paga 4.8 veces."'],
     ['Call to action', '"Te doy 14 días gratis con todas las features. Sin tarjeta. ¿A qué hora te puedo ayudar a configurarlo?"'],
     ['', ''],
     ['OBJECIONES', ''],
-    ['"Es caro"', '"Doctor, ¿cuánto cobras por consulta? ¿$500? DocFácil Pro cuesta MENOS de 1 consulta al mes y te ahorra 8 pacientes en recordatorios WhatsApp. Se paga 16 veces."'],
+    ['"Es caro"', '"Doctor, ¿cuánto cobras por consulta? ¿$500? DocFácil Pro cuesta MENOS de 2 consultas al mes y te ahorra 8 pacientes en recordatorios WhatsApp. Se paga 4.8 veces."'],
     ['"No soy tecnológico"', '"Por eso lo diseñamos simple. Si sabes usar WhatsApp, sabes usar DocFácil. Te acompañamos en la configuración inicial sin costo."'],
     ['"Ya tengo software"', '"¿Es en la nube o instalado en una sola compu? ¿Manda recordatorios WhatsApp automáticos? ¿Tiene portal del paciente? Pruébalo 14 días gratis sin cancelar lo actual."'],
     ['"Mis datos están seguros?"', '"Absolutamente. Encriptación SSL, backups automáticos diarios, tus datos están separados de otras clínicas. Cumplimos con todas las normas mexicanas."'],
@@ -381,7 +381,7 @@ $ws->getStyle('A9:C11')->getBorders()->getAllBorders()->setBorderStyle(Border::B
 
 // ROI
 $ws->setCellValue('A13', 'Precio DocFácil Pro');
-$ws->setCellValue('B13', 299);
+$ws->setCellValue('B13', 999);
 $ws->getStyle('B13')->getNumberFormat()->setFormatCode('"$"#,##0');
 
 $ws->setCellValue('A14', 'ROI (cuántas veces paga DocFácil)');
@@ -426,9 +426,9 @@ $ws->getRowDimension(6)->setRowHeight(25);
 
 $coms = [
     ['Free', '$0', '$0', 'Sin comisión'],
-    ['Básico', '$149', '$447', '$223.50 + $223.50'],
-    ['Pro ⭐', '$299', '$897', '$448.50 + $448.50'],
-    ['Clínica', '$499', '$1,497', '$748.50 + $748.50'],
+    ['Básico', '$499', '$1,497', '$748.50 + $748.50'],
+    ['Pro ⭐', '$999', '$2,997', '$1,498.50 + $1,498.50'],
+    ['Clínica', '$1,999', '$5,997', '$2,998.50 + $2,998.50'],
 ];
 
 $row = 7;
@@ -455,10 +455,10 @@ $row += 2;
 
 $metas = [
     ['Nivel', 'Ventas/mes', 'Mix', 'Comisión aproximada'],
-    ['Starter', '3 Básico + 2 Pro', '3x$447 + 2x$897', '$3,135'],
-    ['Medium', '5 Pro + 1 Clínica', '5x$897 + 1x$1,497', '$5,982'],
-    ['Top', '10 Pro + 2 Clínica', '10x$897 + 2x$1,497', '$11,964'],
-    ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$7,843.50'],
+    ['Starter', '3 Básico + 2 Pro', '3x$1,497 + 2x$2,997', '$10,485'],
+    ['Medium', '5 Pro + 1 Clínica', '5x$2,997 + 1x$5,997', '$20,982'],
+    ['Top', '10 Pro + 2 Clínica', '10x$2,997 + 2x$5,997', '$41,964'],
+    ['Elite', '5 Básico + 10 Pro + 3 Clínica', 'Mix completo', '$55,446'],
 ];
 
 foreach ($metas as $i => $m) {
@@ -533,7 +533,7 @@ $checklist = [
     ['☐', 'Contacto inicial', 'Llamada o WhatsApp al doctor (NO email frío)'],
     ['☐', 'Romper el hielo', 'Hacer pregunta sobre su dolor (tiempo, no-shows, cobros)'],
     ['☐', 'Demo en vivo', 'Mostrar agenda + recordatorios WhatsApp + recetas PDF + cobro por WhatsApp'],
-    ['☐', 'Cotización', 'Mostrar Plan Pro $299 con 50% descuento = $149 de por vida (fundador)'],
+    ['☐', 'Cotización', 'Mostrar Plan Pro $999 con 50% descuento = $499 de por vida (fundador)'],
     ['☐', 'Objeciones', 'Usar respuestas del script (hoja "Script de Venta")'],
     ['☐', 'Ofrecer trial 14 días', 'Sin tarjeta de crédito, sin compromiso'],
     ['☐', 'Crear cuenta en su presencia', 'Registrarlo en docfacil.tu-app.co/doctor/register?vnd=TU_CODIGO'],

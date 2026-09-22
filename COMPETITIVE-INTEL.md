@@ -13,7 +13,7 @@
 - **Funciones principales:** Perfil publico con resenas, agenda online, recordatorios SMS/email, videoconsulta, gestion de citas, CRM de pacientes, facturacion basica, campanas de marketing
 - **Target:** Medicos generales y especialistas que buscan captar pacientes nuevos via marketplace
 - **Debilidades vs DocFacil:**
-  - Precio muy alto (10-30x mas caro que DocFacil)
+  - Precio muy alto (5-10x mas caro que DocFacil)
   - No tiene odontograma
   - Expediente clinico limitado/basico
   - Dependencia del marketplace (si cancelas, pierdes visibilidad)
@@ -61,7 +61,7 @@
   - Sin check-in QR
   - Sin portal de paciente
   - Menor presencia de marca y marketing
-  - Precio base mas alto que DocFacil
+  - Precio base similar o mas bajo (desde ~$399 vs $499 de DocFacil): el precio no es un argumento en contra
 
 ### 1.5 iPraxis
 - **Tipo:** Expediente clinico electronico mexicano
@@ -74,7 +74,7 @@
   - Sin WhatsApp automatico
   - Sin check-in QR
   - Sin portal de paciente moderno
-  - Precio mas alto en plan base
+  - Precio base practicamente igual (~$500 vs $499): empate, el precio no es un argumento en contra
   - Sin plan gratuito para probar
   - Soporte limitado
 
@@ -87,7 +87,7 @@
   - Sin odontograma
   - Sin WhatsApp automatico
   - Sin check-in QR
-  - Precio base significativamente mas alto ($599 vs $149)
+  - Precio base mas alto ($599 vs $499)
   - Sin portal de paciente con acceso web
   - Interfaz funcional pero no tan moderna
   - Sin cobros/pagos integrados
@@ -112,7 +112,7 @@
 - **Funciones principales:** Expediente clinico, agenda, telemedicina, recetas, facturacion electronica, portal de pacientes, reportes, notas clinicas
 - **Target:** Medicos y clinicas en Latinoamerica (Costa Rica, Mexico, Colombia)
 - **Debilidades vs DocFacil:**
-  - Precio mas alto (minimo ~$500 MXN vs $149)
+  - Precio base practicamente igual (minimo ~$500 MXN vs $499): empate, el precio no es un argumento en contra
   - Sin odontograma
   - WhatsApp no nativo (integraciones limitadas)
   - Sin check-in QR
@@ -155,7 +155,7 @@
 | Caracteristica | DocFacil | Doctoralia | Dentrix | SimplyBook | Nimbo | Huli | Dentalink | Medesk |
 |---|---|---|---|---|---|---|---|---|
 | **Precio base MXN/mes** | **$0 (Free)** | ~$2,500 | N/A (USA) | ~$170 | ~$599 | ~$500 | ~$680 | ~$420 |
-| **Plan mas popular** | **$149** | ~$3,500 | ~$5,000 USD | ~$420 | ~$599 | ~$870 | ~$1,000 | ~$700 |
+| **Plan mas popular** | **$499** | ~$3,500 | ~$5,000 USD | ~$420 | ~$599 | ~$870 | ~$1,000 | ~$700 |
 | **100% Web/Nube** | Si | Si | No | Si | Si | Si | Si | Si |
 | **Espanol Mexico** | **Nativo** | Si | No | Parcial | Si | Si | Si | Parcial |
 | **Agenda de citas** | Si | Si | Si | Si | Si | Si | Si | Si |
@@ -169,7 +169,7 @@
 | **Cobros/Pagos** | Si | Parcial | Si (USA) | Si | No | Si | Si | Si |
 | **Reportes** | Si | Basicos | Si | Basicos | Basicos | Si | Si | Si |
 | **Plan gratuito** | **Si** | No | No | Si (limitado) | Si (limitado) | No | No | No |
-| **Multi-doctor** | Si ($299+) | Si | Si | Si | Si | Si | Si | Si |
+| **Multi-doctor** | Si ($999+) | Si | Si | Si | Si | Si | Si | Si |
 | **Telemedicina** | Futuro | Si | No | Zoom | No | Si | No | Si |
 | **Marketplace pacientes** | No | **Si** | No | No | No | No | No | No |
 | **NOM Mexico** | Si | Parcial | No | No | Si | Parcial | No | No |
@@ -178,8 +178,8 @@
 
 ## 3. Top 5 Ventajas Competitivas de DocFacil
 
-### 1. Precio imbatible con plan gratuito real
-DocFacil ofrece el plan gratuito mas funcional del mercado ($0 para 1 doctor, 30 pacientes) y el plan de pago mas barato ($149 MXN/mes). Nimbo cobra $599, Huli $500+, Doctoralia $2,500+. **Somos 4-17x mas baratos** que la competencia directa.
+### 1. Plan gratuito real y precios competitivos
+DocFacil ofrece el plan gratuito mas funcional del mercado ($0 para 1 doctor, 30 pacientes) y su plan de pago arranca en $499 MXN/mes. Nimbo cobra $599, Huli $500+, Doctoralia $2,500+. **Somos hasta 10x mas baratos** que las plataformas de captacion (Doctoralia) y hasta 75% mas baratos que los expedientes clinicos locales; contra Huli e iPraxis el plan base queda practicamente empatado, y hay agendas genericas por debajo de $499 que no incluyen expediente clinico, recetas ni WhatsApp automatico.
 
 ### 2. WhatsApp automatico nativo
 **Ningun competidor** ofrece recordatorios de WhatsApp automaticos integrados nativamente. En Mexico, WhatsApp tiene >95% de penetracion. Los doctores actualmente envian recordatorios manualmente. Esta funcion sola justifica la suscripcion.
@@ -221,21 +221,21 @@ Espanol nativo mexicano, soporte local (Culiacan), cumplimiento NOM, precios en 
 
 ### Battlecard: "Ya uso Doctoralia"
 
-> **Respuesta:** "Doctoralia es excelente para aparecer en Google y recibir pacientes nuevos, pero pagas $2,500-$5,000/mes solo por eso. DocFacil te da expediente clinico completo, recetas con firma, WhatsApp automatico y odontograma por $149/mes. Puedes usar ambos: Doctoralia para captar y DocFacil para gestionar."
+> **Respuesta:** "Doctoralia es excelente para aparecer en Google y recibir pacientes nuevos, pero pagas $2,500-$5,000/mes solo por eso. DocFacil te da expediente clinico completo, recetas con firma, WhatsApp automatico y odontograma por $499/mes. Puedes usar ambos: Doctoralia para captar y DocFacil para gestionar."
 
 **Puntos clave:**
 - Doctoralia = marketing, DocFacil = gestion clinica. No compiten, se complementan.
-- Si el doctor solo quiere gestionar (no captar), esta pagando 20x de mas.
+- Si el doctor solo quiere gestionar (no captar), esta pagando entre 5x y 10x mas de lo necesario.
 - DocFacil tiene expediente clinico real, Doctoralia no.
 
 ---
 
 ### Battlecard: "Ya uso Nimbo"
 
-> **Respuesta:** "Nimbo es buen expediente clinico, pero su plan base cuesta $599/mes y no tiene WhatsApp automatico ni odontograma. Con DocFacil pagas $149/mes, tus pacientes reciben recordatorio por WhatsApp automatico y si eres dentista tienes odontograma incluido. Ademas tenemos check-in QR para que no necesites recepcionista."
+> **Respuesta:** "Nimbo es buen expediente clinico, pero su plan base cuesta $599/mes y no tiene WhatsApp automatico ni odontograma. Con DocFacil pagas $499/mes, tus pacientes reciben recordatorio por WhatsApp automatico y si eres dentista tienes odontograma incluido. Ademas tenemos check-in QR para que no necesites recepcionista."
 
 **Puntos clave:**
-- DocFacil es 4x mas barato en plan base.
+- DocFacil cuesta ~17% menos en plan base ($499 vs $599).
 - WhatsApp automatico es diferenciador unico.
 - Si es dentista, Nimbo no le sirve para odontograma.
 - Check-in QR es innovacion que Nimbo no tiene.
@@ -244,10 +244,10 @@ Espanol nativo mexicano, soporte local (Culiacan), cumplimiento NOM, precios en 
 
 ### Battlecard: "Ya uso Dentalink"
 
-> **Respuesta:** "Dentalink es bueno para lo dental, pero cuesta $680+/mes y es empresa chilena con soporte remoto. DocFacil te da odontograma, recetas con firma digital y WhatsApp automatico por $149/mes, con soporte local en Mexico. Ademas si atiendes consulta general tambien, no necesitas dos softwares."
+> **Respuesta:** "Dentalink es bueno para lo dental, pero cuesta $680+/mes y es empresa chilena con soporte remoto. DocFacil te da odontograma, recetas con firma digital y WhatsApp automatico por $499/mes, con soporte local en Mexico. Ademas si atiendes consulta general tambien, no necesitas dos softwares."
 
 **Puntos clave:**
-- DocFacil cuesta una fraccion con funciones comparables.
+- DocFacil cuesta ~27% menos en el plan base ($499 vs $680+) con funciones comparables.
 - Soporte local mexicano vs soporte desde Chile.
 - DocFacil sirve para dental Y medico general.
 - WhatsApp automatico incluido (Dentalink no lo tiene).
@@ -258,7 +258,7 @@ Espanol nativo mexicano, soporte local (Culiacan), cumplimiento NOM, precios en 
 
 ### Slogan / Tagline Principal
 
-> **"Tu consultorio digital completo por $149/mes"**
+> **"Tu consultorio digital completo por $499/mes"**
 
 Alternativas:
 - "El software medico que si puedes pagar"
@@ -270,11 +270,11 @@ Alternativas:
 | Si compites contra... | Angulo de venta |
 |---|---|
 | **Doctoralia** | "Nosotros gestionamos tu consultorio, ellos solo te consiguen citas. Usa ambos o ahorra $2,000+/mes si ya tienes pacientes." |
-| **Nimbo / iPraxis** | "Mismo expediente clinico, 4x mas barato, con WhatsApp automatico que ellos no tienen." |
-| **Dentalink** | "Odontograma + medico general en uno solo, soporte mexicano, mitad de precio." |
+| **Nimbo / iPraxis** | "Mismo expediente clinico, mas barato o empatado en plan base (17% menos que Nimbo), con WhatsApp automatico que ellos no tienen." |
+| **Dentalink** | "Odontograma + medico general en uno solo, soporte mexicano, hasta la mitad de precio." |
 | **SimplyBook** | "Eso es solo agenda. DocFacil es tu consultorio completo: expediente, recetas, cobros, WhatsApp." |
-| **Dentrix** | "Olvida instalar servidores. DocFacil es 100% nube, en espanol, y cuesta $149/mes no $5,000 USD." |
-| **Huli** | "Huli no tiene odontograma ni WhatsApp. DocFacil si, y cuesta 70% menos." |
+| **Dentrix** | "Olvida instalar servidores. DocFacil es 100% nube, en espanol, y cuesta $499/mes no $5,000 USD." |
+| **Huli** | "Huli no tiene odontograma ni WhatsApp. DocFacil si, y en su plan base cuesta lo mismo o hasta 65% menos en planes superiores." |
 | **Medesk** | "Software europeo traducido vs software hecho en Mexico para Mexico. Tu eliges." |
 | **Excel/papel** | "Gratis para empezar, listo en 5 minutos. Tus pacientes reciben WhatsApp automatico desde dia uno." |
 | **No usa nada** | "Empieza gratis. Solo necesitas tu celular. En 5 minutos tienes agenda, expediente y recetas digitales." |
@@ -292,17 +292,17 @@ Alternativas:
 ## 7. Resumen Ejecutivo
 
 ### Panorama competitivo
-El mercado de software medico en Mexico esta fragmentado. Doctoralia domina en captacion de pacientes pero es caro y limitado en gestion clinica. Nimbo e iPraxis tienen expediente pero son caros y sin innovacion. No hay un lider claro en el segmento de consultorio individual/pequeno que combine precio accesible + funciones completas.
+El mercado de software medico en Mexico esta fragmentado. Doctoralia domina en captacion de pacientes pero es caro y limitado en gestion clinica. Nimbo e iPraxis tienen expediente pero les falta innovacion. No hay un lider claro en el segmento de consultorio individual/pequeno que combine precio accesible + funciones completas.
 
 ### Posicion de DocFacil
 DocFacil tiene una **ventana de oportunidad clara** en el segmento de consultorios individuales y clinicas pequenas con su combinacion unica de:
-- Precio agresivo ($0-$499 MXN)
+- Precio accesible: plan gratuito real ($0) y planes de pago desde $499 MXN
 - WhatsApp automatico (unico en el mercado)
 - Medico + dental en un solo producto
 - Funciones modernas (QR, portal paciente, firma digital)
 
 ### Acciones recomendadas
-1. **Corto plazo:** Enfatizar WhatsApp y precio en todo el marketing. Son los dos diferenciadores mas claros.
+1. **Corto plazo:** Enfatizar WhatsApp automatico y el plan gratuito en todo el marketing. Son los dos diferenciadores mas claros.
 2. **Medio plazo:** Agregar telemedicina basica y integracion CFDI con tercero para cerrar las vulnerabilidades criticas.
 3. **Largo plazo:** Construir comunidad/marketplace propio para competir con el efecto red de Doctoralia.
 

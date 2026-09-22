@@ -46,13 +46,13 @@ $row += 2;
 $sections = [
     ['1. Esquema de comisión', [
         'La comisión por cada nueva clínica vendida es de 3× la primera mensualidad del plan contratado.',
-        'Ejemplo: plan Pro $299/mes → comisión total $897 por venta.',
+        'Ejemplo: plan Pro $999/mes → comisión total $2,997 por venta.',
         'Aplica a todos los planes de pago: Básico, Pro y Clínica. El plan Free NO paga comisión.',
     ]],
     ['2. Pago en dos exhibiciones (split 50/50)', [
         '50% (primera mitad) se paga cuando la clínica realiza su PRIMER pago real al sistema.',
         '50% (segunda mitad) se paga cuando la clínica realiza su SEGUNDO pago mensual.',
-        'Ejemplo Pro: $448.50 al 1er pago + $448.50 al 2do pago = $897 total.',
+        'Ejemplo Pro: $1,498.50 al 1er pago + $1,498.50 al 2do pago = $2,997 total.',
         'Si la clínica NO hace el 2do pago, la segunda mitad no se paga.',
     ]],
     ['3. Clawback (devolución de comisión)', [
@@ -130,7 +130,7 @@ $calc->setCellValue('A4', 'Plan a vender');
 $calc->setCellValue('A5', 'Ventas por mes (esperadas)');
 $calc->setCellValue('A6', 'Retención (% que no cancelará <90 días)');
 
-$calc->setCellValue('B4', 'Profesional');
+$calc->setCellValue('B4', 'Pro');
 $calc->setCellValue('B5', 10);
 $calc->setCellValue('B6', 0.9);
 
@@ -215,13 +215,13 @@ $calc->getStyle("A{$r}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColo
 $r += 2;
 
 $examples = [
-    'Si vendes 5 Básico al mes → 60 × $447 = $26,820/año',
-    'Si vendes 1 Pro al mes → 12 × $898.50 = $10,782/año',
-    'Si vendes 5 Pro al mes → 60 × $898.50 = $53,910/año',
-    'Si vendes 10 Pro al mes → 120 × $898.50 = $107,820/año',
-    'Si vendes 3 Pro + 1 Clínica al mes → (3×$898.50 + 1×$1,798.50) × 12 = $54,126/año',
-    'Si vendes 5 Clínica al mes → 60 × $1,798.50 = $107,910/año 🚀',
-    'Mix realista (5 Básico + 3 Pro + 1 Clínica/mes) → ($2,242.50 + $2,695.50 + $1,798.50) × 12 = $80,838/año',
+    'Si vendes 5 Básico al mes → 60 × $1,497 = $89,820/año',
+    'Si vendes 1 Pro al mes → 12 × $2,997 = $35,964/año',
+    'Si vendes 5 Pro al mes → 60 × $2,997 = $179,820/año',
+    'Si vendes 10 Pro al mes → 120 × $2,997 = $359,640/año',
+    'Si vendes 3 Pro + 1 Clínica al mes → (3×$2,997 + 1×$5,997) × 12 = $179,856/año',
+    'Si vendes 5 Clínica al mes → 60 × $5,997 = $359,820/año 🚀',
+    'Mix realista (5 Básico + 3 Pro + 1 Clínica/mes) → ($7,485 + $8,991 + $5,997) × 12 = $269,676/año',
     'Nota: solo el plan Free ($0) NO paga comisión. Todos los planes de pago califican.',
 ];
 foreach ($examples as $ex) {
@@ -285,14 +285,14 @@ $endRow = 34;
 for ($r = $startRow; $r <= $endRow; $r++) {
     $tr->setCellValue("A{$r}", $r - $startRow + 1);
     // Plan lookup para comisión
-    $tr->setCellValue("E{$r}", "=IFERROR(IF(OR(D{$r}=\"Básico\",D{$r}=\"\"),0,VLOOKUP(D{$r},Planes!A4:C6,3,FALSE)),0)");
+    $tr->setCellValue("E{$r}", "=IFERROR(IF(D{$r}=\"\",0,VLOOKUP(D{$r},Planes!A4:C7,3,FALSE)),0)");
 
     // Días hasta cancelación
     $tr->setCellValue("I{$r}", "=IF(AND(H{$r}<>\"\",B{$r}<>\"\"),H{$r}-B{$r},\"\")");
 
     // Estado de la comisión (la lógica del observer en texto)
     $tr->setCellValue("J{$r}", sprintf(
-        '=IF(C%1$d="","",IF(D%1$d="Básico","No califica",IF(AND(H%1$d<>"",I%1$d<90),"CLAWBACK",IF(AND(F%1$d<>"",G%1$d<>""),"Completa (100%%)",IF(F%1$d<>"","1ra mitad (50%%)","Pendiente")))))',
+        '=IF(C%1$d="","",IF(D%1$d="Free","No califica",IF(AND(H%1$d<>"",I%1$d<90),"CLAWBACK",IF(AND(F%1$d<>"",G%1$d<>""),"Completa (100%%)",IF(F%1$d<>"","1ra mitad (50%%)","Pendiente")))))',
         $r
     ));
 }
@@ -308,7 +308,11 @@ for ($r = $startRow; $r <= $endRow; $r++) {
     $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
     $validation->setAllowBlank(true);
     $validation->setShowDropDown(true);
-    $validation->setFormula1('"Básico,Profesional,Clínica"');
+    // Estas etiquetas tienen que ser EXACTAMENTE las de la hoja Planes
+    // (Free, Básico, Pro, Clínica): la comisión se busca con un VLOOKUP contra
+    // esa columna. Antes decía "Profesional" —la clave interna del modelo— y
+    // el VLOOKUP fallaba, así que elegir Pro del desplegable pagaba $0.
+    $validation->setFormula1('"Free,Básico,Pro,Clínica"');
 }
 
 // Celdas editables en amarillo
@@ -408,9 +412,9 @@ $pl->getStyle('A3:E3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor(
 
 $planes = [
     ['Free', 0, 0, 0, 'NO'],
-    ['Básico', 149, 447, 223.50, 'SÍ'],
-    ['Pro', 299, 897, 448.50, 'SÍ'],
-    ['Clínica', 499, 1497, 748.50, 'SÍ'],
+    ['Básico', 499, 1497, 748.50, 'SÍ'],
+    ['Pro', 999, 2997, 1498.50, 'SÍ'],
+    ['Clínica', 1999, 5997, 2998.50, 'SÍ'],
 ];
 $r = 4;
 foreach ($planes as $p) {
@@ -421,9 +425,11 @@ foreach ($planes as $p) {
     $pl->setCellValue("E{$r}", $p[4]);
     $r++;
 }
-$pl->getStyle('B4:D6')->getNumberFormat()->setFormatCode('"$"#,##0.00');
-$pl->getStyle('A3:E6')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-$pl->getStyle('E4:E6')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+// Hasta la fila 7: la hoja Planes lleva Free, Básico, Pro y Clínica. Con el
+// rango cortado en la 6, la fila de Clínica se quedaba sin formato.
+$pl->getStyle('B4:D7')->getNumberFormat()->setFormatCode('"$"#,##0.00');
+$pl->getStyle('A3:E7')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+$pl->getStyle('E4:E7')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 $pl->getColumnDimension('A')->setWidth(16);
 $pl->getColumnDimension('B')->setWidth(18);

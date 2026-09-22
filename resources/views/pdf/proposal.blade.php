@@ -94,11 +94,11 @@
 
         <div class="section-title">Retorno de inversión</div>
         <div class="roi-box">
-            <div class="roi-title">Con el plan Básico ($149/mes):</div>
+            <div class="roi-title">Con el plan Básico ($499/mes):</div>
             <div class="roi-row"><span>Citas recuperadas por mes (8 × $600)</span><span>+$4,800</span></div>
             <div class="roi-row"><span>Tiempo ahorrado (10 hrs × $200/hr)</span><span>+$2,000</span></div>
-            <div class="roi-row"><span>Costo DocFácil</span><span>-$149</span></div>
-            <div class="roi-row"><span>Beneficio neto mensual</span><span>+$6,651</span></div>
+            <div class="roi-row"><span>Costo DocFácil</span><span>-$499</span></div>
+            <div class="roi-row"><span>Beneficio neto mensual</span><span>+$6,301</span></div>
         </div>
 
         <div class="cta-box">
