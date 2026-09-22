@@ -74,11 +74,39 @@ Two payment methods coexist in `/doctor/actualizar-plan`:
 
 ## Testing
 
-- Tests use **SQLite in-memory** (`phpunit.xml`), prod uses **MySQL**
-- SQLite is more permissive — queries with non-existent columns may pass locally but 500 on prod. Always verify column names against the migration, not the model's `$fillable`
-- Multi-tenancy isolation is tested in `tests/Feature/MultiTenancyTest.php`
-- Doctor resource CRUD is covered in `tests/Feature/DoctorResourcesTest.php` (37 tests)
-- Consultation flow has 33 tests in `tests/Feature/ConsultationTest.php`
+**TDD is the methodology: the test comes first and must fail before the code exists.** A test written after the code only proves the code does what it already does. A green suite is evidence only about the paths the tests drive, on the engine they run on.
+
+### Running it
+
+PHP 8.4, not the system 8.5 (`openspout/openspout` pins `~8.4.0`), and `1024M` — Filament's views exhaust the 128M default and the run dies with an OOM that reads like a failing test:
+
+```bash
+/opt/homebrew/opt/php@8.4/bin/php -d memory_limit=1024M vendor/bin/phpunit
+```
+
+### Pick the layer
+
+| What changed | Test it with |
+|---|---|
+| A Filament page or form | `Livewire::test(ThePage::class)` — fill it, `call('save')`, re-mount, assert |
+| A route, middleware, or plan gate | `$this->actingAs($user)->get(...)` and assert the status |
+| A model rule or calculation | A plain test on the model |
+| A migration or column | A test that seeds the shape production has (see below) |
+
+**The screen is tested against the screen.** Seeding the model directly with `Model::create([...])` proves nothing about the page that writes it. That is exactly how the anesthesia settings shipped rendering three fields, reporting "Configuración guardada", and saving none of them: the tests wrote the columns themselves and never touched the form.
+
+### What the suite cannot see
+
+- Tests use **SQLite in-memory** (`phpunit.xml`), prod is **MySQL**. SQLite ignores `varchar(N)` length and `decimal(M,D)` scale, so a green run says nothing about MySQL. Verify column names against the migration, not the model's `$fillable`.
+- **The database starts empty.** Data-dependent failures — `->change()` dropping `nullable()`, a NULL reaching a `NOT NULL` column — pass on an empty table and break a populated one, on either engine. Seed a row, a NULL, and a long string.
+
+Both are worked through in the `verifying-stack-behavior` skill.
+
+### Existing coverage
+
+- Multi-tenancy isolation: `tests/Feature/MultiTenancyTest.php`
+- Doctor resource CRUD: `tests/Feature/DoctorResourcesTest.php` (37 tests)
+- Consultation flow: `tests/Feature/ConsultationTest.php` (33 tests)
 
 ## Key Gotchas
 
