@@ -6,12 +6,16 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Expense;
+use App\Models\HazardousWaste;
 use App\Models\MedicalRecord;
 use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Prescription;
 use App\Models\PrescriptionItem;
 use App\Models\Service;
+use App\Models\ServiceSupply;
+use App\Models\Supply;
+use App\Models\SupplyLot;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -103,27 +107,192 @@ class DemoSeeder extends Seeder
         // SERVICIOS
         // =============================================
         $services = [];
+        // `unit` es cómo se cobra el precio. Sin él todo se cobra por visita,
+        // así que una extracción de tres dientes se cobraría una vez. Los que
+        // no lo llevan quedan en el default ('visit'), que es como se
+        // comportaban antes de que el precio dijera de qué era.
         $serviceData = [
             ['name' => 'Consulta general', 'price' => 300, 'duration_minutes' => 20, 'category' => 'General'],
             ['name' => 'Limpieza dental', 'price' => 500, 'duration_minutes' => 45, 'category' => 'Preventivo'],
-            ['name' => 'Extracción simple', 'price' => 800, 'duration_minutes' => 30, 'category' => 'Cirugía'],
-            ['name' => 'Extracción de tercer molar', 'price' => 2500, 'duration_minutes' => 60, 'category' => 'Cirugía'],
-            ['name' => 'Resina (obturación)', 'price' => 600, 'duration_minutes' => 40, 'category' => 'Restauración'],
-            ['name' => 'Endodoncia', 'price' => 3500, 'duration_minutes' => 90, 'category' => 'Endodoncia'],
-            ['name' => 'Corona dental porcelana', 'price' => 4500, 'duration_minutes' => 60, 'category' => 'Prótesis'],
-            ['name' => 'Corona dental zirconia', 'price' => 6000, 'duration_minutes' => 60, 'category' => 'Prótesis'],
+            ['name' => 'Extracción simple', 'price' => 800, 'duration_minutes' => 30, 'category' => 'Cirugía', 'unit' => 'tooth'],
+            ['name' => 'Extracción de tercer molar', 'price' => 2500, 'duration_minutes' => 60, 'category' => 'Cirugía', 'unit' => 'tooth'],
+            ['name' => 'Resina (obturación)', 'price' => 600, 'duration_minutes' => 40, 'category' => 'Restauración', 'unit' => 'tooth'],
+            ['name' => 'Endodoncia', 'price' => 3500, 'duration_minutes' => 90, 'category' => 'Endodoncia', 'unit' => 'tooth'],
+            ['name' => 'Corona dental porcelana', 'price' => 4500, 'duration_minutes' => 60, 'category' => 'Prótesis', 'unit' => 'tooth'],
+            ['name' => 'Corona dental zirconia', 'price' => 6000, 'duration_minutes' => 60, 'category' => 'Prótesis', 'unit' => 'tooth'],
             ['name' => 'Blanqueamiento dental', 'price' => 2500, 'duration_minutes' => 60, 'category' => 'Estética'],
-            ['name' => 'Carillas de porcelana (por pieza)', 'price' => 5000, 'duration_minutes' => 45, 'category' => 'Estética'],
+            ['name' => 'Carillas de porcelana (por pieza)', 'price' => 5000, 'duration_minutes' => 45, 'category' => 'Estética', 'unit' => 'tooth'],
             ['name' => 'Radiografía periapical', 'price' => 150, 'duration_minutes' => 10, 'category' => 'Diagnóstico'],
             ['name' => 'Radiografía panorámica', 'price' => 350, 'duration_minutes' => 15, 'category' => 'Diagnóstico'],
             ['name' => 'Guardas dentales', 'price' => 1200, 'duration_minutes' => 30, 'category' => 'Preventivo'],
             ['name' => 'Prótesis parcial removible', 'price' => 3500, 'duration_minutes' => 45, 'category' => 'Prótesis'],
             ['name' => 'Ortodoncia (mensualidad)', 'price' => 800, 'duration_minutes' => 30, 'category' => 'Ortodoncia'],
+            // Este es el que enseña el cobro por cuadrante: $2,500 es POR
+            // cuadrante, así que un curetaje de dos se cobra $5,000.
+            ['name' => 'Curetaje periodontal (por cuadrante)', 'price' => 2500, 'duration_minutes' => 45, 'category' => 'Periodoncia', 'unit' => 'quadrant'],
         ];
 
         foreach ($serviceData as $s) {
             $services[] = Service::create(array_merge($s, ['clinic_id' => $clinic->id]));
         }
+
+        // =============================================
+        // INSUMOS, RECETAS Y KARDEX
+        // =============================================
+        // Se siembran para que quien abra el demo vea el módulo funcionando en
+        // vez de una tabla vacía — es lo mismo que se hizo con los servicios y
+        // los pacientes. Un módulo que nadie llena no se puede enseñar.
+        //
+        // La CATEGORÍA importa: de ella sale el alcance sugerido de cada insumo
+        // (Protección → por visita, Anestesia → por zona contigua). Por eso no
+        // son etiquetas decorativas.
+        $supplyData = [
+            // nombre, categoría, unidad, unidad de compra, cuántas trae, mínimo, costo, existencia
+            ['Guantes de nitrilo', 'Protección', 'pieza', 'caja', 50, 150, 0.95, 400],
+            ['Babero desechable', 'Protección', 'pieza', 'paquete', 100, 60, 0.55, 300],
+            ['Punta de aplicación', 'Desechable', 'pieza', 'paquete', 100, 50, 1.20, 120],
+            ['Algodón en rollo', 'Desechable', 'rollo', 'paquete', 10, 6, 45, 24],
+            ['Composite A2', 'Restaurador', 'jeringa', 'caja', 4, 2, 380, 12],
+            ['Grabador ácido 37%', 'Restaurador', 'jeringa', 'caja', 4, 2, 260, 8],
+            ['Banda de matriz', 'Restaurador', 'pieza', 'paquete', 50, 20, 3.50, 60],
+            ['Anestésico lidocaína 2%', 'Anestesia', 'cartucho', 'caja', 50, 95, 12, 90],
+            ['Cureta periodontal', 'Periodoncia', 'pieza', 'paquete', 6, 2, 320, 8],
+            ['Fresas de diamante', 'Instrumental', 'pieza', 'paquete', 10, 45, 28, 40],
+            ['Sutura seda 3-0', 'Instrumental', 'pieza', 'caja', 12, 6, 55, 10],
+            ['Hipoclorito de sodio 5%', 'Desechable', 'mililitro', 'frasco', 500, 200, 0.35, 900],
+        ];
+
+        $supplies = [];
+
+        foreach ($supplyData as [$name, $category, $unit, $purchaseUnit, $perPurchase, $minStock, $cost, $stock]) {
+            $supplies[$name] = Supply::create([
+                'clinic_id' => $clinic->id,
+                'name' => $name,
+                'category' => $category,
+                'unit' => $unit,
+                'purchase_unit' => $purchaseUnit,
+                'units_per_purchase' => $perPurchase,
+                'min_stock' => $minStock,
+                'cost_per_unit' => $cost,
+            ]);
+        }
+
+        // Los que llevan lote con caducidad. El resto entra sin lote, que es lo
+        // normal en lo que no caduca: capturarle lote a los guantes sería
+        // trabajo sin provecho.
+        $conLote = [
+            'Composite A2' => ['CMP-2612', now()->addDays(18)],
+            'Anestésico lidocaína 2%' => ['LID-4471', now()->addDays(120)],
+        ];
+
+        foreach ($supplyData as [$name, , , , , , $cost, $stock]) {
+            $supply = $supplies[$name];
+
+            if (isset($conLote[$name])) {
+                [$lotNumber, $expiresOn] = $conLote[$name];
+
+                $lot = SupplyLot::create([
+                    'clinic_id' => $clinic->id,
+                    'supply_id' => $supply->id,
+                    'lot_number' => $lotNumber,
+                    'expires_on' => $expiresOn,
+                    'quantity' => $stock,
+                    'unit_cost' => $cost,
+                    'supplier' => 'Dental Supply del Norte',
+                ]);
+
+                $supply->register('in', $stock, [
+                    'unit_cost' => $cost,
+                    'reason' => 'Inventario inicial',
+                    'supply_lot_id' => $lot->id,
+                ]);
+
+                continue;
+            }
+
+            $supply->register('in', $stock, ['unit_cost' => $cost, 'reason' => 'Inventario inicial']);
+        }
+
+        // Dos mermas con motivo, para que "Merma del mes" traiga un número y se
+        // vea que el motivo es una categoría y no una nota.
+        $supplies['Guantes de nitrilo']->register('waste', 12, [
+            'waste_reason' => 'spoiled',
+            'reason' => 'Se rompieron al abrir la caja',
+        ]);
+
+        $supplies['Algodón en rollo']->register('waste', 2, [
+            'waste_reason' => 'expired',
+            'reason' => 'Caducó en el anaquel',
+        ]);
+
+        // =============================================
+        // RECETAS DE INSUMOS
+        // =============================================
+        // Aquí está lo que hace correcta la cuenta: cada línea declara CÓMO
+        // escala, y no todas escalan igual. `null` = como se cobre el servicio.
+        //
+        // [insumo, cantidad, alcance, ¿es opcional?]
+        $recetas = [
+            'Resina (obturación)' => [
+                ['Composite A2', 0.5, null, false],
+                ['Grabador ácido 37%', 0.1, null, false],
+                ['Punta de aplicación', 1, 'visit', false],
+                ['Banda de matriz', 1, null, true],
+                ['Guantes de nitrilo', 2, 'visit', false],
+            ],
+            'Curetaje periodontal (por cuadrante)' => [
+                // La anestesia va por ZONA CONTIGUA aunque el curetaje se cobre
+                // por cuadrante: es el caso que obliga a que el alcance se
+                // pueda sobrescribir.
+                ['Anestésico lidocaína 2%', 1, 'contiguous_zone', false],
+                ['Cureta periodontal', 1, null, false],
+                ['Algodón en rollo', 1, 'visit', false],
+                ['Guantes de nitrilo', 2, 'visit', false],
+            ],
+            'Extracción simple' => [
+                ['Anestésico lidocaína 2%', 1, 'contiguous_zone', false],
+                ['Sutura seda 3-0', 1, null, false],
+                ['Guantes de nitrilo', 2, 'visit', false],
+            ],
+        ];
+
+        $servicesByName = collect($services)->keyBy('name');
+
+        foreach ($recetas as $serviceName => $lines) {
+            $service = $servicesByName->get($serviceName);
+
+            if (! $service) {
+                continue;
+            }
+
+            foreach ($lines as [$supplyName, $quantity, $scope, $optional]) {
+                if (! isset($supplies[$supplyName])) {
+                    continue;
+                }
+
+                ServiceSupply::create([
+                    'clinic_id' => $clinic->id,
+                    'service_id' => $service->id,
+                    'supply_id' => $supplies[$supplyName]->id,
+                    'quantity' => $quantity,
+                    'scope' => $scope,
+                    'is_optional' => $optional,
+                ]);
+            }
+        }
+
+        // Un residuo peligroso con contenedor pero SIN número de manifiesto:
+        // así se ve el aviso de que falta, que es lo que se revisa.
+        HazardousWaste::create([
+            'clinic_id' => $clinic->id,
+            'user_id' => $doctorUser->id,
+            'material' => 'extracted_amalgam',
+            'quantity' => 3.2,
+            'unit' => 'gramo',
+            'disposed_on' => now()->subDays(6),
+            'container' => 'Frasco de amalgama',
+            'notes' => 'Retiro de amalgama en el 36.',
+        ]);
 
         // =============================================
         // PACIENTES (20 pacientes realistas)

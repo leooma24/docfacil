@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -250,5 +251,11 @@ class Appointment extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    /** Los procedimientos que se hicieron, con sus dientes. */
+    public function procedures(): HasMany
+    {
+        return $this->hasMany(ConsultationProcedure::class);
     }
 }

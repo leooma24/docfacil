@@ -94,6 +94,34 @@ class ClinicSettings extends Page implements HasForms
                             ->maxSize(2048)
                             ->helperText('PNG, JPG o WebP, máximo 2 MB. Se usa en el portal público y en correos.'),
                     ]),
+
+                // El límite de dosis no se inventa: lo pone el consultorio.
+                // Vacío significa que el sistema NO compara nada, en vez de
+                // afirmar que está bien sin poder saberlo — que en una app
+                // clínica sería peor que callarse.
+                Section::make('Seguridad clínica')
+                    ->description('Con esto el sistema te avisa si la anestesia propuesta se pasa del máximo para el peso del paciente. Si lo dejas vacío, no compara nada.')
+                    ->columns(3)
+                    ->collapsed()
+                    ->schema([
+                        TextInput::make('anesthetic_max_mg_kg')
+                            ->label('Máximo mg por kg')
+                            ->numeric()
+                            ->minValue(0)
+                            ->helperText('El límite por toxicidad del anestésico que usas.'),
+                        TextInput::make('anesthetic_mg_ml')
+                            ->label('Concentración (mg/ml)')
+                            ->numeric()
+                            ->minValue(0)
+                            ->helperText('La lidocaína al 2% son 20 mg/ml.'),
+                        TextInput::make('anesthetic_ml_per_cartridge')
+                            ->label('ml por cartucho')
+                            ->numeric()
+                            ->default(1.8)
+                            ->minValue(0.1)
+                            ->helperText('El estándar dental es 1.8 ml.'),
+                    ]),
+
                 Section::make('Correos')
                     ->visible(fn () => (bool) auth()->user()->clinic?->hasFeature('expenses'))
                     ->schema([

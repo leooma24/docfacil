@@ -3,13 +3,18 @@
 namespace App\Filament\Doctor\Pages;
 
 use App\Models\Appointment;
+use App\Models\ConsultationProcedure;
 use App\Models\MedicalRecord;
 use App\Models\Payment;
 use App\Models\Prescription;
 use App\Models\PrescriptionItem;
 use App\Models\Service;
+use App\Models\Supply;
+use App\Models\SupplyMovement;
 use App\Services\ConsultationAIService;
 use App\Services\SpecialtyService;
+use App\Support\AnesthesiaDose;
+use App\Support\SupplyProposal;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -88,6 +93,23 @@ class Consultation extends Page implements HasForms
     public ?string $payment_amount = '';
     public string $payment_method = 'cash';
 
+    /**
+     * Los procedimientos realizados: servicio, diente y cantidad.
+     *
+     * Mientras la consulta está en curso viven aquí, dentro del borrador que
+     * ya se guarda en `consultation_data`. Se vuelven filas de verdad al
+     * cerrar, igual que el resto del borrador se vuelve MedicalRecord.
+     */
+    public array $procedures = [];
+
+    /**
+     * Los insumos que se van a descontar, con lo que el doctor haya ajustado.
+     *
+     * Se recalcula cuando cambian los procedimientos, pero respeta lo que él
+     * tocó: la cuenta propone, el doctor dispone.
+     */
+    public array $supplies = [];
+
     // Step 5: Next appointment
     public ?string $next_appointment_date = null;
     public ?string $next_appointment_service_id = null;
@@ -151,6 +173,8 @@ class Consultation extends Page implements HasForms
             $this->payment_service_id = $saved['payment_service_id'] ?? null;
             $this->payment_amount = $saved['payment_amount'] ?? '';
             $this->payment_method = $saved['payment_method'] ?? 'cash';
+            $this->procedures = $saved['procedures'] ?? [];
+            $this->supplies = $saved['supplies'] ?? [];
             $this->next_appointment_date = $saved['next_appointment_date'] ?? null;
             $this->next_appointment_service_id = $saved['next_appointment_service_id'] ?? null;
         } else {
@@ -487,6 +511,11 @@ class Consultation extends Page implements HasForms
                 'payment_service_id' => $this->payment_service_id,
                 'payment_amount' => $this->payment_amount,
                 'payment_method' => $this->payment_method,
+                'procedures' => array_values(array_filter(
+                    $this->procedures,
+                    fn ($p) => ! empty($p['service_id']),
+                )),
+                'supplies' => $this->supplies,
                 'next_appointment_date' => $this->next_appointment_date,
                 'next_appointment_service_id' => $this->next_appointment_service_id,
             ],
@@ -564,6 +593,56 @@ class Consultation extends Page implements HasForms
                 'payment_method' => $this->payment_method,
                 'status' => 'paid',
                 'payment_date' => now()->toDateString(),
+            ]);
+        }
+
+        // Los procedimientos capturados se vuelven filas al cerrar. Se borran
+        // primero y se reescriben: si la consulta se completa dos veces, queda
+        // una sola copia en vez de duplicarse.
+        $this->appointment->procedures()->delete();
+
+        foreach ($this->procedures as $capturado) {
+            $servicio = $this->serviceById($capturado['service_id'] ?? null);
+
+            if (! $servicio) {
+                continue;
+            }
+
+            $this->appointment->procedures()->create([
+                'clinic_id' => $clinicId,
+                'service_id' => $servicio->id,
+                'tooth_number' => ($capturado['tooth_number'] ?? '') !== '' ? $capturado['tooth_number'] : null,
+                'quantity' => max(1, (int) ($capturado['quantity'] ?? 1)),
+                'unit' => $servicio->unit,
+                'unit_price' => $servicio->price,
+            ]);
+        }
+
+        // Y los insumos que el doctor confirmó. Se borran los movimientos de
+        // esta consulta y se reescriben: si algo reintenta el cierre, queda una
+        // sola copia en vez de descontar dos veces del inventario.
+        SupplyMovement::where('clinic_id', $clinicId)
+            ->where('reference_type', Appointment::class)
+            ->where('reference_id', $this->appointment->id)
+            ->delete();
+
+        foreach ($this->supplies as $linea) {
+            $cantidad = (float) ($linea['quantity'] ?? 0);
+
+            if (empty($linea['include']) || $cantidad <= 0) {
+                continue;
+            }
+
+            $insumo = Supply::where('clinic_id', $clinicId)->find($linea['supply_id'] ?? null);
+
+            if (! $insumo) {
+                continue;
+            }
+
+            $insumo->register('out', $cantidad, [
+                'reason' => 'Consulta del ' . now()->format('d/m/Y'),
+                'reference_type' => Appointment::class,
+                'reference_id' => $this->appointment->id,
             ]);
         }
 
@@ -659,6 +738,214 @@ class Consultation extends Page implements HasForms
             if ($service) {
                 $this->payment_amount = (string) $service->price;
             }
+        }
+    }
+
+    // ── Procedimientos realizados ────────────────────────────────
+
+    public function addProcedure(): void
+    {
+        $this->procedures[] = [
+            'service_id' => '',
+            'tooth_number' => '',
+            'quantity' => 1,
+        ];
+    }
+
+    public function removeProcedure(int $indice): void
+    {
+        unset($this->procedures[$indice]);
+        $this->procedures = array_values($this->procedures);
+
+        $this->recalculateCharge();
+    }
+
+    public function updatedProcedures(): void
+    {
+        $this->recalculateCharge();
+        $this->refreshProposal();
+    }
+
+    // ── Los insumos que se van a descontar ───────────────────────
+
+    /**
+     * Rehace la propuesta a partir de los procedimientos capturados.
+     *
+     * Respeta lo que el doctor ya ajustó a mano, mientras la cuenta no haya
+     * cambiado: si capturó un diente más, la cantidad sugerida es nueva y
+     * manda ella; si no, se queda con lo que él puso.
+     */
+    public function refreshProposal(): void
+    {
+        $propuesta = SupplyProposal::for($this->draftProcedures());
+        $previos = collect($this->supplies)->keyBy('supply_id');
+
+        $this->supplies = collect($propuesta)->map(function (array $linea) use ($previos) {
+            $previo = $previos->get($linea['supply']->id);
+            $suggested = $linea['quantity'];
+            $conservar = $previo && (float) ($previo['suggested'] ?? -1) === (float) $suggested;
+
+            return [
+                'supply_id' => $linea['supply']->id,
+                'name' => $linea['supply']->name,
+                'unit' => $linea['supply']->unit,
+                'quantity' => $conservar ? $previo['quantity'] : $suggested,
+                'suggested' => $suggested,
+                'include' => $previo['include'] ?? ! $linea['optional'],
+                'detail' => $linea['detail'],
+            ];
+        })->values()->all();
+    }
+
+    // ── Seguridad del paciente ───────────────────────────────────
+
+    /** Cuántos cartuchos de anestésico lleva la propuesta confirmada. */
+    public function getProposedAnesthesiaProperty(): float
+    {
+        $total = 0.0;
+
+        foreach ($this->supplies as $linea) {
+            if (empty($linea['include'])) {
+                continue;
+            }
+
+            $insumo = Supply::where('clinic_id', auth()->user()->clinic_id)->find($linea['supply_id'] ?? null);
+
+            if ($insumo && $insumo->category === 'Anestesia') {
+                $total += (float) ($linea['quantity'] ?? 0);
+            }
+        }
+
+        return round($total, 3);
+    }
+
+    public function getPatientAllergiesProperty(): ?string
+    {
+        return $this->appointment?->patient?->allergies ?: null;
+    }
+
+    /**
+     * El aviso que importa: el paciente tiene alergias Y se va a usar
+     * anestésico.
+     *
+     * No afirma nada clínico —no sabe si la alergia es al anestésico—, solo
+     * junta los dos datos en el momento en que se pueden juntar. La alergia ya
+     * se ve en la cabecera, pero ahí es un chip de 40 caracteres que se pierde
+     * entre los demás.
+     */
+    public function getAllergyAlertProperty(): ?string
+    {
+        if (! $this->patientAllergies) {
+            return null;
+        }
+
+        return $this->proposedAnesthesia > 0
+            ? 'La propuesta incluye anestésico y este paciente tiene alergias registradas. Revísalas antes de aplicar.'
+            : null;
+    }
+
+    /** El estado de la dosis contra el peso, o null si no hay anestésico. */
+    public function getDoseStatusProperty(): ?array
+    {
+        $cartuchos = $this->proposedAnesthesia;
+
+        if ($cartuchos <= 0) {
+            return null;
+        }
+
+        return AnesthesiaDose::status(
+            $this->appointment->clinic,
+            $this->weight !== '' && $this->weight !== null ? (float) $this->weight : null,
+            $cartuchos,
+        );
+    }
+
+    /**
+     * Los procedimientos del borrador, como objetos.
+     *
+     * Todavía no son filas: se materializan al cerrar. Pero la propuesta tiene
+     * que calcularse mientras el doctor captura, así que se arman aquí.
+     */
+    private function draftProcedures(): \Illuminate\Support\Collection
+    {
+        return collect($this->procedures)
+            ->filter(fn ($p) => ! empty($p['service_id']))
+            ->map(function (array $p) {
+                $procedimiento = new ConsultationProcedure([
+                    'service_id' => $p['service_id'],
+                    'tooth_number' => $p['tooth_number'] ?? null,
+                    'quantity' => $p['quantity'] ?? 1,
+                ]);
+
+                $procedimiento->setRelation('service', $this->serviceById($p['service_id']));
+
+                return $procedimiento;
+            });
+    }
+
+    /**
+     * El total de los procedimientos capturados.
+     *
+     * Es lo que hace que un curetaje de dos cuadrantes se cobre dos veces: el
+     * precio del servicio es POR cuadrante, y la cantidad es cuántos se
+     * hicieron.
+     */
+    public function getProceduresTotalProperty(): float
+    {
+        $total = 0.0;
+
+        foreach ($this->procedures as $capturado) {
+            $servicio = $this->serviceById($capturado['service_id'] ?? null);
+
+            if ($servicio) {
+                $total += (float) $servicio->price * max(1, (int) ($capturado['quantity'] ?? 1));
+            }
+        }
+
+        return round($total, 2);
+    }
+
+    /** La unidad de cobro del servicio de una línea, para etiquetar la cantidad. */
+    public function unitOf(?string $serviceId): string
+    {
+        return $this->serviceById($serviceId)?->unit ?? \App\Support\WorkUnit::VISIT;
+    }
+
+    public function questionFor(?string $serviceId): string
+    {
+        return \App\Support\WorkUnit::question($this->unitOf($serviceId));
+    }
+
+    /** Precio unitario del servicio de una línea, para mostrarlo en el renglón. */
+    public function priceOf(?string $serviceId): float
+    {
+        return (float) ($this->serviceById($serviceId)?->price ?? 0);
+    }
+
+    /** @var array<string, Service|null> */
+    private array $servicesMemo = [];
+
+    private function serviceById(?string $serviceId): ?Service
+    {
+        if (! $serviceId) {
+            return null;
+        }
+
+        // La propuesta y el cobro lo piden varias veces por render.
+        if (! array_key_exists($serviceId, $this->servicesMemo)) {
+            $this->servicesMemo[$serviceId] = Service::where('clinic_id', auth()->user()->clinic_id)->find($serviceId);
+        }
+
+        return $this->servicesMemo[$serviceId];
+    }
+
+    /** El cobro sigue al total de los procedimientos, pero se puede ajustar. */
+    private function recalculateCharge(): void
+    {
+        $total = $this->proceduresTotal;
+
+        if ($total > 0) {
+            $this->payment_amount = (string) $total;
         }
     }
 }

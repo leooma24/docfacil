@@ -840,6 +840,151 @@
             <span class="step-title-text">Cobro</span>
         </div>
         <p class="step-subtitle">Registra el pago de esta consulta.</p>
+
+        {{-- Procedimientos realizados. Es lo que hace que un curetaje de dos
+             cuadrantes se cobre dos veces: el precio del servicio es POR
+             cuadrante, y aquí se dice cuántos se hicieron. --}}
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:0.9rem;background:#fafafa;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
+                <div>
+                    <div style="font-weight:700;font-size:0.9rem;color:#111827;">Procedimientos realizados</div>
+                    <div style="font-size:0.75rem;color:#6b7280;">Qué se hizo y en qué diente. El cobro sale de aquí.</div>
+                </div>
+                <button type="button" wire:click="addProcedure"
+                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:0.6rem;background:#0d9488;color:#ffffff;font-size:0.8rem;font-weight:700;">
+                    + Agregar
+                </button>
+            </div>
+
+            @forelse($procedures as $i => $p)
+            <div wire:key="procedimiento-{{ $i }}" style="padding:0.75rem;margin-bottom:0.5rem;background:#ffffff;border:1px solid #e5e7eb;border-radius:0.7rem;">
+                <div style="margin-bottom:0.5rem;">
+                    <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Servicio</label>
+                    <select wire:model.live="procedures.{{ $i }}.service_id" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                        <option value="">Seleccionar...</option>
+                        @foreach($this->services as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;align-items:end;">
+                    <div>
+                        <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Diente (FDI)</label>
+                        <input type="text" wire:model="procedures.{{ $i }}.tooth_number" placeholder="16" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">{{ $this->questionFor($p['service_id'] ?? null) }}</label>
+                        <input type="number" min="1" wire:model.live="procedures.{{ $i }}.quantity" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.6rem;">
+                    <button type="button" wire:click="removeProcedure({{ $i }})" style="font-size:0.75rem;color:#dc2626;font-weight:600;">Quitar</button>
+                    <div style="text-align:right;">
+                        <span style="font-size:0.72rem;color:#6b7280;">
+                            ${{ number_format($this->priceOf($p['service_id'] ?? null), 0) }}
+                            @if($this->unitOf($p['service_id'] ?? null) !== 'visit')
+                                por {{ $this->unitOf($p['service_id'] ?? null) }}
+                            @endif
+                        </span>
+                        <span style="font-weight:800;font-size:0.95rem;color:#0d9488;margin-left:0.4rem;">
+                            ${{ number_format($this->priceOf($p['service_id'] ?? null) * max(1, (int) ($p['quantity'] ?? 1)), 2) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:0.7rem;">
+                Sin procedimientos capturados. Si el cobro es de un solo servicio, usa los campos de abajo.
+            </div>
+            @endforelse
+
+            @if(count($procedures) > 0)
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;padding-top:0.6rem;border-top:1px solid #e5e7eb;">
+                <span style="font-size:0.8rem;font-weight:600;color:#374151;">Total de procedimientos</span>
+                <span style="font-size:1.05rem;font-weight:800;color:#0f766e;">${{ number_format($this->proceduresTotal, 2) }}</span>
+            </div>
+            @endif
+        </div>
+
+        {{-- Los insumos que se van a descontar. El sistema los propone a partir
+             de los dientes capturados y el doctor desmarca lo que no usó: una
+             propuesta que se revisa en cinco segundos vale más que una
+             automatización que nadie ve. --}}
+        @if(count($procedures) > 0)
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:0.9rem;background:#f0fdfa;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
+                <div>
+                    <div style="font-weight:700;font-size:0.9rem;color:#111827;">Insumos que se van a descontar</div>
+                    <div style="font-size:0.75rem;color:#6b7280;">Calculados de los dientes que capturaste. Desmarca lo que no usaste.</div>
+                </div>
+                <button type="button" wire:click="refreshProposal"
+                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:0.6rem;background:#ffffff;border:1px solid #99f6e4;color:#0f766e;font-size:0.8rem;font-weight:700;">
+                    Recalcular
+                </button>
+            </div>
+
+            @forelse($supplies as $i => $linea)
+            <div wire:key="insumo-{{ $linea['supply_id'] }}"
+                 style="display:grid;grid-template-columns:auto 1fr auto;gap:0.6rem;align-items:center;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#ffffff;border:1px solid {{ !empty($linea['include']) ? '#5eead4' : '#e5e7eb' }};border-radius:0.6rem;">
+                <input type="checkbox" wire:model.live="supplies.{{ $i }}.include" style="width:1.1rem;height:1.1rem;accent-color:#0d9488;">
+                <div style="min-width:0;">
+                    <div style="font-size:0.85rem;font-weight:600;color:{{ !empty($linea['include']) ? '#111827' : '#9ca3af' }};">{{ $linea['name'] }}</div>
+                    <div style="font-size:0.7rem;color:#6b7280;">{{ $linea['detail'] }}</div>
+                    @if((float) ($linea['quantity'] ?? 0) !== (float) ($linea['suggested'] ?? 0))
+                    <div style="font-size:0.7rem;color:#b45309;">
+                        ajustado · la cuenta decía {{ rtrim(rtrim(number_format((float) $linea['suggested'], 2), '0'), '.') }}
+                    </div>
+                    @endif
+                </div>
+                <div style="display:flex;align-items:center;gap:0.35rem;">
+                    <input type="number" step="0.001" min="0" wire:model="supplies.{{ $i }}.quantity"
+                           style="width:5rem;padding:0.4rem;border:1px solid #d1d5db;border-radius:0.45rem;font-size:0.8rem;text-align:right;">
+                    <span style="font-size:0.75rem;color:#6b7280;min-width:3.5rem;">{{ $linea['unit'] }}</span>
+                </div>
+            </div>
+            @empty
+            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:0.7rem;">
+                Ninguno de estos servicios tiene receta de insumos todavía. Se configura en Servicios.
+            </div>
+            @endforelse
+
+            {{-- La alergia importa justo aquí, que es donde se propone el
+                 anestésico. Arriba ya se ve como chip, pero ahí se pierde
+                 entre los demás datos del paciente. --}}
+            @if($this->allergyAlert)
+            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:#fef2f2;border:1px solid #fecaca;">
+                <div style="font-size:0.8rem;font-weight:700;color:#991b1b;">⚠️ Alergias del paciente</div>
+                <div style="font-size:0.78rem;color:#7f1d1d;margin-top:0.15rem;">{{ $this->allergyAlert }}</div>
+                <div style="font-size:0.75rem;color:#991b1b;margin-top:0.3rem;font-style:italic;">Registrado: {{ $this->patientAllergies }}</div>
+            </div>
+            @endif
+
+            {{-- La dosis contra el peso. Solo aparece si la propuesta lleva
+                 anestésico. --}}
+            @php $dosis = $this->doseStatus; @endphp
+            @if($dosis)
+            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:{{ $dosis['exceeds'] === true ? '#fef2f2' : '#ffffff' }};border:1px solid {{ $dosis['exceeds'] === true ? '#fecaca' : '#e5e7eb' }};">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
+                    <span style="font-size:0.8rem;font-weight:700;color:#111827;">💉 Dosis de anestesia</span>
+                    <span style="font-size:0.8rem;font-weight:700;color:{{ $dosis['exceeds'] === true ? '#b91c1c' : '#0f766e' }};">
+                        {{ rtrim(rtrim(number_format($dosis['cartridges'], 2), '0'), '.') }} cartuchos
+                    </span>
+                </div>
+                <div style="font-size:0.75rem;color:{{ $dosis['exceeds'] === true ? '#991b1b' : '#6b7280' }};margin-top:0.2rem;">
+                    {{ $dosis['message'] }}
+                </div>
+                @if(! $dosis['configured'])
+                <div style="font-size:0.7rem;color:#9ca3af;margin-top:0.25rem;">
+                    No se compara nada todavía: el sistema no inventa límites de dosis. Se configura en Ajustes del consultorio.
+                </div>
+                @endif
+            </div>
+            @endif
+        </div>
+        @endif
+
         <div class="pay-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Servicio</label>

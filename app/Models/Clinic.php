@@ -13,6 +13,7 @@ class Clinic extends Model
         'name', 'slug', 'phone', 'email', 'address', 'country',
         'working_hours',
         'minutos_entre_citas',
+        'anesthetic_max_mg_kg', 'anesthetic_mg_ml', 'anesthetic_ml_per_cartridge',
         'city', 'state', 'timezone', 'zip_code', 'logo', 'google_review_url', 'plan',
         'trial_ends_at', 'is_active',
         'is_beta', 'beta_tier', 'is_founder', 'founder_price',

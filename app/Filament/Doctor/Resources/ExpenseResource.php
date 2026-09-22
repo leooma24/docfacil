@@ -222,6 +222,100 @@ class ExpenseResource extends Resource
                             ->success()
                             ->send();
                     }),
+                // Un gasto con proveedor casi siempre es una compra de
+                // insumos. Volver a capturarla en el catálogo es trabajo
+                // duplicado — y el kardex guarda la referencia, así que el
+                // mismo gasto no puede entrar dos veces al inventario.
+                Tables\Actions\Action::make('supply_entry')
+                    ->label('Entrada de insumos')
+                    ->icon('heroicon-o-cube')
+                    ->color('gray')
+                    ->tooltip('Suma al inventario lo que compraste en este gasto')
+                    ->modalHeading(fn (Expense $record) => 'Entrada de insumos — ' . $record->concept)
+                    ->modalDescription('Solo se puede registrar una vez por insumo desde el mismo gasto.')
+                    ->modalSubmitActionLabel('Registrar entrada')
+                    ->visible(fn () => \App\Models\Supply::where('clinic_id', auth()->user()->clinic_id)->active()->exists())
+                    ->form(fn (Expense $record) => [
+                        Forms\Components\Select::make('supply_id')
+                            ->label('Insumo')
+                            ->options(fn () => \App\Models\Supply::where('clinic_id', auth()->user()->clinic_id)
+                                ->active()
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->required()
+                            ->live(),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Cantidad')
+                            ->numeric()
+                            ->required()
+                            ->minValue(0.001)
+                            ->live(onBlur: true)
+                            ->helperText(function (callable $get) {
+                                $insumo = \App\Models\Supply::find($get('supply_id'));
+
+                                if (! $insumo) {
+                                    return 'Elige primero el insumo.';
+                                }
+
+                                $factor = (float) $insumo->units_per_purchase;
+
+                                return $factor > 1 && $insumo->purchase_unit
+                                    ? "En {$insumo->unit}s. 1 {$insumo->purchase_unit} = "
+                                        . rtrim(rtrim(number_format($factor, 3), '0'), '.') . " {$insumo->unit}s."
+                                    : "En {$insumo->unit}s.";
+                            }),
+                        Forms\Components\Placeholder::make('unit_cost')
+                            ->label('Costo por unidad')
+                            ->content(function (callable $get) use ($record) {
+                                $insumo = \App\Models\Supply::find($get('supply_id'));
+                                $cantidad = (float) ($get('quantity') ?? 0);
+
+                                if (! $insumo || $cantidad <= 0) {
+                                    return '—';
+                                }
+
+                                return '$' . number_format($insumo->entryCost((float) $record->amount, $cantidad), 2)
+                                    . " por {$insumo->unit}, del total del gasto.";
+                            }),
+                    ])
+                    ->action(function (Expense $record, array $data) {
+                        $insumo = \App\Models\Supply::where('clinic_id', auth()->user()->clinic_id)
+                            ->findOrFail($data['supply_id']);
+
+                        $cantidad = (float) $data['quantity'];
+
+                        $yaEntro = \App\Models\SupplyMovement::where('clinic_id', auth()->user()->clinic_id)
+                            ->where('reference_type', Expense::class)
+                            ->where('reference_id', $record->id)
+                            ->where('supply_id', $insumo->id)
+                            ->where('type', 'in')
+                            ->exists();
+
+                        if ($yaEntro) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Ya estaba registrado')
+                                ->body("{$insumo->name} ya entró al inventario desde este gasto.")
+                                ->warning()
+                                ->send();
+
+                            return;
+                        }
+
+                        $insumo->register('in', $cantidad, [
+                            'unit_cost' => $insumo->entryCost((float) $record->amount, $cantidad),
+                            'reason' => 'Compra: ' . $record->concept . ($record->supplier ? " ({$record->supplier})" : ''),
+                            'reference_type' => Expense::class,
+                            'reference_id' => $record->id,
+                        ]);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Entrada registrada')
+                            ->body($insumo->name . ': ' . number_format($insumo->fresh()->currentStock(), 0) . " {$insumo->unit} en existencia.")
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
