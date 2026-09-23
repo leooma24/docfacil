@@ -520,9 +520,7 @@ class ProspectResource extends Resource
         $followCall = $opener['followCall'];
 
         $msg = match ($record->contact_day) {
-            0, 1 => "{$greeting}.\n\n"
-                . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-                . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?",
+            0, 1 => self::mensajeDePrimerContacto($record, $greeting, $sector),
             3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
                 . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
                 . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
@@ -539,6 +537,77 @@ class ProspectResource extends Resource
             default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente pensado para la NOM-004). ¿Le interesa una demo de 10 minutos?",
         };
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
+    /**
+     * El primer mensaje.
+     *
+     * No abre con lo que vendemos: abre con una pregunta sobre cómo le hace
+     * hoy. El doctor contesta eso —nadie dice que no avisa— y ahí sale solo
+     * el tiempo que se le va haciéndolo a mano, que es lo que de verdad le
+     * duele. Las tres piezas salieron de los mensajes de septiembre, están
+     * documentadas en .agents/wa-templates.md:
+     *
+     *  - **La salida.** "Si no le interesa me lo dice y no lo molesto más" es
+     *    lo que hace que contesten en vez de bloquear, y es una promesa que
+     *    hay que cumplir: al que dice que no, ya no se le escribe.
+     *  - **La pregunta según lo que hace.** Al ortodoncista le pega el control
+     *    que se pierde; a la odontopediatra, que la cita la recuerdan los papás.
+     *  - **Aclarar que no es cita.** La mitad de los números son cuentas de
+     *    negocio donde contesta recepción o un bot y te tratan como paciente.
+     */
+    protected static function mensajeDePrimerContacto(Prospect $record, string $greeting, string $sector): string
+    {
+        // Sin nombre de persona = cuenta de consultorio: contesta recepción.
+        $esNegocio = self::buildSalutation($record)['followCall'] === '';
+        $lugares = (int) config('founders.seats', 10);
+
+        $deDonde = str_contains(strtolower((string) $record->city), 'mochis')
+            ? 'ingeniero de aquí de Los Mochis'
+            : 'ingeniero, de Los Mochis';
+
+        $apertura = $esNegocio
+            ? "{$greeting}. Le escribo para el doctor o la doctora del consultorio, no es para una cita."
+            : "{$greeting}.";
+
+        $permiso = $esNegocio
+            ? 'Les hago una pregunta corta y ustedes deciden si seguimos; si no les interesa me lo dicen y no los molesto más: '
+            : 'Le hago una pregunta corta y usted decide si seguimos; si no le interesa me lo dice y no lo molesto más: ';
+
+        return $apertura . "\n\n"
+            . "Soy Omar Lerma, {$deDonde}. Hice un sistema para {$sector} y busco a los primeros {$lugares} que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.\n\n"
+            . $permiso . self::preguntaDeApertura($record, $esNegocio);
+    }
+
+    /** La pregunta con la que cierra el primer mensaje. */
+    protected static function preguntaDeApertura(Prospect $record, bool $esNegocio): string
+    {
+        $perfil = strtolower(
+            ($record->specialty ?? '') . ' ' . ($record->name ?? '') . ' ' . ($record->clinic_name ?? '')
+        );
+
+        $hace = $esNegocio ? 'hacen' : 'hace';
+        // A quién se le pregunta cambia; el "le hace / le hacen" no: así se dice.
+        $le = $esNegocio ? 'les' : 'le';
+
+        if (str_contains($perfil, 'ortodon')) {
+            return "en ortodoncia un control que se pierde retrasa todo el tratamiento, por eso {$le} pregunto: ¿cómo le {$hace} hoy para recordarles a sus pacientes su cita?";
+        }
+
+        if (str_contains($perfil, 'pediatr') || str_contains($perfil, 'niñ') || str_contains($perfil, "kid")) {
+            return "con niños la cita la tienen que recordar los papás, por eso {$le} pregunto: ¿cómo le {$hace} hoy para avisarles?";
+        }
+
+        if (str_contains($perfil, 'maxilofacial') || str_contains($perfil, 'cirug')) {
+            return "con cirugías, la revisión de después es la que más se olvida, por eso {$le} pregunto: ¿cómo le {$hace} hoy para que sus pacientes no falten a esa cita?";
+        }
+
+        // Las dos generales se van alternando para poder comparar cuál saca
+        // más respuestas. El id es par o impar, así que a cada prospecto le
+        // toca siempre la misma y el dato no se ensucia.
+        return $record->id % 2 === 0
+            ? "¿cómo le {$hace} hoy para recordarles a sus pacientes su cita?"
+            : "¿qué {$hace} hoy cuando un paciente no llega a su cita?";
     }
 
     /**
