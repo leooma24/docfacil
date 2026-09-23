@@ -506,7 +506,8 @@ class ProspectResource extends Resource
      * Centralizado aquí para que el botón verde de WA y el panel ventas usen
      * la misma plantilla — fuente de verdad.
      */
-    protected static function buildContextualWhatsappUrl(Prospect $record): string
+    /** Publico: el panel admin manda el mismo mensaje que el de ventas. */
+    public static function buildContextualWhatsappUrl(Prospect $record): string
     {
         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
         if (strlen($phone) === 10) $phone = '52' . $phone;

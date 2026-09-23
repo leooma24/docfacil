@@ -175,28 +175,20 @@ class ProspectResource extends Resource
                     ->query(fn ($query) => $query->whereNull('assigned_to_sales_rep_id')),
             ])
             ->actions([
-                // WhatsApp button — opens wa.me with pre-filled beta invite message
+                // WhatsApp: el mensaje es el mismo del panel de ventas. Aqui
+                // habia otras plantillas —"beta gratuito", "otros consultorios
+                // ya redujeron 50% sus citas perdidas"— que ni son ciertas ni
+                // son las que contestaron. Dos juegos de plantillas es como se
+                // vuelven a separar.
                 Tables\Actions\Action::make('whatsapp')
                     ->label('WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
-                    ->visible(fn (Prospect $record) => !empty($record->phone))
-                    ->url(function (Prospect $record) {
-                        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $name = $record->cleanName();
-                        $clinic = $record->clinic_name ?? 'tu consultorio';
-
-                        $status = $record->status;
-                        $message = match ($status) {
-                            'new' => "Hola *{$name}*, soy Omar de *DocFácil*, un software para consultorios médicos y dentales. Estamos invitando consultorios de Sinaloa a nuestro *beta gratuito* con agenda de citas, expedientes digitales, recetas PDF y recordatorios WhatsApp. ¿Te interesa probarlo sin costo para {$clinic}?",
-                            'contacted' => "Hola *{$name}*, te escribí hace unos días sobre DocFácil. Otros consultorios ya redujeron 50% sus citas perdidas con nuestro sistema. ¿Te gustaría una demo rápida de 5 minutos?",
-                            'interested' => "Hola *{$name}*, último mensaje sobre DocFácil. Quedan pocos lugares en el beta gratuito con precio preferencial de por vida. ¿Te animas a probarlo? Es gratis.",
-                            default => "Hola *{$name}*, soy Omar de DocFácil. ¿Cómo va todo con tu consultorio?",
-                        };
-
-                        return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
-                    }, shouldOpenInNewTab: true),
+                    ->visible(fn (Prospect $record) => ! empty($record->phone))
+                    ->url(
+                        fn (Prospect $record) => \App\Filament\Sales\Resources\ProspectResource::buildContextualWhatsappUrl($record),
+                        shouldOpenInNewTab: true,
+                    ),
 
                 // Advance status button
                 Tables\Actions\Action::make('advance')
