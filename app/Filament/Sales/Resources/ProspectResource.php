@@ -639,9 +639,14 @@ class ProspectResource extends Resource
         $esNegocio = self::buildSalutation($record)['followCall'] === '';
         $lugares = (int) config('founders.seats', 10);
 
-        $deDonde = str_contains(strtolower((string) $record->city), 'mochis')
-            ? 'ingeniero de aquí de Los Mochis'
-            : 'ingeniero, de Los Mochis';
+        // "De aquí" solo se puede decir una vez, y es lo único que ninguna
+        // empresa de software puede copiar. Para los de la región, la cercanía
+        // se dice de otro modo: que uno anda por allá.
+        $esDeCasa = str_contains(strtolower((string) $record->city), 'mochis');
+        $deDonde = $esDeCasa ? 'ingeniero de aquí de Los Mochis' : 'ingeniero de Los Mochis';
+        $comoSigue = $esDeCasa
+            ? "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan."
+            : "y esta semana ando platicando con dentistas de la región para armarlo con los primeros {$lugares} que lo usen conmigo de cerca.";
 
         $apertura = $esNegocio
             ? "{$greeting}. Le escribo para el doctor o la doctora del consultorio, no es para una cita."
@@ -652,7 +657,9 @@ class ProspectResource extends Resource
             : 'Le hago una pregunta corta y usted decide si seguimos; si no le interesa me lo dice y no lo molesto más: ';
 
         return $apertura . "\n\n"
-            . "Soy Omar Lerma, {$deDonde}. Hice un sistema para {$sector} y busco a los primeros {$lugares} que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.\n\n"
+            . "Soy Omar Lerma, {$deDonde}. Hice un sistema para {$sector} {$comoSigue}
+
+"
             . $permiso . self::preguntaDeApertura($record, $esNegocio);
     }
 
