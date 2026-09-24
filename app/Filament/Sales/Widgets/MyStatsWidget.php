@@ -4,6 +4,7 @@ namespace App\Filament\Sales\Widgets;
 
 use App\Models\Commission;
 use App\Models\Prospect;
+use App\Support\CargaDeTrabajo;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -32,16 +33,12 @@ class MyStatsWidget extends BaseWidget
             ->whereYear('converted_at', now()->year)
             ->count();
 
-        $pendingFollowups = Prospect::where('assigned_to_sales_rep_id', $userId)
-            ->whereNotIn('status', ['converted', 'lost'])
-            ->where(function ($q) {
-                $q->where(function ($q2) {
-                    $q2->whereNotNull('next_contact_at')->where('next_contact_at', '<=', now());
-                })->orWhere(function ($q2) {
-                    $q2->where('contact_day', 0)->where('status', 'new');
-                });
-            })
-            ->count();
+        // Un seguimiento pendiente es de alguien a quien ya le escribiste y le
+        // toca el siguiente mensaje. Antes aquí entraba también todo prospecto
+        // nuevo sin tocar, así que el tablero decía 1,785 "requieren acción":
+        // un número que no se puede trabajar no es una alerta, es ruido.
+        $pendingFollowups = CargaDeTrabajo::seguimientos($userId)->count();
+        $esperandoRespuesta = CargaDeTrabajo::contestaron($userId)->count();
 
         $pendingAmount = Commission::where('user_id', $userId)
             ->where('status', 'pending')
@@ -53,8 +50,13 @@ class MyStatsWidget extends BaseWidget
                 ->icon('heroicon-o-phone-arrow-up-right')
                 ->color($contactsToday >= 8 ? 'success' : ($contactsToday >= 4 ? 'warning' : 'danger')),
 
-            Stat::make('Seguimientos pendientes', $pendingFollowups)
-                ->description($pendingFollowups > 0 ? 'Requieren acción' : 'Al corriente')
+            Stat::make('Te contestaron', $esperandoRespuesta)
+                ->description($esperandoRespuesta > 0 ? 'Esperando tu respuesta' : 'Nadie esperando')
+                ->icon('heroicon-o-chat-bubble-left-right')
+                ->color($esperandoRespuesta > 0 ? 'warning' : 'gray'),
+
+            Stat::make('Seguimientos de hoy', $pendingFollowups)
+                ->description($pendingFollowups > 0 ? 'Ya les escribiste antes' : 'Al corriente')
                 ->icon('heroicon-o-clock')
                 ->color($pendingFollowups > 0 ? 'danger' : 'success'),
 
