@@ -37,10 +37,14 @@ class LimpiarProspectos extends Command
         }
 
         $contactosFalsos = $this->contactosQueNuncaFueron($ensayo);
+        $perdidosSinIntentar = $this->perdidosQueNadieIntento($ensayo);
+        $fechasFalsas = $this->fechasDeContactoQueNoOcurrio($ensayo);
         $palomitasDudosas = $this->palomitasSinVerificar($ensayo);
 
         $this->newLine();
         $this->line("Contactos que nunca fueron: {$contactosFalsos}");
+        $this->line("Perdidos sin que nadie intentara, recuperados: {$perdidosSinIntentar}");
+        $this->line("Fechas de contacto que no ocurrió, borradas: {$fechasFalsas}");
         $this->line("Palomitas de WhatsApp sin verificar: {$palomitasDudosas}");
 
         if ($ensayo && ($contactosFalsos || $palomitasDudosas)) {
@@ -76,6 +80,72 @@ class LimpiarProspectos extends Command
         if (! $ensayo && $cuantos) {
             $consulta->update([
                 'status' => 'new',
+                'outreach_started_at' => null,
+                'next_contact_at' => null,
+                'contacted_at' => null,
+                'updated_at' => now(),
+            ]);
+        }
+
+        return $cuantos;
+    }
+
+    /**
+     * Los que el correo dio por perdidos sin que nadie los intentara.
+     *
+     * El tercer correo de la secuencia los marcaba como perdidos. Perdido
+     * debería significar una sola cosa: que dijeron que no. Se respeta a quien
+     * contestó, a quien ya iba avanzado en la cadencia, a quien puso una
+     * objeción, y a los números que verificamos y no existen en WhatsApp.
+     */
+    private function perdidosQueNadieIntento(bool $ensayo): int
+    {
+        $consulta = Prospect::query()
+            ->where('status', 'lost')
+            ->where('contact_day', 0)
+            ->whereNull('replied_at')
+            ->where(function ($q) {
+                $q->whereNull('objections_faced')->orWhere('objections_faced', '[]');
+            })
+            ->where(function ($q) {
+                $q->whereNull('notes')->orWhere('notes', 'not like', '%sin_whatsapp%');
+            });
+
+        $cuantos = (clone $consulta)->count();
+
+        if (! $ensayo && $cuantos) {
+            $consulta->update([
+                'status' => 'new',
+                'outreach_started_at' => null,
+                'next_contact_at' => null,
+                'contacted_at' => null,
+                'updated_at' => now(),
+            ]);
+        }
+
+        return $cuantos;
+    }
+
+    /**
+     * La marca de "aquí empezó la prospección" en quien sigue siendo nuevo.
+     *
+     * No cambia su estado —ya está bien— pero la fecha miente, y de ella
+     * dependen los días transcurridos que se muestran en el panel.
+     */
+    private function fechasDeContactoQueNoOcurrio(bool $ensayo): int
+    {
+        $consulta = Prospect::query()
+            ->where('status', 'new')
+            ->where('contact_day', 0)
+            ->whereNull('replied_at')
+            ->where(function ($q) {
+                $q->whereNotNull('outreach_started_at')->orWhereNotNull('next_contact_at');
+            });
+
+        $cuantos = (clone $consulta)->count();
+
+        if (! $ensayo && $cuantos) {
+            $consulta->update([
                 'outreach_started_at' => null,
                 'next_contact_at' => null,
                 'contacted_at' => null,

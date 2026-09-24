@@ -94,6 +94,61 @@ class LimpiarProspectosTest extends TestCase
         $this->assertSame('converted', $convertido->fresh()->status);
     }
 
+    public function test_el_nuevo_con_fecha_de_contacto_falsa_la_pierde(): void
+    {
+        $p = $this->prospecto([
+            'status' => 'new',
+            'contact_day' => 0,
+            'outreach_started_at' => now()->subMonths(5),
+            'next_contact_at' => now()->subMonths(4),
+        ]);
+
+        $this->artisan('docfacil:limpiar-prospectos')->assertSuccessful();
+
+        $p->refresh();
+
+        $this->assertNull($p->outreach_started_at);
+        $this->assertNull($p->next_contact_at);
+        $this->assertSame('new', $p->status);
+    }
+
+    public function test_el_que_el_correo_dio_por_perdido_se_recupera(): void
+    {
+        // El tercer correo lo marcaba como perdido sin que nadie intentara.
+        $p = $this->prospecto([
+            'status' => 'lost',
+            'contact_day' => 0,
+            'outreach_started_at' => now()->subMonths(4),
+        ]);
+
+        $this->artisan('docfacil:limpiar-prospectos')->assertSuccessful();
+
+        $this->assertSame('new', $p->fresh()->status);
+    }
+
+    public function test_el_que_dijo_que_no_sigue_perdido(): void
+    {
+        $dijoQueNo = $this->prospecto([
+            'status' => 'lost',
+            'contact_day' => 1,
+            'replied_at' => now()->subDay(),
+            'last_contact_method' => 'whatsapp',
+        ]);
+
+        $numeroMuerto = $this->prospecto([
+            'phone' => '6688888888',
+            'status' => 'lost',
+            'contact_day' => 0,
+            'has_whatsapp' => false,
+            'notes' => '{"sin_whatsapp":true}',
+        ]);
+
+        $this->artisan('docfacil:limpiar-prospectos')->assertSuccessful();
+
+        $this->assertSame('lost', $dijoQueNo->fresh()->status);
+        $this->assertSame('lost', $numeroMuerto->fresh()->status);
+    }
+
     // ── La palomita que nadie verificó ───────────────────────────
 
     public function test_la_palomita_sin_verificar_queda_en_no_sabemos(): void
