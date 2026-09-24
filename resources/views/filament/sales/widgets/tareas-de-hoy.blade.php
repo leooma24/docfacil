@@ -19,8 +19,8 @@
         <ol style="margin:0;padding-left:1.1rem;">
             @foreach($tareas as $tarea)
                 <li style="margin-bottom:0.7rem;">
-                    <div style="font-weight:600;color:{{ $tarea['urgente'] ? '#b45309' : '#111827' }};">
-                        {{ $tarea['que'] }}
+                    <div style="font-weight:600;color:{{ ($tarea['cumplida'] ?? false) ? '#0f8a4d' : ($tarea['urgente'] ? '#b45309' : '#111827') }};">
+                        {{ ($tarea['cumplida'] ?? false) ? '✓ ' : '' }}{{ $tarea['que'] }}
                     </div>
                     <div style="font-size:0.8rem;color:#6b7280;">{{ $tarea['porque'] }}</div>
                 </li>

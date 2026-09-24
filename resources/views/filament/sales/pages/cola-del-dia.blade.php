@@ -9,7 +9,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.75rem;margin-bottom:1.5rem;">
         @php
             $tarjetas = [
-                ['Enviados hoy', $numeros['enviadosHoy'] . ' de ' . $numeros['tope'], '#0f766e'],
+                ['Enviados hoy', $numeros['enviadosHoy'] . ' de ' . $numeros['tope'], $numeros['enviadosHoy'] >= $numeros['tope'] ? '#0f8a4d' : '#0f766e'],
                 ['Respuestas hoy', $numeros['respuestasHoy'], '#b45309'],
                 ['Enviados esta semana', $numeros['enviadosSemana'], '#475569'],
                 ['Respuestas esta semana', $numeros['respuestasSemana'], '#475569'],
@@ -90,9 +90,20 @@
     {{-- 3. Primeros contactos, solo verificados. --}}
     <div>
         <h2 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem;">Primer contacto · hasta {{ $numeros['tope'] }} al día</h2>
-        <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem;">
-            Todos con número verificado en WhatsApp. Mándalos después del mediodía, uno cada 8 o 10 minutos.
-        </p>
+
+        @if($numeros['enviadosHoy'] >= $numeros['tope'])
+            <div style="background:#e6f5ec;border:1px solid #a7e3c0;border-radius:0.75rem;padding:0.85rem 1rem;margin-bottom:0.75rem;">
+                <div style="font-weight:700;color:#0f8a4d;">Meta del día cumplida · {{ $numeros['enviadosHoy'] }} mensajes</div>
+                <div style="font-size:0.8rem;color:#3f6b52;">
+                    Lo que sigue, mejor mañana. El ritmo es lo que mantiene tu número sano, y la lista de abajo te espera.
+                </div>
+            </div>
+        @else
+            <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem;">
+                Todos con número verificado en WhatsApp. Te faltan {{ $numeros['tope'] - $numeros['enviadosHoy'] }} para la meta de hoy.
+                Mándalos después del mediodía, uno cada 8 o 10 minutos.
+            </p>
+        @endif
 
         @forelse($datos['primerContacto'] as $p)
             @php $fuente = $this->fuente($p); @endphp

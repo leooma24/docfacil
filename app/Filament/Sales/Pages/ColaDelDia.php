@@ -5,6 +5,7 @@ namespace App\Filament\Sales\Pages;
 use App\Filament\Sales\Resources\ProspectResource;
 use App\Models\Prospect;
 use App\Support\CargaDeTrabajo;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
 /**
@@ -93,6 +94,31 @@ class ColaDelDia extends Page
         }
 
         $prospecto->advanceContactDay('whatsapp');
+
+        $this->avisarSiSeCumplioLaMeta();
+    }
+
+    /**
+     * El aviso al llegar al numero del dia.
+     *
+     * Suena a adorno y no lo es: el tope existe para que el numero de quien
+     * vende no termine bloqueado, y un limite que solo se siente como freno se
+     * salta. Como meta, se respeta. Sale una sola vez, justo al llegar.
+     */
+    private function avisarSiSeCumplioLaMeta(): void
+    {
+        $enviadosHoy = CargaDeTrabajo::numeros((int) auth()->id())['enviadosHoy'];
+
+        if ($enviadosHoy !== CargaDeTrabajo::TOPE_DIARIO) {
+            return;
+        }
+
+        Notification::make()
+            ->title('Meta del dia cumplida')
+            ->body(CargaDeTrabajo::TOPE_DIARIO . ' mensajes. De aqui en adelante mejor manana: el ritmo es lo que mantiene tu numero sano.')
+            ->success()
+            ->persistent()
+            ->send();
     }
 
     /**

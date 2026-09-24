@@ -250,6 +250,43 @@ class ColaDelDiaTest extends TestCase
         $this->assertSame(0, $ajeno->fresh()->contact_day);
     }
 
+    // ── La meta del día ──────────────────────────────────────────
+
+    public function test_al_llegar_al_tope_la_tarea_dice_meta_cumplida(): void
+    {
+        for ($i = 0; $i < \App\Support\CargaDeTrabajo::TOPE_DIARIO; $i++) {
+            $this->prospecto([
+                'status' => 'contacted',
+                'contact_day' => 1,
+                'last_contact_method' => 'whatsapp',
+                'last_followup_at' => now(),
+                'next_contact_at' => now()->addDays(2),
+            ]);
+        }
+
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+        $textos = collect($tareas)->pluck('que')->implode(' ');
+
+        $this->assertStringContainsString('Meta del día cumplida', $textos);
+        $this->assertStringNotContainsString('primeros contactos', $textos);
+    }
+
+    public function test_antes_del_tope_dice_cuantos_faltan(): void
+    {
+        $this->prospecto([
+            'status' => 'contacted',
+            'contact_day' => 1,
+            'last_contact_method' => 'whatsapp',
+            'last_followup_at' => now(),
+            'next_contact_at' => now()->addDays(2),
+        ]);
+        $this->prospecto();
+
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+
+        $this->assertStringContainsString('Mandar 1 primeros contactos', collect($tareas)->pluck('que')->implode(' '));
+    }
+
     // ── Verificar antes de escribir ──────────────────────────────
 
     public function test_el_que_no_esta_verificado_sale_en_por_verificar(): void

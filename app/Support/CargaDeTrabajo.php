@@ -228,9 +228,19 @@ class CargaDeTrabajo
             ];
         }
 
-        if ($porContactar > 0) {
-            $faltan = max(0, $numeros['tope'] - $numeros['enviadosHoy']);
-            $cuantos = min($porContactar, $faltan ?: $porContactar);
+        $faltan = max(0, $numeros['tope'] - $numeros['enviadosHoy']);
+
+        if ($faltan === 0 && $numeros['enviadosHoy'] > 0) {
+            // El tope existe para que no le bloqueen el número a quien vende.
+            // Como límite se salta; como meta cumplida, se respeta.
+            $tareas[] = [
+                'que' => 'Meta del día cumplida · ' . $numeros['enviadosHoy'] . ' mensajes',
+                'porque' => 'Lo que sigue, mejor mañana: el ritmo es lo que mantiene tu número sano.',
+                'urgente' => false,
+                'cumplida' => true,
+            ];
+        } elseif ($porContactar > 0) {
+            $cuantos = min($porContactar, $faltan);
 
             $tareas[] = [
                 'que' => "Mandar {$cuantos} primeros contactos",
