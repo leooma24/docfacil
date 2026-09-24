@@ -57,9 +57,9 @@
                             · contestó {{ $p->replied_at?->diffForHumans() }}
                         </div>
                     </div>
-                    <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener"
+                    <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener" wire:click="registrarEnvio({{ $p->id }})"
                        style="flex:none;background:#fff;border:1px solid #d1d5db;color:#374151;font-weight:600;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Abrir chat</a>
-                    <a href="{{ $this->ligaParaPedirLaCita($p) }}" target="_blank" rel="noopener"
+                    <a href="{{ $this->ligaParaPedirLaCita($p) }}" target="_blank" rel="noopener" wire:click="registrarEnvio({{ $p->id }})"
                        style="flex:none;background:#25d366;color:#05330f;font-weight:700;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Pedir la cita</a>
                 </div>
             @endforeach
@@ -79,7 +79,7 @@
                         Día {{ $p->contact_day }} de la cadencia · le tocaba {{ $p->next_contact_at?->format('d/m') }}
                     </div>
                 </div>
-                <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener"
+                <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener" wire:click="registrarEnvio({{ $p->id }})"
                    style="flex:none;background:#25d366;color:#05330f;font-weight:700;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Abrir chat</a>
             </div>
         @empty
@@ -109,7 +109,7 @@
                         </div>
                     @endif
                 </div>
-                <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener"
+                <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener" wire:click="registrarEnvio({{ $p->id }})"
                    style="flex:none;background:#25d366;color:#05330f;font-weight:700;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Abrir chat</a>
             </div>
         @empty

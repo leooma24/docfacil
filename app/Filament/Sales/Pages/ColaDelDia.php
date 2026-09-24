@@ -53,6 +53,42 @@ class ColaDelDia extends Page
         ];
     }
 
+    /**
+     * Abrir el chat cuenta como mandarlo.
+     *
+     * El botón es una liga normal —así el navegador abre WhatsApp con el
+     * gesto del clic y no lo bloquea— y de paso avisa por aquí para dejar
+     * constancia. Sin esto, el prospecto amanecía otra vez en la cola y se le
+     * escribía dos veces: el error más caro de esta pantalla.
+     *
+     * La guarda de cinco minutos es por los clics repetidos: abrir el chat
+     * tres veces seguidas no es mandar tres mensajes.
+     */
+    public function registrarEnvio(int $id): void
+    {
+        $prospecto = Prospect::where('assigned_to_sales_rep_id', auth()->id())->find($id);
+
+        if (! $prospecto) {
+            return;
+        }
+
+        $recienClicado = $prospecto->last_followup_at
+            && $prospecto->last_followup_at->isAfter(now()->subMinutes(5));
+
+        if ($recienClicado) {
+            return;
+        }
+
+        if ($prospecto->status === 'new') {
+            $prospecto->update([
+                'status' => 'contacted',
+                'contacted_at' => $prospecto->contacted_at ?? now(),
+            ]);
+        }
+
+        $prospecto->advanceContactDay('whatsapp');
+    }
+
     /** El mensaje que le toca a este prospecto, desde la única fuente que hay. */
     public function ligaWhatsApp(Prospect $prospecto): string
     {

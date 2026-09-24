@@ -183,6 +183,45 @@ class ColaDelDiaTest extends TestCase
         $this->assertFalse($cola['primerContacto']->contains('id', $p->id));
     }
 
+    // ── Abrir el chat cuenta como mandarlo ───────────────────────
+
+    public function test_abrir_el_chat_registra_el_envio_y_lo_saca_de_la_cola(): void
+    {
+        $p = $this->prospecto();
+
+        Livewire::test(ColaDelDia::class)->call('registrarEnvio', $p->id);
+
+        $p->refresh();
+
+        $this->assertSame('contacted', $p->status);
+        $this->assertSame(1, $p->contact_day);
+        $this->assertSame('whatsapp', $p->last_contact_method);
+        $this->assertNotNull($p->next_contact_at);
+        $this->assertFalse($this->cola()['primerContacto']->contains('id', $p->id));
+    }
+
+    public function test_abrirlo_dos_veces_seguidas_no_cuenta_dos_envios(): void
+    {
+        $p = $this->prospecto();
+
+        Livewire::test(ColaDelDia::class)->call('registrarEnvio', $p->id);
+        $diaDespuesDelPrimero = $p->fresh()->contact_day;
+
+        Livewire::test(ColaDelDia::class)->call('registrarEnvio', $p->id);
+
+        $this->assertSame($diaDespuesDelPrimero, $p->fresh()->contact_day);
+    }
+
+    public function test_no_puede_registrar_envios_de_otro_vendedor(): void
+    {
+        $ajeno = $this->prospecto(['assigned_to_sales_rep_id' => null]);
+
+        Livewire::test(ColaDelDia::class)->call('registrarEnvio', $ajeno->id);
+
+        $this->assertSame('new', $ajeno->fresh()->status);
+        $this->assertSame(0, $ajeno->fresh()->contact_day);
+    }
+
     // ── Lo que toca hoy, en el escritorio ────────────────────────
 
     public function test_el_escritorio_pone_primero_contestarle_a_quien_escribio(): void
