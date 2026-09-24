@@ -98,6 +98,34 @@ class CargaDeTrabajo
             ->get();
     }
 
+    /** Cuántos números verificar por día para que nunca falte cola mañana. */
+    public const TOPE_VERIFICAR = 10;
+
+    /**
+     * Los que hay que verificar antes de poder escribirles.
+     *
+     * Abrir el chat para ver si el número existe no manda nada y no arriesga
+     * la cuenta de quien vende; mandarle a un número muerto sí, y de los que
+     * salen de directorios 9 de cada 10 no están en WhatsApp.
+     *
+     * Por eso esto es una tarea aparte y no se mezcla con el primer contacto:
+     * verificar es trabajo de bodega, escribir es trabajo de venta, y meterlos
+     * en el mismo botón termina en mensajes al vacío.
+     */
+    public static function porVerificar(int $repId): Collection
+    {
+        return self::suyos($repId)
+            ->where('status', 'new')
+            ->where('contact_day', 0)
+            ->whereNull('has_whatsapp')
+            ->whereNotNull('phone')
+            ->orderByRaw("CASE WHEN city LIKE '%Mochis%' THEN 0 WHEN city LIKE '%Guasave%' OR city LIKE '%Fuerte%' OR city LIKE '%Ahome%' THEN 1 ELSE 2 END")
+            ->orderByDesc('lead_score')
+            ->orderBy('id')
+            ->limit(self::TOPE_VERIFICAR)
+            ->get();
+    }
+
     /** Los números de arriba: hoy, la semana y las demos por hacer. */
     public static function numeros(int $repId): array
     {
@@ -191,11 +219,19 @@ class CargaDeTrabajo
                 'urgente' => false,
             ];
         } else {
-            $tareas[] = [
-                'que' => 'Conseguir y verificar la siguiente tanda de números',
-                'porque' => 'No quedan verificados sin contactar, así que hoy no hay a quién escribirle en frío.',
-                'urgente' => true,
-            ];
+            $porVerificar = self::porVerificar($repId)->count();
+
+            $tareas[] = $porVerificar > 0
+                ? [
+                    'que' => "Verificar {$porVerificar} números",
+                    'porque' => 'No quedan verificados para escribir. Abrir el chat no manda nada: es para ver cuáles existen y dejar la cola lista.',
+                    'urgente' => true,
+                ]
+                : [
+                    'que' => 'Conseguir la siguiente tanda de números',
+                    'porque' => 'Ya no queda ninguno por verificar. Sin números nuevos, mañana no hay a quién escribirle.',
+                    'urgente' => true,
+                ];
         }
 
         if ($numeros['demosAgendadas'] > 0) {

@@ -250,6 +250,68 @@ class ColaDelDiaTest extends TestCase
         $this->assertSame(0, $ajeno->fresh()->contact_day);
     }
 
+    // ── Verificar antes de escribir ──────────────────────────────
+
+    public function test_el_que_no_esta_verificado_sale_en_por_verificar(): void
+    {
+        $p = $this->prospecto(['has_whatsapp' => null, 'notes' => null]);
+
+        $cola = $this->cola();
+
+        $this->assertTrue($cola['porVerificar']->contains('id', $p->id));
+        $this->assertFalse($cola['primerContacto']->contains('id', $p->id));
+    }
+
+    public function test_marcar_que_si_existe_lo_pasa_a_primer_contacto(): void
+    {
+        $p = $this->prospecto(['has_whatsapp' => null, 'notes' => null]);
+
+        Livewire::test(ColaDelDia::class)->call('marcarVerificado', $p->id, true);
+
+        $p->refresh();
+
+        $this->assertTrue($p->has_whatsapp);
+        $this->assertStringContainsString('verificado_wa', (string) $p->notes);
+        $this->assertTrue($this->cola()['primerContacto']->contains('id', $p->id));
+        $this->assertFalse($this->cola()['porVerificar']->contains('id', $p->id));
+    }
+
+    public function test_marcar_que_no_existe_lo_cierra_y_no_vuelve_a_salir(): void
+    {
+        $p = $this->prospecto(['has_whatsapp' => null, 'notes' => null]);
+
+        Livewire::test(ColaDelDia::class)->call('marcarVerificado', $p->id, false);
+
+        $p->refresh();
+
+        $this->assertFalse($p->has_whatsapp);
+        $this->assertSame('lost', $p->status);
+        $this->assertNull($p->next_contact_at);
+
+        $cola = $this->cola();
+        $this->assertFalse($cola['porVerificar']->contains('id', $p->id));
+        $this->assertFalse($cola['primerContacto']->contains('id', $p->id));
+    }
+
+    public function test_no_se_verifica_al_prospecto_de_otro_vendedor(): void
+    {
+        $ajeno = $this->prospecto(['has_whatsapp' => null, 'notes' => null, 'assigned_to_sales_rep_id' => null]);
+
+        Livewire::test(ColaDelDia::class)->call('marcarVerificado', $ajeno->id, false);
+
+        $this->assertNull($ajeno->fresh()->has_whatsapp);
+        $this->assertSame('new', $ajeno->fresh()->status);
+    }
+
+    public function test_sin_verificados_la_tarea_del_dia_es_verificar(): void
+    {
+        $this->prospecto(['has_whatsapp' => null, 'notes' => null]);
+
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+
+        $this->assertStringContainsString('Verificar', collect($tareas)->pluck('que')->implode(' '));
+    }
+
     // ── Lo que toca hoy, en el escritorio ────────────────────────
 
     public function test_el_escritorio_pone_primero_contestarle_a_quien_escribio(): void
@@ -267,13 +329,13 @@ class ColaDelDiaTest extends TestCase
         $this->assertTrue($tareas[0]['urgente']);
     }
 
-    public function test_sin_numeros_verificados_la_tarea_es_conseguirlos(): void
+    public function test_sin_ningun_numero_la_tarea_es_conseguirlos(): void
     {
-        // Nadie en la cola de primer contacto: eso también es trabajo del día,
-        // y es el que más se olvida porque no se siente como vender.
+        // Ni verificados ni por verificar: conseguir números es trabajo del
+        // día, y es el que más se olvida porque no se siente como vender.
         $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
 
-        $this->assertStringContainsString('verificar', collect($tareas)->pluck('que')->implode(' '));
+        $this->assertStringContainsString('Conseguir', collect($tareas)->pluck('que')->implode(' '));
     }
 
     public function test_con_numeros_verificados_la_tarea_es_mandarlos(): void

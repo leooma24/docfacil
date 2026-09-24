@@ -49,6 +49,7 @@ class ColaDelDia extends Page
             'contestaron' => CargaDeTrabajo::contestaron($repId),
             'seguimientos' => CargaDeTrabajo::seguimientos($repId),
             'primerContacto' => CargaDeTrabajo::primerContacto($repId),
+            'porVerificar' => CargaDeTrabajo::porVerificar($repId),
             'numeros' => CargaDeTrabajo::numeros($repId),
         ];
     }
@@ -87,6 +88,53 @@ class ColaDelDia extends Page
         }
 
         $prospecto->advanceContactDay('whatsapp');
+    }
+
+    /**
+     * El chat pelón, sin mensaje escrito.
+     *
+     * A propósito no lleva texto: esto es para ver si el número existe, no
+     * para escribirle. Con el mensaje cargado, la tentación de mandarlo a un
+     * número sin verificar está a un clic.
+     */
+    public function ligaParaVerificar(Prospect $prospecto): string
+    {
+        $telefono = preg_replace('/\D/', '', (string) $prospecto->phone);
+
+        if (strlen($telefono) === 10) {
+            $telefono = '52' . $telefono;
+        }
+
+        return "https://wa.me/{$telefono}";
+    }
+
+    /**
+     * Queda anotado si el número existe o no.
+     *
+     * El que no existe se cierra —no se le va a poder escribir nunca— y el que
+     * sí, pasa al primer contacto de mañana. Lo importante es que quede
+     * escrito quién lo verificó y cuándo: la palomita que viene de un archivo
+     * y no de abrir el chat ya nos costó una mañana de mensajes al vacío.
+     */
+    public function marcarVerificado(int $id, bool $existe): void
+    {
+        $prospecto = Prospect::where('assigned_to_sales_rep_id', auth()->id())->find($id);
+
+        if (! $prospecto) {
+            return;
+        }
+
+        $notas = json_decode((string) $prospecto->notes, true);
+        $notas = is_array($notas) ? $notas : [];
+        $notas[$existe ? 'verificado_wa' : 'sin_whatsapp'] = true;
+        $notas['verificado_at'] = now()->toDateTimeString();
+
+        $prospecto->update([
+            'has_whatsapp' => $existe,
+            'status' => $existe ? 'new' : 'lost',
+            'next_contact_at' => null,
+            'notes' => json_encode($notas, JSON_UNESCAPED_UNICODE),
+        ]);
     }
 
     /** El mensaje que le toca a este prospecto, desde la única fuente que hay. */

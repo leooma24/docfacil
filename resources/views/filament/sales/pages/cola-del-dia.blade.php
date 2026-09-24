@@ -120,4 +120,31 @@
         @endforelse
     </div>
 
+    {{-- 4. Los que hay que verificar. Es trabajo de bodega, no de venta: abrir
+         el chat no manda nada, solo enseña si el número existe. --}}
+    @if($datos['porVerificar']->isNotEmpty())
+        <div style="margin-top:1.75rem;">
+            <h2 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem;">Por verificar · {{ $datos['porVerificar']->count() }}</h2>
+            <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem;">
+                Abre el chat —no manda nada— y marca si existe. Los que existan entran mañana a primer contacto;
+                los que no, se cierran y no vuelven a salir.
+            </p>
+
+            @foreach($datos['porVerificar'] as $p)
+                <div style="display:flex;align-items:center;gap:0.5rem;background:#fff;border:1px solid #e5e7eb;border-radius:0.75rem;padding:0.7rem 1rem;margin-bottom:0.4rem;">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:600;font-size:0.92rem;">{{ $p->name }}</div>
+                        <div style="font-size:0.75rem;color:#6b7280;">{{ collect([$p->city, $p->phone])->filter()->implode(' · ') }}</div>
+                    </div>
+                    <a href="{{ $this->ligaParaVerificar($p) }}" target="_blank" rel="noopener"
+                       style="flex:none;background:#fff;border:1px solid #d1d5db;color:#374151;font-weight:600;font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:0.5rem;text-decoration:none;">Abrir chat</a>
+                    <button type="button" wire:click="marcarVerificado({{ $p->id }}, true)"
+                            style="flex:none;background:#dcfce7;border:1px solid #86efac;color:#166534;font-weight:700;font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:0.5rem;">Sí existe</button>
+                    <button type="button" wire:click="marcarVerificado({{ $p->id }}, false)"
+                            style="flex:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-weight:700;font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:0.5rem;">No existe</button>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
 </x-filament-panels::page>
