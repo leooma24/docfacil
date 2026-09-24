@@ -153,6 +153,34 @@ class ColaDelDiaTest extends TestCase
         $this->assertFalse($this->cola()['seguimientos']->contains('id', $p->id));
     }
 
+    public function test_el_seguimiento_de_hace_meses_ya_no_es_de_hoy(): void
+    {
+        // 88 prospectos de abril seguían saliendo como tarea de hoy, con el
+        // seguimiento vencido desde mayo. Retomar eso se lee falso.
+        $p = $this->prospecto([
+            'status' => 'contacted',
+            'contact_day' => 1,
+            'last_contact_method' => 'whatsapp',
+            'next_contact_at' => now()->subMonths(5),
+        ]);
+
+        $this->assertFalse($this->cola()['seguimientos']->contains('id', $p->id));
+    }
+
+    public function test_no_se_sigue_una_cadencia_contra_un_numero_sin_verificar(): void
+    {
+        $p = $this->prospecto([
+            'has_whatsapp' => null,
+            'notes' => null,
+            'status' => 'contacted',
+            'contact_day' => 1,
+            'last_contact_method' => 'whatsapp',
+            'next_contact_at' => now()->subDay(),
+        ]);
+
+        $this->assertFalse($this->cola()['seguimientos']->contains('id', $p->id));
+    }
+
     // ── Los que contestaron ──────────────────────────────────────
 
     public function test_el_que_contesto_aparece_hasta_arriba(): void

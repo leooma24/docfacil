@@ -43,15 +43,32 @@ class CargaDeTrabajo
             ->get();
     }
 
-    /** Les toca el siguiente mensaje, y sí se les escribió antes. */
+    /**
+     * Cuántos días tarde puede estar un seguimiento y seguir siendo de hoy.
+     *
+     * Había 88 prospectos de abril con el seguimiento vencido desde el 1 de
+     * mayo. Eso no es la tarea de hoy: es una cadencia abandonada hace cinco
+     * meses, y retomarla como si nada —"le escribo una vez más por si el
+     * mensaje se perdió entre los del día"— se lee falso.
+     */
+    public const DIAS_DE_GRACIA = 30;
+
+    /**
+     * Les toca el siguiente mensaje, y sí se les escribió antes.
+     *
+     * Con número verificado, igual que el primer contacto: seguir una cadencia
+     * contra un número que no existe es gastar el día en mensajes al vacío.
+     */
     public static function seguimientos(int $repId): Collection
     {
         return self::suyos($repId)
             ->whereNull('replied_at')
             ->where('contact_day', '>', 0)
             ->where('last_contact_method', 'whatsapp')
+            ->where('has_whatsapp', true)
             ->whereNotNull('next_contact_at')
             ->where('next_contact_at', '<=', now())
+            ->where('next_contact_at', '>=', now()->subDays(self::DIAS_DE_GRACIA))
             ->orderBy('next_contact_at')
             ->limit(20)
             ->get();

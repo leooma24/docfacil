@@ -596,22 +596,52 @@ class ProspectResource extends Resource
         $greeting = $opener['greeting'];
         $followCall = $opener['followCall'];
 
+        // Cada día de la cadencia manda su propio mensaje. El día 1 es el
+        // segundo toque, no el primero: repetir el mensaje de presentación a
+        // quien ya lo recibió es la forma más rápida de que lo bloqueen.
+        $demoUrl = url('/demo');
+
         $msg = match ($record->contact_day) {
-            0, 1 => self::mensajeDePrimerContacto($record, $greeting, $sector),
-            3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
-                . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
-                . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
-            7 => ($followCall ? "{$followCall}, último mensaje y no le insisto más." : "Último mensaje y no le insisto más.") . "\n\n"
-                . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
-                . "{$registerUrl}\n\n"
-                . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
-            14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
-                . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
-                . "- Odontograma interactivo con 13 condiciones\n"
-                . "- Recetas PDF con cédula en 10 segundos\n"
-                . "- Más dentistas activos cada semana\n\n"
-                . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
-            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente pensado para la NOM-004). ¿Le interesa una demo de 10 minutos?",
+            0 => self::mensajeDePrimerContacto($record, $greeting, $sector),
+
+            1 => ($followCall ? "{$followCall}, le escribo una vez más" : 'Le escribo una vez más')
+                . " por si el mensaje se perdió entre los del día.
+
+"
+                . "Es una sola pregunta y con eso ya sé si le puedo ayudar o no: ¿cómo le hace hoy para recordarles a sus pacientes su cita?
+
+"
+                . 'Y si no le interesa, dígamelo y no le vuelvo a escribir.',
+
+            3 => ($followCall ? "{$followCall}, la última vez que le escribo esta semana." : 'La última vez que le escribo esta semana.') . "
+
+"
+                . "Lo que hago es quitarle el tiempo que se le va escribiendo uno por uno los recordatorios de las citas del día siguiente. El sistema le arma la lista con el mensaje ya hecho y usted nada más va dando enviar, desde su propio WhatsApp.
+
+"
+                . "Si quiere se lo enseño en 10 minutos por videollamada, o paso 15 minutos a su consultorio. ¿Le queda mejor mañana a la 1 o a las 6 de la tarde?
+
+"
+                . "Y si prefiere verlo usted solo primero, aquí está: {$demoUrl}",
+
+            7 => ($followCall ? "{$followCall}, último mensaje y ya no le insisto." : 'Último mensaje y ya no le insisto.') . "
+
+"
+                . "Le dejo el sistema para que lo vea cuando tenga un rato: {$demoUrl}
+
+"
+                . "Y si quiere probarlo con sus pacientes, el plan gratis no pide tarjeta: {$registerUrl}
+
+"
+                . 'Aquí quedo por si más adelante le sirve. Gracias por su tiempo.',
+
+            default => ($followCall ? "{$followCall}, le escribo después de un tiempo." : 'Le escribo después de un tiempo.') . "
+
+"
+                . "Desde la última vez el sistema ya lleva inventario de insumos y expediente con firma, además de los recordatorios. Si quiere verlo, aquí está: {$demoUrl}
+
+"
+                . 'Y si no, con que me lo diga basta y no vuelvo a escribirle.',
         };
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
@@ -642,11 +672,18 @@ class ProspectResource extends Resource
         // "De aquí" solo se puede decir una vez, y es lo único que ninguna
         // empresa de software puede copiar. Para los de la región, la cercanía
         // se dice de otro modo: que uno anda por allá.
-        $esDeCasa = str_contains(strtolower((string) $record->city), 'mochis');
+        $ciudad = strtolower((string) $record->city);
+        $esDeCasa = str_contains($ciudad, 'mochis');
+        // "La región" es el norte de Sinaloa. A un dentista de Cuernavaca
+        // decirle que ando platicando con dentistas de su región es mentira, y
+        // se nota.
+        $esDeLaRegion = $esDeCasa || (bool) preg_match('/guasave|fuerte|ahome|choix|guam[uú]chil|angostura|sinaloa|mazatl[aá]n|culiac[aá]n|navolato/', $ciudad);
         $deDonde = $esDeCasa ? 'ingeniero de aquí de Los Mochis' : 'ingeniero de Los Mochis';
-        $comoSigue = $esDeCasa
-            ? "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan."
-            : "y esta semana ando platicando con dentistas de la región para armarlo con los primeros {$lugares} que lo usen conmigo de cerca.";
+        $comoSigue = match (true) {
+            $esDeCasa => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
+            $esDeLaRegion => "y esta semana ando platicando con dentistas de la región para armarlo con los primeros {$lugares} que lo usen conmigo de cerca.",
+            default => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
+        };
 
         $apertura = $esNegocio
             ? "{$greeting}. Le escribo para el doctor o la doctora del consultorio, no es para una cita."
