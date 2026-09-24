@@ -227,10 +227,17 @@ class ProspectResource extends Resource
                         };
 
                         $updateData = ['status' => $nextStatus];
-                        if ($nextStatus === 'contacted') $updateData['contacted_at'] = now();
                         if ($nextStatus === 'converted') $updateData['converted_at'] = now();
 
                         $record->update($updateData);
+
+                        // Marcar contactado también avanza la cadencia. Sin esto
+                        // el prospecto quedaba en un limbo —contactado pero en
+                        // día 0— que no aparece ni en primer contacto ni en
+                        // seguimientos: invisible en la cola del día.
+                        if ($nextStatus === 'contacted' && $record->contact_day == 0) {
+                            $record->advanceContactDay('whatsapp');
+                        }
 
                         Notification::make()
                             ->success()
