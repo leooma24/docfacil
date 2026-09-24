@@ -285,8 +285,10 @@ class ColaDelDiaTest extends TestCase
         $p->refresh();
 
         $this->assertFalse($p->has_whatsapp);
-        $this->assertSame('lost', $p->status);
         $this->assertNull($p->next_contact_at);
+        // No se cierra: queda para llamarle, que para eso tiene teléfono.
+        $this->assertSame('new', $p->status);
+        $this->assertTrue(\App\Support\CargaDeTrabajo::paraLlamar($this->vendedor->id)->contains('id', $p->id));
 
         $cola = $this->cola();
         $this->assertFalse($cola['porVerificar']->contains('id', $p->id));
@@ -310,6 +312,44 @@ class ColaDelDiaTest extends TestCase
         $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
 
         $this->assertStringContainsString('Verificar', collect($tareas)->pluck('que')->implode(' '));
+    }
+
+    public function test_al_verificar_se_abre_el_chat_con_el_mensaje_que_le_toca(): void
+    {
+        $p = $this->prospecto(['has_whatsapp' => null, 'notes' => null, 'specialty' => 'Ortodoncia']);
+
+        $liga = urldecode(Livewire::test(ColaDelDia::class)->instance()->ligaParaVerificar($p->fresh()));
+
+        $this->assertStringContainsString('Omar Lerma', $liga);
+        $this->assertStringContainsString('ortodoncia', $liga);
+    }
+
+    public function test_reportar_deja_anotado_que_salio_mal(): void
+    {
+        $p = $this->prospecto();
+
+        Livewire::test(ColaDelDia::class)
+            ->call('abrirReporte', $p->id)
+            ->set('reporte', 'El mensaje le dice doctora y es hombre')
+            ->call('guardarReporte')
+            ->assertSet('reportando', null);
+
+        $notas = json_decode($p->fresh()->notes, true);
+
+        $this->assertSame('El mensaje le dice doctora y es hombre', $notas['reportes'][0]['que']);
+        $this->assertTrue($notas['revisar']);
+    }
+
+    public function test_un_reporte_vacio_no_se_guarda(): void
+    {
+        $p = $this->prospecto();
+
+        Livewire::test(ColaDelDia::class)
+            ->call('abrirReporte', $p->id)
+            ->set('reporte', '   ')
+            ->call('guardarReporte');
+
+        $this->assertStringNotContainsString('reportes', (string) $p->fresh()->notes);
     }
 
     // ── Lo que toca hoy, en el escritorio ────────────────────────

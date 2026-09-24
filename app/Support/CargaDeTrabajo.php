@@ -126,6 +126,25 @@ class CargaDeTrabajo
             ->get();
     }
 
+    /**
+     * Los que no tienen WhatsApp y quedan para llamar.
+     *
+     * Verificar que un número no está en WhatsApp no lo convierte en basura:
+     * casi siempre es el fijo de la recepción de un consultorio que sí existe.
+     * Se guardan aparte, para el día que haya tiempo de marcar.
+     */
+    public static function paraLlamar(int $repId): Collection
+    {
+        return self::suyos($repId)
+            ->where('has_whatsapp', false)
+            ->where('contact_day', 0)
+            ->whereNotNull('phone')
+            ->orderByRaw("CASE WHEN city LIKE '%Mochis%' THEN 0 ELSE 1 END")
+            ->orderBy('id')
+            ->limit(20)
+            ->get();
+    }
+
     /** Los números de arriba: hoy, la semana y las demos por hacer. */
     public static function numeros(int $repId): array
     {
@@ -232,6 +251,16 @@ class CargaDeTrabajo
                     'porque' => 'Ya no queda ninguno por verificar. Sin números nuevos, mañana no hay a quién escribirle.',
                     'urgente' => true,
                 ];
+        }
+
+        $paraLlamar = self::paraLlamar($repId)->count();
+
+        if ($paraLlamar > 0) {
+            $tareas[] = [
+                'que' => "Tienes {$paraLlamar} consultorios sin WhatsApp, para llamarles",
+                'porque' => 'El número existe, nada más no es de WhatsApp. Casi siempre es el fijo de recepción.',
+                'urgente' => false,
+            ];
         }
 
         if ($numeros['demosAgendadas'] > 0) {

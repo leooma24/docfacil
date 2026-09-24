@@ -126,8 +126,9 @@
         <div style="margin-top:1.75rem;">
             <h2 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem;">Por verificar · {{ $datos['porVerificar']->count() }}</h2>
             <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem;">
-                Abre el chat —no manda nada— y marca si existe. Los que existan entran mañana a primer contacto;
-                los que no, se cierran y no vuelven a salir.
+                Abre el chat, lee el mensaje que le tocaría y marca si el número existe. WhatsApp no manda nada solo:
+                el texto se queda en el cuadro hasta que tú le des enviar. Los que existan entran mañana a primer
+                contacto; los que no, se cierran y no vuelven a salir.
             </p>
 
             @foreach($datos['porVerificar'] as $p)
@@ -142,7 +143,23 @@
                             style="flex:none;background:#dcfce7;border:1px solid #86efac;color:#166534;font-weight:700;font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:0.5rem;">Sí existe</button>
                     <button type="button" wire:click="marcarVerificado({{ $p->id }}, false)"
                             style="flex:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-weight:700;font-size:0.78rem;padding:0.4rem 0.75rem;border-radius:0.5rem;">No existe</button>
+                    <button type="button" wire:click="abrirReporte({{ $p->id }})" title="Reportar algo de este prospecto o de su mensaje"
+                            style="flex:none;background:#fff;border:1px solid #d1d5db;color:#6b7280;font-size:0.78rem;padding:0.4rem 0.6rem;border-radius:0.5rem;">Reportar</button>
                 </div>
+
+                @if($reportando === $p->id)
+                    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:0.75rem;padding:0.85rem 1rem;margin:-0.2rem 0 0.6rem;">
+                        <div style="font-size:0.8rem;font-weight:600;margin-bottom:0.4rem;">¿Qué salió mal con {{ $p->name }}?</div>
+                        <textarea wire:model="reporte" rows="2" placeholder="Ej: el mensaje le dice doctora y es hombre; la especialidad no es esa; el nombre está mal escrito"
+                                  style="width:100%;padding:0.5rem 0.65rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;"></textarea>
+                        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                            <button type="button" wire:click="guardarReporte"
+                                    style="background:#0f766e;color:#fff;font-weight:600;font-size:0.8rem;padding:0.4rem 0.9rem;border-radius:0.5rem;">Guardar</button>
+                            <button type="button" wire:click="cancelarReporte"
+                                    style="background:#fff;border:1px solid #d1d5db;color:#6b7280;font-size:0.8rem;padding:0.4rem 0.9rem;border-radius:0.5rem;">Cancelar</button>
+                        </div>
+                    </div>
+                @endif
             @endforeach
         </div>
     @endif

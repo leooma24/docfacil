@@ -41,6 +41,11 @@ class ColaDelDia extends Page
 
     protected static string $view = 'filament.sales.pages.cola-del-dia';
 
+    /** El prospecto cuyo cuadro de reporte está abierto, si hay alguno. */
+    public ?int $reportando = null;
+
+    public string $reporte = '';
+
     public function getViewData(): array
     {
         $repId = (int) auth()->id();
@@ -91,21 +96,61 @@ class ColaDelDia extends Page
     }
 
     /**
-     * El chat pelón, sin mensaje escrito.
+     * El chat con el mensaje ya cargado, también al verificar.
      *
-     * A propósito no lleva texto: esto es para ver si el número existe, no
-     * para escribirle. Con el mensaje cargado, la tentación de mandarlo a un
-     * número sin verificar está a un clic.
+     * Decisión de Omar: prefiere ver el mensaje que le toca a cada quien antes
+     * de mandarlo, tanto para revisar cómo quedó el texto como para decidir él
+     * si lo manda o no. WhatsApp no envía nada solo: el mensaje se queda en el
+     * cuadro hasta que alguien le da enviar, y si el número no existe lo dice
+     * antes de abrir el chat.
      */
     public function ligaParaVerificar(Prospect $prospecto): string
     {
-        $telefono = preg_replace('/\D/', '', (string) $prospecto->phone);
+        return ProspectResource::buildContextualWhatsappUrl($prospecto);
+    }
 
-        if (strlen($telefono) === 10) {
-            $telefono = '52' . $telefono;
+    /** Se abre el cuadro para reportar algo de este prospecto. */
+    public function abrirReporte(int $id): void
+    {
+        $this->reportando = $id;
+        $this->reporte = '';
+    }
+
+    public function cancelarReporte(): void
+    {
+        $this->reportando = null;
+        $this->reporte = '';
+    }
+
+    /**
+     * Lo que salió mal, anotado en el prospecto.
+     *
+     * Un mensaje con una frase rara, un nombre mal escrito, una especialidad
+     * que no era: eso se ve al abrir el chat y se olvida en dos minutos si no
+     * hay dónde escribirlo. Queda en las notas con su fecha, y el prospecto
+     * queda marcado para revisar.
+     */
+    public function guardarReporte(): void
+    {
+        $prospecto = Prospect::where('assigned_to_sales_rep_id', auth()->id())->find($this->reportando);
+
+        if (! $prospecto || trim($this->reporte) === '') {
+            $this->cancelarReporte();
+
+            return;
         }
 
-        return "https://wa.me/{$telefono}";
+        $notas = json_decode((string) $prospecto->notes, true);
+        $notas = is_array($notas) ? $notas : [];
+        $notas['reportes'][] = [
+            'que' => trim($this->reporte),
+            'cuando' => now()->toDateTimeString(),
+        ];
+        $notas['revisar'] = true;
+
+        $prospecto->update(['notes' => json_encode($notas, JSON_UNESCAPED_UNICODE)]);
+
+        $this->cancelarReporte();
     }
 
     /**
@@ -129,9 +174,15 @@ class ColaDelDia extends Page
         $notas[$existe ? 'verificado_wa' : 'sin_whatsapp'] = true;
         $notas['verificado_at'] = now()->toDateTimeString();
 
+        if (! $existe) {
+            // No se cierra: un consultorio con teléfono fijo sigue siendo un
+            // consultorio. Lo que no tiene es WhatsApp, así que se guarda para
+            // llamarle. Cerrarlo sería tirar un prospecto bueno por el canal.
+            $notas['canal'] = 'telefono';
+        }
+
         $prospecto->update([
             'has_whatsapp' => $existe,
-            'status' => $existe ? 'new' : 'lost',
             'next_contact_at' => null,
             'notes' => json_encode($notas, JSON_UNESCAPED_UNICODE),
         ]);
