@@ -394,6 +394,44 @@ class ProspectResource extends Resource
                                 ->send();
                         }),
 
+                    // Contestar es el único hecho que separa un mensaje mandado
+                    // de una conversación. Sin registrarlo no se puede saber si
+                    // un mensaje funciona mejor que otro, y lo que contestó es
+                    // lo que dice qué construir: así salió el inventario.
+                    Tables\Actions\Action::make('contesto')
+                        ->label('Contestó')
+                        ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                        ->color('warning')
+                        ->visible(fn (Prospect $r) => ! $r->replied_at && ! in_array($r->status, ['converted', 'lost']))
+                        ->form([
+                            Forms\Components\Select::make('dolor')
+                                ->label('¿Cómo le hace hoy?')
+                                ->options(Prospect::COMO_LE_HACE)
+                                ->required(),
+                            Forms\Components\Textarea::make('textual')
+                                ->label('Lo que dijo, con sus palabras')
+                                ->rows(2)
+                                ->helperText('Sirve para decidir qué construir. Sin interpretarlo.'),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $notas = json_decode((string) $record->notes, true);
+                            $notas = is_array($notas) ? $notas : [];
+                            $notas['dolor'] = $data['dolor'];
+                            if (! empty($data['textual'])) {
+                                $notas['dijo'] = $data['textual'];
+                            }
+
+                            $record->update([
+                                'replied_at' => now(),
+                                'status' => $record->status === 'new' ? 'contacted' : $record->status,
+                                'notes' => json_encode($notas, JSON_UNESCAPED_UNICODE),
+                            ]);
+
+                            Notification::make()
+                                ->title('Anotado. Ahora va la segunda pregunta, la concreta.')
+                                ->success()->send();
+                        }),
+
                     Tables\Actions\Action::make('schedule_demo')
                         ->label('Agendar demo')
                         ->icon('heroicon-o-computer-desktop')
@@ -506,6 +544,44 @@ class ProspectResource extends Resource
      * Centralizado aquí para que el botón verde de WA y el panel ventas usen
      * la misma plantilla — fuente de verdad.
      */
+    /**
+     * Pedir la cita, con hora concreta.
+     *
+     * Aquí se rompía el embudo: doce prospectos contestaron y ninguno terminó
+     * en demo. Contestar no es agendar, y "¿le interesa una demo?" se contesta
+     * con un no. Dos horas concretas se contestan con una de las dos, o con
+     * "mejor el jueves", que también es avanzar.
+     *
+     * Van las dos modalidades porque no todos quieren lo mismo: la
+     * videollamada es más fácil de aceptar, la visita cierra mejor. Y el demo
+     * queda como tercera salida para el que no quiere hablar con nadie
+     * todavía.
+     */
+    public static function buildDemoWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
+        if (strlen($phone) === 10) {
+            $phone = '52' . $phone;
+        }
+
+        $opener = self::buildSalutation($record);
+        $trato = $opener['followCall'] ?: 'Doctor';
+        $manana = now()->addDay()->locale('es')->isoFormat('dddd');
+
+        $msg = "{$trato}, le propongo algo concreto.
+
+"
+            . "En 10 minutos por videollamada le enseño cómo quedaría su agenda con lo que me contó, o si prefiere paso 15 minutos a su consultorio, lo que se le haga más cómodo.
+
+"
+            . "¿Le queda mejor el {$manana} a la 1 o a las 6 de la tarde?
+
+"
+            . 'Y si antes quiere verlo usted solo con calma, aquí está: ' . url('/demo');
+
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
     /** Publico: el panel admin manda el mismo mensaje que el de ventas. */
     public static function buildContextualWhatsappUrl(Prospect $record): string
     {
