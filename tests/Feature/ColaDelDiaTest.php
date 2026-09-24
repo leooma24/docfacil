@@ -183,6 +183,42 @@ class ColaDelDiaTest extends TestCase
         $this->assertFalse($cola['primerContacto']->contains('id', $p->id));
     }
 
+    // ── Lo que toca hoy, en el escritorio ────────────────────────
+
+    public function test_el_escritorio_pone_primero_contestarle_a_quien_escribio(): void
+    {
+        $this->prospecto([
+            'status' => 'contacted',
+            'contact_day' => 1,
+            'last_contact_method' => 'whatsapp',
+            'replied_at' => now()->subHour(),
+        ]);
+
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+
+        $this->assertStringContainsString('Contestarle', $tareas[0]['que']);
+        $this->assertTrue($tareas[0]['urgente']);
+    }
+
+    public function test_sin_numeros_verificados_la_tarea_es_conseguirlos(): void
+    {
+        // Nadie en la cola de primer contacto: eso también es trabajo del día,
+        // y es el que más se olvida porque no se siente como vender.
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+
+        $this->assertStringContainsString('verificar', collect($tareas)->pluck('que')->implode(' '));
+    }
+
+    public function test_con_numeros_verificados_la_tarea_es_mandarlos(): void
+    {
+        $this->prospecto();
+        $this->prospecto();
+
+        $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
+
+        $this->assertStringContainsString('primeros contactos', collect($tareas)->pluck('que')->implode(' '));
+    }
+
     // ── Los números de arriba ────────────────────────────────────
 
     public function test_cuenta_los_enviados_de_hoy_y_las_respuestas(): void

@@ -4,9 +4,8 @@ namespace App\Filament\Sales\Pages;
 
 use App\Filament\Sales\Resources\ProspectResource;
 use App\Models\Prospect;
+use App\Support\CargaDeTrabajo;
 use Filament\Pages\Page;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 /**
  * A quién le escribo hoy.
@@ -27,8 +26,8 @@ use Illuminate\Support\Collection;
  */
 class ColaDelDia extends Page
 {
-    /** Cuántos primeros contactos al día. Decisión de Omar, 24-sep. */
-    public const TOPE_DIARIO = 12;
+    /** El tope vive en CargaDeTrabajo, que es de donde sale la cola. */
+    public const TOPE_DIARIO = CargaDeTrabajo::TOPE_DIARIO;
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';
 
@@ -44,118 +43,13 @@ class ColaDelDia extends Page
 
     public function getViewData(): array
     {
-        return [
-            'contestaron' => $this->contestaron(),
-            'seguimientos' => $this->seguimientos(),
-            'primerContacto' => $this->primerContacto(),
-            'numeros' => $this->numeros(),
-        ];
-    }
-
-    /** Los míos y nada más: cada vendedor trabaja su propia cartera. */
-    private function mios(): Builder
-    {
-        return Prospect::query()
-            ->where('assigned_to_sales_rep_id', auth()->id())
-            ->whereNotIn('status', ['lost', 'converted']);
-    }
-
-    /**
-     * Contestaron y siguen esperando. Va primero a propósito: un prospecto que
-     * levantó la mano y se enfría es lo más caro que hay en todo el embudo.
-     */
-    private function contestaron(): Collection
-    {
-        return $this->mios()
-            ->whereNotNull('replied_at')
-            ->orderByDesc('replied_at')
-            ->limit(20)
-            ->get();
-    }
-
-    /** Les toca el siguiente mensaje de la cadencia, y sí se les escribió antes. */
-    private function seguimientos(): Collection
-    {
-        return $this->mios()
-            ->whereNull('replied_at')
-            ->where('contact_day', '>', 0)
-            ->where('last_contact_method', 'whatsapp')
-            ->whereNotNull('next_contact_at')
-            ->where('next_contact_at', '<=', now())
-            ->orderBy('next_contact_at')
-            ->limit(20)
-            ->get();
-    }
-
-    /**
-     * Nunca se les ha escrito y su número está verificado.
-     *
-     * Los de casa primero: el "soy de aquí de Los Mochis" solo se puede decir
-     * una vez, y es lo único que ninguna empresa de software puede copiar.
-     */
-    private function primerContacto(): Collection
-    {
-        return $this->mios()
-            ->where('status', 'new')
-            ->where('contact_day', 0)
-            ->where('has_whatsapp', true)
-            ->whereNotNull('phone')
-            ->orderByRaw("CASE WHEN city LIKE '%Mochis%' THEN 0 ELSE 1 END")
-            ->orderByDesc('lead_score')
-            ->orderBy('id')
-            ->limit(self::TOPE_DIARIO)
-            ->get();
-    }
-
-    private function numeros(): array
-    {
-        $base = fn () => Prospect::query()
-            ->where('assigned_to_sales_rep_id', auth()->id())
-            ->where('last_contact_method', 'whatsapp');
+        $repId = (int) auth()->id();
 
         return [
-            'enviadosHoy' => $base()->whereDate('last_followup_at', today())->count(),
-            'enviadosSemana' => $base()->where('last_followup_at', '>=', now()->startOfWeek())->count(),
-            'respuestasHoy' => Prospect::where('assigned_to_sales_rep_id', auth()->id())
-                ->whereDate('replied_at', today())->count(),
-            'respuestasSemana' => Prospect::where('assigned_to_sales_rep_id', auth()->id())
-                ->where('replied_at', '>=', now()->startOfWeek())->count(),
-            'demosAgendadas' => Prospect::where('assigned_to_sales_rep_id', auth()->id())
-                ->whereNotNull('demo_scheduled_at')
-                ->whereNull('demo_completed_at')->count(),
-            'tope' => self::TOPE_DIARIO,
-            // El embudo por etapas. Lo que enseña no es el total, es en qué
-            // escalón se cae: se puede tener buena tasa de respuesta y cero
-            // demos, que es exactamente donde estamos.
-            'embudo' => $this->embudo(),
-        ];
-    }
-
-    /**
-     * En qué escalón se cae.
-     *
-     * Contestar no es agendar y agendar no es cerrar. Medir solo los cierres
-     * esconde dónde está la fuga: doce contestaron y ninguno llegó a demo, y
-     * eso no se ve en un contador de ventas.
-     */
-    private function embudo(): array
-    {
-        $mios = fn () => Prospect::where('assigned_to_sales_rep_id', auth()->id());
-
-        $contactados = (clone $mios())->where('contact_day', '>', 0)->count();
-        $contestaron = (clone $mios())->whereNotNull('replied_at')->count();
-        $agendaron = (clone $mios())->whereNotNull('demo_scheduled_at')->count();
-        $hicieron = (clone $mios())->whereNotNull('demo_completed_at')->count();
-        $cerraron = (clone $mios())->where('status', 'converted')->count();
-
-        $tasa = fn (int $de, int $sobre) => $sobre > 0 ? round($de * 100 / $sobre) : null;
-
-        return [
-            ['etapa' => 'Contactados', 'valor' => $contactados, 'tasa' => null],
-            ['etapa' => 'Contestaron', 'valor' => $contestaron, 'tasa' => $tasa($contestaron, $contactados)],
-            ['etapa' => 'Demo agendada', 'valor' => $agendaron, 'tasa' => $tasa($agendaron, $contestaron)],
-            ['etapa' => 'Demo hecha', 'valor' => $hicieron, 'tasa' => $tasa($hicieron, $agendaron)],
-            ['etapa' => 'Cerraron', 'valor' => $cerraron, 'tasa' => $tasa($cerraron, $hicieron)],
+            'contestaron' => CargaDeTrabajo::contestaron($repId),
+            'seguimientos' => CargaDeTrabajo::seguimientos($repId),
+            'primerContacto' => CargaDeTrabajo::primerContacto($repId),
+            'numeros' => CargaDeTrabajo::numeros($repId),
         ];
     }
 
