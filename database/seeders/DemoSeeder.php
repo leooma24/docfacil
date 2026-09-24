@@ -23,27 +23,18 @@ use Illuminate\Support\Facades\Storage;
 class DemoSeeder extends Seeder
 {
     /**
-     * Estos datos son de mentiras. En produccion hay consultorios reales, y
-     * una clinica sembrada aqui entraria en los conteos del admin y en los
-     * lugares de fundador como si fuera un cliente.
+     * ESTE SEEDER SÍ CORRE EN PRODUCCIÓN, a propósito.
+     *
+     * El consultorio de ejemplo no es dato de prueba: es lo que ve un dentista
+     * cuando entra a /demo, y se rehace solo todos los días a las 4 con
+     * app:demo-reset. Ponerle un candado de producción —como se hizo el 22 de
+     * septiembre— dejó el demo borrado y sin volver a sembrar durante dos días,
+     * justo cuando se estaba mandando la liga a los prospectos. Por eso la
+     * clínica va marcada con is_demo: para que no se confunda con un cliente en
+     * los conteos ni en los lugares de fundador.
      */
-    private function enProduccionNoVa(): bool
-    {
-        if (! app()->isProduction()) {
-            return false;
-        }
-
-        $this->command?->error('Este seeder siembra datos de prueba y no corre en produccion.');
-
-        return true;
-    }
-
     public function run(): void
     {
-        if ($this->enProduccionNoVa()) {
-            return;
-        }
-
         // =============================================
         // CLINICA DEMO
         // =============================================
