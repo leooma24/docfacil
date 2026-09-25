@@ -102,24 +102,8 @@ class TodayAppointments extends BaseWidget
                             $when = "el {$dateStr} a las *{$time} hrs*";
                         }
 
-                        $ttl = $record->starts_at->copy()->addHours(2);
-                        $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                            'appointment.confirm',
-                            $ttl,
-                            ['appointment' => $record->id, 'action' => 'confirm']
-                        );
-                        $cancelUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                            'appointment.confirm',
-                            $ttl,
-                            ['appointment' => $record->id, 'action' => 'cancel']
-                        );
+                        $msg = urlencode(\App\Support\RecordatorioDeCita::mensaje($record));
 
-                        $msg = urlencode(
-                            "Hola {$record->patient->first_name}, te recordamos tu cita {$when} en *{$clinicName}*.\n\n" .
-                            "Confirmar: {$confirmUrl}\n" .
-                            "Cancelar: {$cancelUrl}\n\n" .
-                            "¡Te esperamos!"
-                        );
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),

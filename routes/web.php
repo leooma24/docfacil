@@ -130,7 +130,12 @@ Route::get('/baja/{token}', [UnsubscribeController::class, 'handle'])
 
 // URL corta para reemplazar links firmados largos en WhatsApp.
 // Código de 6 chars resuelve a la URL real. ~30 chars vs ~250.
-Route::get('/c/{code}', [ShortUrlController::class, 'redirect'])
+//
+// Vive en /s/ y no en /c/ porque ahí chocaba con la confirmación de cita:
+// las dos rutas competían por la misma dirección y ganaba esta, así que en
+// cuanto las citas llegaran a seis dígitos el recordatorio iba a mandar al
+// paciente a un 404. No se rompe nada al moverla: no había ninguna creada.
+Route::get('/s/{code}', [ShortUrlController::class, 'redirect'])
     ->name('shortlink')
     ->where('code', '[A-Za-z0-9]{6,12}')
     ->middleware('throttle:120,1');
@@ -185,6 +190,7 @@ Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle'])
 
 // Confirmacion de cita 1-clic desde WhatsApp (ruta firmada, sin auth)
 Route::get('/c/{appointment}', [AppointmentConfirmationController::class, 'show'])
+    ->whereNumber('appointment')
     ->middleware(['signed', 'throttle:30,1'])
     ->name('appointment.confirm');
 

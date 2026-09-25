@@ -19,11 +19,14 @@ class AppointmentConfirmationController extends Controller
 {
     public function show(Request $request, Appointment $appointment)
     {
-        $action = $request->query('action', 'confirm');
+        // Sin acción, la página solo se enseña. Antes el valor por omisión era
+        // 'confirm', así que el paciente que abría a ver de qué se trataba
+        // dejaba su cita confirmada sin haber decidido nada.
+        $action = $request->query('action');
         $alreadyHandled = in_array($appointment->status, ['confirmed', 'cancelled', 'completed', 'no_show']);
 
         // Solo procesar si la cita esta pendiente y no ha pasado
-        if (!$alreadyHandled && $appointment->starts_at->isFuture()) {
+        if ($action && !$alreadyHandled && $appointment->starts_at->isFuture()) {
             if ($action === 'cancel') {
                 $appointment->update([
                     'status' => 'cancelled',
