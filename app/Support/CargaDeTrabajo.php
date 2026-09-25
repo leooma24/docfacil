@@ -177,6 +177,11 @@ class CargaDeTrabajo
         $mios = fn () => Prospect::where('assigned_to_sales_rep_id', $repId);
 
         $contactados = (clone $mios())->where('contact_day', '>', 0)->count();
+        // La tasa de respuesta se mide solo contra los verificados. Mezclar los
+        // números de directorio —de los que 9 de cada 10 no existen— tapa el
+        // dato: el mismo mensaje da 3% mezclado y 25% sobre los que sí
+        // llegaron. Lo que se estaba midiendo no era el mensaje, era el número.
+        $verificados = (clone $mios())->where('contact_day', '>', 0)->where('has_whatsapp', true)->count();
         $contestaron = (clone $mios())->whereNotNull('replied_at')->count();
         $agendaron = (clone $mios())->whereNotNull('demo_scheduled_at')->count();
         $hicieron = (clone $mios())->whereNotNull('demo_completed_at')->count();
@@ -186,7 +191,8 @@ class CargaDeTrabajo
 
         return [
             ['etapa' => 'Contactados', 'valor' => $contactados, 'tasa' => null],
-            ['etapa' => 'Contestaron', 'valor' => $contestaron, 'tasa' => $tasa($contestaron, $contactados)],
+            ['etapa' => 'Con número verificado', 'valor' => $verificados, 'tasa' => null],
+            ['etapa' => 'Contestaron', 'valor' => $contestaron, 'tasa' => $tasa($contestaron, $verificados ?: $contactados)],
             ['etapa' => 'Demo agendada', 'valor' => $agendaron, 'tasa' => $tasa($agendaron, $contestaron)],
             ['etapa' => 'Demo hecha', 'valor' => $hicieron, 'tasa' => $tasa($hicieron, $agendaron)],
             ['etapa' => 'Cerraron', 'valor' => $cerraron, 'tasa' => $tasa($cerraron, $hicieron)],

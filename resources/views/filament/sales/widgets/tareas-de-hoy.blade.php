@@ -27,6 +27,20 @@
             @endforeach
         </ol>
 
+        @if($datos['tip'] ?? null)
+            <div style="display:flex;align-items:flex-start;gap:8px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:0.65rem;padding:0.7rem 0.85rem;margin-top:0.5rem;font-size:0.82rem;color:#134e4a;">
+                <span>
+                    @if($datos['tip']['es_repaso'] ?? false)<span style="opacity:.6;">Repaso ·</span>@endif
+                    <strong>{{ $datos['tip']['tip'] }}</strong> {{ $datos['tip']['porque'] }}
+                    @if(($datos['tip']['veces_visto'] ?? 0) > 0)
+                        <span style="opacity:.6;">· lo has visto {{ $datos['tip']['veces_visto'] }} {{ $datos['tip']['veces_visto'] == 1 ? 'vez' : 'veces' }}</span>
+                    @endif
+                </span>
+                <button type="button" wire:click="yaMeSaleSolo('{{ $datos['tip']['clave'] }}')"
+                        style="flex:none;margin-left:auto;font-size:0.72rem;color:#0f766e;white-space:nowrap;">ya me sale solo</button>
+            </div>
+        @endif
+
         <div style="display:flex;gap:1.5rem;flex-wrap:wrap;border-top:1px solid #f3f4f6;margin-top:0.6rem;padding-top:0.75rem;font-size:0.8rem;color:#6b7280;">
             <div>Enviados hoy: <strong style="color:#111827;">{{ $numeros['enviadosHoy'] }}</strong> de {{ $numeros['tope'] }}</div>
             <div>Respuestas hoy: <strong style="color:#111827;">{{ $numeros['respuestasHoy'] }}</strong></div>

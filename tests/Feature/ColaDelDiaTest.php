@@ -250,6 +250,53 @@ class ColaDelDiaTest extends TestCase
         $this->assertSame(0, $ajeno->fresh()->contact_day);
     }
 
+    // ── El paso que toca ─────────────────────────────────────────
+
+    public function test_marcar_la_demo_hecha_desbloquea_la_tasa_de_cierre(): void
+    {
+        $p = $this->prospecto([
+            'status' => 'interested',
+            'contact_day' => 1,
+            'last_contact_method' => 'whatsapp',
+            'replied_at' => now()->subDays(3),
+            'demo_scheduled_at' => now()->subHour(),
+        ]);
+
+        Livewire::test(ColaDelDia::class)->call('marcarDemoHecha', $p->id);
+
+        $this->assertNotNull($p->fresh()->demo_completed_at);
+
+        $embudo = collect(\App\Support\CargaDeTrabajo::embudo($this->vendedor->id))->keyBy('etapa');
+        $this->assertSame(1, $embudo['Demo hecha']['valor']);
+    }
+
+    public function test_marcarla_dos_veces_no_mueve_la_fecha(): void
+    {
+        $p = $this->prospecto([
+            'status' => 'interested',
+            'demo_scheduled_at' => now()->subDay(),
+            'demo_completed_at' => now()->subDay(),
+        ]);
+
+        $antes = $p->demo_completed_at;
+
+        Livewire::test(ColaDelDia::class)->call('marcarDemoHecha', $p->id);
+
+        $this->assertEquals($antes->timestamp, $p->fresh()->demo_completed_at->timestamp);
+    }
+
+    public function test_no_se_marca_la_demo_de_otro_vendedor(): void
+    {
+        $ajeno = $this->prospecto([
+            'assigned_to_sales_rep_id' => null,
+            'demo_scheduled_at' => now()->subDay(),
+        ]);
+
+        Livewire::test(ColaDelDia::class)->call('marcarDemoHecha', $ajeno->id);
+
+        $this->assertNull($ajeno->fresh()->demo_completed_at);
+    }
+
     // ── La meta del día ──────────────────────────────────────────
 
     public function test_al_llegar_al_tope_la_tarea_dice_meta_cumplida(): void
@@ -285,6 +332,25 @@ class ColaDelDiaTest extends TestCase
         $tareas = \App\Support\CargaDeTrabajo::tareasDeHoy($this->vendedor->id);
 
         $this->assertStringContainsString('Mandar 1 primeros contactos', collect($tareas)->pluck('que')->implode(' '));
+    }
+
+    public function test_la_tasa_de_respuesta_se_mide_sobre_los_verificados(): void
+    {
+        // Dos verificados, uno contestó. Y tres mandados a números que nunca
+        // se verificaron: esos no deben diluir la tasa, porque lo más probable
+        // es que el mensaje ni haya llegado.
+        $this->prospecto(['contact_day' => 1, 'last_contact_method' => 'whatsapp', 'replied_at' => now()]);
+        $this->prospecto(['contact_day' => 1, 'last_contact_method' => 'whatsapp']);
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->prospecto(['contact_day' => 1, 'last_contact_method' => 'whatsapp', 'has_whatsapp' => null, 'notes' => null]);
+        }
+
+        $embudo = collect(\App\Support\CargaDeTrabajo::embudo($this->vendedor->id))->keyBy('etapa');
+
+        $this->assertSame(5, $embudo['Contactados']['valor']);
+        $this->assertSame(2, $embudo['Con número verificado']['valor']);
+        $this->assertSame(50, $embudo['Contestaron']['tasa']);
     }
 
     // ── Verificar antes de escribir ──────────────────────────────

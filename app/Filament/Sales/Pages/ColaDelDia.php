@@ -4,7 +4,9 @@ namespace App\Filament\Sales\Pages;
 
 use App\Filament\Sales\Resources\ProspectResource;
 use App\Models\Prospect;
+use App\Models\TipDeVenta;
 use App\Support\CargaDeTrabajo;
+use App\Support\SiguientePaso;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
@@ -133,6 +135,71 @@ class ColaDelDia extends Page
     public function ligaParaVerificar(Prospect $prospecto): string
     {
         return ProspectResource::buildContextualWhatsappUrl($prospecto);
+    }
+
+    /** Lo único que toca hacer con este prospecto ahora. */
+    public function siguientePaso(Prospect $prospecto): array
+    {
+        return SiguientePaso::para($prospecto);
+    }
+
+    /**
+     * La demo se hizo.
+     *
+     * Este botón no existía: `demo_completed_at` solo se podía llenar desde una
+     * sección colapsada del formulario de edición, así que nadie lo llenaba y
+     * el embudo mostraba cero demos hechas para siempre. Sin ese dato, la tasa
+     * de cierre —la única que falta por conocer— no se puede medir.
+     */
+    public function marcarDemoHecha(int $id): void
+    {
+        $prospecto = Prospect::where('assigned_to_sales_rep_id', auth()->id())->find($id);
+
+        if (! $prospecto || $prospecto->demo_completed_at) {
+            return;
+        }
+
+        $prospecto->update([
+            'demo_completed_at' => now(),
+            'status' => $prospecto->status === 'converted' ? 'converted' : 'interested',
+        ]);
+
+        Notification::make()
+            ->title('Demo registrada')
+            ->body('Ahora lo que sigue es pedir el cierre, con dos opciones. El botón ya lo trae listo.')
+            ->success()
+            ->send();
+    }
+
+    /**
+     * El consejo que toca, pegado a la acción que está por hacer.
+     *
+     * Aparece arriba del botón y no en una pantalla de consejos: una lista de
+     * veinticinco se lee una vez y no se vuelve a abrir. Rota entre los de esa
+     * etapa, para que no salga siempre el mismo, y se deja de ver cuando la
+     * persona dice que ya le sale solo.
+     */
+    public function tipDe(string $etapa): ?array
+    {
+        $tip = TipDeVenta::paraMostrar((int) auth()->id(), $etapa);
+
+        if ($tip) {
+            TipDeVenta::anotarQueSeVio((int) auth()->id(), $tip['clave']);
+        }
+
+        return $tip;
+    }
+
+    /** "Ya me sale solo": deja de aparecer, y vuelve a repaso en 15 días. */
+    public function yaMeSaleSolo(string $clave): void
+    {
+        TipDeVenta::marcarDominado((int) auth()->id(), $clave);
+
+        Notification::make()
+            ->title('Listo, ya no te lo repito')
+            ->body('Vuelve una vez en 15 días, nada más para comprobar que sigue saliendo solo.')
+            ->success()
+            ->send();
     }
 
     /** Se abre el cuadro para reportar algo de este prospecto. */
