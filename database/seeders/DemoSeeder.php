@@ -392,11 +392,17 @@ class DemoSeeder extends Seeder
             }
         }
 
-        // Citas futuras (esta semana y siguiente)
+        // Citas futuras (esta semana y la siguiente).
+        //
+        // Solo se salta el domingo, no el fin de semana entero. Los sábados
+        // muchos consultorios atienden, pero sobre todo: saltándolos, un
+        // viernes la pantalla de "los recordatorios de mañana" amanecía
+        // vacía — y esa es justo la que se enseña en la demo, porque es la
+        // que resuelve lo que los dentistas dicen que les duele.
         $futureStatuses = ['scheduled', 'scheduled', 'confirmed', 'confirmed', 'scheduled'];
         for ($day = 0; $day <= 9; $day++) {
             $date = now()->addDays($day);
-            if ($date->isWeekend()) continue;
+            if ($date->isSunday()) continue;
 
             $slotsUsed = rand(3, 7);
             for ($slot = 0; $slot < $slotsUsed; $slot++) {

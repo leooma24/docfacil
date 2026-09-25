@@ -65,6 +65,26 @@ class ElDemoSiempreExisteTest extends TestCase
         $this->assertTrue((bool) $clinica->is_demo);
     }
 
+    public function test_el_demo_tiene_citas_para_manana(): void
+    {
+        // La pantalla que se enseña en la demo es la de los recordatorios del
+        // día siguiente. Con el seeder saltándose los fines de semana, un
+        // viernes esa pantalla amanecía vacía: la demo se caía justo en lo
+        // único que el dentista pidió ver.
+        $this->travelTo(now()->next('friday')->setTime(10, 0));
+
+        $this->sembrarComoEnProduccion();
+
+        $clinicaId = Clinic::withoutGlobalScopes()->where('slug', 'clinica-dental-sonrisas-cdmx')->value('id');
+
+        $manana = \App\Models\Appointment::withoutGlobalScopes()
+            ->where('clinic_id', $clinicaId)
+            ->whereDate('starts_at', today()->addDay())
+            ->count();
+
+        $this->assertGreaterThan(0, $manana, 'Un viernes, la pantalla de recordatorios de mañana sale vacía.');
+    }
+
     public function test_el_demo_tiene_con_que_enseñarse(): void
     {
         $this->sembrarComoEnProduccion();
