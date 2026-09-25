@@ -29,9 +29,9 @@
     {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:title" content="DocFácil — Software para Consultorio Dental en México">
     <meta property="og:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:type" content="image/png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="DocFácil — Software para consultorios dentales">
@@ -44,7 +44,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil — Software para Consultorio Dental en México">
     <meta name="twitter:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta name="twitter:image:alt" content="DocFácil — Software para consultorios dentales">
     <script type="application/ld+json">
     {

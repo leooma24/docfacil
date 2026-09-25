@@ -18,7 +18,7 @@
     {{-- OpenGraph --}}
     <meta property="og:title" content="Software para Consultorios Dentales en {{ $city }} — DocFácil">
     <meta property="og:description" content="DocFácil ayuda a dentistas en {{ $city }} a recuperar pacientes que no llegan, digitalizar el expediente y mandar recetas profesionales por WhatsApp. 15 días gratis.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="DocFácil — Software para dentistas en {{ $city }}">
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Software para Consultorios Dentales en {{ $city }} — DocFácil">
     <meta name="twitter:description" content="Recordatorios WhatsApp, odontograma digital y recetas PDF para dentistas en {{ $city }}. Prueba 15 días gratis.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
 
     <link rel="canonical" href="{{ url("/software-dental/{$slug}") }}">
     <link rel="preconnect" href="https://fonts.bunny.net">

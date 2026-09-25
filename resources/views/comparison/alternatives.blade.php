@@ -13,7 +13,7 @@
 
     <meta property="og:title" content="Alternativas a {{ $competitor['name'] }} en México · Mejores Opciones">
     <meta property="og:description" content="Comparamos las mejores alternativas a {{ $competitor['name'] }} para consultorios dentales en México.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="{{ url("/alternativas-a-{$slug}") }}">

@@ -14,7 +14,7 @@
     {{-- OpenGraph --}}
     <meta property="og:title" content="DocFácil vs {{ $competitor['name'] }} — Comparativa Honesta">
     <meta property="og:description" content="Comparativa de DocFácil contra {{ $competitor['name'] }}: precio, funciones, NOM-004, soporte. Para consultorios dentales en México.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="{{ url("/vs/{$slug}") }}">
@@ -25,7 +25,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil vs {{ $competitor['name'] }} — Comparativa">
     <meta name="twitter:description" content="Comparativa honesta para consultorios dentales en México.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
 
     <link rel="canonical" href="{{ url("/vs/{$slug}") }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
