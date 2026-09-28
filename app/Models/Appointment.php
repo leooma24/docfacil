@@ -49,6 +49,28 @@ class Appointment extends Model
             ->setDescriptionForEvent(fn (string $eventName) => "Cita {$eventName}");
     }
 
+    /**
+     * Cómo se llama cada estado en español.
+     *
+     * Vive aquí y no dentro de una pantalla porque hay una que la ve el
+     * paciente: la de confirmar la cita decía "El estado actual es: confirmed",
+     * en inglés, porque leía una etiqueta que no existía y caía al valor crudo
+     * de la base.
+     */
+    public const ESTADOS = [
+        'scheduled' => 'Programada',
+        'confirmed' => 'Confirmada',
+        'in_progress' => 'En curso',
+        'completed' => 'Completada',
+        'cancelled' => 'Cancelada',
+        'no_show' => 'No asistió',
+    ];
+
+    public function getStatusLabelAttribute(): string
+    {
+        return self::ESTADOS[$this->status] ?? $this->status;
+    }
+
     protected $fillable = [
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',

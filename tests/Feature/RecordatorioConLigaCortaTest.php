@@ -144,6 +144,18 @@ class RecordatorioConLigaCortaTest extends TestCase
         $this->assertSame('scheduled', $this->cita->fresh()->status);
     }
 
+    public function test_la_pagina_le_habla_al_paciente_en_espanol(): void
+    {
+        // Decía "El estado actual es: confirmed". El paciente no tiene por qué
+        // saber cómo se llaman los estados en la base de datos.
+        $this->cita->update(['status' => 'confirmed']);
+
+        $this->get(RecordatorioDeCita::ligaDirecta($this->cita))
+            ->assertOk()
+            ->assertSee('Confirmada')
+            ->assertDontSee('confirmed');
+    }
+
     // ── El choque de rutas ───────────────────────────────────────
 
     public function test_una_cita_con_id_largo_sigue_abriendo(): void

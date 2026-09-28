@@ -183,6 +183,12 @@ class Consultation extends Page implements HasForms
             if ($this->appointment->service) {
                 $this->payment_service_id = (string) $this->appointment->service_id;
                 $this->payment_amount = (string) $this->appointment->service->price;
+
+                // Y el motivo, con lo que ya se sabe. Si la cita se agendó
+                // para una limpieza, volver a escribir "limpieza" es trabajo
+                // de gratis. Queda editable: es un punto de partida, no un
+                // dato cerrado, y el doctor casi siempre agrega lo suyo.
+                $this->chief_complaint = $this->appointment->service->name;
             }
         }
     }
