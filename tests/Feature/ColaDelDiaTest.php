@@ -495,6 +495,12 @@ class ColaDelDiaTest extends TestCase
 
     public function test_cuenta_los_enviados_de_hoy_y_las_respuestas(): void
     {
+        // Parados a media semana a proposito: "enviados esta semana" cuenta
+        // desde el lunes, y abajo se fabrica un envio de hace dos dias. Un
+        // lunes o un martes esos dos dias caen en la semana pasada y la prueba
+        // fallaba sin que nada estuviera roto.
+        $this->travelTo(now()->startOfWeek()->addDays(3)->setTime(10, 0));
+
         $this->prospecto([
             'status' => 'contacted',
             'contact_day' => 1,

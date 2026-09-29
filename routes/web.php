@@ -5,6 +5,7 @@ use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\AppointmentConfirmationController;
+use App\Http\Controllers\EstrenarCuentaController;
 use App\Http\Controllers\PatientPortalActivationController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
@@ -167,6 +168,17 @@ Route::middleware(['signed', 'throttle:10,1'])->group(function () {
         ->name('paciente.activar');
     Route::post('/paciente/activar/{patient}', [PatientPortalActivationController::class, 'store'])
         ->name('paciente.activar.store');
+});
+
+// El doctor elige su contrasena para estrenar su cuenta, cuando se le dejo el
+// consultorio armado en vez de que se registrara el. Dura 7 dias: la abre
+// cuando sale de consulta, no en el minuto en que se genero. La de "olvide mi
+// contrasena" sigue durando 60 minutos, que para eso esta bien.
+Route::middleware(['signed', 'throttle:10,1'])->group(function () {
+    Route::get('/doctor/estrenar/{user}', [EstrenarCuentaController::class, 'show'])
+        ->name('doctor.estrenar');
+    Route::post('/doctor/estrenar/{user}', [EstrenarCuentaController::class, 'store'])
+        ->name('doctor.estrenar.store');
 });
 
 // Demo para vendedores: crea un consultorio temporal con datos falsos y deja
