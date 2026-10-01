@@ -78,8 +78,9 @@
     .fi-sidebar,
     .fi-sidebar-nav,
     aside.fi-sidebar > * {
-        background: linear-gradient(180deg, #042f2e 0%, #064e3b 40%, #065f46 100%) !important;
-        background-color: #042f2e !important;
+        /* Plano, casi negro con verde: el degradado de antes se veía de otra época. */
+        background: #072522 !important;
+        background-color: #072522 !important;
     }
 
     .fi-sidebar .fi-sidebar-header {
@@ -120,6 +121,41 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
 
+    aside.fi-sidebar {
+        border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+        background-image: radial-gradient(120% 40% at 0% 0%, rgba(45, 212, 191, 0.10), transparent 60%) !important;
+    }
+    .fi-sidebar .fi-sidebar-header { border-bottom: 0 !important; }
+
+    /* Consultorio y botón principal */
+    .dfm-top { padding: 0.25rem 0.1rem 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .dfm-clinica { display: flex; align-items: center; gap: 0.65rem; padding: 0 0.35rem; }
+    .dfm-avatar { width: 2.25rem; height: 2.25rem; flex: 0 0 2.25rem; border-radius: 0.6rem; display: grid; place-items: center;
+        background: linear-gradient(140deg, #2dd4bf, #0d9488); color: #042f2e; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.02em; }
+    .dfm-avatar-img { object-fit: cover; background: #ffffff; height: 2.25rem !important; max-height: 2.25rem !important; }
+    .dfm-clinica-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .dfm-clinica-nombre { color: #ffffff; font-weight: 700; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dfm-clinica-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dfm-cta { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.85rem; border-radius: 0.75rem;
+        background: #2dd4bf; color: #042f2e !important; box-shadow: 0 8px 22px -10px rgba(45, 212, 191, 0.7), inset 0 1px 0 rgba(255,255,255,0.35);
+        transition: transform .15s ease, background .15s ease; }
+    .dfm-cta:hover { background: #5eead4; }
+    .dfm-cta:active { transform: translateY(1px) scale(0.99); }
+    .dfm-cta svg { flex: 0 0 18px; }
+    .dfm-cta-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+    .dfm-cta-t { font-weight: 800; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dfm-cta-s { font-size: 0.72rem; font-weight: 600; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Plan y prueba, abajo */
+    .dfm-plan { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0.75rem 0.9rem; padding: 0.7rem 0.8rem; border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); }
+    .dfm-plan:hover { background: rgba(255, 255, 255, 0.08); }
+    .dfm-plan-t { color: #ffffff; font-weight: 700; font-size: 0.82rem; }
+    .dfm-plan-prueba .dfm-plan-t { color: #fde68a; }
+    .dfm-plan-s { color: rgba(255, 255, 255, 0.55); font-size: 0.72rem; }
+    .dfm-barra { display: block; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+    .dfm-barra > span { display: block; height: 100%; border-radius: inherit; background: #fbbf24; }
+
     /* El nombre junto al logo, solo en el menú (el login usa el mismo logo
        sobre fondo claro). */
     .fi-sidebar .fi-sidebar-header a { display: flex; align-items: center; gap: 0.6rem; }
@@ -132,8 +168,9 @@
         letter-spacing: -0.01em;
     }
     .fi-sidebar:not(.fi-sidebar-open) .fi-sidebar-header a::after,
-    .fi-sidebar:not(.fi-sidebar-open) .docfacil-menu-consultorio,
-    .fi-sidebar:not(.fi-sidebar-open) .docfacil-menu-plan { display: none !important; }
+    .fi-sidebar:not(.fi-sidebar-open) .dfm-top,
+    .fi-sidebar:not(.fi-sidebar-open) .dfm-plan { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { .dfm-cta { transition: none; } }
 
     /* Renglones del menú: sin caja; el fondo aparece al pasar y en el activo. */
     .fi-sidebar .fi-sidebar-nav { padding: 0.75rem 0.75rem 1.5rem !important; }
@@ -163,8 +200,11 @@
        .fi-active cuando uno de sus renglones lo está; apuntarle al grupo
        pintaba como activos a todos sus renglones. */
     .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button {
-        background: rgba(255, 255, 255, 0.13) !important;
-        box-shadow: inset 3px 0 0 #5eead4 !important;
+        background: rgba(45, 212, 191, 0.12) !important;
+        position: relative;
+    }
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button::before {
+        content: ''; position: absolute; left: -0.55rem; top: 22%; bottom: 22%; width: 3px; border-radius: 999px; background: #5eead4;
     }
 
     .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button .fi-sidebar-item-label {

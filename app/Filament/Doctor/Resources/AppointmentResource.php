@@ -38,7 +38,11 @@ class AppointmentResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    /** Cuántas citas quedan hoy: lo primero que el doctor quiere saber. */
+    /**
+     * Cuántas citas quedan hoy: lo primero que el doctor quiere saber. Las de
+     * horas que ya pasaron no cuentan (con 15 minutos de tolerancia), igual
+     * que en el botón principal del menú.
+     */
     public static function getNavigationBadge(): ?string
     {
         $clinicId = auth()->user()?->clinic_id;
@@ -47,7 +51,7 @@ class AppointmentResource extends Resource
         }
 
         $n = Appointment::where('clinic_id', $clinicId)
-            ->whereDate('starts_at', today())
+            ->whereBetween('starts_at', [now()->subMinutes(15), today()->endOfDay()])
             ->whereIn('status', ['scheduled', 'confirmed', 'in_progress'])
             ->count();
 
@@ -56,7 +60,7 @@ class AppointmentResource extends Resource
 
     public static function getNavigationBadgeTooltip(): ?string
     {
-        return 'Citas pendientes de hoy';
+        return 'Citas que faltan hoy';
     }
 
     public static function form(Form $form): Form

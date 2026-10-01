@@ -80,7 +80,9 @@ class MenuDelDoctorTest extends TestCase
     {
         $paciente = Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => 'Ana', 'last_name' => 'Ruiz']);
         $doctor = Doctor::first();
-        foreach ([10, 12] as $hora) {
+        \Illuminate\Support\Carbon::setTestNow(today()->setTime(11, 0));
+        // La de las 9 ya pasó; faltan la de las 12 y la de las 13.
+        foreach ([9, 12, 13] as $hora) {
             Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $doctor->id, 'patient_id' => $paciente->id,
                 'starts_at' => today()->setHour($hora), 'ends_at' => today()->setHour($hora + 1), 'status' => 'scheduled']);
         }
@@ -97,6 +99,7 @@ class MenuDelDoctorTest extends TestCase
         $this->assertSame('2', (string) $badges['Citas']);
         $this->assertSame('1', (string) $badges['Cobros']);
         $this->assertNull($badges['Pacientes']);
+        \Illuminate\Support\Carbon::setTestNow();
     }
 
     public function test_el_menu_dice_en_que_consultorio_esta_y_cuanto_le_queda_de_prueba(): void
@@ -112,5 +115,39 @@ class MenuDelDoctorTest extends TestCase
         $this->clinica->update(['plan' => 'profesional', 'trial_ends_at' => null, 'plan_ends_at' => now()->addMonth()]);
 
         $this->get('/doctor/citas')->assertOk()->assertSee('Plan Pro');
+    }
+
+    // ── El botón principal sabe a quién sigue ───────────────────
+
+    private function citaHoy(string $estado, int $minutos, string $nombre = 'Ana Sofía'): Appointment
+    {
+        $paciente = Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => $nombre, 'last_name' => 'Martínez']);
+
+        return Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => Doctor::first()->id, 'patient_id' => $paciente->id,
+            'starts_at' => now()->addMinutes($minutos), 'ends_at' => now()->addMinutes($minutos + 30), 'status' => $estado]);
+    }
+
+    public function test_el_boton_principal_abre_la_consulta_del_siguiente_paciente(): void
+    {
+        $cita = $this->citaHoy('confirmed', 20);
+
+        $this->get('/doctor/citas')
+            ->assertSee('Atender a Ana Sofía')
+            ->assertSee('consulta?appointment=' . $cita->id, false);
+    }
+
+    public function test_si_ya_hay_una_consulta_abierta_el_boton_la_continua(): void
+    {
+        $this->citaHoy('confirmed', 30, 'Ana Sofía');
+        $this->citaHoy('in_progress', -10, 'Diego');
+
+        $this->get('/doctor/citas')->assertSee('Continuar con Diego')->assertDontSee('Atender a Ana Sofía');
+    }
+
+    public function test_sin_citas_pendientes_hoy_el_boton_es_nueva_consulta(): void
+    {
+        $this->citaHoy('confirmed', 60 * 24 * 2); // pasado mañana
+
+        $this->get('/doctor/citas')->assertSee('Nueva consulta')->assertDontSee('Atender a');
     }
 }
