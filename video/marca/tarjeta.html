@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1080px; height: 1350px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+         background: radial-gradient(circle at 30% 20%, #14b8a6 0%, #0d9488 35%, #0e7490 75%, #0c4a6e 100%); color: #fff;
+         font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; padding: 90px; }
+  img { width: 360px; margin-bottom: 70px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.25)); }
+  h1 { font-size: 76px; line-height: 1.08; font-weight: 800; letter-spacing: -.02em; }
+  p { font-size: 40px; line-height: 1.35; margin-top: 34px; opacity: .92; }
+  .pill { margin-top: 70px; background: #fff; color: #0f766e; font-weight: 800; font-size: 44px; padding: 26px 52px; border-radius: 999px; box-shadow: 0 16px 40px rgba(0,0,0,.22); }
+  .pie { margin-top: 56px; font-size: 34px; line-height: 1.5; opacity: .95; }
+  .pie b { font-weight: 800; }
+</style></head>
+<body>
+  <img src="../../public/images/logo_doc_facil_white.png" alt="">
+  <h1 id="t"></h1>
+  <p id="s"></p>
+  <div class="pill" id="b" hidden></div>
+  <div class="pie" id="f" hidden></div>
+  <script>
+    const q = new URLSearchParams(location.search);
+    for (const k of ['t', 's', 'b', 'f']) { const v = q.get(k); const el = document.getElementById(k); if (v) { el.innerHTML = v; el.hidden = false; } else if (k === 's') el.remove(); }
+  </script>
+</body></html>

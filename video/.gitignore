@@ -1,0 +1,6 @@
+# Lo que se genera al grabar y montar
+*.mp4
+*.webm
+**/audio/*.wav
+**/inicio.png
+**/cierre.png
