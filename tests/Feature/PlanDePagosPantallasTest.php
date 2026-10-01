@@ -156,6 +156,21 @@ class PlanDePagosPantallasTest extends TestCase
             ->assertSee('Ortodoncia')
             ->assertSee('1 vencida');
     }
+
+    public function test_la_cita_de_la_mensualidad_no_se_cobra_dos_veces(): void
+    {
+        $mensualidad = \App\Models\Service::create(['clinic_id' => $this->clinica->id, 'name' => 'Ortodoncia (mensualidad)', 'price' => 800, 'duration_minutes' => 30, 'is_active' => true]);
+        PaymentPlan::crear(['clinic_id' => $this->clinica->id, 'patient_id' => $this->paciente->id, 'service_id' => $mensualidad->id, 'description' => 'Ortodoncia',
+            'total' => 21000, 'down_payment' => 5000, 'installments_count' => 20, 'first_due_date' => '2026-10-01'], 'cash');
+
+        Livewire::test(\App\Filament\Doctor\Pages\Consultation::class)
+            ->set('data.walkin_patient_id', (string) $this->paciente->id)
+            ->set('data.walkin_service_id', (string) $mensualidad->id)
+            ->call('startWalkIn')
+            ->assertSet('payment_amount', '0')
+            ->set('currentStep', 4)
+            ->assertSee('Ortodoncia — mensualidad 1 de 20');
+    }
 }
 
 /** La liga para crear el plan desde un presupuesto, para no repetirla en la prueba. */

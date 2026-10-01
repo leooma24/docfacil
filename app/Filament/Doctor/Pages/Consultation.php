@@ -185,6 +185,25 @@ class Consultation extends Page implements HasForms
                 $this->payment_amount = (string) $this->appointment->service->price;
             }
             $this->proponerProcedimientos();
+            $this->noCobrarDobleLaMensualidad();
+        }
+    }
+
+    /**
+     * La cita del paciente de ortodoncia suele tener el servicio de la
+     * mensualidad. Si ese servicio es el de su plan, lo que se cobra es la
+     * mensualidad del plan, no el precio del servicio otra vez.
+     */
+    private function noCobrarDobleLaMensualidad(): void
+    {
+        $servicio = $this->appointment?->service_id;
+
+        if ($servicio && \App\Models\PaymentPlan::where('clinic_id', $this->appointment->clinic_id)
+            ->where('patient_id', $this->appointment->patient_id)
+            ->where('service_id', $servicio)
+            ->where('status', 'active')
+            ->exists()) {
+            $this->payment_amount = '0';
         }
     }
 
@@ -345,6 +364,7 @@ class Consultation extends Page implements HasForms
             $this->payment_amount = (string) $this->appointment->service->price;
         }
         $this->proponerProcedimientos();
+        $this->noCobrarDobleLaMensualidad();
 
         $this->isWalkIn = false;
         $this->currentStep = 1;
