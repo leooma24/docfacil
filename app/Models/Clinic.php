@@ -185,6 +185,14 @@ class Clinic extends Model
      *
      * Solo aplica al plan free: quien ya paga no está "en prueba".
      */
+    /**
+     * Add-ons que la prueba trae prendidos para que se vean funcionando. El
+     * presupuesto es lo que convierte el odontograma en dinero; al vencer
+     * la prueba vuelve a ser add-on, y la tienda lo sigue ofreciendo
+     * (planIncluyeFeature no lo cuenta como incluido).
+     */
+    public const ADD_ONS_EN_PRUEBA = ['treatment_plans'];
+
     public function enPruebaVigente(): bool
     {
         return $this->plan === 'free'
@@ -537,7 +545,8 @@ class Clinic extends Model
         // y la pagina de planes muestran como "Free". Es solo el permiso real
         // mientras la prueba sigue viva.
         if ($this->enPruebaVigente()) {
-            return in_array($feature, self::featuresForPlan('profesional'), true);
+            return in_array($feature, self::featuresForPlan('profesional'), true)
+                || in_array($feature, self::ADD_ONS_EN_PRUEBA, true);
         }
 
         // 1) Feature incluido en el plan base
