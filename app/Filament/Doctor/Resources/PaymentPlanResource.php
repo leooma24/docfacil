@@ -30,6 +30,8 @@ class PaymentPlanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
+    protected static ?string $navigationGroup = 'Dinero';
+
     protected static ?string $navigationLabel = 'Planes de pago';
 
     protected static ?string $modelLabel = 'Plan de pagos';
@@ -38,11 +40,31 @@ class PaymentPlanResource extends Resource
 
     protected static ?string $slug = 'planes-de-pago';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 3;
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+    }
+
+    /** Planes con mensualidades vencidas. */
+    public static function getNavigationBadge(): ?string
+    {
+        $clinicId = auth()->user()?->clinic_id;
+        $n = $clinicId ? PaymentPlan::where('clinic_id', $clinicId)->where('status', 'active')
+            ->whereHas('payments', fn ($q) => $q->withBalance()->whereDate('due_date', '<', today()))->count() : 0;
+
+        return $n ? (string) $n : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Pacientes con mensualidades vencidas';
     }
 
     public static function form(Form $form): Form

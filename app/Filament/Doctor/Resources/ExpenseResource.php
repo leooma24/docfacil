@@ -22,7 +22,7 @@ class ExpenseResource extends Resource
 {
     protected static ?string $model = Expense::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-down';
 
     protected static ?string $navigationLabel = 'Gastos';
 
@@ -32,9 +32,9 @@ class ExpenseResource extends Resource
 
     protected static ?string $slug = 'gastos';
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Dinero';
 
-    protected static ?int $navigationSort = 45;
+    protected static ?int $navigationSort = 4;
 
     public static function getEloquentQuery(): Builder
     {

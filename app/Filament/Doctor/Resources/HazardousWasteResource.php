@@ -23,6 +23,8 @@ class HazardousWasteResource extends Resource
 {
     protected static ?string $model = HazardousWaste::class;
 
+    protected static ?string $navigationGroup = 'Inventario';
+
     protected static ?string $slug = 'residuos';
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
@@ -33,7 +35,7 @@ class HazardousWasteResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Residuos';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 3;
 
     /**
      * El inventario va en Pro. Se cierran las dos puertas: la navegacion y el

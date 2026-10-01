@@ -24,7 +24,7 @@ class AddOns extends Page
 
     protected static string $view = 'filament.doctor.pages.add-ons';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 6;
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 

@@ -25,13 +25,15 @@ class WaitlistEntryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-queue-list';
 
+    protected static ?string $navigationGroup = 'Pacientes';
+
     protected static ?string $navigationLabel = 'Lista de espera';
 
     protected static ?string $modelLabel = 'Paciente en espera';
 
     protected static ?string $pluralModelLabel = 'Lista de espera';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 6;
 
     public static function getEloquentQuery(): Builder
     {

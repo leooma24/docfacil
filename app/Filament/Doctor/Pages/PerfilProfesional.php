@@ -33,7 +33,7 @@ class PerfilProfesional extends Page implements HasForms
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 
-    protected static ?int $navigationSort = 97;
+    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.doctor.pages.perfil-profesional';
 

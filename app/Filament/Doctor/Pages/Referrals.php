@@ -15,9 +15,9 @@ class Referrals extends Page
 
     protected static ?string $slug = 'referidos';
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Mi cuenta';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 8;
 
     protected static string $view = 'filament.doctor.pages.referrals';
 

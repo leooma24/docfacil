@@ -88,10 +88,9 @@
         background: transparent !important;
     }
 
-    .fi-sidebar .fi-sidebar-header img,
-    .fi-sidebar img {
-        height: 3.5rem !important;
-        max-height: 3.5rem !important;
+    .fi-sidebar .fi-sidebar-header img {
+        height: 2.4rem !important;
+        max-height: 2.4rem !important;
     }
 
     /* Collapse button */
@@ -121,59 +120,99 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
 
-    /* Hover */
-    .fi-sidebar .fi-sidebar-item:hover,
-    .fi-sidebar li:hover > a,
-    .fi-sidebar a.fi-sidebar-item-button:hover {
-        background: rgba(255, 255, 255, 0.06) !important;
-        border-radius: 0.5rem;
+    /* El nombre junto al logo, solo en el menú (el login usa el mismo logo
+       sobre fondo claro). */
+    .fi-sidebar .fi-sidebar-header a { display: flex; align-items: center; gap: 0.6rem; }
+    .fi-sidebar .fi-sidebar-header img { height: 2.4rem !important; max-height: 2.4rem !important; }
+    .fi-sidebar .fi-sidebar-header a::after {
+        content: 'DocFácil';
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: -0.01em;
+    }
+    .fi-sidebar:not(.fi-sidebar-open) .fi-sidebar-header a::after,
+    .fi-sidebar:not(.fi-sidebar-open) .docfacil-menu-consultorio,
+    .fi-sidebar:not(.fi-sidebar-open) .docfacil-menu-plan { display: none !important; }
+
+    /* Renglones del menú: sin caja; el fondo aparece al pasar y en el activo. */
+    .fi-sidebar .fi-sidebar-nav { padding: 0.75rem 0.75rem 1.5rem !important; }
+    .fi-sidebar .fi-sidebar-nav { row-gap: 0 !important; gap: 0 !important; }
+    /* Filament le pone margen negativo a los lados: el activo se pegaba a la orilla. */
+    .fi-sidebar .fi-sidebar-nav-groups { row-gap: 1.1rem !important; margin: 0 !important; }
+    .fi-sidebar .fi-sidebar-group-items { row-gap: 2px !important; }
+    .fi-sidebar .fi-sidebar-item-button {
+        padding: 0.5rem 0.7rem !important;
+        border-radius: 0.6rem !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: 0 !important;
+        transition: background .15s ease, color .15s ease !important;
     }
 
-    .fi-sidebar .fi-sidebar-item:hover .fi-sidebar-item-label,
-    .fi-sidebar .fi-sidebar-item:hover .fi-sidebar-item-icon {
+    .fi-sidebar .fi-sidebar-item-button:hover {
+        background: rgba(255, 255, 255, 0.07) !important;
+    }
+
+    .fi-sidebar .fi-sidebar-item-button:hover .fi-sidebar-item-label,
+    .fi-sidebar .fi-sidebar-item-button:hover .fi-sidebar-item-icon {
         color: #ffffff !important;
     }
 
-    /* Active item */
-    .fi-sidebar .fi-sidebar-item.fi-active,
-    .fi-sidebar .fi-sidebar-item.fi-active > a,
-    .fi-sidebar .fi-active .fi-sidebar-item-button {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 0.5rem;
-        border-left: 3px solid #5eead4 !important;
+    /* Solo el renglón en el que está el doctor. El grupo también lleva
+       .fi-active cuando uno de sus renglones lo está; apuntarle al grupo
+       pintaba como activos a todos sus renglones. */
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button {
+        background: rgba(255, 255, 255, 0.13) !important;
+        box-shadow: inset 3px 0 0 #5eead4 !important;
     }
 
-    .fi-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-label,
-    .fi-sidebar .fi-active .fi-sidebar-item-label {
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button .fi-sidebar-item-label {
         color: #ffffff !important;
         font-weight: 600 !important;
     }
 
-    .fi-sidebar .fi-sidebar-item.fi-active .fi-sidebar-item-icon,
-    .fi-sidebar .fi-active .fi-sidebar-item-icon {
+    .fi-sidebar .fi-sidebar-item.fi-active > .fi-sidebar-item-button .fi-sidebar-item-icon {
         color: #5eead4 !important;
     }
 
-    /* Group labels */
+    /* Títulos de grupo */
     .fi-sidebar .fi-sidebar-group-label,
     .fi-sidebar span.fi-sidebar-group-label,
     .fi-sidebar .fi-sidebar-group > button > span {
-        color: rgba(255, 255, 255, 0.35) !important;
-        font-size: 0.65rem !important;
+        color: rgba(255, 255, 255, 0.42) !important;
+        font-size: 0.68rem !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.1em !important;
+        letter-spacing: 0.12em !important;
         font-weight: 700 !important;
+    }
+
+    .fi-sidebar .fi-sidebar-group > button,
+    .fi-sidebar .fi-sidebar-group-button {
+        padding: 0.25rem 0.7rem !important;
     }
 
     .fi-sidebar .fi-sidebar-group-collapse-button,
     .fi-sidebar .fi-sidebar-group button svg {
-        color: rgba(255, 255, 255, 0.4) !important;
+        color: rgba(255, 255, 255, 0.35) !important;
     }
 
-    /* Sidebar badge (notification counts etc) */
-    .fi-sidebar .fi-badge {
-        background: rgba(255, 255, 255, 0.15) !important;
+    /* Contadores del menú: chicos y con su color (rojo = vencido). */
+    .fi-sidebar .fi-sidebar-item .fi-badge {
+        background: rgba(255, 255, 255, 0.16) !important;
         color: #ffffff !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        padding: 0.05rem 0.5rem !important;
+        min-width: 1.35rem;
+        justify-content: center;
+        font-size: 0.72rem !important;
+        box-shadow: none !important;
+        border: 0 !important;
+    }
+
+    .fi-sidebar .fi-sidebar-item .fi-badge.fi-color-danger {
+        background: #ef4444 !important;
     }
 
     /* ===== TOP BAR ===== */
@@ -631,19 +670,6 @@
     .fi-modal-close-overlay {
         background: rgba(15, 23, 42, 0.4) !important;
         backdrop-filter: blur(8px);
-    }
-
-    /* ====== SIDEBAR NAV ITEMS - subtle glow on hover ====== */
-    .fi-sidebar-item-button {
-        border-radius: 0.75rem !important;
-        transition: all 0.2s !important;
-    }
-
-    .fi-sidebar-item.fi-active .fi-sidebar-item-button {
-        background: linear-gradient(135deg, rgba(13,148,136,0.4), rgba(8,145,178,0.3)) !important;
-        box-shadow:
-            0 4px 12px rgba(13, 148, 136, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
     }
 
     /* ====== NOTIFICATIONS ====== */

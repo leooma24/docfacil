@@ -23,9 +23,9 @@ class Roadmap extends Page
 
     protected static ?string $slug = 'roadmap';
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Mi cuenta';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 9;
 
     protected static string $view = 'filament.doctor.pages.roadmap';
 

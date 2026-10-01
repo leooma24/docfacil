@@ -37,7 +37,7 @@ class Consultation extends Page implements HasForms
 
     protected static bool $shouldRegisterNavigation = true;
 
-    protected static ?int $navigationSort = -1;
+    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.doctor.pages.consultation';
 

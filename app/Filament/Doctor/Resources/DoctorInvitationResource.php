@@ -42,13 +42,13 @@ class DoctorInvitationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-    protected static ?string $navigationLabel = 'Invitar Doctores';
+    protected static ?string $navigationLabel = 'Invitar doctores';
 
     protected static ?string $modelLabel = 'Invitación';
 
     protected static ?string $pluralModelLabel = 'Invitaciones';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationGroup = 'Consultorio';
 

@@ -30,6 +30,8 @@ class PrescriptionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
+    protected static ?string $navigationGroup = 'Pacientes';
+
     protected static ?string $navigationLabel = 'Recetas';
 
     protected static ?string $modelLabel = 'Receta';

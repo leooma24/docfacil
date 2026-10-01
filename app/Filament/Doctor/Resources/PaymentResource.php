@@ -34,13 +34,34 @@ class PaymentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
+    protected static ?string $navigationGroup = 'Dinero';
+
     protected static ?string $navigationLabel = 'Cobros';
 
     protected static ?string $modelLabel = 'Cobro';
 
     protected static ?string $pluralModelLabel = 'Cobros';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 1;
+
+    /** Cobros vencidos: lo que ya debió entrar y no ha entrado. */
+    public static function getNavigationBadge(): ?string
+    {
+        $clinicId = auth()->user()?->clinic_id;
+        $n = $clinicId ? Payment::where('clinic_id', $clinicId)->overdue()->count() : 0;
+
+        return $n ? (string) $n : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Cobros vencidos';
+    }
 
     public static function form(Form $form): Form
     {

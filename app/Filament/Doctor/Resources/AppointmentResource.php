@@ -28,7 +28,7 @@ class AppointmentResource extends Resource
 
     protected static ?string $model = Appointment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $navigationLabel = 'Citas';
 
@@ -36,7 +36,28 @@ class AppointmentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Citas';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 3;
+
+    /** Cuántas citas quedan hoy: lo primero que el doctor quiere saber. */
+    public static function getNavigationBadge(): ?string
+    {
+        $clinicId = auth()->user()?->clinic_id;
+        if (! $clinicId) {
+            return null;
+        }
+
+        $n = Appointment::where('clinic_id', $clinicId)
+            ->whereDate('starts_at', today())
+            ->whereIn('status', ['scheduled', 'confirmed', 'in_progress'])
+            ->count();
+
+        return $n ? (string) $n : null;
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Citas pendientes de hoy';
+    }
 
     public static function form(Form $form): Form
     {

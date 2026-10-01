@@ -31,7 +31,7 @@ class ConsultationFieldsSettings extends Page
 
     protected static string $view = 'filament.doctor.pages.consultation-fields-settings';
 
-    protected static ?int $navigationSort = 97;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 

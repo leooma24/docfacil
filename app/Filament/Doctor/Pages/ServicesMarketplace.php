@@ -20,9 +20,9 @@ class ServicesMarketplace extends Page
 
     protected static bool $shouldRegisterNavigation = true;
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Mi cuenta';
 
-    protected static ?int $navigationSort = 95;
+    protected static ?int $navigationSort = 7;
 
     protected static string $view = 'filament.doctor.pages.services-marketplace';
 

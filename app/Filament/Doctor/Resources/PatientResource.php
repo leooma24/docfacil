@@ -30,6 +30,8 @@ class PatientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    protected static ?string $navigationGroup = 'Pacientes';
+
     protected static ?string $navigationLabel = 'Pacientes';
 
     protected static ?string $modelLabel = 'Paciente';

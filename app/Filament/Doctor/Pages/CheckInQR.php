@@ -21,7 +21,7 @@ class CheckInQR extends Page
 
     protected static ?string $navigationGroup = 'Consultorio';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 2;
 
     protected static function planFeature(): string
     {

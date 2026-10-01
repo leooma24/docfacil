@@ -45,7 +45,7 @@ class ConsentFormResource extends Resource
 
     protected static ?string $model = ConsentForm::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationLabel = 'Consentimientos';
 
@@ -53,9 +53,9 @@ class ConsentFormResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Consentimientos';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 5;
 
-    protected static ?string $navigationGroup = 'Dental';
+    protected static ?string $navigationGroup = 'Pacientes';
 
     public static function form(Form $form): Form
     {

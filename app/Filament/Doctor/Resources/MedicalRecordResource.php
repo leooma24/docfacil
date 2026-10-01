@@ -29,13 +29,15 @@ class MedicalRecordResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Expediente Clínico';
+    protected static ?string $navigationGroup = 'Pacientes';
+
+    protected static ?string $navigationLabel = 'Expediente clínico';
 
     protected static ?string $modelLabel = 'Consulta';
 
     protected static ?string $pluralModelLabel = 'Expediente Clínico';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

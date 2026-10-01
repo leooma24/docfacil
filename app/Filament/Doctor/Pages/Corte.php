@@ -26,15 +26,15 @@ class Corte extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-pie';
 
-    protected static ?string $navigationLabel = 'Corte';
+    protected static ?string $navigationLabel = 'Corte del mes';
 
     protected static ?string $title = 'Corte del mes';
 
     protected static ?string $slug = 'corte';
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Dinero';
 
-    protected static ?int $navigationSort = 46;
+    protected static ?int $navigationSort = 5;
 
     protected static string $view = 'filament.doctor.pages.corte';
 

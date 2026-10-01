@@ -28,6 +28,8 @@ class SupplyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
+    protected static ?string $navigationGroup = 'Inventario';
+
     protected static ?string $navigationLabel = 'Insumos';
 
     protected static ?string $modelLabel = 'Insumo';
@@ -36,7 +38,7 @@ class SupplyResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 1;
 
     /**
      * El inventario va en Pro. Se cierran las dos puertas: la navegacion y el

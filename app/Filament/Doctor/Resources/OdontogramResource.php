@@ -54,9 +54,9 @@ class OdontogramResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Odontogramas';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Dental';
+    protected static ?string $navigationGroup = 'Pacientes';
 
     public static function form(Form $form): Form
     {

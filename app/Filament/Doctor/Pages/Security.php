@@ -9,7 +9,9 @@ use PragmaRX\Google2FAQRCode\Google2FA;
 
 class Security extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
+
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Seguridad';
 

@@ -26,7 +26,9 @@ class SupplyMovementResource extends Resource
 
     protected static ?string $slug = 'movimientos-insumos';
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $navigationIcon = 'heroicon-o-arrows-right-left';
+
+    protected static ?string $navigationGroup = 'Inventario';
 
     protected static ?string $navigationLabel = 'Movimientos';
 
@@ -34,7 +36,7 @@ class SupplyMovementResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Movimientos';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 2;
 
     /**
      * El inventario va en Pro. Se cierran las dos puertas: la navegacion y el

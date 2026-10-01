@@ -8,7 +8,7 @@ class Upgrade extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-circle';
 
-    protected static ?string $navigationLabel = 'Mi Plan';
+    protected static ?string $navigationLabel = 'Mi plan';
 
     protected static ?string $title = 'Actualizar Plan';
 
@@ -16,9 +16,9 @@ class Upgrade extends Page
 
     protected static bool $shouldRegisterNavigation = true;
 
-    protected static ?string $navigationGroup = 'Consultorio';
+    protected static ?string $navigationGroup = 'Mi cuenta';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 5;
 
     protected static string $view = 'filament.doctor.pages.upgrade';
 

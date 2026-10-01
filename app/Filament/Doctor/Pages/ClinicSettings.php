@@ -34,7 +34,7 @@ class ClinicSettings extends Page implements HasForms
 
     protected static string $view = 'filament.doctor.pages.clinic-settings';
 
-    protected static ?int $navigationSort = 98;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 

@@ -15,7 +15,7 @@ class PredictiveInsights extends Page
 
     protected static ?string $slug = 'inteligencia';
 
-    protected static ?int $navigationSort = 95;
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationGroup = 'Consultorio';
 

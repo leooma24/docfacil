@@ -24,7 +24,9 @@ class TreatmentPlanResource extends Resource
 
     protected static ?string $model = TreatmentPlan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
+
+    protected static ?string $navigationGroup = 'Dinero';
 
     protected static ?string $navigationLabel = 'Presupuestos';
 
@@ -32,7 +34,7 @@ class TreatmentPlanResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Presupuestos';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 2;
 
     public static function getEloquentQuery(): Builder
     {

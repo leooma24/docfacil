@@ -41,6 +41,15 @@ class DoctorPanelProvider extends PanelProvider
             ->font('Inter')
             ->plugin(\Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()->editable()->selectable())
             ->sidebarCollapsibleOnDesktop()
+            // Lo de todos los días arriba (sin grupo), luego por tema, y los
+            // ajustes de la cuenta hasta abajo y cerrados.
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make('Pacientes'),
+                \Filament\Navigation\NavigationGroup::make('Dinero'),
+                \Filament\Navigation\NavigationGroup::make('Inventario'),
+                \Filament\Navigation\NavigationGroup::make('Consultorio'),
+                \Filament\Navigation\NavigationGroup::make('Mi cuenta')->collapsed(),
+            ])
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->globalSearchFieldSuffix(fn () => 'Ctrl+K')
             ->databaseNotifications()
@@ -49,6 +58,9 @@ class DoctorPanelProvider extends PanelProvider
             // llevan nombres de pacientes ("Editar Juan Pérez") y se mandaban a
             // Google. El sitio público sí lo sigue midiendo.
             ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
+            // En qué consultorio está (arriba del menú) y su plan (abajo).
+            ->renderHook('panels::sidebar.nav.start', fn () => view('filament.custom.menu-consultorio'))
+            ->renderHook('panels::sidebar.footer', fn () => view('filament.custom.menu-plan'))
             ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat') . \Livewire\Livewire::mount('command-palette'))
             // Ayuda por WhatsApp: el doctor no tenia a donde acudir si se atoraba.
             ->renderHook('panels::body.end', fn () => view('filament.custom.boton-ayuda'))
