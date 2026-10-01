@@ -158,4 +158,38 @@ class DetallesDeConfianzaTest extends TestCase
 
         $this->assertStringNotContainsString('generate_with_ai', $pagina->html());
     }
+
+    // ── Alergias ────────────────────────────────────────────────
+
+    public function test_si_nadie_pregunto_las_alergias_no_dice_ninguna(): void
+    {
+        // "Ninguna" le dice al doctor que el paciente no es alérgico; si nadie
+        // le preguntó, eso es falso y peligroso antes de recetar.
+        \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('doctor'));
+
+        Livewire::withQueryParams(['patient' => $this->patient->id])
+            ->test(\App\Filament\Doctor\Pages\PatientProfile::class)
+            ->assertSee('No registradas')
+            ->assertDontSee('Ninguna');
+    }
+
+    public function test_las_alergias_capturadas_se_ven_tal_cual(): void
+    {
+        $this->patient->update(['allergies' => 'Penicilina']);
+        \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('doctor'));
+
+        Livewire::withQueryParams(['patient' => $this->patient->id])
+            ->test(\App\Filament\Doctor\Pages\PatientProfile::class)
+            ->assertSee('Penicilina');
+    }
+
+    public function test_el_resumen_de_la_consulta_cuenta_bien_los_medicamentos(): void
+    {
+        $this->consulta()
+            ->set('medications', [self::AMOXICILINA])
+            ->set('completed', true)
+            ->set('currentStep', 6)
+            ->assertSee('1 medicamento')
+            ->assertDontSee('1 recetados');
+    }
 }

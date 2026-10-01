@@ -1099,7 +1099,7 @@
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-[10px] md:text-xs">Medicamentos</div>
-                    <div class="font-medium mt-0.5 md:mt-1">{{ count($medications) }} recetados</div>
+                    <div class="font-medium mt-0.5 md:mt-1">{{ count($medications) }} {{ count($medications) === 1 ? 'medicamento' : 'medicamentos' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-[10px] md:text-xs">Cobro</div>
