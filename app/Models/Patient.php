@@ -137,6 +137,15 @@ class Patient extends Model
             || $this->treatmentPlans()->withoutGlobalScopes()->exists();
     }
 
+    /** Se le preguntó y dijo que no tiene: "Ninguna conocida". */
+    public const SIN_ALERGIAS = 'Ninguna conocida';
+
+    /** Tiene alergias de verdad (no vacío y no "Ninguna conocida"). */
+    public function tieneAlergias(): bool
+    {
+        return filled($this->allergies) && $this->allergies !== self::SIN_ALERGIAS;
+    }
+
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";

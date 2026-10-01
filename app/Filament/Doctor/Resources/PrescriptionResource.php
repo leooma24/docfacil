@@ -53,6 +53,7 @@ class PrescriptionResource extends Resource
                             ->getOptionLabelFromRecordUsing(fn (Patient $record) => "{$record->first_name} {$record->last_name}")
                             ->searchable(['first_name', 'last_name'])
                             ->preload()
+                            ->live()
                             ->required(),
                         Forms\Components\Select::make('doctor_id')
                             ->label('Doctor')
@@ -91,7 +92,15 @@ class PrescriptionResource extends Resource
                                     ->placeholder('Amoxicilina')
                                     ->required()
                                     ->live(onBlur: true)
-                                    ->helperText(fn (Forms\Get $get) => \App\Support\Receta::avisoDeControl($get('medication')))
+                                    // El aviso de control y, si el paciente tiene alergias o
+                                    // anticoagulantes anotados, el choque con lo que se receta.
+                                    ->helperText(function (Forms\Get $get) {
+                                        $paciente = Patient::find($get('../../patient_id'));
+                                        $choque = \App\Support\AlertasClinicas::alRecetar($get('medication'), $paciente?->allergies, $paciente?->medical_notes);
+                                        $avisos = array_filter([$choque ? '⚠️ ' . $choque['texto'] : null, \App\Support\Receta::avisoDeControl($get('medication'))]);
+
+                                        return $avisos ? implode(' ', $avisos) : null;
+                                    })
                                     ->columnSpan(2),
                                 Forms\Components\TextInput::make('presentacion')
                                     ->label('Presentación')

@@ -816,6 +816,29 @@ class Consultation extends Page implements HasForms
 
     // ── Procedimientos realizados ────────────────────────────────
 
+    /** Alergias que el doctor anota en la consulta cuando no estaban registradas. */
+    public string $alergiasNuevas = '';
+
+    public function guardarAlergias(): void
+    {
+        $alergias = trim($this->alergiasNuevas);
+        if ($alergias === '' || ! $this->appointment?->patient) {
+            return;
+        }
+
+        $this->appointment->patient->update(['allergies' => $alergias]);
+        $this->appointment->load('patient');
+        $this->alergiasNuevas = '';
+        Notification::make()->title('Alergias guardadas en su expediente')->success()->send();
+    }
+
+    /** Se le preguntó y no tiene: queda anotado para no volver a preguntar a ciegas. */
+    public function sinAlergias(): void
+    {
+        $this->alergiasNuevas = \App\Models\Patient::SIN_ALERGIAS;
+        $this->guardarAlergias();
+    }
+
     /**
      * Agregar y quitar medicamentos en el servidor. Los botones mandaban la
      * lista tal como estaba al dibujarse la pantalla, sin lo que el doctor

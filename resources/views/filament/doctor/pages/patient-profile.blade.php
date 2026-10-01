@@ -229,7 +229,7 @@
                 <h3 class="font-bold text-sm md:text-base text-gray-900 dark:text-white">Información Médica</h3>
                 <div class="space-y-2 md:space-y-3 text-xs md:text-sm">
                     <div class="flex justify-between"><span class="text-gray-500">Tipo de sangre</span><span class="font-medium">{{ $patient->blood_type ?? '-' }}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Alergias</span>@if(filled($patient->allergies))<span class="font-medium text-red-600">{{ $patient->allergies }}</span>@else<span class="font-medium" style="color:#b45309;" title="Nadie las ha registrado: pregúntele antes de recetar">No registradas</span>@endif</div>
+                    <div class="flex justify-between"><span class="text-gray-500">Alergias</span>@if($patient->tieneAlergias())<span class="font-medium text-red-600">{{ $patient->allergies }}</span>@elseif(filled($patient->allergies))<span class="font-medium" style="color:#15803d;">{{ $patient->allergies }}</span>@else<span class="font-medium" style="color:#b45309;" title="Nadie las ha registrado: pregúntele antes de recetar">No registradas</span>@endif</div>
                 </div>
                 @if($patient->medical_notes)
                 <div class="mt-3 md:mt-4 p-2.5 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">

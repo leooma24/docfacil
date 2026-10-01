@@ -233,7 +233,7 @@
                         @if($appointment->patient->blood_type)
                         <span class="cons-chip" style="background:rgba(220,38,38,0.4);border-color:rgba(220,38,38,0.5);">🩸 {{ $appointment->patient->blood_type }}</span>
                         @endif
-                        @if($appointment->patient->allergies)
+                        @if($appointment->patient->tieneAlergias())
                         <span class="cons-chip cons-chip-alert">⚠️ {{ Str::limit($appointment->patient->allergies, 40) }}</span>
                         @endif
                     </div>
@@ -393,19 +393,7 @@
         </div>
         <p class="step-subtitle">Opcional. Registra los signos vitales del paciente.</p>
 
-        {{-- Banners de alerta (dental) --}}
-        @if($this->isFieldEnabled('allergies_alert') && $this->appointment?->patient?->allergies)
-            <div style="background:#fef2f2;border-left:4px solid #ef4444;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
-                <span style="font-size:18px;">⚠️</span>
-                <div style="font-size:13px;color:#991b1b;"><strong>Alergias:</strong> {{ $this->appointment->patient->allergies }}</div>
-            </div>
-        @endif
-        @if($this->isFieldEnabled('anticoagulants_alert') && $this->appointment?->patient?->current_medications && \Illuminate\Support\Str::contains(mb_strtolower($this->appointment->patient->current_medications), ['warfarin','acenocumarol','sintrom','rivaroxaban','apixaban','dabigatran','heparin','aspirin','clopidogrel','anticoagul']))
-            <div style="background:#fff7ed;border-left:4px solid #f97316;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
-                <span style="font-size:18px;">🩸</span>
-                <div style="font-size:13px;color:#9a3412;"><strong>Toma anticoagulantes:</strong> precaución con procedimientos invasivos</div>
-            </div>
-        @endif
+        @include('filament.doctor.partials.alertas-del-paciente')
 
         <div class="vitals-grid" x-data="bmiCalc()" x-init="watch()">
             @if($this->isFieldEnabled('blood_pressure'))
@@ -789,6 +777,10 @@
             <span class="step-title-text">Receta Médica</span>
         </div>
         <p class="step-subtitle">Opcional. Agrega medicamentos si es necesario.</p>
+
+        {{-- Las alergias y antecedentes también aquí: es donde se receta. --}}
+        @include('filament.doctor.partials.alertas-del-paciente')
+
         <div class="space-y-3">
             @foreach($medications as $i => $med)
             <div class="p-3 md:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border">
@@ -811,6 +803,9 @@
                     <input type="text" wire:model="medications.{{ $i }}.duration" placeholder="7 días" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
+                @if($choque = \App\Support\AlertasClinicas::alRecetar($med['medication'] ?? null, $this->appointment?->patient?->allergies, $this->appointment?->patient?->medical_notes))
+                    <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:6px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};">⚠️ {{ $choque['texto'] }}</div>
+                @endif
                 @if($aviso = \App\Support\Receta::avisoDeControl($med['medication'] ?? null))
                     <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;">⚠️ {{ $aviso }}</div>
                 @endif
