@@ -842,10 +842,11 @@
         <p class="step-subtitle">Registra el pago de esta consulta.</p>
 
         {{-- Mensualidades de su plan de pagos que ya tocan: se cobran aquí mismo. --}}
-        @if($this->mensualidadesPorCobrar->count())
+        @php $mensualidadesPorCobrar = $this->mensualidadesPorCobrar(); @endphp
+        @if($mensualidadesPorCobrar->count())
         <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #fde68a;border-radius:0.9rem;background:#fffbeb;">
             <div style="font-weight:700;font-size:0.9rem;color:#92400e;margin-bottom:0.6rem;">📅 Mensualidades por cobrar</div>
-            @foreach($this->mensualidadesPorCobrar as $m)
+            @foreach($mensualidadesPorCobrar as $m)
             <div wire:key="mensualidad-{{ $m->id }}" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#fff;border:1px solid #fde68a;border-radius:0.6rem;">
                 <div>
                     <div style="font-size:0.85rem;font-weight:600;color:#111827;">{{ $m->notes }}</div>

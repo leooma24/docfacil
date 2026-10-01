@@ -24,8 +24,8 @@ class MensualidadesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('installment_number')->label('#')
                     ->formatStateUsing(fn (int $state) => $state === 0 ? 'Enganche' : (string) $state),
                 Tables\Columns\TextColumn::make('due_date')->label('Vence')->date('d/m/Y'),
-                Tables\Columns\TextColumn::make('amount')->label('Monto')->money('MXN'),
-                Tables\Columns\TextColumn::make('amount_paid')->label('Pagado')->money('MXN'),
+                Tables\Columns\TextColumn::make('amount')->label('Monto')->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2)),
+                Tables\Columns\TextColumn::make('amount_paid')->label('Pagado')->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2)),
                 Tables\Columns\TextColumn::make('estado')->label('Estado')->badge()
                     ->state(fn (Payment $p) => match (true) {
                         $p->status === 'paid' => 'Pagada',

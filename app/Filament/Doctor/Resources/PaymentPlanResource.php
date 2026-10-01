@@ -130,7 +130,7 @@ class PaymentPlanResource extends Resource
                 ->schema([
                     Infolists\Components\TextEntry::make('patient.full_name')->label('Paciente')->weight('bold'),
                     Infolists\Components\TextEntry::make('description')->label('Tratamiento'),
-                    Infolists\Components\TextEntry::make('total')->label('Total')->money('MXN'),
+                    Infolists\Components\TextEntry::make('total')->label('Total')->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2)),
                     Infolists\Components\TextEntry::make('estado')->label('Estado')->badge()
                         ->state(fn (PaymentPlan $r) => self::estado($r))
                         ->color(fn (PaymentPlan $r) => match (true) {
@@ -138,8 +138,8 @@ class PaymentPlanResource extends Resource
                             $r->vencidas()->exists() => 'danger',
                             default => 'info',
                         }),
-                    Infolists\Components\TextEntry::make('pagado')->label('Pagado')->state(fn (PaymentPlan $r) => $r->pagado())->money('MXN')->color('success')->weight('bold'),
-                    Infolists\Components\TextEntry::make('saldo')->label('Le falta')->state(fn (PaymentPlan $r) => $r->saldo())->money('MXN')->weight('bold'),
+                    Infolists\Components\TextEntry::make('pagado')->label('Pagado')->state(fn (PaymentPlan $r) => $r->pagado())->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2))->color('success')->weight('bold'),
+                    Infolists\Components\TextEntry::make('saldo')->label('Le falta')->state(fn (PaymentPlan $r) => $r->saldo())->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2))->weight('bold'),
                     Infolists\Components\TextEntry::make('siguiente')->label('Siguiente pago')
                         ->state(fn (PaymentPlan $r) => ($s = $r->siguiente()) ? $s->due_date->format('d/m/Y') . ' · $' . number_format($s->remaining, 2) : '—'),
                     Infolists\Components\TextEntry::make('avance')->label('Mensualidades pagadas')
@@ -164,9 +164,11 @@ class PaymentPlanResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('patient.first_name')->label('Paciente')
                     ->formatStateUsing(fn (PaymentPlan $r) => $r->patient?->full_name)->searchable(['first_name', 'last_name']),
-                Tables\Columns\TextColumn::make('description')->label('Tratamiento'),
-                Tables\Columns\TextColumn::make('total')->label('Total')->money('MXN'),
-                Tables\Columns\TextColumn::make('pagado')->label('Pagado')->state(fn (PaymentPlan $r) => $r->pagado())->money('MXN'),
+                // En pantallas medianas no cabe todo; lo que manda es quién,
+                // cuánto lleva, qué sigue y si debe.
+                Tables\Columns\TextColumn::make('description')->label('Tratamiento')->visibleFrom('lg'),
+                Tables\Columns\TextColumn::make('total')->label('Total')->visibleFrom('lg')->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2)),
+                Tables\Columns\TextColumn::make('pagado')->label('Pagado')->state(fn (PaymentPlan $r) => $r->pagado())->formatStateUsing(fn ($state) => '$' . number_format((float) $state, 2)),
                 Tables\Columns\TextColumn::make('siguiente')->label('Siguiente')
                     ->state(fn (PaymentPlan $r) => ($s = $r->siguiente()) ? $s->due_date->format('d/m/Y') . ' · $' . number_format($s->remaining, 2) : '—'),
                 Tables\Columns\TextColumn::make('estado')->label('Estado')->badge()
@@ -179,6 +181,11 @@ class PaymentPlanResource extends Resource
             ])
             ->actions([Tables\Actions\ViewAction::make()->label('Ver')])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return 'Planes de pago';
     }
 
     public static function getRelations(): array

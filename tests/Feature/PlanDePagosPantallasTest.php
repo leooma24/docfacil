@@ -102,6 +102,8 @@ class PlanDePagosPantallasTest extends TestCase
             'total' => 21000, 'down_payment' => 5000, 'installments_count' => 20, 'first_due_date' => '2026-08-01'], 'cash');
 
         Livewire::test(ListPaymentPlans::class)
+            ->assertSee('Planes de pago')
+            ->assertDontSee('Planes De Pago')
             ->assertSee('Diego Salazar')
             ->assertSee('2 vencidas')
             ->assertSee('$800.00');
@@ -139,7 +141,9 @@ class PlanDePagosPantallasTest extends TestCase
             ->set('currentStep', 4)
             ->assertSee('Mensualidades por cobrar')
             ->assertSee('Ortodoncia — mensualidad 1 de 20')
-            ->call('cobrarMensualidad', $septiembre->id, 'card');
+            ->call('cobrarMensualidad', $septiembre->id, 'card')
+            // Ya cobrada, sale de la lista en ese momento.
+            ->assertDontSee('Ortodoncia — mensualidad 1 de 20');
 
         $this->assertSame('paid', $septiembre->fresh()->status);
         $this->assertSame('card', $septiembre->receipts()->latest('id')->value('payment_method'));

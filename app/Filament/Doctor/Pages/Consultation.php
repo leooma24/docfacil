@@ -835,7 +835,7 @@ class Consultation extends Page implements HasForms
      * Mensualidades de sus planes de pago que ya vencieron o vencen hoy: el
      * paciente de ortodoncia viene a su ajuste y ahí mismo se le cobra.
      */
-    public function getMensualidadesPorCobrarProperty(): \Illuminate\Support\Collection
+    public function mensualidadesPorCobrar(): \Illuminate\Support\Collection
     {
         if (! $this->appointment) {
             return collect();
@@ -852,7 +852,9 @@ class Consultation extends Page implements HasForms
 
     public function cobrarMensualidad(int $paymentId, string $formaDePago = 'cash'): void
     {
-        $mensualidad = $this->mensualidadesPorCobrar->firstWhere('id', $paymentId);
+        // Método y no propiedad calculada: la propiedad se queda en memoria
+        // durante la petición y la mensualidad cobrada seguía en la lista.
+        $mensualidad = $this->mensualidadesPorCobrar()->firstWhere('id', $paymentId);
 
         if (! $mensualidad) {
             return;
