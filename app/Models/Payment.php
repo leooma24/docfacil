@@ -15,7 +15,7 @@ class Payment extends Model
     use BelongsToClinic;
 
     protected $fillable = [
-        'clinic_id', 'patient_id', 'appointment_id', 'service_id',
+        'clinic_id', 'patient_id', 'appointment_id', 'service_id', 'payment_plan_id', 'installment_number',
         'amount', 'amount_paid', 'payment_method', 'status', 'notes',
         'payment_date', 'due_date',
     ];
@@ -50,6 +50,12 @@ class Payment extends Model
         return $this->belongsTo(Service::class);
     }
 
+    /** El plan de pagos al que pertenece, si es enganche o mensualidad. */
+    public function paymentPlan(): BelongsTo
+    {
+        return $this->belongsTo(PaymentPlan::class);
+    }
+
     /** Los abonos, cada uno con su fecha y forma de pago. */
     public function receipts(): HasMany
     {
@@ -68,6 +74,7 @@ class Payment extends Model
         static::updated(function (Payment $cobro) {
             if ($cobro->wasChanged(['amount_paid', 'status', 'amount'])) {
                 $cobro->cuadrarRecibos(now());
+                $cobro->paymentPlan?->actualizarEstado();
             }
         });
     }
@@ -151,6 +158,19 @@ class Payment extends Model
     }
 
     /**
+     * Lo que ya se debe o ya se pagó: deja fuera las mensualidades de un plan
+     * que todavía no vencen, para que 20 mensualidades de ortodoncia no
+     * saturen cobros, saldos y perfiles desde el primer día.
+     */
+    public function scopeYaToca(Builder $query): Builder
+    {
+        return $query->where(fn ($q) => $q->whereNull('payment_plan_id')
+            ->orWhereDate('due_date', '<=', today())
+            ->orWhere('amount_paid', '>', 0)
+            ->orWhere('status', 'paid'));
+    }
+
+    /**
      * Scope de cobros vencidos (saldo pendiente + due_date pasada).
      */
     public function scopeOverdue(Builder $query): Builder
@@ -216,6 +236,9 @@ class Payment extends Model
         return (float) static::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
             ->withBalance()
+            // Las mensualidades de un plan que todavía no vencen no se deben
+            // hoy: 20 mensualidades de ortodoncia no son $16,000 por cobrar.
+            ->yaToca()
             ->selectRaw('SUM(amount - amount_paid) as saldo')
             ->value('saldo');
     }

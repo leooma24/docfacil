@@ -24,6 +24,13 @@ class EditTreatmentPlan extends EditRecord
 
                     return TreatmentPlanResource::enviarPorWhatsapp($this->record->fresh());
                 }),
+            // El presupuesto aceptado de un tratamiento largo se paga en partes.
+            Actions\Action::make('plan_de_pagos')
+                ->label('Hacer plan de pagos')
+                ->icon('heroicon-o-calendar-days')
+                ->color('info')
+                ->visible(fn () => $this->record->status === 'accepted')
+                ->url(fn () => \App\Filament\Doctor\Resources\PaymentPlanResource::getUrl('create', ['presupuesto' => $this->record->id], panel: 'doctor')),
             Actions\Action::make('pdf')
                 ->label('PDF')
                 ->icon('heroicon-o-arrow-down-tray')

@@ -25,7 +25,9 @@ class PaymentResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id);
+        // Las mensualidades futuras de un plan viven en el plan; aquí aparecen
+        // cuando ya tocan.
+        return parent::getEloquentQuery()->where('clinic_id', auth()->user()->clinic_id)->yaToca();
     }
 
     protected static ?string $model = Payment::class;

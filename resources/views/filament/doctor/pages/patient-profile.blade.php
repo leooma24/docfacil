@@ -293,6 +293,26 @@
 
         {{-- Payments tab - card layout on mobile, table on desktop --}}
         @if($activeTab === 'payments')
+        {{-- Planes de pago (ortodoncia y tratamientos largos) --}}
+        @php $planesDePago = \App\Models\PaymentPlan::where('clinic_id', $this->patient->clinic_id)->where('patient_id', $this->patient->id)->latest()->get(); @endphp
+        <div style="padding:16px 20px 4px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div style="font-weight:700;font-size:14px;color:#111827;">Planes de pago</div>
+                <a href="{{ \App\Filament\Doctor\Resources\PaymentPlanResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor') }}"
+                    style="padding:6px 12px;background:#0d9488;color:#fff;font-size:12px;font-weight:600;border-radius:8px;">+ Nuevo plan de pagos</a>
+            </div>
+            @forelse($planesDePago as $plan)
+                @php $sig = $plan->siguiente(); $estadoPlan = \App\Filament\Doctor\Resources\PaymentPlanResource::estado($plan); @endphp
+                <a href="{{ \App\Filament\Doctor\Resources\PaymentPlanResource::getUrl('view', ['record' => $plan], panel: 'doctor') }}"
+                    style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:10px;font-size:13px;color:#111827;">
+                    <span><strong>{{ $plan->description }}</strong> · ${{ number_format($plan->pagado(), 2) }} de ${{ number_format((float) $plan->total, 2) }}</span>
+                    <span style="color:#64748b;">{{ $sig ? 'Siguiente: ' . $sig->due_date->format('d/m/Y') . ' · $' . number_format($sig->remaining, 2) : 'Liquidado' }}</span>
+                    <span style="font-weight:700;color:{{ str_contains($estadoPlan, 'vencida') ? '#b91c1c' : '#0f766e' }};">{{ $estadoPlan }}</span>
+                </a>
+            @empty
+                <div style="font-size:13px;color:#94a3b8;padding:4px 0 10px;">Sin planes de pago.</div>
+            @endforelse
+        </div>
         {{-- Desktop table --}}
         <div class="hidden md:block">
             <table class="w-full text-sm">

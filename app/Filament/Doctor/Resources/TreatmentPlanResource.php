@@ -241,6 +241,12 @@ class TreatmentPlanResource extends Resource
                     ->color('gray')
                     ->url(fn (TreatmentPlan $record) => route('treatment-plan.pdf', $record))
                     ->openUrlInNewTab(),
+                Tables\Actions\Action::make('plan_de_pagos')
+                    ->label('Hacer plan de pagos')
+                    ->icon('heroicon-o-calendar-days')
+                    ->color('info')
+                    ->visible(fn (TreatmentPlan $record) => $record->status === 'accepted')
+                    ->url(fn (TreatmentPlan $record) => PaymentPlanResource::getUrl('create', ['presupuesto' => $record->id], panel: 'doctor')),
                 Tables\Actions\Action::make('send_whatsapp')
                     ->label('Enviar por WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')

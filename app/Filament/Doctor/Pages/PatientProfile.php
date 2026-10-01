@@ -156,6 +156,7 @@ class PatientProfile extends Page
     public function getPaymentsProperty()
     {
         return Payment::where('patient_id', $this->patient->id)
+            ->yaToca()
             ->with(['service'])
             ->orderBy('payment_date', 'desc')
             ->limit(20)
@@ -182,6 +183,7 @@ class PatientProfile extends Page
                 ->value('pagado'),
             'pending' => (float) Payment::where('patient_id', $this->patient->id)
                 ->withBalance()
+                ->yaToca()
                 ->selectRaw('SUM(amount - amount_paid) as saldo')
                 ->value('saldo'),
             'last_visit' => MedicalRecord::where('patient_id', $this->patient->id)->max('visit_date'),

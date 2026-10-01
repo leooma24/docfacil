@@ -841,6 +841,31 @@
         </div>
         <p class="step-subtitle">Registra el pago de esta consulta.</p>
 
+        {{-- Mensualidades de su plan de pagos que ya tocan: se cobran aquí mismo. --}}
+        @if($this->mensualidadesPorCobrar->count())
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #fde68a;border-radius:0.9rem;background:#fffbeb;">
+            <div style="font-weight:700;font-size:0.9rem;color:#92400e;margin-bottom:0.6rem;">📅 Mensualidades por cobrar</div>
+            @foreach($this->mensualidadesPorCobrar as $m)
+            <div wire:key="mensualidad-{{ $m->id }}" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#fff;border:1px solid #fde68a;border-radius:0.6rem;">
+                <div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#111827;">{{ $m->notes }}</div>
+                    <div style="font-size:0.75rem;color:{{ $m->due_date->isBefore(today()) ? '#b91c1c' : '#92400e' }};">
+                        {{ $m->due_date->isBefore(today()) ? 'Venció el ' . $m->due_date->format('d/m/Y') : 'Vence hoy' }} · <strong>${{ number_format($m->remaining, 2) }}</strong>
+                    </div>
+                </div>
+                <div style="display:flex;gap:0.35rem;">
+                    @foreach(['cash' => 'Efectivo', 'card' => 'Tarjeta', 'transfer' => 'Transferencia'] as $forma => $nombre)
+                    <button type="button" wire:click="cobrarMensualidad({{ $m->id }}, '{{ $forma }}')"
+                        style="padding:0.4rem 0.7rem;border-radius:0.5rem;background:{{ $forma === 'cash' ? '#0d9488' : '#ffffff' }};color:{{ $forma === 'cash' ? '#ffffff' : '#0f766e' }};border:1px solid #0d9488;font-size:0.75rem;font-weight:700;">
+                        {{ $nombre }}
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
+
         {{-- Procedimientos realizados. Es lo que hace que un curetaje de dos
              cuadrantes se cobre dos veces: el precio del servicio es POR
              cuadrante, y aquí se dice cuántos se hicieron. --}}

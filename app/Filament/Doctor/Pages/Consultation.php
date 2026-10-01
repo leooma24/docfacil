@@ -811,6 +811,42 @@ class Consultation extends Page implements HasForms
         $this->medications = array_values($this->medications);
     }
 
+    /**
+     * Mensualidades de sus planes de pago que ya vencieron o vencen hoy: el
+     * paciente de ortodoncia viene a su ajuste y ahí mismo se le cobra.
+     */
+    public function getMensualidadesPorCobrarProperty(): \Illuminate\Support\Collection
+    {
+        if (! $this->appointment) {
+            return collect();
+        }
+
+        return \App\Models\Payment::where('clinic_id', $this->appointment->clinic_id)
+            ->where('patient_id', $this->appointment->patient_id)
+            ->whereNotNull('payment_plan_id')
+            ->withBalance()
+            ->whereDate('due_date', '<=', today())
+            ->orderBy('due_date')
+            ->get();
+    }
+
+    public function cobrarMensualidad(int $paymentId, string $formaDePago = 'cash'): void
+    {
+        $mensualidad = $this->mensualidadesPorCobrar->firstWhere('id', $paymentId);
+
+        if (! $mensualidad) {
+            return;
+        }
+
+        $mensualidad->registrarAbono((float) $mensualidad->remaining, $formaDePago);
+
+        Notification::make()
+            ->title('Mensualidad cobrada')
+            ->body($mensualidad->notes . ' · $' . number_format((float) $mensualidad->amount, 2))
+            ->success()
+            ->send();
+    }
+
     /** Lo que el odontograma del paciente tiene por tratar, para agregarlo con un clic. */
     public function getOdontogramaPorTratarProperty(): array
     {
