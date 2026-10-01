@@ -19,7 +19,9 @@ $FF -y -loglevel error "${inputs[@]}" -filter_complex "${filt}${mix}amix=inputs=
 # Grabación 864x1080 → 1080x1350.
 $FF -y -loglevel error -ss "$TRIM" -i "$WEBM" -i "$B/narracion.wav" -map 0:v -map 1:a \
   -vf "scale=1080:1350:flags=lanczos,setsar=1,fps=30" -c:v libx264 -preset slow -crf 21 -pix_fmt yuv420p \
-  -c:a aac -b:a 160k -ar 48000 -ac 2 "$B/cuerpo.mp4"
+  -c:a aac -b:a 160k -ar 48000 -ac 2 "$B/cuerpo-crudo.mp4"
+# Sin los cuadros blancos de cada cambio de página.
+python3 "$(dirname "$0")/sin-destellos.py" "$B/cuerpo-crudo.mp4" "$B/cuerpo.mp4"
 tarjeta() { # imagen duración salida [audio]
   if [ -n "${4:-}" ]; then
     $FF -y -loglevel error -loop 1 -t "$2" -i "$1" -i "$4" -filter_complex "[1:a]aresample=48000,aformat=channel_layouts=stereo,adelay=300|300,apad[a]" -map 0:v -map "[a]" \

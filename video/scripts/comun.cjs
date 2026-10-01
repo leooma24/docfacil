@@ -94,7 +94,25 @@ function ayudantes(page, durs, t0, marks) {
     if (necesita > 0) await W(necesita);
   }
 
-  return { W, cap, mover, clic, escribir, bajar, listo, seg, visible };
+  // Acercamiento de cámara: escala la página para que los elementos (selectores
+  // CSS) queden dentro de la pantalla, de orilla a orilla.
+  const acercar = (selectores, max = 1.9) => page.evaluate(([sel, max]) => {
+    const cajas = sel.map(q => (typeof q === 'string' ? document.querySelector(q) : null)).filter(Boolean).map(e => e.getBoundingClientRect());
+    const m = document.querySelector('.fi-main') || document.body;
+    const r = m.getBoundingClientRect();
+    const L = Math.min(...cajas.map(c => c.left)) - 14, R = Math.max(...cajas.map(c => c.right)) + 14;
+    const T = Math.min(...cajas.map(c => c.top)) - 60, B = Math.max(...cajas.map(c => c.bottom)) + 60;
+    const s = Math.min(max, (innerWidth - 20) / (R - L), (innerHeight - 160) / (B - T));
+    if (s < 1.15) return; // no cabe más grande: no se aleja ni se mueve
+    // Lo que se muestra queda centrado a lo ancho y un poco arriba de la mitad.
+    const cx = (L + R) / 2, cy = (T + B) / 2;
+    const x0 = (s * cx - innerWidth / 2) / (s - 1), y0 = (s * cy - innerHeight * 0.42) / (s - 1);
+    m.style.transition = 'transform 1s ease';
+    m.style.transformOrigin = `${x0 - r.left}px ${y0 - r.top}px`;
+    m.style.transform = `scale(${s})`;
+  }, [selectores, max]);
+
+  return { W, cap, mover, clic, escribir, bajar, listo, seg, visible, acercar };
 }
 
 async function cerrar(ctx, page, outDir, marks) {
