@@ -378,12 +378,12 @@
                 // FDI tooth numbering: cuadrantes 1-4 superior, 5-8 inferior
                 // Sup. derecho: 18-11 (de molar a incisivo central)
                 // Sup. izquierdo: 21-28
-                // Inf. izquierdo: 38-31 (de molar a incisivo)
-                // Inf. derecho: 41-48
+                // Inf. derecho: 48-41 (bajo el sup. derecho)
+                // Inf. izquierdo: 31-38 (bajo el sup. izquierdo)
                 $upperRight = [18, 17, 16, 15, 14, 13, 12, 11];
                 $upperLeft  = [21, 22, 23, 24, 25, 26, 27, 28];
-                $lowerLeft  = [38, 37, 36, 35, 34, 33, 32, 31];
-                $lowerRight = [41, 42, 43, 44, 45, 46, 47, 48];
+                $lowerLeft  = [31, 32, 33, 34, 35, 36, 37, 38];
+                $lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
                 $colors = \App\Models\OdontogramTooth::conditionColors();
                 $labels = \App\Models\OdontogramTooth::conditionLabels();
             @endphp
@@ -456,7 +456,7 @@
 
                     {{-- ARCADA INFERIOR --}}
                     <div class="flex justify-center gap-0.5 md:gap-1 mt-1">
-                        @foreach($lowerLeft as $num)
+                        @foreach($lowerRight as $num)
                         @php
                             $tooth = $byNum->get($num);
                             $cond = $tooth?->condition ?? 'sano';
@@ -472,7 +472,7 @@
                         </div>
                         @endforeach
                         <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
-                        @foreach($lowerRight as $num)
+                        @foreach($lowerLeft as $num)
                         @php
                             $tooth = $byNum->get($num);
                             $cond = $tooth?->condition ?? 'sano';

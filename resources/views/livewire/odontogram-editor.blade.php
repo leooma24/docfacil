@@ -87,7 +87,8 @@
 
         {{-- ARCADA INFERIOR --}}
         <div class="flex justify-center gap-0.5 md:gap-1 mt-1">
-            @foreach($lowerLeft as $num)
+            {{-- Cuadrante inf. derecho (paciente) bajo el sup. derecho: 48…41 | 31…38 --}}
+            @foreach($lowerRight as $num)
             @php
                 $cond = $teeth[$num]['condition'] ?? 'sano';
                 $color = $conditionColors[$cond] ?? '#cbd5e1';
@@ -107,7 +108,7 @@
 
             <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
 
-            @foreach($lowerRight as $num)
+            @foreach($lowerLeft as $num)
             @php
                 $cond = $teeth[$num]['condition'] ?? 'sano';
                 $color = $conditionColors[$cond] ?? '#cbd5e1';
