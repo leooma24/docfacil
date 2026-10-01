@@ -11,6 +11,16 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Appointment extends Model
 {
+    /** Cómo se le dice cada estado a una persona. */
+    public const STATUS_LABELS = [
+        'scheduled' => 'Programada',
+        'confirmed' => 'Confirmada',
+        'in_progress' => 'En curso',
+        'completed' => 'Completada',
+        'cancelled' => 'Cancelada',
+        'no_show' => 'No asistió',
+    ];
+
     use LogsActivity, BelongsToClinic;
 
     /**

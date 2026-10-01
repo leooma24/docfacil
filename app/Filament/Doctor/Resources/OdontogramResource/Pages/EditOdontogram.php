@@ -55,6 +55,31 @@ class EditOdontogram extends EditRecord
                         ->success()
                         ->send();
                 }),
+            Actions\Action::make('armar_presupuesto')
+                ->label('Armar presupuesto')
+                ->icon('heroicon-o-document-currency-dollar')
+                ->color('info')
+                ->action(function () {
+                    $plan = $this->armarPresupuesto();
+
+                    if (! $plan) {
+                        Notification::make()
+                            ->title('Presupuestos es un add-on')
+                            ->body('Actívalo en Add-ons para convertir lo que falta tratar en un presupuesto con tus precios.')
+                            ->warning()
+                            ->send();
+
+                        return;
+                    }
+
+                    $this->redirect(\App\Filament\Doctor\Resources\TreatmentPlanResource::getUrl('edit', ['record' => $plan], panel: 'doctor'));
+                }),
+            Actions\Action::make('imprimir')
+                ->label('Imprimir')
+                ->icon('heroicon-o-printer')
+                ->color('gray')
+                ->url(fn () => route('odontograma.imprimir', $this->record))
+                ->openUrlInNewTab(),
             Actions\DeleteAction::make(),
         ];
     }
@@ -97,6 +122,21 @@ class EditOdontogram extends EditRecord
                 ->where('tooth_number', $toothNumber)
                 ->delete();
         }
+    }
+
+    /**
+     * Guarda lo que el doctor marcó (aunque no haya dado "Guardar") y arma
+     * el presupuesto con lo que falta tratar. Sin el add-on, no hace nada.
+     */
+    public function armarPresupuesto(): ?\App\Models\TreatmentPlan
+    {
+        if (! auth()->user()?->clinic?->hasFeature('treatment_plans')) {
+            return null;
+        }
+
+        $this->guardarDientes();
+
+        return \App\Support\OdontogramaClinico::presupuestoDesde($this->record->fresh());
     }
 
     protected function getFooterWidgets(): array

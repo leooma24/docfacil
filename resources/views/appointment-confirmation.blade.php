@@ -83,7 +83,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <h1>Esta cita ya fue procesada</h1>
-            <p class="subtitle">El estado actual es: <strong>{{ $appointment->status_label ?? $appointment->status }}</strong>. Si necesitas hacer un cambio, comunícate directo con el consultorio.</p>
+            <p class="subtitle">El estado actual es: <strong>{{ \App\Models\Appointment::STATUS_LABELS[$appointment->status] ?? $appointment->status }}</strong>. Si necesitas hacer un cambio, comunícate directo con el consultorio.</p>
         @elseif($action === 'cancel')
             <div class="icon-wrap cancel">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#d97706" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>

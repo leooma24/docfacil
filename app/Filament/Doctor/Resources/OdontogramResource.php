@@ -71,12 +71,15 @@ class OdontogramResource extends Resource
                             ->getOptionLabelFromRecordUsing(fn (Patient $record) => "{$record->first_name} {$record->last_name}")
                             ->searchable(['first_name', 'last_name'])
                             ->preload()
+                            // Desde el perfil del paciente llega con ?patient=
+                            ->default(fn () => request('patient'))
                             ->required(),
                         Forms\Components\Select::make('doctor_id')
                             ->label('Doctor')
                             ->relationship('doctor')
                             ->getOptionLabelFromRecordUsing(fn (Doctor $record) => $record->user?->name ?? '')
                             ->preload()
+                            ->default(fn () => auth()->user()?->doctor?->id)
                             ->required(),
                         Forms\Components\DatePicker::make('evaluation_date')
                             ->label('Fecha evaluación')

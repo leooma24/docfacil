@@ -249,6 +249,29 @@ Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
     ->where('token', '[a-f0-9]{64}')
     ->name('treatment-plan.reject');
 
+// El odontograma para imprimir o guardar en PDF desde el navegador. Se busca
+// por id dentro del consultorio de quien entra: el de otro consultorio no existe.
+Route::get('/doctor/odontogramas/{odontogram}/imprimir', function (int $odontogram) {
+    abort_unless(auth()->check(), 403);
+
+    $odonto = \App\Models\Odontogram::with(['teeth', 'patient', 'doctor.user', 'clinic'])
+        ->where('clinic_id', auth()->user()->clinic_id)
+        ->findOrFail($odontogram);
+
+    $anterior = \App\Models\Odontogram::where('clinic_id', $odonto->clinic_id)
+        ->where('patient_id', $odonto->patient_id)
+        ->where('id', '!=', $odonto->id)
+        ->whereDate('evaluation_date', '<=', $odonto->evaluation_date)
+        ->orderByDesc('evaluation_date')->orderByDesc('id')
+        ->first();
+
+    return view('odontograma.imprimir', [
+        'odonto' => $odonto,
+        'anterior' => $anterior,
+        'cambios' => $anterior ? \App\Support\OdontogramaClinico::cambios($anterior, $odonto) : [],
+    ]);
+})->name('odontograma.imprimir');
+
 Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescription $prescription) {
     abort_unless(auth()->check() && auth()->user()->clinic_id === $prescription->clinic_id, 403);
     $prescription->load(['patient', 'doctor.user', 'doctor.clinic', 'items']);

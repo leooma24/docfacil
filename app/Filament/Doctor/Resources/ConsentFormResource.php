@@ -90,6 +90,8 @@ class ConsentFormResource extends Resource
                                 \Filament\Forms\Components\Actions\Action::make('generate_with_ai')
                                     ->icon('heroicon-o-sparkles')
                                     ->label('Generar con IA')
+                                    // Con la IA apagada el botón solo daba error.
+                                    ->visible(fn () => (bool) config('services.ai.enabled'))
                                     ->tooltip('La IA generará título, contenido, riesgos y alternativas automáticamente')
                                     ->color('info')
                                     ->action(function (Forms\Set $set, Forms\Get $get) {

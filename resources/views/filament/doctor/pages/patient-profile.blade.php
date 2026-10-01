@@ -379,6 +379,12 @@
                 $labels = \App\Models\OdontogramTooth::conditionLabels();
             @endphp
 
+            <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+                <a href="{{ \App\Filament\Doctor\Resources\OdontogramResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor') }}"
+                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#0d9488;color:#fff;font-size:13px;font-weight:600;border-radius:10px;">
+                    + Nuevo odontograma
+                </a>
+            </div>
             @forelse($this->odontograms as $odonto)
             @php
                 // Indexar dientes por número para lookup rápido
@@ -399,6 +405,11 @@
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-semibold rounded-lg border border-teal-200 transition">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         Editar
+                    </a>
+                    <a href="{{ route('odontograma.imprimir', $odonto) }}" target="_blank"
+                        style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:6px 12px;background:#fff;color:#334155;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e2e8f0;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+                        Imprimir
                     </a>
                 </div>
 
@@ -430,12 +441,28 @@
                     @endif
                 </div>
 
+                {{-- Historial: qué cambió desde la visita anterior --}}
+                @php
+                    $odontoAnterior = $this->odontograms[$loop->index + 1] ?? null;
+                    $cambiosOdonto = $odontoAnterior ? \App\Support\OdontogramaClinico::cambios($odontoAnterior, $odonto) : [];
+                @endphp
+                @if($odontoAnterior)
+                <div style="margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12.5px;color:#334155;">
+                    <span style="font-weight:700;color:#0f766e;">Cambios desde el {{ $odontoAnterior->evaluation_date->format('d/m/Y') }}:</span>
+                    @forelse($cambiosOdonto as $cambio)
+                        <span style="display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;">{{ $cambio }}</span>
+                    @empty
+                        <span style="color:#64748b;">sin cambios</span>
+                    @endforelse
+                </div>
+                @endif
+
                 @if($odonto->notes)
                 <p class="text-xs md:text-sm text-gray-600 mt-3 italic px-1">{{ $odonto->notes }}</p>
                 @endif
             </div>
             @empty
-            <div class="text-center text-gray-400 py-8 text-sm">Sin odontogramas registrados.</div>
+            <div style="text-align:center;color:#94a3b8;padding:28px 0;font-size:14px;">Sin odontogramas todavía. Crea el primero con el botón de arriba; los siguientes arrancan de lo que ya marcaste.</div>
             @endforelse
         </div>
         @endif

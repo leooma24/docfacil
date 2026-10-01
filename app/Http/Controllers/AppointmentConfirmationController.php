@@ -20,7 +20,10 @@ class AppointmentConfirmationController extends Controller
     public function show(Request $request, Appointment $appointment)
     {
         $action = $request->query('action', 'confirm');
-        $alreadyHandled = in_array($appointment->status, ['confirmed', 'cancelled', 'completed', 'no_show']);
+        // Una cita confirmada todavía se puede cancelar: al paciente le
+        // salen imprevistos, y es mejor que avise a que no llegue.
+        $cerradas = ['cancelled', 'completed', 'no_show'];
+        $alreadyHandled = in_array($appointment->status, $action === 'cancel' ? $cerradas : [...$cerradas, 'confirmed']);
 
         // Solo procesar si la cita esta pendiente y no ha pasado
         if (!$alreadyHandled && $appointment->starts_at->isFuture()) {

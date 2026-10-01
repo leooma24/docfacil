@@ -4,6 +4,7 @@ namespace App\Filament\Doctor\Resources\OdontogramResource\Pages;
 
 use App\Filament\Doctor\Concerns\HasFormHero;
 use App\Filament\Doctor\Resources\OdontogramResource;
+use App\Support\OdontogramaClinico;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateOdontogram extends CreateRecord
@@ -23,8 +24,23 @@ class CreateOdontogram extends CreateRecord
 
     protected function afterCreate(): void
     {
+        $this->arrancarDeLoAnterior();
+
         // Redirect to edit so user can use the odontogram editor
         $this->redirect(OdontogramResource::getUrl('edit', ['record' => $this->record]));
+    }
+
+    /**
+     * El odontograma nuevo arranca de lo que ya se sabe del paciente: el
+     * doctor marca lo que cambió en vez de volver a capturar la boca.
+     */
+    public function arrancarDeLoAnterior(): void
+    {
+        $anterior = OdontogramaClinico::ultimo($this->record->clinic_id, $this->record->patient_id, antesDe: $this->record->id);
+
+        if ($anterior) {
+            OdontogramaClinico::copiarDientes($anterior, $this->record);
+        }
     }
 
     protected function getFormHeroConfig(): array

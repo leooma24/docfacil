@@ -184,7 +184,34 @@ class Consultation extends Page implements HasForms
                 $this->payment_service_id = (string) $this->appointment->service_id;
                 $this->payment_amount = (string) $this->appointment->service->price;
             }
+            $this->proponerProcedimientos();
         }
+    }
+
+    /**
+     * Si la cita es de un tratamiento dental, la consulta ya abre con ese
+     * procedimiento, en los dientes que el odontograma tiene por tratar
+     * (la cita de extracción de tercer molar trae el 48). Si el odontograma
+     * no dice cuál, queda un renglón para que el doctor ponga el diente.
+     */
+    private function proponerProcedimientos(): void
+    {
+        $servicio = $this->appointment?->service;
+
+        if (! $servicio || ! \App\Support\OdontogramaClinico::condicionDeServicio($servicio->name)) {
+            return;
+        }
+
+        $odontograma = \App\Support\OdontogramaClinico::ultimo($this->appointment->clinic_id, $this->appointment->patient_id);
+        $dientes = \App\Support\OdontogramaClinico::dientesPara($servicio, $odontograma) ?: [''];
+
+        $this->procedures = array_map(fn ($diente) => [
+            'service_id' => (string) $servicio->id,
+            'tooth_number' => (string) $diente,
+            'quantity' => 1,
+        ], $dientes);
+
+        $this->updatedProcedures();
     }
 
     protected function getForms(): array
@@ -317,6 +344,7 @@ class Consultation extends Page implements HasForms
             $this->payment_service_id = (string) $this->appointment->service_id;
             $this->payment_amount = (string) $this->appointment->service->price;
         }
+        $this->proponerProcedimientos();
 
         $this->isWalkIn = false;
         $this->currentStep = 1;
@@ -634,6 +662,9 @@ class Consultation extends Page implements HasForms
             ]);
         }
 
+        // Lo hecho pasa al odontograma: la resina en el 36 le quita la caries.
+        \App\Support\OdontogramaClinico::registrarConsulta($this->appointment);
+
         // Y los insumos que el doctor confirmó. Se borran los movimientos de
         // esta consulta y se reescriben: si algo reintenta el cierre, queda una
         // sola copia en vez de descontar dos veces del inventario.
@@ -758,6 +789,58 @@ class Consultation extends Page implements HasForms
     }
 
     // ── Procedimientos realizados ────────────────────────────────
+
+    /**
+     * Agregar y quitar medicamentos en el servidor. Los botones mandaban la
+     * lista tal como estaba al dibujarse la pantalla, sin lo que el doctor
+     * acababa de escribir: la amoxicilina se quedaba sin frecuencia ni días
+     * y la receta salía incompleta. Livewire manda lo escrito antes de
+     * correr la acción, así que aquí la lista ya viene completa.
+     */
+    public function agregarMedicamento(): void
+    {
+        $this->medications[] = [
+            'medication' => '', 'presentacion' => '', 'dosage' => '', 'via_administracion' => '',
+            'frequency' => '', 'duration' => '', 'instructions' => '',
+        ];
+    }
+
+    public function quitarMedicamento(int $indice): void
+    {
+        unset($this->medications[$indice]);
+        $this->medications = array_values($this->medications);
+    }
+
+    /** Lo que el odontograma del paciente tiene por tratar, para agregarlo con un clic. */
+    public function getOdontogramaPorTratarProperty(): array
+    {
+        if (! $this->appointment) {
+            return [];
+        }
+
+        return \App\Support\OdontogramaClinico::porTratar(
+            \App\Support\OdontogramaClinico::ultimo($this->appointment->clinic_id, $this->appointment->patient_id)
+        );
+    }
+
+    public function agregarDesdeOdontograma(int $numero, string $condicion): void
+    {
+        $servicios = Service::where('clinic_id', auth()->user()->clinic_id)->where('is_active', true)->get();
+        $servicio = \App\Support\OdontogramaClinico::servicioPara($condicion, $numero, $servicios);
+
+        // Un renglón vacío que quedó de "agregar procedimiento" se reutiliza.
+        $this->procedures = array_values(array_filter(
+            $this->procedures,
+            fn ($p) => ($p['service_id'] ?? '') !== '' || ($p['tooth_number'] ?? '') !== ''
+        ));
+        $this->procedures[] = [
+            'service_id' => $servicio ? (string) $servicio->id : '',
+            'tooth_number' => (string) $numero,
+            'quantity' => 1,
+        ];
+
+        $this->updatedProcedures();
+    }
 
     public function addProcedure(): void
     {

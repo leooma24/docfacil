@@ -794,7 +794,7 @@
             <div class="p-3 md:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border">
                 <div class="flex items-center justify-between mb-2 md:mb-3">
                     <span class="font-medium text-xs md:text-sm">Medicamento {{ $i + 1 }}</span>
-                    <button wire:click="$set('medications', {{ json_encode(collect($medications)->forget($i)->values()->toArray()) }})" class="text-red-500 text-xs hover:text-red-700">Quitar</button>
+                    <button type="button" wire:click="quitarMedicamento({{ $i }})" class="text-red-500 text-xs hover:text-red-700">Quitar</button>
                 </div>
                 {{-- Genérico, presentación, dosis, vía, frecuencia y duración: lo que pide el Reglamento de Insumos (arts. 30 y 31). --}}
                 <div class="meds-grid">
@@ -816,7 +816,7 @@
                 @endif
             </div>
             @endforeach
-            <button wire:click="$set('medications', {{ json_encode(array_merge($medications, [['medication' => '', 'presentacion' => '', 'dosage' => '', 'via_administracion' => '', 'frequency' => '', 'duration' => '', 'instructions' => '']])) }})"
+            <button type="button" wire:click="agregarMedicamento"
                 class="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-xs md:text-sm text-gray-500 hover:border-teal-400 hover:text-teal-600 transition">
                 + Agregar medicamento
             </button>
@@ -856,6 +856,30 @@
                 </button>
             </div>
 
+            {{-- Lo que el odontograma tiene por tratar, para agregarlo con un clic.
+                 Al cerrar la consulta, lo hecho regresa al odontograma. --}}
+            @php
+                $yaCapturados = collect($procedures)->pluck('tooth_number')->map(fn ($d) => (string) $d)->all();
+                $porTratar = collect($this->odontogramaPorTratar)->reject(fn ($p) => in_array((string) $p['numero'], $yaCapturados, true));
+                $etiquetasOdo = \App\Models\OdontogramTooth::conditionLabels();
+                $coloresOdo = \App\Models\OdontogramTooth::conditionColors();
+            @endphp
+            @if($porTratar->count())
+            <div style="margin-bottom:0.75rem;padding:0.75rem;border:1px dashed #fca5a5;border-radius:0.7rem;background:#fff7f7;">
+                <div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:0.45rem;letter-spacing:.02em;">🦷 Del odontograma: por tratar</div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+                    @foreach($porTratar as $p)
+                    <button type="button" wire:click="agregarDesdeOdontograma({{ $p['numero'] }}, '{{ $p['condicion'] }}')"
+                        style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.35rem 0.65rem;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:0.78rem;color:#111827;cursor:pointer;">
+                        <span style="width:9px;height:9px;border-radius:3px;background:{{ $coloresOdo[$p['condicion']] ?? '#94a3b8' }};display:inline-block;"></span>
+                        <strong>{{ $p['numero'] }}</strong> {{ $etiquetasOdo[$p['condicion']] ?? $p['condicion'] }}{{ $p['caras'] ? ' · ' . $p['caras'] : '' }}
+                        <span style="color:#0d9488;font-weight:700;">+</span>
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             @forelse($procedures as $i => $p)
             <div wire:key="procedimiento-{{ $i }}" style="padding:0.75rem;margin-bottom:0.5rem;background:#ffffff;border:1px solid #e5e7eb;border-radius:0.7rem;">
                 <div style="margin-bottom:0.5rem;">
@@ -885,7 +909,7 @@
                         <span style="font-size:0.72rem;color:#6b7280;">
                             ${{ number_format($this->priceOf($p['service_id'] ?? null), 0) }}
                             @if($this->unitOf($p['service_id'] ?? null) !== 'visit')
-                                por {{ $this->unitOf($p['service_id'] ?? null) }}
+                                {{ mb_strtolower(\App\Support\WorkUnit::label($this->unitOf($p['service_id'] ?? null))) }}
                             @endif
                         </span>
                         <span style="font-weight:800;font-size:0.95rem;color:#0d9488;margin-left:0.4rem;">
