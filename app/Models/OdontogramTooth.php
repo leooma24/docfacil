@@ -73,15 +73,87 @@ class OdontogramTooth extends Model
         return 'healthy';
     }
 
-    /** incisivo, canino, premolar o molar, por el segundo dígito FDI. */
+    /**
+     * incisivo, canino, premolar o molar, por el segundo dígito FDI. En los
+     * dientes de leche (cuadrantes 5 a 8) el 4 y el 5 son molares: no hay
+     * premolares temporales.
+     */
     public static function tipo(int $numero): string
     {
+        $temporal = intdiv($numero, 10) >= 5;
+
         return match ($numero % 10) {
             1, 2 => 'incisivo',
             3 => 'canino',
-            4, 5 => 'premolar',
+            4, 5 => $temporal ? 'molar' : 'premolar',
             default => 'molar',
         };
+    }
+
+    public static function esSuperior(int $numero): bool
+    {
+        return in_array(intdiv($numero, 10), [1, 2, 5, 6], true);
+    }
+
+    /** Lo que falta hacer y lo que el paciente ya trae, para el resumen. */
+    public const POR_TRATAR = ['decay', 'extraction', 'fracture', 'pending'];
+    public const EXISTENTES = ['filling', 'crown', 'root_canal', 'implant', 'bridge', 'sealant', 'veneer'];
+
+    /** [singular, plural] para el resumen de la boca. */
+    public static function nombresParaResumen(): array
+    {
+        return [
+            'decay' => ['caries', 'caries'],
+            'extraction' => ['extracción indicada', 'extracciones indicadas'],
+            'fracture' => ['fractura', 'fracturas'],
+            'pending' => ['pendiente', 'pendientes'],
+            'filling' => ['obturación', 'obturaciones'],
+            'crown' => ['corona', 'coronas'],
+            'root_canal' => ['endodoncia', 'endodoncias'],
+            'implant' => ['implante', 'implantes'],
+            'bridge' => ['diente con puente', 'dientes con puente'],
+            'sealant' => ['sellante', 'sellantes'],
+            'veneer' => ['carilla', 'carillas'],
+            'missing' => ['diente ausente', 'dientes ausentes'],
+        ];
+    }
+
+    /**
+     * Cuántos dientes tienen cada cosa, contando el diente una vez aunque
+     * tenga caries en dos caras. Recibe el arreglo del editor:
+     * [numero => ['condition' => ..., 'surfaces' => [...]]].
+     */
+    public static function resumenDeBoca(array $dientes): array
+    {
+        $cuenta = [];
+        foreach ($dientes as $diente) {
+            $cosas = array_unique(array_filter(array_merge(
+                [$diente['condition'] ?? null],
+                array_values($diente['surfaces'] ?? [])
+            )));
+            foreach ($cosas as $cosa) {
+                if ($cosa !== 'healthy') {
+                    $cuenta[$cosa] = ($cuenta[$cosa] ?? 0) + 1;
+                }
+            }
+        }
+
+        $grupo = function (array $claves) use ($cuenta) {
+            $g = [];
+            foreach ($claves as $clave) {
+                if (! empty($cuenta[$clave])) {
+                    $g[$clave] = $cuenta[$clave];
+                }
+            }
+
+            return $g;
+        };
+
+        return [
+            'por_tratar' => $grupo(self::POR_TRATAR),
+            'existentes' => $grupo(self::EXISTENTES),
+            'ausentes' => $cuenta['missing'] ?? 0,
+        ];
     }
 
     public static function caraLabels(): array

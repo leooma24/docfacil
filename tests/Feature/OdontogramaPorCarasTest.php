@@ -199,4 +199,55 @@ class OdontogramaPorCarasTest extends TestCase
             ->call('setTab', 'odontogram')
             ->assertSeeHtml('data-cara="36-oclusal" fill="' . $rojo . '"');
     }
+
+    public function test_los_dientes_de_leche_aparecen_al_elegir_denticion_temporal(): void
+    {
+        $this->editor()
+            ->assertDontSeeHtml('Diente 55 ')
+            ->call('setDenticion', 'temporal')
+            ->assertSeeInOrder(['Diente 55 ', 'Diente 51 ', 'Diente 61 ', 'Diente 65 ', 'Diente 85 ', 'Diente 81 ', 'Diente 71 ', 'Diente 75 '])
+            ->assertDontSeeHtml('Diente 18 ');
+    }
+
+    public function test_la_denticion_mixta_muestra_permanentes_y_temporales(): void
+    {
+        $this->editor()
+            ->call('setDenticion', 'mixta')
+            ->assertSeeInOrder(['Diente 18 ', 'Diente 28 ', 'Diente 55 ', 'Diente 65 ', 'Diente 85 ', 'Diente 75 ', 'Diente 48 ', 'Diente 38 ']);
+    }
+
+    public function test_si_ya_tiene_dientes_de_leche_marcados_abre_en_mixta(): void
+    {
+        OdontogramTooth::create([
+            'odontogram_id' => $this->odontograma->id,
+            'tooth_number' => 75,
+            'condition' => 'decay',
+            'center_surface' => 'decay',
+        ]);
+
+        $this->editor()
+            ->assertSet('denticion', 'mixta')
+            ->assertSet('teeth.75.surfaces.oclusal', 'decay');
+    }
+
+    public function test_un_molar_de_leche_es_molar(): void
+    {
+        $this->assertSame('molar', OdontogramTooth::tipo(75));
+        $this->assertSame('molar', OdontogramTooth::tipo(54));
+        $this->assertSame('canino', OdontogramTooth::tipo(83));
+        $this->assertSame('premolar', OdontogramTooth::tipo(15));
+    }
+
+    public function test_el_resumen_separa_lo_que_falta_tratar_de_lo_que_ya_tiene(): void
+    {
+        $this->editor()
+            ->call('setTool', 'decay')
+            ->call('applySurface', 36, 'oclusal')
+            ->call('applySurface', 16, 'distal')
+            ->call('setTool', 'extraction')
+            ->call('applyTool', 48)
+            ->call('setTool', 'filling')
+            ->call('applySurface', 26, 'oclusal')
+            ->assertSeeInOrder(['Por tratar', '2 caries', '1 extracci', 'Tratamientos existentes', '1 obturaci']);
+    }
 }

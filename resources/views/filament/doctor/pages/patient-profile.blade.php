@@ -375,15 +375,6 @@
         @if($activeTab === 'odontogram')
         <div class="p-4 md:p-6">
             @php
-                // FDI tooth numbering: cuadrantes 1-4 superior, 5-8 inferior
-                // Sup. derecho: 18-11 (de molar a incisivo central)
-                // Sup. izquierdo: 21-28
-                // Inf. derecho: 48-41 (bajo el sup. derecho)
-                // Inf. izquierdo: 31-38 (bajo el sup. izquierdo)
-                $upperRight = [18, 17, 16, 15, 14, 13, 12, 11];
-                $upperLeft  = [21, 22, 23, 24, 25, 26, 27, 28];
-                $lowerLeft  = [31, 32, 33, 34, 35, 36, 37, 38];
-                $lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
                 $colors = \App\Models\OdontogramTooth::conditionColors();
                 $labels = \App\Models\OdontogramTooth::conditionLabels();
             @endphp
@@ -413,28 +404,13 @@
 
                 {{-- Arcada dental, el mismo dibujo que el editor --}}
                 <div style="background:linear-gradient(#f8fafc,#fff);border:1px solid #e5e7eb;border-radius:14px;padding:14px 8px;">
-                    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-                        <div style="min-width:700px;display:flex;flex-direction:column;align-items:center;">
-                            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-bottom:4px;">SUPERIOR</div>
-                            @foreach([[$upperRight, $upperLeft], [$lowerRight, $lowerLeft]] as $fila => [$mitadDerecha, $mitadIzquierda])
-                                @if($fila === 1)
-                                    <div style="width:690px;border-top:1.5px dashed #d1d5db;margin:6px 0;"></div>
-                                @endif
-                                <div style="display:flex;align-items:stretch;gap:2px;">
-                                    @foreach([$mitadDerecha, $mitadIzquierda] as $lado => $mitad)
-                                        @if($lado === 1)
-                                            <div style="width:2px;background:#cbd5e1;margin:0 6px;border-radius:2px;"></div>
-                                        @endif
-                                        @foreach($mitad as $num)
-                                            @php $tooth = $byNum->get($num); @endphp
-                                            <x-odontograma.diente :numero="$num" :condicion="$tooth?->condition ?? 'healthy'" :caras="$tooth?->caras() ?? []" :notas="$tooth?->notes" />
-                                        @endforeach
-                                    @endforeach
-                                </div>
-                            @endforeach
-                            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-top:4px;">INFERIOR</div>
-                        </div>
-                    </div>
+                    @php
+                        $dientesDelOdonto = $odonto->teeth->mapWithKeys(fn ($t) => [$t->tooth_number => [
+                            'condition' => $t->condition, 'surfaces' => $t->caras(), 'notes' => $t->notes,
+                        ]])->all();
+                        $denticionOdonto = $odonto->teeth->contains(fn ($t) => $t->tooth_number >= 51) ? 'mixta' : 'permanente';
+                    @endphp
+                    <x-odontograma.arcadas :dientes="$dientesDelOdonto" :denticion="$denticionOdonto" />
 
                     {{-- Leyenda solo de lo que hay en este odontograma --}}
                     @php
