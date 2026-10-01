@@ -52,6 +52,24 @@ class AlertsWidget extends Widget
             ];
         }
 
+        // Huecos de cancelaciones que alguien de la lista de espera podría
+        // ocupar. Lleva directo a la lista filtrada para ese hueco.
+        if (auth()->user()->clinic?->hasFeature('waitlist')) {
+            foreach (Appointment::huecosLibres($clinicId)->take(2) as $hueco) {
+                $candidatos = \App\Models\WaitlistEntry::candidatosPara($hueco)->count();
+                if ($candidatos > 0) {
+                    $cuando = $hueco->starts_at->isTomorrow() ? 'mañana' : ($hueco->starts_at->isToday() ? 'hoy' : $hueco->starts_at->locale('es')->isoFormat('dddd D'));
+                    $alerts[] = [
+                        'type' => 'warning',
+                        'icon' => 'heroicon-o-user-group',
+                        'title' => "Se liberó {$cuando} {$hueco->starts_at->format('H:i')} · {$candidatos} en lista de espera",
+                        'desc' => 'Ofrézcale el horario a quien lo esperaba.',
+                        'url' => $hueco->ligaAListaDeEspera(),
+                    ];
+                }
+            }
+        }
+
         // Lo que el paciente ya aceptó pero nadie ha agendado: dinero que se
         // queda en el presupuesto.
         $sinAgendar = \App\Models\TreatmentPlanItem::whereNull('completed_at')

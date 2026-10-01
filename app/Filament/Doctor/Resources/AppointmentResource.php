@@ -567,7 +567,7 @@ class AppointmentResource extends Resource
                             ->actions([
                                 \Filament\Notifications\Actions\Action::make('lista')
                                     ->label('Ofrecer el horario')
-                                    ->url(route('filament.doctor.resources.lista-de-espera.index'))
+                                    ->url($record->ligaAListaDeEspera())
                                     ->button(),
                             ])
                             ->send();

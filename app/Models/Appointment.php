@@ -237,6 +237,28 @@ class Appointment extends Model
     /**
      * Mensaje listo para mostrarle al doctor, o null si el horario está libre.
      */
+    /**
+     * Citas canceladas que dejaron un hueco que todavía nadie ocupa, de aquí
+     * a una semana. Es lo que se le puede ofrecer a la lista de espera.
+     */
+    public static function huecosLibres(int $clinicId): \Illuminate\Support\Collection
+    {
+        return self::withoutGlobalScopes()
+            ->where('clinic_id', $clinicId)
+            ->where('status', 'cancelled')
+            ->whereBetween('starts_at', [now(), now()->addDays(7)])
+            ->orderBy('starts_at')
+            ->get()
+            ->filter(fn (self $c) => self::traslapes($clinicId, $c->doctor_id, $c->starts_at, $c->ends_at, $c->id)->isEmpty())
+            ->values();
+    }
+
+    /** La liga a la lista de espera filtrada para este hueco. */
+    public function ligaAListaDeEspera(): string
+    {
+        return \App\Filament\Doctor\Resources\WaitlistEntryResource::getUrl('index', ['hueco' => $this->id], panel: 'doctor');
+    }
+
     public static function mensajeDeTraslape(
         int $clinicId,
         ?int $doctorId,

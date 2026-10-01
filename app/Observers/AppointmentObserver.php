@@ -84,7 +84,8 @@ class AppointmentObserver
                     ->actions([
                         Action::make('ver')
                             ->label('Ver lista de espera')
-                            ->url('/doctor/lista-de-espera')
+                            // Abre la lista ya filtrada para este hueco.
+                            ->url($appointment->ligaAListaDeEspera())
                             ->markAsRead(),
                     ])
                     ->sendToDatabase($recipient);

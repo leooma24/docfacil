@@ -160,7 +160,10 @@ class WaitlistEntryResource extends Resource
                         'expired' => 'Expirado',
                         'cancelled' => 'Cancelado',
                     ])
-                    ->default('waiting'),
+                    ->multiple()
+                    // Al ofrecerle el lugar pasa a "Notificado": debe seguir a
+                    // la vista para apartarle la cita cuando conteste.
+                    ->default(['waiting', 'notified']),
             ])
             ->actions([
                 Tables\Actions\Action::make('whatsapp')
@@ -179,9 +182,13 @@ class WaitlistEntryResource extends Resource
                             // frente al paciente; el calendario abre en el
                             // mes actual y era facil picarle a un dia viejo.
                             ->minDate(now())
-                            ->default(now()->addDay()->setTime(10, 0)),
+                            // Desde el aviso de una cancelación ya trae el hueco.
+                            ->default(fn ($livewire) => method_exists($livewire, 'huecoCita') && $livewire->huecoCita()
+                                ? $livewire->huecoCita()->starts_at
+                                : now()->addDay()->setTime(10, 0)),
                     ])
-                    ->action(function (WaitlistEntry $record, array $data) {
+                    ->action(function (WaitlistEntry $record, array $data, $livewire) {
+                        $hueco = method_exists($livewire, 'huecoCita') ? $livewire->huecoCita() : null;
                         $phone = preg_replace('/\D/', '', $record->patient->phone);
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         $firstName = $record->patient->first_name ?: 'hola';
@@ -192,13 +199,59 @@ class WaitlistEntryResource extends Resource
 
                         $message = "Hola {$firstName}, te escribo de *{$clinicName}*. Estás en nuestra lista de espera y se acaba de liberar un horario:\n\nFecha: {$date}\nHora: {$time} hrs\n\nSi te acomoda responde *SÍ* y te lo aparto. ¡Es primer llegado, primer servido!";
 
-                        $record->update(['status' => 'notified', 'notified_at' => now()]);
+                        $record->update([
+                            'status' => 'notified',
+                            'notified_at' => now(),
+                            // Si es el hueco de una cancelación, queda dicho cuál
+                            // para apartarlo con un clic cuando conteste que sí.
+                            'notified_for_appointment_id' => $hueco && $slot->equalTo($hueco->starts_at) ? $hueco->id : null,
+                        ]);
                         Notification::make()
                             ->title('Estado actualizado a Notificado')
                             ->body('Se abrirá WhatsApp con el mensaje listo.')
                             ->success()
                             ->send();
                         return redirect()->away("https://wa.me/{$phone}?text=" . urlencode($message));
+                    }),
+                // El paciente dijo que sí: se le crea la cita en el hueco.
+                Tables\Actions\Action::make('apartar')
+                    ->label('Apartar el horario')
+                    ->icon('heroicon-o-calendar-days')
+                    ->color('primary')
+                    ->visible(fn (WaitlistEntry $record) => $record->status === 'notified')
+                    ->modalHeading('Apartarle el horario')
+                    ->modalDescription(fn (WaitlistEntry $record) => ($hueco = \App\Models\Appointment::find($record->notified_for_appointment_id))
+                        ? 'Se le agenda ' . $hueco->starts_at->locale('es')->isoFormat('dddd D [de] MMMM, HH:mm') . '.'
+                        : 'Elija la fecha y hora que aceptó.')
+                    ->form(fn (WaitlistEntry $record) => $record->notified_for_appointment_id ? [] : [
+                        Forms\Components\DateTimePicker::make('starts_at')->label('Fecha y hora')->required()->native(false)->displayFormat('d/m/Y H:i')->minutesStep(15),
+                    ])
+                    ->action(function (WaitlistEntry $record, array $data) {
+                        $hueco = \App\Models\Appointment::find($record->notified_for_appointment_id);
+                        $inicio = $hueco?->starts_at ?? \Carbon\Carbon::parse($data['starts_at']);
+                        $fin = $hueco?->ends_at ?? $inicio->copy()->addMinutes((int) ($record->service?->duration_minutes ?: 30));
+                        $doctor = $hueco?->doctor_id ?? $record->doctor_id ?? auth()->user()->doctor?->id;
+
+                        if ($choque = \App\Models\Appointment::mensajeDeTraslape($record->clinic_id, $doctor, $inicio, $fin, $hueco?->id)) {
+                            Notification::make()->title('Ese horario ya se ocupó')->body($choque)->warning()->send();
+
+                            return;
+                        }
+
+                        \App\Models\Appointment::create([
+                            'clinic_id' => $record->clinic_id,
+                            'doctor_id' => $doctor,
+                            'patient_id' => $record->patient_id,
+                            'service_id' => $record->service_id ?? $hueco?->service_id,
+                            'starts_at' => $inicio,
+                            'ends_at' => $fin,
+                            'status' => 'scheduled',
+                        ]);
+                        $record->update(['status' => 'booked']);
+
+                        Notification::make()->title('Horario apartado')
+                            ->body(($record->patient?->first_name ?? 'El paciente') . ' quedó agendado ' . $inicio->locale('es')->isoFormat('dddd D [de] MMMM, HH:mm') . '.')
+                            ->success()->send();
                     }),
                 Tables\Actions\EditAction::make(),
             ])
