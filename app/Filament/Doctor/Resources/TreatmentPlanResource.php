@@ -98,10 +98,12 @@ class TreatmentPlanResource extends Resource
             Forms\Components\Section::make('Servicios y costos')
                 ->schema([
                     Forms\Components\Repeater::make('items')
+                        ->label('Tratamientos')
                         ->relationship()
                         ->schema([
                             Forms\Components\Select::make('service_id')
-                                ->label('Servicio (opcional)')
+                                ->label('Servicio')
+                                ->columnSpan(['md' => 5])
                                 ->options(fn () => Service::where('clinic_id', auth()->user()->clinic_id)
                                     ->where('is_active', true)
                                     ->pluck('name', 'id'))
@@ -116,28 +118,37 @@ class TreatmentPlanResource extends Resource
                                         }
                                     }
                                 }),
-                            Forms\Components\TextInput::make('description')
-                                ->label('Descripción')
-                                ->required()
-                                ->maxLength(255),
                             Forms\Components\TextInput::make('tooth_number')
-                                ->label('Diente (FDI)')
-                                ->placeholder('Ej: 16')
+                                ->label('Diente')
+                                ->placeholder('16')
+                                ->columnSpan(['md' => 2])
                                 ->maxLength(10),
                             Forms\Components\TextInput::make('quantity')
-                                ->label('Cantidad')
+                                ->label('Cant.')
                                 ->numeric()
                                 ->default(1)
                                 ->required()
-                                ->minValue(1),
+                                ->minValue(1)
+                                ->columnSpan(['md' => 2])
+                                ->live(onBlur: true),
                             Forms\Components\TextInput::make('unit_price')
-                                ->label('Precio unitario')
+                                ->label('Precio')
                                 ->numeric()
                                 ->prefix('$')
                                 ->required()
-                                ->minValue(0),
+                                ->minValue(0)
+                                ->columnSpan(['md' => 3])
+                                ->live(onBlur: true),
+                            Forms\Components\TextInput::make('description')
+                                ->label('Descripción')
+                                ->columnSpan(['md' => 12])
+                                ->required()
+                                ->maxLength(255),
                         ])
-                        ->columns(3)
+                        // Servicio, diente, cantidad y precio en un renglón y la
+                        // descripción debajo: antes cada tratamiento ocupaba media
+                        // pantalla con cinco campos encimados.
+                        ->columns(['default' => 1, 'md' => 12])
                         ->defaultItems(1)
                         ->orderColumn('sort_order')
                         ->reorderable()
@@ -147,10 +158,16 @@ class TreatmentPlanResource extends Resource
                             ->label('Descuento (monto)')
                             ->numeric()
                             ->prefix('$')
-                            ->default(0),
+                            ->default(0)
+                            ->live(onBlur: true),
+                        // En vivo, con lo que el doctor va escribiendo; antes era el
+                        // total guardado y quedaba viejo al cambiar un precio.
                         Forms\Components\Placeholder::make('total_preview')
-                            ->label('Total estimado')
-                            ->content(fn ($record) => $record ? '$' . number_format((float) $record->total, 2) : 'Guarda para calcular'),
+                            ->label('Total')
+                            ->content(fn (Forms\Get $get) => new \Illuminate\Support\HtmlString(
+                                '<span style="font-size:1.6rem;font-weight:800;color:#0f766e;">$'
+                                . number_format(self::totalEstimado($get('items') ?? [], $get('discount')), 2) . '</span>'
+                            )),
                     ]),
                 ]),
 
@@ -251,6 +268,14 @@ class TreatmentPlanResource extends Resource
      * WhatsApp con el mensaje listo. Lo usan la lista y la pantalla del
      * presupuesto.
      */
+    /** Suma de cantidad × precio de las líneas, menos el descuento. Nunca negativo. */
+    public static function totalEstimado(array $items, mixed $descuento): float
+    {
+        $subtotal = collect($items)->sum(fn ($i) => (float) ($i['quantity'] ?? 0) * (float) ($i['unit_price'] ?? 0));
+
+        return round(max(0, $subtotal - (float) $descuento), 2);
+    }
+
     public static function enviarPorWhatsapp(TreatmentPlan $record)
     {
         if (empty($record->public_token)) {

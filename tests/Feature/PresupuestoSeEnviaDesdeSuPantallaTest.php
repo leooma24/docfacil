@@ -42,4 +42,17 @@ class PresupuestoSeEnviaDesdeSuPantallaTest extends TestCase
         $this->assertSame('sent', $plan->fresh()->status);
         $this->assertNotNull($plan->fresh()->public_token);
     }
+
+    public function test_el_total_se_calcula_con_lo_que_el_doctor_va_escribiendo(): void
+    {
+        $items = [
+            'a' => ['quantity' => '1', 'unit_price' => '600'],
+            'b' => ['quantity' => '2', 'unit_price' => '800.50'],
+            'c' => ['quantity' => '', 'unit_price' => ''],
+        ];
+
+        $this->assertSame(2201.0, \App\Filament\Doctor\Resources\TreatmentPlanResource::totalEstimado($items, '0'));
+        $this->assertSame(2001.0, \App\Filament\Doctor\Resources\TreatmentPlanResource::totalEstimado($items, '200'));
+        $this->assertSame(0.0, \App\Filament\Doctor\Resources\TreatmentPlanResource::totalEstimado($items, '5000'));
+    }
 }
