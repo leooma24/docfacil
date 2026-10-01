@@ -1,8 +1,10 @@
 # Plan Go-To-Market: Primeros 50 Clientes Pagados de DocFácil
 
 > Generado: 2026-04-11 | Horizonte: 12 semanas (abril-julio 2026)
-> Base: Culiacán + Los Mochis, Sinaloa | Equipo: 2 personas (dev + socio comercial)
+> Base: Culiacán + Los Mochis, Sinaloa | Equipo previsto (supuesto): 2 personas (dev + socio comercial)
 > Producto: Listo en producción | Presupuesto: Bootstrapped
+>
+> **Nota de honestidad (1-oct-2026):** DocFácil aún no tiene clientes pagados ni testimonios reales. Todas las cifras de clientes, embudos, tasas y MRR de este plan son **metas o supuestos**, no resultados. Con doctores reales solo se dicen cosas ciertas. Los recordatorios por WhatsApp hoy son **a un clic desde el WhatsApp del consultorio** (mensaje listo + botones "Confirmar"/"Cancelar" para el paciente; sin costo por mensaje); el envío automático está apagado desde el 14-sep-2026.
 
 ---
 
@@ -10,7 +12,7 @@
 
 **Meta:** 50 clientes pagados en 12 semanas = ~4.2 clientes/semana promedio.
 
-Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/semana), las semanas 5-12 de cosecha (5-7 cierres/semana). La curva es una J, no una línea recta.
+Supuesto: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/semana), las semanas 5-12 de cosecha (5-7 cierres/semana). La curva es una J, no una línea recta.
 
 **Distribución geográfica objetivo:**
 - Culiacán: 30 clientes (ciudad más grande, base de operaciones)
@@ -45,7 +47,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Lunes: Crear cuenta demo con datos realistas (20 pacientes ficticios, agenda con citas, recetas generadas) para mostrar en demos. La demo debe verse "vivida", no vacía.
 - Martes: Grabar video demo de 3 minutos (pantalla + voz) mostrando: agendar cita → recordatorio WhatsApp → cobro → receta PDF. Subir a YouTube (no listado) y tener link listo para WhatsApp.
 - Miércoles: Crear 3 volantes PDF/impresos (tamaño media carta):
-  - Volante A: "¿Tus pacientes faltan a sus citas? Recordatorios automáticos por WhatsApp" + QR a landing
+  - Volante A: "¿Tus pacientes faltan a sus citas? Recordatorios por WhatsApp a un clic, con botón para que el paciente confirme. Sin costo por mensaje." + QR a landing
   - Volante B: "Tu consultorio digital desde $16 al día" + QR + teléfono WhatsApp
   - Volante C: "Expediente clínico + Recetas + Cobros en un solo lugar" + QR
 - Jueves: Imprimir 200 volantes (costo: ~$300 MXN en impresión digital). Mandar hacer 100 tarjetas de presentación con QR al demo ($150 MXN).
@@ -74,7 +76,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
   - Presencial si es en Culiacán (llevar laptop, mostrar en la computadora de recepción si se puede)
   - VideoLlamada WhatsApp si es Los Mochis (compartir pantalla)
   - Duración: 15 minutos MAX. Mostrar solo: agenda → recordatorio → cobro → receta
-  - Al final: "¿Quiere probarlo gratis 14 días con sus propios pacientes?"
+  - Al final: "¿Quiere probarlo gratis 15 días con sus propios pacientes?"
 - Viernes PM: Registrar resultados en panel de ventas. Clasificar: caliente / tibio / frío / descartado.
 
 **FT:**
@@ -87,7 +89,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
   4. "Material Dental México - Compra y Venta"
   5. "Dentistas Emprendedores MX"
   - NO vender. Solo contestar preguntas, dar valor. Poner en el perfil "Co-fundador de DocFácil".
-- Jueves: Preparar onboarding automatizado: cuando un doctor se registra al trial, que reciba WhatsApp automático: "¡Bienvenido! Soy [nombre]. En 10 minutos puedo ayudarte a configurar tu primer paciente y cita. ¿Cuándo te queda bien?"
+- Jueves: Preparar onboarding automatizado: cuando un doctor se registra al trial, que reciba WhatsApp de bienvenida (hoy se manda a mano: el envío automático de WhatsApp está apagado desde el 14-sep-2026): "¡Bienvenido! Soy [nombre]. En 10 minutos puedo ayudarte a configurar tu primer paciente y cita. ¿Cuándo te queda bien?"
 - Viernes: Soporte a los trials activos. Asegurar que cada trial tenga al menos 1 paciente y 1 cita creada antes del fin de semana.
 
 **KPIs Semana 2:**
@@ -116,7 +118,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Sábado (medio día): Visitar 5 consultorios que abren sábado en Culiacán (muchos dentistas trabajan sábado medio día). Hora ideal: 10-12pm.
 
 **FT:**
-- Lunes: Publicar en Facebook (desde cuenta personal, no página) un post tipo storytelling: "Mi socio y yo creamos un software para consultorios dentales porque [historia real]. Ya hay doctores usándolo. Si conoces un dentista que lucha con las citas perdidas, etiquétalo." Meta: 5+ etiquetas.
+- Lunes: Publicar en Facebook (desde cuenta personal, no página) un post tipo storytelling: "Mi socio y yo creamos un software para consultorios dentales porque [historia real]. Estamos empezando y buscamos los primeros consultorios; por eso les cargamos su agenda y les contestamos directo. Si conoces un dentista que lucha con las citas perdidas, etiquétalo." Meta: 5+ etiquetas.
 - Martes: Buscar en Google Maps "distribuidor dental Culiacán" y "depósito dental Culiacán". Hacer lista de 5-8 distribuidores. Estos son aliados, no clientes: ellos visitan 50+ consultorios al mes.
 - Miércoles: Visitar al distribuidor dental más grande de Culiacán con una propuesta: "Por cada dentista que nos refieras y se suscriba, te damos $200 MXN de comisión o $300 en crédito en DocFácil para tus clientes."
 - Jueves: Revisar métricas de la semana en el panel de ventas. Ajustar los mensajes de WhatsApp según qué templates tienen mejor respuesta.
@@ -138,16 +140,16 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 
 **SC:**
 - Lunes-Martes: Blitz de seguimiento. Llamar a TODOS los prospectos tibios (los que vieron demo pero no activaron trial, o activaron trial pero no lo usaron). Mensaje: "Doctor, su prueba gratis se acaba en X días. ¿Quiere que le ayude a migrar sus pacientes? Le puedo cargar sus primeros 50 pacientes gratis."
-- Miércoles: Pedir referidos a los 2-3 clientes pagados y a los trials activos: "¿Conoce algún colega que también le serviría? Si se suscribe, le regalamos un mes gratis a usted."
+- Miércoles: Pedir referidos a los clientes pagados (si ya los hay) y a los trials activos: "¿Conoce algún colega que también le serviría? Si se suscribe, le regalamos un mes gratis a usted."
 - Jueves: Contactar al Colegio de Cirujanos Dentistas de Culiacán. Pedir hablar con el presidente o secretario. Propuesta: "Queremos presentar DocFácil en su próxima reunión mensual. 15 minutos, sin costo, y para sus agremiados tenemos precio especial."
 - Viernes: Demos con referidos + nuevos.
 
 **FT:**
-- Lunes: Crear landing page específica: docfacil.com/dentistas-culiacan (si no existe ya). Con testimonial del primer cliente pagado (aunque sea anónimo: "Dentista en Culiacán: 'Reduje mis citas perdidas un 40% en 2 semanas'").
+- Lunes: Crear landing page específica: docfacil.com/dentistas-culiacan (si no existe ya). Agregar testimonial SOLO cuando exista uno real y con permiso del doctor (puede ser anónimo: "Dentista en Culiacán: '[en sus palabras: qué cambió]'"). Mientras no haya, no poner ninguno.
 - Martes: Crear WhatsApp Status (estados) con:
   - Screenshot de la interfaz con datos difuminados
-  - "Ya somos X consultorios usando DocFácil"
-  - Mini-tip: "¿Sabías que el 30% de los pacientes olvidan sus citas si no les mandas recordatorio?"
+  - "Ya somos [número real] consultorios usando DocFácil" (solo cuando haya consultorios reales; si no, omitir este estado)
+  - Mini-tip: "¿Sabías que en México falta en promedio cerca del 30% de los pacientes, y hasta 36% de esas faltas son por olvido? (Doctoralia México)"
   - Publicar 3 estados, que se vean a las 12pm (hora pico de WhatsApp).
 - Miércoles: Publicar segundo artículo SEO: "Cómo reducir citas perdidas en tu consultorio dental: guía 2026"
 - Jueves: Configurar Google Business Profile para DocFácil si no existe. Categoría: "Software company". Esto ayuda a aparecer cuando buscan "software dental Culiacán".
@@ -182,7 +184,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Viernes: Viaje de un día a Los Mochis (2 hrs en carro desde Culiacán). Agendar 4-5 demos presenciales con prospectos tibios que no cerraron por WhatsApp. Llevar laptop y volantes.
 
 **FT:**
-- Crear caso de éxito con el primer cliente satisfecho. Formato: 1 párrafo + 1 foto del consultorio (con permiso) + 1 quote. Publicar en landing y redes.
+- Crear caso de éxito con el primer cliente satisfecho. Formato: 1 párrafo + 1 foto del consultorio (con permiso) + 1 quote real en palabras del doctor (no redactarla por él). Publicar en landing y redes.
 - Activar programa de referidos formal en el sistema: código de referido por cliente, descuento automático al referir.
 - Publicar 1 reel/video corto en Instagram: "Así se ve agendar una cita en DocFácil" (grabación de pantalla 30 segundos, música de fondo).
 - Participar activamente en 2 grupos de Facebook respondiendo preguntas técnicas (posicionarse como experto).
@@ -207,7 +209,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 **FT:**
 - Publicar 3 posts en Facebook durante la semana:
   1. Post educativo: "Las 3 funciones que TODO consultorio dental necesita digitalizar primero" (con imagen/carrusel)
-  2. Post de prueba social: "Esta semana nos eligieron 4 consultorios nuevos en Sinaloa. Gracias por confiar."
+  2. Post de prueba social: "Esta semana nos eligieron [número real] consultorios nuevos en Sinaloa. Gracias por confiar." (solo si es cierto; si no, usar un post de fundador: "Estamos empezando y buscamos los primeros consultorios")
   3. Post interactivo: "Doctores: ¿Cuál es su mayor dolor de cabeza administrativo? A) Citas perdidas B) Cobros C) Expedientes D) Todo lo anterior"
 - Optimizar la landing principal con los aprendizajes de las primeras demos (¿qué es lo primero que preguntan? Ponerlo arriba).
 - Configurar una campaña básica de Facebook Ads: $100 MXN/día ($3,000/mes), segmentando: profesionales de salud en Sinaloa, 28-55 años, interés en odontología. Anuncio con video demo de 60 segundos. CTA: WhatsApp directo.
@@ -229,7 +231,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Lunes: Seguimiento a distribuidores dentales. ¿Han referido a alguien? Refrescar la relación. Llevarles más volantes.
 - Martes: Contactar la Facultad de Odontología de la UAS (Universidad Autónoma de Sinaloa) en Culiacán. Propuesta: ofrecer DocFácil gratis a residentes/pasantes como herramienta de aprendizaje. Los residentes de hoy son los dentistas que abren consultorio en 1-2 años.
 - Miércoles: Presentación en el Colegio de Dentistas (si se logró agendar en semana 4). Formato:
-  - 5 min: "El problema de las citas perdidas en México" (estadísticas)
+  - 5 min: "El problema de las citas perdidas en México" (solo estadísticas con fuente: Doctoralia México ~30% de faltas, hasta 36% por olvido; encuesta Doctocliq 2022; revisión Scielo 2024)
   - 5 min: Demo en vivo de DocFácil
   - 5 min: Oferta especial para agremiados ($499/mes en plan Básico, 6 meses gratis si entran al programa Fundador)
   - Recoger WhatsApp de todos los asistentes
@@ -262,7 +264,7 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 - Dashboard de ventas: revisar funnel completo. ¿Dónde se atoran? ¿En demo→trial o en trial→paid? Ajustar.
 - Si trial→paid es bajo (<25%): el problema es el onboarding. Crear guía paso a paso con screenshots: "Tus primeros 30 minutos en DocFácil".
 - Si demo→trial es bajo (<50%): el problema es la demo. Cambiar el pitch: enfocarse en el dolor #1 que mencionan los doctores.
-- Publicar post de "cierre de mes": "Abril fue increíble. Ya somos X consultorios digitalizándose con DocFácil."
+- Publicar post de "cierre de mes": "Ya somos [número real] consultorios digitalizándose con DocFácil." (solo con el número real de clientes)
 
 **KPIs Semana 8 (MITAD DE CAMINO):**
 | Métrica | Meta |
@@ -283,18 +285,18 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 
 **SC:**
 - Lunes: Contactar a los 25+ clientes pagados. Pedir referido a CADA UNO. Mensaje: "Doctor, ¿cómo le ha ido con DocFácil? Me da gusto. Oiga, ¿tiene algún colega que también le serviría? Si se suscribe, le regalamos un mes a usted."
-- Martes-Miércoles: Contactar todos los referidos. Los referidos tienen 3x la tasa de conversión del outreach frío. Prioridad máxima.
+- Martes-Miércoles: Contactar todos los referidos. Suponemos que los referidos convierten mucho mejor que el outreach frío (supuesto, medirlo). Prioridad máxima.
 - Jueves-Viernes: Outreach a ciudades secundarias: Guasave (30 min de Los Mochis), Guamúchil, Navolato. Google Maps + WhatsApp frío.
 
 **FT:**
 - Implementar NPS simple: a los 30 días de suscripción, enviar WhatsApp: "Del 1 al 10, ¿qué tanto recomendaría DocFácil? Responda con un número." Los que digan 9-10 = pedir referido + testimonial. Los que digan 1-6 = llamar inmediatamente para resolver.
-- Crear segundo video: caso de éxito en video (30-60 seg, el doctor diciendo en cámara por qué usa DocFácil). Pagar $500 MXN de regalo si es necesario.
+- Crear segundo video: caso de éxito en video (30-60 seg, el doctor diciendo en cámara por qué usa DocFácil). Si se le da un regalo (ej. $500 MXN), decirlo en la publicación; el doctor habla en sus propias palabras, sin guion.
 - Evaluar Google Ads: si hay presupuesto ($50-100/día), activar campaña de Search con keywords:
   - "software para consultorio dental"
   - "agenda para dentistas"
   - "recordatorio citas consultorio"
   - "expediente clínico digital"
-  - Solo Sinaloa. CPC esperado: $5-15 MXN.
+  - Solo Sinaloa. CPC esperado (estimado, sin datos propios): $5-15 MXN.
 
 **KPIs Semana 9:**
 | Métrica | Meta |
@@ -330,13 +332,13 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 #### SEMANA 11 — "Sprint final: cerrar pipeline"
 
 **SC:**
-- Lunes: Lista de TODOS los prospectos en pipeline que alguna vez mostraron interés pero no cerraron. Contactar a cada uno con oferta de cierre: "Doctor, quedan 3 lugares del programa Fundador: 6 meses gratis y después $499/mes congelado de por vida. Cuando se llenen, ya no hay forma de entrar."
+- Lunes: Lista de TODOS los prospectos en pipeline que alguna vez mostraron interés pero no cerraron. Contactar a cada uno con oferta de cierre: "Doctor, quedan [lugares reales] lugares del programa Fundador: 6 meses gratis y después $499/mes congelado de por vida. Cuando se llenen, ya no hay forma de entrar."
 - Martes-Jueves: Demos y cierres intensivos. Meta: 10 demos en 3 días.
 - Viernes: Tercer viaje a Los Mochis o Mazatlán para cerrar deals presenciales.
 
 **FT:**
 - Soporte intensivo a trials activos para convertirlos antes de que expiren.
-- Publicar en todos los grupos de Facebook un post de valor + mención sutil: "Pregunta para dentistas: ¿cuántas citas pierden al mes por no-shows? Nosotros en DocFácil vemos que el promedio es 8-12 al mes. Con recordatorios por WhatsApp baja a 2-3."
+- Publicar en todos los grupos de Facebook un post de valor + mención sutil: "Pregunta para dentistas: ¿cuántas citas pierden al mes por pacientes que no llegan? Doctoralia México reporta que en promedio falta cerca del 30% de los pacientes y que hasta 36% de esas faltas son por olvido. En DocFácil hicimos que el recordatorio salga a un clic desde el WhatsApp del consultorio, con botón para que el paciente confirme. ¿A ustedes cuántas les pasan?"
 - Preparar reporte para inversionistas/socios (si aplica): MRR, clientes, retención, pipeline.
 
 **KPIs Semana 11:**
@@ -376,6 +378,8 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 
 ## 2. CANALES DE ADQUISICIÓN (Ordenados por ROI)
 
+> Los "Clientes esperados" y los "Números" de cada canal son **metas y supuestos de planeación**, no resultados medidos.
+
 ### Canal 1: Visitas Puerta a Puerta en Culiacán
 **Clientes esperados: 15 de 50**
 
@@ -388,14 +392,14 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 
 **Ejecución paso a paso:**
 1. Rutear por zona: agrupar consultorios por colonia para visitar 8-10 por recorrido (3 hrs).
-2. Llegar al consultorio, hablar con la RECEPCIONISTA primero. "Buenos días, ¿el doctor [nombre] se encuentra? Vengo a mostrarle un sistema para consultorios que les manda recordatorio de citas por WhatsApp a los pacientes."
+2. Llegar al consultorio, hablar con la RECEPCIONISTA primero. "Buenos días, ¿el doctor [nombre] se encuentra? Vengo a mostrarle un sistema para consultorios con el que ustedes mandan el recordatorio de cita por WhatsApp a un clic, y el paciente confirma con un botón."
 3. Si el doctor está disponible (raro): demo express de 5 minutos en tu celular.
 4. Si no está: dejar volante CON TU NÚMERO DE WHATSAPP escrito a mano. Decir a la recepcionista: "Se lo puede mencionar cuando termine? Es gratis probarlo."
 5. Anotar en el celular: nombre recepcionista, hora de visita, si el consultorio se ve moderno o tradicional, cuántos sillones ves.
 6. A las 24 hrs: enviar WhatsApp al consultorio: "Buen día, soy [nombre] de DocFácil, ayer pasé por su consultorio y platiqué con [nombre recepcionista]. Le mando un video de 3 min de cómo funciona: [link]"
-7. A las 72 hrs sin respuesta: segundo mensaje: "Doctor, sin presión. Solo le comento que puede probarlo gratis 14 días. Si le interesa, aquí estoy. Si no, con gusto. Que tenga buen día."
+7. A las 72 hrs sin respuesta: segundo mensaje: "Doctor, sin presión. Solo le comento que puede probarlo gratis 15 días. Si le interesa, aquí estoy. Si no, con gusto. Que tenga buen día."
 
-**Por qué funciona:** En México, especialmente en ciudades como Culiacán, la venta presencial genera confianza. Los doctores son inundados de WhatsApp spam pero reciben pocas visitas profesionales. Ver una cara genera 3x más confianza que un mensaje digital.
+**Por qué funciona:** En México, especialmente en ciudades como Culiacán, la venta presencial genera confianza. Los doctores son inundados de WhatsApp spam pero reciben pocas visitas profesionales. Suponemos que ver una cara genera más confianza que un mensaje digital (supuesto).
 
 **Números:** 100 visitas → 40 que reciben el mensaje de seguimiento → 15 demos → 10 trials → 5-6 paid. Hacer 200 visitas en 12 semanas = 10-15 clientes.
 
@@ -418,19 +422,19 @@ Realidad: las primeras 4 semanas serán de carga del pipeline (1-2 cierres/seman
 4. Enviar desde las 12:00-14:00 hrs (entre pacientes de mañana y tarde) o 18:00-19:00 (al cerrar el consultorio).
 5. Nunca enviar a las 8am ni después de las 9pm.
 
-**Templates probados (usar en rotación):**
+**Templates por probar (usar en rotación y medir cuál responde mejor):**
 
 **Template A — El Directo:**
-> Buen día Dr. [nombre], soy [tu nombre] de DocFácil. Hacemos software para consultorios dentales: agenda con recordatorios automáticos por WhatsApp a sus pacientes, expediente digital y cobros. Desde $499/mes. ¿Le puedo mandar un video de 3 min mostrando cómo funciona?
+> Buen día Dr. [nombre], soy [tu nombre] de DocFácil. Hacemos software para consultorios dentales: agenda con recordatorios por WhatsApp a un clic desde el WhatsApp de su consultorio (el paciente confirma con un botón; sin costo por mensaje), expediente digital y cobros. Desde $499/mes. ¿Le puedo mandar un video de 3 min mostrando cómo funciona?
 
 **Template B — El Problema:**
-> Dr. [nombre], ¿le pasa que los pacientes faltan a sus citas sin avisar? Un software de recordatorios automáticos por WhatsApp reduce las citas perdidas hasta un 50%. Se llama DocFácil y cuesta menos que $17 al día. ¿Le interesa ver cómo funciona?
+> Dr. [nombre], ¿le pasa que los pacientes faltan a sus citas sin avisar? Según Doctoralia México, en promedio falta cerca del 30% de los pacientes y hasta 36% de esas faltas son por olvido. Con DocFácil usted manda el recordatorio a un clic desde el WhatsApp de su consultorio y el paciente confirma con un botón. Cuesta menos que $17 al día. ¿Le interesa ver cómo funciona?
 
-**Template C — La Referencia Social:**
-> Dr. [nombre], X consultorios en Culiacán ya están usando DocFácil para su agenda y recordatorios de citas por WhatsApp. Cuesta $499/mes y la prueba es gratis. ¿Le mando info?
+**Template C — El Fundador** (cuando haya clientes reales, se puede cambiar por una referencia social con el número real):
+> Dr. [nombre], soy [tu nombre] de DocFácil, un sistema para agenda y recordatorios de citas por WhatsApp hecho aquí en Sinaloa. Estamos empezando y busco los primeros consultorios; por eso le cargo yo su agenda y le contesto directo. Cuesta $499/mes y la prueba es gratis. ¿Le mando info?
 
 **Template D — La Recepcionista:**
-> Buen día, ¿esta es la línea del consultorio del Dr. [nombre]? Soy [tu nombre] de DocFácil, un sistema que le facilita la vida a las recepcionistas: agenda digital con recordatorios automáticos a los pacientes. ¿Se lo podría comentar al doctor? Le puedo mandar un video cortito.
+> Buen día, ¿esta es la línea del consultorio del Dr. [nombre]? Soy [tu nombre] de DocFácil, un sistema que le facilita la vida a las recepcionistas: agenda digital y recordatorios a los pacientes a un clic desde el WhatsApp del consultorio, con botón para que el paciente confirme. ¿Se lo podría comentar al doctor? Le puedo mandar un video cortito.
 
 **Cadencia de seguimiento:**
 - Día 1: Mensaje inicial
@@ -506,11 +510,11 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
    - Presupuesto: $100 MXN/día
    - Audiencia: Sinaloa, 28-55 años, intereses: odontología, dentista, consultorio dental, ortodoncia
    - Formato: Video de 30-60 segundos mostrando la interfaz + voz explicando
-   - Copy: "Recordatorios automáticos por WhatsApp a tus pacientes. Agenda digital. Cobros. Recetas. Desde $499/mes. Prueba gratis 14 días. Escríbenos."
+   - Copy: "Recordatorios por WhatsApp a tus pacientes a un clic, con botón para que confirmen. Sin costo por mensaje. Agenda digital. Cobros. Recetas. Desde $499/mes. Prueba gratis 15 días. Escríbenos."
    - CTA: Botón de WhatsApp
 3. Campaña 2 — Retargeting (semana 8+):
    - Audiencia: Personas que visitaron docfacil.com en los últimos 30 días
-   - Copy: "¿Ya viste DocFácil? X consultorios en Sinaloa ya lo están usando. Tu prueba gratis te espera."
+   - Copy: "¿Ya viste DocFácil? Estamos empezando y buscamos los primeros consultorios de Sinaloa: te cargamos tu agenda y te contestamos directo. Tu prueba gratis te espera." (cambiar a "[número real] consultorios ya lo usan" solo cuando sea cierto)
    - Presupuesto: $50 MXN/día
 4. Medir: Costo por mensaje de WhatsApp. Si es >$30 MXN por mensaje, pausar y ajustar creativos. Meta: $10-20 MXN por lead de WhatsApp.
 
@@ -533,7 +537,7 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
 2. Regla inquebrantable: NO VENDER DIRECTAMENTE durante las primeras 2 semanas. Solo dar valor.
 3. Semana 1-2 en el grupo: Responder preguntas. Compartir tips genuinos. "Para la agenda del consultorio yo uso una herramienta que..." sin link, sin CTA.
 4. Semana 3+: Publicar contenido de valor con mención natural:
-   - "Hice un cálculo: un consultorio que pierde 8 citas al mes pierde ~$12,000 MXN. Nosotros creamos DocFácil exactamente para eso. ¿Alguien más tiene este problema?"
+   - "Hice una cuenta de ejemplo: si un consultorio atiende 60 pacientes al mes y faltan 3 de cada 10 (Doctoralia México reporta ~30% en promedio), son 18 citas vacías; multiplíquelo por lo que cobra por consulta. Nosotros creamos DocFácil exactamente para eso. ¿Alguien más tiene este problema?"
    - Responder cuando alguien pregunte "¿qué software recomiendan para consultorio?"
 5. Si el admin del grupo te da permiso, publicar una oferta: "Soy cofundador de DocFácil, software para consultorios. Para miembros de este grupo: prueba gratis de 30 días (en vez de 14). Link: [...]"
 6. Meta: 1-2 leads por grupo por mes. Con 5 grupos = 5-10 leads/mes = 3 clientes en 12 semanas.
@@ -602,7 +606,7 @@ Este no es un canal separado sino la FUENTE de datos para el canal 2 y el canal 
 1. "Software para consultorio dental México: guía completa 2026" (keyword principal)
 2. "Cómo reducir citas perdidas en tu consultorio dental"
 3. "Expediente clínico electrónico dental: qué necesitas saber"
-4. "DocFácil vs Dentalink vs Doctocliq: comparativa 2026" (capturar tráfico de competidores)
+4. "DocFácil vs Dentalink vs Doctocliq: comparativa 2026" (capturar tráfico de competidores). Usar solo datos verificables: Doctocliq (~US$19-49/mes, recordatorios WhatsApp automáticos, app), Dentum (mexicano, $749/$999/$1,349 con IVA, recordatorios, odontograma, presupuestos), Dentalink (recordatorios/confirmación, app, recetas), Doctoralia ($720-2,970 + IVA). Nunca decir que DocFácil es "el único" con WhatsApp ni que otros no tienen recetas.
 5. "Recordatorios por WhatsApp para consultorios: cómo funciona"
 6. "Cuánto cuesta un software para consultorio dental en México"
 7. "Agenda digital para dentistas: por qué dejar la libreta"
@@ -661,6 +665,8 @@ El buffer del 15% es porque algunos canales rendirán menos de lo esperado. Tene
 ---
 
 ## 3. EMBUDO NUMÉRICO
+
+> Todas las tasas de este embudo son **supuestos** de planeación; reemplazarlas con datos reales en cuanto existan.
 
 ### Embudo General
 
@@ -754,7 +760,7 @@ Los 58 esperados te dan un buffer cómodo para llegar a 50.
 
 | Concepto | Oferta |
 |---|---|
-| **Trial** | 14 días gratis, sin tarjeta (reduce fricción al máximo) |
+| **Trial** | 15 días gratis, sin tarjeta (reduce fricción al máximo) |
 | **Precio Fundador (Básico)** | 6 meses gratis y después $499/mes congelado de por vida — solo para los primeros 10 (así está definido en `config/founders.php`) |
 | **Precio Fundador (Pro)** | $999/mes si sube a Pro (el precio fundador congela el plan contratado, no el catálogo) |
 | **Precio Fundador (Clínica)** | $1,999/mes si sube a Clínica (mismo criterio) |
@@ -766,14 +772,14 @@ Los 58 esperados te dan un buffer cómodo para llegar a 50.
 
 1. **6 meses gratis, no "gratis para siempre":** el doctor entra sin riesgo, pero ya sabe que a partir del mes 7 paga $499/mes. El que nunca paga no valora; el que se compromete usa el sistema en serio desde el día 1.
 2. **"Para siempre":** Elimina el miedo a que suba el precio. El doctor siente que está ganando algo exclusivo: su mensualidad queda congelada de por vida.
-3. **"Primeros 10":** Crea urgencia real. "Ya van 7 consultorios con precio fundador. Quedan 3 lugares." No es escasez de teatro: son los lugares reales del programa, contados contra la base de fundadores.
+3. **"Primeros 10":** Crea urgencia real. "Ya van [número real] consultorios con precio fundador. Quedan [lugares reales]." No es escasez de teatro: son los lugares reales del programa, contados contra la base de fundadores.
 4. **Migración gratis:** El mayor miedo del doctor es "voy a tener que meter TODO desde cero". Quítalo.
 5. **El trato es explícito:** 6 meses gratis a cambio de retroalimentación y testimonial. El doctor entiende qué recibe y qué da a cambio.
 
 ### Estrategia de Upgrade: Free → Básico → Pro
 
 **Free a Básico ($499/mes):**
-- El plan Free tiene 30 pacientes y 20 citas/mes. Un consultorio activo llega a ese límite en 2-3 semanas.
+- El plan Free tiene 30 pacientes y 20 citas/mes. Suponemos que un consultorio activo llega a ese límite en 2-3 semanas (supuesto).
 - Cuando el doctor llegue al límite, mostrar mensaje: "Llegaste al límite del plan gratuito. Actualiza a Básico por $499/mes para pacientes ilimitados. [Actualizar ahora]"
 - NUNCA bloquear funciones críticas (no borrar datos, no impedir ver pacientes existentes). Solo bloquear CREAR nuevos.
 - WhatsApp automático al fundador cuando un usuario Free llegue al 80% de su límite: para que llame proactivamente.
@@ -785,7 +791,7 @@ Los 58 esperados te dan un buffer cómodo para llegar a 50.
 
 ### Qué NO Hacer
 
-- **NO dar trials de 30 días.** 14 días es suficiente. Trials largos = menos urgencia = menor conversión.
+- **NO dar trials de 30 días.** 15 días es suficiente. Trials largos = menos urgencia = menor conversión.
 - **NO regalar meses gratis** a prospectos que no han probado (regálalos solo como incentivo de referidos a clientes existentes).
 - **NO hacer descuentos adicionales** sobre el precio fundador. Si el doctor regatea, la respuesta es: "El programa fundador ya incluye 6 meses gratis y tu precio queda congelado de por vida. Es el mejor trato que vamos a tener."
 - **NO prometer un descuento que no existe.** El precio de lista del Básico es $499/mes, igual que el del fundador: lo que distingue al fundador son los 6 meses gratis y la garantía de precio, no una mensualidad más baja. Nunca decir "precio fundador con descuento".
@@ -826,7 +832,7 @@ NUEVO → CONTACTADO → RESPONDIÓ → DEMO_AGENDADA → DEMO_REALIZADA → TRI
 - DEMO_AGENDADA → DEMO_REALIZADA: se hizo la demo (registrar: duración, features que le interesaron, objeciones, siguiente paso)
 - DEMO_REALIZADA → TRIAL: el doctor activó su cuenta de prueba
 - TRIAL → ACTIVO_PAID: el doctor pagó su primer mes
-- TRIAL → TRIAL_EXPIRADO: pasaron 14 días sin pago (agregar a lista de recontacto)
+- TRIAL → TRIAL_EXPIRADO: pasaron 15 días sin pago (agregar a lista de recontacto)
 
 **Campos obligatorios por prospecto:**
 - Nombre del doctor
@@ -869,7 +875,7 @@ NUEVO → CONTACTADO → RESPONDIÓ → DEMO_AGENDADA → DEMO_REALIZADA → TRI
 ### 5.3 Proceso de Onboarding del Cliente (Primeros 7 Días)
 
 **Día 0 (momento del registro):**
-- Automático: WhatsApp de bienvenida: "¡Bienvenido a DocFácil, Dr. [nombre]! Soy [nombre fundador]. En los próximos 10 minutos voy a ayudarle a configurar su consultorio. ¿Está disponible?"
+- WhatsApp de bienvenida (hoy a mano; el envío automático de WhatsApp está apagado desde el 14-sep-2026): "¡Bienvenido a DocFácil, Dr. [nombre]! Soy [nombre fundador]. En los próximos 10 minutos voy a ayudarle a configurar su consultorio. ¿Está disponible?"
 - Si responde: llamada/videollamada de 15 min. Configurar juntos: nombre del consultorio, horarios, primer paciente, primera cita.
 - Si no responde: enviar video tutorial de 5 min: "Cómo configurar DocFácil en 10 minutos".
 
@@ -878,11 +884,11 @@ NUEVO → CONTACTADO → RESPONDIÓ → DEMO_AGENDADA → DEMO_REALIZADA → TRI
 - Meta: que tenga al menos 5 pacientes y 3 citas en el sistema.
 
 **Día 3:**
-- WhatsApp: "¿Cómo le fue con los recordatorios de citas? Sus pacientes deberían haber recibido un WhatsApp automático ayer. ¿Todo bien?"
-- Meta: que haya visto un recordatorio salir exitosamente.
+- WhatsApp: "¿Ya probó el botón de WhatsApp en su agenda? Le abre el WhatsApp de su consultorio con el recordatorio listo, y cuando el paciente toca 'Confirmar' la cita aparece como Confirmada. ¿Todo bien?"
+- Meta: que haya mandado al menos un recordatorio y visto una confirmación.
 
 **Día 5:**
-- WhatsApp: "Doctor, un tip: puede generar recetas PDF directamente desde la consulta. Le ahorra 5 minutos por paciente. ¿Quiere que le muestre cómo?"
+- WhatsApp: "Doctor, un tip: puede generar recetas PDF directamente desde la consulta. Ya no tiene que escribirlas a mano. ¿Quiere que le muestre cómo?"
 - Meta: activar una segunda feature (recetas o cobros).
 
 **Día 7:**
@@ -899,7 +905,7 @@ NUEVO → CONTACTADO → RESPONDIÓ → DEMO_AGENDADA → DEMO_REALIZADA → TRI
 
 ### 5.4 Proceso de Activación ("Aha Moment")
 
-El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su cita por WhatsApp automáticamente. Ese es el momento en que dice "esto sí funciona."
+El "Aha moment" de DocFácil es cuando el doctor manda un recordatorio a un clic desde su WhatsApp y ve que el paciente tocó "Confirmar" y la cita aparece como Confirmada en la agenda. Ese es el momento en que dice "esto sí funciona."
 
 **Checklist de activación (hacer en los primeros 3 días):**
 1. [ ] Consultorio configurado (nombre, dirección, horarios)
@@ -933,7 +939,7 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 **Si el problema es la demo:**
 - Grabar las demos (con permiso) y revisarlas. ¿Estás hablando de features o de problemas del doctor?
 - Cambiar el formato: en vez de "te muestro el sistema", preguntar primero: "Doctor, ¿cuál es su mayor dolor de cabeza con la agenda/cobros?" y luego mostrar SOLO la solución a ese dolor.
-- Invitar a un doctor ya cliente a una demo conjunta: "Le presento al Dr. Pérez, él usa DocFácil desde hace 3 semanas. ¿Doctor, les platica cómo le ha ido?"
+- Solo cuando exista un cliente real que acepte: invitarlo a una demo conjunta: "Le presento al Dr. [nombre del cliente real], él usa DocFácil desde hace [tiempo real]. ¿Doctor, les platica cómo le ha ido?"
 
 **Si el problema es trial → paid:**
 - Llamar a los 3 trials más recientes que no convirtieron. Preguntar directamente: "¿Qué le faltó? ¿Por qué no continuó?"
@@ -948,9 +954,9 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 **Plan B:**
 1. Cambiar horario: probar visitas de 6:30-7:30 PM cuando los doctores están cerrando y más relajados.
 2. Cambiar al actor: si el SC no está generando confianza, que el FT (el que construyó el sistema) haga las visitas. "Yo soy el que lo creó" genera más credibilidad.
-3. Cambiar el hook: en vez de "vengo a venderle software", probar "vengo a regalarle un sistema de recordatorios por WhatsApp para su consultorio. Es gratis los primeros 14 días."
+3. Cambiar el hook: en vez de "vengo a venderle software", probar "vengo a dejarle a prueba un sistema para mandar recordatorios por WhatsApp a un clic desde su consultorio. Es gratis los primeros 15 días."
 4. Pivotar a llamadas telefónicas: si las visitas no funcionan, invertir ese tiempo en llamadas. 30 llamadas/día > 10 visitas/día en alcance.
-5. Pivotar a un "micro-evento": organizar un desayuno gratuito para 10 dentistas en un restaurante de Culiacán. Costo: $2,000-$3,000 MXN. "Los invito a desayunar para platicarles cómo otros consultorios están reduciendo sus citas perdidas." 15 min de presentación, resto networking.
+5. Pivotar a un "micro-evento": organizar un desayuno gratuito para 10 dentistas en un restaurante de Culiacán. Costo: $2,000-$3,000 MXN. "Los invito a desayunar para platicarles cómo reducir sus citas perdidas." 15 min de presentación, resto networking.
 
 ### Riesgo 3: El ICP está mal
 
@@ -960,7 +966,7 @@ El "Aha moment" de DocFácil es cuando el doctor ve que un paciente confirmó su
 
 **Pivote A — Cambiar de especialidad dental a médica:**
 - Probar con médicos generales, pediatras, ginecólogos, dermatólogos. Son el mismo producto, diferente mercado.
-- Ventaja: hay 3x más médicos generales que dentistas en Culiacán.
+- Ventaja: el mercado de médicos es más grande que el de dentistas (verificar cifras en DENUE antes de usarlas).
 - Acción: crear landing docfacil.com/medicos, ajustar mensajes ("expediente clínico" en vez de "odontograma"), probar WhatsApp frío con 50 médicos.
 
 **Pivote B — Cambiar de ciudad:**

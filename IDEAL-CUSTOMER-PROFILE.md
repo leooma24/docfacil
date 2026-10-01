@@ -22,7 +22,7 @@
 
 ### Dolor principal que DocFacil resuelve
 
-**Pacientes que no regresan y citas perdidas.** El dentista pierde entre 15-30% de citas por no-shows. No tiene forma sistematica de recordar citas, dar seguimiento a tratamientos incompletos ni cobrar facilmente. Cada paciente perdido = $800-$3,000 MXN en tratamiento no terminado.
+**Pacientes que no regresan y citas perdidas.** Segun Doctoralia Mexico, ~30% de los pacientes faltan a su cita y hasta 36% de esas faltas son por olvido (Scielo 2024 reporta 9-24% segun el estudio). No tiene forma sistematica de recordar citas, dar seguimiento a tratamientos incompletos ni cobrar facilmente. Cada paciente perdido = $800-$3,000 MXN en tratamiento no terminado (estimado, no medido).
 
 ### Dolores secundarios
 - Recetas escritas a mano (se ven poco profesionales)
@@ -45,9 +45,9 @@
 - **Upgrade a Pro:** 20% subira a Pro cuando agregue un asociado = $999/mes
 
 ### Por que este ICP convierte mas facil
-- Hay **miles** de consultorios dentales en Sinaloa (solo en Culiacan 800+)
+- Hay **miles** de consultorios dentales en Sinaloa (solo en Culiacan 800+, estimado sin verificar; confirmar con DENUE)
 - Los dentistas son **independientes** y toman decisiones rapido (no hay comite)
-- El odontograma interactivo es un diferenciador fuerte vs competencia
+- El odontograma viene desde el plan de $499 (Doctocliq, Dentum y Dentalink tambien lo tienen; el gancho es el precio de entrada y mostrarlo en vivo)
 - Ticket de $499 es una decision facil (equivale a 1 consulta dental)
 - La asistente adopta el sistema porque le simplifica su trabajo
 
@@ -165,7 +165,7 @@ Activan trial con datos reales:  50 (10%)
 Convierten a plan pagado:        50 (10% del total, 67% del trial)
 ```
 
-**Nota:** La conversion trial->pago de 67% es agresiva pero alcanzable si el onboarding es bueno y el trial dura 14 dias con seguimiento activo.
+**Nota:** La conversion trial->pago de 67% es agresiva pero alcanzable si el onboarding es bueno y el trial dura 15 dias con seguimiento activo.
 
 ### Canales de adquisicion por prioridad
 
@@ -277,15 +277,15 @@ Convierten a plan pagado:        50 (10% del total, 67% del trial)
 ### ICP Primario: Dentistas
 
 #### Gancho WhatsApp frio (1 linea)
-> "Dr. [Nombre], cuantos pacientes le cancelaron citas esta semana? DocFacil manda recordatorios automaticos por WhatsApp y tiene odontograma digital. Le muestro en 5 min?"
+> "Dr. [Nombre], cuantos pacientes le cancelaron citas esta semana? Con DocFacil el recordatorio sale a un clic desde el WhatsApp de su consultorio, con boton para que el paciente confirme; sin costo por mensaje. Tambien trae odontograma digital. Le muestro en 5 min?"
 
 #### Pitch presencial (30 segundos)
-> "Buenas tardes, soy [nombre] de DocFacil. Hacemos un software para consultorios dentales que manda recordatorios de citas por WhatsApp automatico, tiene odontograma interactivo y genera recetas PDF con su firma. Los dentistas que lo usan reducen sus citas perdidas un 40%. Es 100% web, no instala nada. Puedo mostrarle en su tablet en 3 minutos?"
+> "Buenas tardes, soy [nombre] de DocFacil. Es un software para consultorios dentales: el recordatorio de cita sale a un clic desde el WhatsApp de su consultorio, con boton para que el paciente confirme (sin costo por mensaje), tiene odontograma interactivo y genera recetas PDF con su cedula. Segun Doctoralia, ~30% de los pacientes faltan a su cita, muchos por olvido. Es 100% web, no instala nada. Puedo mostrarle en su tablet en 3 minutos?"
 
 #### Pregunta de dolor que abre la conversacion
 > "Que porcentaje de sus pacientes diria que no terminan su tratamiento completo?"
 
-*(Esta pregunta funciona porque el 100% de los dentistas tienen este problema, se estima 30-50% de abandono. Cuando dicen el numero, duele, y ahi entra la solucion.)*
+*(Esta pregunta funciona porque casi todo consultorio tiene tratamientos sin terminar. No hay un dato publicado confiable del porcentaje, asi que deje que el doctor diga su numero. Cuando lo dice, duele, y ahi entra la solucion.)*
 
 #### Mensaje de seguimiento post-demo
 > "Dr. [Nombre], le deje activado el trial gratuito. Ya puede agregar sus primeros 30 pacientes. Si quiere, manana le ayudo a cargar su agenda de la semana en 15 min. A que hora le acomoda?"
@@ -298,7 +298,7 @@ Convierten a plan pagado:        50 (10% del total, 67% del trial)
 > "Dr. [Nombre], aun lleva sus expedientes clinicos en papel? DocFacil es un sistema 100% web para consultorio medico: agenda, expedientes, recetas PDF. Prueba gratis. Le interesa ver una demo?"
 
 #### Pitch presencial (30 segundos)
-> "Buenas tardes, soy [nombre] de DocFacil. Es un sistema para consultorios medicos que le organiza la agenda, guarda expedientes clinicos electronicos cumpliendo la NOM-004, y genera recetas profesionales en PDF. Todo desde el navegador, sin instalar nada. Los doctores que lo usan ahorran 30 minutos diarios en papeleo. Tiene 3 minutos para que se lo muestre?"
+> "Buenas tardes, soy [nombre] de DocFacil. Es un sistema para consultorios medicos que le organiza la agenda, guarda expedientes clinicos electronicos cumpliendo la NOM-004, y genera recetas profesionales en PDF. Todo desde el navegador, sin instalar nada. Si le interesa, yo mismo le ayudo a cargar su agenda en persona. Tiene 3 minutos para que se lo muestre?"
 
 #### Pregunta de dolor que abre la conversacion
 > "Cuando llega un paciente que vio hace 6 meses, que tan facil es encontrar que le receto la vez pasada?"

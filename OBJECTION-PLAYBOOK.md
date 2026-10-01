@@ -13,7 +13,7 @@ Toda objecion se maneja con 4 pasos:
 1. **Acknowledge (Validar)** — Dale la razon parcial. Nunca contradigas de entrada.
    - "Tiene toda la razon..."
    - "Es una muy buena pregunta..."
-   - "Entiendo perfecto, muchos doctores me dicen lo mismo..."
+   - "Entiendo perfecto, es una duda muy comun..."
 
 2. **Question (Preguntar)** — Entiende el fondo real. La objecion que dice casi nunca es la verdadera.
    - "Permitame preguntarle..."
@@ -21,12 +21,12 @@ Toda objecion se maneja con 4 pasos:
    - "Digame una cosa..."
 
 3. **Reframe (Replantear)** — Cambia la perspectiva. De costo a inversion, de riesgo a oportunidad.
-   - "Lo que hemos visto es que..."
+   - "Lo que suele pasar es que..."
    - "Fijese que justo por eso..."
    - "Lo interesante es que..."
 
 4. **Close (Cerrar suave)** — No pidas que compre, pide que pruebe.
-   - "¿Le parece si lo prueba 14 dias sin compromiso?"
+   - "¿Le parece si lo prueba 15 dias sin compromiso?"
    - "¿Que tal si le muestro como funciona con sus propios datos?"
    - "¿Me permite ensenarle en 5 minutos?"
 
@@ -40,7 +40,7 @@ Nunca digas esto:
 |---|---|---|
 | "Esta barato" / "Es baratisimo" | Invalida su percepcion de dinero | "La inversion es de $499 al mes" |
 | "Confia en mi" | Genera desconfianza inmediata | "Le muestro para que usted mismo vea" |
-| "Todos los doctores lo usan" | Mentira detectable y presion social | "Tenemos doctores en Culiacan que..." |
+| "Todos los doctores lo usan" / "Tenemos doctores que..." | Mentira: aun no hay clientes | "Estamos empezando y busco los primeros consultorios" |
 | "Es facil, cualquiera puede" | Minimiza su preocupacion real | "Lo diseñamos para que sea intuitivo" |
 | "Su sistema esta mal" / "El papel es un problema" | Ataca lo que ya funciona para el | "Funciona, pero hay formas de hacerlo mas rapido" |
 | "Tiene que decidir hoy" | Presion = rechazo | "Sin prisa, pruebelo y me dice" |
@@ -82,11 +82,11 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Entiendo, doctor, $499 al mes no es poquito. Permitame preguntarle algo: ¿cuantos pacientes le faltan al mes a sus citas? Porque lo que hemos visto con otros consultorios es que nada mas con los recordatorios automaticos por WhatsApp recuperan 3 o 4 pacientes que no iban a ir. Si una consulta le cobra $500 pesos, con un solo paciente recuperado al mes ya pago el plan Basico ($499), y con dos ya le sobra. Y eso sin contar que deja de pagar papeleria, se ahorra tiempo en agendar y sus pacientes lo ven mas profesional."
+"Entiendo, doctor, $499 al mes no es poquito. Permitame preguntarle algo: ¿cuantos pacientes le faltan al mes a sus citas? Porque en promedio falta cerca del 30% de los pacientes, y hasta 36% de esas faltas son por olvido (Doctoralia). El recordatorio por WhatsApp, a un clic desde su agenda y con boton para que el paciente confirme, ataca justo eso. Si una consulta le cobra $500 pesos, con un solo paciente recuperado al mes ya pago el plan Basico ($499), y con dos ya le sobra. Y eso sin contar que deja de pagar papeleria, se ahorra tiempo en agendar y sus pacientes lo ven mas profesional."
 
 **Pregunta de seguimiento:** "Digame, ¿mas o menos cuanto cobra por consulta? Asi le calculo cuantos pacientes necesita para que se pague solo."
 
-**Dato:** El costo promedio de un no-show en un consultorio dental en Mexico es de $800-$1,500 MXN. Con recordatorios automaticos se reduce 30-40% de inasistencias. Con 5 pacientes recuperados al mes, el ROI de DocFacil es 3x-5x.
+**Dato:** En promedio falta ~30% de los pacientes (12% a mas de 30% segun especialidad) y hasta 36% de las faltas son por olvido (Doctoralia). Razones de faltar: cambio de planes 33.7%, olvido 32.6%, imprevisto 27% (Encuesta Doctocliq 2022, Mexico y Peru). Cuenta de ejemplo: 60 pacientes al mes, faltan 3 de cada 10 = 18 huecos; si recupera 4 a $500, son $2,000 al mes contra $499 del plan.
 
 ---
 
@@ -102,7 +102,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Pregunta de seguimiento:** "¿Su secretaria cuanto tiempo al dia se la pasa buscando informacion o acomodando datos?"
 
-**Dato:** Un consultorio promedio pierde 45 minutos al dia en tareas administrativas que se pueden automatizar. Eso son 15 horas al mes. Si la secretaria gana $8,000 mensuales, eso es $750 pesos en tiempo perdido — mas que el plan Basico.
+**Cuenta de ejemplo (con los numeros de el):** si la secretaria pierde 30 minutos al dia buscando datos y llamando a confirmar, son unas 10 horas al mes. Si gana $8,000 mensuales, eso es cerca de $500 pesos en tiempo — lo mismo que el plan Basico.
 
 ---
 
@@ -114,7 +114,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"¡Claro! De hecho nosotros tambien tenemos plan gratuito: 1 doctor, 30 pacientes, agenda basica, para siempre. Puede empezar con ese sin pagar nada. Ahora, lo que pasa con las opciones gratis de otros es que estan en ingles, los servidores estan fuera de Mexico, el soporte no existe, y cuando usted necesita algo puntual — como un odontograma o recetas con su cedula — no lo tiene. DocFacil esta hecho para consultorios mexicanos: en español, con recetas que cumplen la NOM, soporte por WhatsApp en tu horario. Pero pruebe primero el gratuito y usted decide si necesita mas."
+"¡Claro! De hecho nosotros tambien tenemos plan gratuito: 1 doctor, 15 pacientes, agenda basica, para siempre. Puede empezar con ese sin pagar nada. Ahora, lo que pasa con las opciones gratis de otros es que estan en ingles, los servidores estan fuera de Mexico, el soporte no existe, y cuando usted necesita algo puntual — como un odontograma o recetas con su cedula — no lo tiene. DocFacil esta hecho para consultorios mexicanos: en español, con recetas que cumplen la NOM, soporte por WhatsApp en tu horario. Pero pruebe primero el gratuito y usted decide si necesita mas."
 
 **Pregunta de seguimiento:** "¿Ya probo alguna de esas opciones gratis? ¿Que le funciono y que no?"
 
@@ -128,7 +128,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Es la preocupacion mas comun que escucho, y la entiendo perfecto. Por eso el trial son 14 dias gratis — ni tarjeta le pedimos. Si en esas dos semanas no le sirve, no paga un peso. Y le voy a decir algo: la razon por la que otros sistemas quedan arrumbados es porque son complicados. Aqui en 15 minutos le ensenamos a usted y a su secretaria, y al tercer dia ya lo usan como si nada. ¿Sabe por que? Porque esta diseñado para gente que no quiere batallar con tecnologia."
+"Es la preocupacion mas comun que escucho, y la entiendo perfecto. Por eso el trial son 15 dias gratis — ni tarjeta le pedimos. Si en esas dos semanas no le sirve, no paga un peso, y su cuenta se queda en el plan gratis. Y le voy a decir algo: muchos sistemas quedan arrumbados porque son complicados. Aqui yo mismo le enseño a usted y a su secretaria en 15 minutos, y si quiere le cargo su agenda. Esta diseñado para gente que no quiere batallar con tecnologia."
 
 **Pregunta de seguimiento:** "¿Que otro sistema ha probado antes? Asi le digo en que es diferente."
 
@@ -146,11 +146,9 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Doctor, si usted sabe usar WhatsApp, sabe usar DocFacil. En serio, es el mismo nivel. Es como una pagina web: abre el navegador, entra, y listo. No hay que instalar nada, no hay que actualizar nada. Y mire, le voy a decir algo que a lo mejor le da confianza: el 60% de los doctores que nos usan me dijeron lo mismo que usted la primera vez. Y son los que mas contentos estan, porque se dan cuenta que no era tan complicado como pensaban. ¿Me deja ensenarle? Son 5 minutos aqui en su celular."
+"Doctor, si usted sabe usar WhatsApp, sabe usar DocFacil. En serio, es el mismo nivel. Es como una pagina web: abre el navegador, entra, y listo. No hay que instalar nada, no hay que actualizar nada. Y mire, estamos empezando y busco los primeros consultorios; por eso le cargo yo su agenda y le contesto directo cuando se atore. ¿Me deja ensenarle? Son 5 minutos aqui en su celular."
 
 **Pregunta de seguimiento:** "¿Usa WhatsApp para comunicarse con sus pacientes? ¿Tiene grupo o les manda mensajes directo?"
-
-**Historia:** "Un dentista en Mazatlan, el Dr. Robles, me dijo textual: 'Mijo, yo soy de la vieja guardia.' Le pedi 5 minutos con su tablet. A la semana me mando WhatsApp: 'Ya no puedo vivir sin esto.' Tenia 67 anos."
 
 ---
 
@@ -162,7 +160,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Si funciona y Lupita es buena, pues que bien, no lo vamos a cambiar. Pero digame una cosa: ¿alguna vez le ha pasado que un paciente llega y dicen que tenia cita, y en la libreta no aparece? ¿O que se les traspapela un expediente? No digo que pase diario, pero cuando pasa es un dolor de cabeza. Lo padre de DocFacil es que Lupita puede seguir haciendo lo mismo, nada mas que en vez de la libreta lo hace en la computadora. Y le va a sobrar tiempo porque ya no tiene que hablarle a cada paciente para recordarle la cita — eso lo hace el sistema solito."
+"Si funciona y Lupita es buena, pues que bien, no lo vamos a cambiar. Pero digame una cosa: ¿alguna vez le ha pasado que un paciente llega y dicen que tenia cita, y en la libreta no aparece? ¿O que se les traspapela un expediente? No digo que pase diario, pero cuando pasa es un dolor de cabeza. Lo padre de DocFacil es que Lupita puede seguir haciendo lo mismo, nada mas que en vez de la libreta lo hace en la computadora. Y le va a sobrar tiempo porque ya no tiene que hablarle a cada paciente para recordarle la cita: desde la lista de citas, con un clic se abre su WhatsApp con el recordatorio listo y un boton para que el paciente confirme. Sin costo por mensaje."
 
 **Pregunta de seguimiento:** "¿Lupita cuantas horas al dia le dedica a llamar pacientes para confirmar citas?"
 
@@ -176,7 +174,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Que bueno que ya tiene sistema — eso me dice que usted si le ve valor a la tecnologia. Permitame preguntarle: ¿esta contento con lo que tiene? Porque muchos doctores que vienen de Doctoralia me dicen que funciona bien para visibilidad, pero para el dia a dia del consultorio — expedientes, recetas, cobros — se queda corto. DocFacil no reemplaza Doctoralia, lo complementa. Usted puede seguir recibiendo pacientes por ahi y manejar todo lo clinico aqui. Y si tiene Dentalink o algo similar: mire, esos cobran en dolares. DocFacil es en pesos, soporte en español mexicano, y le sale 3 o 4 veces mas barato."
+"Que bueno que ya tiene sistema — eso me dice que usted si le ve valor a la tecnologia. Permitame preguntarle: ¿esta contento con lo que tiene? Doctoralia es muy fuerte en visibilidad; la pregunta es si para el dia a dia del consultorio — expedientes, recetas, cobros — le cubre lo que necesita. DocFacil no reemplaza Doctoralia, lo complementa. Usted puede seguir recibiendo pacientes por ahi y manejar todo lo clinico aqui. Y si tiene Dentalink o algo similar: mire, esos cobran en dolares. DocFacil es en pesos, soporte en español mexicano, y le sale 3 o 4 veces mas barato."
 
 **Pregunta de seguimiento:** "¿Que es lo que mas usa de su sistema actual? ¿Y que le gustaria que tuviera que no tiene?"
 
@@ -230,9 +228,9 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Tiene toda la razon en preguntar. DocFacil es una empresa mexicana de tecnologia enfocada en salud. Estamos en Sinaloa, atendemos consultorios en todo el noroeste y varias ciudades de Mexico. Puede ver nuestra pagina, nuestras resenas, y si quiere con todo gusto le paso el contacto de algun doctor que ya nos usa para que le platique su experiencia. Al final, la mejor prueba es que lo pruebe usted mismo gratis — si no le sirve, no paga. No le pedimos tarjeta ni contrato."
+"Tiene toda la razon en preguntar. DocFacil lo hago yo, Omar Lerma, desarrollador de software aqui en Sinaloa. Le soy honesto: estamos empezando y busco los primeros consultorios; por eso le cargo yo su agenda y le contesto directo. Aqui tiene mi WhatsApp para lo que necesite. Al final, la mejor prueba es que lo pruebe usted mismo gratis — si no le sirve, no paga. No le pedimos tarjeta ni contrato."
 
-**Pregunta de seguimiento:** "¿Le gustaria platicar con algun doctor de por aqui que ya lo use? Asi le da confianza de primera mano."
+**Pregunta de seguimiento:** "¿Le gustaria que se lo muestre en persona en su consultorio? Asi me conoce y ve el sistema con sus propios datos."
 
 ---
 
@@ -244,7 +242,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Es una preocupacion super valida. Dos cosas: primero, sus datos siempre son suyos. En cualquier momento puede exportar todo — pacientes, citas, expedientes — en formato que puede abrir en Excel o en cualquier otro sistema. Nunca se queda atorado. Segundo, DocFacil esta creciendo: cada mes se suman mas consultorios. No somos un proyecto de garaje — es un negocio que tiene clientes que pagan, equipo de desarrollo, y un modelo que funciona. Pero la garantia real es que sus datos nunca quedan secuestrados."
+"Es una preocupacion super valida. Dos cosas: primero, sus datos siempre son suyos. En cualquier momento puede exportar todo — pacientes, citas, expedientes — en formato que puede abrir en Excel o en cualquier otro sistema. Nunca se queda atorado. Segundo, le soy honesto: estamos empezando y yo mismo lo desarrollo y lo atiendo. Por eso la garantia real que le doy es que sus datos nunca quedan secuestrados."
 
 **Pregunta de seguimiento:** "¿Le ha pasado con algun otro proveedor de software? Asi entiendo mejor su preocupacion."
 
@@ -292,7 +290,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Justo por eso, doctor. DocFacil no es solo para administrar pacientes — es para conseguir mas. Con el portal del paciente, sus pacientes pueden agendar solos. Con los recordatorios, no se le pierden los que ya tiene. Con las recetas PDF con su logo, se ve profesional desde el dia uno. Los doctores que empiezan con el sistema desde chiquitos crecen mas rapido porque se ven como clinica grande. Y el plan gratuito es gratis — cero pesos, 30 pacientes. No tiene nada que perder."
+"Justo por eso, doctor. DocFacil no es solo para administrar pacientes — es para conseguir mas. Con el portal del paciente, sus pacientes pueden agendar solos. Con los recordatorios, no se le pierden los que ya tiene. Con las recetas PDF con su logo, se ve profesional desde el dia uno. Y el plan gratuito es gratis — cero pesos, 15 pacientes. No tiene nada que perder."
 
 **Pregunta de seguimiento:** "¿Cuantos pacientes atiende ahorita por semana? Porque a lo mejor con el plan Free le alcanza perfecto para arrancar."
 
@@ -306,7 +304,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Que buena noticia que esta creciendo! Y mire, esto es una ventaja: DocFacil es 100% web, no se instala en ninguna computadora. Cuando se cambie de consultorio, nada mas abre el navegador en la nueva compu o tablet y todo esta ahi. No hay que migrar nada, no hay que instalar nada, no pierde un solo dato. De hecho, varios doctores nos dicen que les sirvio justamente en la mudanza porque tenian todo en la nube y no dependian de una maquina especifica."
+"Que buena noticia que esta creciendo! Y mire, esto es una ventaja: DocFacil es 100% web, no se instala en ninguna computadora. Cuando se cambie de consultorio, nada mas abre el navegador en la nueva compu o tablet y todo esta ahi. No hay que migrar nada, no hay que instalar nada, no pierde un solo dato."
 
 **Pregunta de seguimiento:** "¿Ya tiene fecha del cambio? Podemos dejarlo configurado antes para que desde el dia uno del consultorio nuevo ya este funcionando."
 
@@ -338,11 +336,9 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Doctor, con todo respeto... si usted pudo sacar la carrera de medicina, aprender a operar, y atender pacientes 30 anos, esto es un paseo. Le toma 15 minutos. Y mire, esto no es para jovenes ni para viejos — es para cualquiera que quiera trabajar mas comodo. ¿Usa WhatsApp? ¿Usa el cajero automatico? Pues DocFacil es igual de sencillo. Ademas, si Lupita lo maneja, usted nada mas ve los reportes y ya. No tiene que tocar nada si no quiere."
+"Doctor, si usted pudo sacar la carrera de medicina, aprender a operar, y atender pacientes 30 anos, esto es un paseo. Le toma 15 minutos. Y mire, esto no es para jovenes ni para viejos — es para cualquiera que quiera trabajar mas comodo. ¿Usa WhatsApp? ¿Usa el cajero automatico? Pues DocFacil es igual de sencillo. Ademas, si Lupita lo maneja, usted nada mas ve los reportes y ya. No tiene que tocar nada si no quiere."
 
 **Pregunta de seguimiento:** "¿Que tal si se lo enseño a su asistente? Ella lo maneja y usted nada mas revisa que todo este en orden."
-
-**Historia:** "Le cuento del Dr. Navarro de Guadalajara: 71 anos, cardiologo. Su hija lo convencio de probar. Ahora el es quien le insiste a sus colegas que se metan. Dice que le ahorra 'como una hora diaria de papeleo.'"
 
 ---
 
@@ -354,7 +350,7 @@ Cuando detectes una o mas senales: deja de vender y facilita la accion.
 
 **Respuesta:**
 
-"Justamente para eso lo hicimos. El plan Free es para 1 doctor y 30 pacientes — perfecto para un consultorio chiquito. No necesita ser clinica grande para beneficiarse. Al contrario: cuando es chiquito, cada paciente cuenta mas. Si se le va un paciente porque no le recordaron la cita, le duele mas que a una clinica de 10 doctores. DocFacil le ayuda a que ningun paciente se le pierda, a verse profesional con recetas bonitas, y a tener todo organizado sin gastar de mas."
+"Justamente para eso lo hicimos. El plan Free es para 1 doctor y 15 pacientes — perfecto para un consultorio chiquito. No necesita ser clinica grande para beneficiarse. Al contrario: cuando es chiquito, cada paciente cuenta mas. Si se le va un paciente porque no le recordaron la cita, le duele mas que a una clinica de 10 doctores. DocFacil le ayuda a que ningun paciente se le pierda, a verse profesional con recetas bonitas, y a tener todo organizado sin gastar de mas."
 
 **Pregunta de seguimiento:** "¿Cuantos pacientes ve a la semana? Porque a lo mejor el plan gratuito le cubre todo lo que necesita."
 
@@ -366,7 +362,7 @@ Usa estos cuando ya veas senales de compra. No vendas — facilita.
 
 ### Cierre 1: La Prueba Sin Riesgo
 
-> "Mire, doctor, yo no le voy a pedir que compre nada. Lo que si le pido es que lo pruebe 14 dias gratis. Sin tarjeta, sin compromiso. Si no le sirve, lo cancela y aqui no paso nada. Pero si le sirve, pues se acaba de resolver la vida. ¿Le parece?"
+> "Mire, doctor, yo no le voy a pedir que compre nada. Lo que si le pido es que lo pruebe 15 dias gratis. Sin tarjeta, sin compromiso. Si no le sirve, lo cancela y aqui no paso nada. Pero si le sirve, pues se acaba de resolver la vida. ¿Le parece?"
 
 ### Cierre 2: El Demo en Vivo
 
@@ -381,7 +377,7 @@ Usa estos cuando ya veas senales de compra. No vendas — facilita.
 ## Tips para WhatsApp Outreach
 
 - **Primer mensaje:** Nunca vendas. Pregunta. "Dr. Garcia, buenas tardes. ¿Me permite una pregunta rapida sobre su consultorio?"
-- **Mensaje de valor:** Envia algo util antes de vender. "Le comparto un tip: ¿sabia que el 35% de los pacientes no van a su cita si no les recuerdan? Hay una forma facil de resolver eso."
+- **Mensaje de valor:** Envia algo util antes de vender. "Le comparto un dato: en promedio falta cerca del 30% de los pacientes, y hasta 36% de esas faltas son por olvido (Doctoralia). Hay una forma facil de resolver eso."
 - **Catalogo:** Manda screenshots del sistema, no PDFs largos. Mejor un video de 30 segundos.
 - **Seguimiento:** Si no contesta en 48hrs, manda UN mensaje mas. Si no contesta, dejalo 2 semanas y vuelve con algo diferente.
 - **Horarios:** Nunca escribas antes de 9am ni despues de 8pm. Mejor entre 10am-1pm y 4pm-7pm.
@@ -406,10 +402,10 @@ Usa estos cuando ya veas senales de compra. No vendas — facilita.
 |---|---|
 | **Precio** | Convertir costo en ROI con numeros de SU consultorio |
 | **Tecnologia** | Comparar con WhatsApp; ofrecer demo inmediato |
-| **Confianza** | Transparencia total + ofrecer contacto con otro doctor |
+| **Confianza** | Transparencia total: quien soy, que estamos empezando, prueba gratis sin tarjeta |
 | **Timing** | Reframe: ahora es el MEJOR momento, no el peor |
 | **Especificas** | Validar y adaptar; si no es candidato, salir con dignidad |
 
 ---
 
-*Ultima actualizacion: Abril 2026*
+*Ultima actualizacion: Octubre 2026*

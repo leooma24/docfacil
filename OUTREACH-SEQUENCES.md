@@ -38,9 +38,9 @@ Vi que tiene su consultorio dental en [ZONA] y queria preguntarle algo rapido:
 
 Como lleva el control de sus citas y expedientes de pacientes? Todavia en libreta/Excel o ya usa algun sistema?
 
-Le pregunto porque estamos trabajando con varios dentistas aqui en Culiacan y el tema mas comun es que pierden citas porque los pacientes se les olvida, y eso son miles de pesos al mes que se van.
+Le pregunto porque en Mexico, en promedio, falta cerca del 30% de los pacientes a su cita, y hasta 36% de esas faltas son por puro olvido (Doctoralia). Eso son miles de pesos al mes que se van.
 
-DocFacil manda recordatorios automaticos por WhatsApp a sus pacientes y le organiza toda la agenda. Se lo puedo mostrar en 10 minutos si le interesa.
+Con DocFacil le manda el recordatorio a cada paciente a un clic desde el WhatsApp de su consultorio, con un boton para que el paciente confirme; sin costo por mensaje. Y le organiza toda la agenda. Se lo puedo mostrar en 10 minutos si le interesa.
 
 Que dia le queda mejor esta semana?
 ```
@@ -51,9 +51,7 @@ Que dia le queda mejor esta semana?
 ```
 Hola [NOMBRE_DOCTOR], le escribo de nuevo rapido.
 
-Le comparto un dato que nos dicen los dentistas que ya usan DocFacil: en promedio recuperan entre 8 y 12 citas al mes nada mas con los recordatorios automaticos por WhatsApp.
-
-Si cada cita suya vale $500-$800, estamos hablando de $4,000 a $9,000 pesos mas al mes. Y el sistema cuesta $499.
+Le hago una cuenta rapida, como ejemplo: si usted atiende 60 pacientes al mes y le faltan 3 de cada 10, son 18 citas perdidas. Si con el recordatorio por WhatsApp (a un clic, con boton para que el paciente confirme) recupera aunque sea 4, y cada cita vale $500-$800, son $2,000 a $3,200 pesos mas al mes. El sistema cuesta $499.
 
 Le dejo este video de 2 minutos donde se ve como funciona: [LINK_DEMO]
 
@@ -90,7 +88,7 @@ Tengo entendido que tiene su consultorio en [ZONA]. Le quiero hacer una pregunta
 
 Cuantas veces a la semana le pasa que un paciente no llega a su cita sin avisar?
 
-Es el problema #1 que nos dicen los medicos generales. Por eso hicimos DocFacil: un sistema que le manda recordatorios por WhatsApp a sus pacientes un dia antes, automatico. Usted no tiene que hacer nada.
+En Mexico falta en promedio cerca del 30% de los pacientes, y una buena parte es por olvido (Doctoralia). Por eso hice DocFacil: desde su agenda, a un clic, le manda el recordatorio a cada paciente por el WhatsApp de su consultorio, con un boton para que confirme. Sin costo por mensaje.
 
 Ademas le organiza expedientes, citas, cobros y hasta genera recetas PDF con sus datos.
 
@@ -103,9 +101,9 @@ Le puedo mostrar como funciona en 10 minutos. Que dia le queda mejor?
 ```
 Hola [NOMBRE_DOCTOR], le doy seguimiento rapido.
 
-Un doctor aqui en Culiacan nos conto que antes de DocFacil tenia 5-6 pacientes a la semana que no llegaban. Con los recordatorios automaticos, bajo a 1-2.
+Le hago una cuenta como ejemplo: si a la semana le faltan 5 pacientes y con el recordatorio (a un clic, con boton para confirmar) recupera 2, a $400-$600 la consulta son $800-$1,200 mas a la semana. El sistema cuesta $499 al mes.
 
-Haga la cuenta: 4 pacientes recuperados x $400-$600 la consulta = $1,600-$2,400 mas a la semana. El sistema cuesta $499 al mes.
+Usted conoce mejor sus numeros: cuantos le faltan a la semana?
 
 Si quiere verlo funcionando: [LINK_DEMO]
 
@@ -138,12 +136,12 @@ Que tenga buen fin de semana.
 ```
 Hola [NOMBRE_DOCTOR], buenas tardes. Soy [NOMBRE_VENDEDOR] de DocFacil.
 
-Le escribo porque estamos trabajando con especialistas en [ESPECIALIDAD] aqui en la region y hay un tema que sale siempre: el tiempo que se pierde llenando expedientes, buscando historiales y organizando la agenda.
+Le escribo porque estoy empezando DocFacil y busco los primeros consultorios de [ESPECIALIDAD] aqui en la region. Hay un tema que seguro le suena: el tiempo que se pierde llenando expedientes, buscando historiales y organizando la agenda.
 
 DocFacil es un sistema disenado especificamente para consultorios medicos. Le permite:
 
 - Tener todos los expedientes digitales y organizados
-- Agenda inteligente con recordatorios por WhatsApp
+- Agenda con recordatorios por WhatsApp a un clic (el paciente confirma con un boton)
 - Recetas PDF profesionales con su cedula y datos
 - Reportes de ingresos y pacientes
 
@@ -158,7 +156,7 @@ Tiene espacio esta semana?
 ```
 Hola [NOMBRE_DOCTOR], le doy seguimiento.
 
-Algo que nos dicen mucho los especialistas es que necesitan un expediente clinico mas completo que un medico general: diagnosticos detallados, tratamientos en curso, fotos, estudios...
+Los especialistas normalmente necesitan un expediente clinico mas completo que un medico general: diagnosticos detallados, tratamientos en curso, fotos, estudios...
 
 DocFacil le permite guardar todo eso por paciente, y lo tiene disponible en 2 clics cuando el paciente llega a consulta. Ya no tiene que buscar en carpetas o archivos.
 
@@ -175,7 +173,7 @@ Y si prefiere que se la muestre en vivo, con gusto. Que dia le funciona?
 
 Puede crear su cuenta gratis y probar DocFacil sin compromiso: [LINK_TRIAL]
 
-El plan gratuito incluye hasta 30 pacientes para que vea si le funciona. Si le convence, platicamos sobre el plan que mejor se ajuste a su consultorio.
+El plan gratuito incluye hasta 15 pacientes para que vea si le funciona. Si le convence, platicamos sobre el plan que mejor se ajuste a su consultorio.
 
 Estoy a sus ordenes.
 
@@ -197,7 +195,7 @@ Hola [NOMBRE_DOCTOR], soy [NOMBRE_VENDEDOR], el que paso hoy por su consultorio 
 
 Gracias por su tiempo. Como le comente, DocFacil le puede ayudar a:
 
-1. Que ningun paciente se le olvide su cita (recordatorios WhatsApp automaticos)
+1. Que ningun paciente se le olvide su cita (recordatorio por WhatsApp a un clic, con boton para que el paciente confirme; sin costo por mensaje)
 2. Tener todos sus expedientes digitales y ordenados
 3. Generar recetas profesionales en PDF en segundos
 
@@ -214,13 +212,11 @@ Quedo al pendiente!
 ```
 [NOMBRE_DOCTOR], buenos dias.
 
-Le platico algo rapido: un [dentista/medico] aqui en Culiacan empezo a usar DocFacil hace 2 meses. Lo que mas le gusto fue lo de los recordatorios.
+Le platico algo rapido: en promedio falta cerca del 30% de los pacientes, y hasta 36% de esas faltas son por olvido (Doctoralia).
 
-Antes perdia como 6-8 citas a la semana porque los pacientes no llegaban. Ahora les llega un WhatsApp automatico un dia antes y sus faltas bajaron a 1-2 por semana.
+Como ejemplo: si usted atiende 60 pacientes al mes y le faltan 3 de cada 10, son 18 huecos. Si con el recordatorio por WhatsApp (a un clic desde su agenda, con boton para que el paciente confirme) recupera 4, a $500 la consulta son $2,000 mas al mes. El sistema cuesta $499.
 
-El calcula que eso le representa unos $8,000-$10,000 pesos mas al mes. Y paga $499 por el sistema.
-
-Si quiere lo prueba gratis y ve los resultados usted mismo: [LINK_TRIAL]
+Si quiere lo prueba gratis y ve con sus propios numeros: [LINK_TRIAL]
 
 O si prefiere, le hago la demo rapido cualquier dia de esta semana. Que le parece?
 ```
@@ -237,7 +233,7 @@ Como estamos arrancando en Culiacan, tenemos una promocion especial para los pri
 
 Eso significa que el plan [PLAN_RECOMENDADO] le quedaria en [PRECIO con descuento] al mes en lugar de [PRECIO].
 
-Esta promocion es solo para consultorios que conocimos en persona, y se acaba cuando lleguemos a 50. Ya llevamos [X] registrados.
+Esta promocion es solo para consultorios que conocimos en persona, y se acaba cuando lleguemos a 50.
 
 Le interesa que le aparte su lugar?
 ```
@@ -277,7 +273,7 @@ Para que le saque el maximo provecho desde el inicio, estos son los 3 pasos que 
 2. Registrar a 5 pacientes que tenga esta semana - puede copiarlos de su libreta
 3. Agendar las citas de manana - y vea como les llega el recordatorio por WhatsApp
 
-Si se atora en algo, me escribe por aqui y le ayudo al momento. Literal, contestamos en menos de 5 minutos.
+Si se atora en algo, me escribe por aqui y le ayudo. Estamos empezando, asi que le contesto yo directo.
 
 Exito!
 ```
@@ -288,44 +284,40 @@ Exito!
 ```
 Hola [NOMBRE_DOCTOR], como le ha ido con DocFacil?
 
-Tip rapido: cuando agende una cita, asegurese de poner el celular correcto del paciente. Asi el recordatorio por WhatsApp le llega automatico un dia antes.
+Tip rapido: cuando agende una cita, asegurese de poner el celular correcto del paciente. Asi, desde la lista de citas, con un clic se abre su WhatsApp con el recordatorio ya escrito y el boton para que el paciente confirme.
 
-Los doctores que usan los recordatorios nos reportan que sus faltas bajan entre 40-60%. Es lo que mas impacto tiene.
+Hasta 36% de las faltas son por olvido (Doctoralia). Eso es justo lo que ataca el recordatorio.
 
 Ya pudo agendar su primera cita? Si necesita ayuda, aqui estoy.
 ```
 
-### Dia 7 - Tip #2: Activar recordatorios WhatsApp
+### Dia 7 - Tip #2: Mandar recordatorios WhatsApp
 **Mejor horario:** Lunes o martes, 10:00-11:00 AM
 
 ```
 [NOMBRE_DOCTOR], va una semana con DocFacil. Como va?
 
-Si todavia no ha activado los recordatorios por WhatsApp, este es el momento. Es la funcion que mas dinero le ahorra porque recupera las citas que normalmente se pierden.
+Si todavia no ha mandado recordatorios por WhatsApp, este es el momento. Es lo que ayuda a recuperar las citas que normalmente se pierden por olvido.
 
-Para activarlos:
-1. Vaya a Configuracion > WhatsApp
-2. Active "Recordatorios automaticos"
-3. Listo. Cada paciente recibe un mensaje un dia antes de su cita.
+Asi se hace:
+1. Abra su lista de citas de manana (o el tablero)
+2. Pique el boton de WhatsApp en cada cita
+3. Se abre el WhatsApp de su consultorio con el mensaje listo (nombre, fecha y hora, consultorio, doctor) y los botones "Confirmar"/"Cancelar". Lo envia y listo; cuando el paciente confirma, la cita queda "Confirmada" en su agenda. Sin costo por mensaje.
 
 Si quiere le ayudo a configurarlo, me marca al [TELEFONO_VENDEDOR] y lo hacemos juntos en 3 minutos.
 ```
 
-### Dia 10 - Caso de exito / ROI
+### Dia 10 - ROI con sus numeros
 **Mejor horario:** Miercoles o jueves, 1:00-2:00 PM
 
 ```
-[NOMBRE_DOCTOR], a estas alturas ya deberia estar viendo resultados. Le comparto numeros reales:
+[NOMBRE_DOCTOR], le propongo hacer la cuenta con sus numeros. Como ejemplo:
 
-Un consultorio dental en Culiacan con DocFacil:
-- Antes: 6-8 citas perdidas por semana
-- Ahora: 1-2 citas perdidas por semana
-- Recupero: ~$8,000/mes en consultas que antes perdia
-- Paga: $499/mes por DocFacil
+- Si atiende 60 pacientes al mes y faltan 3 de cada 10: 18 citas perdidas
+- Si con los recordatorios recupera 4 de esas: 4 x $500 = $2,000/mes
+- DocFacil: $499/mes
 
-Retorno: 16x lo que invierte.
-
-Usted como va? Ha notado alguna diferencia? Me gustaria saber su experiencia.
+Eso es un ejemplo, no una promesa. Usted como va? Cuantas faltas ha tenido estas dos semanas? Me gustaria saber su experiencia.
 ```
 
 ### Dia 12 - Oferta fundador / descuento
@@ -349,13 +341,7 @@ Le interesa? Le activo el plan ahorita mismo.
 ```
 [NOMBRE_DOCTOR], hoy es el ultimo dia de su prueba gratuita.
 
-Si no activa un plan, manana perderia acceso a:
-- Sus expedientes de pacientes
-- Su historial de citas
-- Los recordatorios automaticos por WhatsApp
-- Sus recetas guardadas
-
-No quiero que pierda todo lo que ya lleva avanzado.
+Si no activa un plan, manana su cuenta pasa al plan Gratis. Sus datos se quedan guardados, pero deja de tener las funciones del plan [PLAN_RECOMENDADO] (y el plan Gratis tiene tope de 15 pacientes).
 
 Le puedo activar el plan [PLAN_RECOMENDADO] con la promocion de fundador ahorita mismo. Nada mas digame "si" y yo lo hago.
 
@@ -385,7 +371,7 @@ Que me dice?
 ```
 [NOMBRE_DOCTOR], espero que este muy bien. Le escribo rapido con un dato:
 
-Ya somos [X] consultorios usando DocFacil en [Culiacan/Sinaloa/Mexico]. Los doctores nos dicen que en promedio ahorran 5-8 horas a la semana en temas administrativos.
+Estamos empezando y busco los primeros consultorios; por eso le cargo yo su agenda y le contesto directo.
 
 Si su situacion cambio y ahora si le interesa organizar mejor su consultorio, el plan basico empieza en $499/mes y puede probarlo gratis primero.
 
@@ -423,15 +409,19 @@ Le deseo mucho exito en su consultorio. Saludos.
 **Blade:** `resources/views/emails/prospect-beta-invite.blade.php`
 **Mail:** `App\Mail\ProspectBetaInviteMail`
 
-Abre con una escena reconocible (agenda a las 10, paciente que no llegó, hueco). Pasa a beneficios concretos (recuperar $6-10k, ahorrar 20-30 min, bajar la carga de la recepcionista). Cierra con trial de **15 días sin tarjeta** + fallback a plan gratis permanente. CTA: "Probarlo 15 días gratis" o respuesta al correo para demo.
+Abre con una escena reconocible (agenda a las 10, paciente que no llegó, hueco). Pasa a beneficios concretos (recuperar citas perdidas, ahorrar tiempo, bajar la carga de la recepcionista).
 
-### Email 2 — Caso real (3 días después, status `contacted` → `interested`)
+> **PENDIENTE (2026-10-01):** revisar en el Blade que no prometa montos ("$6-10k") como resultado real; si los usa, presentarlos como cuenta de ejemplo. Cierra con trial de **15 días sin tarjeta** + fallback a plan gratis permanente. CTA: "Probarlo 15 días gratis" o respuesta al correo para demo.
+
+### Email 2 — Seguimiento (3 días después, status `contacted` → `interested`)
 
 **Asunto:** `Dr. [NOMBRE], le dejo un caso que quizá le suene familiar`
 **Blade:** `resources/views/emails/prospect-followup.blade.php`
 **Mail:** `App\Mail\ProspectFollowupMail`
 
-Storytelling: un dentista en Culiacán que pasó de 6-8 faltas/semana a 1-2 en 2 meses. Recupera ~$8k/mes pagando $499. Explica el *cómo* (WhatsApp el día anterior, botón para reagendar). CTA mismo trial 15 días.
+> **PENDIENTE (2026-10-01):** el Blade y `WA_MESSAGES` todavía cuentan el caso de "un dentista en Culiacán" (6-8 faltas → 1-2, ~$8k/mes). Ese caso es inventado: DocFácil aún no tiene clientes. Hay que reescribirlo antes de que el cron lo vuelva a mandar.
+
+Versión honesta: dato con fuente (en promedio falta ~30% de los pacientes; hasta 36% de las faltas son por olvido, Doctoralia) + cuenta de ejemplo con números hipotéticos ("si atiende 60 pacientes al mes y faltan 3 de cada 10…"). Explica el *cómo* (recordatorio a un clic desde el WhatsApp del consultorio, botón para que el paciente confirme, sin costo por mensaje). CTA mismo trial 15 días.
 
 ### Email 3 — Cierre respetuoso (3 días después, status `interested` → `lost`)
 
@@ -448,16 +438,16 @@ Respeta el "no" implícito. Deja 3 puertas abiertas: link de registro sin urgenc
 Cuando el prospecto tiene `phone` pero no `email`, el mismo cron manda por WhatsApp con el mismo arco:
 
 1. **`prospect_beta_invite`** — Escena del hueco en la agenda + 3 beneficios + trial 15 días.
-2. **`prospect_followup`** — Caso del dentista de Culiacán, recuperó $8k/mes.
+2. **`prospect_followup`** — Hoy cuenta el caso inventado del dentista de Culiacán ($8k/mes); **pendiente reescribir** con el dato de Doctoralia + cuenta de ejemplo (ver Email 2).
 3. **`prospect_last_chance`** — Despedida respetuosa + petición de referido.
 
-Los templates están en `app/Console/Commands/SendProspectEmails.php:29-35` como constante `WA_MESSAGES`.
+Los templates están en `app/Console/Commands/SendProspectEmails.php:38-44` como constante `WA_MESSAGES`.
 
 ---
 
 ### Notas operacionales
 
-- **Cron:** `Schedule::command('docfacil:send-prospect-emails')->hourly()` en [routes/console.php:15](routes/console.php).
+- **Cron:** `Schedule::command('docfacil:send-prospect-emails')->hourly()` en [routes/console.php:31](routes/console.php).
 - **Rate limit:** máximo 10 mensajes por corrida (protege WhatsApp de marcarte como spam).
 - **Deduplicación:** el cron checa `lifecycle_emails` para no repetir el mismo mensaje al mismo prospect.
 - **Canal:** prueba email primero; si no hay, WhatsApp. Nunca ambos al mismo prospect en el mismo paso.
@@ -526,7 +516,7 @@ Ultima cosa: si conoce a alguien que le pueda servir, me lo pasa y yo me encargo
 ```
 [NOMBRE_DOCTOR], ya lleva casi 2 meses con DocFacil y me gustaria pedirle un favor rapido.
 
-Nos ayudaria mucho si nos pudiera dar un testimonio corto sobre su experiencia. Puede ser por aqui mismo, por audio de WhatsApp, o si prefiere lo escribo yo y usted nada mas lo aprueba.
+Nos ayudaria mucho si nos pudiera dar un testimonio corto sobre su experiencia. Puede ser por aqui mismo, por audio de WhatsApp, o si prefiere me lo platica y yo lo paso en limpio con sus mismas palabras para que usted lo revise.
 
 Algo asi como:
 - Que problema tenia antes?
@@ -536,12 +526,13 @@ Algo asi como:
 Su testimonio nos ayuda a que mas doctores confien en el sistema. Se lo agradeceria mucho.
 ```
 
-### Testimonio 2 - Version facil (solo aprobacion)
+### Testimonio 2 - Version facil (paso en limpio lo que el doctor dijo)
+> Solo usar con frases que el doctor dijo de verdad (audio o mensaje). No inventar resultados ni numeros.
 ```
-[NOMBRE_DOCTOR], le escribo algo rapido. Basado en lo que me ha platicado, redacte este testimonial para nuestra pagina:
+[NOMBRE_DOCTOR], le escribo algo rapido. Pase en limpio lo que me platico, con sus palabras, para nuestra pagina:
 
-"Antes perdia varias citas a la semana porque los pacientes no llegaban. Con DocFacil, los recordatorios por WhatsApp bajaron mis faltas de 6 a 1 por semana. Ademas ya tengo todos mis expedientes organizados y las recetas las hago en segundos."
-- [NOMBRE_DOCTOR], [ESPECIALIDAD] en Culiacan
+"[en sus palabras: que problema tenia antes]. [en sus palabras: que cambio con DocFacil]. [en sus palabras: que le gusta mas]"
+- [NOMBRE_DOCTOR], [ESPECIALIDAD] en [CIUDAD]
 
 Esta bien si lo usamos? Si quiere cambiarle algo, con toda confianza.
 ```
@@ -576,13 +567,13 @@ Y como agradecimiento, le doy [beneficio: mes gratis / feature extra].
 Doctor, mucho gusto. Mi nombre es [NOMBRE_VENDEDOR], le llamo de DocFacil, 
 somos un software para consultorios medicos y dentales.
 
-Le quito solo un minuto. La razon de mi llamada es que estamos trabajando
-con varios [dentistas/medicos] aqui en Culiacan, y el problema que mas nos 
-reportan es el de las citas perdidas: pacientes que no llegan sin avisar.
+Le quito solo un minuto. Estamos empezando y busco los primeros consultorios
+aqui en la region. Le llamo por las citas perdidas: en promedio falta cerca
+del 30% de los pacientes, y hasta 36% de esas faltas son por olvido (Doctoralia).
 
-Lo que hace DocFacil es que le manda un recordatorio automatico por WhatsApp 
-a cada paciente un dia antes de su cita. Los doctores que lo usan nos dicen 
-que sus faltas bajaron entre un 40 y 60 por ciento.
+Con DocFacil, desde su agenda, a un clic se abre el WhatsApp de su consultorio
+con el recordatorio listo y un boton para que el paciente confirme. Sin costo
+por mensaje.
 
 Ademas le organiza expedientes, agenda y le genera recetas PDF.
 
@@ -621,7 +612,7 @@ Muchas gracias por su tiempo, [NOMBRE_DOCTOR]. Que le vaya muy bien."
 
 6. **Personalicen siempre.** Un "[NOMBRE_DOCTOR]" generico se siente frio. Si saben algo del consultorio (la colonia, si es consultorio nuevo, cuantos doctores tienen), mencionenlo.
 
-7. **El follow-up gana.** El 80% de las ventas se cierran entre el contacto 5 y 12. No se rindan en el mensaje 2.
+7. **El follow-up gana.** No se rindan en el mensaje 2 (pero respeten el limite del punto 5).
 
 8. **WhatsApp > Email > Llamada** en tasa de respuesta para este mercado.
 

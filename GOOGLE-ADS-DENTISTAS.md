@@ -224,17 +224,17 @@ Cada Ad Group necesita **2 RSAs** con 15 headlines + 4 descriptions para que Goo
 ### Headlines (15 — reúsa keyword tema del ad group donde aplique)
 
 ```
-1. Software para Consultorio Dental
-2. DocFácil · Agenda + Odontograma
-3. WhatsApp Automático a Pacientes
-4. Bajen sus No-Shows 40-60%
-5. Recetas PDF con Firma Digital
-6. Pruebe 15 Días Gratis, Sin Tarjeta
+1. Software Consultorio Dental
+2. DocFácil: Agenda y Odontograma
+3. Recordatorio WhatsApp a 1 Clic
+4. Paciente Confirma con 1 Toque
+5. Recetas PDF con Su Cédula
+6. 15 Días Gratis, Sin Tarjeta
 7. Hecho en México para Dentistas
-8. Expediente Dental Digital NOM-004
-9. Odontograma Digital FDI Interactivo
-10. Recupere $8,000/mes en Huecos
-11. Desde $499 al Mes, Sin Contratos
+8. Expediente Dental NOM-004
+9. Odontograma Digital FDI
+10. Sin Costo por Mensaje
+11. Desde $499/Mes, Sin Contratos
 12. Soporte WhatsApp Directo
 13. Listo en 2 Minutos
 14. Cumple NOM-004 y LFPDPPP
@@ -244,13 +244,13 @@ Cada Ad Group necesita **2 RSAs** con 15 headlines + 4 descriptions para que Goo
 ### Descriptions (4)
 
 ```
-1. Agenda, expediente, recetas PDF y recordatorios WhatsApp automáticos. Su consultorio dental organizado desde el día uno. 15 días gratis, sin tarjeta.
+1. Agenda, expediente, recetas PDF y recordatorio WhatsApp a 1 clic. 15 días gratis.
 
-2. El odontograma digital FDI que se actualiza solo. 13 condiciones dentales, editor visual. Todo en la nube, sin instalar nada. Empiece hoy.
+2. Odontograma digital FDI con editor visual. En la nube, sin instalar nada. Empiece hoy.
 
-3. Los dentistas que ya lo usan bajan 40-60% sus citas perdidas y recuperan $6-10k/mes. Plan Pro $999/mes o Básico $499. Sin letra chiquita.
+3. Su paciente confirma la cita con un toque en WhatsApp. Sin costo por mensaje. Desde $499.
 
-4. Hecho en México, cumple NOM-004, soporte real por WhatsApp. Pruébelo 15 días y decide después. Sin tarjeta al registrarse.
+4. Hecho en México. Soporte directo por WhatsApp. Pruébelo 15 días gratis, sin tarjeta.
 ```
 
 ### Paths (visibles en el URL)
@@ -335,7 +335,7 @@ Configuración en 2 min
 
 ```
 Tipo: Features
-Valores: Odontograma Digital, Recordatorios WhatsApp, Recetas PDF, Agenda Online, Expediente Clínico, Cobros Integrados
+Valores: Odontograma Digital, Recordatorios WhatsApp, Recetas PDF, Agenda Online, Expediente Clínico, Saldos de Pacientes
 ```
 
 ### Call Extension
@@ -350,7 +350,7 @@ País: México
 
 - Campos: Nombre, WhatsApp, Especialidad (dropdown), Ciudad
 - CTA: "Agendar demo en 10 min"
-- Mensaje post-submit: "Le escribimos por WhatsApp en los próximos 30 min"
+- Mensaje post-submit: "Le escribo por WhatsApp en los próximos 30 min"
 
 ---
 
@@ -371,7 +371,7 @@ País: México
 - **CTR <1%** en un ad group → quality score malo, puja más cara, reescribe ads
 - **CPC >$80 MXN** en keywords core → alguien nuevo entró a pujar, revisa negatives
 - **Bounce rate >80%** en `/dentistas` → copy del ad no coincide con landing
-- **Conversion rate <2%** sostenido → landing falla (form muy largo, load lento, falta prueba social visible)
+- **Conversion rate <2%** sostenido → landing falla (form muy largo, load lento, falta prueba social visible; usar solo datos de mercado con fuente o testimonios reales, nunca inventados)
 - **Impresiones que caen 50%** de un día a otro → posible disapproval de un ad (revisa Policy tab)
 
 ---
@@ -446,7 +446,7 @@ Search Software Dental MX,Software Dental,+software +consultorio +dental,Broad
 
 **Cuánto:** $2,000 MXN/mes por 30 días de prueba.
 
-**Math esperada:**
+**Math hipotética (supuestos, sin datos reales aún):**
 - ~80-100 clics
 - CPC promedio ~$25-40 MXN
 - Landing convierte ~5% → 4-5 trials

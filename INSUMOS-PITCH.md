@@ -25,7 +25,7 @@ La primera línea del mensaje debe reconocer que él lo sacó. Eso solo ya te se
 >
 > **Cómo funciona:** cada servicio de su catálogo lleva una "receta" de insumos — qué gasta y cuánto. Cuando usted cierra una consulta, el sistema descuenta solo.
 >
-> Y aquí está el detalle que casi nadie hace bien: si aplica resina en 10 dientes, descuenta 10 veces el composite, pero **los guantes y el babero solo una vez**, porque son por visita. Si multiplicara todo por igual, le descontaría 20 guantes en una sola consulta — y por eso esos sistemas se abandonan.
+> Y aquí está el detalle que casi nadie hace bien: si aplica resina en 10 dientes, descuenta 10 veces el composite, pero **los guantes y el babero solo una vez**, porque son por visita. Si multiplicara todo por igual, le descontaría 20 guantes en una sola consulta, y con eso nadie confía en el inventario.
 >
 > **Lo que usted vería:** aviso antes de que se le acabe algo, y el costo de insumos y el margen de cada procedimiento.
 >
@@ -53,7 +53,7 @@ Usar cuando pida detalle o cuando la conversación ya tenga confianza.
 >
 > **Cómo lo resolvemos.** Cada servicio de su catálogo lleva una receta: qué insumos consume y en qué cantidad. Cuando usted cierra una consulta, el sistema descuenta esos insumos del inventario automáticamente. Usted no hace nada distinto a lo que ya hace.
 >
-> **El detalle que importa.** Lo difícil no es descontar, es descontar bien. Hay insumos que se gastan por diente y otros que se gastan por visita. Si aplica resina en diez dientes, el composite va diez veces — pero los guantes y el babero van una sola vez. La mayoría de los sistemas multiplican todo por igual, le descuentan veinte guantes en una consulta, y el doctor deja de confiar en el inventario a la semana. Nosotros separamos los dos casos, y eso es lo que hace que el número sirva.
+> **El detalle que importa.** Lo difícil no es descontar, es descontar bien. Hay insumos que se gastan por diente y otros que se gastan por visita. Si aplica resina en diez dientes, el composite va diez veces — pero los guantes y el babero van una sola vez. Un sistema que multiplica todo por igual le descuenta veinte guantes en una consulta, y el doctor deja de confiar en el inventario. Nosotros separamos los dos casos, y eso es lo que hace que el número sirva.
 >
 > **Lo que usted ve al final.** Un aviso antes de que se le acabe algo (no cuando ya se le acabó), y el costo de insumos y el margen de cada procedimiento. Ese segundo número es el que le dice si su tarifa está bien puesta.
 >
@@ -109,7 +109,7 @@ El ejemplo que siempre funciona:
 > | Babero | **por visita** | **1** |
 > | Anestésico | **por visita** | **1–2** |
 
-Casi ningún sistema del mercado separa esos dos casos. Ese es el argumento.
+Ese es el argumento. (No digas que "casi ningún sistema" lo hace: no lo hemos verificado en la competencia.)
 
 ---
 
@@ -150,25 +150,25 @@ Venta mensual: la comisión se parte 50/50 en los dos primeros pagos. Venta anua
 
 ### Lo que ya NO se puede decir
 
-Desde la subida a $499, DocFácil **dejó de ser "el barato"**. Quedó en paridad con Huli (~$500) e iPraxis (~$500), ~17% por debajo de Nimbo ($599) y ~27% por debajo de Dentalink ($680+) — pero Abysmed arranca en ~$399, por debajo.
+Desde la subida a $499, DocFácil **dejó de ser "el barato"**. Doctocliq tiene plan gratis y planes de US$19-49 (~$350-900 MXN), Dentum arranca en $749 con IVA, Dentalink cotiza (~US$29-89) y Doctoralia "Practice" cuesta $720 + IVA. Ver `COMPETITIVE-INTEL.md` (revisado 1-oct-2026).
 
 Quedan **prohibidas** estas frases (eran ciertas a $149 y ya no):
 
 | No digas | Por qué |
 |---|---|
-| "Somos 4-17× más baratos" | El rango real va de paridad a ~10× (solo contra plataformas de captación tipo Doctoralia) |
+| "Somos 4-17× más baratos" | No es cierto: Doctocliq tiene plan gratis y planes desde ~$350 MXN |
 | "El plan de pago más barato del mercado" | Hay alternativas más baratas |
 | "Precio imbatible" | No lo es |
-| "Es una fracción de lo que cuesta X" | Contra Dentalink es ~27% menos, no una fracción |
+| "Es una fracción de lo que cuesta X" | Contra Dentum ($749) es ~33% menos, no una fracción; Doctocliq puede costar menos |
 
 ### Lo que sí se puede decir
 
-El diferenciador ya no es el precio. Es: **odontograma FDI**, **WhatsApp 1-clic sin la API cara de Meta**, **cumplimiento NOM-004** (notas que se bloquean a las 24 h, recetas con cédula), **SPEI** y **soporte local directo**.
+El diferenciador ya no es el precio. Es: **odontograma FDI**, **WhatsApp 1-clic sin la API cara de Meta** (sin costo por mensaje), **cumplimiento NOM-004** (notas que se bloquean a las 24 h, recetas con cédula), **SPEI** y **trato directo con el fundador**. Ojo: Doctocliq, Dentum y Dentalink también tienen odontograma y recordatorios (automáticos en Doctocliq); nunca decir "único".
 
 Y el argumento de cierre que sigue siendo verdadero:
 
 > *"Con un solo paciente recuperado al mes ya pagó el plan."*
 
-El promedio dental son citas de **$500 a $1,500**. A $499, una sola cita ya cubre el mes.
+Una cita dental suele costar **$500 a $1,500** (estimado, no medido). A $499, una sola cita ya cubre el mes.
 
 ⚠️ **Cuidado con la calificación:** si el consultorio cobra **menos de $200 por consulta**, su margen no aguanta los $499. A ese perfil se le ofrece el **plan Free**, no el pagado.
