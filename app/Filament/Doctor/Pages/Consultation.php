@@ -114,6 +114,8 @@ class Consultation extends Page implements HasForms
     // Step 5: Next appointment
     public ?string $next_appointment_date = null;
     public ?string $next_appointment_service_id = null;
+    /** Si la siguiente cita es un tratamiento del presupuesto, cuál. */
+    public ?int $next_appointment_item_id = null;
 
     public function mount(): void
     {
@@ -178,6 +180,7 @@ class Consultation extends Page implements HasForms
             $this->supplies = $saved['supplies'] ?? [];
             $this->next_appointment_date = $saved['next_appointment_date'] ?? null;
             $this->next_appointment_service_id = $saved['next_appointment_service_id'] ?? null;
+            $this->next_appointment_item_id = $saved['next_appointment_item_id'] ?? null;
         } else {
             // Pre-fill payment amount from service
             if ($this->appointment->service) {
@@ -222,6 +225,19 @@ class Consultation extends Page implements HasForms
     private function proponerProcedimientos(): void
     {
         $servicio = $this->appointment?->service;
+
+        // La cita viene de un tratamiento del presupuesto: ese diente, ese servicio.
+        $item = $this->appointment?->treatmentPlanItem;
+        if ($item && $item->service_id) {
+            $this->procedures = [[
+                'service_id' => (string) $item->service_id,
+                'tooth_number' => (string) ($item->tooth_number ?? ''),
+                'quantity' => max(1, (int) $item->quantity),
+            ]];
+            $this->updatedProcedures();
+
+            return;
+        }
 
         if (! $servicio || ! \App\Support\OdontogramaClinico::condicionDeServicio($servicio->name)) {
             return;
@@ -573,6 +589,7 @@ class Consultation extends Page implements HasForms
                 'supplies' => $this->supplies,
                 'next_appointment_date' => $this->next_appointment_date,
                 'next_appointment_service_id' => $this->next_appointment_service_id,
+                'next_appointment_item_id' => $this->next_appointment_item_id,
             ],
         ]);
     }
@@ -688,6 +705,9 @@ class Consultation extends Page implements HasForms
             ]);
         }
 
+        // Si la cita era un tratamiento del presupuesto, queda hecho.
+        $this->appointment->treatmentPlanItem?->update(['completed_at' => now()]);
+
         // Lo hecho pasa al odontograma: la resina en el 36 le quita la caries.
         \App\Support\OdontogramaClinico::registrarConsulta($this->appointment);
 
@@ -750,6 +770,7 @@ class Consultation extends Page implements HasForms
                     'doctor_id' => $this->appointment->doctor_id,
                     'patient_id' => $this->appointment->patient_id,
                     'service_id' => $this->next_appointment_service_id ?: null,
+                    'treatment_plan_item_id' => $this->next_appointment_item_id,
                     'starts_at' => $inicio,
                     'ends_at' => $fin,
                     'status' => 'scheduled',
@@ -815,6 +836,75 @@ class Consultation extends Page implements HasForms
     }
 
     // ── Procedimientos realizados ────────────────────────────────
+
+    /**
+     * Lo que DocFácil sabe que sigue para este paciente: lo que falta del
+     * presupuesto aceptado, el regreso de los servicios que se repiten
+     * (limpieza en 6 meses) y el control de su plan de pagos. Cada uno con
+     * su fecha, para agendarlo con un clic antes de que se vaya.
+     */
+    public function sugerenciasSiguienteCita(): array
+    {
+        $cita = $this->appointment;
+        if (! $cita) {
+            return [];
+        }
+
+        $hora = now()->startOfHour();
+        $sugerencias = [];
+
+        $pendientes = \App\Models\TreatmentPlanItem::whereNull('completed_at')
+            ->whereHas('treatmentPlan', fn ($q) => $q->where('clinic_id', $cita->clinic_id)->where('patient_id', $cita->patient_id)->where('status', 'accepted'))
+            ->with('service')->orderBy('sort_order')->get()
+            ->reject(fn ($item) => $item->citaPendiente() || $item->id === $cita->treatment_plan_item_id);
+        foreach ($pendientes as $item) {
+            $sugerencias['item-' . $item->id] = [
+                'titulo' => $item->description,
+                'detalle' => 'Del presupuesto',
+                'service_id' => $item->service_id,
+                'item_id' => $item->id,
+                'fecha' => $hora->copy()->addWeek(),
+            ];
+        }
+
+        $hechos = collect($this->procedures)->pluck('service_id')->push($cita->service_id)->filter()->unique();
+        foreach (Service::whereIn('id', $hechos)->where('recall_months', '>', 0)->get() as $servicio) {
+            $sugerencias['regreso-' . $servicio->id] = [
+                'titulo' => "{$servicio->name} en {$servicio->recall_months} " . ($servicio->recall_months === 1 ? 'mes' : 'meses'),
+                'detalle' => 'Regreso',
+                'service_id' => $servicio->id,
+                'item_id' => null,
+                'fecha' => $hora->copy()->addMonthsNoOverflow($servicio->recall_months),
+            ];
+        }
+
+        $plan = \App\Models\PaymentPlan::where('clinic_id', $cita->clinic_id)->where('patient_id', $cita->patient_id)
+            ->where('status', 'active')->whereNotNull('service_id')->latest()->first();
+        $proxima = $plan?->payments()->where('installment_number', '>', 0)->whereDate('due_date', '>', today())->orderBy('due_date')->first();
+        if ($plan && $proxima) {
+            $sugerencias['control-orto'] = [
+                'titulo' => 'Control de ' . $plan->description,
+                'detalle' => 'Con su siguiente mensualidad',
+                'service_id' => $plan->service_id,
+                'item_id' => null,
+                'fecha' => $proxima->due_date->copy()->setTimeFrom($hora),
+            ];
+        }
+
+        return $sugerencias;
+    }
+
+    public function usarSugerencia(string $clave): void
+    {
+        $s = $this->sugerenciasSiguienteCita()[$clave] ?? null;
+        if (! $s) {
+            return;
+        }
+
+        $this->next_appointment_date = $s['fecha']->format('Y-m-d\TH:i');
+        $this->next_appointment_service_id = (string) $s['service_id'];
+        $this->next_appointment_item_id = $s['item_id'];
+    }
 
     /** Alergias que el doctor anota en la consulta cuando no estaban registradas. */
     public string $alergiasNuevas = '';

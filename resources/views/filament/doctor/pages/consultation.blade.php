@@ -1087,6 +1087,24 @@
             <span class="step-title-text">Siguiente Cita</span>
         </div>
         <p class="step-subtitle">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
+
+        {{-- Lo que ya se sabe que sigue: un clic llena fecha y servicio. --}}
+        @php $sugerencias = $this->sugerenciasSiguienteCita(); @endphp
+        @if($sugerencias)
+        <div style="margin-bottom:1rem;">
+            <div style="font-size:0.75rem;font-weight:700;color:#0f766e;margin-bottom:0.45rem;">Lo que sigue para {{ $this->appointment?->patient?->first_name }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.45rem;">
+                @foreach($sugerencias as $clave => $s)
+                <button type="button" wire:click="usarSugerencia('{{ $clave }}')"
+                    style="display:flex;flex-direction:column;align-items:flex-start;padding:0.5rem 0.75rem;border-radius:0.7rem;border:1.5px solid {{ $next_appointment_date === $s['fecha']->format('Y-m-d\TH:i') && (string) $next_appointment_service_id === (string) $s['service_id'] ? '#0d9488' : '#e5e7eb' }};background:#fff;text-align:left;cursor:pointer;">
+                    <span style="font-size:0.82rem;font-weight:700;color:#111827;">{{ $s['titulo'] }}</span>
+                    <span style="font-size:0.72rem;color:#64748b;">{{ $s['detalle'] }} · {{ $s['fecha']->locale('es')->isoFormat('ddd D [de] MMM, HH:mm') }}</span>
+                </button>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <div class="next-grid">
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha y hora</label>

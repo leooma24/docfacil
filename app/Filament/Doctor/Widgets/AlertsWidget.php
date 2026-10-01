@@ -52,6 +52,24 @@ class AlertsWidget extends Widget
             ];
         }
 
+        // Lo que el paciente ya aceptó pero nadie ha agendado: dinero que se
+        // queda en el presupuesto.
+        $sinAgendar = \App\Models\TreatmentPlanItem::whereNull('completed_at')
+            ->whereHas('treatmentPlan', fn ($q) => $q->where('clinic_id', $clinicId)->where('status', 'accepted'))
+            ->get()
+            ->reject(fn ($item) => $item->citaPendiente())
+            ->count();
+
+        if ($sinAgendar > 0) {
+            $alerts[] = [
+                'type' => 'info',
+                'icon' => 'heroicon-o-calendar-days',
+                'title' => $sinAgendar . ($sinAgendar === 1 ? ' tratamiento aceptado sin agendar' : ' tratamientos aceptados sin agendar'),
+                'desc' => 'El paciente ya dijo que sí. Agéndelos desde su presupuesto.',
+                'url' => \App\Filament\Doctor\Resources\TreatmentPlanResource::getUrl('index', ['tableFilters' => ['status' => ['value' => 'accepted']]], panel: 'doctor'),
+            ];
+        }
+
         // Pacientes de mañana a los que falta recordarles. Se cuenta por
         // paciente (uno con tres citas recibe un solo mensaje) y no entran los
         // que ya confirmaron. Se quita al mandar el recordatorio.

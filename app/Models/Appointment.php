@@ -83,7 +83,7 @@ class Appointment extends Model
 
     protected $fillable = [
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
-        'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent',
+        'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent', 'treatment_plan_item_id',
         'consultation_data',
         'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
         'review_request_sent_at',
@@ -273,6 +273,12 @@ class Appointment extends Model
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    /** El tratamiento del presupuesto que se hace en esta cita, si viene de uno. */
+    public function treatmentPlanItem(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(TreatmentPlanItem::class);
     }
 
     public function patient(): BelongsTo

@@ -6,6 +6,7 @@ use App\Filament\Doctor\Resources\TreatmentPlanResource\Pages;
 use App\Models\Patient;
 use App\Models\Service;
 use App\Models\TreatmentPlan;
+use App\Models\TreatmentPlanItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -141,11 +142,70 @@ class TreatmentPlanResource extends Resource
                                 ->minValue(0)
                                 ->columnSpan(['md' => 3])
                                 ->live(onBlur: true),
+                            Forms\Components\Placeholder::make('estado_del_tratamiento')
+                                ->label('')
+                                ->content(fn (?TreatmentPlanItem $record) => $record?->estado())
+                                ->visible(fn (?TreatmentPlanItem $record, Forms\Get $get) => $record && $get('../../status') === 'accepted')
+                                ->columnSpanFull(),
                             Forms\Components\TextInput::make('description')
                                 ->label('Descripción')
                                 ->columnSpan(['md' => 12])
                                 ->required()
                                 ->maxLength(255),
+                        ])
+                        ->extraItemActions([
+                            // Cada tratamiento aceptado se agenda desde aquí y la cita
+                            // queda ligada: la consulta trae su diente y al cerrarla
+                            // el tratamiento queda hecho.
+                            Forms\Components\Actions\Action::make('agendar')
+                                ->label('Agendar')
+                                ->icon('heroicon-o-calendar-days')
+                                ->color('success')
+                                ->tooltip('Agendar este tratamiento')
+                                ->visible(function (array $arguments, Forms\Components\Repeater $component) {
+                                    $item = self::itemDe($arguments, $component);
+
+                                    return $component->getRecord()?->status === 'accepted' && $item && ! $item->completed_at && ! $item->citaPendiente();
+                                })
+                                ->form([
+                                    Forms\Components\DateTimePicker::make('starts_at')
+                                        ->label('Fecha y hora')
+                                        ->native(false)->displayFormat('d/m/Y H:i')->minutesStep(15)
+                                        ->default(fn () => now()->addWeekday()->setTime(10, 0))
+                                        ->required(),
+                                ])
+                                ->action(function (array $arguments, array $data, Forms\Components\Repeater $component) {
+                                    $item = self::itemDe($arguments, $component);
+                                    $plan = $component->getRecord();
+                                    if (! $item || ! $plan) {
+                                        return;
+                                    }
+                                    $inicio = \Carbon\Carbon::parse($data['starts_at']);
+                                    $fin = $inicio->copy()->addMinutes((int) ($item->service?->duration_minutes ?: 30));
+                                    $doctor = $plan->doctor_id ?? auth()->user()->doctor?->id;
+
+                                    if ($choque = \App\Models\Appointment::mensajeDeTraslape($plan->clinic_id, $doctor, $inicio, $fin)) {
+                                        Notification::make()->title('No se agendó')->body($choque)->warning()->send();
+
+                                        return;
+                                    }
+
+                                    \App\Models\Appointment::create([
+                                        'clinic_id' => $plan->clinic_id,
+                                        'doctor_id' => $doctor,
+                                        'patient_id' => $plan->patient_id,
+                                        'service_id' => $item->service_id,
+                                        'treatment_plan_item_id' => $item->id,
+                                        'starts_at' => $inicio,
+                                        'ends_at' => $fin,
+                                        'status' => 'scheduled',
+                                    ]);
+
+                                    Notification::make()
+                                        ->title('Agendado')
+                                        ->body($item->description . ' · ' . $inicio->locale('es')->isoFormat('dddd D [de] MMMM, HH:mm'))
+                                        ->success()->send();
+                                }),
                         ])
                         // Servicio, diente, cantidad y precio en un renglón y la
                         // descripción debajo: antes cada tratamiento ocupaba media
@@ -276,6 +336,18 @@ class TreatmentPlanResource extends Resource
      * WhatsApp con el mensaje listo. Lo usan la lista y la pantalla del
      * presupuesto.
      */
+    /** El tratamiento de una línea del repetidor ("record-12" → item 12). */
+    private static function itemDe(array $arguments, Forms\Components\Repeater $component): ?TreatmentPlanItem
+    {
+        $clave = (string) ($arguments['item'] ?? '');
+        if (! str_starts_with($clave, 'record-')) {
+            return null;
+        }
+
+        return TreatmentPlanItem::where('treatment_plan_id', $component->getRecord()?->id)
+            ->find((int) substr($clave, 7));
+    }
+
     /** Suma de cantidad × precio de las líneas, menos el descuento. Nunca negativo. */
     public static function totalEstimado(array $items, mixed $descuento): float
     {
