@@ -267,6 +267,25 @@ Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
     ->where('token', '[a-f0-9]{64}')
     ->name('treatment-plan.reject');
 
+// El botón de WhatsApp del recordatorio pasa por aquí: deja recordadas todas
+// las citas del paciente de ese día y abre WhatsApp con un solo mensaje. Así
+// DocFácil sabe a quién ya se le escribió.
+Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
+    abort_unless(auth()->check(), 403);
+
+    $cita = \App\Models\Appointment::with(['patient', 'clinic'])
+        ->where('clinic_id', auth()->user()->clinic_id)
+        ->findOrFail($appointment);
+
+    $whatsapp = \App\Support\RecordatorioDeCita::ligaDeWhatsapp($cita);
+    abort_unless($whatsapp, 422, 'El paciente no tiene teléfono.');
+
+    \App\Models\Appointment::whereIn('id', \App\Support\RecordatorioDeCita::delMismoDia($cita)->pluck('id'))
+        ->update(['reminder_sent' => true]);
+
+    return redirect()->away($whatsapp);
+})->name('cita.recordar');
+
 // El odontograma para imprimir o guardar en PDF desde el navegador. Se busca
 // por id dentro del consultorio de quien entra: el de otro consultorio no existe.
 Route::get('/doctor/odontogramas/{odontogram}/imprimir', function (int $odontogram) {

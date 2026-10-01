@@ -91,30 +91,15 @@ class TodayAppointments extends BaseWidget
                     ->visible(fn (Appointment $record) => $record->status === 'in_progress')
                     ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id])),
                 Tables\Actions\Action::make('whatsapp')
-                    ->label('WhatsApp')
-                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
-                    ->color('success')
+                    // Pasa por DocFácil para dejarla recordada (y a las demás
+                    // citas del paciente ese día) y abre WhatsApp con un solo
+                    // mensaje. Ver la ruta cita.recordar.
+                    ->label(fn (Appointment $record) => $record->reminder_sent ? 'Recordado' : 'WhatsApp')
+                    ->icon(fn (Appointment $record) => $record->reminder_sent ? 'heroicon-o-check-circle' : 'heroicon-o-chat-bubble-left-ellipsis')
+                    ->color(fn (Appointment $record) => $record->reminder_sent ? 'gray' : 'success')
+                    ->tooltip(fn (Appointment $record) => $record->reminder_sent ? 'Ya se le mandó el recordatorio. Tóquelo para mandarlo otra vez.' : 'Mandar recordatorio por WhatsApp')
                     ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
-                    ->url(function (Appointment $record) {
-                        $phone = preg_replace('/\D/', '', $record->patient->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $clinicName = $record->clinic->name ?? 'DocFácil';
-                        $time = $record->starts_at->format('H:i');
-
-                        // "hoy" / "mañana" / "el viernes 12 de mayo" segun proximidad.
-                        if ($record->starts_at->isToday()) {
-                            $when = "hoy a las *{$time} hrs*";
-                        } elseif ($record->starts_at->isTomorrow()) {
-                            $when = "mañana a las *{$time} hrs*";
-                        } else {
-                            $dateStr = $record->starts_at->translatedFormat('l j \d\e F');
-                            $when = "el {$dateStr} a las *{$time} hrs*";
-                        }
-
-                        $msg = urlencode(\App\Support\RecordatorioDeCita::mensaje($record));
-
-                        return "https://wa.me/{$phone}?text={$msg}";
-                    })
+                    ->url(fn (Appointment $record) => route('cita.recordar', $record))
                     ->openUrlInNewTab(),
                 Tables\Actions\Action::make('no_show')
                     ->iconButton()

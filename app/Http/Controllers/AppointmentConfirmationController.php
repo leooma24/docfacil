@@ -28,18 +28,23 @@ class AppointmentConfirmationController extends Controller
         $cerradas = ['cancelled', 'completed', 'no_show'];
         $alreadyHandled = in_array($appointment->status, $action === 'cancel' ? $cerradas : [...$cerradas, 'confirmed']);
 
+        // El recordatorio junta en un mensaje todas las citas del paciente ese
+        // día, con una sola liga: lo que decida aplica a todas.
+        $delDia = \App\Support\RecordatorioDeCita::delMismoDia($appointment);
+        if ($delDia->isEmpty()) {
+            $delDia = collect([$appointment]);
+        }
+        $horas = $delDia->map(fn ($c) => $c->starts_at->format('H:i'))->implode(' y ');
+
         // Solo procesar si la cita esta pendiente y no ha pasado
         if ($action && !$alreadyHandled && $appointment->starts_at->isFuture()) {
-            if ($action === 'cancel') {
-                $appointment->update([
-                    'status' => 'cancelled',
-                    'cancellation_reason' => 'Cancelada por paciente vía WhatsApp (1-clic)',
-                ]);
-            } else {
-                $appointment->update([
-                    'status' => 'confirmed',
-                    'confirmed_at' => now(),
-                ]);
+            foreach ($delDia as $cita) {
+                if (! $cita->starts_at->isFuture()) {
+                    continue;
+                }
+                $cita->update($action === 'cancel'
+                    ? ['status' => 'cancelled', 'cancellation_reason' => 'Cancelada por paciente vía WhatsApp (1-clic)']
+                    : ['status' => 'confirmed', 'confirmed_at' => now()]);
             }
 
             Log::info('Appointment 1-click action', [
@@ -55,6 +60,7 @@ class AppointmentConfirmationController extends Controller
             'appointment' => $appointment->fresh(),
             'action' => $action,
             'alreadyHandled' => $alreadyHandled,
+            'horas' => $horas,
         ]);
     }
 }

@@ -129,8 +129,8 @@
                 <span class="detail-value">{{ $appointment->starts_at->translatedFormat('l d \d\e F, Y') }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Hora</span>
-                <span class="detail-value">{{ $appointment->starts_at->format('H:i') }} hrs</span>
+                <span class="detail-label">{{ str_contains($horas ?? '', ' y ') ? 'Horas' : 'Hora' }}</span>
+                <span class="detail-value">{{ $horas ?? $appointment->starts_at->format('H:i') }} hrs</span>
             </div>
             <div class="detail-row">
                 <span class="detail-label">Doctor</span>

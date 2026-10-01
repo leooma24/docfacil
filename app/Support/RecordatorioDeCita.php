@@ -53,6 +53,62 @@ class RecordatorioDeCita
     }
 
     /**
+     * Las citas que el paciente tiene ese mismo día y siguen vigentes, en
+     * orden. Con varias, se le manda un solo recordatorio con todas.
+     */
+    public static function delMismoDia(Appointment $cita): \Illuminate\Support\Collection
+    {
+        return Appointment::withoutGlobalScopes()
+            ->where('clinic_id', $cita->clinic_id)
+            ->where('patient_id', $cita->patient_id)
+            ->whereDate('starts_at', $cita->starts_at->toDateString())
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->orderBy('starts_at')
+            ->get();
+    }
+
+    /**
+     * El recordatorio de todo el día del paciente: si tiene una cita es el de
+     * siempre; si tiene varias, un solo mensaje con todas las horas.
+     */
+    public static function mensajeDelDia(Appointment $cita): string
+    {
+        $citas = self::delMismoDia($cita);
+
+        if ($citas->count() <= 1) {
+            return self::mensaje($cita);
+        }
+
+        $cita->loadMissing(['patient', 'clinic']);
+        $nombre = trim((string) $cita->patient?->first_name) ?: 'Hola';
+        $consultorio = $cita->clinic?->name ?? 'su consultorio';
+        $dia = $cita->starts_at->isToday() ? 'hoy' : $cita->starts_at->locale('es')->isoFormat('dddd');
+        $horas = $citas->map(fn ($c) => $c->starts_at->format('H:i'))->values();
+        $lista = $horas->count() === 2
+            ? $horas[0] . ' y a las ' . $horas[1]
+            : $horas->slice(0, -1)->implode(', ') . ' y a las ' . $horas->last();
+
+        return "Hola {$nombre}, le recordamos sus citas en {$consultorio} {$dia} a las {$lista}.\n\n"
+            . "Confirme o cancele aquí:\n"
+            . self::liga($citas->first()) . "\n\n"
+            . '¡Le esperamos!';
+    }
+
+    /** La dirección de WhatsApp con el recordatorio del día listo. */
+    public static function ligaDeWhatsapp(Appointment $cita): ?string
+    {
+        $telefono = preg_replace('/\D/', '', (string) $cita->patient?->phone);
+        if ($telefono === '') {
+            return null;
+        }
+        if (strlen($telefono) === 10) {
+            $telefono = '52' . $telefono;
+        }
+
+        return 'https://wa.me/' . $telefono . '?text=' . urlencode(self::mensajeDelDia($cita));
+    }
+
+    /**
      * La liga corta que abre la página de la cita.
      *
      * La dirección real va firmada y con caducidad; la corta es la que se

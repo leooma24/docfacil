@@ -104,7 +104,8 @@
             @if(count($alerts) > 0)
             <div class="aw-list">
                 @foreach($alerts as $alert)
-                <div class="aw-item">
+                {{-- Con liga, el aviso lleva directo a resolverlo. --}}
+                <{{ isset($alert['url']) ? 'a' : 'div' }} @isset($alert['url']) href="{{ $alert['url'] }}" @endisset class="aw-item" @isset($alert['url']) style="cursor:pointer;" @endisset>
                     <div class="aw-item-icon">
                         <x-filament::icon :icon="$alert['icon']" class="w-4 h-4 text-white" />
                     </div>
@@ -112,7 +113,10 @@
                         <div class="aw-item-title">{{ $alert['title'] }}</div>
                         <div class="aw-item-desc">{{ $alert['desc'] }}</div>
                     </div>
-                </div>
+                    @isset($alert['url'])
+                        <x-filament::icon icon="heroicon-m-chevron-right" class="w-4 h-4" style="color:rgba(255,255,255,.7);flex:0 0 1rem;" />
+                    @endisset
+                </{{ isset($alert['url']) ? 'a' : 'div' }}>
                 @endforeach
             </div>
             @else
