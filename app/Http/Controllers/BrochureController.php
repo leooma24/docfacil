@@ -77,11 +77,6 @@ class BrochureController extends Controller
                 ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, recetas vencidas, cumpleaños, cobros atrasados. El sistema te avisa.'],
                 ['icon' => '🏥', 'title' => 'Multi-doctor y multi-sede', 'desc' => 'Gestiona varios doctores o sucursales con comisiones automáticas entre ellos. Reportes por doctor.'],
             ],
-            'testimonials' => [
-                ['name' => 'Dra. María Fernández', 'city' => 'CDMX', 'specialty' => 'Odontología', 'quote' => 'Bajé las inasistencias de 30% a 8% el primer mes. El recordatorio por WhatsApp cambió mi consulta.'],
-                ['name' => 'Dr. Carlos Mendoza', 'city' => 'Guadalajara', 'specialty' => 'Medicina General', 'quote' => 'Antes perdía 2 horas al día buscando expedientes en papel. Ahora tengo todo en mi celular.'],
-                ['name' => 'Dra. Ana Torres', 'city' => 'Monterrey', 'specialty' => 'Ortodoncia', 'quote' => 'El odontograma y las recetas PDF le dan un aire profesional que mis pacientes notan y valoran.'],
-            ],
             'plans' => [
                 ['name' => 'Free', 'price' => 0, 'annual' => 0, 'ideal' => 'Probar el sistema sin tarjeta', 'features' => ['1 doctor', '15 pacientes', 'Agenda básica', '10 citas / mes']],
                 ['name' => 'Básico', 'price' => 499, 'annual' => 4990, 'ideal' => 'Consultorios individuales que arrancan', 'features' => ['1 doctor', '200 pacientes', 'WhatsApp + recetas PDF', 'Check-in QR', 'Expediente completo']],

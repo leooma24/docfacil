@@ -369,55 +369,12 @@
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 5 — CASO DE ÉXITO + TESTIMONIOS                        --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="header">
-        <div class="header-brand">DocFácil <small>Casos reales</small></div>
-        <div class="page-number">05</div>
-    </div>
-
-    <h2 class="section">Caso: Dra. Fernández (CDMX)</h2>
-    <p class="section-sub">Consultorio dental individual. Atendía 80 pacientes/mes con 30% de inasistencia. Esto cambió con DocFácil:</p>
-
-    <table class="case-stats"><tr>
-        <td><div class="num">8%</div><div class="label">inasistencia final<br>(antes 30%)</div></td>
-        <td><div class="num">+22</div><div class="label">citas atendidas<br>al mes</div></td>
-        <td><div class="num">$17K</div><div class="label">ingreso adicional<br>al mes</div></td>
-        <td><div class="num">2h</div><div class="label">ahorradas al día<br>en recordatorios</div></td>
-    </tr></table>
-
-    <h3 style="font-size:11pt; margin:14px 0 4px 0; color:#0d9488;">Antes vs. después de DocFácil</h3>
-    <table class="bar-compare">
-        <tr>
-            <td class="lbl">Antes</td>
-            <td class="bar-wrap"><div class="bar-bg"><div class="bar-fill-red" style="width:95%;"></div></div></td>
-            <td class="val" style="color:#ef4444;">30%</td>
-        </tr>
-        <tr>
-            <td class="lbl">Después</td>
-            <td class="bar-wrap"><div class="bar-bg"><div class="bar-fill-green" style="width:25%;"></div></div></td>
-            <td class="val" style="color:#10b981;">8%</td>
-        </tr>
-    </table>
-    <p class="quote-line">"Lo que pago por DocFácil lo recupero en 2 días de consulta extra al mes. Es la mejor inversión que he hecho." — Dra. M. Fernández</p>
-
-    <h2 class="section" style="font-size:16pt; margin-top:16px;">Lo que dicen otros doctores</h2>
-    @foreach ($pages['testimonials'] as $t)
-    <div class="testimonial">
-        <blockquote>"{{ $t['quote'] }}"</blockquote>
-        <div class="author"><strong>{{ $t['name'] }}</strong> · {{ $t['specialty'] }} · {{ $t['city'] }}</div>
-    </div>
-    @endforeach
-</div>
-
-{{-- ============================================================ --}}
-{{-- PÁGINA 6 — PRECIOS Y COMPARATIVA                              --}}
+{{-- PÁGINA 5 — PRECIOS Y COMPARATIVA                              --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
         <div class="header-brand">DocFácil <small>Precios en pesos mexicanos</small></div>
-        <div class="page-number">06</div>
+        <div class="page-number">05</div>
     </div>
 
     <h2 class="section">Planes pensados para cada consultorio</h2>
@@ -479,12 +436,12 @@
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 7 — ECOSISTEMA Y SEGURIDAD                             --}}
+{{-- PÁGINA 6 — ECOSISTEMA Y SEGURIDAD                             --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
         <div class="header-brand">DocFácil <small>Ecosistema, seguridad y confianza</small></div>
-        <div class="page-number">07</div>
+        <div class="page-number">06</div>
     </div>
 
     <h2 class="section">Todo lo que viene integrado</h2>
@@ -552,12 +509,12 @@
 </div>
 
 {{-- ============================================================ --}}
-{{-- PÁGINA 8 — CÓMO EMPEZAR Y CTA FINAL                           --}}
+{{-- PÁGINA 7 — CÓMO EMPEZAR Y CTA FINAL                           --}}
 {{-- ============================================================ --}}
 <div class="page">
     <div class="header">
         <div class="header-brand">DocFácil <small>Cómo empezar hoy</small></div>
-        <div class="page-number">08</div>
+        <div class="page-number">07</div>
     </div>
 
     <h2 class="section">Empieza en 3 pasos</h2>

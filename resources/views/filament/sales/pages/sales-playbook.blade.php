@@ -136,7 +136,7 @@
             </div>
             <div class="sp-step">
                 <div class="sp-step-num" style="background:#dbeafe;color:#2563eb;">D3</div>
-                <div class="sp-step-text"><strong>Follow-up.</strong> Dato ROI: "Doctores recuperan 8-12 citas/mes". Link demo.</div>
+                <div class="sp-step-text"><strong>Follow-up.</strong> Dato: "En México falta en promedio 3 de cada 10 pacientes (Doctoralia)". Link demo.</div>
             </div>
             <div class="sp-step">
                 <div class="sp-step-num" style="background:#dbeafe;color:#2563eb;">D7</div>
