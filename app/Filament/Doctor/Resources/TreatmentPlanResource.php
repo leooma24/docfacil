@@ -232,40 +232,7 @@ class TreatmentPlanResource extends Resource
                     ->requiresConfirmation()
                     ->modalHeading('Enviar presupuesto por WhatsApp')
                     ->modalDescription('Se generará un link único para que el paciente acepte en línea y se abrirá WhatsApp con el mensaje listo.')
-                    ->action(function (TreatmentPlan $record) {
-                        if (empty($record->public_token)) {
-                            $record->generatePublicToken();
-                        }
-                        $record->update([
-                            'status' => $record->status === 'draft' ? 'sent' : $record->status,
-                            'sent_at' => $record->sent_at ?? now(),
-                        ]);
-
-                        $phone = preg_replace('/\D/', '', $record->patient->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
-
-                        $acceptUrl = URL::signedRoute('treatment-plan.accept', ['token' => $record->public_token]);
-                        $pdfUrl = route('treatment-plan.public', ['token' => $record->public_token]);
-
-                        $clinicName = $record->clinic->name ?? 'tu consultorio';
-                        $firstName = $record->patient->first_name ?: 'hola';
-                        $total = number_format((float) $record->total, 2);
-
-                        $msg = "Hola {$firstName}, te comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
-                            . "*{$record->title}*\n"
-                            . "Total: *\${$total} MXN*\n\n"
-                            . "Ver el presupuesto: {$pdfUrl}\n\n"
-                            . "Si te parece bien, puedes aceptarlo aquí: {$acceptUrl}\n\n"
-                            . "Cualquier duda me la platicas por aquí.";
-
-                        Notification::make()
-                            ->title('Presupuesto listo para enviar')
-                            ->body('Se abrirá WhatsApp con el mensaje pre-armado.')
-                            ->success()
-                            ->send();
-
-                        return redirect()->away("https://wa.me/{$phone}?text=" . urlencode($msg));
-                    }),
+                    ->action(fn (TreatmentPlan $record) => self::enviarPorWhatsapp($record)),
             ])
             ->defaultSort('created_at', 'desc');
     }
@@ -277,5 +244,46 @@ class TreatmentPlanResource extends Resource
             'create' => Pages\CreateTreatmentPlan::route('/create'),
             'edit' => Pages\EditTreatmentPlan::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * Marca el presupuesto como enviado, le da su liga pública y abre
+     * WhatsApp con el mensaje listo. Lo usan la lista y la pantalla del
+     * presupuesto.
+     */
+    public static function enviarPorWhatsapp(TreatmentPlan $record)
+    {
+        if (empty($record->public_token)) {
+            $record->generatePublicToken();
+        }
+        $record->update([
+            'status' => $record->status === 'draft' ? 'sent' : $record->status,
+            'sent_at' => $record->sent_at ?? now(),
+        ]);
+
+        $phone = preg_replace('/\D/', '', $record->patient->phone);
+        if (strlen($phone) === 10) $phone = '52' . $phone;
+
+        $acceptUrl = URL::signedRoute('treatment-plan.accept', ['token' => $record->public_token]);
+        $pdfUrl = route('treatment-plan.public', ['token' => $record->public_token]);
+
+        $clinicName = $record->clinic->name ?? 'tu consultorio';
+        $firstName = $record->patient->first_name ?: 'hola';
+        $total = number_format((float) $record->total, 2);
+
+        $msg = "Hola {$firstName}, te comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
+            . "*{$record->title}*\n"
+            . "Total: *\${$total} MXN*\n\n"
+            . "Ver el presupuesto: {$pdfUrl}\n\n"
+            . "Si te parece bien, puedes aceptarlo aquí: {$acceptUrl}\n\n"
+            . "Cualquier duda me la platicas por aquí.";
+
+        Notification::make()
+            ->title('Presupuesto listo para enviar')
+            ->body('Se abrirá WhatsApp con el mensaje pre-armado.')
+            ->success()
+            ->send();
+
+        return redirect()->away("https://wa.me/{$phone}?text=" . urlencode($msg));
     }
 }
