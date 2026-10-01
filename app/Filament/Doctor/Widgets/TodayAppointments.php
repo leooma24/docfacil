@@ -69,14 +69,23 @@ class TodayAppointments extends BaseWidget
                     ]),
             ])
             ->actions([
+                // Las secundarias van como icono y solo WhatsApp lleva
+                // etiqueta. La tabla se salía 175 px del ancho de la pantalla y
+                // lo primero que se cortaba era esta columna: el doctor veía
+                // las citas y no el botón para avisarles, que es justo lo que
+                // vino a hacer.
                 Tables\Actions\Action::make('start_consultation')
                     ->label('Iniciar consulta')
+                    ->iconButton()
+                    ->tooltip('Iniciar consulta')
                     ->icon('heroicon-o-play-circle')
                     ->color('primary')
                     ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed'])),
                 Tables\Actions\Action::make('in_progress')
                     ->label('En consulta')
+                    ->iconButton()
+                    ->tooltip('En consulta')
                     ->icon('heroicon-o-clock')
                     ->color('info')
                     ->visible(fn (Appointment $record) => $record->status === 'in_progress')
@@ -102,28 +111,14 @@ class TodayAppointments extends BaseWidget
                             $when = "el {$dateStr} a las *{$time} hrs*";
                         }
 
-                        $ttl = $record->starts_at->copy()->addHours(2);
-                        $confirmUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                            'appointment.confirm',
-                            $ttl,
-                            ['appointment' => $record->id, 'action' => 'confirm']
-                        );
-                        $cancelUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                            'appointment.confirm',
-                            $ttl,
-                            ['appointment' => $record->id, 'action' => 'cancel']
-                        );
+                        $msg = urlencode(\App\Support\RecordatorioDeCita::mensaje($record));
 
-                        $msg = urlencode(
-                            "Hola {$record->patient->first_name}, te recordamos tu cita {$when} en *{$clinicName}*.\n\n" .
-                            "Confirmar: {$confirmUrl}\n" .
-                            "Cancelar: {$cancelUrl}\n\n" .
-                            "¡Te esperamos!"
-                        );
                         return "https://wa.me/{$phone}?text={$msg}";
                     })
                     ->openUrlInNewTab(),
                 Tables\Actions\Action::make('no_show')
+                    ->iconButton()
+                    ->tooltip('Marcar que no asistió')
                     ->label('No asistió')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')

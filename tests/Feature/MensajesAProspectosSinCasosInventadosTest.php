@@ -2,32 +2,32 @@
 
 namespace Tests\Feature;
 
-use App\Console\Commands\SendProspectEmails;
 use Tests\TestCase;
 
 /**
- * El seguimiento por WhatsApp a prospectos contaba el caso de "un dentista
- * aquí en Culiacán" que bajó sus faltas de 6-8 a 1-2 y recupera ~$8,000 al
- * mes. Ese dentista no existe: DocFácil todavía no tiene clientes. El cron
- * lo mandaba cada hora a prospectos reales.
+ * El seguimiento a prospectos contaba el caso de "un dentista aquí en
+ * Culiacán" que bajó sus faltas de 6-8 a 1-2 y recupera ~$8,000 al mes. Ese
+ * dentista no existe: DocFácil todavía no tiene clientes. Lo que sale solo
+ * hacia prospectos (el comando y sus correos) no cuenta casos inventados.
  */
 class MensajesAProspectosSinCasosInventadosTest extends TestCase
 {
-    public function test_ningun_mensaje_a_prospectos_cuenta_un_caso_inventado(): void
-    {
-        $mensajes = (new \ReflectionClassConstant(SendProspectEmails::class, 'WA_MESSAGES'))->getValue();
+    private const INVENTADOS = ['Hay un dentista', 'aquí en Culiacán', 'recupera ~$8,000', 'bajaron a 1-2'];
 
-        foreach ($mensajes as $tipo => $texto) {
-            $this->assertStringNotContainsString('Culiacán', $texto, $tipo);
-            $this->assertStringNotContainsString('Hay un dentista', $texto, $tipo);
-            $this->assertStringNotContainsString('recupera ~$8,000', $texto, $tipo);
+    public function test_lo_que_sale_solo_a_prospectos_no_cuenta_casos_inventados(): void
+    {
+        $archivos = [
+            app_path('Console/Commands/SendProspectEmails.php'),
+            resource_path('views/emails/prospect-beta-invite.blade.php'),
+            resource_path('views/emails/prospect-followup.blade.php'),
+            resource_path('views/emails/prospect-last-chance.blade.php'),
+        ];
+
+        foreach ($archivos as $archivo) {
+            $texto = file_get_contents($archivo);
+            foreach (self::INVENTADOS as $frase) {
+                $this->assertStringNotContainsString($frase, $texto, basename($archivo));
+            }
         }
-    }
-
-    public function test_el_seguimiento_no_promete_lista_de_espera_automatica(): void
-    {
-        $mensajes = (new \ReflectionClassConstant(SendProspectEmails::class, 'WA_MESSAGES'))->getValue();
-
-        $this->assertStringNotContainsString('automáticamente', $mensajes['prospect_followup']);
     }
 }

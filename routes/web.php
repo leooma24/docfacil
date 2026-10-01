@@ -5,6 +5,7 @@ use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\AppointmentConfirmationController;
+use App\Http\Controllers\EstrenarCuentaController;
 use App\Http\Controllers\PatientPortalActivationController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
@@ -130,7 +131,12 @@ Route::get('/baja/{token}', [UnsubscribeController::class, 'handle'])
 
 // URL corta para reemplazar links firmados largos en WhatsApp.
 // Código de 6 chars resuelve a la URL real. ~30 chars vs ~250.
-Route::get('/c/{code}', [ShortUrlController::class, 'redirect'])
+//
+// Vive en /s/ y no en /c/ porque ahí chocaba con la confirmación de cita:
+// las dos rutas competían por la misma dirección y ganaba esta, así que en
+// cuanto las citas llegaran a seis dígitos el recordatorio iba a mandar al
+// paciente a un 404. No se rompe nada al moverla: no había ninguna creada.
+Route::get('/s/{code}', [ShortUrlController::class, 'redirect'])
     ->name('shortlink')
     ->where('code', '[A-Za-z0-9]{6,12}')
     ->middleware('throttle:120,1');
@@ -164,6 +170,17 @@ Route::middleware(['signed', 'throttle:10,1'])->group(function () {
         ->name('paciente.activar.store');
 });
 
+// El doctor elige su contrasena para estrenar su cuenta, cuando se le dejo el
+// consultorio armado en vez de que se registrara el. Dura 7 dias: la abre
+// cuando sale de consulta, no en el minuto en que se genero. La de "olvide mi
+// contrasena" sigue durando 60 minutos, que para eso esta bien.
+Route::middleware(['signed', 'throttle:10,1'])->group(function () {
+    Route::get('/doctor/estrenar/{user}', [EstrenarCuentaController::class, 'show'])
+        ->name('doctor.estrenar');
+    Route::post('/doctor/estrenar/{user}', [EstrenarCuentaController::class, 'store'])
+        ->name('doctor.estrenar.store');
+});
+
 // Demo para vendedores: crea un consultorio temporal con datos falsos y deja
 // la sesion iniciada. Estaba abierta a internet, y cada visita sembraba ~180
 // registros en la base y regalaba una sesion de doctor a un desconocido.
@@ -185,6 +202,7 @@ Route::post('/webhooks/whatsapp', [WhatsAppWebhookController::class, 'handle'])
 
 // Confirmacion de cita 1-clic desde WhatsApp (ruta firmada, sin auth)
 Route::get('/c/{appointment}', [AppointmentConfirmationController::class, 'show'])
+    ->whereNumber('appointment')
     ->middleware(['signed', 'throttle:30,1'])
     ->name('appointment.confirm');
 

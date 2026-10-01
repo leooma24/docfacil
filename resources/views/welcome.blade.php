@@ -29,9 +29,9 @@
     {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:title" content="DocFácil — Software para Consultorios Médicos y Dentales">
     <meta property="og:description" content="Gestiona tu consultorio de forma fácil. Agenda, expedientes, recetas PDF, WhatsApp y más.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:type" content="image/png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
@@ -44,7 +44,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil — Software para Consultorios Médicos y Dentales">
     <meta name="twitter:description" content="Gestiona tu consultorio de forma fácil. Agenda, expedientes, recetas PDF, WhatsApp y más.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta name="twitter:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
     <script type="application/ld+json">
     {

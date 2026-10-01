@@ -38,24 +38,12 @@ class PendingFollowupsWidget extends Widget
                 'day' => $p->contact_day,
                 'status' => $p->status,
                 'overdue' => $p->next_contact_at?->isPast() ?? false,
-                'wa_url' => $this->buildWhatsAppUrl($p),
+                'wa_url' => \App\Filament\Sales\Resources\ProspectResource::buildContextualWhatsappUrl($p),
             ])
             ->toArray();
     }
 
-    private function buildWhatsAppUrl(Prospect $p): string
-    {
-        $phone = preg_replace('/[\s\-\(\)\+]/', '', $p->phone ?? '');
-        if (strlen($phone) === 10) $phone = '52' . $phone;
-        $name = $p->firstName();
-
-        $msg = match ($p->contact_day) {
-            0, 1 => "Hola {$name}, soy de DocFacil. Queria preguntarle: como lleva el control de citas y expedientes? Le puedo mostrar algo rapido que le ahorra 2 horas al dia.",
-            3 => "Hola {$name}, le doy seguimiento. Doctores que usan DocFacil recuperan 8-12 citas/mes con recordatorios WhatsApp. Son \$4,800+ extra por \$499/mes y garantia de 30 dias. Le interesa una demo de 10 min?",
-            7 => "{$name}, ultimo mensaje. Le dejo acceso gratuito: https://docfacil.tu-app.co/doctor/register - Si necesita algo, aqui estoy.",
-            default => "Hola {$name}, soy de DocFacil. Queria saber si sigue con el pendiente de organizar su consultorio. Sigo disponible para una demo rapida.",
-        };
-
-        return "https://wa.me/{$phone}?text=" . urlencode($msg);
-    }
+    // El mensaje sale de ProspectResource::buildContextualWhatsappUrl(): aquí
+    // vivía una segunda copia, con otro texto y la URL escrita a mano. Dos
+    // juegos de plantillas es como se vuelven a separar.
 }

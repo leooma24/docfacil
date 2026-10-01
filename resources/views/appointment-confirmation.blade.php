@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        @if($action === 'cancel') Cita cancelada
+        @if(! $action) Su cita
+        @elseif($action === 'cancel') Cita cancelada
         @else Cita confirmada
         @endif
         · DocFácil
@@ -78,7 +79,27 @@
 </head>
 <body>
     <div class="card">
-        @if($alreadyHandled)
+        {{-- Sin acción: el paciente abrió la liga y decide él. Antes esta
+             pantalla confirmaba sola al entrar, así que quien abría a ver de
+             qué se trataba se quedaba confirmado sin haber decidido nada. --}}
+        @if(! $action && ! $alreadyHandled)
+            <div class="icon-wrap info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h1>Su cita</h1>
+            <p class="subtitle">
+                {{ $appointment->starts_at->locale('es')->isoFormat('dddd D [de] MMMM [a las] H:mm') }}
+                @if($appointment->clinic?->name) · {{ $appointment->clinic->name }} @endif
+            </p>
+
+            <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 4px;">
+                <a href="{{ \App\Support\RecordatorioDeCita::ligaDirecta($appointment, 'confirm') }}"
+                   style="display:block;background:#059669;color:#fff;font-weight:700;font-size:17px;padding:15px;border-radius:12px;text-decoration:none;">Confirmar mi cita</a>
+                <a href="{{ \App\Support\RecordatorioDeCita::ligaDirecta($appointment, 'cancel') }}"
+                   style="display:block;background:#fff;border:1px solid #e5e7eb;color:#6b7280;font-weight:600;font-size:15px;padding:13px;border-radius:12px;text-decoration:none;">Cancelar</a>
+            </div>
+            <p style="font-size:13px;color:#9ca3af;margin-top:10px;">Si no puede asistir, cancelar nos ayuda a darle ese lugar a otro paciente.</p>
+        @elseif($alreadyHandled)
             <div class="icon-wrap info">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>

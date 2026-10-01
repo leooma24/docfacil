@@ -63,28 +63,7 @@ class SendAppointmentReminders extends Command
             $date = $appt->starts_at->translatedFormat('l d \d\e F');
             $time = $appt->starts_at->format('H:i');
 
-            // Links firmados 1-click para confirmar/cancelar. Validos hasta
-            // 2 horas despues del inicio de la cita (para dejar margen).
-            $ttl = $appt->starts_at->copy()->addHours(2);
-            $confirmUrl = URL::temporarySignedRoute(
-                'appointment.confirm',
-                $ttl,
-                ['appointment' => $appt->id, 'action' => 'confirm']
-            );
-            $cancelUrl = URL::temporarySignedRoute(
-                'appointment.confirm',
-                $ttl,
-                ['appointment' => $appt->id, 'action' => 'cancel']
-            );
-
-            $message = "*Recordatorio de cita*\n\n"
-                . "Hola *{$name}*, te recordamos tu cita en *{$clinicName}*:\n\n"
-                . "Fecha: {$date}\n"
-                . "Hora: {$time} hrs\n"
-                . "Servicio: {$service}\n\n"
-                . "Confirmar: {$confirmUrl}\n"
-                . "Cancelar: {$cancelUrl}\n\n"
-                . "¡Te esperamos!";
+            $message = \App\Support\RecordatorioDeCita::mensaje($appt, '24h');
 
             if ($whatsapp->sendMessage($phone, $message)) {
                 $appt->update(['reminder_24h_sent_at' => now(), 'reminder_sent' => true]);

@@ -8,6 +8,25 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Prospect extends Model
 {
+    /**
+     * Cómo le hace hoy: lo que contestan a la primera pregunta.
+     *
+     * No es una encuesta, es el registro del dolor. De aquí salió que el
+     * problema no es que no avisen —todos avisan— sino el tiempo que se les va
+     * haciéndolo a mano, y de una respuesta de "ya uso otro sistema" salió el
+     * inventario de insumos.
+     */
+    public const COMO_LE_HACE = [
+        'a_mano_whatsapp' => 'Manda los recordatorios a mano por WhatsApp',
+        'llamada' => 'Les llama por teléfono',
+        'cuaderno' => 'Lleva la agenda en cuaderno',
+        'excel' => 'Lleva la agenda en Excel',
+        'otro_sistema' => 'Ya usa otro sistema',
+        'no_avisa' => 'No les avisa',
+        'asistente' => 'Lo hace su asistente o recepción',
+        'otro' => 'Otra cosa',
+    ];
+
     protected $fillable = [
         'name', 'email', 'phone', 'website', 'has_whatsapp',
         'osm_id', 'latitude', 'longitude',
@@ -17,6 +36,7 @@ class Prospect extends Model
         'assigned_to_sales_rep_id', 'converted_clinic_id',
         'last_followup_at', 'next_followup_at',
         'contact_day', 'last_contact_method', 'next_contact_at', 'outreach_started_at',
+        'replied_at',
         'objections_faced', 'demo_scheduled_at', 'demo_completed_at',
         'conversation_log', 'lead_score',
         'unsubscribed_at', 'hot_alerted_at',
@@ -31,6 +51,7 @@ class Prospect extends Model
             'next_followup_at' => 'datetime',
             'next_contact_at' => 'datetime',
             'outreach_started_at' => 'datetime',
+            'replied_at' => 'datetime',
             'demo_scheduled_at' => 'datetime',
             'demo_completed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',

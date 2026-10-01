@@ -44,6 +44,10 @@ class SalesPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Sales/Widgets'), for: 'App\\Filament\\Sales\\Widgets')
             ->widgets([
+                // Lo primero al entrar: qué toca hoy y en qué orden. Los
+                // números vienen después, que son para revisar, no para
+                // decidir con qué empezar.
+                \App\Filament\Sales\Widgets\TareasDeHoyWidget::class,
                 \App\Filament\Sales\Widgets\PendingFollowupsWidget::class,
                 \App\Filament\Sales\Widgets\MyStatsWidget::class,
             ])

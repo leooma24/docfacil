@@ -9,9 +9,9 @@
     {{-- OpenGraph --}}
     <meta property="og:title" content="DocFácil — Brief para consultorios médicos y dentales">
     <meta property="og:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-image.png">
-    <meta property="og:image:type" content="image/png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil — Brief para consultorios">
     <meta name="twitter:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="canonical" href="{{ url('/brief') }}">

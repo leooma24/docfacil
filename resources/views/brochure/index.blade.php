@@ -15,7 +15,7 @@
     {{-- OpenGraph --}}
     <meta property="og:title" content="Brochure DocFácil — Software para Consultorios Médicos y Dentales">
     <meta property="og:description" content="Conoce DocFácil: agenda, expedientes, recetas PDF, recordatorios WhatsApp y más. Descarga el brochure completo.">
-    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-image.png">
+    <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="{{ url('/brochure') }}">

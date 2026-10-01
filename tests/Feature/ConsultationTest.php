@@ -60,6 +60,33 @@ class ConsultationTest extends TestCase
         ]);
     }
 
+    // ── El motivo se llena solo con lo que ya se sabe ────────────
+
+    public function test_el_motivo_se_llena_con_el_servicio_de_la_cita(): void
+    {
+        // Idea de Omar, usando la pantalla: si la cita ya dice a qué viene,
+        // escribirlo otra vez es trabajo de gratis.
+        $cita = $this->createAppointment();
+
+        $this->testWithAppointment($cita)->assertSet('chief_complaint', 'Consulta General');
+    }
+
+    public function test_si_la_cita_no_trae_servicio_el_motivo_queda_vacio(): void
+    {
+        $cita = $this->createAppointment(['service_id' => null]);
+
+        $this->testWithAppointment($cita)->assertSet('chief_complaint', '');
+    }
+
+    public function test_lo_que_el_doctor_ya_habia_escrito_le_gana_al_servicio(): void
+    {
+        // Retomar una consulta a medias no debe pisar lo que ya puso.
+        $cita = $this->createAppointment();
+        $cita->update(['consultation_data' => ['chief_complaint' => 'Le duele desde el lunes', 'currentStep' => 2]]);
+
+        $this->testWithAppointment($cita)->assertSet('chief_complaint', 'Le duele desde el lunes');
+    }
+
     private function createAppointment(array $overrides = []): Appointment
     {
         return Appointment::create(array_merge([

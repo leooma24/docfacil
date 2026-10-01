@@ -394,6 +394,44 @@ class ProspectResource extends Resource
                                 ->send();
                         }),
 
+                    // Contestar es el único hecho que separa un mensaje mandado
+                    // de una conversación. Sin registrarlo no se puede saber si
+                    // un mensaje funciona mejor que otro, y lo que contestó es
+                    // lo que dice qué construir: así salió el inventario.
+                    Tables\Actions\Action::make('contesto')
+                        ->label('Contestó')
+                        ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                        ->color('warning')
+                        ->visible(fn (Prospect $r) => ! $r->replied_at && ! in_array($r->status, ['converted', 'lost']))
+                        ->form([
+                            Forms\Components\Select::make('dolor')
+                                ->label('¿Cómo le hace hoy?')
+                                ->options(Prospect::COMO_LE_HACE)
+                                ->required(),
+                            Forms\Components\Textarea::make('textual')
+                                ->label('Lo que dijo, con sus palabras')
+                                ->rows(2)
+                                ->helperText('Sirve para decidir qué construir. Sin interpretarlo.'),
+                        ])
+                        ->action(function (Prospect $record, array $data) {
+                            $notas = json_decode((string) $record->notes, true);
+                            $notas = is_array($notas) ? $notas : [];
+                            $notas['dolor'] = $data['dolor'];
+                            if (! empty($data['textual'])) {
+                                $notas['dijo'] = $data['textual'];
+                            }
+
+                            $record->update([
+                                'replied_at' => now(),
+                                'status' => $record->status === 'new' ? 'contacted' : $record->status,
+                                'notes' => json_encode($notas, JSON_UNESCAPED_UNICODE),
+                            ]);
+
+                            Notification::make()
+                                ->title('Anotado. Ahora va la segunda pregunta, la concreta.')
+                                ->success()->send();
+                        }),
+
                     Tables\Actions\Action::make('schedule_demo')
                         ->label('Agendar demo')
                         ->icon('heroicon-o-computer-desktop')
@@ -506,7 +544,46 @@ class ProspectResource extends Resource
      * Centralizado aquí para que el botón verde de WA y el panel ventas usen
      * la misma plantilla — fuente de verdad.
      */
-    protected static function buildContextualWhatsappUrl(Prospect $record): string
+    /**
+     * Pedir la cita, con hora concreta.
+     *
+     * Aquí se rompía el embudo: doce prospectos contestaron y ninguno terminó
+     * en demo. Contestar no es agendar, y "¿le interesa una demo?" se contesta
+     * con un no. Dos horas concretas se contestan con una de las dos, o con
+     * "mejor el jueves", que también es avanzar.
+     *
+     * Van las dos modalidades porque no todos quieren lo mismo: la
+     * videollamada es más fácil de aceptar, la visita cierra mejor. Y el demo
+     * queda como tercera salida para el que no quiere hablar con nadie
+     * todavía.
+     */
+    public static function buildDemoWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
+        if (strlen($phone) === 10) {
+            $phone = '52' . $phone;
+        }
+
+        $opener = self::buildSalutation($record);
+        $trato = $opener['followCall'] ?: 'Doctor';
+        $manana = now()->addDay()->locale('es')->isoFormat('dddd');
+
+        $msg = "{$trato}, le propongo algo concreto.
+
+"
+            . "En 10 minutos por videollamada le enseño cómo quedaría su agenda con lo que me contó, o si prefiere paso 15 minutos a su consultorio, lo que se le haga más cómodo.
+
+"
+            . "¿Le queda mejor el {$manana} a la 1 o a las 6 de la tarde?
+
+"
+            . 'Y si antes quiere verlo usted solo con calma, aquí está: ' . url('/demo');
+
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
+    /** Publico: el panel admin manda el mismo mensaje que el de ventas. */
+    public static function buildContextualWhatsappUrl(Prospect $record): string
     {
         $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
         if (strlen($phone) === 10) $phone = '52' . $phone;
@@ -519,26 +596,139 @@ class ProspectResource extends Resource
         $greeting = $opener['greeting'];
         $followCall = $opener['followCall'];
 
+        // Cada día de la cadencia manda su propio mensaje. El día 1 es el
+        // segundo toque, no el primero: repetir el mensaje de presentación a
+        // quien ya lo recibió es la forma más rápida de que lo bloqueen.
+        $demoUrl = url('/demo');
+
         $msg = match ($record->contact_day) {
-            0, 1 => "{$greeting}.\n\n"
-                . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-                . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?",
-            3 => ($followCall ? "{$followCall}, le escribo de nuevo." : "Le escribo de nuevo.") . "\n\n"
-                . "Entiendo que están saturados. Le comparto un dato concreto antes de seguir: el dentista promedio en México pierde \$6,000-15,000 al mes en pacientes que no llegan a su cita. Esa pérdida es exactamente lo que DocFácil ayuda a detener.\n\n"
-                . "Si tiene 10 minutos para una demo por WhatsApp Video, se la muestro con sus propios números. Si prefiere otro momento, dígame cuándo le contacto.",
-            7 => ($followCall ? "{$followCall}, último mensaje y no le insisto más." : "Último mensaje y no le insisto más.") . "\n\n"
-                . "Le dejo el acceso al plan Free de por vida (1 doctor, 15 pacientes, sin tarjeta). Pruébelo, úselo a fondo, y si le sirve me lo dice:\n\n"
-                . "{$registerUrl}\n\n"
-                . "Si más adelante lo necesita, aquí sigo. Gracias por su tiempo.",
-            14 => ($followCall ? "{$followCall}, le escribo de nuevo después de unas semanas." : "Le escribo de nuevo después de unas semanas.") . "\n\n"
-                . "Vi que abrió el enlace en su momento — gracias. Hemos avanzado bastante desde entonces:\n"
-                . "- Odontograma interactivo con 13 condiciones\n"
-                . "- Recetas PDF con cédula en 10 segundos\n"
-                . "- Más dentistas activos cada semana\n\n"
-                . "Si le interesa una demo personalizada de 10 minutos, se la agendo. Sin venta forzada.",
-            default => ($followCall ? "{$followCall}, soy Omar de DocFácil." : "Soy Omar de DocFácil.") . " Sistema para {$sector} hecho en México (recordatorios WhatsApp, odontograma, recetas con cédula, expediente pensado para la NOM-004). ¿Le interesa una demo de 10 minutos?",
+            0 => self::mensajeDePrimerContacto($record, $greeting, $sector),
+
+            1 => ($followCall ? "{$followCall}, le escribo una vez más" : 'Le escribo una vez más')
+                . " por si el mensaje se perdió entre los del día.
+
+"
+                . "Es una sola pregunta y con eso ya sé si le puedo ayudar o no: ¿cómo le hace hoy para recordarles a sus pacientes su cita?
+
+"
+                . 'Y si no le interesa, dígamelo y no le vuelvo a escribir.',
+
+            3 => ($followCall ? "{$followCall}, la última vez que le escribo esta semana." : 'La última vez que le escribo esta semana.') . "
+
+"
+                . "Lo que hago es quitarle el tiempo que se le va escribiendo uno por uno los recordatorios de las citas del día siguiente. El sistema le arma la lista con el mensaje ya hecho y usted nada más va dando enviar, desde su propio WhatsApp.
+
+"
+                . "Si quiere se lo enseño en 10 minutos por videollamada, o paso 15 minutos a su consultorio. ¿Le queda mejor mañana a la 1 o a las 6 de la tarde?
+
+"
+                . "Y si prefiere verlo usted solo primero, aquí está: {$demoUrl}",
+
+            7 => ($followCall ? "{$followCall}, último mensaje y ya no le insisto." : 'Último mensaje y ya no le insisto.') . "
+
+"
+                . "Le dejo el sistema para que lo vea cuando tenga un rato: {$demoUrl}
+
+"
+                . "Y si quiere probarlo con sus pacientes, el plan gratis no pide tarjeta: {$registerUrl}
+
+"
+                . 'Aquí quedo por si más adelante le sirve. Gracias por su tiempo.',
+
+            default => ($followCall ? "{$followCall}, le escribo después de un tiempo." : 'Le escribo después de un tiempo.') . "
+
+"
+                . "Desde la última vez el sistema ya lleva inventario de insumos y expediente con firma, además de los recordatorios. Si quiere verlo, aquí está: {$demoUrl}
+
+"
+                . 'Y si no, con que me lo diga basta y no vuelvo a escribirle.',
         };
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
+    /**
+     * El primer mensaje.
+     *
+     * No abre con lo que vendemos: abre con una pregunta sobre cómo le hace
+     * hoy. El doctor contesta eso —nadie dice que no avisa— y ahí sale solo
+     * el tiempo que se le va haciéndolo a mano, que es lo que de verdad le
+     * duele. Las tres piezas salieron de los mensajes de septiembre, están
+     * documentadas en .agents/wa-templates.md:
+     *
+     *  - **La salida.** "Si no le interesa me lo dice y no lo molesto más" es
+     *    lo que hace que contesten en vez de bloquear, y es una promesa que
+     *    hay que cumplir: al que dice que no, ya no se le escribe.
+     *  - **La pregunta según lo que hace.** Al ortodoncista le pega el control
+     *    que se pierde; a la odontopediatra, que la cita la recuerdan los papás.
+     *  - **Aclarar que no es cita.** La mitad de los números son cuentas de
+     *    negocio donde contesta recepción o un bot y te tratan como paciente.
+     */
+    protected static function mensajeDePrimerContacto(Prospect $record, string $greeting, string $sector): string
+    {
+        // Sin nombre de persona = cuenta de consultorio: contesta recepción.
+        $esNegocio = self::buildSalutation($record)['followCall'] === '';
+        $lugares = (int) config('founders.seats', 10);
+
+        // "De aquí" solo se puede decir una vez, y es lo único que ninguna
+        // empresa de software puede copiar. Para los de la región, la cercanía
+        // se dice de otro modo: que uno anda por allá.
+        $ciudad = strtolower((string) $record->city);
+        $esDeCasa = str_contains($ciudad, 'mochis');
+        // "La región" es el norte de Sinaloa. A un dentista de Cuernavaca
+        // decirle que ando platicando con dentistas de su región es mentira, y
+        // se nota.
+        $esDeLaRegion = $esDeCasa || (bool) preg_match('/guasave|fuerte|ahome|choix|guam[uú]chil|angostura|sinaloa|mazatl[aá]n|culiac[aá]n|navolato/', $ciudad);
+        $deDonde = $esDeCasa ? 'ingeniero de aquí de Los Mochis' : 'ingeniero de Los Mochis';
+        $comoSigue = match (true) {
+            $esDeCasa => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
+            $esDeLaRegion => "y esta semana ando platicando con dentistas de la región para armarlo con los primeros {$lugares} que lo usen conmigo de cerca.",
+            default => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
+        };
+
+        $apertura = $esNegocio
+            ? "{$greeting}. Le escribo para el doctor o la doctora del consultorio, no es para una cita."
+            : "{$greeting}.";
+
+        $permiso = $esNegocio
+            ? 'Les hago una pregunta corta y ustedes deciden si seguimos; si no les interesa me lo dicen y no los molesto más: '
+            : 'Le hago una pregunta corta y usted decide si seguimos; si no le interesa me lo dice y no lo molesto más: ';
+
+        return $apertura . "\n\n"
+            . "Soy Omar Lerma, {$deDonde}. Hice un sistema para {$sector} {$comoSigue}
+
+"
+            . $permiso . self::preguntaDeApertura($record, $esNegocio);
+    }
+
+    /** La pregunta con la que cierra el primer mensaje. */
+    protected static function preguntaDeApertura(Prospect $record, bool $esNegocio): string
+    {
+        $perfil = strtolower(
+            ($record->specialty ?? '') . ' ' . ($record->name ?? '') . ' ' . ($record->clinic_name ?? '')
+        );
+
+        $hace = $esNegocio ? 'hacen' : 'hace';
+        // A quién se le pregunta cambia; el "le hace / le hacen" no: así se dice.
+        $le = $esNegocio ? 'les' : 'le';
+
+        if (str_contains($perfil, 'ortodon')) {
+            return "en ortodoncia un control que se pierde retrasa todo el tratamiento, por eso {$le} pregunto: ¿cómo le {$hace} hoy para recordarles a sus pacientes su cita?";
+        }
+
+        if (str_contains($perfil, 'pediatr') || str_contains($perfil, 'niñ') || str_contains($perfil, "kid")) {
+            return "con niños la cita la tienen que recordar los papás, por eso {$le} pregunto: ¿cómo le {$hace} hoy para avisarles?";
+        }
+
+        if (str_contains($perfil, 'maxilofacial') || str_contains($perfil, 'cirug')) {
+            return "con cirugías, la revisión de después es la que más se olvida, por eso {$le} pregunto: ¿cómo le {$hace} hoy para que sus pacientes no falten a esa cita?";
+        }
+
+        // Las dos generales se van alternando para poder comparar cuál saca
+        // más respuestas. El id es par o impar, así que a cada prospecto le
+        // toca siempre la misma y el dato no se ensucia.
+        return $record->id % 2 === 0
+            ? "¿cómo le {$hace} hoy para recordarles a sus pacientes su cita?"
+            : "¿qué {$hace} hoy cuando un paciente no llega a su cita?";
     }
 
     /**
