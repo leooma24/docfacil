@@ -14,6 +14,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PaymentResource extends Resource
 {
+    public const FORMAS_DE_PAGO = [
+        'cash' => 'Efectivo',
+        'card' => 'Tarjeta',
+        'transfer' => 'Transferencia',
+        'other' => 'Otro',
+    ];
+
     protected static ?string $slug = 'cobros';
 
     public static function getEloquentQuery(): Builder
@@ -82,12 +89,7 @@ class PaymentResource extends Resource
                             ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
                         Forms\Components\Select::make('payment_method')
                             ->label('Método de pago')
-                            ->options([
-                                'cash' => 'Efectivo',
-                                'card' => 'Tarjeta',
-                                'transfer' => 'Transferencia',
-                                'other' => 'Otro',
-                            ])
+                            ->options(self::FORMAS_DE_PAGO)
                             ->default('cash')
                             ->required(),
                         Forms\Components\Select::make('status')
@@ -243,17 +245,14 @@ class PaymentResource extends Resource
                             ->required()
                             ->minValue(0.01)
                             ->maxValue((float) $record->remaining),
+                        Forms\Components\Select::make('payment_method')
+                            ->label('Forma de pago')
+                            ->options(self::FORMAS_DE_PAGO)
+                            ->default($record->payment_method ?: 'cash')
+                            ->required(),
                     ])
                     ->action(function (Payment $record, array $data) {
-                        $installment = (float) $data['installment'];
-                        $newPaid = (float) $record->amount_paid + $installment;
-                        $totalAmount = (float) $record->amount;
-
-                        $newStatus = $newPaid >= $totalAmount ? 'paid' : 'partial';
-                        $record->update([
-                            'amount_paid' => min($newPaid, $totalAmount),
-                            'status' => $newStatus,
-                        ]);
+                        $record->registrarAbono((float) $data['installment'], $data['payment_method'] ?? null);
 
                         \Filament\Notifications\Notification::make()
                             ->title('Abono registrado')

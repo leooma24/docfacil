@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Payment extends Model
 {
@@ -46,6 +48,76 @@ class Payment extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    /** Los abonos, cada uno con su fecha y forma de pago. */
+    public function receipts(): HasMany
+    {
+        return $this->hasMany(PaymentReceipt::class);
+    }
+
+    /**
+     * Lo pagado siempre es la suma de los recibos. Se crea el cobro ya
+     * pagado (la consulta), se marca pagado a mano o se le sube lo abonado
+     * desde el formulario: en todos los casos queda el recibo de lo que
+     * entró. Al crearlo, con la fecha del cobro; después, con la de hoy.
+     */
+    protected static function booted(): void
+    {
+        static::created(fn (Payment $cobro) => $cobro->cuadrarRecibos($cobro->payment_date ?? now()));
+        static::updated(function (Payment $cobro) {
+            if ($cobro->wasChanged(['amount_paid', 'status', 'amount'])) {
+                $cobro->cuadrarRecibos(now());
+            }
+        });
+    }
+
+    private function cuadrarRecibos(\DateTimeInterface $fecha): void
+    {
+        $pagado = $this->status === 'paid' ? (float) $this->amount : (float) $this->amount_paid;
+        $diferencia = round($pagado - (float) $this->receipts()->sum('amount'), 2);
+
+        if (abs($diferencia) < 0.01) {
+            return;
+        }
+
+        $this->receipts()->create([
+            'clinic_id' => $this->clinic_id,
+            'amount' => $diferencia,
+            'payment_method' => $this->payment_method,
+            'paid_at' => $fecha,
+            'notes' => $diferencia < 0 ? 'Ajuste: se corrigió lo pagado' : null,
+        ]);
+    }
+
+    /**
+     * Registra un abono de hoy y actualiza saldo y estado.
+     */
+    public function registrarAbono(float $monto, ?string $formaDePago = null, ?string $notas = null): PaymentReceipt
+    {
+        $monto = round($monto, 2);
+
+        if ($monto <= 0 || $monto > round($this->remaining, 2)) {
+            throw new \InvalidArgumentException('El abono debe ser mayor a cero y no más de lo que se debe ($' . number_format($this->remaining, 2) . ').');
+        }
+
+        return DB::transaction(function () use ($monto, $formaDePago, $notas) {
+            $recibo = $this->receipts()->create([
+                'clinic_id' => $this->clinic_id,
+                'amount' => $monto,
+                'payment_method' => $formaDePago ?? $this->payment_method,
+                'paid_at' => now(),
+                'notes' => $notas,
+            ]);
+
+            $pagado = round((float) $this->amount_paid + $monto, 2);
+            $this->update([
+                'amount_paid' => min($pagado, (float) $this->amount),
+                'status' => $pagado >= (float) $this->amount ? 'paid' : 'partial',
+            ]);
+
+            return $recibo;
+        });
     }
 
     /**
@@ -96,8 +168,7 @@ class Payment extends Model
      * $2,000 de un tratamiento de $5,000 contaba como cero, y el doctor veía
      * menos ingreso del que había recibido.
      *
-     * Aquí un cobro liquidado cuenta completo y uno a plazos cuenta lo
-     * abonado. Todo lo que muestre ingresos usa esto, para que el escritorio
+     * Aquí cuenta cada abono el día que entró (ver PaymentReceipt). Todo lo que muestre ingresos usa esto, para que el escritorio
      * y el corte del mes no digan números distintos.
      */
     public static function cobradoEntre(
@@ -105,13 +176,14 @@ class Payment extends Model
         \DateTimeInterface $desde,
         \DateTimeInterface $hasta,
     ): float {
-        return (float) static::withoutGlobalScopes()
+        // Cuenta los recibos por su fecha: el abono de hoy entra hoy aunque
+        // el cobro sea del mes pasado.
+        return (float) PaymentReceipt::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
             // Hasta el final del día: SQLite guarda la fecha con hora, y un
             // periodo de un solo día (el "cobrado hoy") salía en cero.
-            ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d') . ' 23:59:59'])
-            ->selectRaw('SUM(CASE WHEN status = ? THEN amount ELSE amount_paid END) as cobrado', ['paid'])
-            ->value('cobrado');
+            ->whereBetween('paid_at', [$desde->format('Y-m-d') . ' 00:00:00', $hasta->format('Y-m-d') . ' 23:59:59'])
+            ->sum('amount');
     }
 
     /**
