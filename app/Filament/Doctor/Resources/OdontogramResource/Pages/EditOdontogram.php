@@ -22,7 +22,11 @@ class EditOdontogram extends EditRecord
         parent::mount($record);
 
         // Load existing teeth data
-        $this->teethData = $this->record->teeth->pluck('condition', 'tooth_number')->toArray();
+        $this->teethData = $this->record->teeth->mapWithKeys(fn (OdontogramTooth $t) => [$t->tooth_number => [
+            'condition' => $t->condition,
+            'notes' => $t->notes,
+            'surfaces' => $t->caras(),
+        ]])->toArray();
     }
 
     #[On('teeth-updated')]
@@ -67,8 +71,14 @@ class EditOdontogram extends EditRecord
         foreach ($this->teethData as $toothNumber => $data) {
             $condition = is_array($data) ? ($data['condition'] ?? 'healthy') : $data;
             $notes = is_array($data) ? ($data['notes'] ?? null) : null;
+            $caras = array_merge(OdontogramTooth::carasVacias(), is_array($data) ? ($data['surfaces'] ?? []) : []);
 
-            if ($condition !== 'healthy' || $notes) {
+            $columnas = [];
+            foreach (OdontogramTooth::CARAS as $cara => $columna) {
+                $columnas[$columna] = $caras[$cara] ?: null;
+            }
+
+            if ($condition !== 'healthy' || $notes || array_filter($caras)) {
                 OdontogramTooth::updateOrCreate(
                     [
                         'odontogram_id' => $this->record->id,
@@ -77,7 +87,7 @@ class EditOdontogram extends EditRecord
                     [
                         'condition' => $condition,
                         'notes' => $notes,
-                    ]
+                    ] + $columnas
                 );
 
                 continue;

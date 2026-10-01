@@ -13,9 +13,86 @@ class OdontogramTooth extends Model
         'right_surface', 'center_surface', 'notes',
     ];
 
+    /**
+     * Las cinco caras con su nombre clínico y la columna donde se guardan.
+     * Las columnas se llamaron top/bottom/left/right/center cuando se creó
+     * la tabla; aquí queda escrito qué es cada una.
+     */
+    public const CARAS = [
+        'vestibular' => 'top_surface',
+        'lingual' => 'bottom_surface',
+        'mesial' => 'left_surface',
+        'distal' => 'right_surface',
+        'oclusal' => 'center_surface',
+    ];
+
+    /** Lo que se marca en una cara. Ordenado de más a menos urgente. */
+    public const DE_CARA = ['decay', 'pending', 'filling', 'sealant'];
+
+    /** Lo que se marca en el diente entero. */
+    public const DE_DIENTE = ['extraction', 'missing', 'implant', 'crown', 'bridge', 'root_canal', 'veneer', 'fracture'];
+
     public function odontogram(): BelongsTo
     {
         return $this->belongsTo(Odontogram::class);
+    }
+
+    /** Las caras marcadas, con su nombre clínico: ['oclusal' => 'decay', ...]. */
+    public function caras(): array
+    {
+        $caras = [];
+        foreach (self::CARAS as $cara => $columna) {
+            $caras[$cara] = $this->{$columna} ?: null;
+        }
+
+        return $caras;
+    }
+
+    public static function carasVacias(): array
+    {
+        return array_fill_keys(array_keys(self::CARAS), null);
+    }
+
+    /**
+     * La condición que resume al diente: la del diente entero si la tiene
+     * (una endodoncia con resina sigue siendo endodoncia), si no la cara más
+     * urgente. Sin nada marcado, sano.
+     */
+    public static function resumen(?string $delDiente, array $caras): string
+    {
+        if ($delDiente && in_array($delDiente, self::DE_DIENTE, true)) {
+            return $delDiente;
+        }
+
+        foreach (self::DE_CARA as $condicion) {
+            if (in_array($condicion, $caras, true)) {
+                return $condicion;
+            }
+        }
+
+        return 'healthy';
+    }
+
+    /** incisivo, canino, premolar o molar, por el segundo dígito FDI. */
+    public static function tipo(int $numero): string
+    {
+        return match ($numero % 10) {
+            1, 2 => 'incisivo',
+            3 => 'canino',
+            4, 5 => 'premolar',
+            default => 'molar',
+        };
+    }
+
+    public static function caraLabels(): array
+    {
+        return [
+            'vestibular' => 'Vestibular',
+            'lingual' => 'Lingual / palatina',
+            'mesial' => 'Mesial',
+            'distal' => 'Distal',
+            'oclusal' => 'Oclusal / incisal',
+        ];
     }
 
     public static function conditionLabels(): array

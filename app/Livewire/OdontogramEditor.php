@@ -48,6 +48,7 @@ class OdontogramEditor extends Component
             $this->teeth[$num] = [
                 'condition' => 'healthy',
                 'notes' => '',
+                'surfaces' => OdontogramTooth::carasVacias(),
             ];
         }
 
@@ -61,6 +62,7 @@ class OdontogramEditor extends Component
                     $this->teeth[$tooth->tooth_number] = [
                         'condition' => $tooth->condition,
                         'notes' => $tooth->notes ?? '',
+                        'surfaces' => $tooth->caras(),
                     ];
                 }
             }
@@ -79,6 +81,10 @@ class OdontogramEditor extends Component
         if ($this->activeTool === self::INSPECCIONAR) {
             $this->selectedCondition = $this->teeth[$toothNumber]['condition'] ?? 'healthy';
         } else {
+            // "Sano" sobre el diente lo deja limpio, caras incluidas.
+            if ($this->activeTool === 'healthy') {
+                $this->teeth[$toothNumber]['surfaces'] = OdontogramTooth::carasVacias();
+            }
             $this->teeth[$toothNumber]['condition'] = $this->activeTool;
             $this->selectedCondition = $this->activeTool;
             $this->dispatch('teeth-updated', teeth: $this->teeth);
@@ -86,6 +92,38 @@ class OdontogramEditor extends Component
 
         $this->selectedTooth = $toothNumber;
         $this->toothNotes = $this->teeth[$toothNumber]['notes'] ?? '';
+    }
+
+    /**
+     * Toque sobre una cara del diagrama de cinco caras. Caries, obturación,
+     * sellante y pendiente se quedan en esa cara; "Sano" la limpia; lo que es
+     * del diente entero (extracción, corona…) se aplica al diente.
+     */
+    public function applySurface(int $toothNumber, string $cara): void
+    {
+        if (! array_key_exists($cara, OdontogramTooth::CARAS) || ! isset($this->teeth[$toothNumber])) {
+            return;
+        }
+
+        $herramienta = $this->activeTool;
+        $esDeCara = $herramienta === 'healthy' || in_array($herramienta, OdontogramTooth::DE_CARA, true);
+
+        if ($herramienta === self::INSPECCIONAR || ! $esDeCara) {
+            $this->applyTool($toothNumber);
+
+            return;
+        }
+
+        $diente = &$this->teeth[$toothNumber];
+        $diente['surfaces'] = array_merge(OdontogramTooth::carasVacias(), $diente['surfaces'] ?? []);
+        $diente['surfaces'][$cara] = $herramienta === 'healthy' ? null : $herramienta;
+        $diente['condition'] = OdontogramTooth::resumen($diente['condition'] ?? null, $diente['surfaces']);
+        unset($diente);
+
+        $this->selectedTooth = $toothNumber;
+        $this->selectedCondition = $this->teeth[$toothNumber]['condition'];
+        $this->toothNotes = $this->teeth[$toothNumber]['notes'] ?? '';
+        $this->dispatch('teeth-updated', teeth: $this->teeth);
     }
 
     public function updateTooth(): void

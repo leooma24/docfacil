@@ -411,94 +411,42 @@
                     </a>
                 </div>
 
-                {{-- Arcada dental visual --}}
-                <div class="bg-gradient-to-b from-gray-50 to-white border border-gray-200 rounded-xl p-3 md:p-5">
-                    {{-- ARCADA SUPERIOR --}}
-                    <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mb-2">SUPERIOR</div>
-                    <div class="flex justify-center gap-0.5 md:gap-1 mb-1">
-                        {{-- Cuadrante superior derecho (paciente) — se muestra a la izquierda visual --}}
-                        @foreach($upperRight as $num)
-                        @php
-                            $tooth = $byNum->get($num);
-                            $cond = $tooth?->condition ?? 'sano';
-                            $color = $colors[$cond] ?? '#cbd5e1';
-                            $label = $labels[$cond] ?? null;
-                        @endphp
-                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
-                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110 cursor-help"
-                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
-                            </div>
+                {{-- Arcada dental, el mismo dibujo que el editor --}}
+                <div style="background:linear-gradient(#f8fafc,#fff);border:1px solid #e5e7eb;border-radius:14px;padding:14px 8px;">
+                    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                        <div style="min-width:700px;display:flex;flex-direction:column;align-items:center;">
+                            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-bottom:4px;">SUPERIOR</div>
+                            @foreach([[$upperRight, $upperLeft], [$lowerRight, $lowerLeft]] as $fila => [$mitadDerecha, $mitadIzquierda])
+                                @if($fila === 1)
+                                    <div style="width:690px;border-top:1.5px dashed #d1d5db;margin:6px 0;"></div>
+                                @endif
+                                <div style="display:flex;align-items:stretch;gap:2px;">
+                                    @foreach([$mitadDerecha, $mitadIzquierda] as $lado => $mitad)
+                                        @if($lado === 1)
+                                            <div style="width:2px;background:#cbd5e1;margin:0 6px;border-radius:2px;"></div>
+                                        @endif
+                                        @foreach($mitad as $num)
+                                            @php $tooth = $byNum->get($num); @endphp
+                                            <x-odontograma.diente :numero="$num" :condicion="$tooth?->condition ?? 'healthy'" :caras="$tooth?->caras() ?? []" :notas="$tooth?->notes" />
+                                        @endforeach
+                                    @endforeach
+                                </div>
+                            @endforeach
+                            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-top:4px;">INFERIOR</div>
                         </div>
-                        @endforeach
-                        {{-- Línea media --}}
-                        <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
-                        @foreach($upperLeft as $num)
-                        @php
-                            $tooth = $byNum->get($num);
-                            $cond = $tooth?->condition ?? 'sano';
-                            $color = $colors[$cond] ?? '#cbd5e1';
-                            $label = $labels[$cond] ?? null;
-                        @endphp
-                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
-                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110 cursor-help"
-                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
-                            </div>
-                        </div>
-                        @endforeach
                     </div>
 
-                    {{-- Separador entre arcadas --}}
-                    <div class="border-t-2 border-dashed border-gray-300 my-3 mx-4"></div>
-
-                    {{-- ARCADA INFERIOR --}}
-                    <div class="flex justify-center gap-0.5 md:gap-1 mt-1">
-                        @foreach($lowerRight as $num)
-                        @php
-                            $tooth = $byNum->get($num);
-                            $cond = $tooth?->condition ?? 'sano';
-                            $color = $colors[$cond] ?? '#cbd5e1';
-                            $label = $labels[$cond] ?? null;
-                        @endphp
-                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
-                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110 cursor-help"
-                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
-                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                            </div>
-                        </div>
-                        @endforeach
-                        <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
-                        @foreach($lowerLeft as $num)
-                        @php
-                            $tooth = $byNum->get($num);
-                            $cond = $tooth?->condition ?? 'sano';
-                            $color = $colors[$cond] ?? '#cbd5e1';
-                            $label = $labels[$cond] ?? null;
-                        @endphp
-                        <div class="group relative" title="Diente {{ $num }} — {{ $label ?? 'Sano' }}{{ $tooth?->notes ? ' · ' . $tooth->notes : '' }}">
-                            <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110 cursor-help"
-                                 style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                                <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
-                                <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                    <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mt-2">INFERIOR</div>
-
-                    {{-- Leyenda solo de condiciones presentes en este odontograma --}}
+                    {{-- Leyenda solo de lo que hay en este odontograma --}}
                     @php
-                        $presentConditions = $odonto->teeth->pluck('condition')->unique()->values();
+                        $presentConditions = $odonto->teeth
+                            ->flatMap(fn ($t) => array_merge([$t->condition], array_values(array_filter($t->caras()))))
+                            ->unique()->reject(fn ($c) => $c === 'healthy')->values();
                     @endphp
                     @if($presentConditions->count())
-                    <div class="flex flex-wrap justify-center gap-2 md:gap-3 mt-4 pt-3 border-t border-gray-100 text-[10px] md:text-xs">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin-top:12px;padding-top:10px;border-top:1px solid #f3f4f6;font-size:12px;color:#4b5563;">
                         @foreach($presentConditions as $cond)
-                        <span class="inline-flex items-center gap-1.5 text-gray-600">
-                            <span class="w-2.5 h-2.5 rounded-sm" style="background-color: {{ $colors[$cond] ?? '#94a3b8' }}"></span>
+                        <span style="display:inline-flex;align-items:center;gap:6px;">
+                            <span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:{{ $colors[$cond] ?? '#94a3b8' }};"></span>
                             {{ $labels[$cond] ?? $cond }}
                         </span>
                         @endforeach

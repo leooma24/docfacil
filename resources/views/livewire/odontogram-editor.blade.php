@@ -1,181 +1,134 @@
-<div class="space-y-4">
-    {{-- Toolbar de condiciones --}}
-    <div class="bg-white border border-gray-200 rounded-xl p-3 md:p-4">
-        <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-500 uppercase mb-2.5">Selecciona herramienta</div>
-        <div class="flex flex-wrap gap-2">
-            {{-- Modo por defecto: tocar un diente solo lo abre, no lo cambia.
-                 Va explicito en la barra para que se vea que es un modo mas,
-                 y para que "Sano" quede libre de despintar de verdad. --}}
-            @php $inspeccionando = $activeTool === \App\Livewire\OdontogramEditor::INSPECCIONAR; @endphp
-            <button
-                wire:click="setTool('{{ \App\Livewire\OdontogramEditor::INSPECCIONAR }}')"
-                type="button"
-                title="Solo ver el diente, sin cambiarlo"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border-2 transition
-                    {{ $inspeccionando ? 'shadow-sm scale-105' : 'bg-white hover:scale-105' }}"
-                style="border-color: #64748b;
-                    {{ $inspeccionando ? 'background-color: #64748b20; color: #64748b;' : 'color: #4b5563;' }}"
-            >
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+@php
+    use App\Models\OdontogramTooth;
+    $inspeccionando = $activeTool === \App\Livewire\OdontogramEditor::INSPECCIONAR;
+    $deCara = array_merge(['healthy'], OdontogramTooth::DE_CARA);
+    $deDiente = OdontogramTooth::DE_DIENTE;
+    $nombresCara = OdontogramTooth::caraLabels();
+    $chip = function (string $key, string $label, string $color, bool $activo) {
+        $base = 'display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1.5px solid ' . $color . ';cursor:pointer;transition:transform .1s;';
+        return $base . ($activo ? 'background:' . $color . ';color:#fff;box-shadow:0 2px 6px ' . $color . '55;' : 'background:#fff;color:#374151;');
+    };
+    $muestra = fn (string $color) => 'display:inline-block;width:10px;height:10px;border-radius:3px;background:' . $color . ';';
+@endphp
+<div style="display:flex;flex-direction:column;gap:16px;">
+    {{-- Herramientas --}}
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px 16px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;">
+            {{-- Modo por defecto: tocar un diente solo lo abre, no lo cambia. --}}
+            <button wire:click="setTool('{{ \App\Livewire\OdontogramEditor::INSPECCIONAR }}')" type="button"
+                title="Solo ver el diente, sin cambiarlo" style="{{ $chip('inspect', 'Ver', '#475569', $inspeccionando) }}">
+                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 Ver
             </button>
-            @foreach($conditionLabels as $key => $label)
-            <button
-                wire:click="setTool('{{ $key }}')"
-                type="button"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border-2 transition
-                    {{ $activeTool === $key ? 'shadow-sm scale-105' : 'bg-white hover:scale-105' }}"
-                style="
-                    border-color: {{ $conditionColors[$key] }};
-                    {{ $activeTool === $key ? 'background-color: ' . $conditionColors[$key] . '20; color: ' . $conditionColors[$key] . ';' : 'color: #4b5563;' }}"
-            >
-                <span class="w-2.5 h-2.5 rounded-sm inline-block" style="background-color: {{ $conditionColors[$key] }}"></span>
-                {{ $label }}
-            </button>
-            @endforeach
-        </div>
-    </div>
-
-    {{-- Arcada dental --}}
-    <div class="bg-gradient-to-b from-gray-50 to-white border border-gray-200 rounded-xl p-3 md:p-5">
-        {{-- ARCADA SUPERIOR --}}
-        <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mb-2">SUPERIOR</div>
-        <div class="flex justify-center gap-0.5 md:gap-1 mb-1">
-            {{-- Cuadrante sup. derecho (paciente) — visualmente a la izquierda del que ve el doctor --}}
-            @foreach($upperRight as $num)
-            @php
-                $cond = $teeth[$num]['condition'] ?? 'sano';
-                $color = $conditionColors[$cond] ?? '#cbd5e1';
-                $isSelected = $selectedTooth === $num;
-            @endphp
-            <button type="button" wire:click="applyTool({{ $num }})"
-                class="group relative cursor-pointer focus:outline-none"
-                title="Diente {{ $num }} — {{ $conditionLabels[$cond] ?? 'Sano' }}{{ !empty($teeth[$num]['notes']) ? ' · ' . $teeth[$num]['notes'] : '' }}">
-                <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110
-                    {{ $isSelected ? 'ring-2 ring-offset-1 ring-teal-500 shadow-md' : '' }}"
-                    style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                    <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                    <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
-                </div>
-            </button>
-            @endforeach
-
-            {{-- Línea media --}}
-            <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
-
-            @foreach($upperLeft as $num)
-            @php
-                $cond = $teeth[$num]['condition'] ?? 'sano';
-                $color = $conditionColors[$cond] ?? '#cbd5e1';
-                $isSelected = $selectedTooth === $num;
-            @endphp
-            <button type="button" wire:click="applyTool({{ $num }})"
-                class="group relative cursor-pointer focus:outline-none"
-                title="Diente {{ $num }} — {{ $conditionLabels[$cond] ?? 'Sano' }}{{ !empty($teeth[$num]['notes']) ? ' · ' . $teeth[$num]['notes'] : '' }}">
-                <div class="w-7 h-9 md:w-9 md:h-12 rounded-t-xl border-2 flex flex-col items-center justify-end pb-1 transition hover:scale-110
-                    {{ $isSelected ? 'ring-2 ring-offset-1 ring-teal-500 shadow-md' : '' }}"
-                    style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                    <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                    <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mt-0.5">{{ $num }}</span>
-                </div>
-            </button>
-            @endforeach
+            <span style="font-size:12px;color:#6b7280;">
+                @if($inspeccionando)
+                    Elige una herramienta y toca la cara o el diente.
+                @elseif(in_array($activeTool, $deCara))
+                    Toca la <strong>cara</strong> del diente (el cuadro de abajo) para marcarla.
+                @else
+                    Toca el <strong>diente</strong> para marcarlo completo.
+                @endif
+            </span>
         </div>
 
-        {{-- Separador entre arcadas --}}
-        <div class="border-t-2 border-dashed border-gray-300 my-3 mx-4"></div>
-
-        {{-- ARCADA INFERIOR --}}
-        <div class="flex justify-center gap-0.5 md:gap-1 mt-1">
-            {{-- Cuadrante inf. derecho (paciente) bajo el sup. derecho: 48…41 | 31…38 --}}
-            @foreach($lowerRight as $num)
-            @php
-                $cond = $teeth[$num]['condition'] ?? 'sano';
-                $color = $conditionColors[$cond] ?? '#cbd5e1';
-                $isSelected = $selectedTooth === $num;
-            @endphp
-            <button type="button" wire:click="applyTool({{ $num }})"
-                class="group relative cursor-pointer focus:outline-none"
-                title="Diente {{ $num }} — {{ $conditionLabels[$cond] ?? 'Sano' }}{{ !empty($teeth[$num]['notes']) ? ' · ' . $teeth[$num]['notes'] : '' }}">
-                <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110
-                    {{ $isSelected ? 'ring-2 ring-offset-1 ring-teal-500 shadow-md' : '' }}"
-                    style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                    <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
-                    <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                </div>
-            </button>
-            @endforeach
-
-            <div class="w-px bg-gray-300 mx-1 self-stretch"></div>
-
-            @foreach($lowerLeft as $num)
-            @php
-                $cond = $teeth[$num]['condition'] ?? 'sano';
-                $color = $conditionColors[$cond] ?? '#cbd5e1';
-                $isSelected = $selectedTooth === $num;
-            @endphp
-            <button type="button" wire:click="applyTool({{ $num }})"
-                class="group relative cursor-pointer focus:outline-none"
-                title="Diente {{ $num }} — {{ $conditionLabels[$cond] ?? 'Sano' }}{{ !empty($teeth[$num]['notes']) ? ' · ' . $teeth[$num]['notes'] : '' }}">
-                <div class="w-7 h-9 md:w-9 md:h-12 rounded-b-xl border-2 flex flex-col items-center justify-start pt-1 transition hover:scale-110
-                    {{ $isSelected ? 'ring-2 ring-offset-1 ring-teal-500 shadow-md' : '' }}"
-                    style="background-color: {{ $color }}25; border-color: {{ $color }};">
-                    <span class="text-[8px] md:text-[10px] font-bold text-gray-700 mb-0.5">{{ $num }}</span>
-                    <div class="w-3 h-3 md:w-4 md:h-4 rounded-sm" style="background-color: {{ $color }};"></div>
-                </div>
-            </button>
-            @endforeach
-        </div>
-        <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-400 text-center mt-2">INFERIOR</div>
-    </div>
-
-    {{-- Detalle del diente seleccionado --}}
-    @if($selectedTooth)
-    <div class="bg-white border-2 border-teal-200 rounded-xl p-4 md:p-5 shadow-sm">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center">
-                <span class="text-base font-extrabold text-teal-700">{{ $selectedTooth }}</span>
-            </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px 24px;">
             <div>
-                <div class="text-xs text-gray-500">Diente</div>
-                <div class="inline-flex items-center gap-1.5 mt-0.5">
-                    <span class="w-2.5 h-2.5 rounded-sm" style="background-color: {{ $conditionColors[$selectedCondition] }}"></span>
-                    <span class="text-sm font-semibold" style="color: {{ $conditionColors[$selectedCondition] }};">
-                        {{ $conditionLabels[$selectedCondition] }}
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Cambiar condición</label>
-                <select wire:model.live="selectedCondition" wire:change="updateTooth"
-                    class="w-full rounded-lg border-gray-300 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                    @foreach($conditionLabels as $key => $label)
-                    <option value="{{ $key }}">{{ $label }}</option>
+                <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#6b7280;text-transform:uppercase;margin-bottom:6px;">Por cara</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    @foreach($deCara as $key)
+                        <button wire:click="setTool('{{ $key }}')" type="button" style="{{ $chip($key, $conditionLabels[$key], $conditionColors[$key], $activeTool === $key) }}">
+                            <span style="{{ $muestra($activeTool === $key ? '#ffffff' : $conditionColors[$key]) }}"></span>{{ $conditionLabels[$key] }}
+                        </button>
                     @endforeach
-                </select>
+                </div>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-600 mb-1.5">Notas</label>
-                <input type="text" wire:model.blur="toothNotes" wire:change="updateTooth"
-                    class="w-full rounded-lg border-gray-300 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500"
-                    placeholder="Observaciones del diente...">
+                <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#6b7280;text-transform:uppercase;margin-bottom:6px;">Todo el diente</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    @foreach($deDiente as $key)
+                        <button wire:click="setTool('{{ $key }}')" type="button" style="{{ $chip($key, $conditionLabels[$key], $conditionColors[$key], $activeTool === $key) }}">
+                            <span style="{{ $muestra($activeTool === $key ? '#ffffff' : $conditionColors[$key]) }}"></span>{{ $conditionLabels[$key] }}
+                        </button>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
+
+    {{-- Arcadas, vistas de frente: el lado derecho del paciente a la izquierda --}}
+    <div style="background:linear-gradient(#f8fafc,#fff);border:1px solid #e5e7eb;border-radius:14px;padding:14px 8px;">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+            <div style="min-width:700px;display:flex;flex-direction:column;align-items:center;">
+                <div style="display:flex;justify-content:space-between;width:690px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-bottom:4px;">
+                    <span>DERECHA DEL PACIENTE</span><span>SUPERIOR</span><span>IZQUIERDA DEL PACIENTE</span>
+                </div>
+                @foreach([[$upperRight, $upperLeft], [$lowerRight, $lowerLeft]] as $fila => [$mitadDerecha, $mitadIzquierda])
+                    @if($fila === 1)
+                        <div style="width:690px;border-top:1.5px dashed #d1d5db;margin:6px 0;"></div>
+                    @endif
+                    <div style="display:flex;align-items:stretch;gap:2px;">
+                        @foreach($mitadDerecha as $num)
+                            <x-odontograma.diente :numero="$num" :condicion="$teeth[$num]['condition'] ?? 'healthy'" :caras="$teeth[$num]['surfaces'] ?? []" :notas="$teeth[$num]['notes'] ?? null" :interactivo="true" :seleccionado="$selectedTooth === $num" />
+                        @endforeach
+                        <div style="width:2px;background:#cbd5e1;margin:0 6px;border-radius:2px;"></div>
+                        @foreach($mitadIzquierda as $num)
+                            <x-odontograma.diente :numero="$num" :condicion="$teeth[$num]['condition'] ?? 'healthy'" :caras="$teeth[$num]['surfaces'] ?? []" :notas="$teeth[$num]['notes'] ?? null" :interactivo="true" :seleccionado="$selectedTooth === $num" />
+                        @endforeach
+                    </div>
+                @endforeach
+                <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#9ca3af;margin-top:4px;">INFERIOR</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Diente seleccionado --}}
+    @if($selectedTooth)
+        @php $sel = $teeth[$selectedTooth] ?? []; $marcadas = array_filter($sel['surfaces'] ?? []); @endphp
+        <div style="background:#fff;border:2px solid #99f6e4;border-radius:14px;padding:16px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:#f0fdfa;border:1px solid #99f6e4;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0f766e;font-size:16px;">{{ $selectedTooth }}</div>
+                <div>
+                    <div style="font-size:12px;color:#6b7280;">Diente {{ $selectedTooth }} · {{ ucfirst(\App\Models\OdontogramTooth::tipo($selectedTooth)) }}</div>
+                    <div style="display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:{{ $conditionColors[$selectedCondition] ?? '#374151' }};">
+                        <span style="{{ $muestra($conditionColors[$selectedCondition] ?? '#94a3b8') }}"></span>{{ $conditionLabels[$selectedCondition] ?? 'Sano' }}
+                    </div>
+                    @if($marcadas)
+                        <div style="font-size:12px;color:#374151;margin-top:2px;">
+                            @foreach($marcadas as $cara => $cond)
+                                <span style="margin-right:10px;">{{ $nombresCara[$cara] }}: <strong style="color:{{ $conditionColors[$cond] }}">{{ $conditionLabels[$cond] }}</strong></span>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+                <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:#4b5563;margin-bottom:6px;">Condición del diente</label>
+                    <select wire:model.live="selectedCondition" wire:change="updateTooth"
+                        class="w-full rounded-lg border-gray-300 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" style="width:100%;">
+                        @foreach($conditionLabels as $key => $label)
+                            <option value="{{ $key }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block;font-size:12px;font-weight:600;color:#4b5563;margin-bottom:6px;">Notas</label>
+                    <input type="text" wire:model.blur="toothNotes" wire:change="updateTooth"
+                        class="w-full rounded-lg border-gray-300 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" style="width:100%;"
+                        placeholder="Observaciones del diente...">
+                </div>
+            </div>
+        </div>
     @endif
 
-    {{-- Leyenda completa de todas las condiciones disponibles --}}
-    <div class="bg-white border border-gray-200 rounded-xl p-3">
-        <div class="text-[10px] md:text-xs font-bold tracking-wider text-gray-500 uppercase mb-2">Leyenda</div>
-        <div class="flex flex-wrap gap-x-3 gap-y-1.5 text-[11px] md:text-xs">
+    {{-- Leyenda --}}
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px 16px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#6b7280;text-transform:uppercase;margin-bottom:8px;">Leyenda</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:#4b5563;">
             @foreach($conditionLabels as $key => $label)
-            <span class="inline-flex items-center gap-1.5 text-gray-600">
-                <span class="w-2.5 h-2.5 rounded-sm" style="background-color: {{ $conditionColors[$key] }}"></span>
-                {{ $label }}
-            </span>
+                <span style="display:inline-flex;align-items:center;gap:6px;"><span style="{{ $muestra($conditionColors[$key]) }}"></span>{{ $label }}</span>
             @endforeach
         </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:8px;">Cuadro de cinco caras: arriba vestibular en la arcada superior (abajo en la inferior), centro oclusal/incisal, y mesial del lado de la línea media.</div>
     </div>
 </div>
