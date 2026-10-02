@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Estado actual
+
+Antes de empezar, lee `docs/ESTADO-2026-10-02.md`: lo que se hizo, las decisiones de Omar (sin CFDI, garantía de 30 días, presupuestos desde el Básico, de usted) y los pendientes.
+
 ## Project Overview
 
 DocFácil is a multi-tenant SaaS for medical/dental clinics in Mexico. Built with Laravel 12, Filament 3, Livewire 3, and Tailwind CSS v4. All user-facing text, URLs, and labels are in Spanish.
