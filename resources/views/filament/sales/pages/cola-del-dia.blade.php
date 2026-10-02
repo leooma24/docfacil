@@ -122,6 +122,13 @@
                     <div style="font-size:0.78rem;color:#6b7280;">
                         Día {{ $p->contact_day }} de la cadencia · le tocaba {{ $p->next_contact_at?->format('d/m') }}
                     </div>
+                    @if($video = \App\Filament\Sales\Resources\ProspectResource::videoDelSeguimiento($p))
+                        {{-- WhatsApp no deja adjuntar desde la liga: se adjunta a mano. --}}
+                        <div style="font-size:0.8rem;color:#065f46;margin-top:0.2rem;">
+                            Adjunte el video: <strong>{{ $video['titulo'] }}</strong> ·
+                            <a href="{{ $video['url'] }}" target="_blank" rel="noopener" download style="color:#0f8a4d;text-decoration:underline;">bajarlo</a>
+                        </div>
+                    @endif
                 </div>
                 <a href="{{ $this->ligaWhatsApp($p) }}" target="_blank" rel="noopener" wire:click="registrarEnvio({{ $p->id }})"
                    style="flex:none;background:#25d366;color:#05330f;font-weight:700;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Abrir chat</a>

@@ -604,14 +604,7 @@ class ProspectResource extends Resource
         $msg = match ($record->contact_day) {
             0 => self::mensajeDePrimerContacto($record, $greeting, $sector),
 
-            1 => ($followCall ? "{$followCall}, le escribo una vez más" : 'Le escribo una vez más')
-                . " por si el mensaje se perdió entre los del día.
-
-"
-                . "Es una sola pregunta y con eso ya sé si le puedo ayudar o no: ¿cómo le hace hoy para recordarles a sus pacientes su cita?
-
-"
-                . 'Y si no le interesa, dígamelo y no le vuelvo a escribir.',
+            1 => self::mensajeConVideo($record, $followCall),
 
             3 => ($followCall ? "{$followCall}, la última vez que le escribo esta semana." : 'La última vez que le escribo esta semana.') . "
 
@@ -667,37 +660,83 @@ class ProspectResource extends Resource
     {
         // Sin nombre de persona = cuenta de consultorio: contesta recepción.
         $esNegocio = self::buildSalutation($record)['followCall'] === '';
-        $lugares = (int) config('founders.seats', 10);
 
-        // "De aquí" solo se puede decir una vez, y es lo único que ninguna
-        // empresa de software puede copiar. Para los de la región, la cercanía
-        // se dice de otro modo: que uno anda por allá.
-        $ciudad = strtolower((string) $record->city);
-        $esDeCasa = str_contains($ciudad, 'mochis');
-        // "La región" es el norte de Sinaloa. A un dentista de Cuernavaca
-        // decirle que ando platicando con dentistas de su región es mentira, y
-        // se nota.
-        $esDeLaRegion = $esDeCasa || (bool) preg_match('/guasave|fuerte|ahome|choix|guam[uú]chil|angostura|sinaloa|mazatl[aá]n|culiac[aá]n|navolato/', $ciudad);
+        // "De aquí" solo se le dice al de Los Mochis: es lo único que ninguna
+        // empresa de software puede copiar, y a uno de fuera sería mentira.
+        $esDeCasa = str_contains(strtolower((string) $record->city), 'mochis');
         $deDonde = $esDeCasa ? 'ingeniero de aquí de Los Mochis' : 'ingeniero de Los Mochis';
-        $comoSigue = match (true) {
-            $esDeCasa => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
-            $esDeLaRegion => "y esta semana ando platicando con dentistas de la región para armarlo con los primeros {$lugares} que lo usen conmigo de cerca.",
-            default => "y busco a los primeros {$lugares} consultorios que lo usen conmigo de cerca, para irlo armando a lo que ellos necesitan.",
-        };
 
+        // Octubre 2026: casi nadie contestaba un primer mensaje que traía
+        // quién soy, el programa de fundador y la pregunta. Ahora es una sola
+        // pregunta; lo demás se cuenta cuando ya contestó.
         $apertura = $esNegocio
             ? "{$greeting}. Le escribo para el doctor o la doctora del consultorio, no es para una cita."
             : "{$greeting}.";
 
-        $permiso = $esNegocio
-            ? 'Les hago una pregunta corta y ustedes deciden si seguimos; si no les interesa me lo dicen y no los molesto más: '
-            : 'Le hago una pregunta corta y usted decide si seguimos; si no le interesa me lo dice y no lo molesto más: ';
+        $salida = $esNegocio
+            ? 'Si no les interesa, me lo dicen y no los molesto más.'
+            : 'Si no le interesa, me lo dice y no lo molesto más.';
+
+        $pregunta = self::preguntaDeApertura($record, $esNegocio);
 
         return $apertura . "\n\n"
-            . "Soy Omar Lerma, {$deDonde}. Hice un sistema para {$sector} {$comoSigue}
+            . "Soy Omar Lerma, {$deDonde}, y hice un sistema para {$sector}. "
+            . preg_replace_callback('/^(¿?)(\p{L})/u', fn ($m) => $m[1] . mb_strtoupper($m[2]), $pregunta) . "\n\n"
+            . $salida;
+    }
 
-"
-            . $permiso . self::preguntaDeApertura($record, $esNegocio);
+    /**
+     * El segundo mensaje: el video que le toca.
+     *
+     * Repetir la pregunta a quien no la contestó casi nunca funciona. Esto
+     * trae algo nuevo. El video no viaja en la liga (WhatsApp no deja), así
+     * que la cola dice cuál adjuntar: ver videoDelSeguimiento().
+     */
+    protected static function mensajeConVideo(Prospect $record, string $followCall): string
+    {
+        $esNegocio = $followCall === '';
+        $video = self::videoDelSeguimiento($record);
+
+        $inicio = $esNegocio
+            ? 'Les dejo un video corto para que el doctor o la doctora vea cómo queda: '
+            : "{$followCall}, le dejo un video corto para que vea cómo queda: ";
+
+        $salida = $esNegocio
+            ? 'Y si no les interesa, díganmelo y no les vuelvo a escribir.'
+            : 'Y si no le interesa, dígamelo y no le vuelvo a escribir.';
+
+        return $inicio . $video['dice'] . "\n\n"
+            . ($esNegocio ? 'Si les hace sentido' : 'Si le hace sentido') . ', se lo enseño en 10 minutos por videollamada.' . "\n\n"
+            . $salida;
+    }
+
+    /**
+     * Qué video adjuntar, solo en el segundo mensaje.
+     *
+     * Al ortodoncista le pega lo de las mensualidades; a los demás, la cita
+     * que termina en receta sin papel.
+     *
+     * @return array{titulo: string, dice: string, url: string}|null
+     */
+    public static function videoDelSeguimiento(Prospect $record): ?array
+    {
+        if ((int) $record->contact_day !== 1) {
+            return null;
+        }
+
+        $perfil = strtolower(($record->specialty ?? '') . ' ' . ($record->name ?? '') . ' ' . ($record->clinic_name ?? ''));
+
+        return str_contains($perfil, 'ortodon')
+            ? [
+                'titulo' => 'Mensualidades de brackets',
+                'dice' => 'las mensualidades de los brackets, con el enganche, los abonos y quién va atrasado.',
+                'url' => url('/videos/v3-ortodoncia.mp4'),
+            ]
+            : [
+                'titulo' => 'De la cita a la receta',
+                'dice' => 'de la cita a la receta, sin papel.',
+                'url' => url('/videos/v1-consulta.mp4'),
+            ];
     }
 
     /** La pregunta con la que cierra el primer mensaje. */
