@@ -66,7 +66,11 @@ class TodayAppointments extends BaseWidget
                         'primary' => 'in_progress',
                         'success' => 'completed',
                         'danger' => fn ($state) => in_array($state, ['cancelled', 'no_show']),
-                    ]),
+                    ])
+                    // Ya está en la sala de espera (QR o recepción), y desde cuándo.
+                    ->description(fn (Appointment $record) => $record->arrived_at && in_array($record->status, ['scheduled', 'confirmed'])
+                        ? 'Llegó ' . $record->arrived_at->format('H:i') . ' · espera ' . $record->arrived_at->diffForHumans(now(), \Carbon\CarbonInterface::DIFF_ABSOLUTE, true)
+                        : null),
             ])
             ->actions([
                 // Las secundarias van como icono y solo WhatsApp lleva
@@ -82,6 +86,15 @@ class TodayAppointments extends BaseWidget
                     ->color('primary')
                     ->url(fn (Appointment $record) => route('filament.doctor.pages.consulta', ['appointment' => $record->id]))
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed'])),
+                Tables\Actions\Action::make('llego')
+                    // Para cuando el paciente no usa el QR: recepción lo marca.
+                    ->label('Llegó')
+                    ->iconButton()
+                    ->tooltip('Marcar que ya llegó')
+                    ->icon('heroicon-o-map-pin')
+                    ->color('success')
+                    ->visible(fn (Appointment $record) => ! $record->arrived_at && $record->starts_at->isToday() && in_array($record->status, ['scheduled', 'confirmed']))
+                    ->action(fn (Appointment $record) => $record->marcarLlegada()),
                 Tables\Actions\Action::make('in_progress')
                     ->label('En consulta')
                     ->iconButton()

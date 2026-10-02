@@ -86,7 +86,7 @@ class Appointment extends Model
         'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent', 'treatment_plan_item_id',
         'consultation_data',
         'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
-        'review_request_sent_at',
+        'review_request_sent_at', 'arrived_at',
         'veces_reagendada',
     ];
 
@@ -102,6 +102,7 @@ class Appointment extends Model
             'followup_sent_at' => 'datetime',
             'review_request_sent_at' => 'datetime',
             'confirmed_at' => 'datetime',
+            'arrived_at' => 'datetime',
             'veces_reagendada' => 'integer',
         ];
     }
@@ -251,6 +252,49 @@ class Appointment extends Model
             ->get()
             ->filter(fn (self $c) => self::traslapes($clinicId, $c->doctor_id, $c->starts_at, $c->ends_at, $c->id)->isEmpty())
             ->values();
+    }
+
+    /** La cita de hoy del paciente que todavía no se atiende, la más cercana a esta hora. */
+    public static function deHoyPara(Patient $paciente): ?self
+    {
+        return static::withoutGlobalScopes()
+            ->where('clinic_id', $paciente->clinic_id)
+            ->where('patient_id', $paciente->id)
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->whereBetween('starts_at', [today()->startOfDay(), today()->endOfDay()])
+            ->get()
+            ->sortBy(fn (self $c) => abs($c->starts_at->diffInMinutes(now())))
+            ->first();
+    }
+
+    /**
+     * El paciente ya está en la sala de espera: queda la hora en la cita y se
+     * le avisa al consultorio, con la liga para iniciar la consulta.
+     */
+    public function marcarLlegada(): void
+    {
+        if ($this->arrived_at) {
+            return;
+        }
+
+        $this->update(['arrived_at' => now()]);
+        $this->loadMissing('patient');
+
+        $nombre = trim($this->patient?->first_name . ' ' . $this->patient?->last_name);
+        foreach (User::where('clinic_id', $this->clinic_id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
+            \Filament\Notifications\Notification::make()
+                ->title("{$nombre} ya llegó")
+                ->body('Su cita es a las ' . $this->starts_at->format('H:i') . '. Está en la sala de espera.')
+                ->icon('heroicon-o-map-pin')
+                ->iconColor('success')
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('atender')
+                        ->label('Iniciar consulta')
+                        ->url(\App\Filament\Doctor\Pages\Consultation::getUrl(['appointment' => $this->id], panel: 'doctor'))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($usuario);
+        }
     }
 
     /** La liga a la lista de espera filtrada para este hueco. */

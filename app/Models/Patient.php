@@ -146,6 +146,24 @@ class Patient extends Model
         return filled($this->allergies) && $this->allergies !== self::SIN_ALERGIAS;
     }
 
+    /**
+     * El paciente del consultorio con ese teléfono, aunque uno esté escrito
+     * "668 123 4567" y el otro "6681234567" (se comparan los últimos 10 dígitos).
+     */
+    public static function porTelefono(int $clinicId, ?string $telefono): ?self
+    {
+        $digitos = substr(preg_replace('/\D/', '', (string) $telefono), -10);
+        if (strlen($digitos) < 10) {
+            return null;
+        }
+
+        return static::withoutGlobalScopes()
+            ->where('clinic_id', $clinicId)
+            ->where('phone', 'like', '%' . substr($digitos, -4))
+            ->get()
+            ->first(fn (self $p) => substr(preg_replace('/\D/', '', (string) $p->phone), -10) === $digitos);
+    }
+
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";

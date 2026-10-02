@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Filament\Doctor\Pages\PatientProfile;
+use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
+use App\Models\User;
+use Filament\Notifications\Actions\Action as NotificationAction;
+use Filament\Notifications\Notification;
 use App\Support\AvisoDePrivacidad;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -44,13 +49,8 @@ class CheckInController extends Controller
             return back();
         }
 
-        // Avoid duplicates by phone
-        $existing = null;
-        if (!empty($data['phone'])) {
-            $existing = Patient::where('clinic_id', $clinic->id)
-                ->where('phone', $data['phone'])
-                ->first();
-        }
+        // El mismo teléfono es el mismo paciente, aunque lo escriba con espacios.
+        $existing = Patient::porTelefono($clinic->id, $data['phone'] ?? null);
 
         if ($existing) {
             // Al paciente que ya existe no se le escribe en el expediente desde
@@ -60,6 +60,15 @@ class CheckInController extends Controller
             // La aceptacion del aviso si se registra, porque la liga viene
             // firmada desde el QR que esta pegado en la recepcion.
             AvisoDePrivacidad::registrarAceptacion($existing, 'check_in');
+
+            // Lo que sí se hace es avisar que llegó: la cita de hoy queda
+            // marcada y el doctor lo ve. La pantalla dice lo mismo tenga o no
+            // cita, para no revelar quién se atiende aquí.
+            if ($cita = Appointment::deHoyPara($existing)) {
+                $cita->marcarLlegada();
+            } else {
+                $this->avisarQueEstaEnSala($clinic, $existing, false);
+            }
 
             return view('checkin.success', ['clinic' => $clinic]);
         }
@@ -95,8 +104,29 @@ class CheckInController extends Controller
         ]);
 
         AvisoDePrivacidad::registrarAceptacion($paciente, 'check_in');
+        $this->avisarQueEstaEnSala($clinic, $paciente, true);
 
         return view('checkin.success', ['clinic' => $clinic]);
+    }
+
+    /** Llegó alguien sin cita de hoy: el consultorio lo sabe y abre su perfil en un clic. */
+    protected function avisarQueEstaEnSala(Clinic $clinic, Patient $paciente, bool $nuevo): void
+    {
+        $nombre = trim($paciente->first_name . ' ' . $paciente->last_name);
+        foreach (User::where('clinic_id', $clinic->id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
+            Notification::make()
+                ->title("{$nombre} está en la sala de espera")
+                ->body($nuevo ? 'Se registró con el QR. Es paciente nuevo.' : 'Se registró con el QR. No tiene cita hoy.')
+                ->icon('heroicon-o-map-pin')
+                ->iconColor('info')
+                ->actions([
+                    NotificationAction::make('ver')
+                        ->label('Ver paciente')
+                        ->url(PatientProfile::getUrl(['patient' => $paciente->id], panel: 'doctor'))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($usuario);
+        }
     }
 
     /**

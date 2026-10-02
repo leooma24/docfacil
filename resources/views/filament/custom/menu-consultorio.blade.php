@@ -7,14 +7,20 @@
         ->reject(fn ($p) => in_array(mb_strtolower($p), $sobran, true))->values();
     $iniciales = mb_strtoupper(mb_substr($palabras[0] ?? ($clinica?->name ?? 'D'), 0, 1) . mb_substr($palabras[1] ?? '', 0, 1));
 
-    // El botón principal sabe qué sigue: la consulta abierta, el siguiente
-    // paciente de hoy (con 15 minutos de tolerancia), o una consulta nueva.
+    // El botón principal sabe qué sigue: la consulta abierta, quien ya está
+    // en la sala de espera, el siguiente paciente de hoy (con 15 minutos de
+    // tolerancia), o una consulta nueva.
     $abierta = $clinica ? \App\Models\Appointment::where('clinic_id', $clinica->id)->where('status', 'in_progress')
         ->with('patient')->latest('starts_at')->first() : null;
-    $siguiente = ($clinica && ! $abierta) ? \App\Models\Appointment::where('clinic_id', $clinica->id)
+    $enSala = ($clinica && ! $abierta) ? \App\Models\Appointment::where('clinic_id', $clinica->id)
+        ->whereIn('status', ['scheduled', 'confirmed'])
+        ->whereNotNull('arrived_at')
+        ->whereBetween('starts_at', [today()->startOfDay(), today()->endOfDay()])
+        ->with('patient')->orderBy('starts_at')->first() : null;
+    $siguiente = ($clinica && ! $abierta) ? ($enSala ?? \App\Models\Appointment::where('clinic_id', $clinica->id)
         ->whereIn('status', ['scheduled', 'confirmed'])
         ->whereBetween('starts_at', [now()->subMinutes(15), today()->endOfDay()])
-        ->with('patient')->orderBy('starts_at')->first() : null;
+        ->with('patient')->orderBy('starts_at')->first()) : null;
     $cita = $abierta ?? $siguiente;
     $urlConsulta = \App\Filament\Doctor\Pages\Consultation::getUrl($cita ? ['appointment' => $cita->id] : [], panel: 'doctor');
 @endphp
@@ -41,7 +47,11 @@
                 <span class="dfm-cta-s">Consulta en curso</span>
             @elseif($siguiente)
                 <span class="dfm-cta-t">Atender a {{ $siguiente->patient?->first_name }}</span>
+                @if($siguiente->arrived_at)
+                <span class="dfm-cta-s">Ya llegó · cita {{ $siguiente->starts_at->format('H:i') }}</span>
+                @else
                 <span class="dfm-cta-s">{{ $siguiente->starts_at->format('H:i') }} · {{ \Illuminate\Support\Str::limit($siguiente->service?->name ?? 'Consulta', 22) }}</span>
+                @endif
             @else
                 <span class="dfm-cta-t">Nueva consulta</span>
                 <span class="dfm-cta-s">Sin pacientes pendientes hoy</span>
