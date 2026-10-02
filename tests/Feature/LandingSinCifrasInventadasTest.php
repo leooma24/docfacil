@@ -30,11 +30,4 @@ class LandingSinCifrasInventadasTest extends TestCase
             }
         }
     }
-
-    public function test_el_precio_de_presupuestos_sale_de_la_configuracion(): void
-    {
-        config(['addons.treatment_plans.monthly_price' => 150]);
-
-        $this->get('/')->assertSee('$150 al mes aparte', false);
-    }
 }

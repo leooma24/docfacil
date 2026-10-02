@@ -186,12 +186,10 @@ class Clinic extends Model
      * Solo aplica al plan free: quien ya paga no está "en prueba".
      */
     /**
-     * Add-ons que la prueba trae prendidos para que se vean funcionando. El
-     * presupuesto es lo que convierte el odontograma en dinero; al vencer
-     * la prueba vuelve a ser add-on, y la tienda lo sigue ofreciendo
-     * (planIncluyeFeature no lo cuenta como incluido).
+     * Add-ons que la prueba trae prendidos para que se vean funcionando. Hoy
+     * ninguno: los presupuestos ya vienen en todos los planes de pago.
      */
-    public const ADD_ONS_EN_PRUEBA = ['treatment_plans'];
+    public const ADD_ONS_EN_PRUEBA = [];
 
     public function enPruebaVigente(): bool
     {
@@ -452,10 +450,12 @@ class Clinic extends Model
             'expenses',                // Gastos y corte del mes. Va en Basico
                                        // porque es justo lo que hace que el
                                        // doctor deje su hoja de calculo.
+            'treatment_plans',         // Presupuestos desde el odontograma. Era
+                                       // add-on de $129: el dentista lo usaba en
+                                       // la prueba y al pagar el Basico se le
+                                       // apagaba. Es lo que convierte el
+                                       // odontograma en dinero (Omar, 2-oct-2026).
         ];
-        // Nota: treatment_plans sigue siendo ADD-ON de pago ($129/mes),
-        // gestionado via ClinicAddon. Clinic::hasFeature() consulta addons
-        // activos adicionalmente al plan base.
         //
         // recall_automation SI viene en Pro. Estaba escondido como add-on de
         // $49 que nadie compro, siendo que es lo que mas dinero le genera a un

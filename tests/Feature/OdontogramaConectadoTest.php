@@ -353,9 +353,11 @@ class OdontogramaConectadoTest extends TestCase
         $this->assertEquals(600, (float) $plan->fresh()->total);
     }
 
-    public function test_sin_el_add_on_no_arma_presupuesto(): void
+    public function test_en_el_free_sin_prueba_no_arma_presupuesto(): void
     {
-        $this->clinic->update(['plan' => 'basico', 'plan_ends_at' => now()->addYear(), 'trial_ends_at' => now()->subDay()]);
+        // Desde el 2-oct-2026 los presupuestos vienen en todos los planes de
+        // pago; solo el Free (ya sin prueba) se queda sin ellos.
+        $this->clinic->update(['plan' => 'free', 'plan_ends_at' => null, 'trial_ends_at' => now()->subDay()]);
         $o = $this->odontograma([36 => ['condition' => 'decay', 'center_surface' => 'decay']]);
 
         $this->assertNull($this->paginaDeEdicion($o)->armarPresupuesto());

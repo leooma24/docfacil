@@ -317,7 +317,6 @@
          tiene. Nada de cifras sin fuente ni testimonios: todavía no hay. --}}
     @php
         $waOmar = 'https://wa.me/526682493398?text=' . urlencode('Hola Omar, vi la página de DocFacil y quiero ver cómo funcionaría en mi consultorio.');
-        $precioPresupuestos = (float) config('addons.treatment_plans.monthly_price', 129);
         $videos = [
             'v1-consulta' => ['dur' => '40 s', 'titulo' => 'Video: de la cita a la receta'],
             'v2-presupuesto' => ['dur' => '34 s', 'titulo' => 'Video: del odontograma al presupuesto'],
@@ -368,7 +367,7 @@
                 <p class="lp-dolor">“Armar el presupuesto a mano, diente por diente, me quita la tarde.”</p>
                 <h2 class="lp-h2">Su odontograma ya es su presupuesto.</h2>
                 <p class="lp-p">Marca lo que encuentra, cara por cara, y con un clic sale el presupuesto con sus precios. Se lo manda por WhatsApp y el paciente lo acepta desde su celular. Lo aceptado se agenda en un clic y en la consulta ya aparece.</p>
-                <p class="lp-nota">Incluido en la prueba de 15 días; después, ${{ number_format($precioPresupuestos) }} al mes aparte de su plan.</p>
+                <p class="lp-nota">Incluido en todos los planes de pago, desde el Básico.</p>
             </div>
             @include('partials.landing-video', ['id' => 'v2-presupuesto', 'v' => $videos['v2-presupuesto']])
         </div>
@@ -523,6 +522,7 @@
                             'Gastos y corte del mes',
                             'Odontograma FDI interactivo',
                             'Recetas PDF con cédula',
+                            'Presupuestos que el paciente acepta en línea',
                             'Cobro por WhatsApp a 1 clic',
                             'Confirmar cita con link',
                             'Check-in con QR',
@@ -660,8 +660,6 @@
                 </div>
                 @endforeach
             </div>
-
-            <p class="text-center text-gray-600 mt-10" style="font-size:15px;">Presupuestos en línea: ${{ number_format((float) config('addons.treatment_plans.monthly_price', 129)) }} al mes aparte de cualquier plan (incluidos en la prueba).</p>
         </div>
     </section>
 

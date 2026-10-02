@@ -41,7 +41,8 @@ return [
         'stripe_price_id_monthly' => env('STRIPE_PRICE_ADDON_TREATMENT_PLANS_MONTHLY'),
         'stripe_price_id_annual' => env('STRIPE_PRICE_ADDON_TREATMENT_PLANS_ANNUAL'),
         'beta_trial_days' => 30,
-        'available' => true,
+        // Ya viene en todos los planes de pago: la tienda no lo vende.
+        'available' => false,
     ],
 
     'google_reviews' => [
