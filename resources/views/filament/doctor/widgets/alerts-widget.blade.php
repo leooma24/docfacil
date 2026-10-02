@@ -42,7 +42,7 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
         .aw-head-label {
-            font-size: 0.62rem; font-weight: 700;
+            font-size: 0.75rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.12em;
             opacity: 0.85;
         }
@@ -75,7 +75,7 @@
             font-size: 0.85rem; font-weight: 700; color: white;
         }
         .aw-item-desc {
-            font-size: 0.74rem; opacity: 0.85; margin-top: 2px;
+            font-size: 0.75rem; opacity: 0.85; margin-top: 2px;
         }
 
         .aw-empty {

@@ -24,7 +24,7 @@
             }
             .sc-header-left { flex: 1; min-width: 0; }
             .sc-kicker {
-                font-size: 0.65rem; font-weight: 800;
+                font-size: 0.75rem; font-weight: 800;
                 text-transform: uppercase; letter-spacing: 0.14em;
                 color: #0d9488;
             }
@@ -84,10 +84,10 @@
             }
             .sc-item-body { flex: 1; min-width: 0; }
             .sc-item-title { font-weight: 700; font-size: 0.85rem; color: #0f172a; line-height: 1.3; }
-            .sc-item-desc { font-size: 0.72rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
+            .sc-item-desc { font-size: 0.75rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
             .sc-item-cta {
                 display: inline-block; margin-top: 8px;
-                font-size: 0.72rem; font-weight: 700;
+                font-size: 0.75rem; font-weight: 700;
                 color: #0d9488; text-decoration: none;
                 padding: 4px 10px; border-radius: 8px;
                 background: #ccfbf1;
@@ -101,7 +101,7 @@
             .sc-dismiss {
                 background: none; border: none; cursor: pointer;
                 color: #94a3b8; padding: 6px;
-                font-size: 0.72rem; font-weight: 600;
+                font-size: 0.75rem; font-weight: 600;
                 transition: color 0.2s;
             }
             .sc-dismiss:hover { color: #475569; }

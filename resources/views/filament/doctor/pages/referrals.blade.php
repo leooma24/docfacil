@@ -115,7 +115,7 @@
                 </div>
                 <div style="text-align:right;">
                     <div style="font-weight:700;color:#7c3aed;">{{ $row['cascade_months'] }} meses</div>
-                    <div style="font-size:0.7rem;color:#9ca3af;">ganados</div>
+                    <div style="font-size:0.75rem;color:#9ca3af;">ganados</div>
                 </div>
             </div>
             @endforeach

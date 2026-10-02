@@ -10,7 +10,7 @@
         .steps-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 1rem; padding-bottom: 0.25rem; }
         .steps-bar::-webkit-scrollbar { display: none; }
         .step-btn { display: flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
-        .step-circle { width: 1.25rem; height: 1.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.625rem; font-weight: 700; flex-shrink: 0; }
+        .step-circle { width: 1.25rem; height: 1.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
         .step-divider { width: 1rem; height: 2px; flex-shrink: 0; }
         .nav-buttons { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
         .nav-buttons > div { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -198,18 +198,18 @@
         .cons-hero-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
         .cons-avatar { width: 60px; height: 60px; border-radius: 18px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
         .cons-avatar span { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: white; }
-        .cons-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; font-weight: 700; }
+        .cons-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; font-weight: 700; }
         .cons-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; margin-top: 2px; color: white !important; -webkit-text-fill-color: white !important; background: none !important; }
-        .cons-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.72rem; margin-top: 6px; }
+        .cons-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.875rem; margin-top: 6px; }
         .cons-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; backdrop-filter: blur(8px); font-weight: 600; }
         .cons-chip-alert { background: rgba(239,68,68,0.35); border-color: rgba(239,68,68,0.5); }
         .cons-right { display: flex; align-items: center; gap: 8px; padding-left: 72px; }
         @media (min-width: 768px) { .cons-right { padding-left: 0; text-align: right; flex-direction: column; align-items: flex-end; gap: 6px; } }
-        .cons-time { font-size: 0.72rem; opacity: 0.85; }
+        .cons-time { font-size: 0.8125rem; opacity: 0.9; }
         .cons-service { font-size: 0.82rem; font-weight: 700; }
-        .cons-history-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.28); border-radius: 10px; color: white; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .cons-history-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.28); border-radius: 10px; color: white; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
         .cons-history-btn:hover { background: rgba(255,255,255,0.28); transform: translateY(-1px); }
-        .cons-history-count { background: #fbbf24; color: #78350f; padding: 1px 7px; border-radius: 999px; font-size: 0.65rem; font-weight: 800; }
+        .cons-history-count { background: #fbbf24; color: #78350f; padding: 1px 7px; border-radius: 999px; font-size: 0.75rem; font-weight: 800; }
     </style>
 
     {{-- Patient Hero Header --}}
@@ -318,8 +318,16 @@
         .v2-step-active { color: white; transform: scale(1.05); }
         .v2-step-done { background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.3); color: #0f766e; }
         .v2-step-pending { background: rgba(243, 244, 246, 0.9); border: 1px solid rgba(229, 231, 235, 1); color: #9ca3af; }
-        .v2-step-circle { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; flex-shrink: 0; }
+        .v2-step-circle { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
         .v2-step-icon { font-size: 1rem; }
+        /* El nombre del paso siempre a la vista: con solo el emoji el doctor
+           tenía que adivinar qué era cada paso. En celular va la versión corta. */
+        .v2-step { font-size: 0.875rem; }
+        .v2-step-circle { font-size: 0.75rem; }
+        .v2-step-short { display: none; }
+        @media (max-width: 639px) { .v2-step-label { display: none; } .v2-step-short { display: inline; } }
+        /* El botón de ayuda flotante tapaba "Siguiente": aquí va más arriba. */
+        .df-ayuda { bottom: 96px !important; }
         .v2-step-divider { width: 18px; height: 2px; flex-shrink: 0; border-radius: 2px; }
         @media (min-width: 768px) { .v2-step-divider { width: 28px; } }
     </style>
@@ -345,8 +353,8 @@
                     @endif
                 </span>
                 <span class="v2-step-icon">{{ $cfg['icon'] }}</span>
-                <span class="hidden sm:inline">{{ $cfg['label'] }}</span>
-                <span class="sm:hidden">{{ $cfg['short'] }}</span>
+                <span class="v2-step-label">{{ $cfg['label'] }}</span>
+                <span class="v2-step-short">{{ $cfg['short'] }}</span>
             </button>
             @if($num < 5)
             <div class="v2-step-divider" style="background: {{ $isDone ? '#14b8a6' : '#e5e7eb' }};"></div>
@@ -458,7 +466,7 @@
             @endif
             @if($this->isFieldEnabled('bmi'))
             <div>
-                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IMC <span class="text-[10px] text-gray-400 normal-case">(calculado)</span></label>
+                <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IMC <span class="text-xs text-gray-400 normal-case">(calculado)</span></label>
                 <div class="relative campo-unidad">
                     <input type="text" :value="bmi || '—'" readonly class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm bg-gray-50 dark:bg-gray-800 cursor-not-allowed pr-20">
                     <span class="unidad-bmi" :class="bmiColor" x-text="bmiCategory"></span>
@@ -525,9 +533,9 @@
                             <svg style="width:22px;height:22px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
                         </div>
                         <div>
-                            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.7;font-weight:700;">⭐ Feature exclusivo</div>
+                            <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.7;font-weight:700;">⭐ Feature exclusivo</div>
                             <div style="font-size:15px;font-weight:800;letter-spacing:-0.01em;margin-top:2px;">Modo Consulta en Vivo</div>
-                            <div style="font-size:11px;opacity:0.8;margin-top:2px;">La IA escucha toda la consulta y llena todo automáticamente</div>
+                            <div style="font-size:12px;opacity:0.8;margin-top:2px;">La IA escucha toda la consulta y llena todo automáticamente</div>
                         </div>
                     </div>
                     <button type="button" @click="toggle" x-text="listening ? '⏹ Detener y procesar' : '▶ Iniciar escucha'"
@@ -537,7 +545,7 @@
                 </div>
 
                 <div x-show="listening" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;max-height:120px;overflow-y:auto;">
-                    <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;">🎤 Transcribiendo...</div>
+                    <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;">🎤 Transcribiendo...</div>
                     <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.6;"></div>
                 </div>
 
@@ -563,9 +571,9 @@
                         <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-size:10px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;">✨ Con IA</div>
+                        <div style="font-size:12px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;">✨ Con IA</div>
                         <div style="font-size:14px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">Dictado inteligente</div>
-                        <div style="font-size:11px;color:#64748b;margin-top:1px;">Escribe o dicta lo que pasó en la consulta y la IA llena todo</div>
+                        <div style="font-size:12px;color:#64748b;margin-top:1px;">Escribe o dicta lo que pasó en la consulta y la IA llena todo</div>
                     </div>
                 </div>
             <div class="field-with-mic">
@@ -610,18 +618,18 @@
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                         <div style="display:flex;align-items:center;gap:6px;">
                             <svg style="width:14px;height:14px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            <span style="font-size:11px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Sugerencias IA</span>
+                            <span style="font-size:12px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Sugerencias IA</span>
                         </div>
-                        <button wire:click="dismissSuggestions" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:11px;padding:2px 6px;">✕</button>
+                        <button wire:click="dismissSuggestions" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:12px;padding:2px 6px;">✕</button>
                     </div>
                     <div style="display:flex;flex-direction:column;gap:6px;">
                         @foreach($dxSuggestions as $i => $sug)
                         <button type="button" wire:click="applySuggestion({{ $i }})" style="text-align:left;background:white;border:1px solid #d1fae5;border-radius:8px;padding:10px 12px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:3px;" onmouseover="this.style.borderColor='#0d9488';this.style.boxShadow='0 2px 8px rgba(13,148,136,0.15)';" onmouseout="this.style.borderColor='#d1fae5';this.style.boxShadow='none';">
                             <div style="display:flex;align-items:center;gap:6px;">
-                                <span style="background:#0d9488;color:white;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;">{{ $i + 1 }}</span>
+                                <span style="background:#0d9488;color:white;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">{{ $i + 1 }}</span>
                                 <span style="font-weight:700;color:#111;font-size:13px;">{{ $sug['diagnosis'] }}</span>
                             </div>
-                            <div style="font-size:11px;color:#4b5563;margin-left:24px;">
+                            <div style="font-size:12px;color:#4b5563;margin-left:24px;">
                                 <strong style="color:#0f766e;">Tx:</strong> {{ $sug['treatment'] }}
                                 @if(!empty($sug['medication']['medication']))
                                 <br>
@@ -631,7 +639,7 @@
                         </button>
                         @endforeach
                     </div>
-                    <div style="font-size:10px;color:#64748b;margin-top:8px;text-align:center;">Haz click en una sugerencia para aplicarla</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center;">Haz click en una sugerencia para aplicarla</div>
                 </div>
                 @endif
                 @endif {{-- config('services.ai.enabled') for Dx suggestions --}}
@@ -651,7 +659,7 @@
             <div x-data="cie10Search()" x-init="loadInitial()">
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Códigos CIE-10
-                    <span class="text-[10px] text-gray-400 normal-case">(busca por código o nombre)</span>
+                    <span class="text-xs text-gray-400 normal-case">(busca por código o nombre)</span>
                 </label>
 
                 {{-- Selected codes chips --}}
@@ -904,7 +912,7 @@
             @forelse($procedures as $i => $p)
             <div wire:key="procedimiento-{{ $i }}" style="padding:0.75rem;margin-bottom:0.5rem;background:#ffffff;border:1px solid #e5e7eb;border-radius:0.7rem;">
                 <div style="margin-bottom:0.5rem;">
-                    <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Servicio</label>
+                    <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Servicio</label>
                     <select wire:model.live="procedures.{{ $i }}.service_id" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
                         <option value="">Seleccionar...</option>
                         @foreach($this->services as $id => $name)
@@ -915,11 +923,11 @@
 
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;align-items:end;">
                     <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Diente (FDI)</label>
+                        <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Diente (FDI)</label>
                         <input type="text" wire:model="procedures.{{ $i }}.tooth_number" placeholder="16" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
                     </div>
                     <div>
-                        <label style="display:block;font-size:0.7rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">{{ $this->questionFor($p['service_id'] ?? null) }}</label>
+                        <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">{{ $this->questionFor($p['service_id'] ?? null) }}</label>
                         <input type="number" min="1" wire:model.live="procedures.{{ $i }}.quantity" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
                     </div>
                 </div>
@@ -927,7 +935,7 @@
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.6rem;">
                     <button type="button" wire:click="removeProcedure({{ $i }})" style="font-size:0.75rem;color:#dc2626;font-weight:600;">Quitar</button>
                     <div style="text-align:right;">
-                        <span style="font-size:0.72rem;color:#6b7280;">
+                        <span style="font-size:0.75rem;color:#6b7280;">
                             ${{ number_format($this->priceOf($p['service_id'] ?? null), 0) }}
                             @if($this->unitOf($p['service_id'] ?? null) !== 'visit')
                                 {{ mb_strtolower(\App\Support\WorkUnit::label($this->unitOf($p['service_id'] ?? null))) }}
@@ -976,9 +984,9 @@
                 <input type="checkbox" wire:model.live="supplies.{{ $i }}.include" style="width:1.1rem;height:1.1rem;accent-color:#0d9488;">
                 <div style="min-width:0;">
                     <div style="font-size:0.85rem;font-weight:600;color:{{ !empty($linea['include']) ? '#111827' : '#9ca3af' }};">{{ $linea['name'] }}</div>
-                    <div style="font-size:0.7rem;color:#6b7280;">{{ $linea['detail'] }}</div>
+                    <div style="font-size:0.75rem;color:#6b7280;">{{ $linea['detail'] }}</div>
                     @if((float) ($linea['quantity'] ?? 0) !== (float) ($linea['suggested'] ?? 0))
-                    <div style="font-size:0.7rem;color:#b45309;">
+                    <div style="font-size:0.75rem;color:#b45309;">
                         ajustado · la cuenta decía {{ rtrim(rtrim(number_format((float) $linea['suggested'], 2), '0'), '.') }}
                     </div>
                     @endif
@@ -1021,7 +1029,7 @@
                     {{ $dosis['message'] }}
                 </div>
                 @if(! $dosis['configured'])
-                <div style="font-size:0.7rem;color:#9ca3af;margin-top:0.25rem;">
+                <div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem;">
                     No se compara nada todavía: el sistema no inventa límites de dosis. Se configura en Ajustes del consultorio.
                 </div>
                 @endif
@@ -1069,7 +1077,7 @@
         <div style="margin-top:1rem;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="font-size:12px;color:#166534;">
                 <strong>💬 Envía el cobro por WhatsApp</strong><br>
-                <span style="font-size:11px;color:#15803d;">Mensaje pre-armado con el monto y concepto</span>
+                <span style="font-size:12px;color:#15803d;">Mensaje pre-armado con el monto y concepto</span>
             </div>
             <a href="https://wa.me/52{{ $waPhone }}?text={{ urlencode($waMsg) }}" target="_blank"
                 style="display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:#22c55e;color:white;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;">
@@ -1098,7 +1106,7 @@
                 <button type="button" wire:click="usarSugerencia('{{ $clave }}')"
                     style="display:flex;flex-direction:column;align-items:flex-start;padding:0.5rem 0.75rem;border-radius:0.7rem;border:1.5px solid {{ $next_appointment_date === $s['fecha']->format('Y-m-d\TH:i') && (string) $next_appointment_service_id === (string) $s['service_id'] ? '#0d9488' : '#e5e7eb' }};background:#fff;text-align:left;cursor:pointer;">
                     <span style="font-size:0.82rem;font-weight:700;color:#111827;">{{ $s['titulo'] }}</span>
-                    <span style="font-size:0.72rem;color:#64748b;">{{ $s['detalle'] }} · {{ $s['fecha']->locale('es')->isoFormat('ddd D [de] MMM, HH:mm') }}</span>
+                    <span style="font-size:0.75rem;color:#64748b;">{{ $s['detalle'] }} · {{ $s['fecha']->locale('es')->isoFormat('ddd D [de] MMM, HH:mm') }}</span>
                 </button>
                 @endforeach
             </div>
@@ -1133,19 +1141,19 @@
 
             <div class="summary-grid" style="margin-bottom:1.5rem;font-size:0.8125rem;">
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="text-gray-500 text-[10px] md:text-xs">Diagnóstico</div>
+                    <div class="text-gray-500 text-xs md:text-xs">Diagnóstico</div>
                     <div class="font-medium mt-0.5 md:mt-1 truncate">{{ $diagnosis ?: 'No registrado' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="text-gray-500 text-[10px] md:text-xs">Medicamentos</div>
+                    <div class="text-gray-500 text-xs md:text-xs">Medicamentos</div>
                     <div class="font-medium mt-0.5 md:mt-1">{{ count($medications) }} {{ count($medications) === 1 ? 'medicamento' : 'medicamentos' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="text-gray-500 text-[10px] md:text-xs">Cobro</div>
+                    <div class="text-gray-500 text-xs md:text-xs">Cobro</div>
                     <div class="font-medium mt-0.5 md:mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) : 'Sin cobro' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="text-gray-500 text-[10px] md:text-xs">Siguiente cita</div>
+                    <div class="text-gray-500 text-xs md:text-xs">Siguiente cita</div>
                     <div class="font-medium mt-0.5 md:mt-1">{{ $next_appointment_date ? \Carbon\Carbon::parse($next_appointment_date)->format('d/m/Y H:i') : 'No agendada' }}</div>
                 </div>
             </div>

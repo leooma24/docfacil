@@ -30,6 +30,7 @@ class TodayAppointments extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('day_label')
+                    ->visibleFrom('sm')
                     ->label('Día')
                     ->state(fn ($record) => $record->starts_at->isToday() ? 'Hoy' : 'Mañana')
                     ->badge()
@@ -45,10 +46,12 @@ class TodayAppointments extends BaseWidget
                     ->description(fn ($record) => $record->patient->phone ?? '')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('service.name')
+                    ->visibleFrom('md')
                     ->label('Servicio')
                     ->placeholder('Sin servicio')
                     ->description(fn ($record) => $record->service ? '$' . number_format($record->service->price, 0) : ''),
                 Tables\Columns\TextColumn::make('doctor.user.name')
+                    ->visibleFrom('2xl')
                     ->label('Doctor'),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')

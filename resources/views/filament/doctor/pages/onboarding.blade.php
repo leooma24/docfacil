@@ -56,7 +56,7 @@
 
             {{-- Logo upload --}}
             <div style="margin-top:0.5rem;padding-top:1rem;border-top:1px dashed #e5e7eb;">
-                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.7rem;">(opcional · aparece en tu página pública de citas)</span></label>
+                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.75rem;">(opcional · aparece en tu página pública de citas)</span></label>
                 <div style="display:flex;align-items:center;gap:1rem;">
                     <div style="width:64px;height:64px;border-radius:50%;border:2px dashed #d1d5db;background:#f9fafb;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
                         @if($logo && method_exists($logo, 'temporaryUrl'))
@@ -67,10 +67,10 @@
                     </div>
                     <div style="flex:1;min-width:0;">
                         <input type="file" wire:model="logo" accept="image/png,image/jpeg,image/jpg,image/svg+xml" style="font-size:0.8rem;width:100%;">
-                        <div wire:loading wire:target="logo" style="font-size:0.7rem;color:#0d9488;margin-top:0.25rem;">Subiendo…</div>
-                        @error('logo')<div style="font-size:0.7rem;color:#dc2626;margin-top:0.25rem;">{{ $message }}</div>@enderror
+                        <div wire:loading wire:target="logo" style="font-size:0.75rem;color:#0d9488;margin-top:0.25rem;">Subiendo…</div>
+                        @error('logo')<div style="font-size:0.75rem;color:#dc2626;margin-top:0.25rem;">{{ $message }}</div>@enderror
                         @if($logo && method_exists($logo, 'temporaryUrl'))
-                            <button type="button" wire:click="$set('logo', null)" style="font-size:0.7rem;color:#dc2626;background:none;border:none;cursor:pointer;margin-top:0.25rem;padding:0;text-decoration:underline;">Quitar</button>
+                            <button type="button" wire:click="$set('logo', null)" style="font-size:0.75rem;color:#dc2626;background:none;border:none;cursor:pointer;margin-top:0.25rem;padding:0;text-decoration:underline;">Quitar</button>
                         @endif
                     </div>
                 </div>
@@ -93,7 +93,7 @@
             <div>
                 <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.375rem;">Especialidad</label>
                 <input type="text" wire:model.live.debounce.300ms="specialty" placeholder="Ej: Odontología General, Ortodoncia, Implantología..." style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:0.75rem;font-size:0.875rem;">
-                <p style="margin-top:0.375rem;font-size:0.7rem;color:#6b7280;">Sugerimos servicios según tu especialidad en el siguiente paso.</p>
+                <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">Sugerimos servicios según tu especialidad en el siguiente paso.</p>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                 <div>
@@ -175,7 +175,7 @@
                         <div style="flex:1;min-width:0;">
                             <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
                                 <h4 style="font-weight:700;font-size:0.95rem;">{{ $addon['name'] }}</h4>
-                                <span style="font-size:0.7rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:9999px;background:#f0fdfa;color:#0d9488;">${{ number_format($addon['monthly_price'], 0) }}/mes</span>
+                                <span style="font-size:0.75rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:9999px;background:#f0fdfa;color:#0d9488;">${{ number_format($addon['monthly_price'], 0) }}/mes</span>
                             </div>
                             <p style="color:#6b7280;font-size:0.8rem;margin-top:0.25rem;line-height:1.4;">{{ $addon['short_description'] }}</p>
                             <p style="color:#15803d;font-size:0.75rem;margin-top:0.375rem;font-weight:600;">💰 {{ $addon['revenue_hypothesis'] }}</p>
@@ -239,7 +239,7 @@
                 <a href="{{ $this->portalUrl }}" target="_blank" style="font-size:0.75rem;color:#0d9488;text-decoration:none;font-weight:600;padding:0.3rem 0.6rem;background:white;border-radius:0.375rem;border:1px solid #99f6e4;">Abrir portal ↗</a>
                 <a href="https://wa.me/?text={{ urlencode('Agenda tu cita conmigo aquí: ' . $this->portalUrl) }}" target="_blank" style="font-size:0.75rem;color:#16a34a;text-decoration:none;font-weight:600;padding:0.3rem 0.6rem;background:white;border-radius:0.375rem;border:1px solid #bbf7d0;">Compartir por WhatsApp</a>
             </div>
-            <p style="font-size:0.7rem;color:#6b7280;margin-top:0.5rem;">Tus pacientes pueden agendar sin descargar nada. Compártelo en tu Instagram, ficha de Google, o por WhatsApp.</p>
+            <p style="font-size:0.75rem;color:#6b7280;margin-top:0.5rem;">Tus pacientes pueden agendar sin descargar nada. Compártelo en tu Instagram, ficha de Google, o por WhatsApp.</p>
         </div>
         @endif
 

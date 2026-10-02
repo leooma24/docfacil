@@ -117,15 +117,19 @@ class WaitlistEntryResource extends Resource
                     ->formatStateUsing(fn ($record) => "{$record->patient?->first_name} {$record->patient?->last_name}")
                     ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('service.name')
+                    ->visibleFrom('md')
                     ->label('Servicio')
                     ->placeholder('Cualquiera'),
                 Tables\Columns\TextColumn::make('desired_from')
+                    ->visibleFrom('md')
                     ->label('Desde')
                     ->date('d/m/Y'),
                 Tables\Columns\TextColumn::make('desired_to')
+                    ->visibleFrom('xl')
                     ->label('Hasta')
                     ->date('d/m/Y'),
                 Tables\Columns\BadgeColumn::make('priority')
+                    ->visibleFrom('md')
                     ->label('Prioridad')
                     ->formatStateUsing(fn ($state) => $state == 1 ? 'Urgente' : 'Normal')
                     ->colors(['danger' => fn ($state) => $state == 1, 'gray' => fn ($state) => $state == 0]),
@@ -146,6 +150,7 @@ class WaitlistEntryResource extends Resource
                         'gray' => fn ($state) => in_array($state, ['expired', 'cancelled']),
                     ]),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->visibleFrom('2xl')
                     ->label('Agregado')
                     ->since()
                     ->sortable(),

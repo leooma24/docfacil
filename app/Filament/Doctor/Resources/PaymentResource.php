@@ -151,6 +151,7 @@ class PaymentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('payment_date')
+                    ->visibleFrom('md')
                     ->label('Fecha')
                     ->date('d/m/Y')
                     ->sortable(),
@@ -160,6 +161,7 @@ class PaymentResource extends Resource
                     ->description(fn ($record) => $record->patient?->phone ?: null)
                     ->searchable(['patient.first_name', 'patient.last_name', 'patient.phone']),
                 Tables\Columns\TextColumn::make('service.name')
+                    ->visibleFrom('2xl')
                     ->label('Servicio')
                     ->placeholder('Sin servicio'),
                 Tables\Columns\TextColumn::make('amount')
@@ -188,6 +190,7 @@ class PaymentResource extends Resource
                     // fechas limite de pago. Se activa con toggle si la necesitan.
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\BadgeColumn::make('payment_method')
+                    ->visibleFrom('2xl')
                     ->label('Método')
                     ->formatStateUsing(fn (string $state) => match ($state) {
                         'cash' => 'Efectivo',

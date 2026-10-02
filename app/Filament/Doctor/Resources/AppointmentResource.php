@@ -236,14 +236,17 @@ class AppointmentResource extends Resource
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
                     ->searchable(query: self::buscarPorNombreDePaciente()),
                 Tables\Columns\TextColumn::make('doctor.user.name')
+                    ->visibleFrom('2xl')
                     ->label('Doctor')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('service.name')
+                    ->visibleFrom('md')
                     ->label('Servicio')
                     ->placeholder('Sin servicio'),
                 // Solo aparece cuando la cita ya se movio: el que reagenda
                 // tres veces casi nunca llega a la cuarta.
                 Tables\Columns\TextColumn::make('veces_reagendada')
+                    ->visibleFrom('2xl')
                     ->label('Movida')
                     ->badge()
                     ->sortable()

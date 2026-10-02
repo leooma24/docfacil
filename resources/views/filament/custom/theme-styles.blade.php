@@ -135,7 +135,7 @@
     .dfm-avatar-img { object-fit: cover; background: #ffffff; height: 2.25rem !important; max-height: 2.25rem !important; }
     .dfm-clinica-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
     .dfm-clinica-nombre { color: #ffffff; font-weight: 700; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dfm-clinica-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dfm-clinica-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .dfm-cta { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.85rem; border-radius: 0.75rem;
         background: #2dd4bf; color: #042f2e !important; box-shadow: 0 8px 22px -10px rgba(45, 212, 191, 0.7), inset 0 1px 0 rgba(255,255,255,0.35);
         transition: transform .15s ease, background .15s ease; }
@@ -144,7 +144,7 @@
     .dfm-cta svg { flex: 0 0 18px; }
     .dfm-cta-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
     .dfm-cta-t { font-weight: 800; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dfm-cta-s { font-size: 0.72rem; font-weight: 600; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dfm-cta-s { font-size: 0.75rem; font-weight: 600; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Plan y prueba, abajo */
     .dfm-plan { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0.75rem 0.9rem; padding: 0.7rem 0.8rem; border-radius: 0.75rem;
@@ -152,7 +152,7 @@
     .dfm-plan:hover { background: rgba(255, 255, 255, 0.08); }
     .dfm-plan-t { color: #ffffff; font-weight: 700; font-size: 0.82rem; }
     .dfm-plan-prueba .dfm-plan-t { color: #fde68a; }
-    .dfm-plan-s { color: rgba(255, 255, 255, 0.55); font-size: 0.72rem; }
+    .dfm-plan-s { color: rgba(255, 255, 255, 0.55); font-size: 0.75rem; }
     .dfm-barra { display: block; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
     .dfm-barra > span { display: block; height: 100%; border-radius: inherit; background: #fbbf24; }
 
@@ -220,8 +220,8 @@
     .fi-sidebar .fi-sidebar-group-label,
     .fi-sidebar span.fi-sidebar-group-label,
     .fi-sidebar .fi-sidebar-group > button > span {
-        color: rgba(255, 255, 255, 0.42) !important;
-        font-size: 0.68rem !important;
+        color: rgba(255, 255, 255, 0.62) !important;
+        font-size: 0.75rem !important;
         text-transform: uppercase !important;
         letter-spacing: 0.12em !important;
         font-weight: 700 !important;
@@ -246,7 +246,7 @@
         padding: 0.05rem 0.5rem !important;
         min-width: 1.35rem;
         justify-content: center;
-        font-size: 0.72rem !important;
+        font-size: 0.75rem !important;
         box-shadow: none !important;
         border: 0 !important;
     }
@@ -324,12 +324,6 @@
 
     .dark .fi-ta-row:hover {
         background: rgba(20, 184, 166, 0.05) !important;
-    }
-
-    /* Badges */
-    .fi-badge {
-        border-radius: 9999px !important;
-        font-weight: 600 !important;
     }
 
     /* Form inputs */
@@ -564,8 +558,8 @@
     }
 
     .fi-wi-stats-overview-stat-description {
-        font-size: 0.75rem !important;
-        color: #94a3b8 !important;
+        font-size: 0.8125rem !important;
+        color: #64748b !important;
     }
 
     .fi-wi-stats-overview-stat-icon {
@@ -579,7 +573,8 @@
     .fi-btn-color-primary,
     button.fi-btn.fi-color-primary,
     .fi-ac-btn-action.fi-color-primary {
-        background: linear-gradient(135deg, #0d9488 0%, #0891b2 100%) !important;
+        /* Tono 700: con el 600 el texto blanco no llegaba a 4.5:1. */
+        background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%) !important;
         border: none !important;
         box-shadow:
             0 4px 14px rgba(13, 148, 136, 0.35),
@@ -641,9 +636,8 @@
         background: rgba(240, 253, 250, 0.5) !important;
         backdrop-filter: blur(8px);
         border-bottom: 1px solid rgba(13, 148, 136, 0.15) !important;
-        font-size: 0.7rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        font-size: 0.8125rem !important;
+        font-weight: 600;
         color: #0f766e !important;
     }
 
@@ -685,14 +679,16 @@
         backdrop-filter: blur(8px);
     }
 
-    /* ====== BADGES - rounded + subtle glow ====== */
+    /* ====== BADGES ======
+       Estados ("Confirmada", "Pagado") a 13px y sin mayúsculas forzadas: a
+       11px en mayúsculas costaba leerlos de un vistazo en el consultorio. */
     .fi-badge {
         border-radius: 999px !important;
         font-weight: 600 !important;
         padding: 0.25rem 0.75rem !important;
-        font-size: 0.7rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: 0.8125rem !important;
+        text-transform: none;
+        letter-spacing: 0;
     }
 
     /* ====== MODAL - glass with strong blur ====== */
@@ -950,6 +946,43 @@
            sticky ya da el contexto al scrollear (nombre del paciente
            siempre visible). El usuario puede usar la rueda/drag para
            llegar a la columna de acciones. */
+    }
+
+    /* ====== TABLET Y CELULAR: botones para el dedo (y con guantes) ======
+       44px es lo mínimo para atinarle sin ver. Las acciones de cada fila
+       van más separadas para no tocar "No asistió" queriendo "Llegó". */
+    @media (max-width: 1024px) {
+        .fi-btn, .fi-icon-btn, .fi-ac-btn-action, .fi-tabs-item { min-height: 44px; }
+        .fi-icon-btn { min-width: 44px; }
+        .fi-ta-actions { gap: 0.75rem !important; }
+        .fi-ta-actions a.fi-link, .fi-ta-actions button.fi-link { min-height: 44px; display: inline-flex; align-items: center; }
+        .fi-checkbox-input { width: 1.25rem; height: 1.25rem; }
+    }
+
+    /* ====== CELULAR: cada renglón de tabla es una tarjeta ======
+       La tabla medía el doble de la pantalla: solo se veía la fecha y medio
+       nombre, y el estado y los botones quedaban fuera. Aquí cada renglón se
+       apila (fecha, paciente, estado, botones) y se ve completo. */
+    @media (max-width: 639px) {
+        .fi-ta-content { overflow-x: visible !important; }
+        .fi-ta-table, .fi-ta-table tbody { display: block; width: 100%; }
+        .fi-ta-table thead { display: none; }
+        .fi-ta-table tr.fi-ta-row {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px;
+            padding: 12px 14px; border-bottom: 1px solid #e2e8f0;
+        }
+        .dark .fi-ta-table tr.fi-ta-row { border-color: #1f2937; }
+        .fi-ta-table td.fi-ta-cell { display: block; width: auto !important; padding: 0 !important; }
+        .fi-ta-table td.fi-ta-cell > * { padding: 0 !important; }
+        .fi-ta-table td.fi-ta-cell .fi-ta-col-wrp, .fi-ta-table td.fi-ta-cell .w-full { width: auto !important; }
+        .fi-ta-table td.fi-ta-cell .px-3 { padding-left: 0 !important; padding-right: 0 !important; }
+        .fi-ta-table td.fi-ta-cell .py-4 { padding-top: 2px !important; padding-bottom: 2px !important; }
+        .fi-ta-table td.fi-ta-selection-cell, .fi-ta-table td.fi-ta-cell.hidden { display: none !important; }
+        .fi-ta-table td.fi-ta-cell:not(.fi-ta-selection-cell):not(.fi-ta-actions-cell) + td.fi-ta-cell:not(.fi-ta-actions-cell) { font-weight: 600; }
+        /* El nombre del paciente (2a columna casi siempre) a todo lo ancho. */
+        .fi-ta-table td.fi-ta-cell:not(.fi-ta-selection-cell):not(.fi-ta-actions-cell) + td.fi-ta-cell:not(.fi-ta-actions-cell) { flex-basis: 100%; order: -1; }
+        .fi-ta-table td.fi-ta-actions-cell { flex-basis: 100%; position: static !important; box-shadow: none !important; background: transparent !important; }
+        .fi-ta-table td.fi-ta-actions-cell .fi-ta-actions { justify-content: flex-start !important; flex-wrap: wrap; padding: 6px 0 0 !important; }
     }
 </style>
 

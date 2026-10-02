@@ -24,15 +24,15 @@
         input, select, textarea { width: 100%; padding: 12px 14px; font-size: 15px; border: 1.5px solid #e5e7eb; border-radius: 12px; background: #f9fafb; transition: all 0.15s; font-family: inherit; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: #0d9488; background: white; box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
         textarea { resize: vertical; min-height: 80px; }
-        .error { color: #dc2626; font-size: 11px; margin-top: 3px; }
-        .hint { color: #9ca3af; font-size: 11px; margin-top: 3px; }
+        .error { color: #dc2626; font-size: 12px; margin-top: 3px; }
+        .hint { color: #6b7280; font-size: 12px; margin-top: 3px; }
         button[type="submit"] { width: 100%; padding: 16px; background: linear-gradient(135deg, #0d9488, #0891b2); color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; box-shadow: 0 8px 20px rgba(13,148,136,0.3); transition: transform 0.15s; }
         button[type="submit"]:hover { transform: translateY(-1px); }
         button[type="submit"]:active { transform: translateY(0); }
         .honeypot { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
-        .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #9ca3af; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #6b7280; }
         .footer a { color: #0d9488; font-weight: 600; text-decoration: none; }
-        .section-divider { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.8px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed #e5e7eb; }
+        .section-divider { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed #e5e7eb; }
     </style>
 </head>
 <body>

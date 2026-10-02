@@ -9,82 +9,37 @@
     - $stats (array) — [['label' => '...', 'value' => '...'], ...]
 --}}
 <style>
+    /* Franja compacta de números arriba de la tabla. Antes era una tarjeta
+       de 230px con el título repetido (ya está arriba como encabezado de la
+       página): en una laptop de 1366x768 la primera cita aparecía a media
+       pantalla, y en el celular no se veía ninguna sin bajar. */
     .lh-hero {
         position: relative;
-        border-radius: 1.5rem;
-        padding: 28px 32px;
+        border-radius: 16px;
+        padding: 14px 16px;
         overflow: hidden;
-        background: linear-gradient(135deg, {{ $gradient ?? '#0d9488 0%, #0891b2 40%, #06b6d4 100%' }});
+        /* Un solo color en todas las pantallas (el de cada módulo queda en la
+           rayita de la tabla): con amarillos y verdes claros el texto blanco
+           no se leía. */
+        background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%);
         color: white;
-        box-shadow: 0 20px 60px -15px {{ ($accent ?? '#0d9488') }}66, inset 0 1px 0 rgba(255,255,255,0.2);
-        margin-bottom: 20px;
-    }
-    .lh-hero::before {
-        content: ''; position: absolute; top: -80px; right: -60px;
-        width: 280px; height: 280px;
-        background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
-        border-radius: 50%; pointer-events: none;
-    }
-    .lh-hero::after {
-        content: ''; position: absolute; bottom: -100px; left: -40px;
-        width: 240px; height: 240px;
-        background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);
-        border-radius: 50%; pointer-events: none;
-    }
-    .lh-hero-grain {
-        position: absolute; inset: 0;
-        background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
-        background-size: 20px 20px; pointer-events: none;
+        box-shadow: 0 10px 30px -15px rgba(15, 118, 110, 0.5);
+        margin-bottom: 16px;
     }
     .lh-hero-content { position: relative; z-index: 1; }
-    .lh-hero-top { display: flex; align-items: flex-start; gap: 18px; flex-wrap: wrap; }
-    .lh-hero-icon {
-        width: 64px; height: 64px; border-radius: 18px;
-        background: rgba(255,255,255,0.18);
-        backdrop-filter: blur(12px);
-        border: 1.5px solid rgba(255,255,255,0.3);
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-        font-size: 32px;
-    }
-    .lh-hero-label {
-        font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em;
-        opacity: 0.85; font-weight: 700;
-    }
-    .lh-hero-title {
-        font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;
-        line-height: 1.15; margin-top: 2px; color: white !important;
-        -webkit-text-fill-color: white !important; background: none !important;
-    }
-    .lh-hero-subtitle { font-size: 0.9rem; opacity: 0.9; margin-top: 3px; max-width: 640px; }
 
-    .lh-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        margin-top: 22px;
-    }
-    @media (min-width: 640px) { .lh-stats { grid-template-columns: repeat(4, 1fr); } }
+    .lh-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    @media (min-width: 640px) { .lh-stats { grid-template-columns: repeat({{ max(1, min(4, count($stats ?? []))) }}, minmax(0, 1fr)); } }
 
     .lh-stat {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(255,255,255,0.25);
-        border-radius: 14px;
-        padding: 14px 16px;
-        transition: all 0.2s;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.22);
+        border-radius: 12px;
+        padding: 10px 14px;
+        min-width: 0;
     }
-    .lh-stat:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
-    .lh-stat-label {
-        font-size: 0.63rem; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 0.08em;
-        opacity: 0.82;
-    }
-    .lh-stat-value {
-        font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;
-        margin-top: 4px; line-height: 1; color: white;
-    }
+    .lh-stat-label { font-size: 0.8125rem; font-weight: 600; line-height: 1.25; }
+    .lh-stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; line-height: 1.1; color: white; overflow-wrap: anywhere; }
 
     /* Wrap la tabla de Filament en un container con topo-borde con el accent */
     .fi-page > .fi-section,
@@ -111,27 +66,18 @@
     }
 </style>
 
+@if(!empty($stats))
 <div class="lh-hero">
-    <div class="lh-hero-grain"></div>
     <div class="lh-hero-content">
-        <div class="lh-hero-top">
-            <div class="lh-hero-icon">{{ $icon ?? '📋' }}</div>
-            <div style="flex:1;min-width:0;">
-                <div class="lh-hero-label">{{ $emoji ?? '' }} {{ $kicker ?? 'Listado' }}</div>
-                <h2 class="lh-hero-title">{{ $title ?? 'Listado' }}</h2>
-                <div class="lh-hero-subtitle">{{ $subtitle ?? '' }}</div>
-            </div>
-        </div>
-
-        @if(!empty($stats))
         <div class="lh-stats">
             @foreach($stats as $stat)
             <div class="lh-stat">
-                <div class="lh-stat-label">{{ $stat['label'] }}</div>
+                {{-- Sin emoji: se ve distinto en cada celular y no dice nada que no diga el texto. --}}
+                <div class="lh-stat-label">{{ trim(preg_replace('/[\x{1F000}-\x{1FAFF}\x{2300}-\x{23FF}\x{2B00}-\x{2BFF}\x{2600}-\x{27BF}\x{FE0F}\x{200D}]/u', '', $stat['label'])) }}</div>
                 <div class="lh-stat-value">{{ $stat['value'] }}</div>
             </div>
             @endforeach
         </div>
-        @endif
     </div>
 </div>
+@endif

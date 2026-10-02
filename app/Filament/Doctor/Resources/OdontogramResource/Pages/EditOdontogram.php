@@ -41,7 +41,7 @@ class EditOdontogram extends EditRecord
             Actions\Action::make('save_odontogram')
                 ->label('Guardar Odontograma')
                 ->icon('heroicon-o-check-circle')
-                ->color('success')
+                ->color('primary')
                 ->action(function () {
                     $this->save();
                     $this->guardarDientes();
@@ -58,7 +58,7 @@ class EditOdontogram extends EditRecord
             Actions\Action::make('armar_presupuesto')
                 ->label('Armar presupuesto')
                 ->icon('heroicon-o-document-currency-dollar')
-                ->color('info')
+                ->color('gray')
                 ->action(function () {
                     $plan = $this->armarPresupuesto();
 
@@ -80,7 +80,11 @@ class EditOdontogram extends EditRecord
                 ->color('gray')
                 ->url(fn () => route('odontograma.imprimir', $this->record))
                 ->openUrlInNewTab(),
-            Actions\DeleteAction::make(),
+            // Borrar va aparte, en el menú de más acciones: pegado a
+            // "Guardar" era fácil tocarlo sin querer.
+            Actions\ActionGroup::make([
+                Actions\DeleteAction::make(),
+            ])->tooltip('Más acciones'),
         ];
     }
 

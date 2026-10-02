@@ -9,7 +9,7 @@
         .qr-btn-secondary { background: #f3f4f6; color: #374151; }
         .instructions { background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; padding: 16px; margin-top: 20px; font-size: 13px; color: #713f12; }
         .instructions strong { display: block; margin-bottom: 6px; color: #92400e; }
-        .step-num { display: inline-block; width: 20px; height: 20px; background: #0d9488; color: white; border-radius: 50%; font-size: 11px; font-weight: 700; text-align: center; line-height: 20px; margin-right: 6px; }
+        .step-num { display: inline-block; width: 20px; height: 20px; background: #0d9488; color: white; border-radius: 50%; font-size: 12px; font-weight: 700; text-align: center; line-height: 20px; margin-right: 6px; }
         @media print {
             body * { visibility: hidden; }
             .print-area, .print-area * { visibility: visible; }

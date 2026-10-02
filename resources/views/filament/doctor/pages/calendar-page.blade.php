@@ -51,7 +51,7 @@
         }
         .cal-hero-icon svg { width: 32px; height: 32px; color: white; }
         .cal-hero-label {
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
             opacity: 0.8; font-weight: 700;
         }
         .cal-hero-title {
@@ -85,7 +85,7 @@
             transform: translateY(-2px);
         }
         .cal-stat-label {
-            font-size: 0.63rem; font-weight: 700;
+            font-size: 0.75rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.08em;
             opacity: 0.78; display: flex; align-items: center; gap: 4px;
         }
@@ -182,15 +182,15 @@
 
         /* Today button (orange) */
         .cal-container .fc-today-button {
-            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-            background-color: #f59e0b !important;
+            background: #b45309 !important;
+            background-color: #b45309 !important;
             color: white !important;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35) !important;
+            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.3) !important;
         }
         .cal-container .fc-today-button:disabled {
-            opacity: 0.5 !important;
+            opacity: 0.7 !important;
             cursor: not-allowed !important;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+            background: #92400e !important;
             color: white !important;
         }
 
@@ -228,19 +228,17 @@
             padding: 10px 0 !important;
         }
         .cal-container .fc-col-header-cell-cushion {
-            font-size: 0.72rem !important;
-            font-weight: 800 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.08em !important;
+            font-size: 0.875rem !important;
+            font-weight: 700 !important;
             color: #0f766e !important;
             padding: 4px 0 !important;
         }
 
         .cal-container .fc-timegrid-slot-label-cushion,
         .cal-container .fc-timegrid-slot-label {
-            font-size: 0.7rem !important;
+            font-size: 0.8125rem !important;
             font-weight: 600 !important;
-            color: #94a3b8 !important;
+            color: #475569 !important;
         }
 
         .cal-container .fc-day-today {
@@ -255,7 +253,11 @@
             border: none !important;
             padding: 4px 8px !important;
             font-weight: 600 !important;
-            font-size: 0.72rem !important;
+            /* 13px y en varias líneas: a 11px y cortado en una sola, el
+               nombre del paciente no se alcanzaba a leer. */
+            font-size: 0.8125rem !important;
+            line-height: 1.3 !important;
+            white-space: normal !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
             cursor: pointer !important;
             transition: all 0.2s !important;
@@ -300,7 +302,7 @@
         }
         .cal-legend-item {
             display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.72rem; font-weight: 600; color: #475569;
+            font-size: 0.75rem; font-weight: 600; color: #475569;
         }
         .cal-legend-dot {
             width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0;

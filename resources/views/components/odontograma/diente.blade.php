@@ -98,8 +98,8 @@
             fill="{{ $seleccionado ? '#f0fdfa' : 'transparent' }}" stroke="{{ $seleccionado ? '#14b8a6' : 'transparent' }}" stroke-width="1.5"/>
 
         {{-- Número en etiqueta, del lado de afuera de la boca --}}
-        <rect x="13" y="{{ $yNum }}" width="30" height="15" rx="7.5" fill="{{ $seleccionado ? '#0d9488' : ($temporal ? '#fef3c7' : '#f1f5f9') }}"/>
-        <text x="28" y="{{ $yNum + 11 }}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="10" font-weight="700" fill="{{ $seleccionado ? '#ffffff' : ($temporal ? '#92400e' : '#334155') }}">{{ $numero }}</text>
+        <rect x="11" y="{{ $yNum }}" width="34" height="17" rx="8.5" fill="{{ $seleccionado ? '#0d9488' : ($temporal ? '#fef3c7' : '#f1f5f9') }}"/>
+        <text x="28" y="{{ $yNum + 12.5 }}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700" fill="{{ $seleccionado ? '#ffffff' : ($temporal ? '#92400e' : '#334155') }}">{{ $numero }}</text>
 
         <g transform="{{ $esSuperior ? 'translate(0,20)' : 'translate(0,120) scale(1,-1)' }}">
             {{-- Silueta. Tocarla aplica la herramienta al diente entero. --}}

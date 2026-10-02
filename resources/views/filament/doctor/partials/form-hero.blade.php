@@ -4,57 +4,20 @@
     - $title, $icon, $kicker, $subtitle, $gradient, $accent
 --}}
 <style>
+    /* Solo la indicación del formulario, en una franja clara. Antes era una
+       tarjeta de color con el título repetido (ya está arriba como
+       encabezado) que empujaba el formulario hacia abajo. */
     .fh-hero {
-        position: relative;
-        border-radius: 1.25rem;
-        padding: 20px 24px;
-        overflow: hidden;
-        background: linear-gradient(135deg, {{ $gradient ?? '#0d9488 0%, #0891b2 40%, #06b6d4 100%' }});
-        color: white;
-        box-shadow: 0 14px 40px -12px {{ ($accent ?? '#0d9488') }}66, inset 0 1px 0 rgba(255,255,255,0.2);
-        margin-bottom: 18px;
+        border-radius: 12px;
+        padding: 12px 16px;
+        background: #f0fdfa;
+        border: 1px solid #ccfbf1;
+        color: #134e4a;
+        font-size: 0.9375rem;
+        line-height: 1.45;
+        margin-bottom: 16px;
     }
-    .fh-hero::before {
-        content: ''; position: absolute; top: -60px; right: -40px;
-        width: 220px; height: 220px;
-        background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
-        border-radius: 50%; pointer-events: none;
-    }
-    .fh-hero::after {
-        content: ''; position: absolute; bottom: -80px; left: -30px;
-        width: 180px; height: 180px;
-        background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);
-        border-radius: 50%; pointer-events: none;
-    }
-    .fh-hero-grain {
-        position: absolute; inset: 0;
-        background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
-        background-size: 20px 20px; pointer-events: none;
-    }
-    .fh-hero-row {
-        position: relative; z-index: 1;
-        display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    }
-    .fh-hero-icon {
-        width: 54px; height: 54px; border-radius: 16px;
-        background: rgba(255,255,255,0.18);
-        backdrop-filter: blur(12px);
-        border: 1.5px solid rgba(255,255,255,0.3);
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        font-size: 28px;
-    }
-    .fh-hero-label {
-        font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.12em;
-        opacity: 0.85; font-weight: 700;
-    }
-    .fh-hero-title {
-        font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;
-        line-height: 1.15; margin-top: 2px; color: white !important;
-        -webkit-text-fill-color: white !important; background: none !important;
-    }
-    .fh-hero-subtitle { font-size: 0.85rem; opacity: 0.88; margin-top: 3px; max-width: 640px; }
+    .dark .fh-hero { background: rgba(20, 184, 166, 0.08); border-color: rgba(94, 234, 212, 0.2); color: #ccfbf1; }
 
     /* Top-border en el form de Filament para amarre visual con el hero */
     .fi-page form.fi-form > .fi-section,
@@ -77,14 +40,6 @@
     }
 </style>
 
-<div class="fh-hero">
-    <div class="fh-hero-grain"></div>
-    <div class="fh-hero-row">
-        <div class="fh-hero-icon">{{ $icon ?? '📋' }}</div>
-        <div style="flex:1;min-width:0;">
-            <div class="fh-hero-label">{{ $kicker ?? 'Formulario' }}</div>
-            <h2 class="fh-hero-title">{{ $title ?? 'Formulario' }}</h2>
-            <div class="fh-hero-subtitle">{{ $subtitle ?? '' }}</div>
-        </div>
-    </div>
-</div>
+@if(filled($subtitle ?? ''))
+<div class="fh-hero">{{ $subtitle }}</div>
+@endif

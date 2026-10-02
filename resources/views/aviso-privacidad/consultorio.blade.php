@@ -31,7 +31,7 @@
         .aceptar button { margin-top: 14px; width: 100%; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(135deg, #14b8a6, #0d9488); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
         .error { color: #dc2626; font-size: 13px; margin-top: 6px; }
         .listo { margin-top: 26px; padding: 14px 16px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; color: #065f46; font-size: 14px; }
-        .pie { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 18px; }
+        .pie { text-align: center; font-size: 12px; color: #9ca3af; margin-top: 18px; }
     </style>
 </head>
 <body>

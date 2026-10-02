@@ -13,7 +13,7 @@
             {{-- Mensaje --}}
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[11px] font-bold tracking-wider text-fuchsia-700 uppercase">
+                    <span class="text-xs font-bold tracking-wider text-fuchsia-700 uppercase">
                         Tu plan permite varios doctores
                     </span>
                     @if($isUnlimited)

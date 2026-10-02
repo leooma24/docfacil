@@ -27,7 +27,7 @@
                         <div class="text-xs text-gray-500 dark:text-gray-400">{{ $p->created_at->format('d/m/Y') }} · ${{ number_format($p->amount_mxn) }} MXN</div>
                     </div>
                     @php $color = $p->statusColor(); @endphp
-                    <span style="padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; {{ $color === 'success' ? 'background:#d1fae5; color:#065f46;' : ($color === 'warning' ? 'background:#fef3c7; color:#92400e;' : ($color === 'info' ? 'background:#dbeafe; color:#1e40af;' : ($color === 'danger' ? 'background:#fee2e2; color:#991b1b;' : 'background:#f3f4f6; color:#374151;'))) }}">
+                    <span style="padding:4px 10px; border-radius:6px; font-size:12px; font-weight:700; {{ $color === 'success' ? 'background:#d1fae5; color:#065f46;' : ($color === 'warning' ? 'background:#fef3c7; color:#92400e;' : ($color === 'info' ? 'background:#dbeafe; color:#1e40af;' : ($color === 'danger' ? 'background:#fee2e2; color:#991b1b;' : 'background:#f3f4f6; color:#374151;'))) }}">
                         {{ $p->statusLabel() }}
                     </span>
                 </div>
@@ -50,7 +50,7 @@
                      style="{{ $service->is_featured ? 'border-color:#0d9488; box-shadow: 0 4px 12px rgba(13,148,136,0.15);' : 'border-color:#e5e7eb;' }}">
                     <div class="p-6">
                         @if ($service->is_featured)
-                        <div style="display:inline-block; background:linear-gradient(135deg,#0d9488,#06b6d4); color:#fff; font-size:10px; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:10px; margin-bottom:10px;">⭐ DESTACADO</div>
+                        <div style="display:inline-block; background:linear-gradient(135deg,#0d9488,#06b6d4); color:#fff; font-size:12px; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:10px; margin-bottom:10px;">⭐ DESTACADO</div>
                         @endif
 
                         <div class="flex items-start justify-between gap-4 mb-3">

@@ -18,15 +18,15 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:1rem;">
         <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:0.75rem;padding:0.9rem;text-align:center;">
             <div style="font-size:1.5rem;font-weight:800;color:#7c3aed;">{{ $this->stats['my_proposals'] }}</div>
-            <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Mis propuestas</div>
+            <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Mis propuestas</div>
         </div>
         <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:0.75rem;padding:0.9rem;text-align:center;">
             <div style="font-size:1.5rem;font-weight:800;color:#7c3aed;">{{ $this->stats['my_votes'] }}</div>
-            <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Votos emitidos</div>
+            <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Votos emitidos</div>
         </div>
         <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:0.75rem;padding:0.9rem;text-align:center;">
             <div style="font-size:1.5rem;font-weight:800;color:#059669;">{{ $this->stats['total_shipped'] }}</div>
-            <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Entregadas</div>
+            <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.03em;">Entregadas</div>
         </div>
         <button type="button" wire:click="openProposeModal"
             style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;padding:0.9rem;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;">
@@ -75,17 +75,17 @@
                         <div style="display:flex;align-items:start;justify-content:space-between;gap:0.5rem;margin-bottom:0.35rem;">
                             <h3 style="font-size:1rem;font-weight:700;color:#111827;line-height:1.3;">
                                 {{ $f['title'] }}
-                                @if($f['is_mine'])<span style="font-size:0.65rem;padding:2px 6px;background:#c4b5fd;color:#4c1d95;border-radius:999px;margin-left:0.35rem;vertical-align:middle;">Tuya</span>@endif
+                                @if($f['is_mine'])<span style="font-size:0.75rem;padding:2px 6px;background:#c4b5fd;color:#4c1d95;border-radius:999px;margin-left:0.35rem;vertical-align:middle;">Tuya</span>@endif
                             </h3>
                             @if(!empty($f['price_label']))
-                            <span style="font-size:0.7rem;padding:3px 8px;background:{{ $f['proposed_price_tier'] === 'free' ? '#ecfdf5' : '#fef3c7' }};color:{{ $f['proposed_price_tier'] === 'free' ? '#065f46' : '#78350f' }};border-radius:999px;font-weight:600;white-space:nowrap;">
+                            <span style="font-size:0.75rem;padding:3px 8px;background:{{ $f['proposed_price_tier'] === 'free' ? '#ecfdf5' : '#fef3c7' }};color:{{ $f['proposed_price_tier'] === 'free' ? '#065f46' : '#78350f' }};border-radius:999px;font-weight:600;white-space:nowrap;">
                                 {{ $f['price_label'] }}
                             </span>
                             @endif
                         </div>
                         <p style="font-size:0.85rem;color:#4b5563;line-height:1.55;margin-bottom:0.6rem;">{{ \Illuminate\Support\Str::limit($f['description'], 240) }}</p>
                         <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:#9ca3af;">
-                            <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:0.65rem;">{{ $f['author_initials'] }}</div>
+                            <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:0.75rem;">{{ $f['author_initials'] }}</div>
                             <span>{{ $f['author_name'] }}</span>
                             @if(!empty($f['author_clinic']))<span>·</span><span>{{ $f['author_clinic'] }}</span>@endif
                             @if($f['status'] === 'shipped' && !empty($f['shipped_at']))

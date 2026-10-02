@@ -2,7 +2,7 @@
     <style>
         .pi-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 20px; padding: 28px 32px; color: white; position: relative; overflow: hidden; }
         .pi-hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(13,148,136,0.3), transparent); border-radius: 50%; }
-        .pi-hero-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; font-weight: 700; }
+        .pi-hero-label { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; font-weight: 700; }
         .pi-hero-title { font-size: 28px; font-weight: 800; margin-top: 6px; }
         .pi-hero-summary { font-size: 14px; margin-top: 12px; line-height: 1.6; opacity: 0.95; max-width: 700px; position: relative; z-index: 1; }
         .pi-refresh { position: absolute; top: 20px; right: 24px; background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; z-index: 2; }
@@ -20,10 +20,10 @@
         .pi-type-pricing .pi-card-icon { background: #ede9fe; }
 
         .pi-card-title { font-weight: 800; font-size: 15px; color: #111; }
-        .pi-card-type { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .pi-card-type { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 
         .pi-section { margin-top: 12px; }
-        .pi-section-label { font-size: 10px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .pi-section-label { font-size: 12px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
         .pi-prediction { font-size: 13px; color: #374151; line-height: 1.5; }
         .pi-action { font-size: 13px; color: #0f766e; line-height: 1.5; font-weight: 500; }
 
@@ -83,7 +83,7 @@
         <div class="pi-loading">
             <div class="pi-loading-spinner"></div>
             <div>Analizando los datos de tu consultorio...</div>
-            <div style="font-size:11px;margin-top:6px;opacity:0.7;">Esto tarda unos segundos la primera vez</div>
+            <div style="font-size:12px;margin-top:6px;opacity:0.7;">Esto tarda unos segundos la primera vez</div>
         </div>
         @endif
     </div>

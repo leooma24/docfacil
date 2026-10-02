@@ -17,7 +17,7 @@
                         <span style="font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;">{{ substr($next->patient->first_name, 0, 1) }}{{ substr($next->patient->last_name, 0, 1) }}</span>
                     </div>
                     <div style="min-width:0;flex:1;">
-                        <div style="font-size:0.65rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;margin-bottom:2px;">⏭ Siguiente paciente</div>
+                        <div style="font-size:0.75rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;margin-bottom:2px;">⏭ Siguiente paciente</div>
                         <div style="font-size:1.35rem;font-weight:800;letter-spacing:-0.015em;line-height:1.2;">{{ $next->patient->first_name }} {{ $next->patient->last_name }}</div>
                         <div style="display:flex;flex-wrap:wrap;gap:0.5rem 1rem;font-size:0.75rem;opacity:0.85;margin-top:6px;">
                             <span style="display:inline-flex;align-items:center;gap:4px;">

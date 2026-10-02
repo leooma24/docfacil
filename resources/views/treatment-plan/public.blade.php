@@ -46,7 +46,7 @@
         .status-rejected { background: #fee2e2; color: #991b1b; }
         .footer { text-align: center; margin-top: 20px; color: #9ca3af; font-size: 12px; }
         .footer .docfacil { color: #14b8a6; font-weight: 700; }
-        .tooth { display: inline-block; padding: 2px 6px; background: #f0fdfa; color: #0d9488; border-radius: 4px; font-size: 11px; margin-left: 6px; font-weight: 600; }
+        .tooth { display: inline-block; padding: 2px 6px; background: #f0fdfa; color: #0d9488; border-radius: 4px; font-size: 12px; margin-left: 6px; font-weight: 600; }
     </style>
 </head>
 <body>

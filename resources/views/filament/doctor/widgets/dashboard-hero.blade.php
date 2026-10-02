@@ -41,7 +41,7 @@
             box-shadow: 0 8px 28px rgba(0,0,0,0.18);
         }
         .dh-hero-kicker {
-            font-size: 0.68rem; font-weight: 700;
+            font-size: 0.75rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.14em;
             opacity: 0.82;
         }
@@ -76,7 +76,7 @@
             border-color: rgba(255,255,255,0.4);
         }
         .dh-stat-label {
-            font-size: 0.65rem; font-weight: 700;
+            font-size: 0.75rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.1em;
             opacity: 0.82;
         }
@@ -85,7 +85,7 @@
             margin-top: 6px; line-height: 1; color: white;
         }
         .dh-stat-sub {
-            font-size: 0.68rem; opacity: 0.72; margin-top: 4px;
+            font-size: 0.75rem; opacity: 0.72; margin-top: 4px;
         }
     </style>
 

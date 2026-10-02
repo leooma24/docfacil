@@ -16,7 +16,7 @@
     $filas[] = 'separador';
     if ($temp) { $filas[] = ['der' => [null, null, null, 85, 84, 83, 82, 81], 'izq' => [71, 72, 73, 74, 75, null, null, null]]; }
     if ($perm) { $filas[] = ['der' => [48, 47, 46, 45, 44, 43, 42, 41], 'izq' => [31, 32, 33, 34, 35, 36, 37, 38]]; }
-    $etiqueta = 'font-size:10px;font-weight:700;letter-spacing:.1em;color:#94a3b8;';
+    $etiqueta = 'font-size:12px;font-weight:700;letter-spacing:.1em;color:#64748b;';
 @endphp
 <style>
     .odo-interactivo .odo-cara { cursor: pointer; transition: filter .12s; }

@@ -7,9 +7,9 @@
         .cmdk-header svg { width: 20px; height: 20px; color: #9ca3af; flex-shrink: 0; }
         .cmdk-input { flex: 1; border: none; outline: none; font-size: 16px; background: transparent; color: #111; }
         .cmdk-input::placeholder { color: #9ca3af; }
-        .cmdk-kbd { padding: 2px 8px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 11px; color: #6b7280; font-family: 'SF Mono', Monaco, 'Courier New', monospace; font-weight: 600; }
+        .cmdk-kbd { padding: 2px 8px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 12px; color: #6b7280; font-family: 'SF Mono', Monaco, 'Courier New', monospace; font-weight: 600; }
         .cmdk-body { overflow-y: auto; flex: 1; padding: 8px; }
-        .cmdk-section { padding: 4px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; font-weight: 700; margin-top: 8px; }
+        .cmdk-section { padding: 4px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; font-weight: 700; margin-top: 8px; }
         .cmdk-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; cursor: pointer; transition: all 0.1s; text-decoration: none; color: #111; }
         .cmdk-item:hover, .cmdk-item.selected { background: #f0fdfa; }
         .cmdk-item-icon { font-size: 22px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #f3f4f6; border-radius: 8px; flex-shrink: 0; }
@@ -18,11 +18,11 @@
         .cmdk-item-title { font-weight: 600; font-size: 14px; color: #111; }
         .cmdk-item-subtitle { font-size: 12px; color: #6b7280; }
         .cmdk-item-arrow { color: #9ca3af; }
-        .cmdk-footer { padding: 10px 16px; border-top: 1px solid #e5e7eb; background: #f9fafb; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #6b7280; }
-        .cmdk-footer kbd { display: inline-block; padding: 1px 6px; background: white; border: 1px solid #d1d5db; border-radius: 4px; font-family: monospace; font-size: 10px; margin: 0 2px; }
+        .cmdk-footer { padding: 10px 16px; border-top: 1px solid #e5e7eb; background: #f9fafb; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #6b7280; }
+        .cmdk-footer kbd { display: inline-block; padding: 1px 6px; background: white; border: 1px solid #d1d5db; border-radius: 4px; font-family: monospace; font-size: 12px; margin: 0 2px; }
         .cmdk-ai-btn { background: linear-gradient(135deg, #0d9488, #0891b2); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
         .cmdk-ai-answer { padding: 14px 16px; background: linear-gradient(135deg, #ecfeff, #f0fdfa); border: 1px solid #5eead4; border-radius: 12px; margin: 8px; font-size: 14px; line-height: 1.6; color: #0f766e; }
-        .cmdk-ai-label { font-size: 11px; font-weight: 700; color: #0d9488; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .cmdk-ai-label { font-size: 12px; font-weight: 700; color: #0d9488; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
         .cmdk-empty { padding: 40px 20px; text-align: center; color: #9ca3af; font-size: 13px; }
     </style>
 

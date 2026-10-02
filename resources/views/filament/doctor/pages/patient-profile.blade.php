@@ -1,6 +1,6 @@
 <x-filament-panels::page>
 <style>
-    .pp-hero { position: relative; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%); border-radius: 1.5rem; padding: 28px 32px; color: white; overflow: hidden; margin-bottom: 20px; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.4); }
+    .pp-hero { position: relative; background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%); border-radius: 1.5rem; padding: 28px 32px; color: white; overflow: hidden; margin-bottom: 20px; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.4); }
     .pp-hero::before { content: ''; position: absolute; top: -80px; right: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%); border-radius: 50%; pointer-events: none; }
     .pp-hero::after { content: ''; position: absolute; bottom: -100px; left: -40px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%); border-radius: 50%; pointer-events: none; }
     .pp-hero-content { position: relative; z-index: 1; }
@@ -21,11 +21,12 @@
     .pp-btn-ghost:hover { background: rgba(255,255,255,0.25); }
     .pp-btn svg { width: 15px; height: 15px; }
 
-    .pp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
-    @media (min-width: 768px) { .pp-stats { grid-template-columns: repeat(5, 1fr); } }
+    .pp-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
+    @media (min-width: 480px) { .pp-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (min-width: 768px) { .pp-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     .pp-stat { background: rgba(255,255,255,0.15); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 14px 16px; }
-    .pp-stat-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.78; }
-    .pp-stat-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; line-height: 1.1; color: white; }
+    .pp-stat-label { font-size: 0.8125rem; font-weight: 600; opacity: 0.92; }
+    .pp-stat-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; line-height: 1.1; color: white; overflow-wrap: anywhere; }
     .pp-stat-value-sm { font-size: 0.95rem; font-weight: 700; margin-top: 6px; line-height: 1.2; }
 
     .pp-allergies { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 12px 16px; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.35); backdrop-filter: blur(10px); border-radius: 12px; font-size: 0.82rem; font-weight: 600; }
@@ -112,7 +113,7 @@
                 </div>
                 <div class="pp-stat">
                     <div class="pp-stat-label">Pendiente</div>
-                    <div class="pp-stat-value" style="{{ $this->stats['pending'] > 0 ? 'color:#fbbf24;' : 'opacity:0.6;' }}">${{ number_format($this->stats['pending'], 0) }}</div>
+                    <div class="pp-stat-value" style="{{ $this->stats['pending'] > 0 ? 'color:#fbbf24;' : 'opacity:0.85;' }}">${{ number_format($this->stats['pending'], 0) }}</div>
                 </div>
                 <div class="pp-stat">
                     <div class="pp-stat-label">Última visita</div>
@@ -158,11 +159,11 @@
                     <svg style="width:16px;height:16px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                 </div>
                 <div>
-                    <div style="font-size:11px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Resumen IA</div>
-                    <div style="font-size:10px;color:#64748b;">Generado por IA</div>
+                    <div style="font-size:12px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Resumen IA</div>
+                    <div style="font-size:12px;color:#64748b;">Generado por IA</div>
                 </div>
             </div>
-            <button wire:click="refreshAiSummary" wire:loading.attr="disabled" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:white;border:1px solid #99f6e4;border-radius:8px;font-size:11px;color:#0f766e;cursor:pointer;font-weight:600;">
+            <button wire:click="refreshAiSummary" wire:loading.attr="disabled" style="display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:white;border:1px solid #99f6e4;border-radius:8px;font-size:12px;color:#0f766e;cursor:pointer;font-weight:600;">
                 <svg wire:loading.remove wire:target="refreshAiSummary" style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <svg wire:loading wire:target="refreshAiSummary" style="width:12px;height:12px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 Actualizar
@@ -196,12 +197,12 @@
             <span style="font-size:12px;font-weight:700;color:#374151;">Generar mensaje de WhatsApp con IA</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button wire:click="generateMessage('reminder')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">📅 Recordatorio</button>
-            <button wire:click="generateMessage('followup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">💬 Seguimiento</button>
-            <button wire:click="generateMessage('birthday')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🎂 Cumpleaños</button>
-            <button wire:click="generateMessage('promotion')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🎁 Oferta de regreso</button>
-            <button wire:click="generateMessage('payment')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">💰 Pago pendiente</button>
-            <button wire:click="generateMessage('checkup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;">🔍 Revisión</button>
+            <button wire:click="generateMessage('reminder')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">📅 Recordatorio</button>
+            <button wire:click="generateMessage('followup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">💬 Seguimiento</button>
+            <button wire:click="generateMessage('birthday')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🎂 Cumpleaños</button>
+            <button wire:click="generateMessage('promotion')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🎁 Oferta de regreso</button>
+            <button wire:click="generateMessage('payment')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">💰 Pago pendiente</button>
+            <button wire:click="generateMessage('checkup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🔍 Revisión</button>
         </div>
 
         <div wire:loading wire:target="generateMessage" style="margin-top:10px;padding:10px;background:#f9fafb;border-radius:8px;font-size:12px;color:#6b7280;">
@@ -211,7 +212,7 @@
         @if($generatedMessage)
         <div wire:loading.remove wire:target="generateMessage" style="margin-top:12px;padding:12px 14px;background:#f0fdfa;border:1px solid #5eead4;border-radius:10px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                <div style="font-size:10px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Mensaje generado</div>
+                <div style="font-size:12px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Mensaje generado</div>
                 <button wire:click="closeMessage" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;">✕</button>
             </div>
             <div style="font-size:13px;color:#1f2937;line-height:1.6;white-space:pre-wrap;padding:10px 12px;background:white;border-radius:8px;border:1px solid #e5e7eb;">{{ $generatedMessage }}</div>
@@ -240,8 +241,8 @@
             ];
             @endphp
             @foreach($tabs as $key => $label)
-            <button wire:click="setTab('{{ $key }}')"
-                class="px-3 md:px-4 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap
+            <button wire:click="setTab('{{ $key }}')" style="min-height:44px;font-size:0.875rem;"
+                class="px-3 md:px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap
                 {{ $activeTab === $key ? 'bg-white dark:bg-gray-800 text-teal-600 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                 {{ $label }}
             </button>
@@ -272,7 +273,7 @@
                 </div>
                 @if($patient->medical_notes)
                 <div class="mt-3 md:mt-4 p-2.5 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <div class="text-[10px] md:text-xs text-gray-500 font-medium mb-1">Notas médicas</div>
+                    <div class="text-xs md:text-xs text-gray-500 font-medium mb-1">Notas médicas</div>
                     <div class="text-xs md:text-sm">{{ $patient->medical_notes }}</div>
                 </div>
                 @endif
@@ -289,7 +290,7 @@
                     <div>
                         <span class="text-xs md:text-sm font-bold text-gray-900 dark:text-white">{{ $record->visit_date->format('d/m/Y') }}</span>
                         {{-- NOM-004 5.10: quién la elaboró, con cédula, fecha y hora. --}}
-                        <span class="text-[10px] md:text-xs text-gray-500 ml-2">Elaboró: {{ $record->autoria() }}</span>
+                        <span class="text-xs md:text-xs text-gray-500 ml-2">Elaboró: {{ $record->autoria() }}</span>
                     </div>
                 </div>
                 @if($record->chief_complaint)<div class="text-xs md:text-sm"><span class="text-gray-500">Motivo:</span> {{ $record->chief_complaint }}</div>@endif
@@ -310,9 +311,9 @@
                 <div class="flex items-center justify-between mb-2 md:mb-3">
                     <div>
                         <span class="font-bold text-xs md:text-sm">{{ $rx->prescription_date->format('d/m/Y') }}</span>
-                        <span class="text-[10px] md:text-xs text-gray-500 ml-2">{{ $rx->doctor->user->name ?? '' }}</span>
+                        <span class="text-xs md:text-xs text-gray-500 ml-2">{{ $rx->doctor->user->name ?? '' }}</span>
                     </div>
-                    <span class="text-[10px] md:text-xs text-gray-500">{{ $rx->items->count() }} med.</span>
+                    <span class="text-xs md:text-xs text-gray-500">{{ $rx->items->count() }} med.</span>
                 </div>
                 @if($rx->diagnosis)<div class="text-xs md:text-sm text-gray-600 mb-2">{{ $rx->diagnosis }}</div>@endif
                 <div class="space-y-1">
@@ -389,11 +390,11 @@
             <div class="p-3 flex items-center justify-between gap-3">
                 <div class="min-w-0">
                     <div class="text-xs font-bold text-gray-900 dark:text-white">{{ $pay->payment_date->format('d/m/Y') }}</div>
-                    <div class="text-[10px] text-gray-500 truncate">{{ $pay->service->name ?? 'Sin servicio' }} · {{ match($pay->payment_method) { 'cash' => 'Efectivo', 'card' => 'Tarjeta', 'transfer' => 'Transf.', default => $pay->payment_method } }}</div>
+                    <div class="text-xs text-gray-500 truncate">{{ $pay->service->name ?? 'Sin servicio' }} · {{ match($pay->payment_method) { 'cash' => 'Efectivo', 'card' => 'Tarjeta', 'transfer' => 'Transf.', default => $pay->payment_method } }}</div>
                 </div>
                 <div class="text-right shrink-0">
                     <div class="text-sm font-bold">${{ number_format($pay->amount, 0) }}</div>
-                    <span class="px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $pay->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
+                    <span class="px-1.5 py-0.5 rounded-full text-xs font-medium {{ $pay->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
                         {{ $pay->status === 'paid' ? 'Pagado' : ($pay->status === 'pending' ? 'Pendiente' : 'Parcial') }}
                     </span>
                 </div>
@@ -412,14 +413,14 @@
                 <div class="flex items-center gap-2 md:gap-4 min-w-0">
                     <div class="text-center min-w-[40px] md:min-w-[60px]">
                         <div class="text-sm md:text-lg font-bold text-gray-900 dark:text-white">{{ $apt->starts_at->format('d') }}</div>
-                        <div class="text-[10px] md:text-xs text-gray-500">{{ $apt->starts_at->translatedFormat('M') }}</div>
+                        <div class="text-xs md:text-xs text-gray-500">{{ $apt->starts_at->translatedFormat('M') }}</div>
                     </div>
                     <div class="min-w-0">
                         <div class="text-xs md:text-sm font-medium truncate">{{ $apt->starts_at->format('H:i') }} — {{ $apt->service->name ?? 'Sin servicio' }}</div>
-                        <div class="text-[10px] md:text-xs text-gray-500">{{ $apt->doctor->user->name ?? '' }}</div>
+                        <div class="text-xs md:text-xs text-gray-500">{{ $apt->doctor->user->name ?? '' }}</div>
                     </div>
                 </div>
-                <span class="px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium shrink-0
+                <span class="px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-xs md:text-xs font-medium shrink-0
                     {{ match($apt->status) { 'completed' => 'bg-green-100 text-green-700', 'scheduled' => 'bg-amber-100 text-amber-700', 'confirmed' => 'bg-blue-100 text-blue-700', 'cancelled' => 'bg-red-100 text-red-700', 'no_show' => 'bg-gray-100 text-gray-700', default => 'bg-gray-100 text-gray-700' } }}">
                     {{ match($apt->status) { 'completed' => 'Completada', 'scheduled' => 'Programada', 'confirmed' => 'Confirmada', 'cancelled' => 'Cancelada', 'no_show' => 'No asistió', 'in_progress' => 'En consulta', default => $apt->status } }}
                 </span>
@@ -454,7 +455,7 @@
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
                     <div>
                         <div class="font-bold text-sm md:text-base text-gray-900">{{ $odonto->evaluation_date->format('d/m/Y') }}</div>
-                        <div class="text-[11px] md:text-xs text-gray-500 mt-0.5">
+                        <div class="text-xs md:text-xs text-gray-500 mt-0.5">
                             {{ $odonto->doctor->user->name ?? 'Sin doctor' }}
                             <span class="mx-1.5 text-gray-300">·</span>
                             {{ $odonto->teeth->count() }} dientes con condición

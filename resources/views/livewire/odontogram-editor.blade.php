@@ -33,7 +33,7 @@
         . ($activo ? $color : '#e5e7eb') . ';background:' . ($activo ? $color . '14' : '#fff') . ';color:' . ($activo ? '#111827' : '#4b5563') . ';'
         . ($activo ? 'box-shadow:0 0 0 3px ' . $color . '22;' : '');
     $tarjeta = 'background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.04);';
-    $titulo = 'font-size:10.5px;font-weight:700;letter-spacing:.09em;color:#64748b;text-transform:uppercase;';
+    $titulo = 'font-size:12px;font-weight:700;letter-spacing:.09em;color:#64748b;text-transform:uppercase;';
 @endphp
 <div style="display:flex;flex-direction:column;gap:14px;font-family:Inter,system-ui,sans-serif;">
 
@@ -166,6 +166,6 @@
                 <span style="display:inline-flex;align-items:center;gap:6px;">{!! $icono($key) !!}{{ $label }}</span>
             @endforeach
         </div>
-        <div style="font-size:11.5px;color:#94a3b8;margin-top:8px;">Círculo de cinco caras: el centro es oclusal/incisal, el lado hacia la línea media es mesial, y vestibular mira hacia afuera de la boca. Los números en amarillo son dientes temporales.</div>
+        <div style="font-size:12px;color:#64748b;margin-top:8px;">Círculo de cinco caras: el centro es oclusal/incisal, el lado hacia la línea media es mesial, y vestibular mira hacia afuera de la boca. Los números en amarillo son dientes temporales.</div>
     </div>
 </div>

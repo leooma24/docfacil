@@ -158,13 +158,16 @@ class PatientResource extends Resource
                     ->label('Teléfono')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->visibleFrom('2xl')
                     ->label('Email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('birth_date')
+                    ->visibleFrom('xl')
                     ->label('Nacimiento')
                     ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
+                    ->visibleFrom('xl')
                     ->label('Activo')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
