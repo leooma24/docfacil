@@ -31,6 +31,9 @@ class LlegadaPorQrTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // A media mañana: una cita "en 20 minutos" cerca de la medianoche
+        // caía al día siguiente y la prueba fallaba según la hora en que corría.
+        $this->travelTo(today()->setTime(10, 0));
         $this->clinica = Clinic::create(['name' => 'Consultorio Sonrisas', 'slug' => 'consultorio-sonrisas', 'plan' => 'basico',
             'plan_ends_at' => now()->addMonth(), 'trial_ends_at' => now()->subDay(), 'is_active' => true, 'onboarding_status' => 'completed']);
         $this->user = User::forceCreate(['name' => 'Dr. Test', 'email' => 'd@test.com', 'password' => bcrypt('x'), 'role' => 'doctor', 'email_verified_at' => now(), 'clinic_id' => $this->clinica->id]);

@@ -27,6 +27,9 @@ class MenuDelDoctorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // A media mañana: una cita "en 20 minutos" cerca de la medianoche
+        // caía al día siguiente y la prueba fallaba según la hora en que corría.
+        $this->travelTo(today()->setTime(10, 0));
         // En prueba: trae todo lo de Pro y los presupuestos.
         $this->clinica = Clinic::create(['name' => 'Consultorio Test', 'plan' => 'free', 'trial_ends_at' => now()->addDays(10), 'onboarding_status' => 'completed']);
         $user = User::forceCreate(['name' => 'Dr. Test', 'email' => 'd@test.com', 'password' => bcrypt('x'), 'role' => 'doctor', 'email_verified_at' => now(), 'clinic_id' => $this->clinica->id]);

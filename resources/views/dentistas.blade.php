@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>DocFácil — Software para Consultorio Dental en México</title>
+    <title>DocFácil: software para Consultorio Dental en México</title>
     <meta name="description" content="Para el consultorio dental que lleva todo en papel: agenda, recetas con cédula, odontograma, presupuestos y quién le debe, en el celular. 15 días gratis, sin tarjeta.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
@@ -27,14 +27,14 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 
     {{-- OpenGraph (Facebook, WhatsApp, LinkedIn) --}}
-    <meta property="og:title" content="DocFácil — Software para Consultorio Dental en México">
+    <meta property="og:title" content="DocFácil: software para Consultorio Dental en México">
     <meta property="og:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="DocFácil — Software para consultorios dentales">
+    <meta property="og:image:alt" content="DocFácil: software para consultorios dentales">
     <meta property="og:url" content="{{ url('/dentistas') }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DocFácil">
@@ -42,10 +42,10 @@
 
     {{-- Twitter --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="DocFácil — Software para Consultorio Dental en México">
+    <meta name="twitter:title" content="DocFácil: software para Consultorio Dental en México">
     <meta name="twitter:description" content="Odontograma digital, recordatorios WhatsApp, recetas PDF con cédula. 15 días gratis para dentistas.">
     <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
-    <meta name="twitter:image:alt" content="DocFácil — Software para consultorios dentales">
+    <meta name="twitter:image:alt" content="DocFácil: software para consultorios dentales">
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
@@ -193,45 +193,123 @@
         html, body { overflow-x: hidden; max-width: 100vw; }
 
         /* Landing: estilos propios (no utilidades responsive de Tailwind, que
-           no siempre compilan en producción). Texto de 17px para leerse
-           bien en el celular, de donde llega casi todo el que viene de WhatsApp. */
-        .lp-wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
-        .lp-narrow { max-width: 720px; }
-        .lp-hero { padding: 112px 0 48px; background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%); }
-        .lp-kicker { font-size: 15px; font-weight: 700; color: #0f766e; margin: 0 0 12px; }
-        .lp-h1 { font-size: 34px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: #0f172a; margin: 0; max-width: 820px; }
-        .lp-lead { font-size: 19px; line-height: 1.55; color: #334155; margin: 18px 0 0; max-width: 680px; }
+           no siempre compilan en producción). Tema claro, un solo acento (el
+           verde azulado de la marca) y radios de 16px en tarjetas, 14px en
+           botones. Texto de 17px: casi todos llegan desde WhatsApp en el celular. */
+        :root { --lp-acento: #0f766e; --lp-acento-2: #115e59; --lp-tinta: #0f172a; --lp-texto: #334155; --lp-suave: #475569; --lp-fondo: #f6faf9; }
+        .lp-wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+        .lp-kicker { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lp-acento); margin: 0 0 14px; }
+        .lp-h1 { font-size: 38px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; color: var(--lp-tinta); margin: 0; }
+        .lp-lead { font-size: 19px; line-height: 1.55; color: var(--lp-texto); margin: 18px 0 0; max-width: 34ch; }
+        .lp-h2 { font-size: 30px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: var(--lp-tinta); margin: 0 0 14px; }
+        .lp-p { font-size: 17px; line-height: 1.65; color: var(--lp-texto); margin: 0 0 12px; max-width: 58ch; }
+        .lp-dolor { font-size: 18px; line-height: 1.45; font-style: italic; color: #9a3412; font-weight: 600; margin: 0 0 12px; padding-bottom: 2px; max-width: 46ch; }
+        .lp-dolor-claro { color: #fdba74; }
+        .lp-nota { font-size: 15px; color: var(--lp-acento-2); background: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 12px; padding: 10px 14px; display: inline-block; margin: 6px 0 0; font-weight: 600; }
+        .lp-centro { text-align: center; max-width: 760px; margin: 0 auto 36px; }
+        .lp-centro .lp-dolor { margin-left: auto; margin-right: auto; }
+
         .lp-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-        .lp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 14px; font-size: 17px; font-weight: 700; text-decoration: none; transition: transform .15s, box-shadow .15s; }
-        .lp-btn:hover { transform: translateY(-1px); }
-        .lp-btn-primary { background: #0f766e; color: #fff; box-shadow: 0 10px 24px -10px rgba(15,118,110,.6); }
-        .lp-btn-wa { background: #fff; color: #166534; border: 2px solid #22c55e; }
-        .lp-fine { font-size: 15px; color: #475569; margin: 16px 0 0; }
+        .lp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 14px; font-size: 17px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s, background .2s; }
+        .lp-btn:hover { transform: translateY(-2px); }
+        .lp-btn:active { transform: translateY(0) scale(.98); }
+        .lp-btn-primary { background: var(--lp-acento); color: #fff; box-shadow: 0 12px 28px -12px rgba(15,118,110,.7); }
+        .lp-btn-primary:hover { background: var(--lp-acento-2); }
+        .lp-btn-wa { background: #fff; color: #14532d; border: 2px solid #16a34a; }
+        .lp-btn-wa:hover { background: #f0fdf4; }
+
+        /* Inicio: texto a la izquierda; la foto de la libreta con el celular encima. */
+        .lp-hero { padding: 104px 0 40px; background: radial-gradient(1200px 500px at 85% 10%, #ccfbf1 0%, rgba(204,251,241,0) 60%), #fff; overflow: hidden; }
+        .lp-hero-grid { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; }
+        .lp-hero-media { position: relative; padding-bottom: 40px; }
+        .lp-hero-foto { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; box-shadow: 0 30px 60px -30px rgba(15,23,42,.45); }
+        .lp-hero-tel { position: absolute; left: 10px; bottom: 0; width: 38%; max-width: 220px; height: auto; border-radius: 18px; border: 6px solid #0f172a; background: #0f172a; box-shadow: 0 24px 48px -16px rgba(15,23,42,.55); transform: rotate(-4deg); }
+
+        /* Franja de confianza */
+        .lp-franja { border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; background: #fff; }
+        .lp-franja-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; padding-top: 22px; padding-bottom: 22px; }
+        .lp-franja-item { display: flex; gap: 10px; align-items: flex-start; }
+        .lp-franja-item svg { width: 26px; height: 26px; color: var(--lp-acento); flex-shrink: 0; margin-top: 1px; }
+        .lp-franja-item strong { display: block; font-size: 15px; color: var(--lp-tinta); }
+        .lp-franja-item span { display: block; font-size: 14px; line-height: 1.4; color: var(--lp-suave); margin-top: 2px; }
+
         .lp-sec { padding: 64px 0; }
-        .lp-alt { background: #f8fafc; }
-        .lp-split { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; }
-        .lp-dolor { font-size: 18px; font-style: italic; color: #b45309; font-weight: 600; margin: 0 0 10px; }
-        .lp-h2 { font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; color: #0f172a; margin: 0 0 14px; }
-        .lp-p { font-size: 17px; line-height: 1.65; color: #334155; margin: 0 0 12px; }
-        .lp-nota { font-size: 15px; color: #475569; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; display: inline-block; margin-top: 4px; }
-        .lp-video { margin: 0; width: 100%; max-width: 380px; justify-self: center; }
-        .lp-video video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; border-radius: 18px; background: #0f766e; box-shadow: 0 20px 40px -18px rgba(15,23,42,.45); }
-        .lp-video figcaption { font-size: 14px; color: #475569; text-align: center; margin-top: 8px; }
-        .lp-omar { display: flex; gap: 16px; align-items: center; text-align: left; background: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 16px; padding: 18px; margin-top: 8px; }
+        .lp-tinte { background: var(--lp-fondo); }
+        .lp-oscuro { background: linear-gradient(160deg, #134e4a 0%, #0f3d3a 100%); }
+        .lp-split { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
+        .lp-lista { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; }
+        .lp-lista li { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; color: var(--lp-texto); }
+        .lp-lista svg { width: 20px; height: 20px; color: var(--lp-acento); flex-shrink: 0; margin-top: 2px; }
+
+        /* Video: póster con el gancho, se reproduce con sonido al tocarlo. */
+        .lp-video { margin: 0; width: 100%; max-width: 360px; justify-self: center; }
+        .lp-video video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; border-radius: 20px; background: #0f766e; box-shadow: 0 28px 56px -24px rgba(15,23,42,.55); }
+        .lp-video figcaption { font-size: 14px; color: var(--lp-suave); text-align: center; margin-top: 10px; }
+        .lp-oscuro .lp-video figcaption { color: #99f6e4; }
+
+        /* Mosaico de recordatorios: tres celdas distintas, no tres tarjetas iguales. */
+        .lp-bento { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .lp-celda { margin: 0; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .lp-celda figcaption { padding: 20px 22px 0; font-size: 16px; line-height: 1.55; color: var(--lp-texto); }
+        .lp-celda figcaption strong { display: block; font-size: 18px; color: var(--lp-tinta); margin-bottom: 4px; }
+        .lp-celda img { display: block; width: 78%; max-width: 300px; height: auto; margin: 18px auto 0; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 30px -12px rgba(15,23,42,.25); }
+        .lp-celda-a { background: linear-gradient(180deg, #ccfbf1 0%, #f0fdfa 100%); }
+        .lp-celda-b { background: #fff; border: 1px solid #e2e8f0; }
+        .lp-celda-c { background: #fff7ed; border: 1px solid #fed7aa; padding: 22px; justify-content: center; }
+        .lp-celda-c strong { font-size: 22px; color: #7c2d12; }
+        .lp-celda-c p { font-size: 16px; line-height: 1.55; color: #7c2d12; margin: 8px 0 0; }
+        .lp-celda-c span { font-weight: 700; }
+
+        /* Mensualidades: video al centro, una idea a cada lado. */
+        .lp-trio { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; justify-items: center; }
+        .lp-trio-txt { max-width: 300px; text-align: center; }
+        .lp-trio-txt strong { display: block; font-size: 20px; color: #f0fdfa; margin-bottom: 6px; }
+        .lp-trio-txt p { font-size: 16px; line-height: 1.6; color: #ccfbf1; margin: 0; }
+
+        /* Empezar */
+        .lp-omar-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
+        .lp-omar { display: flex; gap: 16px; align-items: center; background: var(--lp-fondo); border: 1px solid #ccfbf1; border-radius: 16px; padding: 18px; margin: 8px 0 20px; }
+        .lp-omar img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 3px solid #14b8a6; }
+        .lp-omar p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--lp-texto); }
+        .lp-sigue-fig { margin: 0; justify-self: center; max-width: 380px; }
+        .lp-sigue-fig img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 24px 50px -24px rgba(15,23,42,.35); }
+        .lp-sigue-fig figcaption { font-size: 14px; color: var(--lp-suave); text-align: center; margin-top: 10px; }
+
         .lp-faq details { border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; margin-bottom: 10px; }
-        .lp-faq summary { cursor: pointer; list-style: none; padding: 16px 18px; font-size: 17px; font-weight: 700; color: #0f172a; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .lp-faq summary { cursor: pointer; list-style: none; padding: 16px 18px; font-size: 17px; font-weight: 700; color: var(--lp-tinta); min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .lp-faq summary::-webkit-details-marker { display: none; }
-        .lp-faq summary::after { content: '+'; font-size: 24px; color: #0f766e; font-weight: 400; }
-        .lp-faq details[open] summary::after { content: '–'; }
-        .lp-faq details p { padding: 0 18px 16px; margin: 0; font-size: 16px; line-height: 1.6; color: #334155; }
-        @@media (min-width: 768px) {
-            .lp-hero { padding: 150px 0 72px; }
-            .lp-h1 { font-size: 48px; }
-            .lp-h2 { font-size: 34px; }
-            .lp-sec { padding: 88px 0; }
-            .lp-split { grid-template-columns: 1.15fr 0.85fr; gap: 56px; }
-            .lp-rev .lp-txt { order: 2; }
+        .lp-faq summary::after { content: '+'; font-size: 24px; color: var(--lp-acento); font-weight: 400; }
+        .lp-faq details[open] summary::after { content: '-'; }
+        .lp-faq details p { padding: 0 18px 16px; margin: 0; font-size: 16px; line-height: 1.6; color: var(--lp-texto); }
+        .lp-narrow { max-width: 760px; }
+        .lp-alt { background: var(--lp-fondo); }
+
+        /* Aparecer al entrar en pantalla: dice "esto es lo siguiente". Sin
+           movimiento para quien lo pidió en su sistema. */
+        @@media (prefers-reduced-motion: no-preference) {
+            [data-lp-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+            [data-lp-reveal].lp-visto { opacity: 1; transform: none; }
         }
+
+        @@media (min-width: 768px) {
+            .lp-hero { padding: 120px 0 64px; }
+            .lp-hero-grid { grid-template-columns: 1.05fr 1fr; gap: 56px; }
+            .lp-h1 { font-size: 54px; }
+            .lp-h2 { font-size: 38px; }
+            .lp-hero-tel { left: -40px; }
+            .lp-franja-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lp-sec { padding: 96px 0; }
+            .lp-split { grid-template-columns: 1.1fr .9fr; gap: 64px; }
+            .lp-rev > :first-child { order: 2; }
+            .lp-bento { grid-template-columns: 1.3fr 1fr; grid-template-rows: auto auto; }
+            .lp-celda-a { grid-row: span 2; }
+            .lp-trio { grid-template-columns: 1fr auto 1fr; gap: 40px; }
+            .lp-trio-txt:first-child { text-align: right; justify-self: end; }
+            .lp-trio-txt:last-child { text-align: left; justify-self: start; }
+            .lp-omar-grid { grid-template-columns: 1.15fr .85fr; gap: 64px; }
+        }
+        /* En el celular la burbuja del chat va arriba del botón fijo de abajo. */
+        @@media (max-width: 767px) { #df-chat-bubble { bottom: 104px !important; right: 14px !important; width: 56px !important; height: 56px !important; } }
     </style>
     @include('partials.analytics')
 </head>
@@ -274,7 +352,7 @@
                 <a href="{{ url('/doctor/login') }}" class="text-sm text-gray-500 hover:text-teal-600 transition font-medium">Iniciar sesión</a>
                 {{-- CTA único primary — sin competencia visual en el nav --}}
                 <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar" data-track-text="prueba_gratis" class="inline-flex items-center px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition-all hover:shadow-lg hover:shadow-teal-200 hover:-translate-y-0.5">
-                    Prueba gratis
+                    Probar 15 días gratis
                 </a>
             </div>
             {{-- Mobile menu --}}
@@ -306,100 +384,161 @@
                 📲 Instalar como app
             </button>
             <a href="{{ url('/doctor/login') }}" class="block py-2 text-gray-600">Iniciar sesión</a>
-            <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar_mobile" data-track-text="prueba_gratis" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Prueba gratis</a>
+            <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar_mobile" data-track-text="prueba_gratis" class="block py-2 px-4 bg-teal-600 text-white text-center rounded-lg">Probar 15 días gratis</a>
         </div>
     </nav>
 
     {{-- Cada sección arranca con el problema del dentista, con sus palabras,
-         y enseña cómo se resuelve con un video corto (el mismo que Omar manda
-         por WhatsApp). Antes la página era una lista de funciones y capturas:
-         quien la abre quiere saber si le arregla un problema, no qué botones
-         tiene. Nada de cifras sin fuente ni testimonios: todavía no hay. --}}
+         y enseña cómo se resuelve: con el video corto que Omar manda por
+         WhatsApp o con capturas reales del producto (datos de demo). Antes
+         era una lista de funciones; quien abre la página quiere saber si le
+         arregla un problema. Nada de cifras sin fuente ni testimonios. --}}
     @php
         $waOmar = 'https://wa.me/526682493398?text=' . urlencode('Hola Omar, vi la página de DocFacil y quiero ver cómo funcionaría en mi consultorio.');
         $videos = [
-            'v1-consulta' => ['dur' => '40 s', 'titulo' => 'Video: de la cita a la receta'],
-            'v2-presupuesto' => ['dur' => '34 s', 'titulo' => 'Video: del odontograma al presupuesto'],
-            'v3-ortodoncia' => ['dur' => '32 s', 'titulo' => 'Video: mensualidades de brackets'],
+            'v1-consulta' => ['dur' => '40 s', 'titulo' => 'De la cita a la receta'],
+            'v2-presupuesto' => ['dur' => '34 s', 'titulo' => 'Del odontograma al presupuesto'],
+            'v3-ortodoncia' => ['dur' => '32 s', 'titulo' => 'Mensualidades de brackets'],
+        ];
+        $ico = [
+            'tarjeta' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>',
+            'escudo' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>',
+            'chat' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/>',
+            'celular' => '<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/>',
+            'check' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>',
         ];
     @endphp
 
-    {{-- 1. HERO --}}
+    {{-- 1. INICIO: la libreta y el celular --}}
     <section class="lp-hero">
-        <div class="lp-wrap">
-            <p class="lp-kicker">Para consultorios dentales que van empezando</p>
-            <h1 class="lp-h1">Su consultorio en papel, pasado al celular. <span style="color:#0f766e;">Sin que se le olvide nada.</span></h1>
-            <p class="lp-lead">Agenda, recetas con su cédula, odontograma y quién le debe, en un solo lugar. Pruébelo 15 días gratis, sin tarjeta, y yo le ayudo a cargar su agenda.</p>
-            <div class="lp-ctas">
-                <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="hero" data-track-text="probar_15_dias" class="lp-btn lp-btn-primary">Probar 15 días gratis</a>
-                <a href="{{ $waOmar }}" target="_blank" rel="noopener" data-track="whatsapp_clicked" data-track-location="hero" class="lp-btn lp-btn-wa">Escribirle a Omar por WhatsApp</a>
+        <div class="lp-wrap lp-hero-grid">
+            <div class="lp-hero-txt" data-lp-reveal>
+                <p class="lp-kicker">Para el consultorio dental que va empezando</p>
+                <h1 class="lp-h1">Su consultorio en papel, pasado al celular.</h1>
+                <p class="lp-lead">Agenda, recetas, odontograma y cobros en un solo lugar. Pruébelo 15 días gratis y yo le ayudo a cargar su agenda.</p>
+                <div class="lp-ctas">
+                    <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="hero" data-track-text="probar_15_dias" class="lp-btn lp-btn-primary">Probar 15 días gratis</a>
+                    <a href="{{ $waOmar }}" target="_blank" rel="noopener" data-track="whatsapp_clicked" data-track-location="hero" class="lp-btn lp-btn-wa">Escribirle a Omar</a>
+                </div>
             </div>
-            <p class="lp-fine">Sin tarjeta · Garantía de 30 días · Soporte directo por WhatsApp · Funciona en el celular</p>
+            <div class="lp-hero-media" data-lp-reveal>
+                <img src="{{ asset('images/landing/hero-libreta.jpg') }}" alt="Libreta de citas de papel junto a un celular en la recepción de un consultorio" width="1200" height="900" fetchpriority="high" class="lp-hero-foto">
+                <img src="{{ asset('images/landing/agenda-celular.jpg') }}" alt="La agenda de DocFácil en el celular: cada cita con su estado" width="480" height="708" loading="lazy" class="lp-hero-tel">
+            </div>
         </div>
     </section>
 
-    {{-- 2. LA CONSULTA (video 1) --}}
+    {{-- 2. Lo que quita el miedo, en una franja --}}
+    <section class="lp-franja">
+        <div class="lp-wrap lp-franja-grid">
+            @foreach ([
+                ['tarjeta', 'Sin tarjeta', '15 días con todo, sin dar datos de pago.'],
+                ['escudo', 'Garantía de 30 días', 'Si su primer pago no le sirve, se lo devuelvo.'],
+                ['chat', 'Le contesto yo', 'Soporte directo por WhatsApp con Omar.'],
+                ['celular', 'En su celular', 'También en la tablet o la computadora.'],
+            ] as [$i, $t, $d])
+            <div class="lp-franja-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">{!! $ico[$i] !!}</svg>
+                <div><strong>{{ $t }}</strong><span>{{ $d }}</span></div>
+            </div>
+            @endforeach
+        </div>
+    </section>
+
+    {{-- 3. LA CONSULTA (video 1) --}}
     <section id="problema" class="lp-sec">
         <div class="lp-wrap lp-split">
-            <div class="lp-txt">
+            <div data-lp-reveal>
                 <p class="lp-dolor">“Entre apuntar, hacer la receta a mano y cobrar, se me va media consulta.”</p>
                 <h2 class="lp-h2">Una consulta completa, sin papeles.</h2>
-                <p class="lp-p">Al iniciar la consulta ya viene lo que se va a hacer y en qué diente. Anota el diagnóstico, la receta sale con su cédula, y el cobro ya trae el tratamiento. Si el paciente tiene alergias registradas, DocFácil le avisa antes de recetar.</p>
+                <p class="lp-p">Al iniciar la consulta ya viene lo que se va a hacer y en qué diente. La receta sale con su cédula y el cobro ya trae el tratamiento.</p>
+                <ul class="lp-lista">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">{!! $ico['check'] !!}</svg>Le avisa si el paciente es alérgico antes de recetar</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">{!! $ico['check'] !!}</svg>Al cerrar, le sugiere la siguiente cita</li>
+                </ul>
             </div>
             @include('partials.landing-video', ['id' => 'v1-consulta', 'v' => $videos['v1-consulta']])
         </div>
     </section>
 
-    {{-- 3. RECORDATORIOS (sin video) --}}
-    <section class="lp-sec lp-alt">
-        <div class="lp-wrap lp-narrow">
-            <p class="lp-dolor">“Se me olvida confirmar y el sillón se queda vacío.”</p>
-            <h2 class="lp-h2">El recordatorio por WhatsApp, ya escrito, a un clic desde su agenda.</h2>
-            <p class="lp-p">Le da un clic a la cita y se abre WhatsApp con el mensaje y una liga para que el paciente confirme o cancele. Se manda desde el WhatsApp de su consultorio, sin costo por mensaje. Si alguien cancela, la lista de espera le dice a quién ofrecerle ese horario (plan Pro).</p>
-            <p class="lp-p">Y cuando el paciente llega y escanea el QR de su recepción, a usted le avisa que ya está en la sala.</p>
+    {{-- 4. RECORDATORIOS: tres capturas reales en mosaico --}}
+    <section class="lp-sec lp-tinte">
+        <div class="lp-wrap">
+            <div class="lp-centro" data-lp-reveal>
+                <p class="lp-dolor">“Se me olvida confirmar y el sillón se queda vacío.”</p>
+                <h2 class="lp-h2">El recordatorio por WhatsApp, a un clic desde su agenda.</h2>
+            </div>
+            <div class="lp-bento">
+                <figure class="lp-celda lp-celda-a" data-lp-reveal>
+                    <figcaption><strong>El paciente confirma desde su celular.</strong> Un clic en la cita abre WhatsApp con el mensaje y la liga. Sin costo por mensaje.</figcaption>
+                    <img src="{{ asset('images/landing/paciente-confirma.jpg') }}" alt="Pantalla donde el paciente confirma o cancela su cita" width="560" height="1005" loading="lazy">
+                </figure>
+                <figure class="lp-celda lp-celda-b" data-lp-reveal>
+                    <figcaption><strong>Llega, escanea el QR y a usted le avisa.</strong> Su cita queda como "llegó".</figcaption>
+                    <img src="{{ asset('images/landing/check-in-qr.jpg') }}" alt="Registro con QR en la sala de espera" width="560" height="790" loading="lazy">
+                </figure>
+                <div class="lp-celda lp-celda-c" data-lp-reveal>
+                    <strong>¿Alguien canceló?</strong>
+                    <p>La lista de espera le dice quién quería ese día, y aparta la cita en un clic. <span>Plan Pro.</span></p>
+                </div>
+            </div>
         </div>
     </section>
 
-    {{-- 4. PRESUPUESTO (video 2) --}}
+    {{-- 5. PRESUPUESTO (video 2) --}}
     <section id="presupuestos" class="lp-sec">
         <div class="lp-wrap lp-split lp-rev">
-            <div class="lp-txt">
+            <div data-lp-reveal>
                 <p class="lp-dolor">“Armar el presupuesto a mano, diente por diente, me quita la tarde.”</p>
                 <h2 class="lp-h2">Su odontograma ya es su presupuesto.</h2>
-                <p class="lp-p">Marca lo que encuentra, cara por cara, y con un clic sale el presupuesto con sus precios. Se lo manda por WhatsApp y el paciente lo acepta desde su celular. Lo aceptado se agenda en un clic y en la consulta ya aparece.</p>
+                <p class="lp-p">Marca lo que encuentra, cara por cara, y con un clic sale el presupuesto con sus precios. El paciente lo acepta desde su celular y lo aceptado se agenda en un clic.</p>
                 <p class="lp-nota">Incluido en todos los planes de pago, desde el Básico.</p>
             </div>
             @include('partials.landing-video', ['id' => 'v2-presupuesto', 'v' => $videos['v2-presupuesto']])
         </div>
     </section>
 
-    {{-- 5. MENSUALIDADES (video 3) --}}
-    <section class="lp-sec lp-alt">
-        <div class="lp-wrap lp-split">
-            <div class="lp-txt">
-                <p class="lp-dolor">“No sé quién me debe la mensualidad de brackets.”</p>
-                <h2 class="lp-h2">Sepa quién va al día y quién le debe, sin revisar la libreta.</h2>
-                <p class="lp-p">Pone el total, el enganche y las mensualidades, y cada pago queda con su fecha. Cuando el paciente viene a su ajuste, la mensualidad aparece en la consulta para cobrarla ahí mismo, y queda en su corte del día.</p>
+    {{-- 6. MENSUALIDADES (video 3): el video al centro, dos ideas a los lados --}}
+    <section class="lp-sec lp-oscuro">
+        <div class="lp-wrap">
+            <div class="lp-centro" data-lp-reveal>
+                <p class="lp-dolor lp-dolor-claro">“No sé quién me debe la mensualidad de brackets.”</p>
+                <h2 class="lp-h2" style="color:#f0fdfa;">Sepa quién va al día y quién le debe.</h2>
             </div>
-            @include('partials.landing-video', ['id' => 'v3-ortodoncia', 'v' => $videos['v3-ortodoncia']])
+            <div class="lp-trio">
+                <div class="lp-trio-txt" data-lp-reveal>
+                    <strong>Cada pago con su fecha</strong>
+                    <p>Pone el total, el enganche y las mensualidades. Ve quién va al corriente y quién tiene pagos vencidos.</p>
+                </div>
+                @include('partials.landing-video', ['id' => 'v3-ortodoncia', 'v' => $videos['v3-ortodoncia']])
+                <div class="lp-trio-txt" data-lp-reveal>
+                    <strong>Se cobra en el ajuste</strong>
+                    <p>Cuando viene a su cita, la mensualidad aparece en la consulta y queda en su corte del día.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    {{-- 6. EMPEZAR: el miedo a pasar todo del papel --}}
+    {{-- 7. EMPEZAR: Omar y "lo que sigue" --}}
     <section class="lp-sec">
-        <div class="lp-wrap lp-narrow" style="text-align:center;">
-            <p class="lp-dolor">“Pasar todo del papel me va a costar trabajo.”</p>
-            <h2 class="lp-h2">Usted no captura nada solo: yo le ayudo a empezar.</h2>
-            <div class="lp-omar">
-                @if (file_exists(public_path('images/founder-omar-320.jpg')))
-                <img src="{{ asset('images/founder-omar-320.jpg') }}" alt="Omar Lerma, fundador de DocFácil" width="96" height="96" loading="lazy" decoding="async" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid #14b8a6;">
-                @endif
-                <p class="lp-p" style="text-align:left;margin:0;">Soy Omar Lerma, de Los Mochis, Sinaloa. Me manda su Excel por WhatsApp y le dejo cargados sus pacientes; si los tiene en la libreta, le ayudo a armar la lista. Cualquier duda, me escribe a mi celular y le contesto yo.</p>
+        <div class="lp-wrap lp-omar-grid">
+            <div class="lp-omar-carta" data-lp-reveal>
+                <p class="lp-dolor">“Pasar todo del papel me va a costar trabajo.”</p>
+                <h2 class="lp-h2">Usted no captura nada solo: yo le ayudo a empezar.</h2>
+                <div class="lp-omar">
+                    @if (file_exists(public_path('images/founder-omar-320.jpg')))
+                    <img src="{{ asset('images/founder-omar-320.jpg') }}" alt="Omar Lerma, fundador de DocFácil" width="88" height="88" loading="lazy" decoding="async">
+                    @endif
+                    <p>Soy Omar Lerma, de Los Mochis, Sinaloa. Me manda su Excel por WhatsApp y le dejo cargados sus pacientes; si los tiene en la libreta, le ayudo a armar la lista. Cualquier duda, le contesto yo.</p>
+                </div>
+                <a href="{{ $waOmar }}" target="_blank" rel="noopener" data-track="whatsapp_clicked" data-track-location="founder_section" class="lp-btn lp-btn-wa">Escribirle a Omar</a>
             </div>
-            <a href="{{ $waOmar }}" target="_blank" rel="noopener" data-track="whatsapp_clicked" data-track-location="founder_section" class="lp-btn lp-btn-wa" style="margin-top:20px;">Escribirle a Omar: 668 249 3398</a>
+            <figure class="lp-sigue-fig" data-lp-reveal>
+                <img src="{{ asset('images/landing/lo-que-sigue.jpg') }}" alt="En el perfil de cada paciente, lo que sigue: su próxima cita, su mensualidad y sus alergias" width="560" height="620" loading="lazy">
+                <figcaption>En cada paciente, lo que sigue: a un clic.</figcaption>
+            </figure>
         </div>
     </section>
-
 
     <section id="pricing" class="py-14 sm:py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -428,9 +567,9 @@
             @if ($fundador['hay'])
             <div class="max-w-2xl mx-auto mb-10 rounded-2xl p-6" style="background:linear-gradient(135deg,#fffbeb,#fef3c7); border:2px solid #fbbf24; box-shadow:0 10px 25px -12px rgba(217,119,6,.35);" data-animate>
                 <div class="flex items-start gap-4">
-                    <div class="text-4xl flex-shrink-0">🏅</div>
+                    <svg style="width:40px;height:40px;color:#b45309;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg>
                     <div class="flex-1">
-                        <div class="text-[11px] font-extrabold text-amber-800 uppercase tracking-widest">Programa Fundador</div>
+                        <div class="font-extrabold text-amber-800" style="font-size:14px;">Programa Fundador</div>
                         <div class="font-extrabold text-amber-900 text-xl mt-0.5">
                             @if ($fundador['tomados'] > 0)
                                 Quedan {{ $fundador['quedan'] }} de {{ $fundador['total'] }} lugares
@@ -453,7 +592,7 @@
 
                         <p class="text-sm text-amber-900 leading-relaxed">
                             <strong>{{ $mesesGratis }} meses sin costo</strong> y después
-                            <strong>${{ number_format($precioFundador) }}/mes de por vida</strong>, congelado —
+                            <strong>${{ number_format($precioFundador) }}/mes de por vida</strong>, congelado:
                             la mitad de los ${{ number_format($precioPro) }} del plan Pro.
                         </p>
                         <p class="text-sm text-amber-800 mt-1.5 leading-relaxed">
@@ -473,8 +612,7 @@
             @else
             {{-- Ya se llenaron. El ahorro anual es el precio de siempre, sin reloj. --}}
             <div class="max-w-2xl mx-auto mb-10 rounded-xl p-4 flex items-center gap-4" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5); border:1px solid #6ee7b7;" data-animate>
-                <div class="text-3xl flex-shrink-0">💰</div>
-                <div>
+                                <div>
                     <div class="font-bold text-emerald-900">Paga anual y ahorra 2 meses</div>
                     <div class="text-sm text-emerald-800">El año le sale en 10 meses.</div>
                 </div>
@@ -932,21 +1070,18 @@
 // PWA
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 
-// Sticky CTA mobile: aparece tras scrollear 500px. (Desktop usa el chatbot bubble — no compite con el sticky aquí.)
+// Botón fijo del celular y sombra del menú: aparecen cuando el inicio
+// sale de la pantalla (IntersectionObserver, sin escuchar cada scroll).
 (function() {
+    const hero = document.querySelector('.lp-hero');
     const stickyCta = document.getElementById('sticky-cta');
-    if (!stickyCta) return;
-
-    function update() {
-        if (window.scrollY > 500) {
-            stickyCta.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-        } else {
-            stickyCta.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-        }
-    }
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
+    const navbar = document.getElementById('navbar');
+    if (!hero) return;
+    new IntersectionObserver(([e]) => {
+        const fuera = !e.isIntersecting;
+        if (stickyCta) stickyCta.classList.toggle('opacity-0', !fuera), stickyCta.classList.toggle('pointer-events-none', !fuera), stickyCta.classList.toggle('translate-y-full', !fuera);
+        if (navbar) navbar.classList.toggle('shadow-lg', fuera), navbar.classList.toggle('border-b', !fuera);
+    }, { threshold: 0.05 }).observe(hero);
 })();
 
 // Scroll animations
@@ -963,20 +1098,11 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
-// Navbar scroll effect
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const navbar = document.getElementById('navbar');
-    const scroll = window.scrollY;
-    if (scroll > 100) {
-        navbar.classList.add('shadow-lg');
-        navbar.classList.remove('border-b');
-    } else {
-        navbar.classList.remove('shadow-lg');
-        navbar.classList.add('border-b');
-    }
-    lastScroll = scroll;
-});
+// Secciones nuevas: aparecen una vez, al entrar en pantalla.
+const lpVisto = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('lp-visto'); lpVisto.unobserve(e.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('[data-lp-reveal]').forEach(el => lpVisto.observe(el));
 
 </script>
 

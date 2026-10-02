@@ -49,7 +49,7 @@
     .pp-sigue-btn { flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
     .pp-sigue-btn:hover { background: #ccfbf1; }
     .pp-sigue-rojo .pp-sigue-btn { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-    @media (max-width: 640px) { .pp-sigue-row { flex-wrap: wrap; } .pp-sigue-btn { width: 100%; justify-content: center; margin-left: 24px; } }
+    @media (max-width: 640px) { .pp-sigue-row { flex-wrap: wrap; } .pp-sigue-btn { width: calc(100% - 24px); justify-content: center; margin-left: 24px; } }
 </style>
 
 @if($patient)
