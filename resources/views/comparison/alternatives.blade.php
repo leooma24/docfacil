@@ -124,7 +124,7 @@
                 <div class="bg-white p-5 rounded-xl border border-gray-100">
                     <div class="text-2xl mb-2">🇲🇽</div>
                     <div class="font-bold mb-1">Cumplimiento mexicano</div>
-                    <p class="text-sm text-gray-600">NOM-004 (expediente), LFPDPPP (datos), SPEI, CFDI.</p>
+                    <p class="text-sm text-gray-600">NOM-004 (expediente), LFPDPPP (datos) y cobro en pesos.</p>
                 </div>
                 <div class="bg-white p-5 rounded-xl border border-gray-100">
                     <div class="text-2xl mb-2">💰</div>

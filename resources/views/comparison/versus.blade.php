@@ -235,7 +235,7 @@
                     <h4 class="text-sm font-bold text-gray-900 mt-6 mb-2">Limitaciones honestas</h4>
                     <ul class="space-y-2 text-xs text-gray-600">
                         <li>· Apenas arrancando (abril 2026) — pocos testimoniales públicos aún</li>
-                        <li>· CFDI directo está en roadmap Q3 2026 (mientras tanto facturas con tu sistema fiscal actual)</li>
+                        <li>· No emite factura CFDI</li>
                         <li>· Foco exclusivo dental — no es para médicos generales</li>
                     </ul>
                 </div>

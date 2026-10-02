@@ -76,7 +76,7 @@ class ComparisonController extends Controller
                 'Soporte robusto si hablas inglés',
             ],
             'weaknesses'  => [
-                'Pensado para USA: no soporta NOM-004, LFPDPPP, SPEI ni facturación CFDI',
+                'Pensado para USA: no soporta NOM-004, LFPDPPP ni SPEI',
                 'Software instalado (no cloud-native) — requiere servidor local',
                 'Precio en USD muy elevado para consultorio mexicano promedio',
                 'Soporte en inglés',

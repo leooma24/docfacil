@@ -169,7 +169,7 @@
                 { q: '¿Los pacientes pueden firmar digital?', a: '¡Sí! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },
                 { q: '¿Mis datos están seguros?', a: 'La conexión va cifrada (HTTPS), hay respaldo automático diario, cada consultorio está aislado (tus datos nunca se cruzan con otro) y puedes activar la verificación en dos pasos. Las notas y recetas se bloquean a las 24 horas y queda historial de cambios. Los servidores están en Estados Unidos.' },
                 { q: '¿Puedo tener varios doctores?', a: 'Sí. Desde el plan Pro ($999/mes) hasta 3 doctores, o plan Clínica ($1,999/mes) para doctores ilimitados. Multi-sucursal, comisiones entre doctores y reportes individuales incluidos.' },
-                { q: '¿Hay garantía?', a: '¡Sí! Garantía de 30 días: si no ves resultados en el primer mes, te devolvemos tu dinero completo sin preguntas.' },
+                { q: '¿Hay garantía?', a: 'Sí. Si en los primeros 30 días de su primer pago decide que no le sirve, le devolvemos ese pago completo, sin explicar el motivo. Las reglas están en los términos (docfacil.tu-app.co/terminos#garantia).' },
                 { q: '¿Puedo probarlo sin registrarme?', a: '¡Sí! Hay un modo demo que crea una clínica temporal con 35 pacientes falsos, 60 citas históricas y todas las features activas. Sin registro, sin compromiso. Entra, juega y luego crea tu cuenta gratis.' },
             ],
 

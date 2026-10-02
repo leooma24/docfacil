@@ -24,11 +24,13 @@
                 <p>Le escribo de nuevo.</p>
             @endif
 
-            <p>Sé que están saturados, no le robo tiempo. La cuenta rápida del consultorio promedio:</p>
+            <p>Sé que están saturados, no le robo tiempo. Una cuenta rápida, con sus propios números:</p>
 
+            {{-- Sin "el consultorio promedio pierde 8 citas": no hay de dónde
+                 sale ese número. La cuenta la hace el doctor con los suyos. --}}
             <div class="math">
-                8 pacientes que no llegan al mes × $1,000 = <strong>$8,000</strong><br>
-                En un año: <strong>$96,000</strong> que se evaporan.
+                Si al mes se le van 2 citas de $1,000 por no confirmar = <strong>$2,000</strong><br>
+                El plan Básico cuesta <strong>$499</strong>.
             </div>
 
             <p>Por <strong>$499 al mes</strong>, DocFácil le manda recordatorios WhatsApp a sus pacientes con un solo clic. Si recupera 1 cita al mes ya pagó el plan; las demás son ganancia neta.</p>

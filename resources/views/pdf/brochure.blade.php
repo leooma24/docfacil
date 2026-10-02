@@ -432,7 +432,7 @@
     </table>
 
     <h3 style="font-size:11pt; margin:12px 0 4px 0; color:#0d9488;">Lo que <em>NO</em> hace DocFácil (transparencia total)</h3>
-    <p style="font-size:9pt; color:#4b5563; margin:0;">Facturación CFDI (por ahora), integración con laboratorios dentales externos, teleconsulta por video. Si necesitas alguna de estas, avísanos — está en el roadmap.</p>
+    <p style="font-size:9pt; color:#4b5563; margin:0;">Facturación CFDI, integración con laboratorios dentales externos, teleconsulta por video.</p>
 </div>
 
 {{-- ============================================================ --}}
