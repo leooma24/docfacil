@@ -23,6 +23,15 @@
             <h2 class="text-2xl font-bold mt-8">3. Período de prueba y suscripción</h2>
             <p>DocFácil ofrece 15 días de prueba gratuita sin requerir tarjeta. Al finalizar, el Cliente puede suscribirse a un plan de pago. La cancelación es inmediata y sin penalización.</p>
 
+            <h3 id="garantia" class="text-xl font-bold mt-6">Garantía de 30 días</h3>
+            <p>Si dentro de los 30 días naturales siguientes a su <strong>primer pago</strong> de un plan el Cliente decide que DocFácil no le sirve, puede pedir la devolución completa de ese primer pago, sin tener que explicar el motivo. Basta con escribir a soporte (<strong>soporte@docfacil.tu-app.co</strong> o WhatsApp 668 249 3398) dentro de ese plazo.</p>
+            <ul class="list-disc pl-6 space-y-1">
+                <li>La devolución se hace por el mismo medio con el que se pagó, en un máximo de <strong>10 días hábiles</strong> desde la solicitud.</li>
+                <li>Aplica una sola vez por consultorio y solo al primer pago; los pagos de los meses o años siguientes no son reembolsables, aunque el Cliente puede cancelar en cualquier momento y deja de pagar desde el siguiente periodo.</li>
+                <li>En el programa Fundador, el plazo de 30 días corre desde el primer pago, cuando terminan los meses sin costo.</li>
+                <li>Al hacerse la devolución, la cuenta pasa al plan Free y el Cliente conserva sus datos según la sección 7.</li>
+            </ul>
+
             <h2 class="text-2xl font-bold mt-8">4. Obligaciones del Cliente</h2>
             <ul class="list-disc pl-6 space-y-2">
                 <li>Proporcionar información veraz al registrarse, incluyendo cédula profesional.</li>
