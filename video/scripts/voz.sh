@@ -1,10 +1,10 @@
 #!/bin/bash
 # Genera la voz de un guion con Kokoro y la deja lista para montar:
 # sin silencios en las orillas, volumen parejo y durations.txt.
-# Uso: voz.sh <carpetaDelVideo>
+# Uso: voz.sh <carpetaDelVideo> [velocidad, 1.0 por omisión]
 set -euo pipefail
 DIR="$1"; A="$DIR/audio"; mkdir -p "$A"
-(cd ~/AI/voz && ./kokoro-venv/bin/python kokoro_lote.py "$DIR/guion.txt" "$A" ef_dora 1.0 >/dev/null)
+(cd ~/AI/voz && ./kokoro-venv/bin/python kokoro_lote.py "$DIR/guion.txt" "$A" ef_dora "${2:-1.0}" >/dev/null)
 : > "$A/durations.txt"
 for f in "$A"/seg*_raw.wav; do
   k=$(basename "${f%_raw.wav}")

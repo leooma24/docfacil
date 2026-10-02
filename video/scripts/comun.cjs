@@ -27,10 +27,12 @@ async function sesion(browser) {
 }
 
 // Contexto que graba, con cursor visible y sin el botón flotante de ayuda.
-async function contextoGrabando(browser, outDir, estado) {
+// `vista` cambia el tamaño de la pantalla que se graba: más angosta, todo sale
+// más grande en el celular (el video se escala igual a 1080x1350 al montar).
+async function contextoGrabando(browser, outDir, estado, vista = VIEW) {
   const ctx = await browser.newContext({
-    viewport: VIEW, locale: 'es-MX', colorScheme: 'light', storageState: estado,
-    recordVideo: { dir: outDir, size: VIEW },
+    viewport: vista, locale: 'es-MX', colorScheme: 'light', storageState: estado,
+    recordVideo: { dir: outDir, size: vista },
   });
   await ctx.addInitScript(() => {
     const montar = () => {

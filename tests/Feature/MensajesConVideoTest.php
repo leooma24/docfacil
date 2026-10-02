@@ -125,11 +125,11 @@ class MensajesConVideoTest extends TestCase
         $this->assertStringContainsString('brackets', $this->mensaje($p));
     }
 
-    public function test_a_los_demas_les_toca_el_video_de_la_cita_a_la_receta(): void
+    public function test_a_los_demas_les_toca_el_video_corto_de_la_receta(): void
     {
         $p = $this->prospecto(['contact_day' => 1]);
 
-        $this->assertSame('v1-consulta.mp4', basename(ProspectResource::videoDelSeguimiento($p)['url']));
+        $this->assertSame('v1-corto.mp4', basename(ProspectResource::videoDelSeguimiento($p)['url']));
         $this->assertStringContainsString('receta', $this->mensaje($p));
     }
 

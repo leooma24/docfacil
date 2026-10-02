@@ -713,8 +713,9 @@ class ProspectResource extends Resource
     /**
      * Qué video adjuntar, solo en el segundo mensaje.
      *
-     * Al ortodoncista le pega lo de las mensualidades; a los demás, la cita
-     * que termina en receta sin papel.
+     * Al ortodoncista le pega lo de las mensualidades; a los demás, la receta
+     * sin papel en la versión corta (27 s): la de 40 s iba rápido para
+     * alguien que no conoce el sistema.
      *
      * @return array{titulo: string, dice: string, url: string}|null
      */
@@ -733,9 +734,9 @@ class ProspectResource extends Resource
                 'url' => url('/videos/v3-ortodoncia.mp4'),
             ]
             : [
-                'titulo' => 'De la cita a la receta',
-                'dice' => 'de la cita a la receta, sin papel.',
-                'url' => url('/videos/v1-consulta.mp4'),
+                'titulo' => 'La receta, sin papel',
+                'dice' => 'la receta sin papel, el cobro con el diente ya puesto y el odontograma al día.',
+                'url' => url('/videos/v1-corto.mp4'),
             ];
     }
 
