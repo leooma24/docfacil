@@ -30,6 +30,25 @@
 
     .pp-allergies { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 12px 16px; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.35); backdrop-filter: blur(10px); border-radius: 12px; font-size: 0.82rem; font-weight: 600; }
     .pp-allergies svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* Lo que sigue: lo que toca hacer con el paciente, a un clic. */
+    .pp-sigue { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(15,23,42,.06); }
+    .dark .pp-sigue { background: #111827; border-color: #1f2937; }
+    .pp-sigue-h { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 0 0 10px; }
+    .dark .pp-sigue-h { color: #f1f5f9; }
+    .pp-sigue-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-top: 1px solid #f1f5f9; }
+    .dark .pp-sigue-row { border-color: #1f2937; }
+    .pp-sigue-row:first-of-type { border-top: 0; }
+    .pp-sigue-dot { width: 10px; height: 10px; border-radius: 999px; flex-shrink: 0; }
+    .pp-sigue-txt { flex: 1; min-width: 0; }
+    .pp-sigue-t { font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.3; }
+    .dark .pp-sigue-t { color: #f1f5f9; }
+    .pp-sigue-d { font-size: 14px; color: #475569; margin-top: 2px; line-height: 1.35; }
+    .dark .pp-sigue-d { color: #94a3b8; }
+    .pp-sigue-btn { flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
+    .pp-sigue-btn:hover { background: #ccfbf1; }
+    .pp-sigue-rojo .pp-sigue-btn { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+    @media (max-width: 640px) { .pp-sigue-row { flex-wrap: wrap; } .pp-sigue-btn { width: 100%; justify-content: center; margin-left: 24px; } }
 </style>
 
 @if($patient)
@@ -101,7 +120,7 @@
                 </div>
             </div>
 
-            @if($patient->allergies)
+            @if($patient->tieneAlergias())
             <div class="pp-allergies">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
                 <span>⚠️ Alergias: {{ $patient->allergies }}</span>
@@ -109,6 +128,26 @@
             @endif
         </div>
     </div>
+
+    {{-- LO QUE SIGUE --}}
+    @php
+        $colores = ['rojo' => '#dc2626', 'ambar' => '#d97706', 'verde' => '#059669', 'gris' => '#94a3b8'];
+    @endphp
+    @if(count($this->loQueSigue))
+    <div class="pp-sigue">
+        <h3 class="pp-sigue-h">Lo que sigue</h3>
+        @foreach($this->loQueSigue as $paso)
+        <div class="pp-sigue-row pp-sigue-{{ $paso['tono'] }}">
+            <span class="pp-sigue-dot" style="background:{{ $colores[$paso['tono']] ?? '#94a3b8' }}"></span>
+            <div class="pp-sigue-txt">
+                <div class="pp-sigue-t">{{ $paso['titulo'] }}</div>
+                <div class="pp-sigue-d">{{ $paso['detalle'] }}</div>
+            </div>
+            <a href="{{ $paso['url'] }}" class="pp-sigue-btn">{{ $paso['accion'] }}</a>
+        </div>
+        @endforeach
+    </div>
+    @endif
 
     @if(config('services.ai.enabled'))
     {{-- AI Summary Card --}}

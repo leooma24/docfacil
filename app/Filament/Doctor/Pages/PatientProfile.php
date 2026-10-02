@@ -171,6 +171,12 @@ class PatientProfile extends Page
             ->get();
     }
 
+    /** Lo que toca hacer con este paciente, cada cosa con su liga. */
+    public function getLoQueSigueProperty(): array
+    {
+        return \App\Support\LoQueSigue::para($this->patient);
+    }
+
     public function getStatsProperty(): array
     {
         return [
