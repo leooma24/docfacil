@@ -125,12 +125,19 @@ class MensajesConVideoTest extends TestCase
         $this->assertStringContainsString('brackets', $this->mensaje($p));
     }
 
-    public function test_a_los_demas_les_toca_el_video_corto_de_la_receta(): void
+    /**
+     * El primer mensaje pregunta cómo recuerda las citas: el segundo enseña
+     * eso. Y dice lo que de verdad pasa: se abre su WhatsApp y él da enviar.
+     */
+    public function test_a_los_demas_les_toca_el_video_de_los_recordatorios(): void
     {
         $p = $this->prospecto(['contact_day' => 1]);
+        $msg = $this->mensaje($p);
 
-        $this->assertSame('v1-corto.mp4', basename(ProspectResource::videoDelSeguimiento($p)['url']));
-        $this->assertStringContainsString('receta', $this->mensaje($p));
+        $this->assertSame('v4-recordatorios.mp4', basename(ProspectResource::videoDelSeguimiento($p)['url']));
+        $this->assertStringContainsString('recordatorios', $msg);
+        $this->assertStringContainsString('enviar', $msg);
+        $this->assertStringNotContainsString('automátic', $msg);
     }
 
     public function test_al_consultorio_el_video_se_le_manda_para_el_doctor(): void

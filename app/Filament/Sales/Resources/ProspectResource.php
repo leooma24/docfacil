@@ -713,9 +713,9 @@ class ProspectResource extends Resource
     /**
      * Qué video adjuntar, solo en el segundo mensaje.
      *
-     * Al ortodoncista le pega lo de las mensualidades; a los demás, la receta
-     * sin papel en la versión corta (27 s): la de 40 s iba rápido para
-     * alguien que no conoce el sistema.
+     * Al ortodoncista le pega lo de las mensualidades; a los demás, los
+     * recordatorios, que es justo lo que les preguntó el primer mensaje.
+     * El video dice lo que pasa: se abre su WhatsApp y él da enviar.
      *
      * @return array{titulo: string, dice: string, url: string}|null
      */
@@ -734,9 +734,9 @@ class ProspectResource extends Resource
                 'url' => url('/videos/v3-ortodoncia.mp4'),
             ]
             : [
-                'titulo' => 'La receta, sin papel',
-                'dice' => 'la receta sin papel, el cobro con el diente ya puesto y el odontograma al día.',
-                'url' => url('/videos/v1-corto.mp4'),
+                'titulo' => 'Los recordatorios, sin escribirlos',
+                'dice' => 'los recordatorios de mañana. Se abre su WhatsApp con el mensaje ya escrito, usted le da enviar y el paciente confirma con un toque.',
+                'url' => url('/videos/v4-recordatorios.mp4'),
             ];
     }
 

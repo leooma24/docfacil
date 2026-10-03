@@ -1,0 +1,8 @@
+GUION VIDEO 4: los recordatorios de mañana, sin escribirlos (DocFácil, voz Kokoro ef_dora a 0.92)
+
+1. Doctor, ¿todavía escribe uno por uno los recordatorios de mañana?
+2. Aquí ve a quién le falta recordarle su cita.
+3. Toca WhatsApp: se abre con el mensaje ya escrito, y usted le da enviar.
+4. Su paciente confirma o cancela con un toque.
+5. Y en su agenda ya aparece confirmada.
+6. Pruébelo quince días gratis. Yo le ayudo a cargar su agenda.
