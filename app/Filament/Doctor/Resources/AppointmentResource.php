@@ -300,6 +300,23 @@ class AppointmentResource extends Resource
                     ->default(),
             ])
             ->actions([
+                // Fuera del menú, a la vista: recordarle a cada paciente de
+                // mañana es un clic, no dos (Acciones → WhatsApp).
+                Tables\Actions\Action::make('whatsapp')
+                    // Pasa por DocFácil para dejarla recordada (y a las demás
+                    // citas del paciente ese día) y abre WhatsApp con un solo
+                    // mensaje. Ver la ruta cita.recordar.
+                    ->label(fn (Appointment $record) => $record->reminder_sent ? 'Recordado' : 'WhatsApp')
+                    ->icon(fn (Appointment $record) => $record->reminder_sent ? 'heroicon-o-check-circle' : 'heroicon-o-chat-bubble-left-ellipsis')
+                    ->color(fn (Appointment $record) => $record->reminder_sent ? 'gray' : 'success')
+                    ->tooltip(fn (Appointment $record) => $record->reminder_sent ? 'Ya se le mandó el recordatorio. Tóquelo para mandarlo otra vez.' : 'Mandar recordatorio por WhatsApp')
+                    ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
+                    ->url(fn (Appointment $record) => route('cita.recordar', $record))
+                    ->openUrlInNewTab()
+                    // Solo el ícono: con la palabra, "Acciones" se salía de la
+                    // tabla en una laptop de 1366.
+                    ->iconButton()
+                    ->size('lg'),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('start_consultation')
                         ->label('Iniciar consulta')
@@ -446,17 +463,7 @@ class AppointmentResource extends Resource
                     ->requiresConfirmation()
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed', 'in_progress']))
                     ->action(fn (Appointment $record) => $record->update(['status' => 'completed'])),
-                Tables\Actions\Action::make('whatsapp')
-                    // Pasa por DocFácil para dejarla recordada (y a las demás
-                    // citas del paciente ese día) y abre WhatsApp con un solo
-                    // mensaje. Ver la ruta cita.recordar.
-                    ->label(fn (Appointment $record) => $record->reminder_sent ? 'Recordado' : 'WhatsApp')
-                    ->icon(fn (Appointment $record) => $record->reminder_sent ? 'heroicon-o-check-circle' : 'heroicon-o-chat-bubble-left-ellipsis')
-                    ->color(fn (Appointment $record) => $record->reminder_sent ? 'gray' : 'success')
-                    ->tooltip(fn (Appointment $record) => $record->reminder_sent ? 'Ya se le mandó el recordatorio. Tóquelo para mandarlo otra vez.' : 'Mandar recordatorio por WhatsApp')
-                    ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
-                    ->url(fn (Appointment $record) => route('cita.recordar', $record))
-                    ->openUrlInNewTab(),
+
                 Tables\Actions\Action::make('reschedule')
                     ->label('Re-agendar')
                     ->icon('heroicon-o-arrow-path')

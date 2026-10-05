@@ -127,6 +127,12 @@ class Consultation extends Page implements HasForms
     /** Si la siguiente cita es un tratamiento del presupuesto, cuál. */
     public ?int $next_appointment_item_id = null;
 
+    /** La consulta de este paciente: su cita de hoy, o una sin cita. */
+    public static function urlParaPaciente(\App\Models\Patient|int $paciente): string
+    {
+        return route('filament.doctor.pages.consulta', ['patient' => $paciente instanceof \App\Models\Patient ? $paciente->id : $paciente]);
+    }
+
     public function mount(): void
     {
         $appointmentId = request('appointment');
@@ -141,6 +147,29 @@ class Consultation extends Page implements HasForms
             $this->appointment = Appointment::with(['patient', 'doctor.user', 'service', 'clinic'])
                 ->where('clinic_id', $clinicId)
                 ->find($appointmentId);
+        }
+
+        // "Iniciar consulta" desde el perfil o desde el aviso de que llegó:
+        // su cita de hoy si la tiene; si no, una consulta sin cita con él.
+        if (! $this->appointment && request('patient')) {
+            $paciente = \App\Models\Patient::where('clinic_id', $clinicId)->find(request('patient'));
+
+            if ($paciente) {
+                $this->appointment = Appointment::with(['patient', 'doctor.user', 'service', 'clinic'])
+                    ->where('clinic_id', $clinicId)
+                    ->where('patient_id', $paciente->id)
+                    ->whereDate('starts_at', today())
+                    ->whereIn('status', ['scheduled', 'confirmed', 'in_progress'])
+                    ->orderBy('starts_at')
+                    ->first();
+
+                if (! $this->appointment) {
+                    $this->walkin_patient_id = (string) $paciente->id;
+                    $this->startWalkIn();
+
+                    return;
+                }
+            }
         }
 
         // Auto-resume: if no appointment specified, check for in_progress appointment

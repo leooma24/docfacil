@@ -18,6 +18,11 @@ class EditAppointment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('iniciarConsulta')
+                ->label('Iniciar consulta')
+                ->icon('heroicon-o-play-circle')
+                ->url(fn () => route('filament.doctor.pages.consulta', ['appointment' => $this->record->id]))
+                ->visible(fn () => in_array($this->record->status, ['scheduled', 'confirmed', 'in_progress'], true)),
             Actions\DeleteAction::make(),
         ];
     }

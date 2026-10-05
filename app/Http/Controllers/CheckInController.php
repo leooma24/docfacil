@@ -120,6 +120,10 @@ class CheckInController extends Controller
                 ->icon('heroicon-o-map-pin')
                 ->iconColor('info')
                 ->actions([
+                    NotificationAction::make('atender')
+                        ->label('Iniciar consulta')
+                        ->url(\App\Filament\Doctor\Pages\Consultation::urlParaPaciente($paciente))
+                        ->markAsRead(),
                     NotificationAction::make('ver')
                         ->label('Ver paciente')
                         ->url(PatientProfile::getUrl(['patient' => $paciente->id], panel: 'doctor'))
