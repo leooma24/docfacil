@@ -121,7 +121,7 @@
             </div>
             @else
             <div class="aw-empty">
-                <div class="aw-empty-emoji">✅</div>
+                <div class="aw-empty-emoji" style="color:#059669;"><x-icono nombre="check-circle" /></div>
                 <div class="aw-empty-text">Todo en orden. Nada que reportar ahora mismo.</div>
             </div>
             @endif

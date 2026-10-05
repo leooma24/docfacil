@@ -143,6 +143,23 @@ class PanelSinEmojisTest extends TestCase
             ->assertDontSee('Sube 20%');
     }
 
+    /**
+     * Lo que sale solo a veces (el cumpleaños de hoy, la lista vacía) no lo
+     * ve un recorrido de pantallas: se revisan las vistas mismas.
+     */
+    public function test_ninguna_vista_del_panel_trae_emojis(): void
+    {
+        $vistas = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(resource_path('views/filament/doctor')));
+
+        foreach ($vistas as $vista) {
+            if (! str_ends_with($vista->getFilename(), '.blade.php')) {
+                continue;
+            }
+            $texto = preg_replace('/\{\{--.*?--\}\}/s', '', file_get_contents($vista->getPathname()));
+            $this->assertDoesNotMatchRegularExpression(self::EMOJI, $texto, $vista->getPathname());
+        }
+    }
+
     public function test_los_avisos_y_botones_no_traen_emojis(): void
     {
         $archivos = [

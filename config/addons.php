@@ -14,10 +14,10 @@
 return [
     'recall_automation' => [
         'slug' => 'recall_automation',
-        'name' => 'Recall automático',
+        'name' => 'Recall: a quién ya le toca volver',
         'feature_flag' => 'recall_automation',
         'short_description' => 'Pacientes que hace meses no regresan aparecen listados con click-to-WhatsApp.',
-        'long_description' => 'Configura servicios con periodo de recall (ej. limpieza cada 6 meses). DocFácil calcula qué pacientes ya te tocan y los lista cada semana con un botón para abrir WhatsApp con el mensaje armado.',
+        'long_description' => 'Configura servicios con periodo de recall (ej. limpieza cada 6 meses). DocFácil calcula a qué pacientes ya les toca volver y los pone en su escritorio. Un clic abre su WhatsApp con el mensaje armado y usted da enviar.',
         'monthly_price' => 49.00,
         'annual_price' => 490.00, // 2 meses gratis en anual
         'icon' => 'arrow-path',
@@ -45,10 +45,10 @@ return [
 
     'google_reviews' => [
         'slug' => 'google_reviews',
-        'name' => 'Reseñas Google automatizadas',
+        'name' => 'Reseñas en Google: a quién pedírsela',
         'feature_flag' => 'google_reviews',
         'short_description' => 'Lista pacientes a pedirles reseña. 1 clic y abre WhatsApp con el link a Google Maps listo.',
-        'long_description' => 'Después de cada cita completada, DocFácil te muestra qué pacientes pueden dejarte reseña en Google. Un clic manda WhatsApp personalizado con tu link directo. Triplicar tus reseñas Google = más pacientes nuevos te encuentran orgánicamente (sin pagar ads).',
+        'long_description' => 'Después de cada cita completada, DocFácil le muestra a qué pacientes pedirles reseña en Google. Un clic abre su WhatsApp con el mensaje y su link de Google, y usted da enviar. Más reseñas ayudan a que pacientes nuevos lo encuentren sin pagar anuncios.',
         'monthly_price' => 49.00,
         'annual_price' => 490.00,
         'icon' => 'star',

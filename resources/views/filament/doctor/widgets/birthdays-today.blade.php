@@ -1,7 +1,7 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            🎂 Cumpleaños de hoy
+            <x-icono nombre="cake" /> Cumpleaños de hoy
         </x-slot>
         <x-slot name="description">
             Abre WhatsApp con el mensaje listo en un clic.

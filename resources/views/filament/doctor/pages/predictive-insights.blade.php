@@ -40,7 +40,7 @@
                 <svg style="width:12px;height:12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 Actualizar
             </button>
-            <div class="pi-hero-label">✨ IA Predictiva</div>
+            <div class="pi-hero-label"><x-icono nombre="sparkles" /> IA Predictiva</div>
             <div class="pi-hero-title">Inteligencia del consultorio</div>
             @if($insights && !empty($insights['summary']))
             <div class="pi-hero-summary">{{ $insights['summary'] }}</div>
@@ -61,20 +61,20 @@
 
                 @if(!empty($p['prediction']))
                 <div class="pi-section">
-                    <div class="pi-section-label">📊 Predicción</div>
+                    <div class="pi-section-label"><x-icono nombre="chart-bar" /> Predicción</div>
                     <div class="pi-prediction">{{ $p['prediction'] }}</div>
                 </div>
                 @endif
 
                 @if(!empty($p['action']))
                 <div class="pi-section">
-                    <div class="pi-section-label">🎯 Qué hacer</div>
+                    <div class="pi-section-label"><x-icono nombre="check-circle" /> Qué hacer</div>
                     <div class="pi-action">{{ $p['action'] }}</div>
                 </div>
                 @endif
 
                 @if(!empty($p['impact']))
-                <div class="pi-impact">💰 {{ $p['impact'] }}</div>
+                <div class="pi-impact"><x-icono nombre="banknotes" /> {{ $p['impact'] }}</div>
                 @endif
             </div>
             @endforeach

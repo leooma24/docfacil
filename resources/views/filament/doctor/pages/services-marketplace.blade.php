@@ -50,7 +50,7 @@
                      style="{{ $service->is_featured ? 'border-color:#0d9488; box-shadow: 0 4px 12px rgba(13,148,136,0.15);' : 'border-color:#e5e7eb;' }}">
                     <div class="p-6">
                         @if ($service->is_featured)
-                        <div style="display:inline-block; background:linear-gradient(135deg,#0d9488,#06b6d4); color:#fff; font-size:12px; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:10px; margin-bottom:10px;">⭐ DESTACADO</div>
+                        <div style="display:inline-block; background:linear-gradient(135deg,#0d9488,#06b6d4); color:#fff; font-size:12px; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:10px; margin-bottom:10px;">★ DESTACADO</div>
                         @endif
 
                         <div class="flex items-start justify-between gap-4 mb-3">

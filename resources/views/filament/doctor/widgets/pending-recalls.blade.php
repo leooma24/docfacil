@@ -1,14 +1,14 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            🦷 Recalls pendientes ({{ $total_due }})
+            <x-icono nombre="arrow-path" /> Recalls pendientes ({{ $total_due }})
         </x-slot>
         <x-slot name="description">
             Pacientes que hace meses no regresan y ya les toca. Click para abrir WhatsApp.
         </x-slot>
 
         @if($recalls->isEmpty())
-            <p class="text-sm text-gray-500 dark:text-gray-400 py-3">Todos al día. 🎉</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 py-3">Todos al día.</p>
         @else
         <div class="space-y-2">
             @foreach ($recalls as $r)

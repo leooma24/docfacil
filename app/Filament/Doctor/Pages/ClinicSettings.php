@@ -224,7 +224,7 @@ class ClinicSettings extends Page implements HasForms
                             ->helperText(new \Illuminate\Support\HtmlString(
                                 'Abre tu <a href="https://business.google.com" target="_blank" class="text-teal-600 underline">perfil de Google Business</a>, '.
                                 'haz clic en "Reseñas" > "Recibir más reseñas" y copia el link corto. '.
-                                'Se usa en el add-on de <strong>Reseñas Google automatizadas</strong>.'
+                                'Se usa en el add-on de <strong>Reseñas en Google</strong>: va en el mensaje que se le manda al paciente.'
                             )),
                     ]),
             ])

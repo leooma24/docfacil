@@ -20,7 +20,7 @@
                 <div style="display:flex;gap:16px;align-items:flex-start;">
                     <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #fbbf24;flex-shrink:0;">
                     <div style="flex:1;min-width:0;">
-                        <div style="font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b45309;">⭐ Programa Fundador</div>
+                        <div style="font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b45309;"><x-icono nombre="star" /> Programa Fundador</div>
                         <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-top:2px;line-height:1.25;">Ya llevas un mes con DocFácil. ¿Me regalas una frase?</h3>
                         <p style="font-size:.9rem;color:#475569;margin-top:6px;line-height:1.5;">
                             Cómo era tu consultorio antes y qué cambió. Con una o dos oraciones basta, en tus palabras, como se lo contarías a un colega. — Omar

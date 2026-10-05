@@ -100,7 +100,7 @@ class PatientResource extends Resource
                         Forms\Components\DatePicker::make('birth_date')
                             ->label('Fecha de nacimiento')
                             ->placeholder('dd/mm/aaaa')
-                            ->helperText('Con esto le felicitas el cumpleaños automáticamente.')
+                            ->helperText('Con esto aparece en "Cumpleaños de hoy" del escritorio, para felicitarlo con un clic.')
                             ->native(false)
                             ->displayFormat('d/m/Y'),
                         Forms\Components\Select::make('gender')

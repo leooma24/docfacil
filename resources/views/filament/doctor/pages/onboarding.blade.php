@@ -248,7 +248,7 @@
                 @if(!$logo)
                 <li>→ Agrega tu logo desde <strong>Mi cuenta › Configuración</strong></li>
                 @endif
-                <li>→ Conecta tu link de Google para activar reseñas automáticas</li>
+                <li>→ Conecta tu link de Google para pedir reseñas con un clic</li>
                 <li>→ Comparte tu QR de check-in en recepción</li>
             </ul>
         </div>
