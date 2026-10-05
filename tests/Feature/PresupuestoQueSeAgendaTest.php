@@ -81,7 +81,8 @@ class PresupuestoQueSeAgendaTest extends TestCase
             'starts_at' => now()->addMinutes(10), 'ends_at' => now()->addMinutes(50), 'status' => 'confirmed']);
 
         Livewire::withQueryParams(['appointment' => $cita->id])->test(Consultation::class)
-            ->assertSet('procedures', [['service_id' => (string) $this->resina->id, 'tooth_number' => '46', 'quantity' => 1]])
+            ->assertSet('procedures', [['service_id' => (string) $this->resina->id, 'tooth_number' => '46', 'quantity' => 1,
+                'precio' => 600.0, 'precio_de' => (string) $this->resina->id]])
             ->call('saveAndComplete');
 
         $this->assertNotNull($this->item->fresh()->completed_at);

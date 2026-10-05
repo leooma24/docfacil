@@ -95,6 +95,16 @@ class Consultation extends Page implements HasForms
     public string $payment_method = 'cash';
 
     /**
+     * Si el doctor llegó a ver la pantalla del cobro. Sin eso el cobro no se
+     * da por pagado: "Guardar y terminar" desde el diagnóstico lo deja por
+     * cobrar, con el monto que traía, en vez de inventar un pago.
+     */
+    public bool $vioElCobro = false;
+
+    /** El tratamiento ya se paga en mensualidades: la consulta no lo cobra aparte. */
+    public bool $cubiertoPorPlan = false;
+
+    /**
      * Los procedimientos realizados: servicio, diente y cantidad.
      *
      * Mientras la consulta está en curso viven aquí, dentro del borrador que
@@ -149,6 +159,20 @@ class Consultation extends Page implements HasForms
             return;
         }
 
+        // Una consulta cerrada no se vuelve a abrir: cerrarla otra vez dejaba
+        // un segundo expediente y un segundo cobro. La cita terminada o
+        // cancelada lleva al perfil, donde está todo lo que pasó.
+        if (in_array($this->appointment->status, ['completed', 'cancelled', 'no_show'], true)) {
+            \Filament\Notifications\Notification::make()
+                ->title($this->appointment->status === 'completed' ? 'Esa consulta ya se cerró' : 'Esa cita no se atendió')
+                ->body('Aquí está el perfil del paciente, con su historial y sus cobros.')
+                ->info()
+                ->send();
+            $this->redirect(route('filament.doctor.pages.perfil-paciente', ['patient' => $this->appointment->patient_id]));
+
+            return;
+        }
+
         // Mark as in progress
         if (in_array($this->appointment->status, ['scheduled', 'confirmed'])) {
             $this->appointment->update(['status' => 'in_progress']);
@@ -181,6 +205,8 @@ class Consultation extends Page implements HasForms
             $this->next_appointment_date = $saved['next_appointment_date'] ?? null;
             $this->next_appointment_service_id = $saved['next_appointment_service_id'] ?? null;
             $this->next_appointment_item_id = $saved['next_appointment_item_id'] ?? null;
+            $this->vioElCobro = (bool) ($saved['vioElCobro'] ?? false);
+            $this->cubiertoPorPlan = (bool) ($saved['cubiertoPorPlan'] ?? false);
         } else {
             // Pre-fill payment amount from service
             if ($this->appointment->service) {
@@ -206,12 +232,23 @@ class Consultation extends Page implements HasForms
     private function noCobrarDobleLaMensualidad(): void
     {
         $servicio = $this->appointment?->service_id;
+        // El plan de pagos que se armó desde el presupuesto no lleva servicio:
+        // lo liga el presupuesto. Ese tratamiento ya se paga en mensualidades.
+        $presupuesto = $this->appointment?->treatmentPlanItem?->treatment_plan_id;
 
-        if ($servicio && \App\Models\PaymentPlan::where('clinic_id', $this->appointment->clinic_id)
+        if (! $servicio && ! $presupuesto) {
+            return;
+        }
+
+        $this->cubiertoPorPlan = \App\Models\PaymentPlan::where('clinic_id', $this->appointment->clinic_id)
             ->where('patient_id', $this->appointment->patient_id)
-            ->where('service_id', $servicio)
             ->where('status', 'active')
-            ->exists()) {
+            ->where(fn ($q) => $q
+                ->when($servicio, fn ($q) => $q->orWhere('service_id', $servicio))
+                ->when($presupuesto, fn ($q) => $q->orWhere('treatment_plan_id', $presupuesto)))
+            ->exists();
+
+        if ($this->cubiertoPorPlan) {
             $this->payment_amount = '0';
         }
     }
@@ -227,12 +264,16 @@ class Consultation extends Page implements HasForms
         $servicio = $this->appointment?->service;
 
         // La cita viene de un tratamiento del presupuesto: ese diente, ese servicio.
+        // Y a su precio: lo que se le prometió al paciente en el presupuesto,
+        // con el descuento repartido, no el del catálogo.
         $item = $this->appointment?->treatmentPlanItem;
         if ($item && $item->service_id) {
             $this->procedures = [[
                 'service_id' => (string) $item->service_id,
                 'tooth_number' => (string) ($item->tooth_number ?? ''),
                 'quantity' => max(1, (int) $item->quantity),
+                'precio' => self::precioDelPresupuesto($item),
+                'precio_de' => (string) $item->service_id,
             ]];
             $this->updatedProcedures();
 
@@ -433,9 +474,18 @@ class Consultation extends Page implements HasForms
             ->toArray();
     }
 
+    /** Si el doctor movió el cobro, lo vio: cuenta igual que llegar a su pantalla. */
+    public function updated(string $propiedad): void
+    {
+        if (in_array($propiedad, ['payment_amount', 'payment_method', 'payment_service_id'], true)) {
+            $this->vioElCobro = true;
+        }
+    }
+
     public function nextStep(): void
     {
         $this->currentStep = min($this->currentStep + 1, 5);
+        $this->vioElCobro = $this->vioElCobro || $this->currentStep >= 4;
         $this->saveConsultationState();
     }
 
@@ -448,6 +498,7 @@ class Consultation extends Page implements HasForms
     public function goToStep(int $step): void
     {
         $this->currentStep = $step;
+        $this->vioElCobro = $this->vioElCobro || $this->currentStep >= 4;
         $this->saveConsultationState();
     }
 
@@ -590,6 +641,8 @@ class Consultation extends Page implements HasForms
                 'next_appointment_date' => $this->next_appointment_date,
                 'next_appointment_service_id' => $this->next_appointment_service_id,
                 'next_appointment_item_id' => $this->next_appointment_item_id,
+                'vioElCobro' => $this->vioElCobro,
+                'cubiertoPorPlan' => $this->cubiertoPorPlan,
             ],
         ]);
     }
@@ -611,6 +664,11 @@ class Consultation extends Page implements HasForms
 
     private function cerrarLaConsulta(): void
     {
+        // Ya se cerró (doble clic, otra pestaña): no se vuelve a cerrar.
+        if ($this->appointment->fresh()?->status === 'completed') {
+            return;
+        }
+
         $clinicId = auth()->user()->clinic_id;
 
         // Solo guardamos los signos vitales que están habilitados Y tienen valor.
@@ -678,8 +736,9 @@ class Consultation extends Page implements HasForms
                 'service_id' => $this->payment_service_id ?: null,
                 'amount' => $this->payment_amount,
                 'payment_method' => $this->payment_method,
-                'status' => 'paid',
+                'status' => $this->vioElCobro ? 'paid' : 'pending',
                 'payment_date' => now()->toDateString(),
+                'due_date' => now()->toDateString(),
             ]);
         }
 
@@ -701,7 +760,7 @@ class Consultation extends Page implements HasForms
                 'tooth_number' => ($capturado['tooth_number'] ?? '') !== '' ? $capturado['tooth_number'] : null,
                 'quantity' => max(1, (int) ($capturado['quantity'] ?? 1)),
                 'unit' => $servicio->unit,
-                'unit_price' => $servicio->price,
+                'unit_price' => $this->precioDeLinea($capturado),
             ]);
         }
 
@@ -1183,10 +1242,8 @@ class Consultation extends Page implements HasForms
         $total = 0.0;
 
         foreach ($this->procedures as $capturado) {
-            $servicio = $this->serviceById($capturado['service_id'] ?? null);
-
-            if ($servicio) {
-                $total += (float) $servicio->price * max(1, (int) ($capturado['quantity'] ?? 1));
+            if ($this->serviceById($capturado['service_id'] ?? null)) {
+                $total += $this->precioDeLinea($capturado) * max(1, (int) ($capturado['quantity'] ?? 1));
             }
         }
 
@@ -1210,6 +1267,35 @@ class Consultation extends Page implements HasForms
         return (float) ($this->serviceById($serviceId)?->price ?? 0);
     }
 
+    /**
+     * El precio de un renglón: el del presupuesto si de ahí viene y el doctor
+     * no le cambió el servicio; si no, el del catálogo.
+     */
+    public function precioDeLinea(array $linea): float
+    {
+        $servicio = (string) ($linea['service_id'] ?? '');
+
+        if (isset($linea['precio']) && $servicio !== '' && ($linea['precio_de'] ?? null) === $servicio) {
+            return (float) $linea['precio'];
+        }
+
+        return $this->priceOf($servicio ?: null);
+    }
+
+    /** Lo que vale el renglón del presupuesto, con el descuento del total repartido. */
+    private static function precioDelPresupuesto(\App\Models\TreatmentPlanItem $item): float
+    {
+        $presupuesto = $item->treatmentPlan;
+        $precio = (float) $item->unit_price;
+        $subtotal = (float) ($presupuesto?->subtotal ?? 0);
+
+        if ($subtotal > 0 && (float) $presupuesto->total < $subtotal) {
+            $precio *= (float) $presupuesto->total / $subtotal;
+        }
+
+        return round($precio, 2);
+    }
+
     /** @var array<string, Service|null> */
     private array $servicesMemo = [];
 
@@ -1230,6 +1316,10 @@ class Consultation extends Page implements HasForms
     /** El cobro sigue al total de los procedimientos, pero se puede ajustar. */
     private function recalculateCharge(): void
     {
+        if ($this->cubiertoPorPlan) {
+            return;
+        }
+
         $total = $this->proceduresTotal;
 
         if ($total > 0) {

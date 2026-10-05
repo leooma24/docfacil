@@ -256,9 +256,22 @@ class CalendarWidget extends FullCalendarWidget
         JS;
     }
 
+    /**
+     * La cita por atender abre la consulta. La que ya se atendió o no se
+     * atendió lleva al perfil del paciente: abrir su consulta otra vez y
+     * cerrarla dejaba un segundo cobro.
+     */
     public function onEventClick(array $event): void
     {
-        $this->redirect(route('filament.doctor.pages.consulta', ['appointment' => $event['id']]));
+        $cita = \App\Models\Appointment::where('clinic_id', auth()->user()->clinic_id)->find($event['id'] ?? null);
+
+        if (! $cita) {
+            return;
+        }
+
+        $this->redirect(in_array($cita->status, ['completed', 'cancelled', 'no_show'], true)
+            ? route('filament.doctor.pages.perfil-paciente', ['patient' => $cita->patient_id])
+            : route('filament.doctor.pages.consulta', ['appointment' => $cita->id]));
     }
 
     public function onEventDrop(array $event, array $oldEvent, array $relatedEvents, array $delta, ?array $oldResource, ?array $newResource): bool

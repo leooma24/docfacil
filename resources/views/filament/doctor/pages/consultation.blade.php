@@ -936,13 +936,13 @@
                     <button type="button" wire:click="removeProcedure({{ $i }})" style="font-size:0.75rem;color:#dc2626;font-weight:600;">Quitar</button>
                     <div style="text-align:right;">
                         <span style="font-size:0.75rem;color:#6b7280;">
-                            ${{ number_format($this->priceOf($p['service_id'] ?? null), 0) }}
+                            ${{ number_format($this->precioDeLinea($p), 0) }}
                             @if($this->unitOf($p['service_id'] ?? null) !== 'visit')
                                 {{ mb_strtolower(\App\Support\WorkUnit::label($this->unitOf($p['service_id'] ?? null))) }}
                             @endif
                         </span>
                         <span style="font-weight:800;font-size:0.95rem;color:#0d9488;margin-left:0.4rem;">
-                            ${{ number_format($this->priceOf($p['service_id'] ?? null) * max(1, (int) ($p['quantity'] ?? 1)), 2) }}
+                            ${{ number_format($this->precioDeLinea($p) * max(1, (int) ($p['quantity'] ?? 1)), 2) }}
                         </span>
                     </div>
                 </div>
@@ -1150,7 +1150,7 @@
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-xs md:text-xs">Cobro</div>
-                    <div class="font-medium mt-0.5 md:mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) : 'Sin cobro' }}</div>
+                    <div class="font-medium mt-0.5 md:mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) . ($vioElCobro ? '' : ' por cobrar') : 'Sin cobro' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-xs md:text-xs">Siguiente cita</div>

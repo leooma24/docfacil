@@ -22,6 +22,9 @@ class PendingPayments extends BaseWidget
                 Payment::query()
                     ->where('clinic_id', auth()->user()->clinic_id)
                     ->whereIn('status', ['pending', 'partial'])
+                    // Las mensualidades que todavía no vencen no se cobran
+                    // aquí: "Cobrar" las daba por pagadas completas.
+                    ->yaToca()
                     ->with(['patient', 'service'])
                     ->orderBy('payment_date', 'desc')
                     ->limit(10)
