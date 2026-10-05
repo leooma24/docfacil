@@ -24,6 +24,39 @@ class EditTreatmentPlan extends EditRecord
 
                     return TreatmentPlanResource::enviarPorWhatsapp($this->record->fresh());
                 }),
+            // Uno tras otro, en el orden del presupuesto: escoger la hora y listo.
+            Actions\Action::make('agendarSiguiente')
+                ->label(fn () => 'Agendar: ' . ($this->record->siguientePorAgendar()?->description ?? ''))
+                ->icon('heroicon-o-calendar-days')
+                ->color('success')
+                ->visible(fn () => $this->record->status === 'accepted' && $this->record->siguientePorAgendar())
+                ->modalHeading(fn () => 'Agendar: ' . ($this->record->siguientePorAgendar()?->description ?? ''))
+                ->modalSubmitActionLabel('Agendar')
+                ->form([
+                    \Filament\Forms\Components\DateTimePicker::make('starts_at')
+                        ->label('Fecha y hora')
+                        ->native(false)->displayFormat('d/m/Y H:i')->minutesStep(15)
+                        ->default(fn () => now()->addWeekday()->setTime(10, 0))
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $item = $this->record->siguientePorAgendar();
+                    $cita = $item?->agendar(\Carbon\Carbon::parse($data['starts_at']));
+
+                    if (! $item || is_string($cita)) {
+                        \Filament\Notifications\Notification::make()->title('No se agendó')->body($cita ?: 'Ya no hay tratamientos por agendar.')->warning()->send();
+
+                        return;
+                    }
+
+                    $sigue = $this->record->siguientePorAgendar();
+                    \Filament\Notifications\Notification::make()
+                        ->title('Agendado')
+                        ->body($item->description . ' · ' . $cita->starts_at->locale('es')->isoFormat('dddd D [de] MMMM, HH:mm')
+                            . ($sigue ? '. Sigue: ' . $sigue->description . '.' : '. Ya está todo agendado.'))
+                        ->success()->send();
+                    $this->fillForm();
+                }),
             // El presupuesto aceptado de un tratamiento largo se paga en partes.
             Actions\Action::make('plan_de_pagos')
                 ->label('Hacer plan de pagos')

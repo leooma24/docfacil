@@ -63,8 +63,35 @@ class TreatmentPlanController extends Controller
         ]);
 
         $plan->load(['patient', 'doctor.user', 'clinic']);
+        $this->avisarQueAcepto($plan);
 
         return response()->view('treatment-plan.accepted', ['plan' => $plan]);
+    }
+
+    /**
+     * El paciente aceptó: el consultorio se entera ahí mismo, con la liga que
+     * abre la ventana para agendar el primer tratamiento. Antes solo quedaba
+     * en el log y el doctor se enteraba si revisaba las alertas.
+     */
+    protected function avisarQueAcepto(TreatmentPlan $plan): void
+    {
+        $nombre = trim(($plan->patient?->first_name ?? '') . ' ' . ($plan->patient?->last_name ?? '')) ?: 'Un paciente';
+        $tratamientos = $plan->items()->count();
+
+        foreach (\App\Models\User::where('clinic_id', $plan->clinic_id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
+            \Filament\Notifications\Notification::make()
+                ->title("{$nombre} aceptó su presupuesto")
+                ->body('$' . number_format((float) $plan->total, 0) . ' · ' . $tratamientos . ($tratamientos === 1 ? ' tratamiento' : ' tratamientos') . '. Falta agendarlo.')
+                ->icon('heroicon-o-check-badge')
+                ->iconColor('success')
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('agendar')
+                        ->label('Agendar')
+                        ->url(\App\Filament\Doctor\Resources\TreatmentPlanResource::urlParaAgendar($plan))
+                        ->markAsRead(),
+                ])
+                ->sendToDatabase($usuario);
+        }
     }
 
     public function reject(Request $request, string $token)

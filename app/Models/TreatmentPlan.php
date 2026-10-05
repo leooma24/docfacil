@@ -38,6 +38,13 @@ class TreatmentPlan extends Model
     public function doctor(): BelongsTo { return $this->belongsTo(Doctor::class); }
     public function items(): HasMany { return $this->hasMany(TreatmentPlanItem::class)->orderBy('sort_order'); }
 
+    /** El siguiente tratamiento, en orden, que no está hecho ni tiene cita. */
+    public function siguientePorAgendar(): ?TreatmentPlanItem
+    {
+        return $this->items()->whereNull('completed_at')->get()
+            ->first(fn (TreatmentPlanItem $item) => ! $item->citaPendiente());
+    }
+
     public function generatePublicToken(): string
     {
         $this->public_token = bin2hex(random_bytes(32));

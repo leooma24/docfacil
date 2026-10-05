@@ -181,25 +181,13 @@ class TreatmentPlanResource extends Resource
                                         return;
                                     }
                                     $inicio = \Carbon\Carbon::parse($data['starts_at']);
-                                    $fin = $inicio->copy()->addMinutes((int) ($item->service?->duration_minutes ?: 30));
-                                    $doctor = $plan->doctor_id ?? auth()->user()->doctor?->id;
+                                    $cita = $item->agendar($inicio, $plan->doctor_id ?? auth()->user()->doctor?->id);
 
-                                    if ($choque = \App\Models\Appointment::mensajeDeTraslape($plan->clinic_id, $doctor, $inicio, $fin)) {
-                                        Notification::make()->title('No se agendó')->body($choque)->warning()->send();
+                                    if (is_string($cita)) {
+                                        Notification::make()->title('No se agendó')->body($cita)->warning()->send();
 
                                         return;
                                     }
-
-                                    \App\Models\Appointment::create([
-                                        'clinic_id' => $plan->clinic_id,
-                                        'doctor_id' => $doctor,
-                                        'patient_id' => $plan->patient_id,
-                                        'service_id' => $item->service_id,
-                                        'treatment_plan_item_id' => $item->id,
-                                        'starts_at' => $inicio,
-                                        'ends_at' => $fin,
-                                        'status' => 'scheduled',
-                                    ]);
 
                                     Notification::make()
                                         ->title('Agendado')
@@ -297,6 +285,13 @@ class TreatmentPlanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                // El aceptado que tiene tratamientos sin cita: directo a escoger la hora.
+                Tables\Actions\Action::make('agendar')
+                    ->label('Agendar')
+                    ->icon('heroicon-o-calendar-days')
+                    ->color('success')
+                    ->visible(fn (TreatmentPlan $record) => $record->status === 'accepted' && $record->siguientePorAgendar())
+                    ->url(fn (TreatmentPlan $record) => self::urlParaAgendar($record)),
                 Tables\Actions\Action::make('pdf')
                     ->label('PDF')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -320,6 +315,12 @@ class TreatmentPlanResource extends Resource
                     ->action(fn (TreatmentPlan $record) => self::enviarPorWhatsapp($record)),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    /** El presupuesto con la ventana de "Agendar" ya abierta en el siguiente tratamiento. */
+    public static function urlParaAgendar(TreatmentPlan $plan): string
+    {
+        return self::getUrl('edit', ['record' => $plan->id, 'action' => 'agendarSiguiente'], panel: 'doctor');
     }
 
     public static function getPages(): array

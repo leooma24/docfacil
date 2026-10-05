@@ -70,7 +70,7 @@ class LoQueSigue
                 'tipo' => 'por_agendar',
                 'titulo' => $n . ($n === 1 ? ' tratamiento aceptado' : ' tratamientos aceptados') . ' por agendar',
                 'detalle' => $porAgendar->take(3)->pluck('description')->implode(' · ') . ($n > 3 ? ' · …' : ''),
-                'url' => TreatmentPlanResource::getUrl('edit', ['record' => $porAgendar->first()->treatment_plan_id], panel: 'doctor'),
+                'url' => TreatmentPlanResource::urlParaAgendar($porAgendar->first()->treatmentPlan),
                 'accion' => 'Agendar',
                 'tono' => 'ambar',
             ];

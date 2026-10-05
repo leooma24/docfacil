@@ -40,6 +40,34 @@ class TreatmentPlanItem extends Model
     }
 
     /** La cita que viene para este tratamiento, si ya se agendó. */
+    /**
+     * Le pone cita a este tratamiento, ligada a él: la consulta trae su diente
+     * y al cerrarla queda hecho. Si choca con otra cita, regresa el aviso y no
+     * agenda nada.
+     */
+    public function agendar(\DateTimeInterface $inicio, ?int $doctorId = null): Appointment|string
+    {
+        $plan = $this->treatmentPlan;
+        $inicio = \Carbon\Carbon::instance($inicio);
+        $fin = $inicio->copy()->addMinutes((int) ($this->service?->duration_minutes ?: 30));
+        $doctor = $doctorId ?? $plan->doctor_id ?? auth()->user()?->doctor?->id;
+
+        if ($choque = Appointment::mensajeDeTraslape($plan->clinic_id, $doctor, $inicio, $fin)) {
+            return $choque;
+        }
+
+        return Appointment::create([
+            'clinic_id' => $plan->clinic_id,
+            'doctor_id' => $doctor,
+            'patient_id' => $plan->patient_id,
+            'service_id' => $this->service_id,
+            'treatment_plan_item_id' => $this->id,
+            'starts_at' => $inicio,
+            'ends_at' => $fin,
+            'status' => 'scheduled',
+        ]);
+    }
+
     public function citaPendiente(): ?Appointment
     {
         return $this->appointments()
