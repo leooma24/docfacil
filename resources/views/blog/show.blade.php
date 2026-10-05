@@ -172,7 +172,7 @@
 
     <footer class="footer">
         <div class="container-wide">
-            &copy; {{ date('Y') }} DocFácil — <a href="/">Software para consultorios médicos y dentales</a>
+            &copy; {{ date('Y') }} DocFácil — <a href="/">Software para consultorios dentales</a>
         </div>
     </footer>
 </body>

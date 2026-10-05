@@ -24,7 +24,8 @@ class ToolsController extends Controller
     /**
      * Captura opcional del lead despues de ver el analisis ROI.
      * Crea un Prospect con source='calculator_tool' y notes con los
-     * numeros del doctor para que Omar pueda mandar analisis personalizado.
+     * numeros del doctor para que ventas le mande un analisis (se asigna a
+     * ventas@docfacil.com; por eso la pagina dice "Le escribimos", no "Omar").
      */
     public function calculadoraRoiLead(Request $request)
     {
@@ -44,7 +45,7 @@ class ToolsController extends Controller
 
         $phoneDigits = preg_replace('/\D/', '', $data['phone']);
         if (strlen($phoneDigits) < 10) {
-            return response()->json(['error' => 'Telefono invalido'], 422);
+            return response()->json(['error' => 'Teléfono inválido'], 422);
         }
 
         $calc = $data['calc'];
@@ -80,7 +81,7 @@ class ToolsController extends Controller
                 'error' => $e->getMessage(),
                 'phone' => $phoneDigits,
             ]);
-            return response()->json(['error' => 'No pudimos guardar tus datos'], 500);
+            return response()->json(['error' => 'No pudimos guardar sus datos'], 500);
         }
 
         return response()->json(['ok' => true]);

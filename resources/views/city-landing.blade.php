@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Software para Consultorios Dentales en {{ $city }} — DocFácil</title>
-    <meta name="description" content="Software para dentistas en {{ $city }}, {{ $state }}. Recordatorios WhatsApp, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean) y recetas PDF con cédula. 15 días gratis, sin tarjeta. Desde $499/mes.">
+    <meta name="description" content="Software para dentistas en {{ $city }}, {{ $state }}. Recordatorios por WhatsApp a 1 clic, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean) y recetas PDF con cédula. 15 días gratis, sin tarjeta. Desde $499/mes.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
@@ -17,7 +17,7 @@
 
     {{-- OpenGraph --}}
     <meta property="og:title" content="Software para Consultorios Dentales en {{ $city }} — DocFácil">
-    <meta property="og:description" content="DocFácil ayuda a dentistas en {{ $city }} a recuperar pacientes que no llegan, digitalizar el expediente y mandar recetas profesionales por WhatsApp. 15 días gratis.">
+    <meta property="og:description" content="Agenda, recordatorios por WhatsApp a 1 clic, odontograma, expediente, recetas PDF con cédula, presupuestos y cobros para dentistas en {{ $city }}. 15 días gratis.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
     {{-- Twitter --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Software para Consultorios Dentales en {{ $city }} — DocFácil">
-    <meta name="twitter:description" content="Recordatorios WhatsApp, odontograma digital y recetas PDF para dentistas en {{ $city }}. Prueba 15 días gratis.">
+    <meta name="twitter:description" content="Recordatorios por WhatsApp a 1 clic, odontograma digital y recetas PDF para dentistas en {{ $city }}. Pruébelo 15 días gratis.">
     <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
 
     <link rel="canonical" href="{{ url("/software-dental/{$slug}") }}">
@@ -50,7 +50,7 @@
         "@@context": "https://schema.org",
         "@@type": "SoftwareApplication",
         "name": "DocFácil — Software para dentistas en {{ $city }}",
-        "description": "Software dental para consultorios en {{ $city }}, {{ $state }}. Agenda con recordatorios WhatsApp, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean a las 24 horas), recetas PDF con cédula y cobros por WhatsApp.",
+        "description": "Software dental para consultorios en {{ $city }}, {{ $state }}. Agenda con recordatorios por WhatsApp a 1 clic, odontograma digital FDI, expediente pensado para la NOM-004 (notas que se bloquean a las 24 horas), recetas PDF con cédula, presupuestos y cobros.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "Web",
         "url": "{{ url("/software-dental/{$slug}") }}",
@@ -75,11 +75,11 @@
         "@@type": "FAQPage",
         "mainEntity": [
             { "@@type": "Question", "name": "¿Cuánto cuesta DocFácil para un consultorio en {{ $city }}?",
-              "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico desde $499/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pago anual = 2 meses gratis. Garantía 30 días." } },
+              "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 15 pacientes, 10 citas al mes). Plan Básico $499 al mes con odontograma, recordatorios por WhatsApp a 1 clic, recetas PDF, presupuestos y cobros. Si paga el año, le sale en 10 meses. Garantía de 30 días sobre su primer pago." } },
             { "@@type": "Question", "name": "¿Funciona para consultorios pequeños en {{ $city }}?",
-              "acceptedAnswer": { "@@type": "Answer", "text": "Sí. La mayoría de nuestros usuarios son consultorios de 1 a 3 sillones. El plan Free está hecho para consultorios pequeños que apenas empiezan." } },
+              "acceptedAnswer": { "@@type": "Answer", "text": "Sí. Está hecho para consultorios de 1 a 3 sillones. El plan Free sirve para consultorios pequeños que apenas empiezan." } },
             { "@@type": "Question", "name": "¿DocFácil me ayuda con la NOM-004 y con la protección de datos?",
-              "acceptedAnswer": { "@@type": "Answer", "text": "Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos." } },
+              "acceptedAnswer": { "@@type": "Answer", "text": "Está pensado para ayudarle con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva su cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos." } },
             { "@@type": "Question", "name": "¿Necesito instalar algo?",
               "acceptedAnswer": { "@@type": "Answer", "text": "No. DocFácil funciona en cualquier navegador y se puede instalar como app (PWA) en celular. No requiere instalación local." } }
         ]
@@ -101,7 +101,7 @@
                 <a href="{{ url('/doctor/login') }}" class="hidden sm:inline text-sm text-gray-500 hover:text-teal-600 font-medium">Iniciar sesión</a>
                 <a href="{{ url('/doctor/register?city=' . urlencode($city) . '&state=' . urlencode($state)) }}" data-track="cta_clicked" data-track-location="city_navbar" data-track-city="{{ $slug }}"
                    class="px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition shadow hover:shadow-lg hover:shadow-teal-200">
-                    Prueba gratis
+                    Probar gratis
                 </a>
             </div>
         </div>
@@ -125,9 +125,9 @@
             </h1>
 
             <p class="mt-6 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-up" style="animation-delay:0.2s;">
-                Recordatorios WhatsApp <strong class="text-gray-900">a 1 clic</strong>, odontograma digital FDI,
-                expediente pensado para la NOM-004 (notas que se bloquean) y recetas PDF con cédula.
-                <strong class="text-gray-900">Hecho en México</strong> — pensado para dentistas que quieren recuperar pacientes que no llegan.
+                Recordatorios por WhatsApp <strong class="text-gray-900">a 1 clic</strong>, odontograma digital FDI,
+                expediente pensado para la NOM-004 (notas que se bloquean), recetas PDF con cédula, presupuestos y cobros.
+                <strong class="text-gray-900">Hecho en México</strong> para consultorios dentales mexicanos.
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-up" style="animation-delay:0.3s;">
@@ -154,17 +154,10 @@
                 </span>
                 <span class="flex items-center gap-1">
                     <svg class="w-4 h-4 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                    Cancelas en 1 clic
+                    Cancele cuando quiera, sin penalización
                 </span>
             </div>
 
-            @if($stats['has_data'] && $stats['rounded_consultorios'] >= 10)
-            {{-- Local social proof: data REAL de prospectos en esa ciudad --}}
-            <div class="mt-10 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full text-xs sm:text-sm font-semibold text-amber-800 animate-fade-up" style="animation-delay:0.5s;">
-                <span class="text-base">📍</span>
-                Más de {{ $stats['rounded_consultorios'] }}+ consultorios dentales identificados en {{ $city }}
-            </div>
-            @endif
         </div>
     </section>
 
@@ -175,15 +168,9 @@
                 Hecho para dentistas en {{ $city }}
             </h2>
             <p class="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-                Los consultorios dentales en {{ $city }} pierden en promedio
-                <strong class="text-gray-900">15-25 citas al mes</strong> porque pacientes no llegan sin avisar
-                — eso son <strong class="text-gray-900">$6-15,000 al mes</strong> que se van por la coladera.
-                DocFácil te ayuda a recuperarlo con recordatorios por WhatsApp a 1 clic.
-                @if(!empty($stats['top_specialties']))
-                Ya investigamos a más de {{ $stats['rounded_consultorios'] >= 10 ? $stats['rounded_consultorios'].'+' : count($stats['top_specialties']) }} consultorios en {{ $city }} —
-                las especialidades más comunes son
-                {{ collect($stats['top_specialties'])->keys()->take(2)->map(fn($s) => mb_strtolower($s))->join(' y ') }}.
-                @endif
+                Cada cita que no llega es un hueco en su agenda. Con DocFácil, usted
+                abre el recordatorio ya escrito en <strong class="text-gray-900">su propio WhatsApp</strong> y solo le da enviar.
+                El paciente confirma su cita con un link, y en el plan Pro, si alguien cancela, la lista de espera le ayuda a llenar ese hueco.
             </p>
         </div>
     </section>
@@ -192,17 +179,17 @@
     <section class="py-14 sm:py-20 bg-white">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">Lo que tu consultorio en {{ $city }} necesita</h2>
-                <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Las funciones que de verdad usas todos los días — sin features inflados ni complejidad.</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">Lo que su consultorio en {{ $city }} necesita</h2>
+                <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Lo que se usa todos los días en un consultorio dental, sin complicaciones.</p>
             </div>
             @php
                 $features = [
-                    ['icon' => '📱', 'title' => 'Recordatorios WhatsApp 1-clic', 'desc' => 'Abres el mensaje armado y lo mandas desde tu propio WhatsApp. Sin API cara de Meta.'],
-                    ['icon' => '🦷', 'title' => 'Odontograma digital FDI', 'desc' => '13 condiciones (caries, corona, implante, sellante…). Editor visual interactivo.'],
-                    ['icon' => '📋', 'title' => 'Expediente pensado para la NOM-004', 'desc' => 'Notas SOAP, alergias y fotos. Diagnósticos con CIE-10 y notas que se bloquean a las 24 horas.'],
-                    ['icon' => '💊', 'title' => 'Recetas PDF con cédula', 'desc' => 'Tu nombre, especialidad, cédula y espacio para tu firma. Llegan al paciente por WhatsApp en 10 segundos.'],
-                    ['icon' => '💰', 'title' => 'Cobros por WhatsApp', 'desc' => 'Registras cobros en segundos y mandas el monto al paciente con un clic.'],
-                    ['icon' => '📊', 'title' => 'Reportes claros', 'desc' => 'Ingresos del mes, servicios más rentables, pacientes activos. Sin hojas de Excel.'],
+                    ['icon' => '📱', 'title' => 'Recordatorios por WhatsApp a 1 clic', 'desc' => 'DocFácil abre su WhatsApp con el mensaje ya escrito y usted le da enviar. Sin pagar mensajes a Meta.'],
+                    ['icon' => '🦷', 'title' => 'Odontograma digital FDI', 'desc' => '13 condiciones (caries, corona, implante, sellante…). Lo que falta tratar se vuelve presupuesto.'],
+                    ['icon' => '📋', 'title' => 'Expediente pensado para la NOM-004', 'desc' => 'Notas de cada consulta, alergias y antecedentes. Diagnósticos con CIE-10 y notas que se bloquean a las 24 horas.'],
+                    ['icon' => '💊', 'title' => 'Recetas PDF con cédula', 'desc' => 'Su nombre, especialidad, cédula y espacio para su firma. El paciente las ve en su portal.'],
+                    ['icon' => '💰', 'title' => 'Presupuestos y cobros', 'desc' => 'El paciente acepta el presupuesto en línea. Usted registra cobros y abonos, y manda el saldo por WhatsApp a 1 clic.'],
+                    ['icon' => '📊', 'title' => 'Corte del mes', 'desc' => 'Ingresos, gastos y corte del mes en una pantalla. Sin hojas de Excel.'],
                 ];
             @endphp
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -227,13 +214,13 @@
                 <div class="rounded-2xl p-6 bg-white border-2 border-gray-200">
                     <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Plan Free</div>
                     <div class="mt-2 text-3xl font-extrabold text-gray-900">$0<span class="text-base font-normal text-gray-500">/mes</span></div>
-                    <div class="mt-2 text-sm text-gray-600">1 doctor · 15 pacientes · agenda básica</div>
+                    <div class="mt-2 text-sm text-gray-600">1 doctor · 15 pacientes · 10 citas al mes</div>
                 </div>
                 <div class="rounded-2xl p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-500 relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-teal-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">El más elegido</div>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-teal-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">Para empezar</div>
                     <div class="text-xs font-bold text-teal-700 uppercase tracking-wide">Plan Básico</div>
                     <div class="mt-2 text-3xl font-extrabold text-gray-900">$499<span class="text-base font-normal text-gray-500">/mes</span></div>
-                    <div class="mt-2 text-sm text-gray-700">Odontograma + WhatsApp + recetas + cobros</div>
+                    <div class="mt-2 text-sm text-gray-700">Odontograma + WhatsApp a 1 clic + recetas + presupuestos + cobros</div>
                 </div>
             </div>
 
@@ -254,27 +241,27 @@
                 $faqs = [
                     [
                         'q' => "¿DocFácil funciona en {$city}?",
-                        'a' => "Sí. DocFácil funciona en cualquier ciudad de México con conexión a internet, con soporte en español y directo por WhatsApp con el fundador.",
+                        'a' => "Sí. DocFácil funciona en cualquier ciudad de México con internet. El soporte es en español, directo por WhatsApp con el fundador.",
                     ],
                     [
                         'q' => "¿Cuánto cuesta DocFácil para un consultorio en {$city}?",
-                        'a' => "Plan Free de por vida (1 doctor, 15 pacientes). Plan Básico $499/mes con odontograma, recordatorios WhatsApp y recetas PDF. Pro $999/mes para 3 doctores. Clínica $1,999/mes. Pago anual = 2 meses gratis. Garantía 30 días.",
+                        'a' => "Plan Free de por vida (1 doctor, 15 pacientes, 10 citas al mes). Plan Básico $499 al mes con odontograma, recordatorios por WhatsApp a 1 clic, recetas PDF, presupuestos y cobros. Pro $999 al mes, hasta 3 doctores. Clínica $1,999 al mes. Si paga el año, le sale en 10 meses. Garantía de 30 días sobre su primer pago.",
                     ],
                     [
                         'q' => "¿DocFácil me ayuda con la NOM-004 y con la protección de datos?",
-                        'a' => "Está pensado para ayudarte con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva tu cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos.",
+                        'a' => "Está pensado para ayudarle con la NOM-004: las notas clínicas y las recetas se bloquean 24 horas después de creadas, queda historial de cambios, los diagnósticos usan el catálogo CIE-10 y la receta lleva su cédula. Para los datos: conexión cifrada (HTTPS), respaldo diario y cada consultorio aislado de los demás. Los servidores están en Estados Unidos.",
                     ],
                     [
                         'q' => "¿Tengo que firmar un contrato?",
-                        'a' => "No. Cancelas con 1 clic cuando quieras. Sin penalizaciones. Tus datos quedan accesibles 30 días después de cancelar por si cambias de opinión.",
+                        'a' => "No. Cancele cuando quiera, sin penalización.",
                     ],
                     [
-                        'q' => "¿Y si no soy bueno con la tecnología?",
-                        'a' => "DocFácil está hecho para dentistas, no para ingenieros. Si sabes usar WhatsApp, sabes usar DocFácil. Te acompaño paso a paso por WhatsApp las primeras semanas, sin costo extra.",
+                        'q' => "¿Y si no se me da la tecnología?",
+                        'a' => "DocFácil está hecho para dentistas, no para ingenieros. Si usa WhatsApp, puede usar DocFácil. Le acompañamos paso a paso por WhatsApp las primeras semanas, sin costo extra.",
                     ],
                     [
                         'q' => "¿Puedo migrar mis pacientes desde Excel o papel?",
-                        'a' => "Sí. Me mandas tu Excel o CSV por WhatsApp y yo lo subo a tu cuenta durante el onboarding — sin costo, sin importar cuántos pacientes tengas.",
+                        'a' => "Sí. Nos manda su Excel o CSV por WhatsApp y lo subimos a su cuenta al empezar, sin costo.",
                     ],
                 ];
                 @endphp
@@ -299,10 +286,10 @@
         <div class="absolute inset-0 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-700"></div>
         <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
-                Empieza hoy en {{ $city }}
+                Empiece hoy en {{ $city }}
             </h2>
             <p class="mt-4 text-lg text-teal-100">
-                Configúralo en 2 minutos. Plan gratis de por vida. Sin tarjeta.
+                15 días con todo, sin tarjeta. Después, plan Free de por vida o el plan que elija.
             </p>
             <a href="{{ url('/doctor/register?city=' . urlencode($city) . '&state=' . urlencode($state)) }}"
                data-track="cta_clicked" data-track-location="city_final_cta" data-track-city="{{ $slug }}"

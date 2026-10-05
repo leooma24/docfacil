@@ -43,7 +43,7 @@ class SitemapTest extends TestCase
         $ciudades = substr_count($xml, '/software-dental/');
         $this->assertGreaterThanOrEqual(30, $ciudades, "Solo {$ciudades} ciudades en el sitemap.");
 
-        foreach (['dentalink', 'doctorum', 'eaglesoft'] as $competidor) {
+        foreach (['dentalink', 'doctorum'] as $competidor) {
             $this->assertStringContainsString("/vs/{$competidor}", $xml);
             $this->assertStringContainsString("/alternativas-a-{$competidor}", $xml);
         }
@@ -65,7 +65,7 @@ class SitemapTest extends TestCase
         // que es lo que hace que Google las rastree seguido.
         $html = $this->get('/dentistas')->assertSuccessful()->getContent();
 
-        foreach (['dentalink', 'doctorum', 'eaglesoft'] as $competidor) {
+        foreach (['dentalink', 'doctorum'] as $competidor) {
             $this->assertStringContainsString("/vs/{$competidor}", $html);
             $this->assertStringContainsString("/alternativas-a-{$competidor}", $html);
         }

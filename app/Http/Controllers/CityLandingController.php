@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Prospect;
-use Illuminate\Support\Facades\Cache;
-
 /**
  * Páginas pSEO por ciudad: /software-dental/{slug}
  *
- * El array de ciudades cubre todas las plazas con tracción real (>=5
- * prospectos en BD). Cada página inyecta datos reales (cuántos consultorios
- * hay en BD, especialidad top, distribución) para que cada URL tenga
- * contenido único — no plantilla repetida.
+ * El array de ciudades cubre las plazas donde se prospecta. La página ya
+ * no muestra cuántos prospectos hay en la ciudad: "más de N consultorios
+ * identificados" se leía como clientes y revelaba la base de prospección.
  */
 class CityLandingController extends Controller
 {
@@ -73,16 +69,10 @@ class CityLandingController extends Controller
 
         $data = $this->cities[$slug];
 
-        // Métricas reales por ciudad. Cacheamos 1 hora para no martillar BD.
-        $stats = Cache::remember("city-landing-stats:{$slug}", 3600, function () use ($data) {
-            return $this->computeStats($data['db_name']);
-        });
-
         return view('city-landing', [
             'city'        => $data['name'],
             'state'       => $data['state'],
             'slug'        => $slug,
-            'stats'       => $stats,
             'all_cities'  => $this->getCitiesForFooter(),
         ]);
     }
@@ -96,36 +86,5 @@ class CityLandingController extends Controller
             ->map(fn ($d, $slug) => ['slug' => $slug, 'name' => $d['name'], 'state' => $d['state']])
             ->values()
             ->all();
-    }
-
-    /**
-     * Insights reales de la ciudad desde BD para hacer pSEO no genérico.
-     * Conteo de prospectos = "consultorios identificados", especialidad top,
-     * etc. Si no hay data, defaults seguros.
-     */
-    private function computeStats(string $dbName): array
-    {
-        $totalProspects = Prospect::where('city', $dbName)->count();
-
-        $topSpecialties = Prospect::where('city', $dbName)
-            ->whereNotNull('specialty')
-            ->where('specialty', '!=', '')
-            ->selectRaw('specialty, count(*) as c')
-            ->groupBy('specialty')
-            ->orderByDesc('c')
-            ->limit(3)
-            ->pluck('c', 'specialty')
-            ->all();
-
-        // "Más de N consultorios" — redondeamos hacia abajo en decenas
-        // para no parecer súper preciso (sale más natural en marketing).
-        $roundedConsultorios = $totalProspects >= 10 ? floor($totalProspects / 10) * 10 : max($totalProspects, 0);
-
-        return [
-            'total'                => $totalProspects,
-            'rounded_consultorios' => $roundedConsultorios,
-            'top_specialties'      => $topSpecialties,
-            'has_data'             => $totalProspects > 0,
-        ];
     }
 }

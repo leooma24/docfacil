@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\LoQueTraeCadaPlan;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
@@ -62,27 +63,9 @@ class BrochureController extends Controller
 
     private function buildPages(): array
     {
+        // Los planes salen de una sola fuente: lo que el sistema hace hoy.
         return [
-            'features' => [
-                ['icon' => '📅', 'title' => 'Agenda inteligente', 'desc' => 'Calendario visual multi-doctor, arrastrar y soltar citas, acceso desde cualquier dispositivo. Vista diaria, semanal, mensual.'],
-                ['icon' => '💬', 'title' => 'Recordatorios WhatsApp', 'desc' => 'Mensaje listo 24h y 2h antes de la cita; lo mandas con un clic desde tu WhatsApp. Los consultorios reportan hasta 40% menos inasistencias.'],
-                ['icon' => '📋', 'title' => 'Expediente clínico digital', 'desc' => 'Historial completo, alergias, padecimientos, notas SOAP. Todo organizado por paciente y consulta.'],
-                ['icon' => '📄', 'title' => 'Recetas PDF profesionales', 'desc' => 'Con tu nombre, especialidad, cédula profesional, datos del consultorio y espacio para tu firma. El paciente recibe PDF por WhatsApp.'],
-                ['icon' => '🦷', 'title' => 'Odontograma interactivo', 'desc' => '13 condiciones dentales, colores por estado, compartible con el paciente. Historial visual de cada pieza.'],
-                ['icon' => '💰', 'title' => 'Cobro por WhatsApp', 'desc' => 'Envía el monto y link de pago directo al chat. Control automático de cobros pendientes por paciente.'],
-                ['icon' => '📱', 'title' => 'Check-in con QR', 'desc' => 'El paciente escanea al llegar, firma consentimiento en tablet o celular. Sin papel, sin filas.'],
-                ['icon' => '✍', 'title' => 'Firma en pantalla', 'desc' => 'Consentimientos informados firmados con el dedo en pantalla táctil, con fecha y hora. Quedan bloqueados al firmarse.'],
-                ['icon' => '👥', 'title' => 'Portal del paciente', 'desc' => 'Tus pacientes ven sus citas, recetas, pagos e historial. Reduce llamadas de consulta rutinaria.'],
-                ['icon' => '📊', 'title' => 'Dashboard con gráficas', 'desc' => 'Ingresos, citas por doctor, cobros pendientes, pacientes activos. Datos del mes vs. mes anterior.'],
-                ['icon' => '🔔', 'title' => 'Alertas inteligentes', 'desc' => 'Pacientes inactivos, recetas vencidas, cumpleaños, cobros atrasados. El sistema te avisa.'],
-                ['icon' => '🏥', 'title' => 'Multi-doctor y multi-sede', 'desc' => 'Gestiona varios doctores o sucursales con comisiones automáticas entre ellos. Reportes por doctor.'],
-            ],
-            'plans' => [
-                ['name' => 'Free', 'price' => 0, 'annual' => 0, 'ideal' => 'Probar el sistema sin tarjeta', 'features' => ['1 doctor', '15 pacientes', 'Agenda básica', '10 citas / mes']],
-                ['name' => 'Básico', 'price' => 499, 'annual' => 4990, 'ideal' => 'Consultorios individuales que arrancan', 'features' => ['1 doctor', '200 pacientes', 'WhatsApp + recetas PDF', 'Check-in QR', 'Expediente completo']],
-                ['name' => 'Pro', 'price' => 999, 'annual' => 9990, 'popular' => true, 'ideal' => 'Consultorios establecidos', 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Odontograma interactivo', 'Portal del paciente', 'Reportes avanzados', 'Soporte prioritario']],
-                ['name' => 'Clínica', 'price' => 1999, 'annual' => 19990, 'ideal' => 'Clínicas con varios doctores o sedes', 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Comisiones entre doctores', 'Reportes por doctor', 'Onboarding 1 a 1']],
-            ],
+            'plans' => LoQueTraeCadaPlan::planes(),
         ];
     }
 

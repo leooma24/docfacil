@@ -22,10 +22,6 @@
         .plan-features li::before { content: '✓ '; color: #0d9488; font-weight: bold; }
         .plan-badge { display: inline-block; background: #0d9488; color: white; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-bottom: 8px; }
 
-        .roi-box { background: #f0fdfa; border: 1px solid #ccfbf1; border-radius: 12px; padding: 20px; margin: 20px 0; }
-        .roi-title { font-weight: 800; color: #0d9488; font-size: 14px; margin-bottom: 10px; }
-        .roi-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e0f2f1; font-size: 12px; }
-        .roi-row:last-child { border-bottom: none; font-weight: 800; font-size: 14px; color: #0d9488; }
 
         .cta-box { background: linear-gradient(135deg, #0d9488, #0891b2); color: white; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0; }
         .cta-box h3 { font-size: 18px; margin: 0 0 8px; }
@@ -42,7 +38,7 @@
 <body>
     <div class="header">
         <h1>Propuesta DocFácil</h1>
-        <p>Software para {{ $isDentist ? 'consultorios dentales' : 'consultorios médicos' }} · {{ $date }}</p>
+        <p>Software para consultorios dentales · {{ $date }}</p>
     </div>
 
     <div class="content">
@@ -50,27 +46,27 @@
             Estimado/a <strong>{{ $prospect->name }}</strong>{{ $prospect->clinic_name ? ' — ' . $prospect->clinic_name : '' }},
         </p>
         <p>
-            Gracias por su interés en DocFácil. A continuación le presento cómo nuestro software puede ayudarle
-            a organizar su consultorio, recuperar citas perdidas y ahorrar tiempo cada día.
+            Gracias por su interés en DocFácil. Aquí le explico, en corto, qué hace el sistema por su consultorio
+            y cuánto cuesta.
         </p>
 
-        <div class="section-title">El problema que resolvemos</div>
+        <div class="section-title">Lo que hace por usted</div>
         <div class="benefits">
             <div class="benefit">
                 <div class="benefit-title">📅 Citas que se pierden</div>
-                <div class="benefit-desc">El 30% de pacientes no llegan porque se les olvida. Los recordatorios por WhatsApp a 1 clic ayudan a reducirlo hasta un 40%.</div>
+                <div class="benefit-desc">DocFácil le arma el recordatorio de cada cita y abre su WhatsApp con el mensaje escrito. Usted da enviar.</div>
             </div>
             <div class="benefit">
                 <div class="benefit-title">📝 Tiempo en papeleo</div>
-                <div class="benefit-desc">Expedientes, recetas, cobros — todo en un solo lugar. Ahorra 2+ horas al día en tareas administrativas.</div>
+                <div class="benefit-desc">Expedientes, odontograma, recetas y cobros en un solo lugar, ligados a cada paciente.</div>
             </div>
             <div class="benefit">
                 <div class="benefit-title">💰 Cobros lentos</div>
-                <div class="benefit-desc">Envía el cobro por WhatsApp al terminar la consulta. El paciente paga sin salir de la app.</div>
+                <div class="benefit-desc">Registre el cobro al terminar la consulta. Si queda saldo, DocFácil abre su WhatsApp con el recordatorio de pago escrito.</div>
             </div>
             <div class="benefit">
                 <div class="benefit-title">📄 Recetas ilegibles</div>
-                <div class="benefit-desc">Recetas PDF profesionales con su cédula, los datos de su consultorio y espacio para su firma. El paciente las recibe por WhatsApp.</div>
+                <div class="benefit-desc">Recetas en PDF con su cédula, los datos de su consultorio y espacio para su firma. El paciente también las ve en su portal.</div>
             </div>
         </div>
 
@@ -83,6 +79,10 @@
                 @endif
                 <div class="plan-name">{{ $plan['name'] }}</div>
                 <div class="plan-price">${{ number_format($plan['price']) }}<span>/mes</span></div>
+                <div style="font-size: 11px; color: #6b7280;">{{ $plan['limits'] }}</div>
+                @if($plan['lead'])
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; margin-top: 8px; text-align: left;">{{ $plan['lead'] }}</div>
+                @endif
                 <ul class="plan-features">
                     @foreach($plan['features'] as $f)
                     <li>{{ $f }}</li>
@@ -92,23 +92,15 @@
             @endforeach
         </div>
 
-        <div class="section-title">Retorno de inversión</div>
-        <div class="roi-box">
-            <div class="roi-title">Con el plan Básico ($499/mes):</div>
-            <div class="roi-row"><span>Citas recuperadas por mes (8 × $600)</span><span>+$4,800</span></div>
-            <div class="roi-row"><span>Tiempo ahorrado (10 hrs × $200/hr)</span><span>+$2,000</span></div>
-            <div class="roi-row"><span>Costo DocFácil</span><span>-$499</span></div>
-            <div class="roi-row"><span>Beneficio neto mensual</span><span>+$6,301</span></div>
-        </div>
-
         <div class="cta-box">
-            <h3>14 días gratis · Sin tarjeta de crédito</h3>
+            <h3>15 días gratis con todo · Sin tarjeta</h3>
+            <p>Si paga y en los primeros 30 días no le sirve, le devolvemos su primer pago. También existe el plan Free, gratis para siempre (1 doctor, 15 pacientes, 10 citas al mes).</p>
             <p>Regístrese en docfacil.tu-app.co/doctor/register o contacte a {{ $repName }} para una demo personalizada.</p>
         </div>
     </div>
 
     <div class="footer">
-        DocFácil · Software para consultorios médicos y dentales · docfacil.tu-app.co<br>
+        DocFácil · Software para consultorios dentales · docfacil.tu-app.co<br>
         Propuesta preparada por {{ $repName }} · {{ $date }}
     </div>
 </body>

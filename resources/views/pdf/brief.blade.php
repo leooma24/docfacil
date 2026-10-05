@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DocFácil — Brief para consultorios médicos y dentales</title>
-    <meta name="description" content="Brief de DocFácil: agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros. Empieza gratis en 2 minutos.">
+    <title>DocFácil — Brief para consultorios dentales</title>
+    <meta name="description" content="Brief de DocFácil: agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros. Empiece gratis.">
 
     {{-- OpenGraph --}}
-    <meta property="og:title" content="DocFácil — Brief para consultorios médicos y dentales">
+    <meta property="og:title" content="DocFácil — Brief para consultorios dentales">
     <meta property="og:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="DocFácil — Software para consultorios médicos y dentales">
+    <meta property="og:image:alt" content="DocFácil — Software para consultorios dentales">
     <meta property="og:url" content="{{ url('/brief') }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="DocFácil">
@@ -141,7 +141,7 @@
     <div class="header">
         <div>
             <div class="brand">DocFácil</div>
-            <small>Software para consultorios médicos y dentales</small>
+            <small>Software para consultorios dentales</small>
         </div>
         <div class="header-right">
             Brief 2026<br>
@@ -150,35 +150,35 @@
     </div>
 
     <div class="hero">
-        <h1>Deja de perder $15,000 al mes en citas que no llegan</h1>
-        <p>Cada cita perdida son $600 que se van. DocFácil recupera ese dinero con recordatorios por WhatsApp a 1 clic, cobra por ti y te ahorra 8 horas a la semana.</p>
+        <h1>Su consultorio dental, en orden y en un solo lugar</h1>
+        <p>Agenda, expediente, odontograma, recetas y cobros. Los recordatorios salen de su propio WhatsApp a 1 clic: DocFácil escribe el mensaje y usted da enviar.</p>
     </div>
 
     <img src="{{ $screens['dashboard'] }}" alt="Escritorio DocFácil" class="shot shot-hero">
-    <p class="shot-cap">Tu día en un vistazo — ingresos del mes, próximas citas y lo que pasó hoy.</p>
+    <p class="shot-cap">Su día en un vistazo: ingresos del mes, próximas citas y lo que pasó hoy.</p>
 
     <div class="row">
         <div class="col-2">
-            <h2 style="margin-top:4px;">Lo que pierdes cada mes</h2>
-            <div class="pain-box"><strong>$14,400 en citas perdidas</strong><br>El 30% de pacientes no llega. 24 citas × $600 = dinero que se fue.</div>
-            <div class="pain-box"><strong>10 hrs/semana en papeleo</strong><br>Buscar expedientes, escribir recetas a mano, llamar a confirmar.</div>
-            <div class="pain-box"><strong>Cobros que se te olvidan</strong><br>"Te pago después" que nunca regresó. Trabajo hecho sin cobrar.</div>
-            <div class="pain-box"><strong>Decides a ojo, no con datos</strong><br>No sabes qué servicio te deja más ni cuánto te deben.</div>
+            <h2 style="margin-top:4px;">Lo que hoy cuesta trabajo</h2>
+            <div class="pain-box"><strong>Citas que no llegan</strong><br>Al paciente se le olvidó y nadie le recordó.</div>
+            <div class="pain-box"><strong>Tiempo en papeleo</strong><br>Buscar expedientes, escribir recetas a mano, llamar a confirmar.</div>
+            <div class="pain-box"><strong>Cobros que se olvidan</strong><br>"Le pago después" que nunca regresó. Trabajo hecho sin cobrar.</div>
+            <div class="pain-box"><strong>Decidir a ojo</strong><br>No sabe qué servicio le deja más ni cuánto le deben.</div>
         </div>
         <div class="col-2">
-            <h2 style="margin-top:4px;">Lo que recuperas con DocFácil</h2>
-            <div class="solution-box"><strong>+$11,500/mes en citas que sí llegan</strong><br>WhatsApp automático 24h y 2h antes. Inasistencia baja de 30% a 8%.</div>
-            <div class="solution-box"><strong>+8 horas a la semana</strong><br>Agenda en nube, expedientes digitales, recetas PDF en 10 segundos.</div>
-            <div class="solution-box"><strong>Cobras el mismo día</strong><br>Link de pago por WhatsApp al terminar la consulta. Antes que se vaya.</div>
-            <div class="solution-box"><strong>Sabes cuánto ganas cada día</strong><br>Ingresos, pendientes, servicios rentables — al entrar, sin Excel.</div>
+            <h2 style="margin-top:4px;">Lo que hace DocFácil</h2>
+            <div class="solution-box"><strong>Recordatorio a 1 clic</strong><br>Abre su WhatsApp con el mensaje escrito; usted da enviar. El paciente confirma con un link.</div>
+            <div class="solution-box"><strong>Todo en un solo lugar</strong><br>Agenda, expediente, odontograma y recetas PDF con su cédula, ligados a cada paciente.</div>
+            <div class="solution-box"><strong>Cobro el mismo día</strong><br>Registra el cobro al terminar. Si queda saldo, abre su WhatsApp con el recordatorio escrito.</div>
+            <div class="solution-box"><strong>Sabe cuánto gana cada día</strong><br>Ingresos, pendientes y gastos del mes al entrar, sin Excel.</div>
         </div>
     </div>
 
     <div class="stats">
         <table style="width:100%;">
             <tr>
-                <td><div class="num">$29K</div><div class="label">que pierdes hoy al mes</div></td>
-                <td><div class="num">$999</div><div class="label">lo que pagas por DocFácil Pro</div></td>
+                <td><div class="num">$0</div><div class="label">plan Free, para siempre</div></td>
+                <td><div class="num">$499</div><div class="label">al mes, plan Básico</div></td>
                 <td><div class="num">30 días</div><div class="label">garantía de devolución</div></td>
                 <td><div class="num">15 días</div><div class="label">prueba gratis sin tarjeta</div></td>
             </tr>
@@ -210,14 +210,14 @@
     <div class="feat-big">
         <span class="feat-num">01</span>
         <h3>Odontograma interactivo</h3>
-        <p>Diagrama dental con 13 condiciones. Haces clic en el diente, eliges el estado, se guarda automático. El paciente lo recibe por WhatsApp y entiende su tratamiento al instante.</p>
+        <p>Diagrama dental FDI. Usted hace clic en el diente o en la cara, elige el estado y se guarda. Lo imprime en PDF para explicarle al paciente su tratamiento.</p>
         <img src="{{ $screens['odontograma'] }}" alt="Odontograma interactivo" class="shot">
     </div>
 
     <div class="feat-big">
         <span class="feat-num">02</span>
         <h3>Recetas PDF profesionales</h3>
-        <p>Con tu nombre, especialidad, cédula, datos del consultorio y espacio para tu firma. El paciente las recibe por WhatsApp en un clic — adiós letra ilegible y papeles perdidos.</p>
+        <p>Con su nombre, especialidad, cédula, datos del consultorio y espacio para su firma. Se descargan en PDF y el paciente también las ve en su portal.</p>
         <img src="{{ $screens['recetas'] }}" alt="Recetas PDF" class="shot">
     </div>
 
@@ -230,7 +230,7 @@
     </div>
 
     <div class="footer">
-        Sigue en la página siguiente → Funciones completas, precios y cómo empezar en 2 minutos
+        Sigue en la página siguiente → Funciones, precios y cómo empezar
     </div>
 </div>
 
@@ -241,7 +241,7 @@
     <div class="header">
         <div>
             <div class="brand">DocFácil</div>
-            <small>12 funciones pensadas para doctores reales</small>
+            <small>Pensado para consultorios dentales</small>
         </div>
         <div class="header-right">
             Brief 2026<br>
@@ -252,35 +252,35 @@
     <h2 style="margin-top:0;">Todo lo que incluye</h2>
     <table class="features">
         <tr>
-            <td><span class="icon">✓</span> <strong>Agenda de citas</strong> Calendario visual, multi-doctor, drag &amp; drop</td>
-            <td><span class="icon">✓</span> <strong>Recordatorios WhatsApp</strong> A 1 clic desde tu WhatsApp, 24h y 2h antes</td>
+            <td><span class="icon">✓</span> <strong>Agenda de citas</strong> Calendario visual, varios doctores, arrastrar y soltar</td>
+            <td><span class="icon">✓</span> <strong>Recordatorios WhatsApp</strong> A 1 clic desde su WhatsApp; usted da enviar</td>
         </tr>
         <tr>
-            <td><span class="icon">✓</span> <strong>Expediente clínico</strong> Historial, alergias, notas SOAP</td>
+            <td><span class="icon">✓</span> <strong>Expediente clínico</strong> Motivo, diagnóstico CIE-10, tratamiento, signos vitales, alergias</td>
             <td><span class="icon">✓</span> <strong>Recetas PDF</strong> Con cédula y espacio para firma</td>
         </tr>
         <tr>
-            <td><span class="icon">✓</span> <strong>Odontograma interactivo</strong> 13 condiciones, compartible</td>
-            <td><span class="icon">✓</span> <strong>Cobro por WhatsApp</strong> Monto + link de pago</td>
+            <td><span class="icon">✓</span> <strong>Odontograma interactivo</strong> Diagrama FDI, se imprime en PDF</td>
+            <td><span class="icon">✓</span> <strong>Cobro por WhatsApp</strong> Monto y saldo, a 1 clic</td>
         </tr>
         <tr>
             <td><span class="icon">✓</span> <strong>Check-in con QR</strong> Sin papeleo, el paciente escanea</td>
-            <td><span class="icon">✓</span> <strong>Firma en pantalla</strong> En tablet o celular, con fecha y hora</td>
+            <td><span class="icon">✓</span> <strong>Consentimientos</strong> Firmados en pantalla, con fecha y hora (Pro)</td>
         </tr>
         <tr>
-            <td><span class="icon">✓</span> <strong>Portal del paciente</strong> Citas, recetas, pagos</td>
+            <td><span class="icon">✓</span> <strong>Portal del paciente</strong> Sus citas, recetas y pagos</td>
             <td><span class="icon">✓</span> <strong>Dashboard con gráficas</strong> Ingresos, citas, alertas</td>
         </tr>
         <tr>
-            <td><span class="icon">✓</span> <strong>Alertas inteligentes</strong> Inactivos, vencidos, cumpleaños</td>
-            <td><span class="icon">✓</span> <strong>Multi-doctor / Multi-sede</strong> Con comisiones automáticas</td>
+            <td><span class="icon">✓</span> <strong>Alertas inteligentes</strong> Pacientes sin visita, pagos vencidos (Pro)</td>
+            <td><span class="icon">✓</span> <strong>Varios doctores</strong> Producción por doctor (Pro hasta 3, Clínica ilimitados)</td>
         </tr>
     </table>
 
     <h2>Planes y precios</h2>
 
     <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 8.5pt;">
-        <strong style="color: #92400e;">💡 Paga anual y ahorra 2 meses</strong> <span style="color:#78350f;">— el plan anual cuesta solo 10 meses (16.7% de descuento).</span>
+        <strong style="color: #92400e;">💡 Pague anual y ahorre 2 meses</strong> <span style="color:#78350f;">— el plan anual cuesta solo 10 meses (16.7% de descuento).</span>
     </div>
 
     <table class="pricing">
@@ -293,37 +293,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><strong>Free</strong></td>
+            @foreach(\App\Support\LoQueTraeCadaPlan::planes() as $p)
+            <tr @if($p['popular']) class="popular" @endif>
+                <td><strong>{{ $p['name'] }}{{ $p['popular'] ? ' ★' : '' }}</strong></td>
+                @if($p['annual'] === 0)
                 <td class="price-free">$0 / mes</td>
                 <td style="color:#6b7280;">—</td>
-                <td>1 doctor · hasta 30 pacientes · sin tarjeta</td>
+                @else
+                <td class="price">${{ $p['price'] }} / mes</td>
+                <td class="price" style="color:#059669;">${{ number_format($p['annual']) }} / año</td>
+                @endif
+                <td>{{ $p['limits'] }}<br><span style="color:#6b7280;">{{ $p['lead'] ? $p['lead'] . ' ' : '' }}{{ implode(' · ', array_slice($p['features'], 0, 3)) }}</span></td>
             </tr>
-            <tr>
-                <td><strong>Básico</strong></td>
-                <td class="price">$499 / mes</td>
-                <td class="price" style="color:#059669;">$4,990 / año</td>
-                <td>1 doctor · 200 pacientes · WhatsApp · recetas PDF</td>
-            </tr>
-            <tr class="popular">
-                <td><strong>Pro ★</strong></td>
-                <td class="price">$999 / mes</td>
-                <td class="price" style="color:#059669;">$9,990 / año</td>
-                <td>3 doctores · ilimitados · odontograma · portal paciente</td>
-            </tr>
-            <tr>
-                <td><strong>Clínica</strong></td>
-                <td class="price">$1,999 / mes</td>
-                <td class="price" style="color:#059669;">$19,990 / año</td>
-                <td>Doctores ilimitados · multi-sucursal · comisiones</td>
-            </tr>
+            @endforeach
         </tbody>
     </table>
-    <p style="font-size:8.5pt; color:#6b7280; margin:3px 0 0 0;">14 días gratis con todas las funciones. Sin tarjeta. Sin compromiso. Precios en MXN.</p>
+    <p style="font-size:8.5pt; color:#6b7280; margin:3px 0 0 0;">15 días gratis con todas las funciones. Sin tarjeta. Garantía de 30 días en su primer pago. Precios en MXN.</p>
 
     <div class="cta-box">
-        <h3>Empieza gratis en 2 minutos</h3>
-        <p>Escanea el QR o visita <strong>docfacil.tu-app.co</strong> y crea tu cuenta sin tarjeta.</p>
+        <h3>Empiece gratis</h3>
+        <p>Escanee el QR o visite <strong>docfacil.tu-app.co</strong> y cree su cuenta sin tarjeta.</p>
         <table class="cta-grid">
             <tr>
                 <td class="qr">
@@ -341,7 +330,7 @@
     </div>
 
     <div class="footer">
-        DocFácil © {{ date('Y') }} · Software para consultorios médicos y dentales en México · <a href="{{ url('/') }}">docfacil.tu-app.co</a>
+        DocFácil © {{ date('Y') }} · Software para consultorios dentales en México · <a href="{{ url('/') }}">docfacil.tu-app.co</a>
     </div>
 </div>
 

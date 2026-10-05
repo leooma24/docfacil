@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prospect;
+use App\Support\LoQueTraeCadaPlan;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProposalPdfController extends Controller
@@ -17,24 +18,37 @@ class ProposalPdfController extends Controller
             403
         );
 
-        $isDentist = str_contains(strtolower($prospect->specialty ?? ''), 'dent')
-            || str_contains(strtolower($prospect->specialty ?? ''), 'odont');
-
-        $plan = $isDentist ? 'basico' : 'basico';
-        $price = \App\Models\Commission::monthlyPriceForPlan($plan);
-
-        $pdf = Pdf::loadView('pdf.proposal', [
-            'prospect' => $prospect,
-            'isDentist' => $isDentist,
-            'plans' => [
-                ['name' => 'Básico', 'price' => 499, 'features' => ['1 doctor', '200 pacientes', 'Citas ilimitadas', 'Recetas PDF', 'Recordatorios WhatsApp', 'Check-in QR']],
-                ['name' => 'Pro', 'price' => 999, 'popular' => true, 'features' => ['Hasta 3 doctores', 'Pacientes ilimitados', 'Todo del Básico', 'Odontograma interactivo', 'Consentimientos digitales', 'Portal del paciente', 'Soporte prioritario']],
-                ['name' => 'Clínica', 'price' => 1999, 'features' => ['Doctores ilimitados', 'Multi-sucursal', 'Todo del Pro', 'Reportes por doctor', 'Onboarding 1 a 1']],
-            ],
-            'date' => now()->translatedFormat('d \d\e F \d\e Y'),
-            'repName' => auth()->user()->name,
-        ]);
+        $pdf = Pdf::loadView('pdf.proposal', self::datos($prospect, auth()->user()->name));
 
         return $pdf->stream("propuesta-{$prospect->name}.pdf");
+    }
+
+    /**
+     * Lo que lleva la propuesta. Los planes salen de LoQueTraeCadaPlan,
+     * la misma fuente de la página de inicio y del panel.
+     */
+    public static function datos(Prospect $prospect, string $repName): array
+    {
+        $plans = [];
+
+        foreach (['basico', 'profesional', 'clinica'] as $key) {
+            $plan = LoQueTraeCadaPlan::plan($key);
+
+            $plans[] = [
+                'name' => $plan['name'],
+                'price' => \App\Models\Commission::monthlyPriceForPlan($key),
+                'popular' => $plan['popular'],
+                'limits' => $plan['limits'],
+                'lead' => $plan['lead'],
+                'features' => $plan['features'],
+            ];
+        }
+
+        return [
+            'prospect' => $prospect,
+            'plans' => $plans,
+            'date' => now()->translatedFormat('d \d\e F \d\e Y'),
+            'repName' => $repName,
+        ];
     }
 }

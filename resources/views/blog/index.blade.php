@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blog — DocFácil · Software para consultorios médicos</title>
-    <meta name="description" content="Artículos para médicos y dentistas: gestión de consultorio, recordatorios, expedientes digitales, recetas electrónicas y más.">
+    <title>Blog — DocFácil · Software para consultorios dentales</title>
+    <meta name="description" content="Artículos para dentistas: gestión del consultorio, recordatorios, expediente digital, recetas y más.">
     <meta property="og:title" content="Blog — DocFácil">
-    <meta property="og:description" content="Tips para médicos y dentistas que quieren digitalizar su consultorio.">
+    <meta property="og:description" content="Guías para dentistas que quieren ordenar su consultorio.">
     <meta property="og:url" content="{{ url('/blog') }}">
     <link rel="canonical" href="{{ url('/blog') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
@@ -59,7 +59,7 @@
     <div class="container">
         <div class="hero">
             <h1>Blog DocFácil</h1>
-            <p>Tips, guías y estrategias para médicos y dentistas que quieren hacer crecer su consultorio.</p>
+            <p>Guías para dentistas que quieren ordenar y hacer crecer su consultorio.</p>
         </div>
 
         <div class="grid">
@@ -88,7 +88,7 @@
 
     <footer class="footer">
         <div class="container">
-            &copy; {{ date('Y') }} DocFácil — <a href="/">Software para consultorios médicos y dentales</a>
+            &copy; {{ date('Y') }} DocFácil — <a href="/">Software para consultorios dentales</a>
         </div>
     </footer>
 </body>

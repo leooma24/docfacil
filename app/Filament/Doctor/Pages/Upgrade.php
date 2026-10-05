@@ -79,59 +79,30 @@ class Upgrade extends Page
      */
     public function getPlans(): array
     {
-        return [
-            [
-                'key' => 'basico',
-                'name' => 'Básico',
-                'monthly' => \App\Models\Commission::monthlyPriceForPlan('basico'),
-                'annual' => \App\Models\Commission::annualPriceForPlan('basico'),
-                'ideal' => 'Consultorios individuales que arrancan',
-                'features' => [
-                    '1 doctor',
-                    '200 pacientes',
-                    'Recordatorios WhatsApp',
-                    'Recetas PDF',
-                    'Check-in con QR',
-                    'Expediente clínico completo',
-                    'Cobro por WhatsApp',
-                ],
-            ],
-            [
-                'key' => 'profesional',
-                'name' => 'Pro',
-                'monthly' => \App\Models\Commission::monthlyPriceForPlan('profesional'),
-                'annual' => \App\Models\Commission::annualPriceForPlan('profesional'),
-                'ideal' => 'Consultorios establecidos',
-                'popular' => true,
-                'features' => [
-                    'Hasta 3 doctores',
-                    'Pacientes ilimitados',
-                    'Odontograma interactivo',
-                    'Portal del paciente',
-                    'Consentimientos digitales',
-                    'Recall: a quién ya le toca volver',
-                    'Reportes avanzados',
-                    'Soporte prioritario',
-                    'Todo lo del Básico',
-                ],
-            ],
-            [
-                'key' => 'clinica',
-                'name' => 'Clínica',
-                'monthly' => \App\Models\Commission::monthlyPriceForPlan('clinica'),
-                'annual' => \App\Models\Commission::annualPriceForPlan('clinica'),
-                'ideal' => 'Clínicas con varios doctores o sedes',
-                'features' => [
-                    'Doctores ilimitados',
-                    'Multi-sucursal',
-                    'Comisiones entre doctores',
-                    'Reportes por doctor',
-                    'Onboarding 1 a 1',
-                    'Soporte prioritario 24/7',
-                    'Todo lo del Pro',
-                ],
-            ],
-        ];
+        // Lo que trae cada plan sale de una sola fuente (LoQueTraeCadaPlan),
+        // la misma de la página de inicio, el folleto y la propuesta.
+        $plans = [];
+
+        foreach (['basico', 'profesional', 'clinica'] as $key) {
+            $plan = \App\Support\LoQueTraeCadaPlan::plan($key);
+
+            $features = [$plan['limits']];
+            if (! empty($plan['lead'])) {
+                $features[] = rtrim(str_replace(', y además:', '', $plan['lead']), ':');
+            }
+
+            $plans[] = [
+                'key' => $key,
+                'name' => $plan['name'],
+                'monthly' => \App\Models\Commission::monthlyPriceForPlan($key),
+                'annual' => \App\Models\Commission::annualPriceForPlan($key),
+                'ideal' => $plan['ideal'],
+                'popular' => $plan['popular'],
+                'features' => array_merge($features, $plan['features']),
+            ];
+        }
+
+        return $plans;
     }
 
     /**

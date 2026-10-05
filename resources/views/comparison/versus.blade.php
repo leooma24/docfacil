@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DocFácil vs {{ $competitor['name'] }} — Comparativa para Consultorios Dentales en México</title>
-    <meta name="description" content="DocFácil vs {{ $competitor['name'] }}: comparativa honesta de funciones, precio, soporte y diferencias para consultorios dentales en México. Pros y contras de cada uno.">
+    <meta name="description" content="¿Compara DocFácil con {{ $competitor['name'] }}? Lo que DocFácil hace hoy para consultorios dentales en México, con precios en pesos. 15 días gratis, sin tarjeta.">
     <meta name="theme-color" content="#14b8a6">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
@@ -12,8 +12,8 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 
     {{-- OpenGraph --}}
-    <meta property="og:title" content="DocFácil vs {{ $competitor['name'] }} — Comparativa Honesta">
-    <meta property="og:description" content="Comparativa de DocFácil contra {{ $competitor['name'] }}: precio, funciones, NOM-004, soporte. Para consultorios dentales en México.">
+    <meta property="og:title" content="DocFácil vs {{ $competitor['name'] }} — Comparativa">
+    <meta property="og:description" content="Lo que DocFácil hace hoy, con precios en pesos, para quien lo compara con {{ $competitor['name'] }}. Para consultorios dentales en México.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -24,7 +24,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DocFácil vs {{ $competitor['name'] }} — Comparativa">
-    <meta name="twitter:description" content="Comparativa honesta para consultorios dentales en México.">
+    <meta name="twitter:description" content="Lo que DocFácil hace hoy para consultorios dentales en México.">
     <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
 
     <link rel="canonical" href="{{ url("/vs/{$slug}") }}">
@@ -42,7 +42,7 @@
         "@@context": "https://schema.org",
         "@@type": "Article",
         "headline": "DocFácil vs {{ $competitor['name'] }}: Comparativa para Consultorios Dentales en México",
-        "description": "Comparativa honesta entre DocFácil y {{ $competitor['name'] }}: funciones, precio, soporte, herramientas para la NOM-004 y casos de uso ideales.",
+        "description": "Lo que DocFácil hace hoy para consultorios dentales en México, para quien lo compara con {{ $competitor['name'] }}. Para precios y funciones de {{ $competitor['name'] }}, consulte su sitio oficial.",
         "datePublished": "2026-04-29",
         "dateModified": "{{ now()->toDateString() }}",
         "author": { "@@type": "Organization", "name": "DocFácil" },
@@ -61,23 +61,18 @@
         "mainEntity": [
             {
                 "@@type": "Question",
-                "name": "¿Cuál es la diferencia principal entre DocFácil y {{ $competitor['name'] }}?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil está hecho 100% para consultorios dentales en México: pensado para la NOM-004 (notas que se bloquean y recetas con cédula), integra SPEI, tiene WhatsApp 1-clic nativo y precio en pesos. {{ $competitor['name'] }} está orientado a {{ $competitor['origin'] }} y no aborda el contexto regulatorio mexicano de la misma forma." }
+                "name": "¿Qué hace DocFácil para un consultorio dental?",
+                "acceptedAnswer": { "@@type": "Answer", "text": "Agenda, recordatorios por WhatsApp a 1 clic (DocFácil abre su WhatsApp con el mensaje escrito y usted le da enviar), odontograma FDI, expediente pensado para la NOM-004 (notas y recetas que se bloquean a las 24 horas, diagnósticos con CIE-10), recetas PDF con cédula, presupuestos que el paciente acepta en línea y cobros. Hecho en México para consultorios mexicanos." }
             },
             {
                 "@@type": "Question",
-                "name": "¿{{ $competitor['name'] }} cumple con NOM-004 y LFPDPPP en México?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "{{ $competitor['name'] }} no fue diseñado para el marco regulatorio mexicano. DocFácil sí está pensado para él: notas clínicas y recetas que se bloquean 24 horas después de creadas, recetas con cédula profesional, diagnósticos con catálogo CIE-10 y contrato de encargado para los datos de tus pacientes." }
+                "name": "¿Cuánto cuesta DocFácil?",
+                "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 15 pacientes, 10 citas al mes). Básico $499 MXN al mes, Pro $999 y Clínica $1,999. Si paga el año, le sale en 10 meses. 15 días con todo, sin tarjeta, y garantía de 30 días sobre su primer pago." }
             },
             {
                 "@@type": "Question",
-                "name": "¿Cuál es más barato, DocFácil o {{ $competitor['name'] }}?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil tiene plan Free de por vida y plan pagado desde $499 MXN/mes en pesos sin sobresaltos cambiarios. {{ $competitor['name'] }}: {{ $competitor['pricing'] }}." }
-            },
-            {
-                "@@type": "Question",
-                "name": "¿Para quién es mejor DocFácil que {{ $competitor['name'] }}?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "DocFácil es la mejor opción para consultorios dentales mexicanos de 1 a 3 sillones, dentistas independientes, y clínicas que quieren WhatsApp 1-clic, un expediente pensado para la NOM-004 (notas que se bloquean) y soporte directo del fundador en español MX. {{ $competitor['name'] }} puede ser mejor para: {{ $competitor['best_for'] }}" }
+                "name": "¿Cómo comparo DocFácil con {{ $competitor['name'] }}?",
+                "acceptedAnswer": { "@@type": "Answer", "text": "Para comparar precios y funciones actuales de {{ $competitor['name'] }}, consulte su sitio oficial. De DocFácil puede probar todo 15 días gratis, sin tarjeta, con sus propios pacientes." }
             }
         ]
     }
@@ -105,13 +100,14 @@
     <section class="py-16 sm:py-24 px-4 bg-gradient-to-b from-teal-50/40 to-white">
         <div class="max-w-4xl mx-auto text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold rounded-full mb-5">
-                COMPARATIVA HONESTA
+                COMPARATIVA
             </div>
             <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
                 DocFácil <span class="text-gray-400">vs</span> {{ $competitor['name'] }}
             </h1>
             <p class="mt-6 text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                Comparativa real para consultorios dentales en México. Sin marketing inflado — incluimos lo que {{ $competitor['name'] }} hace bien y dónde DocFácil tiene la ventaja.
+                Si está comparando opciones para su consultorio dental, aquí está lo que DocFácil hace hoy, con precios en pesos.
+                Para comparar precios y funciones actuales de {{ $competitor['name'] }}, consulte su sitio oficial.
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -120,166 +116,118 @@
                     Probar DocFácil 15 días gratis →
                 </a>
                 <a href="#tabla-comparativa" class="w-full sm:w-auto px-8 py-3.5 bg-gray-100 text-gray-800 font-semibold rounded-xl hover:bg-gray-200 transition">
-                    Ver comparativa completa ↓
+                    Ver qué revisar ↓
                 </a>
             </div>
         </div>
     </section>
 
-    {{-- TL;DR --}}
+    {{-- Resumen --}}
     <section class="py-12 bg-white">
         <div class="max-w-3xl mx-auto px-4">
             <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/60 p-6 sm:p-8">
-                <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">TL;DR · Resumen ejecutivo</div>
+                <div class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3">En resumen</div>
                 <p class="text-gray-800 leading-relaxed">
-                    <strong>DocFácil</strong> está hecho 100% para consultorios dentales en México: pensado para la NOM-004 (notas que se bloquean y recetas con cédula), integra SPEI, tiene WhatsApp 1-clic nativo, soporte directo del fundador y precio en pesos. Plan Free de por vida + Básico desde $499 MXN/mes.
+                    <strong>DocFácil</strong> está hecho en México para consultorios dentales mexicanos: expediente pensado para la NOM-004 (notas y recetas que se bloquean a las 24 horas), recetas PDF con cédula, odontograma FDI, presupuestos, cobros y recordatorios por WhatsApp a 1 clic. Plan Free de por vida y Básico desde $499 MXN al mes.
                     <br><br>
-                    <strong>{{ $competitor['name'] }}</strong> es {{ $competitor['tagline'] }} ({{ $competitor['origin'] }}). {{ $competitor['pricing'] }}. Es opción válida para {{ \Illuminate\Support\Str::lower($competitor['best_for']) }}, pero no fue diseñado para el contexto regulatorio mexicano.
+                    Para comparar precios y funciones actuales de <strong>{{ $competitor['name'] }}</strong>, consulte su sitio oficial. Abajo le dejamos las preguntas que conviene hacerle a cualquier sistema.
                 </p>
             </div>
         </div>
     </section>
 
-    {{-- Tabla comparativa principal --}}
+    {{-- Tabla: qué revisar y qué hace DocFácil --}}
     <section id="tabla-comparativa" class="py-14 sm:py-20 bg-gray-50">
         <div class="max-w-5xl mx-auto px-4">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-center mb-10">Comparativa lado a lado</h2>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-center mb-3">Qué revisar al comparar</h2>
+            <p class="text-center text-gray-600 mb-10">Lo que DocFácil hace hoy, punto por punto. Haga las mismas preguntas a {{ $competitor['name'] }}.</p>
 
             <div class="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-200">
                 <table class="w-full text-sm sm:text-base">
                     <thead>
                         <tr class="border-b-2 border-gray-200 bg-gray-50">
-                            <th class="text-left py-4 px-4 sm:px-6 font-bold text-gray-700">Criterio</th>
+                            <th class="text-left py-4 px-4 sm:px-6 font-bold text-gray-700">Qué revisar</th>
                             <th class="text-left py-4 px-4 sm:px-6 font-bold text-teal-700">DocFácil</th>
-                            <th class="text-left py-4 px-4 sm:px-6 font-bold text-gray-700">{{ $competitor['name'] }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
+                        @php
+                            $filas = [
+                                ['Hecho en', 'México, para consultorios dentales mexicanos'],
+                                ['Pensado para la NOM-004', 'Notas y recetas que se bloquean a las 24 horas, historial de cambios y diagnósticos con CIE-10'],
+                                ['Aviso de privacidad y datos de sus pacientes', 'Aviso de privacidad publicado; DocFácil es encargado de los datos de sus pacientes'],
+                                ['Recordatorios por WhatsApp', 'A 1 clic: DocFácil abre su WhatsApp con el mensaje escrito y usted le da enviar'],
+                                ['Odontograma FDI', 'Interactivo, con 13 condiciones; lo que falta tratar se vuelve presupuesto'],
+                                ['Recetas', 'PDF con su cédula y espacio para su firma; el paciente las ve en su portal'],
+                                ['Presupuestos y cobros', 'El paciente acepta el presupuesto en línea; cobros, abonos y saldo por WhatsApp a 1 clic'],
+                                ['Precio', 'Free de por vida · Básico $499 MXN al mes · Pro $999 · Clínica $1,999'],
+                                ['Cómo paga su plan', 'Con tarjeta, o por SPEI'],
+                                ['Soporte', 'Por WhatsApp con el fundador, en español'],
+                                ['Garantía', '30 días de garantía sobre su primer pago'],
+                            ];
+                        @endphp
+                        @foreach($filas as [$criterio, $docfacil])
                         <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">País de origen</td>
-                            <td class="py-3 px-4 sm:px-6">🇲🇽 México</td>
-                            <td class="py-3 px-4 sm:px-6">{{ $competitor['origin'] }}</td>
+                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">{{ $criterio }}</td>
+                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">{{ $docfacil }}</td>
                         </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Pensado para la NOM-004 (México)</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Notas que se bloquean a las 24 h y recetas con cédula</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">No aplicable / requiere customización</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Aviso de privacidad y contrato de encargado para tus pacientes</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Incluidos en nuestros términos y aviso de privacidad</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">Revisa sus términos</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">WhatsApp recordatorios</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ 1-clic nativo, sin API cara</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">Vía integración o copy-paste</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Pago SPEI</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ Soporte directo</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">No soportado</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Odontograma FDI interactivo</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ 13 condiciones</td>
-                            <td class="py-3 px-4 sm:px-6">Disponible</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Recetas con cédula profesional</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">✓ PDF con cédula y espacio para firma</td>
-                            <td class="py-3 px-4 sm:px-6 text-amber-700">Genérica (no formato MX)</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Precio inicial</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">Free de por vida · Básico $499 MXN/mes</td>
-                            <td class="py-3 px-4 sm:px-6">{{ $competitor['pricing'] }}</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Soporte</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">WhatsApp directo del fundador (Omar Lerma)</td>
-                            <td class="py-3 px-4 sm:px-6">Tickets / email zona horaria distinta</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Idioma soporte</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">Español MX nativo</td>
-                            <td class="py-3 px-4 sm:px-6">Español genérico / inglés</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 sm:px-6 font-semibold text-gray-700">Garantía</td>
-                            <td class="py-3 px-4 sm:px-6 text-emerald-700 font-semibold">30 días devolución</td>
-                            <td class="py-3 px-4 sm:px-6">Variable según contrato</td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
+            <p class="mt-4 text-center text-sm text-gray-500">Para comparar precios y funciones actuales de {{ $competitor['name'] }}, consulte su sitio oficial.</p>
         </div>
     </section>
 
-    {{-- Strengths/Weaknesses honestas --}}
+    {{-- Fortalezas y limitaciones de DocFácil --}}
     <section class="py-14 sm:py-20 bg-white">
         <div class="max-w-5xl mx-auto px-4">
-            <h2 class="text-2xl sm:text-4xl font-extrabold text-center mb-10">Pros y contras de cada uno</h2>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-center mb-10">Lo que DocFácil sí hace y lo que no</h2>
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="rounded-2xl p-6 border-2 border-teal-200 bg-teal-50/40">
-                    <h3 class="text-xl font-extrabold text-teal-900 mb-4">DocFácil — fortalezas</h3>
+                    <h3 class="text-xl font-extrabold text-teal-900 mb-4">Lo que sí hace</h3>
                     <ul class="space-y-3 text-sm text-gray-700">
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>WhatsApp 1-clic nativo</strong> — abre tu propio WhatsApp con mensaje pre-armado, sin API cara de Meta</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Hecho 100% para México</strong> — pensado para la NOM-004 (notas y recetas que se bloquean), SPEI, español MX, soporte MX</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Founder-led</strong> — Omar Lerma responde directo en su WhatsApp personal</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Plan Free de por vida</strong> — 1 doctor + 15 pacientes sin tarjeta</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Precio en pesos</strong> — desde $499 MXN/mes, sin riesgo cambiario</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Garantía 30 días</strong> — devolución completa sin preguntas</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>PWA</strong> — se instala como app en iPhone/Android sin pasar por App Store</span></li>
-                    </ul>
-                    <h4 class="text-sm font-bold text-gray-900 mt-6 mb-2">Limitaciones honestas</h4>
-                    <ul class="space-y-2 text-xs text-gray-600">
-                        <li>· Apenas arrancando (abril 2026) — pocos testimoniales públicos aún</li>
-                        <li>· No emite factura CFDI</li>
-                        <li>· Foco exclusivo dental — no es para médicos generales</li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>WhatsApp a 1 clic</strong>: abre su propio WhatsApp con el mensaje ya escrito, sin pagar mensajes a Meta</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Hecho en México para consultorios mexicanos</strong>: pensado para la NOM-004, en español de México, precios en pesos</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Soporte con el fundador</strong>: Omar Lerma responde por WhatsApp</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Plan Free de por vida</strong>: 1 doctor, 15 pacientes y 10 citas al mes, sin tarjeta</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Garantía</strong>: 30 días de garantía sobre su primer pago</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Se instala como app</strong> en el celular (iPhone o Android) desde el navegador</span></li>
                     </ul>
                 </div>
 
                 <div class="rounded-2xl p-6 border-2 border-gray-200 bg-gray-50/40">
-                    <h3 class="text-xl font-extrabold text-gray-900 mb-4">{{ $competitor['name'] }} — fortalezas</h3>
+                    <h3 class="text-xl font-extrabold text-gray-900 mb-4">Lo que no hace (todavía)</h3>
                     <ul class="space-y-3 text-sm text-gray-700">
-                        @foreach($competitor['strengths'] as $s)
-                        <li class="flex items-start gap-2"><span class="text-blue-600 mt-0.5">✓</span><span>{{ $s }}</span></li>
-                        @endforeach
-                    </ul>
-                    <h4 class="text-sm font-bold text-gray-900 mt-6 mb-2">Limitaciones para el mercado mexicano</h4>
-                    <ul class="space-y-2 text-xs text-gray-600">
-                        @foreach($competitor['weaknesses'] as $w)
-                        <li>· {{ $w }}</li>
-                        @endforeach
+                        <li class="flex items-start gap-2"><span class="text-gray-400 mt-0.5">·</span><span>Es nuevo (2026): todavía no tiene casos publicados de otros consultorios</span></li>
+                        <li class="flex items-start gap-2"><span class="text-gray-400 mt-0.5">·</span><span>No emite factura CFDI</span></li>
+                        <li class="flex items-start gap-2"><span class="text-gray-400 mt-0.5">·</span><span>No manda WhatsApp solo: usted le da enviar a cada mensaje</span></li>
+                        <li class="flex items-start gap-2"><span class="text-gray-400 mt-0.5">·</span><span>No cobra al paciente en línea: usted registra el cobro</span></li>
+                        <li class="flex items-start gap-2"><span class="text-gray-400 mt-0.5">·</span><span>Hecho para consultorios dentales</span></li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- Para quién es cada uno --}}
+    {{-- Para quién es --}}
     <section class="py-14 sm:py-20 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-2xl sm:text-4xl font-extrabold mb-10">¿Para quién es mejor cada opción?</h2>
+            <h2 class="text-2xl sm:text-4xl font-extrabold mb-10">¿Es DocFácil para su consultorio?</h2>
             <div class="grid md:grid-cols-2 gap-6 text-left">
                 <div class="rounded-2xl bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-200 p-6">
-                    <div class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-2">Elige DocFácil si...</div>
+                    <div class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-2">Le conviene DocFácil si...</div>
                     <ul class="space-y-2.5 text-sm text-gray-700">
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Tu consultorio está en México (1-3 sillones)</li>
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quieres recordatorios WhatsApp sin pagar API a Meta</li>
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quieres un expediente pensado para la NOM-004 (notas que se bloquean, recetas con cédula)</li>
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Prefieres precio en pesos sin sobresaltos cambiarios</li>
-                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Valoras hablar directo con el fundador del software</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Su consultorio dental está en México (1 a 3 sillones)</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quiere mandar recordatorios por WhatsApp desde su propio número</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quiere un expediente pensado para la NOM-004 (notas que se bloquean, recetas con cédula)</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Prefiere pagar en pesos</li>
+                        <li class="flex items-start gap-2"><span class="text-teal-600">→</span> Quiere hablar directo con quien hace el sistema</li>
                     </ul>
                 </div>
                 <div class="rounded-2xl bg-white border border-gray-200 p-6">
-                    <div class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Elige {{ $competitor['name'] }} si...</div>
-                    <p class="text-sm text-gray-700 leading-relaxed">{{ $competitor['best_for'] }}</p>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{{ $competitor['name'] }} NO es ideal si...</div>
-                        <p class="text-xs text-gray-600 leading-relaxed">{{ $competitor['not_for'] }}</p>
-                    </div>
+                    <div class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Antes de decidir</div>
+                    <p class="text-sm text-gray-700 leading-relaxed">Pruebe DocFácil 15 días con sus propios pacientes, sin tarjeta. Para comparar precios y funciones actuales de {{ $competitor['name'] }}, consulte su sitio oficial y pida el precio en pesos por escrito.</p>
                 </div>
             </div>
         </div>
@@ -288,16 +236,16 @@
     {{-- Migración --}}
     <section class="py-14 bg-white">
         <div class="max-w-3xl mx-auto px-4 text-center">
-            <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">¿Vienes de {{ $competitor['name'] }}? Te ayudo a migrar</h2>
+            <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">¿Ya usa {{ $competitor['name'] }}? Le ayudamos a pasar sus pacientes</h2>
             <p class="text-gray-600 leading-relaxed mb-6">
-                Si ya estás usando {{ $competitor['name'] }} y quieres probar DocFácil, mándame tu Excel/CSV con tus pacientes a mi WhatsApp directo y yo lo subo a tu cuenta sin costo durante el onboarding. Sin importar cuántos pacientes tengas.
+                Si quiere probar DocFácil, mándenos por WhatsApp su Excel o CSV con sus pacientes y lo subimos a su cuenta al empezar, sin costo.
             </p>
-            <a href="https://wa.me/526682493398?text={{ urlencode("Hola Omar, vengo de {$competitor['name']} y quiero probar DocFácil. ¿Me puedes ayudar con la migración?") }}"
+            <a href="https://wa.me/526682493398?text={{ urlencode("Hola Omar, uso {$competitor['name']} y quiero probar DocFácil. ¿Me puede ayudar a pasar mis pacientes?") }}"
                target="_blank"
                data-track="whatsapp_clicked" data-track-location="vs_migration" data-track-competitor="{{ $slug }}"
                class="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
-                Hablar con Omar para migrar
+                Hablar con Omar
             </a>
         </div>
     </section>
@@ -306,8 +254,8 @@
     <section class="py-16 sm:py-20 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-700"></div>
         <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Pruébalo tú mismo</h2>
-            <p class="mt-4 text-lg text-teal-100">15 días gratis con todas las funciones del Pro. Sin tarjeta. Garantía 30 días si decides quedarte.</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Pruébelo usted mismo</h2>
+            <p class="mt-4 text-lg text-teal-100">15 días con todo, sin tarjeta. 30 días de garantía sobre su primer pago.</p>
             <a href="{{ url('/doctor/register') }}"
                data-track="cta_clicked" data-track-location="vs_final_cta" data-track-competitor="{{ $slug }}"
                class="mt-8 inline-flex items-center px-10 py-4 bg-white text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition shadow-2xl text-lg">
@@ -344,7 +292,7 @@
                 <span class="text-gray-700">·</span>
                 <a href="{{ url('/doctor/login') }}" class="hover:text-teal-400 transition">Iniciar sesión</a>
             </div>
-            <p class="text-xs text-gray-600">&copy; {{ date('Y') }} DocFácil. Comparativa con fines informativos. {{ $competitor['name'] }} es marca registrada de su respectivo dueño.</p>
+            <p class="text-xs text-gray-600">&copy; {{ date('Y') }} DocFácil. Comparativa con fines informativos. Las marcas mencionadas pertenecen a sus respectivos dueños.</p>
         </div>
     </footer>
 </body>

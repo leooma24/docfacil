@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Calculadora gratis: ¿cuánto pierdes al mes en tu consultorio dental? · DocFácil</title>
-    <meta name="description" content="Calcula en 1 minuto cuánto dinero pierdes cada mes por citas no confirmadas, papeleo y cobros olvidados. Calculadora interactiva gratis para consultorios dentales en México.">
+    <title>Calculadora gratis: ¿cuánto pierde al mes en su consultorio dental? · DocFácil</title>
+    <meta name="description" content="Calcule en 1 minuto, con sus propios números, cuánto se le va cada mes por citas a las que no llegan, papeleo y cobros olvidados. Calculadora gratis para consultorios dentales en México.">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
     <link rel="canonical" href="{{ url('/herramientas/calculadora-consultorio') }}">
 
@@ -14,11 +14,11 @@
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/herramientas/calculadora-consultorio') }}">
-    <meta property="og:title" content="¿Cuánto pierdes al mes en tu consultorio dental? Calculadora gratis">
-    <meta property="og:description" content="1 minuto, sin registro. Descubre cuánto se te está yendo cada mes por citas no confirmadas, papeleo y cobros olvidados.">
+    <meta property="og:title" content="¿Cuánto pierde al mes en su consultorio dental? Calculadora gratis">
+    <meta property="og:description" content="1 minuto, sin registro. Con sus propios números, vea cuánto se le va cada mes por citas a las que no llegan, papeleo y cobros olvidados.">
     <meta property="og:image" content="{{ asset('images/og-default.png') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="¿Cuánto pierdes al mes en tu consultorio? Calculadora gratis">
+    <meta name="twitter:title" content="¿Cuánto pierde al mes en su consultorio? Calculadora gratis">
 
     {{-- JSON-LD structured data para rich snippets --}}
     @php
@@ -29,7 +29,7 @@
             'url' => url('/herramientas/calculadora-consultorio'),
             'applicationCategory' => 'BusinessApplication',
             'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'MXN'],
-            'description' => 'Calculadora gratuita para dentistas en México que calcula pérdidas mensuales por no-shows, papeleo y cobros no recuperados.',
+            'description' => 'Calculadora gratuita para dentistas en México: con sus propios números estima lo que se pierde al mes por citas a las que no llegan, papeleo y cobros no recuperados.',
             'publisher' => ['@type' => 'Organization', 'name' => 'DocFácil', 'url' => url('/')],
         ];
     @endphp
@@ -219,8 +219,8 @@
 <section class="hero">
     <div class="hero-inner">
         <span class="hero-kicker">Calculadora gratis · sin registro</span>
-        <h1>¿Cuánto estás perdiendo cada mes en tu consultorio?</h1>
-        <p>Un minuto y te muestro dónde se te están yendo los pesos. Todos los cálculos se hacen en tu navegador — tus datos no se guardan ni se mandan a ningún lado.</p>
+        <h1>¿Cuánto está perdiendo cada mes en su consultorio?</h1>
+        <p>Un minuto, con sus propios números. Los cálculos se hacen en su navegador; solo guardamos sus datos si nos pide el análisis.</p>
     </div>
 </section>
 
@@ -228,15 +228,15 @@
     <div class="card-main">
         <div class="grid-split">
             <div class="inputs-section">
-                <h2>Tus datos</h2>
+                <h2>Sus números</h2>
 
                 <div class="input-row">
                     <label>
-                        Pacientes que ves al mes
+                        Pacientes que ve al mes
                         <span class="value" x-text="patients"></span>
                     </label>
                     <input type="range" min="10" max="200" step="5" x-model.number="patients">
-                    <div class="input-helper">Promedio general (todas las sillas)</div>
+                    <div class="input-helper">Promedio general (todos los sillones)</div>
                 </div>
 
                 <div class="input-row">
@@ -245,7 +245,7 @@
                         <span class="value" x-text="noShowPct + '%'"></span>
                     </label>
                     <input type="range" min="5" max="45" step="1" x-model.number="noShowPct">
-                    <div class="input-helper">15-25% es lo típico en consultorios sin recordatorios</div>
+                    <div class="input-helper">Su estimado: de cada 100 citas, cuántas no llegan ni avisan</div>
                 </div>
 
                 <div class="input-row">
@@ -254,12 +254,12 @@
                         <span class="value">$<span x-text="avgTicket.toLocaleString('es-MX')"></span></span>
                     </label>
                     <input type="range" min="200" max="3000" step="50" x-model.number="avgTicket">
-                    <div class="input-helper">Lo que un paciente deja en una visita típica</div>
+                    <div class="input-helper">Lo que un paciente deja en una visita normal</div>
                 </div>
 
                 <div class="input-row">
                     <label>
-                        Horas/semana que gastas en papeleo
+                        Horas a la semana que se le van en papeleo
                         <span class="value" x-text="paperworkHours + ' hrs'"></span>
                     </label>
                     <input type="range" min="0" max="25" step="1" x-model.number="paperworkHours">
@@ -268,25 +268,25 @@
 
                 <div class="input-row">
                     <label>
-                        Valor de tu hora profesional
+                        Valor de su hora profesional
                         <span class="value">$<span x-text="hourlyRate.toLocaleString('es-MX')"></span></span>
                     </label>
                     <input type="range" min="150" max="1500" step="50" x-model.number="hourlyRate">
-                    <div class="input-helper">Lo que podrías estar cobrando en una consulta</div>
+                    <div class="input-helper">Lo que podría estar cobrando en una consulta</div>
                 </div>
 
                 <div class="input-row">
                     <label>
-                        Cobros que olvidas cobrar al mes
+                        Cobros que se quedan sin cobrar al mes
                         <span class="value" x-text="forgottenPct + '%'"></span>
                     </label>
                     <input type="range" min="0" max="20" step="1" x-model.number="forgottenPct">
-                    <div class="input-helper">Pacientes que "te pagan después" y nunca regresas</div>
+                    <div class="input-helper">Su estimado: pacientes que "pagan después" y no se les vuelve a cobrar</div>
                 </div>
             </div>
 
             <div class="results-section">
-                <h2>Lo que pierdes al mes</h2>
+                <h2>Lo que pierde al mes, según sus números</h2>
 
                 <div class="result-total">
                     <div class="label">Total perdido</div>
@@ -314,7 +314,7 @@
                     <div class="breakdown-row">
                         <div class="breakdown-icon">💸</div>
                         <div>
-                            <div class="breakdown-label">Cobros que se te olvidan</div>
+                            <div class="breakdown-label">Cobros que se quedan sin cobrar</div>
                             <div class="breakdown-sub"><span x-text="forgottenPct"></span>% × <span x-text="patients"></span> pacientes × $<span x-text="avgTicket.toLocaleString('es-MX')"></span></div>
                         </div>
                         <div class="breakdown-amount">$<span x-text="Math.round(lossForgotten).toLocaleString('es-MX')"></span></div>
@@ -324,10 +324,10 @@
         </div>
 
         <div class="cta-section">
-            <h3>DocFácil te ayuda a recuperar esto</h3>
-            <p>Agenda + recordatorios WhatsApp a 1 clic + expediente digital + recetas PDF + cobros por WhatsApp — desde <strong>$499/mes</strong>. Pagarías menos del 10% de lo que hoy pierdes.</p>
+            <h3>DocFácil le ayuda con esto</h3>
+            <p>Agenda, recordatorios por WhatsApp a 1 clic, expediente digital, recetas PDF, presupuestos y cobros, desde <strong>$499 al mes</strong>.<template x-if="total > 499"><span> Eso es el <strong x-text="Math.max(1, Math.round(499 / total * 100)) + '%'"></strong> de lo que, según sus números, se le va al mes.</span></template></p>
             <a href="{{ url('/dentistas?utm_source=calculadora&utm_medium=tools&utm_campaign=roi_calculator') }}" class="cta-btn">Probar DocFácil 15 días gratis →</a>
-            <div class="cta-footnote">Sin tarjeta · sin compromisos · 15 días con todo desbloqueado</div>
+            <div class="cta-footnote">Sin tarjeta · 15 días con todo · cancele cuando quiera, sin penalización</div>
         </div>
 
         {{-- LEAD CAPTURE: opcional, aparece despues de ver resultados --}}
@@ -336,13 +336,13 @@
                 <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:22px;">
                     <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px;">
                         <div>
-                            <h4 style="font-size:16px;font-weight:700;color:#78350f;margin-bottom:4px;">¿Quieres saber cómo recuperar estos <span x-text="'$' + Math.round(total).toLocaleString('es-MX')"></span> al mes?</h4>
-                            <p style="font-size:13px;color:#92400e;">Te mando por WhatsApp un análisis corto con los 3 cambios que más impacto tendrían en tu caso específico. Sin spam, sin llamadas molestas.</p>
+                            <h4 style="font-size:16px;font-weight:700;color:#78350f;margin-bottom:4px;">¿Quiere ideas para recuperar estos <span x-text="'$' + Math.round(total).toLocaleString('es-MX')"></span> al mes?</h4>
+                            <p style="font-size:13px;color:#92400e;">Le escribimos por WhatsApp con un análisis corto de sus números. Sin spam.</p>
                         </div>
                         <button x-on:click="leadDismissed = true" style="background:none;border:none;color:#92400e;cursor:pointer;padding:4px;font-size:18px;line-height:1;" aria-label="Cerrar">✕</button>
                     </div>
                     <form x-on:submit.prevent="submitLead()" style="display:grid;gap:10px;">
-                        <input type="text" x-model="leadName" placeholder="Tu nombre" required maxlength="100" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
+                        <input type="text" x-model="leadName" placeholder="Su nombre" required maxlength="100" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                             <input type="tel" x-model="leadPhone" placeholder="WhatsApp (ej. 6682493398)" required maxlength="20" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
                             <input type="email" x-model="leadEmail" placeholder="Email (opcional)" maxlength="100" style="padding:10px 12px;border:1px solid #fcd34d;border-radius:8px;font-size:14px;">
@@ -350,24 +350,23 @@
                         <div x-show="leadError" x-text="leadError" style="color:#991b1b;font-size:13px;" x-cloak></div>
                         <button type="submit" x-bind:disabled="leadLoading"
                             style="background:linear-gradient(135deg,#d97706,#b45309);color:white;border:none;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;">
-                            <span x-show="!leadLoading">Mándame el análisis →</span>
+                            <span x-show="!leadLoading">Quiero el análisis →</span>
                             <span x-show="leadLoading" x-cloak>Enviando...</span>
                         </button>
-                        <p style="font-size:11px;color:#b45309;text-align:center;">Tu info solo se usa para contactarte una vez. No la compartimos.</p>
+                        <p style="font-size:11px;color:#b45309;text-align:center;">Guardamos su nombre, teléfono y estos números solo para escribirle sobre el análisis. No los compartimos.</p>
                     </form>
                 </div>
             </template>
             <template x-if="leadSubmitted">
                 <div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:14px;padding:20px;text-align:center;">
                     <div style="font-size:36px;margin-bottom:6px;">✓</div>
-                    <h4 style="font-size:16px;font-weight:700;color:#065f46;margin-bottom:4px;">¡Listo! Omar te escribe pronto por WhatsApp</h4>
-                    <p style="font-size:13px;color:#047857;">Normalmente respondo el mismo día.</p>
+                    <h4 style="font-size:16px;font-weight:700;color:#065f46;margin-bottom:4px;">¡Listo! Le escribimos pronto por WhatsApp</h4>
                 </div>
             </template>
         </div>
 
         <div class="share-section">
-            <p style="margin-bottom: 10px;">💡 Comparte el análisis con un colega que siga en libreta:</p>
+            <p style="margin-bottom: 10px;">💡 Comparta el análisis con un colega que siga en libreta:</p>
             <a :href="personalizedWhatsappShare" target="_blank" rel="noopener" class="share-btn">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z"/></svg>
                 Compartir con mis números
@@ -384,10 +383,10 @@
 
         <div class="trust-section">
             <h4>💡 Cómo hicimos los cálculos</h4>
-            <p><strong>Citas que no llegan:</strong> # pacientes × % no-show × ticket promedio. El rango 15-25% de no-shows en consultorios sin recordatorios viene de estudios de citas confirmadas por WhatsApp/SMS.</p>
-            <p style="margin-top:8px;"><strong>Papeleo:</strong> horas/semana × 4 semanas × valor de tu hora. Representa el costo de oportunidad — si en vez de buscar expedientes estuvieras atendiendo pacientes.</p>
-            <p style="margin-top:8px;"><strong>Cobros olvidados:</strong> % de pacientes × pacientes totales × ticket. Típicamente 3-8% dependiendo de qué tanto registras.</p>
-            <p style="margin-top:10px; color:#4b5563;"><strong>Son estimaciones.</strong> Úsalas como punto de partida para pensar tu operación, no como reporte financiero exacto.</p>
+            <p><strong>Citas que no llegan:</strong> pacientes al mes × el porcentaje que usted estima que no llega × ticket promedio.</p>
+            <p style="margin-top:8px;"><strong>Papeleo:</strong> horas a la semana × 4 semanas × valor de su hora. Es lo que podría cobrar si en vez de buscar expedientes estuviera atendiendo pacientes.</p>
+            <p style="margin-top:8px;"><strong>Cobros olvidados:</strong> el porcentaje que usted estima × pacientes al mes × ticket.</p>
+            <p style="margin-top:10px; color:#4b5563;"><strong>Son estimaciones con sus números.</strong> Los valores con los que abre la calculadora son solo un ejemplo; cámbielos por los suyos. Úselas como punto de partida, no como reporte financiero.</p>
         </div>
     </div>
 
@@ -467,7 +466,7 @@ function calculator() {
         async submitLead() {
             this.leadError = '';
             if (!this.leadName || !this.leadPhone) {
-                this.leadError = 'Tu nombre y teléfono son obligatorios';
+                this.leadError = 'Su nombre y teléfono son obligatorios';
                 return;
             }
             this.leadLoading = true;
@@ -497,7 +496,7 @@ function calculator() {
                 if (!resp.ok) throw new Error('Server error');
                 this.leadSubmitted = true;
             } catch (e) {
-                this.leadError = 'Hubo un error. Intenta de nuevo en unos segundos.';
+                this.leadError = 'Hubo un error. Intente de nuevo en unos segundos.';
             } finally {
                 this.leadLoading = false;
             }
