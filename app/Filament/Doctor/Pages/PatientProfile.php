@@ -42,6 +42,17 @@ class PatientProfile extends Page
         }
     }
 
+    /** "Cobrar" de Lo que sigue: todo lo vencido, con el total ya puesto. */
+    public function cobrarVencidoAction(): \Filament\Actions\Action
+    {
+        return \App\Filament\Doctor\Actions\CobrarAbono::make('cobrarVencido', fn () => Payment::where('clinic_id', auth()->user()->clinic_id)
+            ->where('patient_id', $this->patient?->id)
+            ->overdue()
+            ->get())
+            ->button()
+            ->size('sm');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

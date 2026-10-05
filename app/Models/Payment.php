@@ -128,6 +128,40 @@ class Payment extends Model
     }
 
     /**
+     * Un pago que cubre varios adeudos: se abona del más viejo al más nuevo.
+     *
+     * El paciente que debe dos mensualidades y trae $1,500 no paga "la
+     * primera" y "la segunda" por separado: da el dinero y ya. Aquí se
+     * reparte solo, con la misma fecha y forma de pago.
+     */
+    public static function abonarEnOrden(iterable $cobros, float $monto, ?string $formaDePago = null): void
+    {
+        $cobros = collect($cobros)
+            ->filter(fn (Payment $c) => $c->remaining > 0)
+            ->sortBy(fn (Payment $c) => ($c->due_date ?? $c->payment_date)?->timestamp ?? 0)
+            ->values();
+
+        $monto = round($monto, 2);
+        $debe = round($cobros->sum(fn (Payment $c) => $c->remaining), 2);
+
+        if ($monto <= 0 || $monto > $debe) {
+            throw new \InvalidArgumentException('El pago debe ser mayor a cero y no más de lo que se debe ($' . number_format($debe, 2) . ').');
+        }
+
+        DB::transaction(function () use ($cobros, $monto, $formaDePago) {
+            $queda = $monto;
+            foreach ($cobros as $cobro) {
+                if ($queda <= 0) {
+                    break;
+                }
+                $parte = round(min($queda, $cobro->remaining), 2);
+                $cobro->registrarAbono($parte, $formaDePago);
+                $queda = round($queda - $parte, 2);
+            }
+        });
+    }
+
+    /**
      * Saldo pendiente = amount - amount_paid. Nunca negativo.
      */
     protected function remaining(): Attribute

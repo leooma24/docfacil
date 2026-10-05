@@ -18,6 +18,15 @@ class EditPayment extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            \App\Filament\Doctor\Actions\CobrarAbono::make('registrarAbono', fn () => collect([$this->record->fresh()]))
+                ->label('Registrar pago')
+                ->visible(fn () => $this->record->remaining > 0 && $this->record->status !== 'paid')
+                // El formulario se pone al día: si luego le dan Guardar, no
+                // regresa lo pagado al saldo de antes.
+                ->after(function () {
+                    $this->record->refresh();
+                    $this->refreshFormData(['amount_paid', 'status']);
+                }),
             Actions\DeleteAction::make(),
         ];
     }

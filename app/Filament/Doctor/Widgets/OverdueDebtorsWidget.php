@@ -2,16 +2,25 @@
 
 namespace App\Filament\Doctor\Widgets;
 
+use App\Filament\Doctor\Actions\CobrarAbono;
 use App\Models\Payment;
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Widgets\Widget;
 
 /**
- * Pacientes con adeudos vencidos — vista rapida con click-to-WhatsApp
- * para recordatorio de cobro. Se muestra solo si hay al menos 1 adeudo
- * vencido en la clinica del doctor.
+ * Pacientes con adeudos vencidos. "Cobrar" registra el pago ahí mismo con lo
+ * que debe ya puesto; "Recordarle" abre WhatsApp con el mensaje. Se muestra
+ * solo si hay al menos 1 adeudo vencido en la clinica del doctor.
  */
-class OverdueDebtorsWidget extends Widget
+class OverdueDebtorsWidget extends Widget implements HasActions, HasForms
 {
+    use InteractsWithActions;
+    use InteractsWithForms;
+
     protected static string $view = 'filament.doctor.widgets.overdue-debtors';
 
     protected static ?int $sort = 5;
@@ -23,6 +32,13 @@ class OverdueDebtorsWidget extends Widget
         return Payment::where('clinic_id', auth()->user()->clinic_id)
             ->overdue()
             ->exists();
+    }
+
+    public function cobrarAction(): Action
+    {
+        return CobrarAbono::make('cobrar', fn (array $arguments) => Payment::where('clinic_id', auth()->user()->clinic_id)
+            ->whereKey($arguments['payment'] ?? null)
+            ->get());
     }
 
     public function getViewData(): array

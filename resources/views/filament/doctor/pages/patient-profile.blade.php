@@ -149,7 +149,12 @@
                 <div class="pp-sigue-t">{{ $paso['titulo'] }}</div>
                 <div class="pp-sigue-d">{{ $paso['detalle'] }}</div>
             </div>
-            <a href="{{ $paso['url'] }}" class="pp-sigue-btn">{{ $paso['accion'] }}</a>
+            @if($paso['tipo'] === 'saldo')
+                {{-- Se cobra aquí mismo, con lo vencido ya puesto. --}}
+                {{ $this->cobrarVencidoAction }}
+            @else
+                <a href="{{ $paso['url'] }}" class="pp-sigue-btn">{{ $paso['accion'] }}</a>
+            @endif
         </div>
         @endforeach
     </div>
