@@ -121,8 +121,10 @@
     @if($selectedTooth)
         @php $sel = $teeth[$selectedTooth] ?? []; $marcadas = array_filter($sel['surfaces'] ?? []); @endphp
         <div style="{{ $tarjeta }}border-color:#99f6e4;padding:16px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;">
-            <div style="width:84px;flex:0 0 84px;">
-                <x-odontograma.diente :numero="$selectedTooth" :condicion="$sel['condition'] ?? 'healthy'" :caras="$sel['surfaces'] ?? []" />
+            {{-- En grande y tocable: en el celular las caras del diente chico
+                 miden unos 9 px; aquí sí caben el dedo. --}}
+            <div style="width:120px;flex:0 0 120px;">
+                <x-odontograma.diente :numero="$selectedTooth" :condicion="$sel['condition'] ?? 'healthy'" :caras="$sel['surfaces'] ?? []" :interactivo="true" />
             </div>
             <div style="flex:1 1 280px;min-width:0;">
                 <div style="font-size:12px;color:#64748b;">Diente {{ $selectedTooth }} · {{ ucfirst(OdontogramTooth::tipo($selectedTooth)) }}{{ $selectedTooth >= 51 ? ' temporal' : '' }}</div>
