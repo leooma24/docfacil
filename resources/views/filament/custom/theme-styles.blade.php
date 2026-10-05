@@ -53,6 +53,10 @@
 </script>
 
 <style>
+    /* Esquinas del panel, en tres tamaños (ver RadiosDelPanelTest):
+       8px botones, campos, chips y cajas chicas (igual que Filament);
+       12px cajas dentro de una tarjeta; 16px tarjetas, secciones y
+       ventanas (igual que la página de inicio). 999px píldoras, 50% círculos. */
     /* ===== DOCFACIL CUSTOM THEME ===== */
 
     /* x-cloak: oculta elementos hasta que Alpine los procesa.
@@ -130,13 +134,13 @@
     /* Consultorio y botón principal */
     .dfm-top { padding: 0.25rem 0.1rem 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
     .dfm-clinica { display: flex; align-items: center; gap: 0.65rem; padding: 0 0.35rem; }
-    .dfm-avatar { width: 2.25rem; height: 2.25rem; flex: 0 0 2.25rem; border-radius: 0.6rem; display: grid; place-items: center;
+    .dfm-avatar { width: 2.25rem; height: 2.25rem; flex: 0 0 2.25rem; border-radius: 8px; display: grid; place-items: center;
         background: linear-gradient(140deg, #2dd4bf, #0d9488); color: #042f2e; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.02em; }
     .dfm-avatar-img { object-fit: cover; background: #ffffff; height: 2.25rem !important; max-height: 2.25rem !important; }
     .dfm-clinica-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
     .dfm-clinica-nombre { color: #ffffff; font-weight: 700; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .dfm-clinica-sub { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dfm-cta { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.85rem; border-radius: 0.75rem;
+    .dfm-cta { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 0.85rem; border-radius: 12px;
         background: #2dd4bf; color: #042f2e !important; box-shadow: 0 8px 22px -10px rgba(45, 212, 191, 0.7), inset 0 1px 0 rgba(255,255,255,0.35);
         transition: transform .15s ease, background .15s ease; }
     .dfm-cta:hover { background: #5eead4; }
@@ -147,7 +151,7 @@
     .dfm-cta-s { font-size: 0.75rem; font-weight: 600; opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Plan y prueba, abajo */
-    .dfm-plan { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0.75rem 0.9rem; padding: 0.7rem 0.8rem; border-radius: 0.75rem;
+    .dfm-plan { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0.75rem 0.9rem; padding: 0.7rem 0.8rem; border-radius: 12px;
         background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.07); }
     .dfm-plan:hover { background: rgba(255, 255, 255, 0.08); }
     .dfm-plan-t { color: #ffffff; font-weight: 700; font-size: 0.82rem; }
@@ -180,7 +184,7 @@
     .fi-sidebar .fi-sidebar-group-items { row-gap: 2px !important; }
     .fi-sidebar .fi-sidebar-item-button {
         padding: 0.5rem 0.7rem !important;
-        border-radius: 0.6rem !important;
+        border-radius: 8px !important;
         background: transparent !important;
         box-shadow: none !important;
         border: 0 !important;
@@ -278,7 +282,7 @@
     /* ===== CARDS ===== */
     .fi-section,
     .fi-ta-ctn {
-        border-radius: 1rem !important;
+        border-radius: 16px !important;
         border: 1px solid #e5e7eb !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
         overflow: hidden;
@@ -291,7 +295,7 @@
 
     /* Stats cards */
     .fi-wi-stats-overview-stat {
-        border-radius: 1rem !important;
+        border-radius: 16px !important;
         border: 1px solid #e5e7eb !important;
         transition: all 0.2s ease !important;
     }
@@ -308,7 +312,7 @@
 
     /* Buttons */
     .fi-btn {
-        border-radius: 0.75rem !important;
+        border-radius: 12px !important;
         font-weight: 600 !important;
         transition: all 0.15s ease !important;
     }
@@ -328,7 +332,7 @@
 
     /* Form inputs */
     .fi-input, .fi-select, textarea, select {
-        border-radius: 0.75rem !important;
+        border-radius: 12px !important;
         transition: all 0.15s ease !important;
     }
 
@@ -351,7 +355,7 @@
     }
 
     .fi-simple-main-ctn {
-        border-radius: 1.5rem !important;
+        border-radius: 16px !important;
         box-shadow: 0 20px 60px rgba(0,0,0,0.08) !important;
     }
 
@@ -363,7 +367,7 @@
 
     /* Modal */
     .fi-modal-content {
-        border-radius: 1rem !important;
+        border-radius: 16px !important;
     }
 
     /* FullCalendar styling */
@@ -391,7 +395,7 @@
     }
 
     .fc .fc-button {
-        border-radius: 0.5rem !important;
+        border-radius: 8px !important;
         font-weight: 600 !important;
         font-size: 0.8rem !important;
         padding: 0.4rem 0.75rem !important;
@@ -430,7 +434,7 @@
 
     /* Widget cards */
     .fi-wi-chart {
-        border-radius: 1rem !important;
+        border-radius: 16px !important;
     }
 
     /* ========================================
@@ -513,7 +517,7 @@
             0 1px 3px rgba(0, 0, 0, 0.02),
             0 8px 30px rgba(13, 148, 136, 0.06),
             inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
-        border-radius: 1.25rem !important;
+        border-radius: 16px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
@@ -564,7 +568,7 @@
 
     .fi-wi-stats-overview-stat-icon {
         background: linear-gradient(135deg, rgba(13,148,136,0.1), rgba(8,145,178,0.1)) !important;
-        border-radius: 0.75rem !important;
+        border-radius: 12px !important;
         padding: 0.5rem !important;
         color: #0d9488 !important;
     }
@@ -592,7 +596,7 @@
     }
 
     .fi-btn {
-        border-radius: 0.75rem !important;
+        border-radius: 12px !important;
         font-weight: 600 !important;
         transition: all 0.2s !important;
     }
@@ -609,7 +613,7 @@
         background: rgba(255, 255, 255, 0.6) !important;
         backdrop-filter: blur(10px);
         border: 1.5px solid rgba(13, 148, 136, 0.15) !important;
-        border-radius: 0.75rem !important;
+        border-radius: 12px !important;
         transition: all 0.2s !important;
     }
 
@@ -675,7 +679,7 @@
     .fi-global-search {
         background: rgba(240, 253, 250, 0.5) !important;
         border: 1px solid rgba(13, 148, 136, 0.15) !important;
-        border-radius: 0.875rem !important;
+        border-radius: 12px !important;
         backdrop-filter: blur(8px);
     }
 
@@ -700,7 +704,7 @@
         box-shadow:
             0 25px 50px -12px rgba(0, 0, 0, 0.25),
             0 0 0 1px rgba(13, 148, 136, 0.05) !important;
-        border-radius: 1.5rem !important;
+        border-radius: 16px !important;
     }
 
     .fi-modal-close-overlay {
@@ -713,7 +717,7 @@
         backdrop-filter: blur(20px) saturate(180%);
         background: rgba(255, 255, 255, 0.9) !important;
         border: 1px solid rgba(13, 148, 136, 0.15) !important;
-        border-radius: 1rem !important;
+        border-radius: 16px !important;
         box-shadow: 0 12px 40px rgba(13, 148, 136, 0.15) !important;
     }
 
@@ -743,7 +747,7 @@
     }
     ::-webkit-scrollbar-thumb {
         background: rgba(13, 148, 136, 0.2);
-        border-radius: 10px;
+        border-radius: 8px;
         transition: background 0.2s;
     }
     ::-webkit-scrollbar-thumb:hover {
@@ -774,7 +778,7 @@
             font-size: 1.5rem !important;
         }
         .fi-section {
-            border-radius: 1rem !important;
+            border-radius: 16px !important;
         }
     }
 

@@ -3,7 +3,7 @@
         /* ===== CALENDAR HERO ===== */
         .cal-hero {
             position: relative;
-            border-radius: 1.5rem;
+            border-radius: 16px;
             padding: 28px 32px;
             overflow: hidden;
             background: linear-gradient(135deg, #3b82f6 0%, #0891b2 40%, #7c3aed 100%);
@@ -43,7 +43,7 @@
 
         .cal-hero-title-block { display: flex; align-items: center; gap: 16px; }
         .cal-hero-icon {
-            width: 64px; height: 64px; border-radius: 18px;
+            width: 64px; height: 64px; border-radius: 16px;
             background: rgba(255,255,255,0.18); backdrop-filter: blur(12px);
             border: 1.5px solid rgba(255,255,255,0.3);
             display: flex; align-items: center; justify-content: center;
@@ -76,7 +76,7 @@
             background: rgba(255,255,255,0.15);
             backdrop-filter: blur(14px);
             border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 16px 18px;
             transition: all 0.2s;
         }
@@ -97,7 +97,7 @@
         /* ===== CALENDAR WIDGET CONTAINER ===== */
         .cal-container {
             background: white;
-            border-radius: 1.25rem;
+            border-radius: 16px;
             padding: 20px;
             border: 1px solid rgba(229, 231, 235, 0.8);
             box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 2px rgba(59,130,246,0.05);
@@ -147,7 +147,7 @@
             background: linear-gradient(135deg, #3b82f6, #0891b2) !important;
             background-color: #3b82f6 !important;
             border: none !important;
-            border-radius: 10px !important;
+            border-radius: 8px !important;
             padding: 9px 16px !important;
             font-weight: 700 !important;
             font-size: 0.78rem !important;
@@ -204,14 +204,14 @@
             color: white !important;
         }
 
-        /* Button groups (rounded pill) */
+        /* Button groups (rounded-lg pill) */
         .cal-container .fc-button-group {
             display: inline-flex !important;
             gap: 6px !important;
             background: transparent !important;
         }
         .cal-container .fc-button-group .fc-button {
-            border-radius: 10px !important;
+            border-radius: 8px !important;
             margin: 0 !important;
         }
 
@@ -249,7 +249,7 @@
         }
 
         .cal-container .fc-event {
-            border-radius: 10px !important;
+            border-radius: 8px !important;
             border: none !important;
             padding: 4px 8px !important;
             font-weight: 600 !important;

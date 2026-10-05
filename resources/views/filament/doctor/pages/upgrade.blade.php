@@ -89,7 +89,7 @@
                     <span class="text-gray-500 text-sm">{{ $subtitle }} MXN</span>
                 </div>
                 @if ($cycle === 'annual')
-                <div class="mb-4 inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-200 rounded text-xs font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300">
+                <div class="mb-4 inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300">
                     Equivale a ${{ number_format($plan['annual'] / 12) }}/mes
                 </div>
                 @endif

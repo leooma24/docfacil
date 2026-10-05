@@ -58,7 +58,7 @@
                     </div>
                     <div class="mt-3 text-xs">
                         <p class="text-gray-500">¿No puedes escanear? Introduce manualmente:</p>
-                        <code class="block mt-1 p-2 bg-gray-100 dark:bg-gray-700 rounded font-mono text-xs break-all">{{ $secret }}</code>
+                        <code class="block mt-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg font-mono text-xs break-all">{{ $secret }}</code>
                     </div>
                 </div>
 

@@ -32,7 +32,7 @@
     .odo-interactivo .odo-silueta { cursor: pointer; }
     .odo-interactivo:not(.odo-sel):hover .odo-fondo { fill: #f8fafc; stroke: #e2e8f0; }
     .odo-escoge { display: none; }
-    .odo-escoge button { flex: 1; padding: 10px 12px; min-height: 44px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid #cbd5e1; background: #fff; color: #475569; }
+    .odo-escoge button { flex: 1; padding: 10px 12px; min-height: 44px; border-radius: 8px; font-size: 14px; font-weight: 700; border: 1px solid #cbd5e1; background: #fff; color: #475569; }
     .odo-ver-sup .odo-escoge [data-arcada="sup"], .odo-ver-inf .odo-escoge [data-arcada="inf"] { background: #0f766e; border-color: #0f766e; color: #fff; }
     .odo-lado { display: none; }
     /* En el celular, una arcada a la vez y cada lado del paciente en su

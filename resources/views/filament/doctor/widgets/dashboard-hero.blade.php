@@ -4,7 +4,7 @@
     <style>
         .dh-hero {
             position: relative;
-            border-radius: 1.5rem;
+            border-radius: 16px;
             padding: 32px 36px;
             overflow: hidden;
             background: linear-gradient(135deg, #0d9488 0%, #0891b2 35%, #7c3aed 100%);
@@ -32,7 +32,7 @@
 
         .dh-hero-top { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
         .dh-hero-icon {
-            width: 64px; height: 64px; border-radius: 20px;
+            width: 64px; height: 64px; border-radius: 16px;
             background: rgba(255,255,255,0.18);
             backdrop-filter: blur(14px);
             border: 1.5px solid rgba(255,255,255,0.32);
@@ -125,7 +125,7 @@
         .dh-empty-cta {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 14px; background: white; color: #0d9488;
-            font-weight: 700; font-size: 0.78rem; border-radius: 10px;
+            font-weight: 700; font-size: 0.78rem; border-radius: 8px;
             text-decoration: none; align-self: flex-start;
             transition: all 0.2s; margin-top: 4px;
         }

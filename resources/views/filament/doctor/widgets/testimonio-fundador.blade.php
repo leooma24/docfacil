@@ -1,7 +1,7 @@
 {{-- Estilos en línea a propósito: en producción algunas utilidades de Tailwind v4 no compilan. Ver CLAUDE.md. --}}
 <x-filament-widgets::widget>
     @unless ($oculto)
-        <div style="border-radius:1.25rem;border:2px solid #fde68a;background:linear-gradient(135deg,#fffbeb 0%,#ffffff 65%);padding:22px 26px;box-shadow:0 8px 24px -8px rgba(217,119,6,.18);">
+        <div style="border-radius:16px;border:2px solid #fde68a;background:linear-gradient(135deg,#fffbeb 0%,#ffffff 65%);padding:22px 26px;box-shadow:0 8px 24px -8px rgba(217,119,6,.18);">
             @if ($enviado)
                 <div style="display:flex;gap:16px;align-items:center;">
                     <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid #fbbf24;flex-shrink:0;">
@@ -39,7 +39,7 @@
                     <label style="display:block;margin-top:12px;font-size:.8rem;font-weight:700;color:#334155;">
                         Cómo quieres que aparezca tu nombre
                         <input type="text" wire:model="firma" maxlength="120"
-                            style="display:block;width:100%;margin-top:4px;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-size:.9rem;font-weight:500;color:#0f172a;background:#fff;">
+                            style="display:block;width:100%;margin-top:4px;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:.9rem;font-weight:500;color:#0f172a;background:#fff;">
                     </label>
                     @error('firma')
                         <div style="color:#dc2626;font-size:.8rem;margin-top:4px;">{{ $message }}</div>
@@ -52,7 +52,7 @@
 
                     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;">
                         <button type="submit" wire:loading.attr="disabled"
-                            style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:700;font-size:.9rem;border:none;border-radius:10px;padding:10px 18px;cursor:pointer;">
+                            style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:700;font-size:.9rem;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;">
                             Enviar mi frase
                         </button>
                         <button type="button" wire:click="despues"

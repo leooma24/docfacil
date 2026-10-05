@@ -1,18 +1,18 @@
 <x-filament-panels::page>
     <style>
-        .pi-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 20px; padding: 28px 32px; color: white; position: relative; overflow: hidden; }
+        .pi-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 28px 32px; color: white; position: relative; overflow: hidden; }
         .pi-hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(13,148,136,0.3), transparent); border-radius: 50%; }
         .pi-hero-label { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; font-weight: 700; }
         .pi-hero-title { font-size: 28px; font-weight: 800; margin-top: 6px; }
         .pi-hero-summary { font-size: 14px; margin-top: 12px; line-height: 1.6; opacity: 0.95; max-width: 700px; position: relative; z-index: 1; }
-        .pi-refresh { position: absolute; top: 20px; right: 24px; background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; z-index: 2; }
+        .pi-refresh { position: absolute; top: 20px; right: 24px; background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; z-index: 2; }
         .pi-refresh:hover { background: rgba(255,255,255,0.25); }
 
         .pi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 20px; }
         .pi-card { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s; }
         .pi-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
         .pi-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .pi-card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .pi-card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 
         .pi-type-revenue .pi-card-icon { background: #d1fae5; }
         .pi-type-workload .pi-card-icon { background: #dbeafe; }

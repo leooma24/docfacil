@@ -5,7 +5,7 @@
     // Estilos en linea a proposito: en produccion algunas utilidades de
     // Tailwind v4 no compilan, y este bloque es justo lo que el doctor viene
     // a ver. Ver CLAUDE.md.
-    $tarjeta = 'border-radius:1rem;padding:1.25rem 1.5rem;border:1px solid rgba(0,0,0,.06);background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);';
+    $tarjeta = 'border-radius:16px;padding:1.25rem 1.5rem;border:1px solid rgba(0,0,0,.06);background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);';
     $etiqueta = 'font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;opacity:.6;';
     $cifra = 'font-size:1.875rem;font-weight:800;line-height:1.15;margin-top:.35rem;';
 @endphp
@@ -13,7 +13,7 @@
 <x-filament-panels::page>
 
     {{-- Hero --}}
-    <div style="border-radius:1.25rem;padding:1.75rem 2rem;color:#fff;background:linear-gradient(135deg,#0f766e 0%,#0891b2 45%,#0ea5e9 100%);box-shadow:0 10px 30px rgba(8,145,178,.25);">
+    <div style="border-radius:16px;padding:1.75rem 2rem;color:#fff;background:linear-gradient(135deg,#0f766e 0%,#0891b2 45%,#0ea5e9 100%);box-shadow:0 10px 30px rgba(8,145,178,.25);">
         <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85;"><x-icono nombre="chart-bar" /> Cuánto te quedó</div>
         <div style="font-size:1.75rem;font-weight:800;margin-top:.25rem;">Corte del consultorio</div>
         <div style="opacity:.92;margin-top:.4rem;max-width:46rem;line-height:1.5;">
@@ -42,11 +42,11 @@
             </p>
             <div style="margin-top:1.25rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;">
                 <a href="{{ \App\Filament\Doctor\Resources\ExpenseResource::getUrl('create') }}"
-                   style="display:inline-block;padding:.6rem 1.1rem;border-radius:.6rem;background:#d97706;color:#fff;font-weight:600;text-decoration:none;">
+                   style="display:inline-block;padding:.6rem 1.1rem;border-radius:8px;background:#d97706;color:#fff;font-weight:600;text-decoration:none;">
                     Registrar un gasto
                 </a>
                 <a href="{{ \App\Filament\Doctor\Resources\PaymentResource::getUrl('create') }}"
-                   style="display:inline-block;padding:.6rem 1.1rem;border-radius:.6rem;background:#0d9488;color:#fff;font-weight:600;text-decoration:none;">
+                   style="display:inline-block;padding:.6rem 1.1rem;border-radius:8px;background:#0d9488;color:#fff;font-weight:600;text-decoration:none;">
                     Registrar un cobro
                 </a>
             </div>

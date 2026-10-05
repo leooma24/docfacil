@@ -47,7 +47,7 @@
                 </div>
 
                 <label class="flex items-center gap-3 mb-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 cursor-pointer">
-                    <input type="checkbox" wire:model.live="inheritsClinicConfig" class="rounded text-teal-600 focus:ring-teal-500">
+                    <input type="checkbox" wire:model.live="inheritsClinicConfig" class="rounded-lg text-teal-600 focus:ring-teal-500">
                     <div>
                         <div class="font-bold text-sm">Usar configuración de la clínica</div>
                         <div class="text-xs text-gray-500">Si lo prendes, heredas lo que el dueño configure para todos.</div>
@@ -70,7 +70,7 @@
                                     <input type="checkbox"
                                         wire:model.live="enabled.{{ $field['key'] }}"
                                         @disabled($disabled)
-                                        class="mt-0.5 rounded text-teal-600 focus:ring-teal-500">
+                                        class="mt-0.5 rounded-lg text-teal-600 focus:ring-teal-500">
                                     <div class="flex-1 min-w-0">
                                         <div class="font-bold text-sm">{{ $field['label'] }}</div>
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $field['help'] }}</div>

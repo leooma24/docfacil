@@ -9,17 +9,17 @@
         .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
         .steps-bar { display: flex; align-items: center; justify-content: flex-start; gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 1rem; padding-bottom: 0.25rem; }
         .steps-bar::-webkit-scrollbar { display: none; }
-        .step-btn { display: flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
+        .step-btn { display: flex; align-items: center; gap: 0.375rem; padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
         .step-circle { width: 1.25rem; height: 1.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
         .step-divider { width: 1rem; height: 2px; flex-shrink: 0; }
         .nav-buttons { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
         .nav-buttons > div { display: flex; flex-direction: column; gap: 0.5rem; }
-        .nav-btn { width: 100%; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; text-align: center; }
+        .nav-btn { width: 100%; padding: 0.75rem 1.25rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; text-align: center; }
         .header-layout { display: flex; flex-direction: column; gap: 0.75rem; }
         .header-info { display: flex; align-items: center; gap: 0.75rem; }
         .header-meta { text-align: left; font-size: 0.75rem; }
         .action-btns { display: flex; flex-direction: column; gap: 0.5rem; }
-        .action-btns a { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; text-decoration: none; text-align: center; }
+        .action-btns a { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: 12px; font-weight: 600; font-size: 0.875rem; text-decoration: none; text-align: center; }
         @media (min-width: 640px) {
             .vitals-grid { grid-template-columns: repeat(2, 1fr); }
             .meds-grid { grid-template-columns: repeat(2, 1fr); }
@@ -51,7 +51,7 @@
         /* Voice dictation mic button */
         .field-with-mic { display: flex; gap: 0.375rem; align-items: stretch; }
         .field-with-mic > .field-main { flex: 1; min-width: 0; }
-        .mic-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; min-width: 2.25rem; border-radius: 0.5rem; border: 1px solid #d1d5db; background: #f9fafb; cursor: pointer; flex-shrink: 0; transition: all 0.15s; color: #6b7280; align-self: flex-end; height: 2.5rem; }
+        .mic-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; min-width: 2.25rem; border-radius: 8px; border: 1px solid #d1d5db; background: #f9fafb; cursor: pointer; flex-shrink: 0; transition: all 0.15s; color: #6b7280; align-self: flex-end; height: 2.5rem; }
         .mic-btn:hover { background: #f3f4f6; color: #0d9488; }
         .mic-btn.recording { background: #dc2626; border-color: #dc2626; color: #fff; animation: micPulse 1.2s infinite; }
         .mic-btn svg { width: 1.1rem; height: 1.1rem; }
@@ -189,14 +189,14 @@
 
     @if($appointment)
     <style>
-        .cons-hero { position: relative; border-radius: 1.5rem; padding: 1.5rem 1.75rem; overflow: hidden; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%); color: white; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.5), inset 0 1px 0 rgba(255,255,255,0.2); margin-bottom: 1.25rem; }
+        .cons-hero { position: relative; border-radius: 16px; padding: 1.5rem 1.75rem; overflow: hidden; background: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #7c3aed 100%); color: white; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.5), inset 0 1px 0 rgba(255,255,255,0.2); margin-bottom: 1.25rem; }
         .cons-hero::before { content: ''; position: absolute; top: -80px; right: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%); border-radius: 50%; pointer-events: none; }
         .cons-hero::after { content: ''; position: absolute; bottom: -80px; left: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%); border-radius: 50%; pointer-events: none; }
         .cons-hero-grain { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0); background-size: 20px 20px; pointer-events: none; }
         .cons-hero-body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 14px; }
         @media (min-width: 768px) { .cons-hero-body { flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; } }
         .cons-hero-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
-        .cons-avatar { width: 60px; height: 60px; border-radius: 18px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        .cons-avatar { width: 60px; height: 60px; border-radius: 16px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
         .cons-avatar span { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: white; }
         .cons-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.8; font-weight: 700; }
         .cons-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; margin-top: 2px; color: white !important; -webkit-text-fill-color: white !important; background: none !important; }
@@ -207,7 +207,7 @@
         @media (min-width: 768px) { .cons-right { padding-left: 0; text-align: right; flex-direction: column; align-items: flex-end; gap: 6px; } }
         .cons-time { font-size: 0.8125rem; opacity: 0.9; }
         .cons-service { font-size: 0.82rem; font-weight: 700; }
-        .cons-history-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.28); border-radius: 10px; color: white; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .cons-history-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.28); border-radius: 8px; color: white; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
         .cons-history-btn:hover { background: rgba(255,255,255,0.28); transform: translateY(-1px); }
         .cons-history-count { background: #fbbf24; color: #78350f; padding: 1px 7px; border-radius: 999px; font-size: 0.75rem; font-weight: 800; }
     </style>
@@ -314,7 +314,7 @@
         .v2-steps-wrap::-webkit-scrollbar { display: none; }
         .v2-steps-container { display: flex; align-items: center; justify-content: flex-start; gap: 8px; min-width: max-content; }
         @media (min-width: 768px) { .v2-steps-container { justify-content: center; min-width: 0; } }
-        .v2-step { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 14px; font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
+        .v2-step { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
         .v2-step-active { color: white; transform: scale(1.05); }
         .v2-step-done { background: rgba(13, 148, 136, 0.1); border: 1px solid rgba(13, 148, 136, 0.3); color: #0f766e; }
         .v2-step-pending { background: rgba(243, 244, 246, 0.9); border: 1px solid rgba(229, 231, 235, 1); color: #9ca3af; }
@@ -365,7 +365,7 @@
 
     {{-- Step content --}}
     <style>
-        .step-card { background: white; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 2px rgba(13,148,136,0.05); border: 1px solid rgba(229, 231, 235, 0.8); position: relative; overflow: hidden; }
+        .step-card { background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 2px rgba(13,148,136,0.05); border: 1px solid rgba(229, 231, 235, 0.8); position: relative; overflow: hidden; }
         .dark .step-card { background: rgba(15, 23, 42, 0.6); border-color: rgba(94, 234, 212, 0.15); }
         .step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--step-accent, #0d9488), var(--step-accent-2, #0891b2)); }
         .step-title { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
@@ -544,12 +544,12 @@
                         onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"></button>
                 </div>
 
-                <div x-show="listening" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;max-height:120px;overflow-y:auto;">
+                <div x-show="listening" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;max-height:120px;overflow-y:auto;">
                     <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;"><x-icono nombre="microphone" /> Transcribiendo...</div>
                     <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.6;"></div>
                 </div>
 
-                <div x-show="processing" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,0.25);border:1px solid rgba(13,148,136,0.4);border-radius:10px;display:flex;align-items:center;gap:10px;">
+                <div x-show="processing" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,0.25);border:1px solid rgba(13,148,136,0.4);border-radius:8px;display:flex;align-items:center;gap:10px;">
                     <div style="width:10px;height:10px;background:#5eead4;border-radius:50%;animation:pulse 1s infinite;"></div>
                     <span style="font-size:12px;font-weight:600;"><x-icono nombre="sparkles" /> La IA está estructurando tu consulta...</span>
                 </div>
@@ -567,7 +567,7 @@
             <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(13,148,136,0.15),transparent 70%);border-radius:50%;pointer-events:none;"></div>
             <div style="position:relative;z-index:1;">
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 16px rgba(13,148,136,0.35);">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 16px rgba(13,148,136,0.35);">
                         <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                     </div>
                     <div style="flex:1;min-width:0;">
@@ -608,7 +608,7 @@
 
                 @if(config('services.ai.enabled'))
                 {{-- AI Diagnosis Suggestions --}}
-                <div wire:loading wire:target="fetchDxSuggestions" style="margin-top:10px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdfa;border:1px dashed #5eead4;border-radius:10px;font-size:12px;color:#0f766e;">
+                <div wire:loading wire:target="fetchDxSuggestions" style="margin-top:10px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f0fdfa;border:1px dashed #5eead4;border-radius:8px;font-size:12px;color:#0f766e;">
                     <div style="width:8px;height:8px;background:#0d9488;border-radius:50%;animation:pulse 1s infinite;"></div>
                     <span>IA analizando el motivo...</span>
                 </div>
@@ -665,7 +665,7 @@
                 {{-- Selected codes chips --}}
                 <div class="flex flex-wrap gap-1 mb-2" x-show="selected.length > 0">
                     <template x-for="(code, i) in selected" :key="code.code">
-                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded text-xs">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded-lg text-xs">
                             <strong x-text="code.code"></strong>
                             <span x-text="code.name" class="max-w-[200px] truncate"></span>
                             <button type="button" @click="remove(i)" class="ml-1 text-teal-600 hover:text-teal-900">×</button>
@@ -812,10 +812,10 @@
                     <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
                 @if($choque = \App\Support\AlertasClinicas::alRecetar($med['medication'] ?? null, $this->appointment?->patient?->allergies, $this->appointment?->patient?->medical_notes))
-                    <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:6px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};"><x-icono nombre="exclamation-triangle" /> {{ $choque['texto'] }}</div>
+                    <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:8px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};"><x-icono nombre="exclamation-triangle" /> {{ $choque['texto'] }}</div>
                 @endif
                 @if($aviso = \App\Support\Receta::avisoDeControl($med['medication'] ?? null))
-                    <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;"><x-icono nombre="exclamation-triangle" /> {{ $aviso }}</div>
+                    <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:8px;font-size:12px;color:#92400e;"><x-icono nombre="exclamation-triangle" /> {{ $aviso }}</div>
                 @endif
             </div>
             @endforeach
@@ -847,10 +847,10 @@
         {{-- Mensualidades de su plan de pagos que ya tocan: se cobran aquí mismo. --}}
         @php $mensualidadesPorCobrar = $this->mensualidadesPorCobrar(); @endphp
         @if($mensualidadesPorCobrar->count())
-        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #fde68a;border-radius:0.9rem;background:#fffbeb;">
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #fde68a;border-radius:12px;background:#fffbeb;">
             <div style="font-weight:700;font-size:0.9rem;color:#92400e;margin-bottom:0.6rem;"><x-icono nombre="calendar-days" /> Mensualidades por cobrar</div>
             @foreach($mensualidadesPorCobrar as $m)
-            <div wire:key="mensualidad-{{ $m->id }}" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#fff;border:1px solid #fde68a;border-radius:0.6rem;">
+            <div wire:key="mensualidad-{{ $m->id }}" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#fff;border:1px solid #fde68a;border-radius:8px;">
                 <div>
                     <div style="font-size:0.85rem;font-weight:600;color:#111827;">{{ $m->notes }}</div>
                     <div style="font-size:0.75rem;color:{{ $m->due_date->isBefore(today()) ? '#b91c1c' : '#92400e' }};">
@@ -860,7 +860,7 @@
                 <div style="display:flex;gap:0.35rem;">
                     @foreach(['cash' => 'Efectivo', 'card' => 'Tarjeta', 'transfer' => 'Transferencia'] as $forma => $nombre)
                     <button type="button" wire:click="cobrarMensualidad({{ $m->id }}, '{{ $forma }}')"
-                        style="padding:0.4rem 0.7rem;border-radius:0.5rem;background:{{ $forma === 'cash' ? '#0d9488' : '#ffffff' }};color:{{ $forma === 'cash' ? '#ffffff' : '#0f766e' }};border:1px solid #0d9488;font-size:0.75rem;font-weight:700;">
+                        style="padding:0.4rem 0.7rem;border-radius:8px;background:{{ $forma === 'cash' ? '#0d9488' : '#ffffff' }};color:{{ $forma === 'cash' ? '#ffffff' : '#0f766e' }};border:1px solid #0d9488;font-size:0.75rem;font-weight:700;">
                         {{ $nombre }}
                     </button>
                     @endforeach
@@ -873,14 +873,14 @@
         {{-- Procedimientos realizados. Es lo que hace que un curetaje de dos
              cuadrantes se cobre dos veces: el precio del servicio es POR
              cuadrante, y aquí se dice cuántos se hicieron. --}}
-        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:0.9rem;background:#fafafa;">
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:12px;background:#fafafa;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
                 <div>
                     <div style="font-weight:700;font-size:0.9rem;color:#111827;">Procedimientos realizados</div>
                     <div style="font-size:0.75rem;color:#6b7280;">Qué se hizo y en qué diente. El cobro sale de aquí.</div>
                 </div>
                 <button type="button" wire:click="addProcedure"
-                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:0.6rem;background:#0d9488;color:#ffffff;font-size:0.8rem;font-weight:700;">
+                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:8px;background:#0d9488;color:#ffffff;font-size:0.8rem;font-weight:700;">
                     + Agregar
                 </button>
             </div>
@@ -894,7 +894,7 @@
                 $coloresOdo = \App\Models\OdontogramTooth::conditionColors();
             @endphp
             @if($porTratar->count())
-            <div style="margin-bottom:0.75rem;padding:0.75rem;border:1px dashed #fca5a5;border-radius:0.7rem;background:#fff7f7;">
+            <div style="margin-bottom:0.75rem;padding:0.75rem;border:1px dashed #fca5a5;border-radius:8px;background:#fff7f7;">
                 <div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:0.45rem;letter-spacing:.02em;"><x-icono nombre="clipboard-document-list" /> Del odontograma: por tratar</div>
                 <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
                     @foreach($porTratar as $p)
@@ -910,10 +910,10 @@
             @endif
 
             @forelse($procedures as $i => $p)
-            <div wire:key="procedimiento-{{ $i }}" style="padding:0.75rem;margin-bottom:0.5rem;background:#ffffff;border:1px solid #e5e7eb;border-radius:0.7rem;">
+            <div wire:key="procedimiento-{{ $i }}" style="padding:0.75rem;margin-bottom:0.5rem;background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;">
                 <div style="margin-bottom:0.5rem;">
                     <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Servicio</label>
-                    <select wire:model.live="procedures.{{ $i }}.service_id" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                    <select wire:model.live="procedures.{{ $i }}.service_id" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.85rem;">
                         <option value="">Seleccionar...</option>
                         @foreach($this->services as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
@@ -924,11 +924,11 @@
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;align-items:end;">
                     <div>
                         <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">Diente (FDI)</label>
-                        <input type="text" wire:model="procedures.{{ $i }}.tooth_number" placeholder="16" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                        <input type="text" wire:model="procedures.{{ $i }}.tooth_number" placeholder="16" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.85rem;">
                     </div>
                     <div>
                         <label style="display:block;font-size:0.75rem;font-weight:600;color:#374151;margin-bottom:0.2rem;">{{ $this->questionFor($p['service_id'] ?? null) }}</label>
-                        <input type="number" min="1" wire:model.live="procedures.{{ $i }}.quantity" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.85rem;">
+                        <input type="number" min="1" wire:model.live="procedures.{{ $i }}.quantity" style="width:100%;padding:0.5rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.85rem;">
                     </div>
                 </div>
 
@@ -948,7 +948,7 @@
                 </div>
             </div>
             @empty
-            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:0.7rem;">
+            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:8px;">
                 Sin procedimientos capturados. Si el cobro es de un solo servicio, usa los campos de abajo.
             </div>
             @endforelse
@@ -966,21 +966,21 @@
              propuesta que se revisa en cinco segundos vale más que una
              automatización que nadie ve. --}}
         @if(count($procedures) > 0 && $this->llevaInventario())
-        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:0.9rem;background:#f0fdfa;">
+        <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #e5e7eb;border-radius:12px;background:#f0fdfa;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
                 <div>
                     <div style="font-weight:700;font-size:0.9rem;color:#111827;">Insumos que se van a descontar</div>
                     <div style="font-size:0.75rem;color:#6b7280;">Calculados de los dientes que capturaste. Desmarca lo que no usaste.</div>
                 </div>
                 <button type="button" wire:click="refreshProposal"
-                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:0.6rem;background:#ffffff;border:1px solid #99f6e4;color:#0f766e;font-size:0.8rem;font-weight:700;">
+                        style="flex-shrink:0;padding:0.5rem 0.9rem;border-radius:8px;background:#ffffff;border:1px solid #99f6e4;color:#0f766e;font-size:0.8rem;font-weight:700;">
                     Recalcular
                 </button>
             </div>
 
             @forelse($supplies as $i => $linea)
             <div wire:key="insumo-{{ $linea['supply_id'] }}"
-                 style="display:grid;grid-template-columns:auto 1fr auto;gap:0.6rem;align-items:center;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#ffffff;border:1px solid {{ !empty($linea['include']) ? '#5eead4' : '#e5e7eb' }};border-radius:0.6rem;">
+                 style="display:grid;grid-template-columns:auto 1fr auto;gap:0.6rem;align-items:center;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#ffffff;border:1px solid {{ !empty($linea['include']) ? '#5eead4' : '#e5e7eb' }};border-radius:8px;">
                 <input type="checkbox" wire:model.live="supplies.{{ $i }}.include" style="width:1.1rem;height:1.1rem;accent-color:#0d9488;">
                 <div style="min-width:0;">
                     <div style="font-size:0.85rem;font-weight:600;color:{{ !empty($linea['include']) ? '#111827' : '#9ca3af' }};">{{ $linea['name'] }}</div>
@@ -993,12 +993,12 @@
                 </div>
                 <div style="display:flex;align-items:center;gap:0.35rem;">
                     <input type="number" step="0.001" min="0" wire:model="supplies.{{ $i }}.quantity"
-                           style="width:5rem;padding:0.4rem;border:1px solid #d1d5db;border-radius:0.45rem;font-size:0.8rem;text-align:right;">
+                           style="width:5rem;padding:0.4rem;border:1px solid #d1d5db;border-radius:8px;font-size:0.8rem;text-align:right;">
                     <span style="font-size:0.75rem;color:#6b7280;min-width:3.5rem;">{{ $linea['unit'] }}</span>
                 </div>
             </div>
             @empty
-            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:0.7rem;">
+            <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:8px;">
                 Ninguno de estos servicios tiene receta de insumos todavía. Se configura en Servicios.
             </div>
             @endforelse
@@ -1007,7 +1007,7 @@
                  anestésico. Arriba ya se ve como chip, pero ahí se pierde
                  entre los demás datos del paciente. --}}
             @if($this->allergyAlert)
-            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:#fef2f2;border:1px solid #fecaca;">
+            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;">
                 <div style="font-size:0.8rem;font-weight:700;color:#991b1b;"><x-icono nombre="exclamation-triangle" /> Alergias del paciente</div>
                 <div style="font-size:0.78rem;color:#7f1d1d;margin-top:0.15rem;">{{ $this->allergyAlert }}</div>
                 <div style="font-size:0.75rem;color:#991b1b;margin-top:0.3rem;font-style:italic;">Registrado: {{ $this->patientAllergies }}</div>
@@ -1018,7 +1018,7 @@
                  anestésico. --}}
             @php $dosis = $this->doseStatus; @endphp
             @if($dosis)
-            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:{{ $dosis['exceeds'] === true ? '#fef2f2' : '#ffffff' }};border:1px solid {{ $dosis['exceeds'] === true ? '#fecaca' : '#e5e7eb' }};">
+            <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:8px;background:{{ $dosis['exceeds'] === true ? '#fef2f2' : '#ffffff' }};border:1px solid {{ $dosis['exceeds'] === true ? '#fecaca' : '#e5e7eb' }};">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
                     <span style="font-size:0.8rem;font-weight:700;color:#111827;">Dosis de anestesia</span>
                     <span style="font-size:0.8rem;font-weight:700;color:{{ $dosis['exceeds'] === true ? '#b91c1c' : '#0f766e' }};">
@@ -1075,13 +1075,13 @@
                    . "Concepto: {$serviceName}\n\n"
                    . "Puede pagar por transferencia. ¡Gracias!";
         @endphp
-        <div style="margin-top:1rem;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="margin-top:1rem;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="font-size:12px;color:#166534;">
                 <strong><x-icono nombre="chat-bubble-left-ellipsis" /> Envía el cobro por WhatsApp</strong><br>
                 <span style="font-size:12px;color:#15803d;">Mensaje pre-armado con el monto y concepto</span>
             </div>
             <a href="https://wa.me/52{{ $waPhone }}?text={{ urlencode($waMsg) }}" target="_blank"
-                style="display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:#22c55e;color:white;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;">
+                style="display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:#22c55e;color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;white-space:nowrap;">
                 <svg style="width:16px;height:16px;" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                 Cobrar por WhatsApp
             </a>
@@ -1105,7 +1105,7 @@
             <div style="display:flex;flex-wrap:wrap;gap:0.45rem;">
                 @foreach($sugerencias as $clave => $s)
                 <button type="button" wire:click="usarSugerencia('{{ $clave }}')"
-                    style="display:flex;flex-direction:column;align-items:flex-start;padding:0.5rem 0.75rem;border-radius:0.7rem;border:1.5px solid {{ $next_appointment_date === $s['fecha']->format('Y-m-d\TH:i') && (string) $next_appointment_service_id === (string) $s['service_id'] ? '#0d9488' : '#e5e7eb' }};background:#fff;text-align:left;cursor:pointer;">
+                    style="display:flex;flex-direction:column;align-items:flex-start;padding:0.5rem 0.75rem;border-radius:8px;border:1.5px solid {{ $next_appointment_date === $s['fecha']->format('Y-m-d\TH:i') && (string) $next_appointment_service_id === (string) $s['service_id'] ? '#0d9488' : '#e5e7eb' }};background:#fff;text-align:left;cursor:pointer;">
                     <span style="font-size:0.82rem;font-weight:700;color:#111827;">{{ $s['titulo'] }}</span>
                     <span style="font-size:0.75rem;color:#64748b;">{{ $s['detalle'] }} · {{ $s['fecha']->locale('es')->isoFormat('ddd D [de] MMM, HH:mm') }}</span>
                 </button>

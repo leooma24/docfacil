@@ -4,7 +4,7 @@
     <style>
         .aw-card {
             position: relative;
-            border-radius: 1.25rem;
+            border-radius: 16px;
             padding: 22px 24px;
             overflow: hidden;
             background: linear-gradient(135deg, #f59e0b 0%, #f97316 40%, #ef4444 100%);
@@ -33,7 +33,7 @@
             display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
         }
         .aw-head-icon {
-            width: 44px; height: 44px; border-radius: 14px;
+            width: 44px; height: 44px; border-radius: 12px;
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(12px);
             border: 1.5px solid rgba(255,255,255,0.3);
@@ -66,7 +66,7 @@
             transform: translateX(3px);
         }
         .aw-item-icon {
-            width: 32px; height: 32px; border-radius: 10px;
+            width: 32px; height: 32px; border-radius: 8px;
             background: rgba(255,255,255,0.22);
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
@@ -84,7 +84,7 @@
             background: rgba(255,255,255,0.12);
             backdrop-filter: blur(10px);
             border: 1px dashed rgba(255,255,255,0.3);
-            border-radius: 14px;
+            border-radius: 12px;
         }
         .aw-empty-emoji { font-size: 28px; margin-bottom: 4px; }
         .aw-empty-text { font-size: 0.8rem; opacity: 0.92; font-weight: 600; }

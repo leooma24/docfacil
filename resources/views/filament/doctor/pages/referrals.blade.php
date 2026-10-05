@@ -2,7 +2,7 @@
 <div style="max-width:760px;margin:0 auto;">
 
     {{-- Share card --}}
-    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1.25rem;padding:2rem;margin-bottom:1.5rem;">
+    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:2rem;margin-bottom:1.5rem;">
         <div style="text-align:center;margin-bottom:1.5rem;">
             <div style="font-size:3rem;margin-bottom:0.5rem;color:#0d9488;"><x-icono nombre="gift" /></div>
             <h2 style="font-size:1.5rem;font-weight:800;">Invita a un colega y ambos ganan</h2>
@@ -11,7 +11,7 @@
             </p>
         </div>
 
-        <div style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border:2px solid #14b8a6;border-radius:1rem;padding:1.5rem;text-align:center;margin-bottom:1.5rem;">
+        <div style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border:2px solid #14b8a6;border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1.5rem;">
             <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.05em;">Tu código de referido</div>
             <div style="font-size:2.5rem;font-weight:800;color:#0d9488;letter-spacing:0.1em;margin-top:0.5rem;">{{ $this->getReferralCode() }}</div>
             <div style="font-size:0.8rem;color:#6b7280;margin-top:0.5rem;">Compártelo con otros doctores</div>
@@ -19,12 +19,12 @@
 
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
             <a href="{{ $this->getWhatsAppShareLink() }}" target="_blank"
-                style="flex:1;min-width:200px;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.875rem;background:#22c55e;color:white;border-radius:0.75rem;font-weight:700;font-size:0.9rem;text-decoration:none;">
+                style="flex:1;min-width:200px;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.875rem;background:#22c55e;color:white;border-radius:12px;font-weight:700;font-size:0.9rem;text-decoration:none;">
                 <svg style="width:20px;height:20px;" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
                 Compartir por WhatsApp
             </a>
             <button onclick="navigator.clipboard.writeText('{{ $this->getReferralLink() }}');this.textContent='✓ Copiado';setTimeout(()=>this.textContent='Copiar link de registro',2000)"
-                style="padding:0.875rem 1.5rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:0.75rem;font-weight:600;font-size:0.9rem;cursor:pointer;">
+                style="padding:0.875rem 1.5rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:12px;font-weight:600;font-size:0.9rem;cursor:pointer;">
                 Copiar link de registro
             </button>
         </div>
@@ -32,19 +32,19 @@
 
     {{-- Stats --}}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
-        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:1.25rem;text-align:center;">
+        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;">
             <div style="font-size:1.75rem;font-weight:800;color:#0d9488;">{{ $this->stats['total_referred'] }}</div>
             <div style="font-size:0.8rem;color:#6b7280;">Colegas invitados</div>
         </div>
-        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:1.25rem;text-align:center;">
+        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;">
             <div style="font-size:1.75rem;font-weight:800;color:#059669;">{{ $this->stats['paid_referred'] }}</div>
             <div style="font-size:0.8rem;color:#6b7280;">Ya pagando</div>
         </div>
-        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:1.25rem;text-align:center;">
+        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;">
             <div style="font-size:1.75rem;font-weight:800;color:#7c3aed;">{{ $this->stats['cascade_rewards'] }}/{{ $this->stats['cap'] }}</div>
             <div style="font-size:0.8rem;color:#6b7280;">Meses cascade ganados</div>
         </div>
-        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:1.25rem;text-align:center;">
+        <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;">
             <div style="font-size:1.75rem;font-weight:800;color:#0d9488;">{{ $this->stats['total_months'] }}</div>
             <div style="font-size:0.8rem;color:#6b7280;">Total meses gratis</div>
         </div>
@@ -52,7 +52,7 @@
 
     {{-- Referral history --}}
     @if(count($this->referrals) > 0)
-    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;overflow:hidden;margin-bottom:1.5rem;">
+    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:1.5rem;">
         <div style="padding:1rem 1.25rem;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-weight:700;font-size:0.875rem;" class="dark:bg-gray-700">
             Tus referidos
         </div>
@@ -75,9 +75,9 @@
                     </td>
                     <td style="padding:0.75rem;text-align:center;">
                         @if($ref['plan'] === 'free')
-                            <span style="padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;background:#f3f4f6;color:#6b7280;">Trial</span>
+                            <span style="padding:0.25rem 0.75rem;border-radius:999px;font-size:0.75rem;font-weight:600;background:#f3f4f6;color:#6b7280;">Trial</span>
                         @else
-                            <span style="padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.75rem;font-weight:600;background:#d1fae5;color:#065f46;">{{ ucfirst($ref['plan']) }}</span>
+                            <span style="padding:0.25rem 0.75rem;border-radius:999px;font-size:0.75rem;font-weight:600;background:#d1fae5;color:#065f46;">{{ ucfirst($ref['plan']) }}</span>
                         @endif
                     </td>
                     <td style="padding:0.75rem;text-align:center;">
@@ -98,7 +98,7 @@
 
     {{-- Leaderboard --}}
     @if(count($this->leaderboard) > 0)
-    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;overflow:hidden;">
+    <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;">
         <div style="padding:1rem 1.25rem;background:linear-gradient(135deg,#fef3c7,#fde68a);border-bottom:1px solid #fcd34d;font-weight:700;font-size:0.875rem;color:#78350f;">
             <x-icono nombre="trophy" /> Top embajadores DocFácil
         </div>

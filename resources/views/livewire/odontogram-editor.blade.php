@@ -29,7 +29,7 @@
 
         return '<svg width="18" height="18" viewBox="0 0 18 18" style="flex:0 0 18px">' . $svg . '</svg>';
     };
-    $chip = fn (string $color, bool $activo) => 'display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 8px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid '
+    $chip = fn (string $color, bool $activo) => 'display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 8px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid '
         . ($activo ? $color : '#e5e7eb') . ';background:' . ($activo ? $color . '14' : '#fff') . ';color:' . ($activo ? '#111827' : '#4b5563') . ';'
         . ($activo ? 'box-shadow:0 0 0 3px ' . $color . '22;' : '');
     $tarjeta = 'background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 1px 2px rgba(15,23,42,.04);';
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div style="display:inline-flex;background:#f1f5f9;border-radius:10px;padding:3px;">
+        <div style="display:inline-flex;background:#f1f5f9;border-radius:8px;padding:3px;">
             @foreach(['permanente' => 'Permanente', 'mixta' => 'Mixta', 'temporal' => 'Temporal'] as $clave => $nombre)
                 <button type="button" wire:click="setDenticion('{{ $clave }}')"
                     style="padding:6px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:0;{{ $denticion === $clave ? 'background:#fff;color:#0f766e;box-shadow:0 1px 3px rgba(15,23,42,.12);' : 'background:transparent;color:#64748b;' }}">{{ $nombre }}</button>

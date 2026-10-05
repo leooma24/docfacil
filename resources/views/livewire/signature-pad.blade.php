@@ -1,30 +1,30 @@
 <div>
     @if($signed)
-    <div style="text-align:center;padding:2rem;background:#f0fdf4;border:1px solid #86efac;border-radius:1rem;">
+    <div style="text-align:center;padding:2rem;background:#f0fdf4;border:1px solid #86efac;border-radius:16px;">
         <svg style="width:48px;height:48px;color:#22c55e;margin:0 auto 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <p style="font-weight:700;color:#166534;font-size:1.125rem;">Firmado correctamente</p>
         <p style="color:#4ade80;font-size:0.875rem;">La firma ha sido guardada.</p>
     </div>
     @else
-    <div style="border:2px dashed #d1d5db;border-radius:1rem;padding:1rem;background:#fafafa;">
+    <div style="border:2px dashed #d1d5db;border-radius:16px;padding:1rem;background:#fafafa;">
         <p style="text-align:center;font-size:0.875rem;color:#6b7280;margin-bottom:0.75rem;">Firma del paciente — dibuja con el dedo o mouse</p>
         <canvas
             id="signature-canvas-{{ $consentFormId }}"
             width="600"
             height="200"
-            style="border:1px solid #e5e7eb;border-radius:0.5rem;background:white;width:100%;cursor:crosshair;touch-action:none;"
+            style="border:1px solid #e5e7eb;border-radius:8px;background:white;width:100%;cursor:crosshair;touch-action:none;"
         ></canvas>
         <div style="display:flex;gap:0.75rem;margin-top:0.75rem;justify-content:flex-end;">
             <button
                 onclick="clearSignature()"
                 type="button"
-                style="padding:0.5rem 1.25rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:0.5rem;font-size:0.875rem;font-weight:600;cursor:pointer;">
+                style="padding:0.5rem 1.25rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:8px;font-size:0.875rem;font-weight:600;cursor:pointer;">
                 Borrar
             </button>
             <button
                 onclick="saveSignature()"
                 type="button"
-                style="padding:0.5rem 1.25rem;background:#14b8a6;color:white;border:none;border-radius:0.5rem;font-size:0.875rem;font-weight:600;cursor:pointer;">
+                style="padding:0.5rem 1.25rem;background:#14b8a6;color:white;border:none;border-radius:8px;font-size:0.875rem;font-weight:600;cursor:pointer;">
                 Guardar firma
             </button>
         </div>

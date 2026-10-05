@@ -1,10 +1,10 @@
 <x-filament-panels::page>
     <style>
-        .qr-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 500px; margin: 0 auto; text-align: center; }
+        .qr-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 500px; margin: 0 auto; text-align: center; }
         .qr-card img { width: 280px; height: 280px; border: 8px solid #f0fdfa; border-radius: 16px; margin: 12px auto; display: block; }
-        .qr-url { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #4b5563; word-break: break-all; margin: 12px 0; font-family: monospace; }
+        .qr-url { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #4b5563; word-break: break-all; margin: 12px 0; font-family: monospace; }
         .qr-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
-        .qr-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+        .qr-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
         .qr-btn-primary { background: #0d9488; color: white; }
         .qr-btn-secondary { background: #f3f4f6; color: #374151; }
         .instructions { background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; padding: 16px; margin-top: 20px; font-size: 13px; color: #713f12; }

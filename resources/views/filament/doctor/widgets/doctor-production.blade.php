@@ -33,7 +33,7 @@
                         <td class="py-3 px-3 text-right text-red-600 dark:text-red-400">{{ $d['no_show'] }}</td>
                         <td class="py-3 px-3 text-right">
                             <span @class([
-                                'inline-block px-2 py-0.5 rounded text-xs font-semibold',
+                                'inline-block px-2 py-0.5 rounded-lg text-xs font-semibold',
                                 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' => $d['completion_rate'] >= 80,
                                 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' => $d['completion_rate'] >= 50 && $d['completion_rate'] < 80,
                                 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' => $d['completion_rate'] < 50,

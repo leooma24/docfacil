@@ -36,7 +36,7 @@
                         <div class="text-gray-500 dark:text-gray-400 mb-1">CLABE</div>
                         <div class="flex items-center gap-2">
                             <strong class="text-gray-900 dark:text-white font-mono text-base tracking-wider">{{ $spei['clabe'] }}</strong>
-                            <button type="button" onclick="navigator.clipboard.writeText('{{ $spei['clabe'] }}'); this.innerText='✓ Copiado'; setTimeout(()=>this.innerText='Copiar',2000)" class="text-xs text-teal-600 hover:text-teal-700 font-semibold border border-teal-200 px-2 py-1 rounded">Copiar</button>
+                            <button type="button" onclick="navigator.clipboard.writeText('{{ $spei['clabe'] }}'); this.innerText='✓ Copiado'; setTimeout(()=>this.innerText='Copiar',2000)" class="text-xs text-teal-600 hover:text-teal-700 font-semibold border border-teal-200 px-2 py-1 rounded-lg">Copiar</button>
                         </div>
                     </div>
                     <div class="border-b border-gray-100 dark:border-gray-800 pb-2">
@@ -47,7 +47,7 @@
                         <div class="text-xs text-amber-900 font-semibold mb-1 dark:text-amber-200">Concepto / Referencia (importante)</div>
                         <div class="flex items-center gap-2">
                             <strong class="text-amber-900 dark:text-amber-100 font-mono">{{ $this->referenceCode }}</strong>
-                            <button type="button" onclick="navigator.clipboard.writeText('{{ $this->referenceCode }}'); this.innerText='✓ Copiado'; setTimeout(()=>this.innerText='Copiar',2000)" class="text-xs text-amber-700 hover:text-amber-900 font-semibold border border-amber-300 px-2 py-1 rounded">Copiar</button>
+                            <button type="button" onclick="navigator.clipboard.writeText('{{ $this->referenceCode }}'); this.innerText='✓ Copiado'; setTimeout(()=>this.innerText='Copiar',2000)" class="text-xs text-amber-700 hover:text-amber-900 font-semibold border border-amber-300 px-2 py-1 rounded-lg">Copiar</button>
                         </div>
                         <p class="text-xs text-amber-800 mt-1 dark:text-amber-200/80">Pon este código como <strong>concepto</strong> o <strong>referencia</strong> de tu transferencia. Así lo cruzamos contigo.</p>
                     </div>

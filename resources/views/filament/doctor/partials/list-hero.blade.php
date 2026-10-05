@@ -46,7 +46,7 @@
     .fi-page > section.fi-ta-ctn,
     .fi-page .fi-resource-list-records-page > .fi-ta {
         position: relative;
-        border-radius: 1.25rem !important;
+        border-radius: 16px !important;
         overflow: hidden;
         box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 1px 2px {{ ($accent ?? '#0d9488') }}14 !important;
         border: 1px solid rgba(229, 231, 235, 0.8) !important;

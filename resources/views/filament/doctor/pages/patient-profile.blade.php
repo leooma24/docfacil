@@ -1,12 +1,12 @@
 <x-filament-panels::page>
 <style>
-    .pp-hero { position: relative; background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%); border-radius: 1.5rem; padding: 28px 32px; color: white; overflow: hidden; margin-bottom: 20px; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.4); }
+    .pp-hero { position: relative; background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%); border-radius: 16px; padding: 28px 32px; color: white; overflow: hidden; margin-bottom: 20px; box-shadow: 0 20px 60px -15px rgba(13,148,136,0.4); }
     .pp-hero::before { content: ''; position: absolute; top: -80px; right: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%); border-radius: 50%; pointer-events: none; }
     .pp-hero::after { content: ''; position: absolute; bottom: -100px; left: -40px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%); border-radius: 50%; pointer-events: none; }
     .pp-hero-content { position: relative; z-index: 1; }
     .pp-hero-top { display: flex; flex-direction: column; gap: 16px; }
     @media (min-width: 768px) { .pp-hero-top { flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; } }
-    .pp-avatar { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
+    .pp-avatar { width: 72px; height: 72px; border-radius: 16px; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 28px rgba(0,0,0,0.2); }
     .pp-avatar span { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; color: white; }
     .pp-identity { display: flex; align-items: center; gap: 16px; min-width: 0; }
     .pp-name { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 0; color: white !important; -webkit-text-fill-color: white !important; background: none !important; }
@@ -24,7 +24,7 @@
     .pp-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
     @media (min-width: 480px) { .pp-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     @media (min-width: 768px) { .pp-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-    .pp-stat { background: rgba(255,255,255,0.15); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.25); border-radius: 14px; padding: 14px 16px; }
+    .pp-stat { background: rgba(255,255,255,0.15); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.25); border-radius: 12px; padding: 14px 16px; }
     .pp-stat-label { font-size: 0.8125rem; font-weight: 600; opacity: 0.92; }
     .pp-stat-value { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 2px; line-height: 1.1; color: white; overflow-wrap: anywhere; }
     .pp-stat-value-sm { font-size: 0.95rem; font-weight: 700; margin-top: 6px; line-height: 1.2; }
@@ -162,7 +162,7 @@
 
     @if(config('services.ai.enabled'))
     {{-- AI Summary Card --}}
-    <div wire:init="loadAiSummary" style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1px solid #99f6e4;border-radius:14px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
+    <div wire:init="loadAiSummary" style="background:linear-gradient(135deg,#ecfeff 0%,#f0fdfa 100%);border:1px solid #99f6e4;border-radius:12px;padding:16px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
             <div style="display:flex;align-items:center;gap:8px;">
                 <div style="width:28px;height:28px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -201,7 +201,7 @@
 
     @if(config('services.ai.enabled'))
     {{-- AI Message Generator --}}
-    <div style="background:white;border:1px solid #e5e7eb;border-radius:14px;padding:14px 16px;margin-bottom:16px;">
+    <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
             <svg style="width:16px;height:16px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             <span style="font-size:12px;font-weight:700;color:#374151;">Generar mensaje de WhatsApp con IA</span>
@@ -220,7 +220,7 @@
         </div>
 
         @if($generatedMessage)
-        <div wire:loading.remove wire:target="generateMessage" style="margin-top:12px;padding:12px 14px;background:#f0fdfa;border:1px solid #5eead4;border-radius:10px;">
+        <div wire:loading.remove wire:target="generateMessage" style="margin-top:12px;padding:12px 14px;background:#f0fdfa;border:1px solid #5eead4;border-radius:8px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                 <div style="font-size:12px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Mensaje generado</div>
                 <button wire:click="closeMessage" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:14px;">✕</button>
@@ -252,7 +252,7 @@
             @endphp
             @foreach($tabs as $key => $label)
             <button wire:click="setTab('{{ $key }}')" style="min-height:44px;font-size:0.875rem;"
-                class="px-3 md:px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap
+                class="px-3 md:px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap
                 {{ $activeTab === $key ? 'bg-white dark:bg-gray-800 text-teal-600 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                 {{ $label }}
             </button>
@@ -348,7 +348,7 @@
                 @if($rx->diagnosis)<div class="text-xs md:text-sm text-gray-600 mb-2">{{ $rx->diagnosis }}</div>@endif
                 <div class="space-y-1">
                     @foreach($rx->items as $item)
-                    <div class="text-xs md:text-sm bg-gray-50 dark:bg-gray-700 rounded px-2.5 md:px-3 py-1.5 md:py-2">
+                    <div class="text-xs md:text-sm bg-gray-50 dark:bg-gray-700 rounded-lg px-2.5 md:px-3 py-1.5 md:py-2">
                         <span class="font-medium">{{ $item->medication }}</span>
                         <span class="text-gray-500">— {{ $item->dosage }} {{ $item->frequency }} x {{ $item->duration }}</span>
                     </div>
@@ -374,7 +374,7 @@
             @forelse($planesDePago as $plan)
                 @php $sig = $plan->siguiente(); $estadoPlan = \App\Filament\Doctor\Resources\PaymentPlanResource::estado($plan); @endphp
                 <a href="{{ \App\Filament\Doctor\Resources\PaymentPlanResource::getUrl('view', ['record' => $plan], panel: 'doctor') }}"
-                    style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:10px;font-size:13px;color:#111827;">
+                    style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:10px 12px;margin-bottom:8px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#111827;">
                     <span><strong>{{ $plan->description }}</strong> · ${{ number_format($plan->pagado(), 2) }} de ${{ number_format((float) $plan->total, 2) }}</span>
                     <span style="color:#64748b;">{{ $sig ? 'Siguiente: ' . $sig->due_date->format('d/m/Y') . ' · $' . number_format($sig->remaining, 2) : 'Liquidado' }}</span>
                     <span style="font-weight:700;color:{{ str_contains($estadoPlan, 'vencida') ? '#b91c1c' : '#0f766e' }};">{{ $estadoPlan }}</span>
@@ -484,7 +484,7 @@
 
             <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
                 <a href="{{ \App\Filament\Doctor\Resources\OdontogramResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor') }}"
-                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#0d9488;color:#fff;font-size:13px;font-weight:600;border-radius:10px;">
+                    style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#0d9488;color:#fff;font-size:13px;font-weight:600;border-radius:8px;">
                     + Nuevo odontograma
                 </a>
             </div>
@@ -517,7 +517,7 @@
                 </div>
 
                 {{-- Arcada dental, el mismo dibujo que el editor --}}
-                <div style="background:linear-gradient(#f8fafc,#fff);border:1px solid #e5e7eb;border-radius:14px;padding:14px 8px;">
+                <div style="background:linear-gradient(#f8fafc,#fff);border:1px solid #e5e7eb;border-radius:12px;padding:14px 8px;">
                     @php
                         $dientesDelOdonto = $odonto->teeth->mapWithKeys(fn ($t) => [$t->tooth_number => [
                             'condition' => $t->condition, 'surfaces' => $t->caras(), 'notes' => $t->notes,
@@ -550,7 +550,7 @@
                     $cambiosOdonto = $odontoAnterior ? \App\Support\OdontogramaClinico::cambios($odontoAnterior, $odonto) : [];
                 @endphp
                 @if($odontoAnterior)
-                <div style="margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12.5px;color:#334155;">
+                <div style="margin-top:10px;padding:10px 12px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12.5px;color:#334155;">
                     <span style="font-weight:700;color:#0f766e;">Cambios desde el {{ $odontoAnterior->evaluation_date->format('d/m/Y') }}:</span>
                     @forelse($cambiosOdonto as $cambio)
                         <span style="display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border-radius:999px;background:#fff;border:1px solid #e2e8f0;">{{ $cambio }}</span>

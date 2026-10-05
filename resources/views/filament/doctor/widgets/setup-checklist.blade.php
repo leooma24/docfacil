@@ -2,7 +2,7 @@
     <div class="sc-card" x-data="{ open: true }">
         <style>
             .sc-card {
-                border-radius: 1.25rem;
+                border-radius: 16px;
                 background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
                 border: 2px solid #5eead4;
                 padding: 24px 28px;
@@ -61,7 +61,7 @@
                 padding: 14px 16px;
                 background: white;
                 border: 1px solid #e2e8f0;
-                border-radius: 14px;
+                border-radius: 12px;
                 transition: all 0.2s;
             }
             .sc-item:hover {
