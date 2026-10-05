@@ -219,6 +219,16 @@ class Prospect extends Model
 
     public function advanceContactDay(string $method): void
     {
+        // Qué mensaje se mandó, para saber cuántos contestan a cada versión
+        // (tarjeta "Cómo van los mensajes" del escritorio de ventas).
+        $this->mensajes()->create([
+            'user_id' => $this->assigned_to_sales_rep_id ?? auth()->id(),
+            'paso' => (int) $this->contact_day,
+            'version' => $method === 'whatsapp' ? \App\Support\MensajesDeVenta::version((int) $this->contact_day) : $method,
+            'canal' => $method,
+            'enviado_at' => now(),
+        ]);
+
         $nextDay = self::CADENCE[$this->contact_day] ?? null;
 
         if ($nextDay === null) {
@@ -258,6 +268,11 @@ class Prospect extends Model
     public function emailEvents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ProspectEmailEvent::class);
+    }
+
+    public function mensajes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProspectMensaje::class);
     }
 
     public function assignedSalesRep(): BelongsTo

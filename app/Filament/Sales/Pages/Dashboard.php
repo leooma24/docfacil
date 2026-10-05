@@ -19,6 +19,8 @@ class Dashboard extends BaseDashboard
         return [
             TareasDeHoyWidget::class,
             MyStatsWidget::class,
+            // Al final: es para revisar cada tanto, no para empezar el día.
+            \App\Filament\Sales\Widgets\ComoVanLosMensajesWidget::class,
         ];
     }
 }
