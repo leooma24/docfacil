@@ -425,18 +425,28 @@ class AppointmentResource extends Resource
                                 ->success()
                                 ->send();
                         }),
+                // Cobrar la cita, una sola vez: si ya se pagó no aparece, y si
+                // quedó por cobrar (la consulta que se cerró sin ver el cobro)
+                // se cobra ese mismo cobro en vez de crear otro.
                 Tables\Actions\Action::make('charge')
                     ->label('Cobrar')
                     ->icon('heroicon-o-banknotes')
                     ->color('success')
-                    ->visible(fn (Appointment $record) => in_array($record->status, ['completed', 'in_progress']))
+                    ->visible(fn (Appointment $record) => in_array($record->status, ['completed', 'in_progress'])
+                        && ! ($record->payments()->exists() && ! $record->payments()->whereIn('status', ['pending', 'partial'])->exists()))
+                    ->fillForm(fn (Appointment $record) => [
+                        'amount' => ($debe = $record->payments()->whereIn('status', ['pending', 'partial'])->get()->sum(fn ($p) => $p->remaining))
+                            ? round($debe, 2)
+                            : $record->service?->price,
+                        'payment_method' => 'cash',
+                    ])
                     ->form([
                         Forms\Components\TextInput::make('amount')
                             ->label('Monto')
                             ->numeric()
                             ->prefix('$')
                             ->required()
-                            ->default(fn (Appointment $record) => $record->service?->price),
+                            ->minValue(0.01),
                         Forms\Components\Select::make('payment_method')
                             ->label('Método de pago')
                             ->options([
@@ -444,10 +454,21 @@ class AppointmentResource extends Resource
                                 'card' => 'Tarjeta',
                                 'transfer' => 'Transferencia',
                             ])
-                            ->default('cash')
                             ->required(),
                     ])
                     ->action(function (Appointment $record, array $data) {
+                        $pendientes = $record->payments()->whereIn('status', ['pending', 'partial'])->get();
+
+                        if ($pendientes->isNotEmpty()) {
+                            try {
+                                \App\Models\Payment::abonarEnOrden($pendientes, (float) $data['amount'], $data['payment_method']);
+                            } catch (\InvalidArgumentException $e) {
+                                Notification::make()->title('No se registró')->body($e->getMessage())->warning()->send();
+                            }
+
+                            return;
+                        }
+
                         \App\Models\Payment::create([
                             'clinic_id' => auth()->user()->clinic_id,
                             'patient_id' => $record->patient_id,
@@ -547,41 +568,7 @@ class AppointmentResource extends Resource
                     ->visible(fn (Appointment $record) => in_array($record->status, ['scheduled', 'confirmed']))
                     ->action(function (Appointment $record) {
                         $record->update(['status' => 'cancelled']);
-
-                        // Al cancelar queda un hueco. En vez de esperar a que
-                        // el doctor se acuerde de a quien le urgia esa fecha,
-                        // le decimos quien de la lista de espera cabe ahi.
-                        $candidatos = \App\Models\WaitlistEntry::candidatosPara($record);
-
-                        if ($candidatos->isEmpty()) {
-                            Notification::make()
-                                ->title('Cita cancelada')
-                                ->body('Nadie de tu lista de espera pedía ese día.')
-                                ->success()
-                                ->send();
-
-                            return;
-                        }
-
-                        $lista = $candidatos
-                            ->map(function ($entrada) {
-                                $nombre = trim(($entrada->patient->first_name ?? '') . ' ' . ($entrada->patient->last_name ?? ''));
-                                $urgente = (int) $entrada->priority === 1 ? ' — urgente' : '';
-
-                                return '• ' . e($nombre . $urgente);
-                            })
-                            // Uno por renglón: con "\n" el aviso los juntaba.
-                            ->implode('<br>');
-
-                        // "Ofrecer a Diego" abre WhatsApp con el mensaje y lo
-                        // deja anotado para este hueco: sin pasar por la lista.
-                        Notification::make()
-                            ->title('Se liberó el ' . $record->starts_at->translatedFormat('l d \d\e F, H:i'))
-                            ->body(new \Illuminate\Support\HtmlString('Estos pacientes esperaban ese día:<br>' . $lista))
-                            ->info()
-                            ->persistent()
-                            ->actions(\App\Models\WaitlistEntry::botonesParaElHueco($record, $candidatos))
-                            ->send();
+                        self::avisarDelHueco($record);
                     }),
                     Tables\Actions\EditAction::make()->label('Editar detalles'),
                 ])
@@ -618,5 +605,47 @@ class AppointmentResource extends Resource
             'create' => Pages\CreateAppointment::route('/create'),
             'edit' => Pages\EditAppointment::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * El aviso al cancelar: quién de la lista de espera cabe en el hueco, con
+     * "Ofrecer a ..." para cada uno. Lo usan la lista de citas y la cita abierta.
+     */
+    public static function avisarDelHueco(Appointment $record): void
+    {
+        // Al cancelar queda un hueco. En vez de esperar a que
+        // el doctor se acuerde de a quien le urgia esa fecha,
+        // le decimos quien de la lista de espera cabe ahi.
+        $candidatos = \App\Models\WaitlistEntry::candidatosPara($record);
+
+        if ($candidatos->isEmpty()) {
+            Notification::make()
+                ->title('Cita cancelada')
+                ->body('Nadie de tu lista de espera pedía ese día.')
+                ->success()
+                ->send();
+
+            return;
+        }
+
+        $lista = $candidatos
+            ->map(function ($entrada) {
+                $nombre = trim(($entrada->patient->first_name ?? '') . ' ' . ($entrada->patient->last_name ?? ''));
+                $urgente = (int) $entrada->priority === 1 ? ' — urgente' : '';
+
+                return '• ' . e($nombre . $urgente);
+            })
+            // Uno por renglón: con "\n" el aviso los juntaba.
+            ->implode('<br>');
+
+        // "Ofrecer a Diego" abre WhatsApp con el mensaje y lo
+        // deja anotado para este hueco: sin pasar por la lista.
+        Notification::make()
+            ->title('Se liberó el ' . $record->starts_at->translatedFormat('l d \d\e F, H:i'))
+            ->body(new \Illuminate\Support\HtmlString('Estos pacientes esperaban ese día:<br>' . $lista))
+            ->info()
+            ->persistent()
+            ->actions(\App\Models\WaitlistEntry::botonesParaElHueco($record, $candidatos))
+            ->send();
     }
 }

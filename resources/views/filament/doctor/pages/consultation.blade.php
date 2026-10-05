@@ -1195,10 +1195,19 @@
                     WhatsApp
                 </a>
                 @endif
+                {{-- Directo al que sigue: el que ya llegó primero, luego por hora. --}}
+                @if($siguiente = $this->siguienteCita)
+                <a href="{{ route('filament.doctor.pages.consulta', ['appointment' => $siguiente->id]) }}"
+                    style="background:#0f766e;color:white;">
+                    Atender a {{ strtok(trim((string) $siguiente->patient?->first_name), ' ') ?: 'siguiente' }}
+                    · {{ $siguiente->arrived_at ? 'ya llegó' : $siguiente->starts_at->format('H:i') }}
+                </a>
+                @else
                 <a href="{{ route('filament.doctor.pages.dashboard') }}"
                     style="background:#374151;color:white;">
-                    Siguiente paciente
+                    Ir al escritorio
                 </a>
+                @endif
             </div>
         </div>
         @endif

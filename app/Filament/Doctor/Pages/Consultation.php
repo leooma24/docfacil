@@ -127,6 +127,27 @@ class Consultation extends Page implements HasForms
     /** Si la siguiente cita es un tratamiento del presupuesto, cuál. */
     public ?int $next_appointment_item_id = null;
 
+    /**
+     * A quién le toca después de esta consulta: de las citas de hoy del mismo
+     * doctor, primero el que ya está en la sala y luego por hora.
+     */
+    public function getSiguienteCitaProperty(): ?Appointment
+    {
+        if (! $this->appointment) {
+            return null;
+        }
+
+        return Appointment::with('patient')
+            ->where('clinic_id', $this->appointment->clinic_id)
+            ->where('doctor_id', $this->appointment->doctor_id)
+            ->whereKeyNot($this->appointment->id)
+            ->whereDate('starts_at', today())
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->orderByRaw('arrived_at is null')
+            ->orderBy('starts_at')
+            ->first();
+    }
+
     /** La consulta de este paciente: su cita de hoy, o una sin cita. */
     public static function urlParaPaciente(\App\Models\Patient|int $paciente): string
     {

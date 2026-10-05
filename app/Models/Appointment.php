@@ -363,6 +363,37 @@ class Appointment extends Model
         return $this->hasMany(ConsultationProcedure::class);
     }
 
+    /**
+     * La cita del presupuesto se completó: el tratamiento queda hecho y pasa
+     * al odontograma, se cierre por la consulta, la visita rápida o
+     * "Completar". La consulta ya lo hace al cerrar; si el tratamiento ya
+     * está hecho, aquí no se repite.
+     */
+    public function cerrarSuTratamiento(): void
+    {
+        $item = $this->treatmentPlanItem;
+
+        if (! $item || $item->completed_at) {
+            return;
+        }
+
+        // Sin consulta no hay procedimientos capturados: el del presupuesto
+        // es lo que se hizo (ese servicio, en ese diente).
+        if ($item->service_id && ! $this->procedures()->exists()) {
+            $this->procedures()->create([
+                'clinic_id' => $this->clinic_id,
+                'service_id' => $item->service_id,
+                'tooth_number' => $item->tooth_number ?: null,
+                'quantity' => max(1, (int) $item->quantity),
+                'unit' => $item->service?->unit,
+                'unit_price' => $item->unit_price,
+            ]);
+        }
+
+        $item->update(['completed_at' => now()]);
+        \App\Support\OdontogramaClinico::registrarConsulta($this);
+    }
+
     /** Lo que se cobró en esta cita (sin las mensualidades de un plan). */
     public function payments(): HasMany
     {

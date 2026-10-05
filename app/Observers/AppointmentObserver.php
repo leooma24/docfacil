@@ -33,6 +33,14 @@ class AppointmentObserver
     public function updated(Appointment $appointment): void
     {
         if (!$appointment->wasChanged('status')) return;
+
+        // Completada por donde sea: su tratamiento del presupuesto queda hecho.
+        if ($appointment->status === 'completed') {
+            $appointment->cerrarSuTratamiento();
+
+            return;
+        }
+
         if ($appointment->status !== 'cancelled') return;
         if (!$appointment->starts_at || !$appointment->starts_at->isFuture()) return;
 

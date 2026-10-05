@@ -23,8 +23,28 @@ class EditAppointment extends EditRecord
                 ->icon('heroicon-o-play-circle')
                 ->url(fn () => route('filament.doctor.pages.consulta', ['appointment' => $this->record->id]))
                 ->visible(fn () => in_array($this->record->status, ['scheduled', 'confirmed', 'in_progress'], true)),
-            Actions\DeleteAction::make(),
+            // La cita por venir se cancela, no se borra: así queda el hueco
+            // y la lista de espera se entera. Borrar queda para la que ya
+            // pasó o ya estaba cancelada.
+            Actions\Action::make('cancelarCita')
+                ->label('Cancelar cita')
+                ->icon('heroicon-o-x-circle')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->visible(fn () => $this->porVenir())
+                ->action(function () {
+                    $this->record->update(['status' => 'cancelled']);
+                    AppointmentResource::avisarDelHueco($this->record);
+                    $this->refreshFormData(['status']);
+                }),
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $this->porVenir()),
         ];
+    }
+
+    private function porVenir(): bool
+    {
+        return in_array($this->record->status, ['scheduled', 'confirmed'], true) && $this->record->starts_at?->isFuture();
     }
 
     protected function getFormHeroConfig(): array
