@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Estado actual
 
-Antes de empezar, lee `docs/ESTADO-2026-10-02.md`: lo que se hizo, las decisiones de Omar (sin CFDI, garantía de 30 días, presupuestos desde el Básico, de usted) y los pendientes.
+Antes de empezar, lee `docs/ESTADO-2026-10-04.md` (lo más reciente) y `docs/ESTADO-2026-10-02.md` (lo anterior): lo que se hizo, las decisiones de Omar (sin CFDI, garantía de 30 días, presupuestos desde el Básico, de usted, solo se enseña lo que ya existe, los mensajes los manda el doctor desde su WhatsApp) y los pendientes.
 
 ## Project Overview
 

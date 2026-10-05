@@ -119,6 +119,21 @@ class PantallaDeSalaTest extends TestCase
         $this->pantalla()->assertOk()->assertSee('http-equiv="refresh"', false);
     }
 
+    // ── La hora del consultorio, no la del servidor ──────────────
+
+    public function test_usa_la_hora_del_consultorio(): void
+    {
+        // En Sinaloa es una hora menos que en el centro: a las 10:00 del
+        // centro allá son las 9:00, y la cita de las 8:50 que todavía no
+        // llega sigue en la lista.
+        $this->clinica->update(['timezone' => 'America/Mazatlan']);
+        $this->cita('Luis', 'Mora', '08:50');
+
+        $this->pantalla()->assertOk()
+            ->assertSee('Luis M.')
+            ->assertSee('09:00');
+    }
+
     // ── Quién la puede abrir ─────────────────────────────────────
 
     public function test_sin_firma_no_abre(): void

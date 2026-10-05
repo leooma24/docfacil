@@ -7,7 +7,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 destino=../public/videos
 mkdir -p "$destino"
-for par in "v1-consulta:docfacil-de-la-cita-a-la-receta" "v1-corto:docfacil-receta-sin-papel" "v4-recordatorios:docfacil-recordatorios" "v2-presupuesto:docfacil-odontograma-a-presupuesto" "v3-ortodoncia:docfacil-mensualidades-de-brackets"; do
+for par in "v1-consulta:docfacil-de-la-cita-a-la-receta" "v1-corto:docfacil-receta-sin-papel" "v4-recordatorios:docfacil-recordatorios" "v5-sala:docfacil-sala-de-espera" "v2-presupuesto:docfacil-odontograma-a-presupuesto" "v3-ortodoncia:docfacil-mensualidades-de-brackets"; do
   dir=${par%%:*}; mp4=${par#*:}
   ffmpeg -y -loglevel error -i "$dir/$mp4.mp4" -vf "scale=720:900:flags=lanczos" \
     -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart "$destino/$dir.mp4"

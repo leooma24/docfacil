@@ -1,0 +1,8 @@
+GUION VIDEO 5: la pantalla de la sala de espera (DocFácil, voz Kokoro ef_dora a 0.92)
+
+1. Doctor, ¿sus pacientes le preguntan a cada rato cuánto les falta?
+2. Ponga esta pantalla en una tele de la sala: dice quién está en consulta y quién sigue.
+3. Cuando su paciente llega, recepción le da Llegó, y la pantalla lo muestra.
+4. Usted le da Iniciar consulta, y en la pantalla pasa a En consulta.
+5. Solo se ve el nombre y la inicial, nunca a qué viene.
+6. Pruébelo quince días gratis. Yo le ayudo a cargar su agenda.
