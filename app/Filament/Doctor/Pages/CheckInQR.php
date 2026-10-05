@@ -48,6 +48,12 @@ class CheckInQR extends Page
         return \Illuminate\Support\Facades\URL::signedRoute('checkin.show', ['slug' => $clinic->slug]);
     }
 
+    /** La pantalla de la sala de espera, firmada como el QR. */
+    public function getPantallaUrl(): string
+    {
+        return \Illuminate\Support\Facades\URL::signedRoute('sala.pantalla', ['slug' => auth()->user()->clinic->slug]);
+    }
+
     public function getQrCodeUrl(): string
     {
         $url = urlencode($this->getCheckInUrl());

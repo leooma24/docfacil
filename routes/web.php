@@ -223,6 +223,12 @@ Route::post('/clinica/{slug}/check-in', [CheckInController::class, 'store'])
     ->middleware(['signed', 'throttle:5,1'])
     ->name('checkin.store');
 
+// La pantalla de la sala de espera (quién está en consulta y quién sigue).
+// Firmada, como el QR: sin la firma, cualquiera vería quién tiene cita hoy.
+Route::get('/clinica/{slug}/sala', \App\Http\Controllers\SalaDeEsperaController::class)
+    ->middleware(['signed', 'throttle:30,1'])
+    ->name('sala.pantalla');
+
 // Aviso de privacidad del consultorio para sus pacientes, y la liga firmada
 // para que el paciente lo acepte desde su celular (ley de datos, arts. 8 y 16).
 Route::get('/clinica/{slug}/aviso-de-privacidad', [\App\Http\Controllers\AvisoDePrivacidadController::class, 'show'])

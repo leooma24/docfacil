@@ -440,6 +440,7 @@ class Clinic extends Model
             'whatsapp_reminders',      // Recordatorios auto + manual 1-clic
             'whatsapp_payment',        // Cobro por WhatsApp
             'qr_checkin',              // Check-in con QR
+            'pantalla_sala',           // Pantalla de la sala: en consulta y quién sigue
             'basic_dashboard',
             'odontogram',              // Odontograma FDI interactivo — diferenciador
                                        // dental clave; va en Basico para que el

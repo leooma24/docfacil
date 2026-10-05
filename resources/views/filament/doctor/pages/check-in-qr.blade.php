@@ -49,5 +49,19 @@
                 <div><span class="step-num">4</span> Cuando los atiendes, ya aparecen en tu lista de pacientes</div>
             </div>
         </div>
+
+        {{-- La pantalla de la sala: quién está en consulta y quién sigue. --}}
+        <div class="instructions" style="margin-top: 16px;">
+            <strong>Pantalla de la sala de espera</strong>
+            <p style="color: #4b5563; font-size: 14px; margin: 6px 0 10px; line-height: 1.6;">
+                Ábrala en una tele o tablet de la sala: dice quién está en consulta y quién sigue, y se actualiza sola.
+                De cada paciente solo se ve el nombre y la inicial del apellido ("Ana R."), nunca a qué viene.
+            </p>
+            <div class="qr-url">{{ $this->getPantallaUrl() }}</div>
+            <div class="qr-actions">
+                <a href="{{ $this->getPantallaUrl() }}" target="_blank" class="qr-btn qr-btn-primary">Abrir la pantalla</a>
+                <button onclick="navigator.clipboard.writeText('{{ $this->getPantallaUrl() }}'); this.textContent='¡Copiado!'" class="qr-btn qr-btn-secondary">Copiar link</button>
+            </div>
+        </div>
     </div>
 </x-filament-panels::page>
