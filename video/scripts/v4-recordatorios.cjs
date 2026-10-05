@@ -1,7 +1,7 @@
 // Video 4: los recordatorios de mañana, sin escribirlos.
-// Lo que se ve es lo que hay: la lista "Mañana, sin recordatorio", el menú
-// Acciones → WhatsApp (que abre el chat con el mensaje ya escrito y deja la
-// cita recordada), la página donde el paciente confirma y la cita confirmada.
+// Lo que se ve es lo que hay: la lista "Mañana, sin recordatorio", el botón
+// de WhatsApp de cada cita (que abre el chat con el mensaje ya escrito y deja
+// la cita recordada), la página donde el paciente confirma y la cita confirmada.
 // Las citas de prueba de mañana se preparan en la base antes de grabar.
 // Uso: node v4-recordatorios.cjs <audioDir> <outDir>
 const fs = require('fs');
@@ -24,6 +24,12 @@ const DOMINIO = 'docfacil.tu-app.co';
     st.textContent = '#__cap{top:16px !important;bottom:auto !important;font-size:24px !important;padding:12px 20px !important;max-width:680px !important;background:rgba(15,118,110,.96) !important}'
       + ' #__cortina{position:fixed;inset:0;z-index:99998;pointer-events:none}';
     document.head.appendChild(st);
+    // La página del paciente (/c/…) está hecha para el celular: en el video
+    // se agranda desde que carga, para que se vea como en su teléfono.
+    if (location.pathname.startsWith('/c/')) {
+      const contenido = [...document.body.children].find(e => !['__cur', '__cap', '__cortina'].includes(e.id) && e.tagName !== 'SCRIPT');
+      if (contenido) { contenido.style.transformOrigin = 'top center'; contenido.style.transform = 'scale(1.45)'; }
+    }
     const foto = sessionStorage.getItem('__congelado');
     if (foto) {
       const c = document.createElement('div'); c.id = '__cortina';
@@ -31,14 +37,22 @@ const DOMINIO = 'docfacil.tu-app.co';
       document.body.appendChild(c);
     }
   }));
-  // WhatsApp no se abre de verdad: se toma la liga que DocFácil le arma.
-  await ctx.route('https://wa.me/**', (r) => r.abort());
+  // WhatsApp no se abre de verdad: la ruta de DocFácil sí corre (deja la cita
+  // recordada) y de su respuesta se toma la liga que arma; la pestaña nueva
+  // se queda en blanco en vez de ir a wa.me.
+  let ligaWhatsapp = '';
+  await ctx.route('**/recordar', async (r) => {
+    const resp = await r.fetch({ maxRedirects: 0 });
+    ligaWhatsapp = resp.headers()['location'] || '';
+    await r.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>WhatsApp</title>' });
+  });
   const page = await ctx.newPage();
   const inicioVideo = Date.now();
   const errores = [];
   page.on('pageerror', e => errores.push(e.message));
 
   const marks = [];
+  let otraPestaña = null;
   const { W, mover, clic, listo, seg, visible } = ayudantes(page, durs, inicioVideo, marks);
   const congelar = async () => {
     const foto = 'data:image/jpeg;base64,' + (await page.screenshot({ type: 'jpeg', quality: 88 })).toString('base64');
@@ -58,14 +72,6 @@ const DOMINIO = 'docfacil.tu-app.co';
     });
     await W(400);
   };
-  // La página del paciente está hecha para el celular: en el video se agranda
-  // para que se vea como en su teléfono. Se escala su contenido, no el cursor.
-  const agrandarPaginaDelPaciente = () => page.evaluate(() => {
-    const contenido = [...document.body.children].find(e => !['__cur', '__cap', '__cortina'].includes(e.id) && e.tagName !== 'SCRIPT');
-    if (!contenido) return;
-    contenido.style.transformOrigin = 'top center';
-    contenido.style.transform = 'scale(1.45)';
-  });
   const fila = (nombre) => page.locator('tr', { hasText: nombre }).first();
 
   await page.goto(BASE + '/doctor/citas?tableFilters[sin_recordatorio][isActive]=true');
@@ -88,17 +94,18 @@ const DOMINIO = 'docfacil.tu-app.co';
   });
 
   await seg(3, 'Se abre su WhatsApp con el mensaje listo: usted da enviar', async () => {
-    await clic(fila('Miguel Ángel').getByRole('button', { name: 'Acciones' }), 14);
-    await W(500);
-    const respuesta = ctx.waitForEvent('response', { predicate: r => r.url().includes('/recordar'), timeout: 8000 });
-    await clic(page.locator('.fi-dropdown-panel a, .fi-dropdown-panel button', { hasText: 'WhatsApp' }), 12);
-    const ligaWhatsapp = (await respuesta).headers()['location'] || '';
-    for (const p of ctx.pages()) if (p !== page) await p.close().catch(() => {});
+    // El botón de WhatsApp está a la vista en cada cita: un clic.
+    const pestaña = ctx.waitForEvent('page');
+    await clic(fila('Miguel Ángel').locator('a[href*="/recordar"]'), 16);
+    const otra = await pestaña;
+    for (let i = 0; i < 50 && !ligaWhatsapp; i++) await W(100);
+    // Su video no es el de la grabación: se borra al cerrarla.
+    otraPestaña = otra;
+    await otra.close().catch(() => {});
     await page.bringToFront();
     if (!ligaWhatsapp.includes('wa.me')) throw new Error('no salió la liga de WhatsApp: ' + ligaWhatsapp);
     const mensaje = decodeURIComponent(ligaWhatsapp.split('text=')[1].replace(/\+/g, ' '));
     fs.writeFileSync(path.join(outDir, 'mensaje.txt'), mensaje);
-    await page.keyboard.press('Escape');
     // No sale solo: se abre el WhatsApp del doctor con el mensaje ya escrito
     // en la caja de texto, y él le da enviar. Eso es lo que se enseña.
     await page.evaluate(([texto, dominio]) => {
@@ -131,7 +138,6 @@ const DOMINIO = 'docfacil.tu-app.co';
     await congelar();
     await page.goto(mensaje.match(/https?:\/\/\S+/)[0]);
     await listo();
-    await agrandarPaginaDelPaciente();
     await W(300);
   });
 
@@ -141,7 +147,6 @@ const DOMINIO = 'docfacil.tu-app.co';
     await mover(boton, 20); await W(400);
     await Promise.all([page.waitForNavigation(), clic(boton, 4)]);
     await listo();
-    await agrandarPaginaDelPaciente();
     await W(RESPIRO + 300);
     await congelar();
     await page.goto(BASE + '/doctor/citas');
@@ -160,6 +165,9 @@ const DOMINIO = 'docfacil.tu-app.co';
   });
 
   const video = await cerrar(ctx, page, outDir, marks);
+  // montar.sh toma el único .webm de la carpeta: el de la pestaña de WhatsApp sobra.
+  // (Si no alcanzó a grabar nada, no hay archivo que borrar.)
+  if (otraPestaña) await otraPestaña.video().path().then(f => fs.rmSync(f, { force: true })).catch(() => {});
   await browser.close();
   console.log(video);
   if (errores.length) { console.error('Errores de JavaScript en la página:\n' + errores.join('\n')); process.exit(2); }
