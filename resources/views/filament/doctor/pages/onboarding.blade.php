@@ -122,7 +122,7 @@
 
         @if($suggestions_loaded && count($quick_services) > 0)
         <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:0.75rem;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.8rem;color:#0f766e;">
-            ✨ Te dejamos {{ count($quick_services) }} servicios pre-cargados. Edita precios y duración a tu gusto.
+            <x-icono nombre="sparkles" /> Te dejamos {{ count($quick_services) }} servicios pre-cargados. Edita precios y duración a tu gusto.
         </div>
         @endif
 
@@ -171,14 +171,13 @@
             <div wire:click="toggleAddon('{{ $addon['slug'] }}')" style="cursor:pointer;border:2px solid {{ $isSelected ? '#7c3aed' : '#e5e7eb' }};border-radius:1rem;padding:1.25rem;transition:all 0.15s;background:{{ $isSelected ? '#fdf4ff' : 'white' }};">
                 <div style="display:flex;align-items:start;justify-content:space-between;gap:0.75rem;">
                     <div style="display:flex;align-items:start;gap:0.75rem;flex:1;min-width:0;">
-                        <div style="font-size:1.75rem;flex-shrink:0;">{{ $addon['icon'] }}</div>
+                        <div style="font-size:1.75rem;flex-shrink:0;color:#7c3aed;"><x-icono :nombre="$addon['icon']" /></div>
                         <div style="flex:1;min-width:0;">
                             <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
                                 <h4 style="font-weight:700;font-size:0.95rem;">{{ $addon['name'] }}</h4>
                                 <span style="font-size:0.75rem;font-weight:700;padding:0.15rem 0.5rem;border-radius:9999px;background:#f0fdfa;color:#0d9488;">${{ number_format($addon['monthly_price'], 0) }}/mes</span>
                             </div>
                             <p style="color:#6b7280;font-size:0.8rem;margin-top:0.25rem;line-height:1.4;">{{ $addon['short_description'] }}</p>
-                            <p style="color:#15803d;font-size:0.75rem;margin-top:0.375rem;font-weight:600;">💰 {{ $addon['revenue_hypothesis'] }}</p>
                         </div>
                     </div>
                     <div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;border:2px solid {{ $isSelected ? '#7c3aed' : '#d1d5db' }};background:{{ $isSelected ? '#7c3aed' : 'white' }};display:flex;align-items:center;justify-content:center;">
@@ -231,7 +230,7 @@
         @if($this->portalUrl)
         <div style="margin-top:1.75rem;padding:1rem 1.25rem;background:linear-gradient(135deg,#ecfeff,#f0fdfa);border:1px solid #99f6e4;border-radius:1rem;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
             <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
-                <span style="font-size:1.25rem;">🌐</span>
+                <span style="font-size:1.25rem;color:#0d9488;"><x-icono nombre="globe-alt" /></span>
                 <span style="font-weight:700;font-size:0.9rem;color:#0f766e;">Tu portal de agendamiento ya está vivo</span>
             </div>
             <div style="background:white;padding:0.6rem 0.85rem;border-radius:0.625rem;border:1px solid #99f6e4;font-size:0.78rem;color:#0d9488;font-family:monospace;word-break:break-all;">{{ $this->portalUrl }}</div>
@@ -244,7 +243,7 @@
         @endif
 
         <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #f3f4f6;text-align:left;max-width:440px;margin-left:auto;margin-right:auto;">
-            <p style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;">💡 Para terminar tu marca:</p>
+            <p style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;"><x-icono nombre="light-bulb" /> Para terminar tu marca:</p>
             <ul style="font-size:0.8rem;color:#6b7280;list-style:none;padding:0;margin:0;display:grid;gap:0.375rem;">
                 @if(!$logo)
                 <li>→ Agrega tu logo desde <strong>Mi cuenta › Configuración</strong></li>

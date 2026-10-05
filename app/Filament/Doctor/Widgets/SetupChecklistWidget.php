@@ -78,7 +78,7 @@ class SetupChecklistWidget extends Widget
                 'done' => ! empty($logo),
                 'cta' => 'Subir logo',
                 'url' => \App\Filament\Doctor\Pages\ClinicSettings::getUrl(),
-                'icon' => '🏥',
+                'icon' => 'building-office-2',
             ],
             [
                 'key' => 'services',
@@ -89,7 +89,7 @@ class SetupChecklistWidget extends Widget
                 'done' => $servicesCount >= 5,
                 'cta' => $servicesCount > 0 ? 'Agregar más' : 'Agregar servicios',
                 'url' => \App\Filament\Doctor\Resources\ServiceResource::getUrl('index'),
-                'icon' => '🦷',
+                'icon' => 'clipboard-document-list',
             ],
             // Lo primero que se ofrece es subir el Excel, no capturar uno por
             // uno: el dentista que ya tiene 300 pacientes en una hoja no va a
@@ -108,7 +108,7 @@ class SetupChecklistWidget extends Widget
                     : \App\Filament\Doctor\Resources\PatientResource::getUrl('index') . '?action=import',
                 'cta2' => $patientsCount > 0 ? null : 'Crear uno',
                 'url2' => $patientsCount > 0 ? null : \App\Filament\Doctor\Resources\PatientResource::getUrl('create'),
-                'icon' => '👤',
+                'icon' => 'user-group',
             ],
             [
                 'key' => 'appointment',
@@ -121,7 +121,7 @@ class SetupChecklistWidget extends Widget
                 'url' => $appointmentsCount > 0
                     ? \App\Filament\Doctor\Resources\AppointmentResource::getUrl('index')
                     : \App\Filament\Doctor\Resources\AppointmentResource::getUrl('create'),
-                'icon' => '📅',
+                'icon' => 'calendar-days',
             ],
             [
                 'key' => 'payment',
@@ -132,7 +132,7 @@ class SetupChecklistWidget extends Widget
                 'done' => $paymentsCount > 0,
                 'cta' => $paymentsCount > 0 ? 'Ver cobros' : 'Registrar cobro',
                 'url' => \App\Filament\Doctor\Resources\PaymentResource::getUrl('index'),
-                'icon' => '💰',
+                'icon' => 'banknotes',
             ],
         ];
 

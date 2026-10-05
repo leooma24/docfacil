@@ -38,15 +38,13 @@ class ListHazardousWastes extends ListRecords
 
         return [
             'title'    => 'Residuos',
-            'icon'     => '⚠️',
-            'kicker'   => '🧾 Cumplimiento',
             'subtitle' => 'Amalgama, mercurio y residuos biológicos. No descuentan inventario: son el registro que se enseña en una revisión.',
             'gradient' => '#f59e0b 0%, #d97706 40%, #b45309 100%',
             'accent'   => '#f59e0b',
             'stats' => [
-                ['label' => '📋 Este año',        'value' => number_format($total)],
-                ['label' => '⚠️ Sin registro',    'value' => number_format($sinRegistro)],
-                ['label' => '🧪 Materiales',      'value' => number_format($materiales)],
+                ['label' => 'Este año',        'value' => number_format($total)],
+                ['label' => 'Sin registro',    'value' => number_format($sinRegistro)],
+                ['label' => 'Materiales',      'value' => number_format($materiales)],
             ],
         ];
     }

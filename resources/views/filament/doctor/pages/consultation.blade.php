@@ -221,20 +221,20 @@
                     <span>{{ substr($appointment->patient->first_name, 0, 1) }}{{ substr($appointment->patient->last_name, 0, 1) }}</span>
                 </div>
                 <div style="min-width:0;flex:1;">
-                    <div class="cons-label">🩺 En consulta</div>
+                    <div class="cons-label"><x-icono nombre="play-circle" /> En consulta</div>
                     <h2 class="cons-name">{{ $appointment->patient->first_name }} {{ $appointment->patient->last_name }}</h2>
                     <div class="cons-meta">
                         @if($appointment->patient->birth_date)
-                        <span class="cons-chip">🎂 {{ $appointment->patient->birth_date->age }} años</span>
+                        <span class="cons-chip"><x-icono nombre="cake" /> {{ $appointment->patient->birth_date->age }} años</span>
                         @endif
                         @if($appointment->patient->phone)
-                        <span class="cons-chip">📞 {{ $appointment->patient->phone }}</span>
+                        <span class="cons-chip"><x-icono nombre="phone" /> {{ $appointment->patient->phone }}</span>
                         @endif
                         @if($appointment->patient->blood_type)
-                        <span class="cons-chip" style="background:rgba(220,38,38,0.4);border-color:rgba(220,38,38,0.5);">🩸 {{ $appointment->patient->blood_type }}</span>
+                        <span class="cons-chip" style="background:rgba(220,38,38,0.4);border-color:rgba(220,38,38,0.5);">Sangre {{ $appointment->patient->blood_type }}</span>
                         @endif
                         @if($appointment->patient->tieneAlergias())
-                        <span class="cons-chip cons-chip-alert">⚠️ {{ Str::limit($appointment->patient->allergies, 40) }}</span>
+                        <span class="cons-chip cons-chip-alert"><x-icono nombre="exclamation-triangle" /> {{ Str::limit($appointment->patient->allergies, 40) }}</span>
                         @endif
                     </div>
                 </div>
@@ -302,11 +302,11 @@
     {{-- Steps indicator --}}
     @php
     $stepConfig = [
-        1 => ['label' => 'Signos vitales', 'short' => 'Vitales', 'icon' => '❤️', 'color' => '#ef4444', 'colorDark' => '#dc2626'],
-        2 => ['label' => 'Diagnóstico', 'short' => 'Dx', 'icon' => '🔬', 'color' => '#0d9488', 'colorDark' => '#0f766e'],
-        3 => ['label' => 'Receta', 'short' => 'Rx', 'icon' => '💊', 'color' => '#8b5cf6', 'colorDark' => '#7c3aed'],
-        4 => ['label' => 'Cobro', 'short' => 'Cobro', 'icon' => '💰', 'color' => '#f59e0b', 'colorDark' => '#d97706'],
-        5 => ['label' => 'Siguiente cita', 'short' => 'Cita', 'icon' => '📅', 'color' => '#3b82f6', 'colorDark' => '#2563eb'],
+        1 => ['label' => 'Signos vitales', 'short' => 'Vitales', 'icon' => 'heart', 'color' => '#ef4444', 'colorDark' => '#dc2626'],
+        2 => ['label' => 'Diagnóstico', 'short' => 'Dx', 'icon' => 'magnifying-glass', 'color' => '#0d9488', 'colorDark' => '#0f766e'],
+        3 => ['label' => 'Receta', 'short' => 'Rx', 'icon' => 'document-text', 'color' => '#8b5cf6', 'colorDark' => '#7c3aed'],
+        4 => ['label' => 'Cobro', 'short' => 'Cobro', 'icon' => 'banknotes', 'color' => '#f59e0b', 'colorDark' => '#d97706'],
+        5 => ['label' => 'Siguiente cita', 'short' => 'Cita', 'icon' => 'calendar-days', 'color' => '#3b82f6', 'colorDark' => '#2563eb'],
     ];
     @endphp
     <style>
@@ -352,7 +352,7 @@
                         {{ $num }}
                     @endif
                 </span>
-                <span class="v2-step-icon">{{ $cfg['icon'] }}</span>
+                <span class="v2-step-icon"><x-icono :nombre="$cfg['icon']" /></span>
                 <span class="v2-step-label">{{ $cfg['label'] }}</span>
                 <span class="v2-step-short">{{ $cfg['short'] }}</span>
             </button>
@@ -396,7 +396,7 @@
         {{-- Step 1: Vital Signs + Somatometry (configurable por especialidad) --}}
         @if($currentStep === 1)
         <div class="step-title">
-            <span class="step-title-icon">❤️</span>
+            <span class="step-title-icon"><x-icono nombre="heart" /></span>
             <span class="step-title-text">Signos Vitales</span>
         </div>
         <p class="step-subtitle">Opcional. Registra los signos vitales del paciente.</p>
@@ -516,7 +516,7 @@
         {{-- Step 2: Diagnosis --}}
         @if($currentStep === 2)
         <div class="step-title">
-            <span class="step-title-icon">🔬</span>
+            <span class="step-title-icon"><x-icono nombre="magnifying-glass" /></span>
             <span class="step-title-text">Diagnóstico y Tratamiento</span>
         </div>
         <p class="step-subtitle">{{ config('services.ai.enabled') ? 'Usa la IA para llenar todo automáticamente o escribe manual.' : 'Registra el diagnóstico, tratamiento y notas.' }}</p>
@@ -533,25 +533,25 @@
                             <svg style="width:22px;height:22px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m7 7v4m-4 0h8M12 3a3 3 0 00-3 3v5a3 3 0 006 0V6a3 3 0 00-3-3z"/></svg>
                         </div>
                         <div>
-                            <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.7;font-weight:700;">⭐ Feature exclusivo</div>
+                            <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.7;font-weight:700;"><x-icono nombre="star" /> Feature exclusivo</div>
                             <div style="font-size:15px;font-weight:800;letter-spacing:-0.01em;margin-top:2px;">Modo Consulta en Vivo</div>
                             <div style="font-size:12px;opacity:0.8;margin-top:2px;">La IA escucha toda la consulta y llena todo automáticamente</div>
                         </div>
                     </div>
-                    <button type="button" @click="toggle" x-text="listening ? '⏹ Detener y procesar' : '▶ Iniciar escucha'"
+                    <button type="button" @click="toggle" x-text="listening ? 'Detener y procesar' : 'Iniciar escucha'"
                         :style="listening ? 'background:linear-gradient(135deg,#dc2626,#991b1b);box-shadow:0 8px 20px rgba(220,38,38,0.4);' : 'background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 8px 20px rgba(16,185,129,0.4);'"
                         style="padding:12px 20px;color:white;border:none;border-radius:12px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap;transition:transform 0.2s;"
                         onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'"></button>
                 </div>
 
                 <div x-show="listening" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;max-height:120px;overflow-y:auto;">
-                    <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;">🎤 Transcribiendo...</div>
+                    <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.6;margin-bottom:6px;font-weight:700;"><x-icono nombre="microphone" /> Transcribiendo...</div>
                     <div x-text="transcript || 'Habla normal con el paciente. Escucharé todo.'" style="font-size:12px;line-height:1.6;"></div>
                 </div>
 
                 <div x-show="processing" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,0.25);border:1px solid rgba(13,148,136,0.4);border-radius:10px;display:flex;align-items:center;gap:10px;">
                     <div style="width:10px;height:10px;background:#5eead4;border-radius:50%;animation:pulse 1s infinite;"></div>
-                    <span style="font-size:12px;font-weight:600;">✨ La IA está estructurando tu consulta...</span>
+                    <span style="font-size:12px;font-weight:600;"><x-icono nombre="sparkles" /> La IA está estructurando tu consulta...</span>
                 </div>
             </div>
 
@@ -571,7 +571,7 @@
                         <svg style="width:20px;height:20px;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-size:12px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;">✨ Con IA</div>
+                        <div style="font-size:12px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;"><x-icono nombre="sparkles" /> Con IA</div>
                         <div style="font-size:14px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">Dictado inteligente</div>
                         <div style="font-size:12px;color:#64748b;margin-top:1px;">Escribe o dicta lo que pasó en la consulta y la IA llena todo</div>
                     </div>
@@ -588,7 +588,7 @@
                     onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <svg wire:loading.remove wire:target="processFullDictation" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     <svg wire:loading wire:target="processFullDictation" style="width:16px;height:16px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                    <span wire:loading.remove wire:target="processFullDictation">✨ Procesar con IA</span>
+                    <span wire:loading.remove wire:target="processFullDictation"><x-icono nombre="sparkles" /> Procesar con IA</span>
                     <span wire:loading wire:target="processFullDictation">Analizando...</span>
                 </button>
             </div>
@@ -781,7 +781,7 @@
         {{-- Step 3: Prescription --}}
         @if($currentStep === 3)
         <div class="step-title">
-            <span class="step-title-icon">💊</span>
+            <span class="step-title-icon"><x-icono nombre="document-text" /></span>
             <span class="step-title-text">Receta Médica</span>
         </div>
         <p class="step-subtitle">Opcional. Agrega medicamentos si es necesario.</p>
@@ -812,10 +812,10 @@
                     <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
                 @if($choque = \App\Support\AlertasClinicas::alRecetar($med['medication'] ?? null, $this->appointment?->patient?->allergies, $this->appointment?->patient?->medical_notes))
-                    <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:6px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};">⚠️ {{ $choque['texto'] }}</div>
+                    <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:6px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};"><x-icono nombre="exclamation-triangle" /> {{ $choque['texto'] }}</div>
                 @endif
                 @if($aviso = \App\Support\Receta::avisoDeControl($med['medication'] ?? null))
-                    <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;">⚠️ {{ $aviso }}</div>
+                    <div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#92400e;"><x-icono nombre="exclamation-triangle" /> {{ $aviso }}</div>
                 @endif
             </div>
             @endforeach
@@ -839,7 +839,7 @@
         {{-- Step 4: Payment --}}
         @if($currentStep === 4)
         <div class="step-title">
-            <span class="step-title-icon">💰</span>
+            <span class="step-title-icon"><x-icono nombre="banknotes" /></span>
             <span class="step-title-text">Cobro</span>
         </div>
         <p class="step-subtitle">Registra el pago de esta consulta.</p>
@@ -848,7 +848,7 @@
         @php $mensualidadesPorCobrar = $this->mensualidadesPorCobrar(); @endphp
         @if($mensualidadesPorCobrar->count())
         <div style="margin-bottom:1.25rem;padding:1rem;border:1px solid #fde68a;border-radius:0.9rem;background:#fffbeb;">
-            <div style="font-weight:700;font-size:0.9rem;color:#92400e;margin-bottom:0.6rem;">📅 Mensualidades por cobrar</div>
+            <div style="font-weight:700;font-size:0.9rem;color:#92400e;margin-bottom:0.6rem;"><x-icono nombre="calendar-days" /> Mensualidades por cobrar</div>
             @foreach($mensualidadesPorCobrar as $m)
             <div wire:key="mensualidad-{{ $m->id }}" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.6rem 0.75rem;margin-bottom:0.4rem;background:#fff;border:1px solid #fde68a;border-radius:0.6rem;">
                 <div>
@@ -895,7 +895,7 @@
             @endphp
             @if($porTratar->count())
             <div style="margin-bottom:0.75rem;padding:0.75rem;border:1px dashed #fca5a5;border-radius:0.7rem;background:#fff7f7;">
-                <div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:0.45rem;letter-spacing:.02em;">🦷 Del odontograma: por tratar</div>
+                <div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:0.45rem;letter-spacing:.02em;"><x-icono nombre="clipboard-document-list" /> Del odontograma: por tratar</div>
                 <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
                     @foreach($porTratar as $p)
                     <button type="button" wire:click="agregarDesdeOdontograma({{ $p['numero'] }}, '{{ $p['condicion'] }}')"
@@ -1008,7 +1008,7 @@
                  entre los demás datos del paciente. --}}
             @if($this->allergyAlert)
             <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:#fef2f2;border:1px solid #fecaca;">
-                <div style="font-size:0.8rem;font-weight:700;color:#991b1b;">⚠️ Alergias del paciente</div>
+                <div style="font-size:0.8rem;font-weight:700;color:#991b1b;"><x-icono nombre="exclamation-triangle" /> Alergias del paciente</div>
                 <div style="font-size:0.78rem;color:#7f1d1d;margin-top:0.15rem;">{{ $this->allergyAlert }}</div>
                 <div style="font-size:0.75rem;color:#991b1b;margin-top:0.3rem;font-style:italic;">Registrado: {{ $this->patientAllergies }}</div>
             </div>
@@ -1020,7 +1020,7 @@
             @if($dosis)
             <div style="margin-top:0.6rem;padding:0.7rem 0.85rem;border-radius:0.6rem;background:{{ $dosis['exceeds'] === true ? '#fef2f2' : '#ffffff' }};border:1px solid {{ $dosis['exceeds'] === true ? '#fecaca' : '#e5e7eb' }};">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
-                    <span style="font-size:0.8rem;font-weight:700;color:#111827;">💉 Dosis de anestesia</span>
+                    <span style="font-size:0.8rem;font-weight:700;color:#111827;">Dosis de anestesia</span>
                     <span style="font-size:0.8rem;font-weight:700;color:{{ $dosis['exceeds'] === true ? '#b91c1c' : '#0f766e' }};">
                         {{ rtrim(rtrim(number_format($dosis['cartridges'], 2), '0'), '.') }} cartuchos
                     </span>
@@ -1069,14 +1069,15 @@
             $serviceName = collect($this->services)->get($payment_service_id) ?? 'consulta';
             $clinicName = $appointment->clinic->name ?? '';
             $waPhone = preg_replace('/\D/', '', $appointment->patient->phone);
-            $waMsg = "Hola {$appointment->patient->first_name}, te comparto el cobro de tu consulta de hoy en {$clinicName}:\n\n"
-                   . "💰 *Total: \${" . number_format($payment_amount, 2) . "}*\n"
-                   . "📋 Concepto: {$serviceName}\n\n"
-                   . "Puedes pagar por transferencia. ¡Gracias!";
+            // Al paciente: de usted y sin emojis, como lo demás que le sale.
+            $waMsg = "Hola {$appointment->patient->first_name}, le comparto el cobro de su consulta de hoy en {$clinicName}:\n\n"
+                   . "*Total: \$" . number_format((float) $payment_amount, 2) . "*\n"
+                   . "Concepto: {$serviceName}\n\n"
+                   . "Puede pagar por transferencia. ¡Gracias!";
         @endphp
         <div style="margin-top:1rem;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="font-size:12px;color:#166534;">
-                <strong>💬 Envía el cobro por WhatsApp</strong><br>
+                <strong><x-icono nombre="chat-bubble-left-ellipsis" /> Envía el cobro por WhatsApp</strong><br>
                 <span style="font-size:12px;color:#15803d;">Mensaje pre-armado con el monto y concepto</span>
             </div>
             <a href="https://wa.me/52{{ $waPhone }}?text={{ urlencode($waMsg) }}" target="_blank"
@@ -1091,7 +1092,7 @@
         {{-- Step 5: Next appointment --}}
         @if($currentStep === 5)
         <div class="step-title">
-            <span class="step-title-icon">📅</span>
+            <span class="step-title-icon"><x-icono nombre="calendar-days" /></span>
             <span class="step-title-text">Siguiente Cita</span>
         </div>
         <p class="step-subtitle">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
@@ -1249,7 +1250,7 @@
     <div class="max-w-lg mx-auto px-2 md:px-0">
         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl md:rounded-2xl p-4 md:p-8">
             <div class="text-center mb-4 md:mb-6">
-                <div class="text-4xl md:text-5xl mb-2">🩺</div>
+                <div class="text-4xl md:text-5xl mb-2" style="color:#0d9488;"><x-icono nombre="clipboard-document-check" /></div>
                 <div class="font-extrabold text-lg md:text-xl">Iniciar consulta</div>
                 <div class="text-xs md:text-sm text-gray-500 mt-1">Busca un paciente o crea uno nuevo con el botón +</div>
             </div>

@@ -22,12 +22,12 @@
                 <button type="button" wire:click="$set('tab', 'clinic')"
                     class="px-4 py-2 text-sm font-bold border-b-2 transition
                         {{ $tab === 'clinic' ? 'border-teal-600 text-teal-700 dark:text-teal-300' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                    🏥 Configuración de la clínica
+                    <x-icono nombre="building-office-2" /> Configuración de la clínica
                 </button>
                 <button type="button" wire:click="$set('tab', 'mine')"
                     class="px-4 py-2 text-sm font-bold border-b-2 transition
                         {{ $tab === 'mine' ? 'border-teal-600 text-teal-700 dark:text-teal-300' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                    👤 Mi configuración personal
+                    <x-icono nombre="user" /> Mi configuración personal
                 </button>
             </nav>
         </div>

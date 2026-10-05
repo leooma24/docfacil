@@ -63,8 +63,6 @@ class CreateDoctorInvitation extends CreateRecord
     {
         return [
             'title'    => 'Invitar doctor',
-            'icon'     => '👨‍⚕️',
-            'kicker'   => '➕ Agregar al equipo',
             'subtitle' => 'Invita a un doctor a unirse a tu clínica. Recibirá un link para registrarse por email o WhatsApp.',
             'gradient' => '#ec4899 0%, #d946ef 40%, #a855f7 100%',
             'accent'   => '#ec4899',

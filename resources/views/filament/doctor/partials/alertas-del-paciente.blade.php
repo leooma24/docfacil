@@ -10,7 +10,7 @@
     @if($this->isFieldEnabled('allergies_alert'))
         @if($pac->tieneAlergias())
             <div style="background:#fef2f2;border-left:4px solid #ef4444;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
-                <span style="font-size:18px;">⚠️</span>
+                <span style="font-size:18px;color:#dc2626;"><x-icono nombre="exclamation-triangle" /></span>
                 <div style="font-size:13px;color:#991b1b;"><strong>Alergias:</strong> {{ $pac->allergies }}</div>
             </div>
         @elseif(blank($pac->allergies))
@@ -26,7 +26,7 @@
     @endif
     @if($this->isFieldEnabled('anticoagulants_alert') && $anticoagulado)
         <div style="background:#fff7ed;border-left:4px solid #f97316;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
-            <span style="font-size:18px;">🩸</span>
+            <span style="font-size:18px;color:#ea580c;"><x-icono nombre="exclamation-triangle" /></span>
             <div style="font-size:13px;color:#9a3412;"><strong>Toma anticoagulantes</strong> (según sus notas): precaución con procedimientos invasivos y antiinflamatorios.</div>
         </div>
     @endif

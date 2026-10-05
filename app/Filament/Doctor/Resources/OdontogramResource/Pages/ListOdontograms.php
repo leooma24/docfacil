@@ -35,16 +35,14 @@ class ListOdontograms extends ListRecords
 
         return [
             'title'    => 'Odontogramas',
-            'icon'     => '🦷',
-            'kicker'   => '🦷 Diagramas dentales',
             'subtitle' => 'Diagrama dental interactivo con 13 condiciones. Ideal para dentistas y compartible con el paciente.',
             'gradient' => '#06b6d4 0%, #0ea5e9 40%, #3b82f6 100%',
             'accent'   => '#0ea5e9',
             'stats' => [
-                ['label' => '🦷 Total',            'value' => number_format($total)],
-                ['label' => '📅 Este mes',         'value' => $month],
-                ['label' => '👥 Pacientes',        'value' => number_format($uniquePatients)],
-                ['label' => '✏️ Editados semana',  'value' => $updatedThisWeek],
+                ['label' => 'Total',            'value' => number_format($total)],
+                ['label' => 'Este mes',         'value' => $month],
+                ['label' => 'Pacientes',        'value' => number_format($uniquePatients)],
+                ['label' => 'Editados semana',  'value' => $updatedThisWeek],
             ],
         ];
     }

@@ -50,7 +50,7 @@
         {{-- Toggle mensual/anual --}}
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-200 rounded-2xl p-4 dark:from-amber-900/10 dark:via-orange-900/10 dark:to-amber-900/10 dark:border-amber-800">
             <div class="flex items-center gap-3">
-                <div class="text-3xl">💡</div>
+                <div class="text-3xl" style="color:#0d9488;"><x-icono nombre="light-bulb" /></div>
                 <div>
                     <div class="font-bold text-amber-900 dark:text-amber-200">Paga anual y ahorra 2 meses</div>
                     <div class="text-sm text-amber-800 dark:text-amber-300/80">El plan anual cuesta solo 10 meses (16.7% descuento).</div>

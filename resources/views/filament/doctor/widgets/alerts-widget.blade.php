@@ -94,7 +94,7 @@
         <div class="aw-grain"></div>
         <div class="aw-content">
             <div class="aw-head">
-                <div class="aw-head-icon">🔔</div>
+                <div class="aw-head-icon"><x-icono nombre="bell-alert" /></div>
                 <div>
                     <div class="aw-head-label">Radar del consultorio</div>
                     <div class="aw-head-title">Alertas y avisos</div>

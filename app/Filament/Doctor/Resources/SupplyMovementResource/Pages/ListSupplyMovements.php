@@ -44,16 +44,14 @@ class ListSupplyMovements extends ListRecords
 
         return [
             'title'    => 'Movimientos de insumos',
-            'icon'     => '🔄',
-            'kicker'   => '📋 El kardex',
             'subtitle' => 'Todo lo que entró, salió o se perdió. Es de solo lectura: un movimiento es un hecho, y corregirlo es agregar otro.',
             'gradient' => '#64748b 0%, #475569 40%, #334155 100%',
             'accent'   => '#64748b',
             'stats' => [
-                ['label' => '📋 Este mes',       'value' => number_format($movimientos)],
-                ['label' => '💸 Comprado',       'value' => '$' . number_format((float) $gastado)],
-                ['label' => '⚠️ Merma del mes',  'value' => '$' . number_format((float) $mermaEnPesos)],
-                ['label' => '🧾 Mermas',         'value' => number_format($mermas)],
+                ['label' => 'Este mes',       'value' => number_format($movimientos)],
+                ['label' => 'Comprado',       'value' => '$' . number_format((float) $gastado)],
+                ['label' => 'Merma del mes',  'value' => '$' . number_format((float) $mermaEnPesos)],
+                ['label' => 'Mermas',         'value' => number_format($mermas)],
             ],
         ];
     }

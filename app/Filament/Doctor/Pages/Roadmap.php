@@ -175,7 +175,7 @@ class Roadmap extends Page
             ]);
 
             Notification::make()
-                ->title('Tu voto cuenta 🗳️')
+                ->title('Tu voto cuenta')
                 ->body('Gracias por ayudar a decidir qué construimos este mes.')
                 ->success()
                 ->send();

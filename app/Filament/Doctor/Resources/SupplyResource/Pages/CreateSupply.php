@@ -25,8 +25,6 @@ class CreateSupply extends CreateRecord
     {
         return [
             'title'    => 'Nuevo insumo',
-            'icon'     => '📦',
-            'kicker'   => '➕ Agregar al catálogo',
             'subtitle' => 'Con su punto de reorden y su unidad. El stock empieza en cero: se llena con el primer movimiento.',
             'gradient' => '#14b8a6 0%, #0d9488 40%, #0f766e 100%',
             'accent'   => '#14b8a6',

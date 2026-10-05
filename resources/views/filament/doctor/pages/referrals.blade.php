@@ -4,7 +4,7 @@
     {{-- Share card --}}
     <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1.25rem;padding:2rem;margin-bottom:1.5rem;">
         <div style="text-align:center;margin-bottom:1.5rem;">
-            <div style="font-size:3rem;margin-bottom:0.5rem;">🎁</div>
+            <div style="font-size:3rem;margin-bottom:0.5rem;color:#0d9488;"><x-icono nombre="gift" /></div>
             <h2 style="font-size:1.5rem;font-weight:800;">Invita a un colega y ambos ganan</h2>
             <p style="color:#6b7280;font-size:0.875rem;margin-top:0.5rem;max-width:560px;margin-left:auto;margin-right:auto;">
                 Tu colega gana <strong style="color:#0d9488;">30 días de trial</strong> (vs 15 normales). Tú ganas <strong style="color:#0d9488;">15 días extra al registrarse</strong> + <strong style="color:#0d9488;">1 mes gratis por cada mes que pague</strong> (hasta 12 meses = 1 año completo de DocFácil sin costo).
@@ -100,13 +100,13 @@
     @if(count($this->leaderboard) > 0)
     <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;overflow:hidden;">
         <div style="padding:1rem 1.25rem;background:linear-gradient(135deg,#fef3c7,#fde68a);border-bottom:1px solid #fcd34d;font-weight:700;font-size:0.875rem;color:#78350f;">
-            🏆 Top embajadores DocFácil
+            <x-icono nombre="trophy" /> Top embajadores DocFácil
         </div>
         <div style="padding:0.5rem 1.25rem;">
             @foreach($this->leaderboard as $row)
             <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid #f3f4f6;{{ $row['is_me'] ? 'background:#fffbeb;margin:0 -1.25rem;padding-left:1.25rem;padding-right:1.25rem;' : '' }}">
                 <div style="font-size:1rem;font-weight:800;color:#9ca3af;width:30px;">
-                    @if($row['position'] === 1)🥇@elseif($row['position'] === 2)🥈@elseif($row['position'] === 3)🥉@else#{{ $row['position'] }}@endif
+                    #{{ $row['position'] }}
                 </div>
                 <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#14b8a6,#0d9488);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ $row['initials'] }}</div>
                 <div style="flex:1;min-width:0;">

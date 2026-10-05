@@ -34,13 +34,9 @@ class EditPayment extends EditRecord
     protected function getFormHeroConfig(): array
     {
         $amount = number_format($this->record->amount ?? 0, 2);
-        $patient = $this->record->patient ?? null;
-        $name = $patient ? trim($patient->first_name . ' ' . $patient->last_name) : 'Cobro';
 
         return [
             'title'    => 'Editar cobro',
-            'icon'     => '💰',
-            'kicker'   => '✏️ ' . $name . ' · $' . $amount,
             'subtitle' => 'Actualiza monto, método de pago o estado del cobro.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',

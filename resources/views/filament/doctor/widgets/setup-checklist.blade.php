@@ -109,7 +109,7 @@
 
         <div class="sc-header">
             <div class="sc-header-left">
-                <div class="sc-kicker">⚡ Pon a punto tu DocFácil</div>
+                <div class="sc-kicker"><x-icono nombre="bolt" /> Pon a punto tu DocFácil</div>
                 <h3 class="sc-title">
                     @if($percent >= 80)
                         Casi listo · {{ ($total_count - $completed_count) === 1 ? 'falta 1 paso' : 'faltan ' . ($total_count - $completed_count) . ' pasos' }}
@@ -140,7 +140,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                             </svg>
                         @else
-                            <span>{{ $item['icon'] }}</span>
+                            <x-icono :nombre="$item['icon']" />
                         @endif
                     </div>
                     <div class="sc-item-body">

@@ -14,7 +14,7 @@
 
     {{-- Hero --}}
     <div style="border-radius:1.25rem;padding:1.75rem 2rem;color:#fff;background:linear-gradient(135deg,#0f766e 0%,#0891b2 45%,#0ea5e9 100%);box-shadow:0 10px 30px rgba(8,145,178,.25);">
-        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85;">📊 Cuánto te quedó</div>
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85;"><x-icono nombre="chart-bar" /> Cuánto te quedó</div>
         <div style="font-size:1.75rem;font-weight:800;margin-top:.25rem;">Corte del consultorio</div>
         <div style="opacity:.92;margin-top:.4rem;max-width:46rem;line-height:1.5;">
             Lo que entró, lo que salió y lo que te quedó. No es contabilidad para el SAT — eso lo hace tu contador.
@@ -34,7 +34,7 @@
     @if (! $n['hay_datos'])
 
         <div style="{{ $tarjeta }} text-align:center;padding:3rem 1.5rem;">
-            <div style="font-size:3rem;">📊</div>
+            <div style="font-size:3rem;color:#94a3b8;"><x-icono nombre="chart-bar" /></div>
             <div style="font-size:1.15rem;font-weight:700;margin-top:.5rem;">Todavía no hay nada que cortar</div>
             <p style="opacity:.65;margin-top:.5rem;max-width:32rem;margin-left:auto;margin-right:auto;line-height:1.55;">
                 En cuanto registres cobros y gastos de este periodo, aquí te va a aparecer cuánto entró,

@@ -1,7 +1,7 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            🌐 Tu portal público de reservas
+            <x-icono nombre="globe-alt" /> Tu portal público de reservas
         </x-slot>
         <x-slot name="description">
             Comparte esta URL en tu Instagram, firma de WhatsApp, o pon el QR en tu recepción. Los pacientes agendan sin llamarte.
@@ -20,7 +20,7 @@
                         type="button"
                         x-on:click="navigator.clipboard.writeText('{{ $publicUrl }}'); copied = true; setTimeout(() => copied = false, 2000);"
                         class="px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg transition whitespace-nowrap">
-                        <span x-show="!copied">📋 Copiar</span>
+                        <span x-show="!copied"><x-icono nombre="clipboard-document" /> Copiar</span>
                         <span x-show="copied" x-cloak>✓ Copiado</span>
                     </button>
                 </div>
@@ -33,12 +33,12 @@
                     </a>
                     <a href="{{ $publicUrl }}" target="_blank"
                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold rounded-lg transition">
-                        👁️ Ver como paciente
+                        <x-icono nombre="eye" /> Ver como paciente
                     </a>
                 </div>
 
                 <div class="text-xs text-gray-500 dark:text-gray-400 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg leading-relaxed">
-                    💡 <strong>Ideas para usarlo:</strong>
+                    <x-icono nombre="light-bulb" /> <strong>Ideas para usarlo:</strong>
                     <ul class="mt-1 ml-4 list-disc space-y-0.5">
                         <li>Pega la URL en la bio de Instagram de tu consultorio</li>
                         <li>Imprime el QR y ponlo en la recepción</li>

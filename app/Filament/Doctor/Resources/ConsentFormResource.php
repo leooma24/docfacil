@@ -123,7 +123,7 @@ class ConsentFormResource extends Resource
                                         $set('alternatives', $template['alternatives']);
 
                                         \Filament\Notifications\Notification::make()
-                                            ->title('✨ Consentimiento generado')
+                                            ->title('Consentimiento generado')
                                             ->body('Revisa y ajusta antes de guardar.')
                                             ->success()
                                             ->send();

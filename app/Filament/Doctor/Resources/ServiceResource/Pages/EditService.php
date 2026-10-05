@@ -24,13 +24,10 @@ class EditService extends EditRecord
 
     protected function getFormHeroConfig(): array
     {
-        $name = $this->record->name ?? 'Servicio';
         $price = '$' . number_format($this->record->price ?? 0, 0);
 
         return [
             'title'    => 'Editar servicio',
-            'icon'     => '🩺',
-            'kicker'   => '✏️ ' . $name . ' · ' . $price,
             'subtitle' => 'Ajusta precio, duración o descripción del servicio.',
             'gradient' => '#f59e0b 0%, #f97316 40%, #ea580c 100%',
             'accent'   => '#f59e0b',

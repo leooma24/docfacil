@@ -8,8 +8,6 @@
 
     @include('filament.doctor.partials.list-hero', [
         'title'    => $h['title']    ?? 'Listado',
-        'icon'     => $h['icon']     ?? '📋',
-        'kicker'   => $h['kicker']   ?? 'Listado',
         'subtitle' => $h['subtitle'] ?? '',
         'gradient' => $h['gradient'] ?? '#0d9488 0%, #0891b2 40%, #06b6d4 100%',
         'accent'   => $h['accent']   ?? '#0d9488',

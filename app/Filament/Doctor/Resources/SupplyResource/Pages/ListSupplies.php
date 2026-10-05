@@ -38,16 +38,14 @@ class ListSupplies extends ListRecords
 
         return [
             'title'    => 'Insumos',
-            'icon'     => '📦',
-            'kicker'   => '🧾 Tu material',
             'subtitle' => 'Lo que tienes en el consultorio y lo que está por acabarse. El stock sale del kardex de movimientos.',
             'gradient' => '#14b8a6 0%, #0d9488 40%, #0f766e 100%',
             'accent'   => '#14b8a6',
             'stats' => [
-                ['label' => '📦 Total',        'value' => number_format($total)],
-                ['label' => '✅ Activos',      'value' => number_format($activos)],
-                ['label' => '⚠️ Bajo mínimo',  'value' => number_format($belowMinimum)],
-                ['label' => '💰 Valor',        'value' => '$' . number_format($valor)],
+                ['label' => 'Total',        'value' => number_format($total)],
+                ['label' => 'Activos',      'value' => number_format($activos)],
+                ['label' => 'Bajo mínimo',  'value' => number_format($belowMinimum)],
+                ['label' => 'Valor',        'value' => '$' . number_format($valor)],
             ],
         ];
     }

@@ -319,7 +319,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                     <div>
-                        <div class="cal-hero-label">📅 Tu agenda</div>
+                        <div class="cal-hero-label"><x-icono nombre="calendar-days" /> Tu agenda</div>
                         <h2 class="cal-hero-title">Calendario de Citas</h2>
                         <div class="cal-hero-subtitle">Arrastra para mover citas · Click para ver detalles · Redimensiona para ajustar duración</div>
                     </div>
@@ -329,19 +329,19 @@
             {{-- STATS --}}
             <div class="cal-stats">
                 <div class="cal-stat">
-                    <div class="cal-stat-label">📌 Hoy</div>
+                    <div class="cal-stat-label"><x-icono nombre="map-pin" /> Hoy</div>
                     <div class="cal-stat-value">{{ $this->stats['today'] }}</div>
                 </div>
                 <div class="cal-stat">
-                    <div class="cal-stat-label">📊 Esta semana</div>
+                    <div class="cal-stat-label"><x-icono nombre="chart-bar" /> Esta semana</div>
                     <div class="cal-stat-value">{{ $this->stats['week'] }}</div>
                 </div>
                 <div class="cal-stat">
-                    <div class="cal-stat-label">⚠️ Sin confirmar</div>
+                    <div class="cal-stat-label"><x-icono nombre="exclamation-triangle" /> Sin confirmar</div>
                     <div class="cal-stat-value">{{ $this->stats['pending_confirmation'] }}</div>
                 </div>
                 <div class="cal-stat">
-                    <div class="cal-stat-label">✅ Atendidas</div>
+                    <div class="cal-stat-label"><x-icono nombre="check-circle" /> Atendidas</div>
                     <div class="cal-stat-value">{{ $this->stats['completed_this_week'] }}</div>
                 </div>
             </div>

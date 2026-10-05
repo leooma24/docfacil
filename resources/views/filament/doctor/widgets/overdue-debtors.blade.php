@@ -1,7 +1,7 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            🔔 Adeudos vencidos
+            <x-icono nombre="bell-alert" /> Adeudos vencidos
         </x-slot>
         <x-slot name="description">
             Total pendiente: <strong>${{ number_format($total_overdue, 2) }}</strong> — "Cobrar" registra el pago; "Recordarle" abre WhatsApp.

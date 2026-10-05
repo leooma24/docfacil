@@ -25,8 +25,6 @@ class CreateService extends CreateRecord
     {
         return [
             'title'    => 'Nuevo servicio',
-            'icon'     => '🩺',
-            'kicker'   => '➕ Agregar al catálogo',
             'subtitle' => 'Nombre, precio y duración del servicio. Se usa al agendar citas y registrar cobros.',
             'gradient' => '#f59e0b 0%, #f97316 40%, #ea580c 100%',
             'accent'   => '#f59e0b',

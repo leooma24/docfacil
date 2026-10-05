@@ -35,16 +35,14 @@ class ListMedicalRecords extends ListRecords
 
         return [
             'title'    => 'Expediente Clínico',
-            'icon'     => '📋',
-            'kicker'   => '🩺 Historial médico',
             'subtitle' => 'Todas las consultas, diagnósticos y tratamientos registrados. Cada nota queda bloqueada 24 horas después de guardarla.',
             'gradient' => '#ef4444 0%, #f97316 40%, #f59e0b 100%',
             'accent'   => '#ef4444',
             'stats' => [
-                ['label' => '📋 Total',            'value' => number_format($total)],
-                ['label' => '🩺 Hoy',              'value' => $today],
-                ['label' => '📅 Este mes',         'value' => $month],
-                ['label' => '👥 Pacientes atendidos','value' => number_format($uniquePatients)],
+                ['label' => 'Total',            'value' => number_format($total)],
+                ['label' => 'Hoy',              'value' => $today],
+                ['label' => 'Este mes',         'value' => $month],
+                ['label' => 'Pacientes atendidos','value' => number_format($uniquePatients)],
             ],
         ];
     }

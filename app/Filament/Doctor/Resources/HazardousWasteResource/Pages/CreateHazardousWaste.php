@@ -26,8 +26,6 @@ class CreateHazardousWaste extends CreateRecord
     {
         return [
             'title'    => 'Registrar residuo',
-            'icon'     => '⚠️',
-            'kicker'   => '🧾 Cumplimiento',
             'subtitle' => 'Qué residuo, cuánto y en qué contenedor. El número de manifiesto se puede anotar después.',
             'gradient' => '#f59e0b 0%, #d97706 40%, #b45309 100%',
             'accent'   => '#f59e0b',

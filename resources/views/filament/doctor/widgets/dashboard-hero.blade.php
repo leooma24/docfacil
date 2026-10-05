@@ -137,7 +137,7 @@
         <div class="dh-hero-grain"></div>
         <div class="dh-hero-content">
             <div class="dh-hero-top">
-                <div class="dh-hero-icon">{{ $d['empty_state'] === 'normal' ? '🩺' : '👋' }}</div>
+                <div class="dh-hero-icon"><x-icono :nombre="$d['empty_state'] === 'normal' ? 'clipboard-document-check' : 'sparkles'" /></div>
                 <div style="flex:1;min-width:0;">
                     <div class="dh-hero-kicker">{{ $d['date'] }}</div>
                     @if($d['empty_state'] === 'fresh')
@@ -157,22 +157,22 @@
                 {{-- Estado normal: tarjetas con métricas del día --}}
                 <div class="dh-stats">
                     <div class="dh-stat">
-                        <div class="dh-stat-label">📅 Citas hoy</div>
+                        <div class="dh-stat-label"><x-icono nombre="calendar-days" /> Citas hoy</div>
                         <div class="dh-stat-value">{{ $d['today_appts'] }}</div>
                         <div class="dh-stat-sub">Agendadas para hoy</div>
                     </div>
                     <div class="dh-stat">
-                        <div class="dh-stat-label">💰 Cobrado hoy</div>
+                        <div class="dh-stat-label"><x-icono nombre="banknotes" /> Cobrado hoy</div>
                         <div class="dh-stat-value">${{ number_format($d['today_income']) }}</div>
                         <div class="dh-stat-sub">Pagos recibidos</div>
                     </div>
                     <div class="dh-stat">
-                        <div class="dh-stat-label">⏳ Por cobrar</div>
+                        <div class="dh-stat-label"><x-icono nombre="clock" /> Por cobrar</div>
                         <div class="dh-stat-value">${{ number_format($d['pending_payments']) }}</div>
                         <div class="dh-stat-sub">Pagos pendientes</div>
                     </div>
                     <div class="dh-stat">
-                        <div class="dh-stat-label">🆕 Pacientes nuevos</div>
+                        <div class="dh-stat-label"><x-icono nombre="user-plus" /> Pacientes nuevos</div>
                         <div class="dh-stat-value">{{ $d['new_patients'] }}</div>
                         <div class="dh-stat-sub">Registrados hoy</div>
                     </div>

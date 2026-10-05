@@ -39,16 +39,14 @@ class ListExpenses extends ListRecords
 
         return [
             'title'    => 'Gastos',
-            'icon'     => '💸',
-            'kicker'   => '📉 Lo que sale',
             'subtitle' => 'Anota lo que gastas y el corte del mes te dice cuánto te quedó de verdad.',
             'gradient' => '#b45309 0%, #d97706 40%, #f59e0b 100%',
             'accent'   => '#d97706',
             'stats' => [
-                ['label' => '📅 Este mes',      'value' => '$' . number_format($esteMes, 2)],
+                ['label' => 'Este mes',      'value' => '$' . number_format($esteMes, 2)],
                 ['label' => '⏮️ Mes pasado',    'value' => '$' . number_format($mesPasado, 2)],
-                ['label' => '🔝 Mayor gasto',   'value' => $mayor ?? '—'],
-                ['label' => '🔁 Cada mes',      'value' => Expense::where('clinic_id', $clinicId)->where('is_recurring', true)->count()],
+                ['label' => 'Mayor gasto',   'value' => $mayor ?? '—'],
+                ['label' => 'Cada mes',      'value' => Expense::where('clinic_id', $clinicId)->where('is_recurring', true)->count()],
             ],
         ];
     }

@@ -156,7 +156,8 @@ class CalendarWidget extends FullCalendarWidget
     {
         return [
             \Filament\Actions\Action::make('magic_slot')
-                ->label('✨ Slot mágico')
+                ->label('Slot mágico')
+                ->icon('heroicon-o-sparkles')
                 ->color('info')
                 ->tooltip('La IA encuentra los mejores horarios disponibles')
                 ->form([
@@ -214,7 +215,7 @@ class CalendarWidget extends FullCalendarWidget
                         ->implode("\n");
 
                     \Filament\Notifications\Notification::make()
-                        ->title('✨ Mejores slots disponibles')
+                        ->title('Mejores horarios disponibles')
                         ->body($body)
                         ->success()
                         ->persistent()

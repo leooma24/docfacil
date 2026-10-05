@@ -31,8 +31,6 @@ class CreateAppointment extends CreateRecord
     {
         return [
             'title'    => 'Nueva cita',
-            'icon'     => '📅',
-            'kicker'   => '➕ Agendar cita',
             'subtitle' => 'Agenda una nueva cita. El paciente recibirá recordatorio WhatsApp 24h y 2h antes.',
             'gradient' => '#3b82f6 0%, #0891b2 40%, #0ea5e9 100%',
             'accent'   => '#3b82f6',

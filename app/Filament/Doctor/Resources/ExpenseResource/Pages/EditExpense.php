@@ -26,8 +26,6 @@ class EditExpense extends EditRecord
     {
         return [
             'title'    => 'Editar gasto',
-            'icon'     => '💸',
-            'kicker'   => '✏️ Gasto',
             'subtitle' => 'Corrige el monto, la categoría o la fecha.',
             'gradient' => '#b45309 0%, #d97706 40%, #f59e0b 100%',
             'accent'   => '#d97706',

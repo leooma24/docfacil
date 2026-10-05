@@ -35,16 +35,14 @@ class ListDoctorInvitations extends ListRecords
 
         return [
             'title'    => 'Invitar Doctores',
-            'icon'     => '👨‍⚕️',
-            'kicker'   => '🩺 Tu equipo médico',
             'subtitle' => 'Invita a otros doctores a unirse a tu clínica. Reciben un link de registro por email y WhatsApp.',
             'gradient' => '#ec4899 0%, #d946ef 40%, #a855f7 100%',
             'accent'   => '#ec4899',
             'stats' => [
-                ['label' => '📨 Total',            'value' => number_format($total)],
-                ['label' => '⏳ Pendientes',       'value' => $pending],
-                ['label' => '✅ Aceptadas',        'value' => $accepted],
-                ['label' => '⏰ Expiradas',        'value' => $expired],
+                ['label' => 'Total',            'value' => number_format($total)],
+                ['label' => 'Pendientes',       'value' => $pending],
+                ['label' => 'Aceptadas',        'value' => $accepted],
+                ['label' => 'Expiradas',        'value' => $expired],
             ],
         ];
     }

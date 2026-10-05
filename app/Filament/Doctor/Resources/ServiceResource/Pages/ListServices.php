@@ -35,16 +35,14 @@ class ListServices extends ListRecords
 
         return [
             'title'    => 'Servicios',
-            'icon'     => '🩺',
-            'kicker'   => '💼 Tu catálogo',
             'subtitle' => 'Servicios que ofreces con precios y duración. Se asignan a citas y cobros automáticos.',
             'gradient' => '#f59e0b 0%, #f97316 40%, #ea580c 100%',
             'accent'   => '#f59e0b',
             'stats' => [
-                ['label' => '🩺 Total',          'value' => number_format($total)],
-                ['label' => '✅ Activos',        'value' => number_format($active)],
-                ['label' => '💰 Precio promedio','value' => '$' . number_format($avgPrice)],
-                ['label' => '🏆 Más caro',       'value' => '$' . number_format($maxPrice)],
+                ['label' => 'Total',          'value' => number_format($total)],
+                ['label' => 'Activos',        'value' => number_format($active)],
+                ['label' => 'Precio promedio','value' => '$' . number_format($avgPrice)],
+                ['label' => 'Más caro',       'value' => '$' . number_format($maxPrice)],
             ],
         ];
     }

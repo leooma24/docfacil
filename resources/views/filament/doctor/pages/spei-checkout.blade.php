@@ -76,7 +76,7 @@
         {{-- Recomendación de anual si eligió mensual --}}
         @if ($this->cycle === 'monthly')
         <div class="rounded-2xl p-5 border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 flex items-start gap-4 dark:border-amber-800 dark:from-amber-900/20 dark:to-orange-900/20">
-            <div class="text-3xl">💡</div>
+            <div class="text-3xl" style="color:#0d9488;"><x-icono nombre="light-bulb" /></div>
             <div class="flex-1">
                 <div class="font-bold text-amber-900 dark:text-amber-200">¿Te conviene el plan anual con SPEI?</div>
                 <p class="text-sm text-amber-800 dark:text-amber-200/80 mt-1">Con SPEI mensual tendrás que subir comprobante cada mes. Con anual pagas 1 vez, te ahorras 2 meses y te olvidas del trámite.</p>

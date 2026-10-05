@@ -42,13 +42,9 @@ class EditPrescription extends EditRecord
 
     protected function getFormHeroConfig(): array
     {
-        $patient = $this->record->patient ?? null;
-        $name = $patient ? trim($patient->first_name . ' ' . $patient->last_name) : 'Receta';
 
         return [
             'title'    => 'Editar receta',
-            'icon'     => '💊',
-            'kicker'   => '✏️ ' . $name,
             'subtitle' => 'Actualiza medicamentos, dosis o notas de la receta.',
             'gradient' => '#8b5cf6 0%, #a855f7 40%, #c084fc 100%',
             'accent'   => '#8b5cf6',

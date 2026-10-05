@@ -65,16 +65,16 @@
                         <h2 class="pp-name">{{ $patient->first_name }} {{ $patient->last_name }}</h2>
                         <div class="pp-meta">
                             @if($patient->birth_date)
-                            <span class="pp-meta-item">🎂 {{ $patient->birth_date->age }} años · {{ $patient->birth_date->format('d/m/Y') }}</span>
+                            <span class="pp-meta-item"><x-icono nombre="cake" /> {{ $patient->birth_date->age }} años · {{ $patient->birth_date->format('d/m/Y') }}</span>
                             @endif
                             @if($patient->gender)
-                            <span class="pp-meta-item">{{ $patient->gender === 'male' ? '♂ Masculino' : ($patient->gender === 'female' ? '♀ Femenino' : '⚥ Otro') }}</span>
+                            <span class="pp-meta-item"><x-icono nombre="user" /> {{ $patient->gender === 'male' ? 'Masculino' : ($patient->gender === 'female' ? 'Femenino' : 'Otro') }}</span>
                             @endif
                             @if($patient->blood_type)
-                            <span class="pp-meta-item pp-meta-blood">🩸 {{ $patient->blood_type }}</span>
+                            <span class="pp-meta-item pp-meta-blood">Sangre {{ $patient->blood_type }}</span>
                             @endif
                             @if($patient->phone)
-                            <span class="pp-meta-item">📞 {{ $patient->phone }}</span>
+                            <span class="pp-meta-item"><x-icono nombre="phone" /> {{ $patient->phone }}</span>
                             @endif
                         </div>
                     </div>
@@ -129,7 +129,7 @@
             @if($patient->tieneAlergias())
             <div class="pp-allergies">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-                <span>⚠️ Alergias: {{ $patient->allergies }}</span>
+                <span><x-icono nombre="exclamation-triangle" /> Alergias: {{ $patient->allergies }}</span>
             </div>
             @endif
         </div>
@@ -207,16 +207,16 @@
             <span style="font-size:12px;font-weight:700;color:#374151;">Generar mensaje de WhatsApp con IA</span>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button wire:click="generateMessage('reminder')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">📅 Recordatorio</button>
-            <button wire:click="generateMessage('followup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">💬 Seguimiento</button>
-            <button wire:click="generateMessage('birthday')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🎂 Cumpleaños</button>
-            <button wire:click="generateMessage('promotion')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🎁 Oferta de regreso</button>
-            <button wire:click="generateMessage('payment')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">💰 Pago pendiente</button>
-            <button wire:click="generateMessage('checkup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">🔍 Revisión</button>
+            <button wire:click="generateMessage('reminder')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Recordatorio</button>
+            <button wire:click="generateMessage('followup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Seguimiento</button>
+            <button wire:click="generateMessage('birthday')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Cumpleaños</button>
+            <button wire:click="generateMessage('promotion')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Oferta de regreso</button>
+            <button wire:click="generateMessage('payment')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Pago pendiente</button>
+            <button wire:click="generateMessage('checkup')" wire:loading.attr="disabled" style="padding:6px 12px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Revisión</button>
         </div>
 
         <div wire:loading wire:target="generateMessage" style="margin-top:10px;padding:10px;background:#f9fafb;border-radius:8px;font-size:12px;color:#6b7280;">
-            ✨ Generando mensaje con IA...
+            <x-icono nombre="sparkles" /> Generando mensaje con IA...
         </div>
 
         @if($generatedMessage)

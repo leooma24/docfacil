@@ -48,8 +48,6 @@ class EditConsentForm extends EditRecord
 
         return [
             'title'    => 'Editar consentimiento',
-            'icon'     => '✍️',
-            'kicker'   => '✏️ ' . $title . $signed,
             'subtitle' => 'Actualiza el texto del consentimiento o recoge la firma del paciente.',
             'gradient' => '#6366f1 0%, #8b5cf6 40%, #a855f7 100%',
             'accent'   => '#6366f1',

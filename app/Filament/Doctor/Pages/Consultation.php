@@ -585,7 +585,7 @@ class Consultation extends Page implements HasForms
         $this->saveConsultationState();
 
         Notification::make()
-            ->title('✨ Sugerencia aplicada')
+            ->title('Sugerencia aplicada')
             ->body('Revisa y ajusta si es necesario.')
             ->success()
             ->send();
@@ -635,7 +635,7 @@ class Consultation extends Page implements HasForms
             $this->saveConsultationState();
 
             Notification::make()
-                ->title('✨ Dictado procesado')
+                ->title('Dictado procesado')
                 ->body('Se llenaron los campos automáticamente. Revisa antes de guardar.')
                 ->success()
                 ->send();

@@ -82,19 +82,17 @@ class ListPatients extends ListRecords
 
         return [
             'title'    => 'Pacientes',
-            'icon'     => '👤',
-            'kicker'   => '🩺 Tu base de pacientes',
             'subtitle' => 'Buscar, crear y gestionar todos tus pacientes. Click en uno para ver su perfil completo.',
             'gradient' => '#0d9488 0%, #0891b2 40%, #06b6d4 100%',
             'accent'   => '#0d9488',
             'stats' => [
-                ['label' => '👥 Total',             'value' => number_format($total)
+                ['label' => 'Total',             'value' => number_format($total)
                     . ($restantes !== null ? ' de ' . number_format($limite) : '')],
-                ['label' => '✨ Activos 30 días',    'value' => number_format($activeLastMonth)],
+                ['label' => 'Activos 30 días',    'value' => number_format($activeLastMonth)],
                 ['label' => '🆕 Nuevos este mes',    'value' => number_format($newThisMonth)],
                 $restantes !== null
-                    ? ['label' => '📦 Te quedan', 'value' => number_format($restantes)]
-                    : ['label' => '💰 Con saldo', 'value' => number_format($withBalance)],
+                    ? ['label' => 'Te quedan', 'value' => number_format($restantes)]
+                    : ['label' => 'Con saldo', 'value' => number_format($withBalance)],
             ],
         ];
     }

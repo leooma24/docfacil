@@ -39,16 +39,14 @@ class ListPayments extends ListRecords
 
         return [
             'title'    => 'Cobros',
-            'icon'     => '💰',
-            'kicker'   => '💳 Tu flujo de caja',
             'subtitle' => 'Todos los cobros realizados y pendientes. Registra pagos en efectivo o envía links por WhatsApp.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',
             'stats' => [
-                ['label' => '💵 Cobrado hoy',     'value' => '$' . number_format($today)],
-                ['label' => '📅 Este mes',         'value' => '$' . number_format($month)],
-                ['label' => '⏳ Pendiente',        'value' => '$' . number_format($pending)],
-                ['label' => '🧾 Pagos del mes',    'value' => number_format($countMonth)],
+                ['label' => 'Cobrado hoy',     'value' => '$' . number_format($today)],
+                ['label' => 'Este mes',         'value' => '$' . number_format($month)],
+                ['label' => 'Pendiente',        'value' => '$' . number_format($pending)],
+                ['label' => 'Pagos del mes',    'value' => number_format($countMonth)],
             ],
         ];
     }

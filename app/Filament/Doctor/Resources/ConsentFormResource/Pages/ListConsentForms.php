@@ -35,16 +35,14 @@ class ListConsentForms extends ListRecords
 
         return [
             'title'    => 'Consentimientos',
-            'icon'     => '✍️',
-            'kicker'   => '📄 Firma digital',
             'subtitle' => 'Consentimientos informados con firma digital del paciente. Guardan fecha, hora e IP.',
             'gradient' => '#6366f1 0%, #8b5cf6 40%, #a855f7 100%',
             'accent'   => '#6366f1',
             'stats' => [
-                ['label' => '📄 Total',           'value' => number_format($total)],
-                ['label' => '✅ Firmados',        'value' => number_format($signed)],
-                ['label' => '⏳ Pendientes',      'value' => number_format($pending)],
-                ['label' => '📅 Este mes',        'value' => number_format($thisMonth)],
+                ['label' => 'Total',           'value' => number_format($total)],
+                ['label' => 'Firmados',        'value' => number_format($signed)],
+                ['label' => 'Pendientes',      'value' => number_format($pending)],
+                ['label' => 'Este mes',        'value' => number_format($thisMonth)],
             ],
         ];
     }

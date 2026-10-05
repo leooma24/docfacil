@@ -4,7 +4,7 @@
     {{-- Hero intro --}}
     <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd;border-radius:1.25rem;padding:1.5rem;margin-bottom:1.5rem;">
         <div style="display:flex;align-items:start;gap:1rem;">
-            <div style="font-size:2.5rem;flex-shrink:0;">💡</div>
+            <div style="font-size:2.5rem;flex-shrink:0;color:#7c3aed;"><x-icono nombre="light-bulb" /></div>
             <div style="flex:1;">
                 <h2 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;">Tú diseñas el futuro de DocFácil</h2>
                 <p style="font-size:0.875rem;color:#5b21b6;line-height:1.55;">
@@ -30,7 +30,7 @@
         </div>
         <button type="button" wire:click="openProposeModal"
             style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;padding:0.9rem;border-radius:0.75rem;font-weight:700;font-size:0.875rem;cursor:pointer;">
-            💡 Proponer idea
+            <x-icono nombre="light-bulb" /> Proponer idea
         </button>
     </div>
 
@@ -47,7 +47,7 @@
     {{-- Features list --}}
     @if(count($this->features) === 0)
         <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:1rem;padding:3rem 1.5rem;text-align:center;">
-            <div style="font-size:3rem;margin-bottom:0.5rem;opacity:0.4;">📭</div>
+            <div style="font-size:3rem;margin-bottom:0.5rem;opacity:0.4;"><x-icono nombre="inbox" /></div>
             <p style="color:#6b7280;font-size:0.9rem;">
                 @if($activeTab === 'proposed')
                     No hay propuestas abiertas. <strong>¡Sé el primero!</strong> Propón una idea y empiezas con tu voto automático.
@@ -104,7 +104,7 @@
     @if($showProposeModal)
     <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;" wire:click.self="closeProposeModal">
         <div class="bg-white dark:bg-gray-800" style="max-width:540px;width:100%;border-radius:1rem;padding:1.75rem;max-height:90vh;overflow-y:auto;">
-            <h3 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;">💡 Propón una idea</h3>
+            <h3 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;"><x-icono nombre="light-bulb" /> Propón una idea</h3>
             <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1.25rem;">Tu voto se registra automáticamente. Compártela después para que tus colegas voten.</p>
 
             <form wire:submit.prevent="submitProposal">
@@ -144,7 +144,7 @@
     @if($votingFeatureId)
     <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;" wire:click.self="closeVoteModal">
         <div class="bg-white dark:bg-gray-800" style="max-width:440px;width:100%;border-radius:1rem;padding:1.75rem;">
-            <h3 style="font-size:1.1rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;">🗳️ Tu voto con precio</h3>
+            <h3 style="font-size:1.1rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;"><x-icono nombre="hand-raised" /> Tu voto con precio</h3>
             <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1.25rem;">¿Cuánto pagarías al mes por esta feature? Tu respuesta nos ayuda a decidir si la construimos como pagada o gratis.</p>
 
             <div style="display:grid;gap:0.4rem;margin-bottom:1.25rem;">
