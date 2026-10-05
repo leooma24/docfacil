@@ -51,3 +51,5 @@ El efecto no es un error visible, es peor: la vigilancia de dosis —lo único d
 ## Del material de venta
 
 Aparte del código, hay frases que este proyecto no puede sostener y que siguen ahí: "Cumplimos con todas las normas mexicanas" en el kit del vendedor, "servidores fuera de México" usado como golpe a la competencia cuando los nuestros están en Estados Unidos, testimonios de doctores que no existen, y cifras de ahorro sin fuente. La landing está bien escrita; el material interno no. Se limpia aparte.
+
+*Actualización 5-oct-2026: el material de venta se limpió el 4 de octubre (brief, folleto, propuesta, páginas por ciudad, comparativas, calculadora y blog) y los documentos de `.agents/` el 5. Lo cuida `MaterialesDeVentaHonestosTest`.*

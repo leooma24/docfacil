@@ -589,8 +589,9 @@ class ProspectResource extends Resource
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
         $opener = self::buildSalutation($record);
-        $isDentist = self::detectDentist($record);
-        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
+        // Solo dentistas (Omar, 4-oct-2026): DocFácil se vende a consultorios
+        // dentales. Al que no lo es no se le escribe de otra cosa.
+        $sector = 'consultorios dentales';
         $vndCode = auth()->user()->sales_rep_code ?? '';
         $registerUrl = url('/doctor/register') . ($vndCode ? "?vnd={$vndCode}" : '');
         $greeting = $opener['greeting'];
@@ -631,7 +632,7 @@ class ProspectResource extends Resource
             default => ($followCall ? "{$followCall}, le escribo después de un tiempo." : 'Le escribo después de un tiempo.') . "
 
 "
-                . "Desde la última vez el sistema ya lleva inventario de insumos y expediente con firma, además de los recordatorios. Si quiere verlo, aquí está: {$demoUrl}
+                . "Desde la última vez el sistema ya lleva inventario de insumos y consentimientos que el paciente firma en pantalla, además de los recordatorios. Si quiere verlo, aquí está: {$demoUrl}
 
 "
                 . 'Y si no, con que me lo diga basta y no vuelvo a escribirle.',
@@ -846,28 +847,6 @@ class ProspectResource extends Resource
             'name' => $name,
             'title' => $title,
         ];
-    }
-
-    /**
-     * URL wa.me con mensaje de intro cuando el rep marca primer contacto
-     * por WhatsApp. Tono humano, no spam, opcion de salir abierta.
-     */
-    protected static function buildIntroWhatsappUrl(Prospect $record): string
-    {
-        $phone = preg_replace('/\D/', '', (string) $record->phone);
-        if (strlen($phone) === 10) $phone = '52' . $phone;
-
-        $opener = self::buildSalutation($record);
-        $isDentist = self::detectDentist($record);
-        $sector = $isDentist ? 'consultorios dentales' : 'consultorios médicos';
-
-        // Plantilla profesional clean (sin emojis ni jerga). Documentada en
-        // .agents/wa-templates.md — actualizar ambos lados al cambiar.
-        $msg = "{$opener['greeting']}.\n\n"
-            . "Soy Omar, ingeniero mexicano de Los Mochis. Construí un sistema para {$sector} y estoy hablando uno a uno con los primeros 50 antes de abrirlo al público.\n\n"
-            . "Si me da la oportunidad le hago una pregunta corta y de ahí decide si quiere seguir hablando: ¿cómo le hace hoy para recordar a los pacientes que tienen cita?";
-
-        return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }
 
     /**

@@ -1,8 +1,10 @@
 # Demo de 10 minutos — Script para Omar
 
-*Generado: 2026-04-28 · Para presentar DocFácil cuando un dentista pide demo*
+*Generado: 2026-04-28 · Revisado: 2026-10-05 · Para presentar DocFácil cuando un dentista pide demo*
 
 > Este es el guión que dices casi palabra por palabra. Está calibrado para 10 min en WhatsApp video o en persona, mostrando tu pantalla.
+>
+> **Regla:** solo se enseña y se dice lo que el sistema hace hoy. Los mensajes no salen solos: DocFácil abre el WhatsApp del doctor con el texto escrito y él da enviar. Nada de cifras sin fuente: el dinero se habla con los números del dentista.
 
 ---
 
@@ -26,7 +28,7 @@
 | Min | Sección | Objetivo |
 |-----|---------|----------|
 | 0-1 | Apertura + confirmar dolor | Asegurar que estamos resolviendo SU problema |
-| 1-3 | **Hero #1: Recordatorio WhatsApp 1-clic** | El WOW principal — recuperar citas perdidas |
+| 1-3 | **Hero #1: Recordatorio WhatsApp 1-clic** | El WOW principal — que no se olviden de su cita |
 | 3-5 | **Hero #2: Expediente + Odontograma** | La diferenciación dental real |
 | 5-7 | Recetas PDF con cédula + Cobros WhatsApp | Profesionalismo y dinero |
 | 7-9 | Precios + oferta | Cerrar la decisión |
@@ -54,8 +56,8 @@ Lo que conteste a esta segunda es donde arranca tu demo. Esa es su frustración 
 
 | Lo que dice el doctor | Por dónde arrancas |
 |---|---|
-| "Recordar a los pacientes" / "que no lleguen" | Hero WhatsApp masivo (Min 1-3) |
-| "El papeleo" / "las recetas a mano" | Recetas PDF NOM-004 (Min 5-7) |
+| "Recordar a los pacientes" / "que no lleguen" | Hero recordatorios a 1 clic (Min 1-3) |
+| "El papeleo" / "las recetas a mano" | Recetas PDF con cédula (Min 5-7) |
 | "Cobrar lo que me deben" / "se me olvida" | Cobros con WhatsApp (Min 5-7) |
 | "El expediente" / "no encuentro las cosas" | Expediente + odontograma (Min 3-5) |
 | "Mi asistente no se da abasto" | **Cambia a Enfoque B** (asistente Lupita) |
@@ -86,28 +88,28 @@ Una vez que dijo SU dolor, le devuelves SU palabra:
 
 ### Lo que muestras
 
-1. **Dashboard** — abre `/doctor` (después del login del demo)
+1. **Escritorio** — abre `/doctor` (después del login del demo)
 2. **Tu día en un vistazo** — apuntas a la sección de citas del día
-3. **Citas → click en una cita** que no esté confirmada
-4. **Botón "WhatsApp"** verde — click ahí
-5. **Se abre WhatsApp Web** con mensaje pre-armado: "Hola Roberto, te recordamos tu cita..."
-6. **Apuntas en pantalla:** "Mire — el mensaje ya viene armado. Yo solo le doy enviar."
+3. **Citas → filtro "Mañana, sin recordatorio"**
+4. **Botón "WhatsApp"** en la cita — click ahí
+5. **Se abre WhatsApp Web** con el mensaje ya escrito: "Hola Roberto, le recordamos su cita en {consultorio} mañana a las 10:00. Confirme o cancele aquí: {liga}"
+6. **Apuntas en pantalla:** "Mire — el mensaje ya viene armado. Usted solo le da enviar." El botón de la cita cambia a "Recordado".
 
 ### Lo que dices mientras muestras
 
 > "Mire, esta es su agenda del día. Aquí tiene todas las citas. Pongamos que mañana tiene 8 pacientes y necesita confirmar.
 >
-> Antes, usted o su asistente abría WhatsApp, copiaba el número, pegaba, escribía 'hola, te recordamos tu cita...'. Eran 8 minutos por paciente, mal escritos cuando hay prisa.
+> Hoy, ¿cómo le hace? [Deje que conteste.] Abrir WhatsApp, buscar el número, escribir el mensaje, uno por uno.
 >
-> Aquí: [hace click en el botón WhatsApp]. Listo. Ya se abrió WhatsApp con el mensaje y la cita. Solo enviar.
+> Aquí: [hace click en el botón WhatsApp]. Listo. Se abrió su WhatsApp con el mensaje y la cita. Usted le da enviar, desde su propio número.
 >
-> En 8 pacientes son **8 segundos vs. 60 minutos**. Y cuando el paciente da clic al link de confirmación, en su panel aparece automático que confirmó."
+> Y cuando el paciente toca la liga, ve su cita y elige confirmar o cancelar. Si confirma, aquí en su agenda la cita cambia a confirmada sin que usted haga nada."
 
 ### El cierre del bloque
 
-> "¿Cuántas citas calcula que pierde a la semana porque no llegan o no avisan? **Cada una son entre $500 y $1,500.** Si recupera 1 sola al mes con esto, ya pagó el plan completo."
+> "¿Cuántas citas calcula que se le pierden a la semana porque no llegan o no avisan? ¿Y cuánto le deja una cita?" [Con SUS números:] "Si esto le salva una sola al mes, ya pagó el plan."
 
-**⏰ Si el dentista interrumpe con "¿y si no tiene WhatsApp el paciente?"** → "El sistema lo detecta y le manda SMS. Pero el 95% de mexicanos en consulta dental tiene WhatsApp."
+**Si el dentista interrumpe con "¿y si el paciente no tiene WhatsApp?"** → "Ese paciente se avisa como hoy, por llamada. El sistema no manda mensajes de texto; lo que hace es armarle el mensaje para WhatsApp."
 
 ---
 
@@ -121,17 +123,18 @@ Una vez que dijo SU dolor, le devuelves SU palabra:
    - Historial clínico (alergias, medicamentos)
    - **Tab Odontograma** — click ahí
 3. **Odontograma FDI** — click en un diente cualquiera (ej molar 36)
-4. **Modal aparece** con condiciones (caries, corona, extracción, endodoncia, sellante, etc.)
-5. **Selecciona "Caries oclusal"** → se guarda, el diente cambia de color
-6. **Apuntas:** "Esto se queda guardado para siempre. La próxima vez que llegue, abre y ve historia visual completa."
+4. **Aparecen las condiciones** (caries, corona, extracción, endodoncia, sellante, etc.), por cara del diente
+5. **Marca caries en la cara oclusal** → se guarda, el diente cambia de color
+6. **Lo que falta tratar se vuelve presupuesto** con los precios de su catálogo
+7. **Apuntas:** "Cada consulta deja su versión. La próxima vez que llegue, abre y ve en qué quedaron."
 
 ### Lo que dices
 
-> "Doctor, este es el expediente del paciente. Todo lo que tiene en una carpeta física, aquí en 5 segundos.
+> "Doctor, este es el expediente del paciente. Lo que tiene en una carpeta física, aquí junto: datos, alergias, consultas, recetas y cobros.
 >
-> Pero mire esto — esto es lo que ningún sistema gringo o de medicina general tiene: el odontograma interactivo. Notación FDI internacional. Click en cualquier diente, elige la condición, y se queda registrado con fecha.
+> Y mire esto: el odontograma. Notación FDI. Click en cualquier diente, elige la condición, y se queda registrado con fecha.
 >
-> Cuando el paciente regrese en 6 meses, no tiene que adivinar 'qué le hice la vez pasada'. Lo ve aquí, en 1 segundo. Y se lo puede compartir al paciente por WhatsApp para que entienda su tratamiento."
+> Lo que falta tratar se vuelve presupuesto con sus precios. Se lo manda al paciente por WhatsApp a 1 clic y él lo acepta en línea. Cuando el paciente regrese en 6 meses, no tiene que adivinar 'qué le hice la vez pasada': lo ve aquí."
 
 ### El cierre del bloque
 
@@ -146,25 +149,24 @@ Una vez que dijo SU dolor, le devuelves SU palabra:
 ### Lo que muestras
 
 1. **En el expediente del paciente → click "Receta nueva"**
-2. **Form de receta:** apunta los campos (medicamento, dosis, duración)
-3. **Click "Generar PDF"**
-4. **Se abre PDF** con:
+2. **Form de receta:** apunta los campos (medicamento, dosis, duración).
+3. **Click "PDF"**
+4. **Se abre el PDF** con:
    - Logo del consultorio
    - Cédula profesional visible
-   - Firma digital
+   - Espacio para la firma autógrafa
    - Datos del paciente
-5. **Click "Compartir por WhatsApp"** — se abre WA con el PDF adjunto
-6. **Vuelve atrás → tab "Cobros pendientes"**
-7. **Lista de pacientes con saldo** → click "Cobrar por WhatsApp" en uno
-8. **Mensaje pre-armado:** "Hola Roberto, te aviso que tienes un cobro pendiente de $1,200 por tu corona..."
+5. **Cobros → filtro "Con saldo"**
+6. **Lista de pacientes con saldo** → "Recordar por WhatsApp" en uno
+7. **Mensaje ya escrito, de usted:** "Le recuerdo que tiene un cobro pendiente de $1,200 MXN..." con cómo pagar
 
 ### Lo que dices
 
 > "Aquí dos cosas que profesionalizan el consultorio.
 >
-> Primero, recetas PDF con su cédula y firma — no recetas a mano. El paciente la recibe por WhatsApp, va a la farmacia, y ya. Y usted **cumple NOM-004** automático.
+> Primero, recetas PDF con su cédula, impresas para que usted las firme — no recetas a mano. Quedan guardadas en el expediente del paciente.
 >
-> Segundo, cobranza. Esto es lo que más cuesta perseguir. Lista de saldos pendientes. Click en cualquiera, le manda al paciente por WhatsApp el monto exacto. **Sin perseguirlo, sin pena, profesional.** Cuando paga, le confirma desde aquí mismo."
+> Segundo, cobranza. Esto es lo que más cuesta perseguir. Lista de saldos pendientes. Click en cualquiera y se abre su WhatsApp con el mensaje y el monto exacto; usted da enviar. **Sin perseguirlo, sin pena.** Cuando paga, registra el abono aquí mismo y el saldo se actualiza."
 
 ---
 
@@ -178,23 +180,23 @@ Vas a la landing en otra pestaña: `docfacil.tu-app.co/dentistas` → scroll a s
 
 > "Doctor, déjeme ser directo con los números.
 >
-> - **Plan Free de por vida:** 1 doctor, 15 pacientes. Cero costo, para siempre. Si tiene poquitos pacientes, este le funciona.
-> - **Plan Básico $499/mes:** 1 doctor, 200 pacientes, **todo lo que le acabo de mostrar incluyendo el odontograma FDI** — WhatsApp 1-clic, expediente, recetas PDF, cobros.
-> - **Plan Pro $999/mes:** Hasta 3 doctores, pacientes ilimitados, consentimientos digitales, portal público de agendamiento, lista de espera con notificación automática, reportes avanzados.
-> - **Plan Clínica $1,999/mes:** Si tiene varios doctores y necesita reportes por doctor.
+> - **Plan Free para siempre:** 1 doctor, 15 pacientes y 10 citas al mes: agenda y expediente. Cero costo. Si tiene poquitos pacientes, le sirve para empezar.
+> - **Plan Básico $499/mes:** 1 doctor, 200 pacientes, **todo lo que le acabo de mostrar** — odontograma, presupuestos, recordatorios a 1 clic, recetas PDF, cobros con abonos, check-in con QR, pantalla de la sala y portal del paciente.
+> - **Plan Pro $999/mes:** Hasta 3 doctores, pacientes ilimitados, agenda en línea para que el paciente agende solo, recall, lista de espera, consentimientos con firma, inventario de insumos, reportes.
+> - **Plan Clínica $1,999/mes:** Doctores ilimitados, producción y reportes por doctor, y onboarding 1 a 1.
 >
 > Si paga anual, son 10 meses pagados, ahorra 2.
 >
-> Y aquí está la garantía: **15 días gratis con todo, sin tarjeta. 30 días de devolución completa si no le sirve.** Su riesgo es cero.
+> Y aquí está la garantía: **15 días gratis con todo, sin tarjeta. Y si en los primeros 30 días de su primer pago decide que no le sirve, le devolvemos ese pago.**
 >
 > ¿Cuál de los planes le suena más para su consultorio?"
 
 **Si dice "pero está caro":** Ya no expliques de nuevo — usa el playbook (`.agents/objection-playbook.md` → `price_expensive`):
-> "Si recupera 1 cita al mes con WhatsApp ya pagó el plan. Eso son ~$700 que recupera. Y el resto del año es ganancia neta."
+> "¿Cuánto le deja una cita? Si le salva una sola al mes, ya pagó el plan."
 
 **Si dice "Plan Pro me suena":** Excelente, vas a min 9.
 
-**Si dice "Free para empezar":** También bien — el plan free le mete al sistema, después converte solo cuando crezca.
+**Si dice "Free para empezar":** También bien — el Free sigue funcionando después de la prueba, con sus límites. Cuando crezca, sube de plan.
 
 ---
 
@@ -210,9 +212,9 @@ Abres `docfacil.tu-app.co/doctor/register` en otra pestaña.
 >
 > Le abro la liga de registro en este momento. Es 2 minutos: nombre, email, contraseña. Cuenta lista. **Sin tarjeta, sin compromiso.**
 >
-> En los próximos 15 días tiene todo desbloqueado del Plan Pro, gratis. **Si lo usa y le suma, hablamos de plan pagado. Si no, su cuenta se queda viva en el plan Free de por vida.**
+> En los próximos 15 días tiene todo lo del Plan Pro, gratis. **Si lo usa y le suma, hablamos de plan pagado. Si no, su cuenta se queda en el plan Free, que sigue funcionando.**
 >
-> Yo personalmente le ayudo en el primer setup — me marca por WhatsApp directo a 668 249 3398 y le cargo sus primeros 30 pacientes desde cualquier Excel o lista que tenga. Sin costo.
+> Yo personalmente le ayudo en el primer setup — me manda su Excel por WhatsApp al 668 249 3398 y subo sus pacientes a su cuenta. Sin costo. Si los tiene en libreta, le ayudo a armar la lista.
 >
 > ¿Lo registramos ahora? Le paso la liga y vemos juntos los primeros 5 minutos."
 
@@ -236,8 +238,8 @@ Abres `docfacil.tu-app.co/doctor/register` en otra pestaña.
 ## REGLAS DE ORO DURANTE LA DEMO
 
 1. **No expliques cómo funciona, muestra resultados.**
-   - ❌ "Esto guarda en una base de datos PostgreSQL..."
-   - ✅ "Aquí está el expediente. Búsquedalo en 1 segundo."
+   - ❌ "Esto guarda en una base de datos..."
+   - ✅ "Aquí está el expediente. Búsquelo por nombre."
 
 2. **Siempre pregunta antes de presentar.**
    - "¿Cómo lo lleva hoy?" antes de mostrar la solución
@@ -255,7 +257,11 @@ Abres `docfacil.tu-app.co/doctor/register` en otra pestaña.
    - ✅ "¿Lo registramos ahora?"
 
 6. **Si dudan, ofrece WhatsApp directo + ayuda en setup.**
-   - Tu superpoder vs. competencia: TÚ contestas, no un bot
+   - Lo que tú das: TÚ contestas, no un bot
+
+7. **No prometas lo que no existe.**
+   - ❌ "Se manda solo", "le llega la receta por WhatsApp", "factura", "funciona sin internet"
+   - ✅ "Se abre su WhatsApp con el mensaje y usted da enviar"
 
 ---
 
@@ -282,13 +288,13 @@ Ajustes:
 
 **Min 0-1:** "Doctor, ¿cuál de estas tres pesa más: pacientes que no llegan, papeleo manual, o cobranza?"
 
-**Min 1-3:** Demo WhatsApp 1-clic en `/doctor` → "8 segundos vs 60 min."
+**Min 1-3:** Demo WhatsApp 1-clic en `/doctor` → "Se abre su WhatsApp con el mensaje; usted da enviar."
 
-**Min 3-5:** Expediente + odontograma → "Esto es lo que ningún gringo tiene."
+**Min 3-5:** Expediente + odontograma → "Lo que falta tratar se vuelve presupuesto."
 
-**Min 5-7:** Recetas PDF (NOM-004) + cobros WhatsApp → "Profesionalismo + dinero."
+**Min 5-7:** Recetas PDF con cédula + cobros WhatsApp → "Profesionalismo + dinero."
 
-**Min 7-9:** Precios → Plan Básico $499 (incluye odontograma), Pro $999 si necesita 2-3 doctores. Garantía 30 días. "¿Cuál le suena?"
+**Min 7-9:** Precios → Plan Básico $499 (incluye odontograma y presupuestos), Pro $999 si necesita 2-3 doctores, agenda en línea o recall. Garantía de 30 días sobre el primer pago. "¿Cuál le suena?"
 
 **Min 9-10:** Liga de registro → "¿Lo registramos ahora?"
 
@@ -300,9 +306,9 @@ Ajustes:
 
 ## ENFOQUE B — Demo "La asistente Lupita" (10 min)
 
-Cuando el doctor diga "yo no soy de tecnología" o "para eso tengo a la recepcionista", cambiamos de protagonista. En vez de mostrarle al doctor cómo cargar pacientes, le mostramos cómo **su asistente** termina la jornada en 5 minutos en vez de quedarse 45 más.
+Cuando el doctor diga "yo no soy de tecnología" o "para eso tengo a la recepcionista", cambiamos de protagonista. En vez de mostrarle al doctor cómo cargar pacientes, le mostramos cómo **su asistente** deja listos los recordatorios de mañana sin escribirlos uno por uno.
 
-**Personaje:** Lupita, asistente del Dr. Hernández. Son las 6:45 pm, ya cerró el consultorio. El doctor se fue. Lupita normalmente se queda hasta 7:30 mandando recordatorios manuales por WhatsApp uno por uno.
+**Personaje (ejemplo para el demo):** Lupita, asistente del Dr. Hernández. Ya cerró el consultorio y le toca mandar los recordatorios de mañana por WhatsApp, uno por uno.
 
 ### Min 0-1: Apertura calibrada (centrada en la asistente)
 
@@ -316,10 +322,10 @@ Espera. Lo más probable: recordatorios de mañana, cobros, agendar pacientes nu
 **Pregunta 2 — el peso real:**
 > "¿Cuánto tiempo extra cree que se queda? ¿Media hora, una hora más?"
 
-Lo que conteste te da la munición para el cierre ("son 14 horas al mes que se ahorra Lupita").
+Lo que conteste te da la munición para el cierre: usa SU número, no uno inventado.
 
 **Espejo + transición:**
-> "OK, entonces lo que le voy a mostrar es exactamente la pantalla que su asistente abriría a las 6:45 pm para terminar todo eso en 5 minutos en vez de 45. ¿Le parece?"
+> "OK, entonces lo que le voy a mostrar es exactamente la pantalla que su asistente abriría al final del día para dejar eso listo. ¿Le parece?"
 
 Abrir `/doctor` con el usuario demo. Mostrar el escritorio.
 
@@ -330,42 +336,48 @@ Eso es señal verde. Refuerzas:
 
 ### Min 1-3: Recordatorios masivos
 
-Ir a **Citas** → filtrar por "Mañana".
+Ir a **Citas** → filtro "Mañana, sin recordatorio".
 
 > "Aquí están las 8 citas de mañana. En vez de copiar y pegar 8 mensajes en WhatsApp, mire."
 
 Click en una cita → acción **WhatsApp** → se abre con mensaje completo:
 
 ```
-Hola Roberto, le recuerdo su cita mañana 29 de abril a las 10:00 am
-con el Dr. Hernández. Servicio: limpieza dental. Si necesita reagendar,
-respóndame este mismo mensaje. Saludos. Clínica Sonrisa Norte.
+Hola Roberto, le recordamos su cita en Consultorio Sonrisa Norte
+miércoles a las 10:00.
+
+Confirme o cancele aquí:
+{liga}
+
+¡Le esperamos!
 ```
 
-> "El mensaje sale ya armado, con el nombre del paciente, la fecha en español, el servicio, y el doctor. Lupita solo da enviar. Ocho segundos por paciente. Las 8 citas en menos de 2 minutos."
+> "El mensaje sale ya armado, con el nombre del paciente, el día y la hora, y la liga para confirmar. Lupita solo da enviar desde el WhatsApp del consultorio, y pasa a la siguiente."
 
 ### Min 3-5: Cobros pendientes
 
-Ir a **Cobros** → filtro "Sin pago hace 30+ días".
+Ir a **Cobros** → filtro "Sin pago hace +30 días".
 
-> "Esto es lo que más sangra a una clínica: pacientes que se fueron debiendo y nadie se acuerda de cobrarles. Mire, estos 4 pacientes deben en total $8,400. Antes lo apuntaban en una libreta y se les olvidaba."
+> "Esto es lo que más se le escapa a un consultorio: pacientes que se fueron debiendo y nadie se acuerda de cobrarles. Mire, aquí están los que deben y cuánto (en el demo son datos de ejemplo)."
 
-Click en un cobro pendiente → acción **Recordar WhatsApp** → mensaje completo con desglose:
+Click en un cobro pendiente → acción **Recordar por WhatsApp** → se abre su WhatsApp con el mensaje y el desglose:
 
 ```
-Hola Sra. Martínez, le recuerdo su saldo pendiente de $1,800
-por el tratamiento del 12 de marzo. Puede pagar con transferencia
-o tarjeta en el consultorio. Cualquier duda, aquí estoy.
-Clínica Sonrisa Norte.
+Le recuerdo que tiene un cobro pendiente de $1,800 MXN.
+
+Cuando le acomode:
+  • Llamar al consultorio
+  • Pasar al consultorio
+  • O respóndame por aquí y le paso los datos de transferencia
 ```
 
-> "Lupita manda 4 mensajes en 30 segundos. Si solo uno paga, ya pagó el sistema dos veces."
+> "Lupita da enviar en cada uno, desde el WhatsApp del consultorio. Cuando pagan, registra el abono y el saldo se actualiza."
 
 ### Min 5-7: Pacientes y odontograma rápido
 
 Ir a **Pacientes** → buscar uno → abrir perfil.
 
-> "Cuando llega el paciente mañana, Lupita ya tiene su expediente listo. Mire: aquí está su odontograma — los dientes con tratamientos previos marcados en colores. El doctor entra, lo ve en 3 segundos y sabe en qué quedaron."
+> "Cuando llega el paciente mañana, su expediente ya está listo. Mire: aquí está su odontograma — los dientes con tratamientos previos marcados en colores. El doctor entra y ve en qué quedaron."
 
 Mostrar el odontograma visual (arcada superior + inferior con dientes coloreados).
 
@@ -373,19 +385,19 @@ Mostrar el odontograma visual (arcada superior + inferior con dientes coloreados
 
 ### Min 7-9: Precios
 
-> "Doctor, lo que acaba de ver — recordatorios automáticos, cobros con WhatsApp, expediente con odontograma — eso es **el plan Básico, $499 al mes.** Es para un solo doctor con asistente, que es exactamente su caso."
+> "Doctor, lo que acaba de ver — recordatorios a 1 clic, cobros por WhatsApp, expediente con odontograma — eso es **el plan Básico, $499 al mes.** Es para un solo doctor, que es su caso."
 >
 > "Si después contrata un segundo doctor, brincamos al Pro de $999. Pero arrancamos con el Básico."
 >
-> "Lo que se ahorra Lupita en una sola noche — 40 minutos × 22 días hábiles = 14 horas al mes. ¿Cuánto le paga la hora?"
+> "Usted me dijo que se queda [lo que él contestó] extra. ¿Cuánto vale ese tiempo?"
 
 ### Min 9-10: Cierre + invitación a la asistente
 
-> "Le voy a mandar dos ligas: una para usted como doctor para que entre a su consultorio, y otra para que su asistente reciba su propio acceso."
+> "Le mando la liga de registro. Si su asistente necesita su propio acceso, me dice y se lo doy de alta."
 >
-> "Mañana en la mañana hagamos una llamada de 15 min con Lupita y le enseño exactamente lo que acabamos de ver. Que ella se vaya tranquila a casa la primera noche que use el sistema. ¿Le parece?"
+> "Mañana en la mañana hagamos una llamada de 15 min con Lupita y le enseño exactamente lo que acabamos de ver. ¿Le parece?"
 
-**Garantía 30 días.** "Si en un mes Lupita no se ahorra al menos 8 horas, le devuelvo el dinero."
+**Garantía de 30 días.** "Si en los primeros 30 días de su primer pago decide que no le sirve, le devolvemos ese pago."
 
 ### Cuándo usar Enfoque B vs Enfoque A
 
@@ -402,4 +414,4 @@ El Enfoque B funciona porque cambia al protagonista del demo. El doctor no compr
 
 ---
 
-*Última actualización: 2026-04-28. Cuando salga una nueva versión del producto o un cambio en pricing, actualizar este documento.*
+*Última actualización: 2026-10-05. Cuando salga una nueva versión del producto o un cambio en pricing, actualizar este documento.*

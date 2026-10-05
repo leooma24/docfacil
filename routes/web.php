@@ -29,8 +29,9 @@ use Illuminate\Support\Facades\Route;
 // Raiz y /dentistas comparten la misma vista. La estrategia es 100% dental
 // hasta llegar a 100 clinicas pagando — no tiene sentido mantener 2 landings
 // que digan cosas distintas. /dentistas se mantiene para Google Ads /
-// tracking diferenciado de email vs SEO. welcome.blade.php se conserva en
-// el repo por si se reabre el segmento medico general.
+// tracking diferenciado de email vs SEO. La vieja welcome.blade.php (la
+// landing para médicos) se borró el 5-oct-2026: Omar decidió vender solo a
+// dentistas y traía afirmaciones falsas. Queda en el historial de git.
 Route::view('/', 'dentistas')->name('landing.home');
 Route::view('/dentistas', 'dentistas')->name('landing.dentistas');
 

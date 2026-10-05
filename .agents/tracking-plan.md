@@ -1,6 +1,6 @@
 # DocFácil Tracking Plan
 
-*Last updated: 2026-04-28*
+*Last updated: 2026-04-28 · Revisado contra `resources/views/dentistas.blade.php` el 2026-10-05*
 
 > Source of truth de todos los eventos de tracking. Cuando agregues, modifiques o desactives un evento, **actualiza este documento**. Las skills de marketing leen este archivo para informar análisis y recomendaciones.
 
@@ -47,11 +47,11 @@ El partial los lee con `session()->pull(...)` y los dispara una sola vez.
 | `page_view` | `utm_source`, `utm_medium`, `utm_campaign` | Auto via gtag config |
 | `cta_clicked` | `location`, `text` | Click en cualquier `[data-track="cta_clicked"]` |
 | `pricing_tier_clicked` | `tier`, `cycle` | Click en card de pricing |
-| `roi_calculator_used` | `monthly_savings`, `patients`, `price_per_visit` | Cambio de input (1 fire por sesión) |
+| `founder_seat_clicked` | — | Click "Quiero un lugar" del programa Fundador (abre WhatsApp con Omar) |
 | `whatsapp_clicked` | `location` | Click en cualquier link `wa.me` |
 | `form_submitted` | `form_type` (`contact`) | Submit form de contacto |
-| `exit_intent_shown` | — | Modal de exit intent aparece |
-| `exit_intent_converted` | — | Click "Agendar 20 min con Omar" en modal |
+
+La página de inicio ya no tiene calculadora de ahorro ni modal de salida: esos eventos se quitaron de esta tabla.
 
 ### Funnel signup + activación
 
@@ -68,20 +68,19 @@ El partial los lee con `session()->pull(...)` y los dispara una sola vez.
 |---|---|---|
 | `navbar` | `prueba_gratis` | Navbar desktop |
 | `navbar_mobile` | `prueba_gratis` | Navbar mobile |
-| `hero` | `probar_15_dias_gratis` | Hero primary CTA |
-| `hero` | `ver_demo_en_vivo` | Hero secondary CTA |
-| `final_cta` | `crear_mi_cuenta_gratis` | Final section CTA |
-| `sticky_mobile` | `empieza_gratis` | Sticky bottom (mobile) |
-| `sticky_desktop` | `ir` | Sticky bottom-right (desktop) |
+| `hero` | `probar_15_dias` | Hero primary CTA |
+| `sticky_mobile` | `probar_15_dias` | Sticky bottom (mobile) |
 | (pricing tier) | tier slug | Una entrada por card de pricing |
 
 WhatsApp:
 
 | Location | Where |
 |---|---|
-| `founder_section` | Botón verde "Escríbeme: 668..." |
+| `hero` | Botón "Escribirle a Omar" del hero |
+| `founder_section` | Botón verde "Escribirle a Omar" |
 | `contact_section` | Link teléfono en sección de contacto |
-| `exit_intent` | Botón "Agendar 20 min con Omar" del modal |
+
+Las páginas por ciudad y las comparativas marcan su propio `cta_clicked` (`city_final_cta`, `vs_final_cta`, `alt_final_cta`).
 
 ---
 
@@ -114,7 +113,7 @@ En GA4 Admin → Eventos → marcar como conversión:
 1. **`signup_completed`** — primaria del funnel
 2. **`subscription_upgraded`** — la que importa para revenue
 3. **`form_submitted`** — lead nurture
-4. **`exit_intent_converted`** — recuperación de visitor que se iba
+4. **`founder_seat_clicked`** — interés en el programa Fundador
 
 ---
 

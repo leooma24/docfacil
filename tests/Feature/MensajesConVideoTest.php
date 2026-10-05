@@ -189,4 +189,23 @@ class MensajesConVideoTest extends TestCase
             ->assertSee('Mensualidades de brackets')
             ->assertSee('videos/v3-ortodoncia.mp4');
     }
+
+    // ── Solo dentistas, y solo lo que existe ─────────────────────
+
+    public function test_el_crm_le_habla_a_consultorios_dentales_aunque_el_prospecto_no_diga_dental(): void
+    {
+        $msg = $this->mensaje($this->prospecto(['name' => 'Dr. Luis Mora', 'specialty' => 'Medicina general']));
+
+        $this->assertStringContainsString('consultorios dentales', $msg);
+        $this->assertStringNotContainsString('médicos', $msg);
+    }
+
+    public function test_el_mensaje_de_despues_no_promete_expediente_con_firma(): void
+    {
+        $msg = $this->mensaje($this->prospecto(['contact_day' => 14]));
+
+        $this->assertStringNotContainsString('expediente con firma', $msg);
+        $this->assertStringContainsString('consentimientos', $msg);
+    }
+
 }

@@ -139,4 +139,49 @@ class MaterialesDeVentaHonestosTest extends TestCase
         $this->assertContains('Presupuestos que el paciente acepta en línea', $basico['features']);
         $this->assertStringContainsString('15 pacientes', \App\Support\LoQueTraeCadaPlan::plan('free')['limits']);
     }
+
+    /**
+     * Los documentos de .agents/ los leen Omar y los agentes que venden: lo
+     * que digan ahí termina en un WhatsApp a un dentista. Revisión del
+     * 5-oct-2026: prometían WhatsApp automático, modo sin internet, servidores
+     * en México, exportar en CSV, recetas por WhatsApp, CFDI, cifras sin
+     * fuente, dentistas mayores que "ya lo usan" y precios de la competencia.
+     */
+    public function test_los_documentos_de_venta_internos_no_prometen_de_mas(): void
+    {
+        $prohibido = [
+            // Lo que no existe
+            'WhatsApp automático', 'recordatorios automáticos', 'recordatorio automático',
+            'confirmación automática', 'lista de espera automática', 'notificación automática',
+            'mande solo', 'link de pago', 'SOAP', 'multi-sucursal', 'sucursal',
+            'comisiones entre doctores', 'SMS', 'Compartir por WhatsApp',
+            'compartir al paciente por WhatsApp', 'recibe por WhatsApp', 'Recetas PDF firmadas',
+            'modo offline', 'sync automático', 'sincroniza solo', 'Export completo', 'Export CSV',
+            'exportar TODO', 'servidores en México', 'servidores MX', 'territorio mexicano',
+            'TLS 1.3', 'auditoría de accesos', 'Su CFDI', 'CFDI sale', 'dictado',
+            'Presupuestos/Treatment plans', '$129', 'exit_intent', 'roi_calculator_used',
+            // Datos viejos
+            '14 días', 'primeros 50',
+            // Cifras sin fuente y casos inventados
+            '$15,000', '$6-10k', '$6,000-15,000', '$6-15k', '1 de cada 3', '25-30%', '20-25%',
+            '5-10%', '8 horas', '14 horas', '5-8 hrs', '5 y 8 horas', '10 horas', '$8,500',
+            '8 segundos', 'en 10 segundos', 'Tengo dentistas', 'mi mamá', 'mi tío',
+            'Caso de Culiacán', '95%',
+            // Solo dentistas
+            'médicos generales', 'médico general', 'consultorios médicos',
+            // Competencia sin fuente
+            'Dentalink', 'Doctorum', 'Eaglesoft', 'Dentrix', 'iPraxis', 'Nimbo', 'Medisuite',
+            '$2,500', 'gringo',
+        ];
+
+        $archivos = glob(base_path('.agents/*.md'));
+        $this->assertNotEmpty($archivos, 'Debería haber documentos en .agents/');
+
+        foreach ($archivos as $archivo) {
+            $texto = file_get_contents($archivo);
+            foreach ($prohibido as $frase) {
+                $this->assertFalse(mb_stripos($texto, $frase) !== false, basename($archivo) . " dice \"{$frase}\"");
+            }
+        }
+    }
 }
