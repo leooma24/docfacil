@@ -14,6 +14,18 @@ class CreateAppointment extends CreateRecord
 
     protected static string $view = 'filament.doctor.resources.create-with-hero';
 
+    /** Al tope de citas del mes se le dice con palabras, no con una pantalla de error. */
+    protected function beforeCreate(): void
+    {
+        $clinica = auth()->user()->clinic;
+        $inicio = $this->data['starts_at'] ?? null;
+
+        if ($clinica && ! $clinica->puedeAgendar($inicio ? \Illuminate\Support\Carbon::parse($inicio) : null)) {
+            $clinica->avisarTopeDeCitas();
+            $this->halt();
+        }
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['clinic_id'] = auth()->user()->clinic_id;

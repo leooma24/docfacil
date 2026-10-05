@@ -46,10 +46,9 @@ class VerifyClinicPlan
         // Check if plan/trial/beta has expired
         $isExpired = false;
 
-        // Free plan with expired trial
-        if ($clinic->plan === 'free' && $clinic->trial_ends_at && $clinic->trial_ends_at->isPast()) {
-            $isExpired = true;
-        }
+        // Free con la prueba vencida NO se bloquea: Free es para siempre, con
+        // sus límites (1 doctor, 15 pacientes, 10 citas al mes), como promete
+        // la página. Antes aquí se volvía de solo lectura.
 
         // Beta tester with expired beta
         if ($clinic->is_beta && $clinic->beta_ends_at && $clinic->beta_ends_at->isPast()) {
@@ -61,32 +60,22 @@ class VerifyClinicPlan
             return redirect()->route('filament.doctor.pages.actualizar-plan');
         }
 
-        // Plan limits - BLOCK
-        $limits = $this->getPlanLimits($clinic->plan);
-
-        if ($limits && !$isExpired) {
-            if ($limits['patients'] && $request->routeIs('*.patients.create')) {
-                $patientCount = $clinic->patients()->count();
-                if ($patientCount >= $limits['patients']) {
-                    return redirect()->route('filament.doctor.pages.actualizar-plan');
-                }
+        // Límites del plan. Las rutas del panel van en español (pacientes,
+        // citas, invitar-doctores): con los nombres en inglés estos topes
+        // nunca se aplicaban.
+        if (! $isExpired) {
+            if ($request->routeIs('*.pacientes.create') && ! $clinic->puedeAgregarPacientes()) {
+                return redirect()->route('filament.doctor.pages.actualizar-plan');
             }
 
-            if ($limits['appointments'] && $request->routeIs('*.appointments.create')) {
-                $monthlyAppointments = $clinic->appointments()
-                    ->whereMonth('starts_at', now()->month)
-                    ->whereYear('starts_at', now()->year)
-                    ->count();
-                if ($monthlyAppointments >= $limits['appointments']) {
-                    return redirect()->route('filament.doctor.pages.actualizar-plan');
-                }
+            if ($request->routeIs('*.citas.create') && ! $clinic->puedeAgendar()) {
+                return redirect()->route('filament.doctor.pages.actualizar-plan');
             }
 
-            if ($limits['doctors'] && $request->routeIs('*.doctor-invitations.create')) {
-                $doctorCount = $clinic->doctors()->count();
-                if ($doctorCount >= $limits['doctors']) {
-                    return redirect()->route('filament.doctor.pages.actualizar-plan');
-                }
+            $limits = $this->getPlanLimits($clinic->plan);
+            if ($limits && $limits['doctors'] && $request->routeIs('*.invitar-doctores.create')
+                && $clinic->doctors()->count() >= $limits['doctors']) {
+                return redirect()->route('filament.doctor.pages.actualizar-plan');
             }
         }
 

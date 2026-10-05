@@ -750,6 +750,80 @@ class Clinic extends Model
         return $restantes === null || $restantes >= $cuantos;
     }
 
+    /** Citas al mes que incluye cada plan. null = sin tope. */
+    public const LIMITE_CITAS_DEL_MES = [
+        'free' => 10,
+        'basico' => null,
+        'profesional' => null,
+        'clinica' => null,
+    ];
+
+    /**
+     * El tope de citas del mes de este consultorio, o null si no tiene.
+     * Mismas reglas que el de pacientes: en la prueba no hay tope, y el plan
+     * de pago vencido cae al de Free.
+     */
+    public function limiteDeCitasDelMes(): ?int
+    {
+        if ($this->enPruebaVigente()) {
+            return null;
+        }
+
+        // Plan de pago cuya fecha ya pasó: tope de Free. Sin fecha (puesto a
+        // mano, beta, demo) no se topa: en octubre de 2026 había cuatro
+        // consultorios así y no se les iba a cortar la agenda.
+        if ($this->planIsPaid()) {
+            return $this->plan_ends_at && $this->plan_ends_at->isPast()
+                ? self::LIMITE_CITAS_DEL_MES['free']
+                : null;
+        }
+
+        return self::LIMITE_CITAS_DEL_MES[$this->plan] ?? self::LIMITE_CITAS_DEL_MES['free'];
+    }
+
+    /** Las citas del mes de esa fecha (por omisión, el de hoy). */
+    public function citasDelMes(?\DateTimeInterface $fecha = null): int
+    {
+        $fecha = \Illuminate\Support\Carbon::instance($fecha ?? now());
+
+        return Appointment::withoutGlobalScopes()->where('clinic_id', $this->id)
+            ->whereBetween('starts_at', [$fecha->copy()->startOfMonth(), $fecha->copy()->endOfMonth()])
+            ->count();
+    }
+
+    public function puedeAgendar(?\DateTimeInterface $fecha = null): bool
+    {
+        $limite = $this->limiteDeCitasDelMes();
+
+        return $limite === null || $this->citasDelMes($fecha) < $limite;
+    }
+
+    /** El aviso con el botón a los planes, para las pantallas que agendan. */
+    public function avisarTopeDeCitas(): void
+    {
+        \Filament\Notifications\Notification::make()
+            ->title('Llegaste al tope de tu plan')
+            ->body($this->mensajeDeTopeDeCitas())
+            ->warning()
+            ->persistent()
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('subir')
+                    ->label('Ver planes')
+                    ->url(\App\Filament\Doctor\Pages\Upgrade::getUrl())
+                    ->button(),
+            ])
+            ->send();
+    }
+
+    public function mensajeDeTopeDeCitas(): string
+    {
+        $limite = $this->limiteDeCitasDelMes();
+        $plan = self::displayNameForPlan($this->plan);
+
+        return "Llegaste a las {$limite} citas del mes que incluye tu plan {$plan}. "
+            . 'Actualiza tu plan para seguir agendando; el próximo mes se vuelve a contar.';
+    }
+
     /**
      * El mensaje que ve el doctor cuando ya no caben más.
      */

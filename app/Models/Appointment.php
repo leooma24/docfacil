@@ -33,6 +33,19 @@ class Appointment extends Model
 
     protected static function booted(): void
     {
+        // El tope de citas del mes del plan (Free: 10), para todos los caminos.
+        static::creating(function (self $cita) {
+            if (empty($cita->clinic_id) || ! $cita->starts_at) {
+                return;
+            }
+
+            $clinica = Clinic::withoutGlobalScopes()->find($cita->clinic_id);
+
+            if ($clinica && ! $clinica->puedeAgendar($cita->starts_at)) {
+                throw new \App\Exceptions\LimiteDeCitasAlcanzado($clinica);
+            }
+        });
+
         // Cada vez que a una cita le cambian la hora, se cuenta.
         //
         // El dato ya quedaba en la bitácora de actividad, pero ahí nadie lo

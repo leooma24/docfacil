@@ -34,14 +34,17 @@ class PlanLimitsTest extends TestCase
         return $user;
     }
 
-    public function test_expired_trial_redirects_to_upgrade(): void
+    /**
+     * Antes la prueba vencida mandaba a actualizar en cualquier alta. Desde el
+     * 4-oct-2026 Free es para siempre con sus límites (ver FreeQueSiFuncionaTest).
+     */
+    public function test_expired_trial_keeps_free_working(): void
     {
         $user = $this->createDoctor([
             'trial_ends_at' => now()->subDay(),
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor/pacientes/create');
-        $response->assertRedirect(route('filament.doctor.pages.actualizar-plan'));
+        $this->actingAs($user)->get('/doctor/pacientes/create')->assertOk();
     }
 
     public function test_active_trial_allows_access(): void
