@@ -565,21 +565,19 @@ class AppointmentResource extends Resource
                                 $nombre = trim(($entrada->patient->first_name ?? '') . ' ' . ($entrada->patient->last_name ?? ''));
                                 $urgente = (int) $entrada->priority === 1 ? ' — urgente' : '';
 
-                                return '• ' . $nombre . $urgente;
+                                return '• ' . e($nombre . $urgente);
                             })
-                            ->implode("\n");
+                            // Uno por renglón: con "\n" el aviso los juntaba.
+                            ->implode('<br>');
 
+                        // "Ofrecer a Diego" abre WhatsApp con el mensaje y lo
+                        // deja anotado para este hueco: sin pasar por la lista.
                         Notification::make()
                             ->title('Se liberó el ' . $record->starts_at->translatedFormat('l d \d\e F, H:i'))
-                            ->body("Estos pacientes esperaban ese día:\n" . $lista)
+                            ->body(new \Illuminate\Support\HtmlString('Estos pacientes esperaban ese día:<br>' . $lista))
                             ->info()
                             ->persistent()
-                            ->actions([
-                                \Filament\Notifications\Actions\Action::make('lista')
-                                    ->label('Ofrecer el horario')
-                                    ->url($record->ligaAListaDeEspera())
-                                    ->button(),
-                            ])
+                            ->actions(\App\Models\WaitlistEntry::botonesParaElHueco($record, $candidatos))
                             ->send();
                     }),
                     Tables\Actions\EditAction::make()->label('Editar detalles'),

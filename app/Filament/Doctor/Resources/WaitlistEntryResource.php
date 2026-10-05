@@ -194,29 +194,17 @@ class WaitlistEntryResource extends Resource
                     ])
                     ->action(function (WaitlistEntry $record, array $data, $livewire) {
                         $hueco = method_exists($livewire, 'huecoCita') ? $livewire->huecoCita() : null;
-                        $phone = preg_replace('/\D/', '', $record->patient->phone);
-                        if (strlen($phone) === 10) $phone = '52' . $phone;
-                        $firstName = $record->patient->first_name ?: 'hola';
-                        $clinicName = $record->clinic->name ?? 'tu consultorio';
-                        $slot = \Carbon\Carbon::parse($data['slot_start']);
-                        $date = $slot->translatedFormat('l d \d\e F');
-                        $time = $slot->format('H:i');
+                        // El mismo mensaje y la misma anotación que "Ofrecer a ..."
+                        // del aviso de la cancelación (WaitlistEntry::ofrecer).
+                        $whatsapp = $record->ofrecer(\Carbon\Carbon::parse($data['slot_start']), $hueco);
 
-                        $message = "Hola {$firstName}, te escribo de *{$clinicName}*. Estás en nuestra lista de espera y se acaba de liberar un horario:\n\nFecha: {$date}\nHora: {$time} hrs\n\nSi te acomoda responde *SÍ* y te lo aparto. ¡Es primer llegado, primer servido!";
-
-                        $record->update([
-                            'status' => 'notified',
-                            'notified_at' => now(),
-                            // Si es el hueco de una cancelación, queda dicho cuál
-                            // para apartarlo con un clic cuando conteste que sí.
-                            'notified_for_appointment_id' => $hueco && $slot->equalTo($hueco->starts_at) ? $hueco->id : null,
-                        ]);
                         Notification::make()
                             ->title('Estado actualizado a Notificado')
                             ->body('Se abrirá WhatsApp con el mensaje listo.')
                             ->success()
                             ->send();
-                        return redirect()->away("https://wa.me/{$phone}?text=" . urlencode($message));
+
+                        return redirect()->away($whatsapp);
                     }),
                 // El paciente dijo que sí: se le crea la cita en el hueco.
                 Tables\Actions\Action::make('apartar')

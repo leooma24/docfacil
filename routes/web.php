@@ -292,6 +292,24 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     return redirect()->away($whatsapp);
 })->name('cita.recordar');
 
+// "Ofrecer a Diego" en el aviso de una cancelación: lo deja notificado para
+// ese hueco y abre WhatsApp con el mensaje. Solo huecos que de verdad se
+// cancelaron y del consultorio de quien entra.
+Route::get('/doctor/lista-de-espera/{entrada}/ofrecer/{cita}', function (int $entrada, int $cita) {
+    abort_unless(auth()->check(), 403);
+    $clinica = auth()->user()->clinic_id;
+
+    $hueco = \App\Models\Appointment::withoutGlobalScopes()->where('clinic_id', $clinica)
+        ->where('status', 'cancelled')->findOrFail($cita);
+    $espera = \App\Models\WaitlistEntry::withoutGlobalScopes()->with(['patient', 'clinic'])
+        ->where('clinic_id', $clinica)->whereIn('status', ['waiting', 'notified'])->findOrFail($entrada);
+
+    $whatsapp = $espera->ofrecer($hueco->starts_at, $hueco);
+    abort_unless($whatsapp, 422, 'El paciente no tiene teléfono.');
+
+    return redirect()->away($whatsapp);
+})->middleware('auth')->name('lista-espera.ofrecer');
+
 // El odontograma para imprimir o guardar en PDF desde el navegador. Se busca
 // por id dentro del consultorio de quien entra: el de otro consultorio no existe.
 Route::get('/doctor/odontogramas/{odontogram}/imprimir', function (int $odontogram) {

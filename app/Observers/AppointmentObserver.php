@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Appointment;
 use App\Models\WaitlistEntry;
-use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
@@ -21,73 +20,50 @@ use Illuminate\Support\Facades\Log;
  */
 class AppointmentObserver
 {
+    /**
+     * Se cancele desde donde se cancele (la cita abierta, el paciente desde su
+     * liga, la lista), los demás del consultorio se enteran del hueco con los
+     * mismos candidatos que ve quien canceló (WaitlistEntry::candidatosPara) y
+     * con "Ofrecer a ..." para cada uno.
+     *
+     * Antes solo avisaba si la cita era dentro de 72 horas y buscaba los
+     * candidatos a su manera, así que el aviso y la pantalla decían cosas
+     * distintas. Lo que importa es si el día cae en lo que el paciente pidió.
+     */
     public function updated(Appointment $appointment): void
     {
         if (!$appointment->wasChanged('status')) return;
         if ($appointment->status !== 'cancelled') return;
         if (!$appointment->starts_at || !$appointment->starts_at->isFuture()) return;
-        if ($appointment->starts_at->diffInHours(now()) > 72) return;
 
         $clinic = $appointment->clinic;
         if (!$clinic || !$clinic->hasFeature('waitlist')) return;
 
-        $matches = $this->findWaitlistMatches($appointment);
-        if ($matches->isEmpty()) return;
+        $candidatos = WaitlistEntry::candidatosPara($appointment, 3);
+        if ($candidatos->isEmpty()) return;
 
-        $this->notifyClinicUsers($appointment, $matches);
+        $this->notifyClinicUsers($appointment, $candidatos);
     }
 
-    protected function findWaitlistMatches(Appointment $appointment)
-    {
-        $date = $appointment->starts_at->toDateString();
-
-        $query = WaitlistEntry::where('clinic_id', $appointment->clinic_id)
-            ->where('status', 'waiting')
-            ->whereDate('desired_from', '<=', $date)
-            ->whereDate('desired_to', '>=', $date)
-            ->with(['patient']);
-
-        if ($appointment->service_id) {
-            $query->where(function ($q) use ($appointment) {
-                $q->whereNull('service_id')->orWhere('service_id', $appointment->service_id);
-            });
-        }
-        if ($appointment->doctor_id) {
-            $query->where(function ($q) use ($appointment) {
-                $q->whereNull('doctor_id')->orWhere('doctor_id', $appointment->doctor_id);
-            });
-        }
-
-        return $query
-            ->orderByDesc('priority')
-            ->orderBy('created_at')
-            ->limit(3)
-            ->get();
-    }
-
-    protected function notifyClinicUsers(Appointment $appointment, $matches): void
+    protected function notifyClinicUsers(Appointment $appointment, $candidatos): void
     {
         $slotDate = $appointment->starts_at->translatedFormat('l d \d\e F, H:i');
-        $count = $matches->count();
-        $names = $matches->pluck('patient.first_name')->filter()->join(', ');
+        $names = $candidatos->map(fn ($e) => trim(($e->patient->first_name ?? '') . ' ' . ($e->patient->last_name ?? '')))->filter()->join(', ');
 
-        $recipients = $appointment->clinic->users()->whereIn('role', ['doctor', 'staff'])->get();
-        if ($recipients->isEmpty()) return;
+        // A quien canceló desde la pantalla ya se le avisó ahí mismo.
+        $recipients = $appointment->clinic->users()
+            ->whereIn('role', ['doctor', 'staff'])
+            ->when(auth()->id(), fn ($q, $yo) => $q->whereKeyNot($yo))
+            ->get();
 
         foreach ($recipients as $recipient) {
             try {
                 Notification::make()
-                    ->title("{$count} paciente(s) en lista de espera para el slot cancelado")
+                    ->title('Se liberó el ' . $slotDate)
                     ->icon('heroicon-o-user-group')
                     ->iconColor('warning')
-                    ->body("Se canceló la cita del {$slotDate}. Candidatos en lista: {$names}. Abre Lista de espera para contactarlos.")
-                    ->actions([
-                        Action::make('ver')
-                            ->label('Ver lista de espera')
-                            // Abre la lista ya filtrada para este hueco.
-                            ->url($appointment->ligaAListaDeEspera())
-                            ->markAsRead(),
-                    ])
+                    ->body('En lista de espera para ese día: ' . $names . '.')
+                    ->actions(WaitlistEntry::botonesParaElHueco($appointment, $candidatos))
                     ->sendToDatabase($recipient);
             } catch (\Throwable $e) {
                 Log::warning('Waitlist notification failed', ['error' => $e->getMessage()]);
