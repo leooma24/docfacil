@@ -39,13 +39,13 @@ Omar decidió que el skill solo lee. Lo que se marca en el CRM ("Contestó", la 
 
 ```bash
 # El día: quién contestó, seguimientos con su video, demos y cómo van los mensajes
-ssh root@206.189.203.228 'cd /var/www/docfacil && php artisan docfacil:ventas-hoy'
+ssh root@206.189.203.228 'cd /var/www/docfacil && php artisan docfacil:ventas-hoy --rep=100'
 
 # Un prospecto: lo que dijo, los mensajes que recibió y el siguiente paso que propone el CRM
 ssh root@206.189.203.228 'cd /var/www/docfacil && php artisan docfacil:ventas-prospecto "Abigail"'
 ```
 
-Si `ventas-prospecto` encuentra a varios, pregúntale a Omar cuál. Si no hay ssh (otra computadora), pídele que pegue lo que ve en la cola o en la ficha.
+`--rep=100` es Omar (en el servidor hay más de un vendedor). Si `ventas-prospecto` encuentra a varios, pregúntale a Omar cuál. Si no hay ssh (otra computadora), pídele que pegue lo que ve en la cola o en la ficha.
 
 ## 1. Contestarle a un prospecto
 
