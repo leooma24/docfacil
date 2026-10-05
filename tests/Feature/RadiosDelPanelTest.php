@@ -11,8 +11,8 @@ use Tests\TestCase;
  * 16, 18, 20, 24 px y sus versiones en rem): cada pantalla se veía hecha
  * por alguien distinto. Ahora:
  *
- *  - 8 px:  botones, campos, chips y cajas chicas (lo mismo que Filament).
- *  - 12 px: cajas dentro de una tarjeta (avisos, renglones de lista).
+ *  - 8 px:  chips, calendario y cajas chicas.
+ *  - 12 px: botones, campos y cajas dentro de una tarjeta (avisos, renglones).
  *  - 16 px: tarjetas, secciones y ventanas (lo mismo que la página de inicio).
  *  - 999 px las píldoras, 50 % los círculos, y 2 a 4 px las rayitas.
  */

@@ -54,9 +54,13 @@
 
 <style>
     /* Esquinas del panel, en tres tamaños (ver RadiosDelPanelTest):
-       8px botones, campos, chips y cajas chicas (igual que Filament);
-       12px cajas dentro de una tarjeta; 16px tarjetas, secciones y
-       ventanas (igual que la página de inicio). 999px píldoras, 50% círculos. */
+       8px chips, calendario y cajas chicas; 12px botones, campos y cajas
+       dentro de una tarjeta; 16px tarjetas, secciones y ventanas (igual que
+       la página de inicio). 999px píldoras, 50% círculos.
+
+       Este archivo tenía dos temas encimados (el original y el "vidrio v2"),
+       con las mismas piezas definidas dos veces. El 5-oct-2026 se juntaron:
+       cada pieza se define una vez, con lo que de verdad se veía. */
     /* ===== DOCFACIL CUSTOM THEME ===== */
 
     /* x-cloak: oculta elementos hasta que Alpine los procesa.
@@ -88,14 +92,9 @@
     }
 
     .fi-sidebar .fi-sidebar-header {
-        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        border-bottom: 0 !important;
         padding: 1rem !important;
         background: transparent !important;
-    }
-
-    .fi-sidebar .fi-sidebar-header img {
-        height: 2.4rem !important;
-        max-height: 2.4rem !important;
     }
 
     /* Collapse button */
@@ -129,7 +128,6 @@
         border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
         background-image: radial-gradient(120% 40% at 0% 0%, rgba(45, 212, 191, 0.10), transparent 60%) !important;
     }
-    .fi-sidebar .fi-sidebar-header { border-bottom: 0 !important; }
 
     /* Consultorio y botón principal */
     .dfm-top { padding: 0.25rem 0.1rem 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -177,8 +175,7 @@
     @media (prefers-reduced-motion: reduce) { .dfm-cta { transition: none; } }
 
     /* Renglones del menú: sin caja; el fondo aparece al pasar y en el activo. */
-    .fi-sidebar .fi-sidebar-nav { padding: 0.75rem 0.75rem 1.5rem !important; }
-    .fi-sidebar .fi-sidebar-nav { row-gap: 0 !important; gap: 0 !important; }
+    .fi-sidebar .fi-sidebar-nav { padding: 0.75rem 0.75rem 1.5rem !important; row-gap: 0 !important; gap: 0 !important; }
     /* Filament le pone margen negativo a los lados: el activo se pegaba a la orilla. */
     .fi-sidebar .fi-sidebar-nav-groups { row-gap: 1.1rem !important; margin: 0 !important; }
     .fi-sidebar .fi-sidebar-group-items { row-gap: 2px !important; }
@@ -259,28 +256,13 @@
         background: #ef4444 !important;
     }
 
-    /* ===== TOP BAR ===== */
-    .fi-topbar {
-        background: #ffffff !important;
-        border-bottom: none !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    /* ===== CARDS =====
+       Las secciones se ven en "GLASS CARDS", más abajo. Aquí solo lo que
+       de este tema sí se ve: las tablas, que el vidrio no toca. */
+    .fi-section {
+        overflow: hidden;
     }
 
-    .dark .fi-topbar {
-        background: #1f2937 !important;
-    }
-
-    /* ===== MAIN CONTENT ===== */
-    .fi-main {
-        background: #f8fafb !important;
-    }
-
-    .dark .fi-main {
-        background: #111827 !important;
-    }
-
-    /* ===== CARDS ===== */
-    .fi-section,
     .fi-ta-ctn {
         border-radius: 16px !important;
         border: 1px solid #e5e7eb !important;
@@ -288,55 +270,33 @@
         overflow: hidden;
     }
 
-    .dark .fi-section,
     .dark .fi-ta-ctn {
         border-color: #374151 !important;
     }
 
-    /* Stats cards */
-    .fi-wi-stats-overview-stat {
-        border-radius: 16px !important;
-        border: 1px solid #e5e7eb !important;
-        transition: all 0.2s ease !important;
-    }
-
-    .dark .fi-wi-stats-overview-stat {
-        border-color: #374151 !important;
-    }
-
+    /* Stats cards: al pasar, el borde se pinta del color de la marca */
     .fi-wi-stats-overview-stat:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
         border-color: #14b8a6 !important;
     }
 
     /* Buttons */
-    .fi-btn {
-        border-radius: 12px !important;
-        font-weight: 600 !important;
-        transition: all 0.15s ease !important;
-    }
-
     .fi-btn:hover {
         transform: translateY(-1px) !important;
     }
 
-    /* Table rows */
-    .fi-ta-row:hover {
-        background: #f0fdfa !important;
-    }
-
+    /* Table rows (en claro, ver "TABLES - Glass rows") */
     .dark .fi-ta-row:hover {
         background: rgba(20, 184, 166, 0.05) !important;
     }
 
-    /* Form inputs */
-    .fi-input, .fi-select, textarea, select {
+    /* Campos que no son de Filament (los de Filament, en "INPUTS") */
+    .fi-select, textarea, select {
         border-radius: 12px !important;
         transition: all 0.15s ease !important;
     }
 
-    .fi-input:focus, .fi-select:focus, textarea:focus, select:focus {
+    .fi-select:focus, textarea:focus, select:focus {
         border-color: #14b8a6 !important;
         box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1) !important;
     }
@@ -357,12 +317,6 @@
     .fi-simple-main-ctn {
         border-radius: 16px !important;
         box-shadow: 0 20px 60px rgba(0,0,0,0.08) !important;
-    }
-
-    /* Page heading */
-    .fi-header-heading {
-        font-weight: 800 !important;
-        letter-spacing: -0.02em !important;
     }
 
     /* Modal */
@@ -777,9 +731,6 @@
         .fi-page-header-heading {
             font-size: 1.5rem !important;
         }
-        .fi-section {
-            border-radius: 16px !important;
-        }
     }
 
     /* Remove body background since .fi-main handles it */
@@ -799,7 +750,6 @@
     */
 
     /* Dropdown panel arriba de todo */
-    .fi-dropdown-panel,
     .fi-dropdown-list,
     [x-ref="panel"] {
         z-index: 9999 !important;
@@ -863,9 +813,6 @@
        no aplica porque la tabla se renderiza como cards.
     */
     @media (min-width: 768px) {
-        .fi-ta-content {
-            overflow-x: auto;
-        }
 
         /* Variables: ancho aproximado de la columna de checkbox y de la
            columna de acciones (Filament: w-1 + px-3 ~= 2.75rem para el
