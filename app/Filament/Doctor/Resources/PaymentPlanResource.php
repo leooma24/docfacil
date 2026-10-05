@@ -185,6 +185,9 @@ class PaymentPlanResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('patient.first_name')->label('Paciente')
+                    // El nombre lleva al perfil del paciente: de cualquier lista se llega a todo lo suyo.
+                    ->url(fn ($record) => \App\Filament\Doctor\Pages\PatientProfile::getUrl(['patient' => $record->patient_id], panel: 'doctor'))
+                    ->color('primary')
                     ->formatStateUsing(fn (PaymentPlan $r) => $r->patient?->full_name)->searchable(['first_name', 'last_name']),
                 // En pantallas medianas no cabe todo; lo que manda es quién,
                 // cuánto lleva, qué sigue y si debe.

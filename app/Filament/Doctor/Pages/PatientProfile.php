@@ -53,6 +53,17 @@ class PatientProfile extends Page
             ->size('sm');
     }
 
+    /** "Cobrar" de un cobro de la pestaña Cobros, solo si es de este paciente. */
+    public function cobrarUnoAction(): \Filament\Actions\Action
+    {
+        return \App\Filament\Doctor\Actions\CobrarAbono::make('cobrarUno', fn (array $arguments) => Payment::where('clinic_id', auth()->user()->clinic_id)
+            ->where('patient_id', $this->patient?->id)
+            ->whereKey($arguments['payment'] ?? null)
+            ->get())
+            ->link()
+            ->size('sm');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -149,7 +160,7 @@ class PatientProfile extends Page
     public function getMedicalRecordsProperty()
     {
         return MedicalRecord::where('patient_id', $this->patient->id)
-            ->with(['doctor.user'])
+            ->with(['doctor.user', 'prescriptions', 'appointment.payments'])
             ->orderBy('visit_date', 'desc')
             ->limit(20)
             ->get();

@@ -362,4 +362,10 @@ class Appointment extends Model
     {
         return $this->hasMany(ConsultationProcedure::class);
     }
+
+    /** Lo que se cobró en esta cita (sin las mensualidades de un plan). */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class)->whereNull('payment_plan_id');
+    }
 }

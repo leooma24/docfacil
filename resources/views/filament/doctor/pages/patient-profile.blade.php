@@ -306,6 +306,23 @@
                 @if($record->chief_complaint)<div class="text-xs md:text-sm"><span class="text-gray-500">Motivo:</span> {{ $record->chief_complaint }}</div>@endif
                 @if($record->diagnosis)<div class="text-xs md:text-sm mt-0.5 md:mt-1"><span class="text-gray-500">Dx:</span> <span class="font-medium">{{ $record->diagnosis }}</span></div>@endif
                 @if($record->treatment)<div class="text-xs md:text-sm mt-0.5 md:mt-1"><span class="text-gray-500">Tx:</span> {{ $record->treatment }}</div>@endif
+                {{-- De la consulta a lo que salió de ella: su receta y su cobro. --}}
+                @php $cobroDeLaConsulta = $record->appointment?->payments->first(); @endphp
+                @if($record->prescriptions->isNotEmpty() || $cobroDeLaConsulta)
+                <div class="flex flex-wrap items-center gap-3 mt-2 text-xs md:text-sm">
+                    @foreach($record->prescriptions as $rx)
+                        <a href="{{ route('prescription.pdf', $rx) }}" target="_blank" class="font-semibold text-teal-700 hover:underline">Receta (PDF)</a>
+                    @endforeach
+                    @if($cobroDeLaConsulta)
+                        <span class="{{ $cobroDeLaConsulta->status === 'paid' ? 'text-gray-600' : 'text-amber-700 font-semibold' }}">
+                            Cobro: ${{ number_format($cobroDeLaConsulta->amount, 0) }} {{ $cobroDeLaConsulta->status === 'paid' ? 'pagado' : 'por cobrar' }}
+                        </span>
+                        @if($cobroDeLaConsulta->status !== 'paid' && $cobroDeLaConsulta->remaining > 0)
+                            {{ ($this->cobrarUnoAction)(['payment' => $cobroDeLaConsulta->id]) }}
+                        @endif
+                    @endif
+                </div>
+                @endif
             </div>
             @empty
             <div class="p-8 text-center text-gray-400 text-sm">Sin historial clínico</div>
@@ -323,7 +340,10 @@
                         <span class="font-bold text-xs md:text-sm">{{ $rx->prescription_date->format('d/m/Y') }}</span>
                         <span class="text-xs md:text-xs text-gray-500 ml-2">{{ $rx->doctor->user->name ?? '' }}</span>
                     </div>
-                    <span class="text-xs md:text-xs text-gray-500">{{ $rx->items->count() }} med.</span>
+                    <span class="flex items-center gap-3">
+                        <span class="text-xs md:text-xs text-gray-500">{{ $rx->items->count() }} med.</span>
+                        <a href="{{ route('prescription.pdf', $rx) }}" target="_blank" class="text-xs md:text-sm font-semibold text-teal-700 hover:underline">PDF</a>
+                    </span>
                 </div>
                 @if($rx->diagnosis)<div class="text-xs md:text-sm text-gray-600 mb-2">{{ $rx->diagnosis }}</div>@endif
                 <div class="space-y-1">
@@ -386,6 +406,9 @@
                             <span class="px-2 py-1 rounded-full text-xs font-medium {{ $pay->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
                                 {{ $pay->status === 'paid' ? 'Pagado' : ($pay->status === 'pending' ? 'Pendiente' : 'Parcial') }}
                             </span>
+                            @if($pay->status !== 'paid' && $pay->remaining > 0)
+                                <span class="ml-2">{{ ($this->cobrarUnoAction)(['payment' => $pay->id]) }}</span>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -407,6 +430,9 @@
                     <span class="px-1.5 py-0.5 rounded-full text-xs font-medium {{ $pay->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">
                         {{ $pay->status === 'paid' ? 'Pagado' : ($pay->status === 'pending' ? 'Pendiente' : 'Parcial') }}
                     </span>
+                    @if($pay->status !== 'paid' && $pay->remaining > 0)
+                        <div class="mt-1">{{ ($this->cobrarUnoAction)(['payment' => $pay->id]) }}</div>
+                    @endif
                 </div>
             </div>
             @empty
@@ -430,10 +456,17 @@
                         <div class="text-xs md:text-xs text-gray-500">{{ $apt->doctor->user->name ?? '' }}</div>
                     </div>
                 </div>
+                <div class="flex items-center gap-2 shrink-0">
+                @if($apt->status === 'in_progress' || (in_array($apt->status, ['scheduled', 'confirmed'], true) && $apt->starts_at->gte(today())))
+                    <a href="{{ route('filament.doctor.pages.consulta', ['appointment' => $apt->id]) }}" class="text-xs md:text-sm font-semibold text-teal-700 hover:underline">
+                        {{ $apt->status === 'in_progress' ? 'Continuar' : 'Iniciar consulta' }}
+                    </a>
+                @endif
                 <span class="px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-xs md:text-xs font-medium shrink-0
                     {{ match($apt->status) { 'completed' => 'bg-green-100 text-green-700', 'scheduled' => 'bg-amber-100 text-amber-700', 'confirmed' => 'bg-blue-100 text-blue-700', 'cancelled' => 'bg-red-100 text-red-700', 'no_show' => 'bg-gray-100 text-gray-700', default => 'bg-gray-100 text-gray-700' } }}">
                     {{ match($apt->status) { 'completed' => 'Completada', 'scheduled' => 'Programada', 'confirmed' => 'Confirmada', 'cancelled' => 'Cancelada', 'no_show' => 'No asistió', 'in_progress' => 'En consulta', default => $apt->status } }}
                 </span>
+                </div>
             </div>
             @empty
             <div class="p-8 text-center text-gray-400 text-sm">Sin citas</div>

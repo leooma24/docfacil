@@ -144,6 +144,9 @@ class MedicalRecordResource extends Resource
                     ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('patient.first_name')
+                    // El nombre lleva al perfil del paciente: de cualquier lista se llega a todo lo suyo.
+                    ->url(fn ($record) => \App\Filament\Doctor\Pages\PatientProfile::getUrl(['patient' => $record->patient_id], panel: 'doctor'))
+                    ->color('primary')
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
                     ->searchable(query: self::buscarPorNombreDePaciente()),
