@@ -3,7 +3,7 @@
      llega desde WhatsApp en su celular no baje nada hasta que toque. --}}
 <figure class="lp-video">
     <video controls playsinline preload="none"
-           poster="{{ asset('videos/' . $id . '-poster.jpg') }}"
+           poster="{{ asset($poster ?? ('videos/' . $id . '-poster.jpg')) }}"
            width="720" height="900"
            aria-label="{{ $v['titulo'] }}"
            onplay="window.trackEvent && window.trackEvent('video_played', { video: '{{ $id }}' })">

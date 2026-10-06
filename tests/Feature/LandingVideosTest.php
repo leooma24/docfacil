@@ -6,23 +6,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Los 3 videos de venta en la página, en orden y livianos: casi todo el que
- * llega viene de WhatsApp en su celular, así que no se baja nada hasta que
- * le da play.
+ * Los 5 videos de venta en la página, cada uno en su paso del recorrido
+ * (recordatorio, sala, consulta, presupuesto, mensualidades) y livianos:
+ * casi todo el que llega viene de WhatsApp en su celular, así que no se baja
+ * nada hasta que le da play.
  */
 class LandingVideosTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const VIDEOS = ['v1-consulta', 'v2-presupuesto', 'v3-ortodoncia'];
+    private const VIDEOS = ['v4-recordatorios', 'v5-sala', 'v1-corto', 'v2-presupuesto', 'v3-ortodoncia'];
 
-    public function test_los_tres_videos_en_orden_sin_descargarse_solos(): void
+    public function test_los_cinco_videos_en_orden_sin_descargarse_solos(): void
     {
         $html = $this->get('/')->assertOk()->getContent();
 
-        $this->assertSame(3, substr_count($html, '<video'));
-        $this->assertSame(3, substr_count($html, 'preload="none"'));
-        $this->assertSame(3, substr_count($html, 'playsinline'));
+        $this->assertSame(5, substr_count($html, '<video'));
+        $this->assertSame(5, substr_count($html, 'preload="none"'));
+        $this->assertSame(5, substr_count($html, 'playsinline'));
 
         $posiciones = array_map(fn ($v) => strpos($html, "videos/{$v}.mp4"), self::VIDEOS);
         $this->assertNotContains(false, $posiciones);
