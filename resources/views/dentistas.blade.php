@@ -749,7 +749,7 @@
                                 <li class="ag-cita" :data-edo="estados[{{ $i }}]" :class="{ 'ag-activa': activa === {{ $i }} }">
                                     <span class="ag-hora">{{ $hora }}</span>
                                     <span class="ag-quien"><strong>{{ $quien }}</strong><span>{{ $que }}</span></span>
-                                    <span class="ag-edo" x-text="etiqueta(estados[{{ $i }}])">Por confirmar</span>
+                                    <span class="ag-edo" x-text="etiqueta(estados[{{ $i }}])">Programada</span>
                                 </li>
                                 @endforeach
                             </ol>
@@ -786,7 +786,7 @@
                     <span class="mango foto" data-iso="15" aria-hidden="true"><b>15</b></span>
                     <div>
                         <h2 class="e-h2">Su libreta, pero que le avisa.</h2>
-                        <p class="e-p">Cada cita con su estado: por confirmar, confirmó, llegó, atendida. En el celular, la tablet o la computadora de recepción.</p>
+                        <p class="e-p">Cada cita con su estado: programada, confirmada, llegó, completada. En el celular, la tablet o la computadora de recepción.</p>
                     </div>
                 </div>
                 <ul class="puntos">
@@ -863,7 +863,7 @@ Confirme o cancele aquí:
                 </figure>
                 <div class="llega-celda llega-espera">
                     <strong>¿Alguien canceló?</strong>
-                    <p class="e-p" style="color:#cfd5da;margin:8px 0 0;">La lista de espera le dice quién quería ese día. “Ofrecer a…” abre su WhatsApp con el mensaje y deja apartado el hueco. Plan Pro.</p>
+                    <p class="e-p" style="color:#cfd5da;margin:8px 0 0;">La lista de espera le dice quién quería ese día. “Ofrecer a…” abre su WhatsApp con el mensaje y deja anotado a quién se lo ofreció. Si dice que sí, la cita se agenda en un clic. Plan Pro.</p>
                 </div>
             </div>
         </div>
@@ -954,7 +954,7 @@ Confirme o cancele aquí:
                     <div class="pp-leyenda">
                         <span><i style="background:var(--iso-35);"></i>Pagada</span>
                         <span><i style="border:2px solid var(--tinta);background:repeating-linear-gradient(135deg,#fff 0 3px,var(--acero-2) 3px 6px);"></i>Vencida</span>
-                        <span><i style="background:var(--acero);border:1.5px solid var(--acero-3);"></i>Por venir</span>
+                        <span><i style="background:var(--acero);border:1.5px solid var(--acero-3);"></i>Por pagar</span>
                     </div>
                     <div class="pp-cobrar"><strong>Mensualidad 7 vencida: $800</strong><span>Cobrar</span></div>
                     <span class="e-ejemplo" style="display:block;margin-top:12px;text-align:right;">Datos de ejemplo</span>
@@ -983,7 +983,7 @@ Confirme o cancele aquí:
                     </div>
                 </div>
                 <ul class="omar-pasos">
-                    <li><span><strong>Hoy:</strong> crea su cuenta en dos minutos, sin tarjeta.</span></li>
+                    <li><span><strong>Hoy:</strong> crea su cuenta, sin tarjeta.</span></li>
                     <li><span><strong>Esta semana:</strong> le cargo sus pacientes y le enseño su agenda por WhatsApp.</span></li>
                     <li><span><strong>Las primeras semanas:</strong> le acompaño, sin costo extra.</span></li>
                 </ul>
@@ -1317,7 +1317,7 @@ function agendaDeMañana() {
         horas: @json(array_column($agendaEjemplo, 0)),
         estados: ['pendiente', 'pendiente', 'pendiente', 'pendiente'],
         activa: null, whatsapp: false, texto: '', escribiendo: false, tocando: false, terminado: false, corrida: 0,
-        etiqueta(e) { return { pendiente: 'Por confirmar', enviado: 'Recordado', confirmo: 'Confirmó' }[e]; },
+        etiqueta(e) { return { pendiente: 'Programada', enviado: 'Recordado', confirmo: 'Confirmada' }[e]; },
         mensaje(i) {
             const nombre = this.nombres[i].split(' ')[0];
             return 'Hola ' + nombre + ', le recordamos su cita en Consultorio Dental Mochis jueves a las ' + this.horas[i] + '.\n\nConfirme o cancele aquí:\n(la liga de su cita)\n\n¡Le esperamos!';

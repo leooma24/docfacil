@@ -88,6 +88,24 @@ class LandingRecorridoTest extends TestCase
         $this->assertStringContainsString('data-track-location="hero_demo"', $html);
     }
 
+    /**
+     * Lo que la página enseña se llama como en el sistema: los estados de la
+     * cita, el botón "Recordado", el estado de cada mensualidad. Y no promete
+     * lo que el sistema no hace (la lista de espera anota a quién se ofreció
+     * el hueco, no lo aparta) ni tiempos que nadie midió.
+     */
+    public function test_la_pagina_habla_como_el_sistema(): void
+    {
+        $html = $this->html();
+
+        foreach (['Programada', 'Recordado', 'Confirmada', 'Pagada', 'Vencida', 'Por pagar'] as $etiqueta) {
+            $this->assertStringContainsString($etiqueta, $html, "La página no dice \"{$etiqueta}\" como el sistema");
+        }
+        foreach (['Por confirmar', 'Confirmó', 'Por venir', 'apartado el hueco', 'dos minutos'] as $frase) {
+            $this->assertStringNotContainsString($frase, $html, "La página dice \"{$frase}\"");
+        }
+    }
+
     public function test_sin_rayas_largas_en_el_texto(): void
     {
         $html = $this->html();
