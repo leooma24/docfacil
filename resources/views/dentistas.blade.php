@@ -201,6 +201,9 @@
 
         /* Botones: grafito sobre acero, blanco sobre los campos de color. */
         .e-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+        .ini-demo { margin: 18px 0 0; font-size: 16px; color: var(--tinta-3); }
+        .ini-demo a { color: var(--tinta); font-weight: 750; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+        .ini-demo a:hover { text-decoration-color: var(--iso-30); }
         .e-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 26px; border-radius: var(--r-medio); font-size: 17px; font-weight: 750; text-decoration: none; white-space: nowrap; border: 2px solid transparent; cursor: pointer; transition: transform .25s var(--sale), box-shadow .25s var(--sale), background-color .2s, color .2s; }
         .e-btn:active { transform: translateY(1px) scale(.98); }
         .e-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
@@ -675,6 +678,7 @@
                         window.__docfacilInstallPrompt.userChoice.finally(() => { installing = false; window.__docfacilInstallPrompt = null; show = false; });
                     "
                     type="button"><span x-text="installing ? 'Instalando…' : 'Instalar app'"></span></button>
+                <a href="{{ route('demo') }}" data-track="demo_clicked" data-track-location="navbar">Ver el demo</a>
                 <a href="{{ url('/doctor/login') }}">Iniciar sesión</a>
                 <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar" data-track-text="prueba_gratis" class="e-btn e-btn-tinta">Probar 15 días gratis</a>
             </div>
@@ -696,6 +700,7 @@
                     window.__docfacilInstallPrompt.userChoice.finally(() => { window.__docfacilInstallPrompt = null; show = false; });
                 "
                 type="button">Instalar como app</button>
+            <a href="{{ route('demo') }}" data-track="demo_clicked" data-track-location="navbar_mobile">Ver el demo</a>
             <a href="{{ url('/doctor/login') }}">Iniciar sesión</a>
             <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="navbar_mobile" data-track-text="prueba_gratis" class="e-btn e-btn-tinta">Probar 15 días gratis</a>
         </div>
@@ -726,6 +731,7 @@
                         <a href="{{ url('/doctor/register') }}" data-track="cta_clicked" data-track-location="hero" data-track-text="probar_15_dias" class="e-btn e-btn-tinta">Probar 15 días gratis</a>
                         <a href="{{ $waOmar }}" target="_blank" rel="noopener" data-track="whatsapp_clicked" data-track-location="hero" class="e-btn e-btn-linea">{!! $svg('wa') !!}Escribirle a Omar</a>
                     </div>
+                    <p class="ini-demo" data-entra>¿Quiere verlo por dentro primero? <a href="{{ route('demo') }}" data-track="demo_clicked" data-track-location="hero_demo">Entre al demo</a>, sin registrarse.</p>
                 </div>
 
                 <div class="ini-media" x-data="agendaDeMañana()" x-init="arrancar()">

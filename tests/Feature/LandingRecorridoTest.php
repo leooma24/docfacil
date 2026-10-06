@@ -75,6 +75,19 @@ class LandingRecorridoTest extends TestCase
         $this->assertStringContainsString('images/landing/omar.jpg', $this->html());
     }
 
+    /**
+     * El que no quiere registrarse todavía entra al demo desde el inicio y
+     * desde la barra (también la del celular).
+     */
+    public function test_el_demo_esta_a_la_mano(): void
+    {
+        $html = $this->html();
+        $demo = 'href="' . route('demo') . '"';
+
+        $this->assertGreaterThanOrEqual(3, substr_count($html, $demo), 'Falta la liga al demo en la barra, el menú del celular o el inicio');
+        $this->assertStringContainsString('data-track-location="hero_demo"', $html);
+    }
+
     public function test_sin_rayas_largas_en_el_texto(): void
     {
         $html = $this->html();
