@@ -81,6 +81,9 @@ class PromocionFundadorTest extends TestCase
         $this->assertStringContainsString('6 meses sin costo', $texto);
         $this->assertStringContainsString('$499 al mes de por vida', $texto);
         $this->assertStringContainsString('Me quedan 9 lugares', $texto);
+        // Omar, 7-oct: él les deja cargada la semana; solo se ocupa nombre, WhatsApp y día y hora.
+        $this->assertStringContainsString('nombre del paciente, su WhatsApp y el día y la hora', $texto);
+        $this->assertStringContainsString('si al final no le sirve, lo deja y listo, sin compromiso', $texto);
         $this->assertStringNotContainsStringIgnoringCase('automátic', $texto);
         $this->assertSame(1, substr_count($texto, '?'), 'Una sola pregunta.');
     }

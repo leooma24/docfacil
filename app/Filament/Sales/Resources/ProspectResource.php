@@ -604,7 +604,10 @@ class ProspectResource extends Resource
         $precio = number_format((float) config('founders.monthly_price', 499));
 
         $msg = "{$trato}, le escribo con una propuesta en la que ganamos los dos.\n\n"
-            . "Busco {$lugares['total']} consultorios dentales fundadores para DocFácil: usan el plan Pro {$meses} meses sin costo y después pagan \${$precio} al mes de por vida, la mitad de lo que cuesta. A cambio solo le pido que lo use en serio y me diga la verdad, aunque sea que no le sirve.\n\n"
+            . "Busco {$lugares['total']} consultorios dentales fundadores para DocFácil: usan el plan Pro {$meses} meses sin costo y después pagan \${$precio} al mes de por vida, la mitad de lo que cuesta. A cambio solo le pido que lo use en serio y me diga la verdad. Y si al final no le sirve, lo deja y listo, sin compromiso.\n\n"
+            // Omar, 7-oct-2026: él carga la semana. Una cita solo pide nombre y
+            // día y hora; el WhatsApp es para que salgan los recordatorios.
+            . "Además, no tiene que capturar nada: si me pasa las citas de su semana (el nombre del paciente, su WhatsApp y el día y la hora), yo se las dejo cargadas y con los recordatorios listos para mandar.\n\n"
             . ($lugares['quedan'] === 1 ? 'Me queda 1 lugar.' : "Me quedan {$lugares['quedan']} lugares.") . ' ¿Le aparto uno?';
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
