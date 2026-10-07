@@ -98,6 +98,35 @@ class CargaDeTrabajo
             ->get();
     }
 
+    /** Cuántas promociones de fundador al día, para cuidar el número. */
+    public const TOPE_PROMOCION = 15;
+
+    /**
+     * La promoción de fundador, a los que ya recibieron un mensaje.
+     *
+     * Omar, 7-oct-2026: a todos los que ya se les escribió y tienen WhatsApp,
+     * menos a los que dijeron que no les interesa (quedan como "lost") y a
+     * los que ya son clientes. Una sola vez por persona, nunca el mismo día
+     * de otro mensaje, y solo mientras haya lugares de fundador.
+     */
+    public static function promocionFundador(int $repId): Collection
+    {
+        if (! \App\Models\Clinic::lugaresDeFundador()['hay']) {
+            return collect();
+        }
+
+        return self::suyos($repId)
+            ->where('contact_day', '>', 0)
+            ->where('has_whatsapp', true)
+            ->whereNotNull('phone')
+            ->where(fn (Builder $q) => $q->whereNull('last_followup_at')->orWhere('last_followup_at', '<', today()))
+            ->whereDoesntHave('mensajes', fn (Builder $q) => $q->where('version', MensajesDeVenta::PROMO_FUNDADOR))
+            ->orderByRaw('CASE WHEN replied_at IS NULL THEN 1 ELSE 0 END')
+            ->orderBy('last_followup_at')
+            ->limit(self::TOPE_PROMOCION)
+            ->get();
+    }
+
     /** Cuántos números verificar por día para que nunca falte cola mañana. */
     public const TOPE_VERIFICAR = 10;
 

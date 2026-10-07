@@ -58,6 +58,7 @@ class ColaDelDia extends Page
             'seguimientos' => CargaDeTrabajo::seguimientos($repId),
             'primerContacto' => CargaDeTrabajo::primerContacto($repId),
             'porVerificar' => CargaDeTrabajo::porVerificar($repId),
+            'promocion' => CargaDeTrabajo::promocionFundador($repId),
             'numeros' => CargaDeTrabajo::numeros($repId),
         ];
     }
@@ -141,6 +142,29 @@ class ColaDelDia extends Page
     public function siguientePaso(Prospect $prospecto): array
     {
         return SiguientePaso::para($prospecto);
+    }
+
+    /** El chat con la promoción de fundador ya escrita. */
+    public function ligaPromocion(Prospect $prospecto): string
+    {
+        return ProspectResource::buildPromoFundadorWhatsappUrl($prospecto);
+    }
+
+    /**
+     * Abrir el chat de la promoción cuenta como mandarla.
+     *
+     * Igual que registrarEnvio, pero sin mover la cadencia; y como sale una
+     * sola vez por persona, el segundo clic ya no registra nada.
+     */
+    public function registrarPromocion(int $id): void
+    {
+        $prospecto = Prospect::where('assigned_to_sales_rep_id', auth()->id())->find($id);
+
+        if (! $prospecto || $prospecto->mensajes()->where('version', \App\Support\MensajesDeVenta::PROMO_FUNDADOR)->exists()) {
+            return;
+        }
+
+        $prospecto->registrarPromocionFundador();
     }
 
     /**

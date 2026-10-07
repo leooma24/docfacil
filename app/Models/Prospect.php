@@ -253,6 +253,34 @@ class Prospect extends Model
     }
 
     /**
+     * Se le mandó la promoción de fundador.
+     *
+     * No mueve la cadencia (no es el siguiente mensaje, es otro), pero sí
+     * cuenta como envío de hoy y empuja el siguiente seguimiento: dos mensajes
+     * en pocos días a quien no contestó es como se gana un bloqueo.
+     */
+    public function registrarPromocionFundador(): void
+    {
+        $this->mensajes()->create([
+            'user_id' => $this->assigned_to_sales_rep_id ?? auth()->id(),
+            'paso' => \App\Support\MensajesDeVenta::PASO_PROMO,
+            'version' => \App\Support\MensajesDeVenta::PROMO_FUNDADOR,
+            'canal' => 'whatsapp',
+            'enviado_at' => now(),
+        ]);
+
+        $siguiente = $this->next_contact_at && $this->next_contact_at->gt(now()->addDays(3))
+            ? $this->next_contact_at
+            : ($this->next_contact_at ? now()->addDays(3) : null);
+
+        $this->update([
+            'last_contact_method' => 'whatsapp',
+            'last_followup_at' => now(),
+            'next_contact_at' => $siguiente,
+        ]);
+    }
+
+    /**
      * Días desde el inicio del outreach.
      */
     public function daysSinceOutreach(): ?int

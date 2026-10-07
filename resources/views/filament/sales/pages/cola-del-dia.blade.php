@@ -138,6 +138,31 @@
         @endforelse
     </div>
 
+    {{-- 2b. Programa Fundador a los que ya recibieron un mensaje (una vez). --}}
+    @if($datos['promocion']->isNotEmpty())
+        <div style="margin-bottom:1.75rem;">
+            <h2 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem;">Programa Fundador · ganar-ganar</h2>
+            <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem;">
+                Ya les escribió antes. Les llega una sola vez y no mueve su seguimiento.
+                Adjunte la imagen:
+                <a href="{{ asset('images/promo/fundador.png') }}" target="_blank" rel="noopener" download style="color:#0f8a4d;text-decoration:underline;">bajarla</a>
+            </p>
+
+            @foreach($datos['promocion'] as $p)
+                <div style="display:flex;align-items:center;gap:0.75rem;background:#fff;border:1px solid #fcd34d;border-radius:0.75rem;padding:0.85rem 1rem;margin-bottom:0.5rem;">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:600;">{{ $p->name }}</div>
+                        <div style="font-size:0.78rem;color:#6b7280;">
+                            {{ $p->replied_at ? 'Le contestó' : 'Día ' . $p->contact_day . ' de la cadencia' }} · último mensaje {{ $p->last_followup_at?->format('d/m') }}
+                        </div>
+                    </div>
+                    <a href="{{ $this->ligaPromocion($p) }}" target="_blank" rel="noopener" wire:click="registrarPromocion({{ $p->id }})"
+                       style="flex:none;background:#25d366;color:#05330f;font-weight:700;font-size:0.82rem;padding:0.5rem 0.9rem;border-radius:0.6rem;text-decoration:none;">Abrir chat</a>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     {{-- 3. Primeros contactos, solo verificados. --}}
     <div>
         <h2 style="font-size:1rem;font-weight:700;margin-bottom:0.25rem;">Primer contacto · hasta {{ $numeros['tope'] }} al día</h2>

@@ -3,6 +3,7 @@
 namespace App\Filament\Sales\Resources;
 
 use App\Filament\Sales\Resources\ProspectResource\Pages;
+use App\Models\Clinic;
 use App\Models\Prospect;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -578,6 +579,33 @@ class ProspectResource extends Resource
 
 "
             . 'Y si antes quiere verlo usted solo con calma, aquí está: ' . url('/demo');
+
+        return "https://wa.me/{$phone}?text=" . urlencode($msg);
+    }
+
+    /**
+     * La promoción de fundador (Omar, 7-oct-2026): ganar-ganar.
+     *
+     * Lo mismo que dice la landing, sin agregar nada: el plan Pro 6 meses sin
+     * costo y luego $499 de por vida, a cambio de usarlo en serio y decir la
+     * verdad. Los lugares que quedan salen de contar fundadores reales.
+     */
+    public static function buildPromoFundadorWhatsappUrl(Prospect $record): string
+    {
+        $phone = preg_replace('/[\s\-\(\)\+]/', '', $record->phone);
+        if (strlen($phone) === 10) {
+            $phone = '52' . $phone;
+        }
+
+        $opener = self::buildSalutation($record);
+        $trato = $opener['followCall'] ?: $opener['greeting'];
+        $lugares = Clinic::lugaresDeFundador();
+        $meses = (int) config('founders.free_months', 6);
+        $precio = number_format((float) config('founders.monthly_price', 499));
+
+        $msg = "{$trato}, le escribo con una propuesta en la que ganamos los dos.\n\n"
+            . "Busco {$lugares['total']} consultorios dentales fundadores para DocFácil: usan el plan Pro {$meses} meses sin costo y después pagan \${$precio} al mes de por vida, la mitad de lo que cuesta. A cambio solo le pido que lo use en serio y me diga la verdad, aunque sea que no le sirve.\n\n"
+            . ($lugares['quedan'] === 1 ? 'Me queda 1 lugar.' : "Me quedan {$lugares['quedan']} lugares.") . ' ¿Le aparto uno?';
 
         return "https://wa.me/{$phone}?text=" . urlencode($msg);
     }

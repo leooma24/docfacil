@@ -28,6 +28,12 @@ class MensajesDeVenta
         30 => 'p30-recontacto',
     ];
 
+    /** La promoción de fundador: va fuera de la cadencia, una vez por persona. */
+    public const PROMO_FUNDADOR = 'promo-fundador';
+
+    /** El paso con que se guarda la promoción (fuera de la cadencia, al final de la tarjeta). */
+    public const PASO_PROMO = 99;
+
     public const ETIQUETAS = [
         'p0-larga' => 'Primer mensaje largo (fundador + pregunta)',
         'p0-corta' => 'Primer mensaje corto (una sola pregunta)',
@@ -37,6 +43,7 @@ class MensajesDeVenta
         'p7-ultimo' => 'Cuarto: último, con la liga del demo',
         'p14-recontacto' => 'Recontacto a las 2 semanas',
         'p30-recontacto' => 'Recontacto al mes',
+        'promo-fundador' => 'Promoción de fundador (ganar-ganar)',
     ];
 
     /** Qué versión salió en ese paso en esa fecha (por omisión, hoy). */
