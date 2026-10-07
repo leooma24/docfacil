@@ -29,3 +29,7 @@ scripts/demo-recorder/
 
 # Output de customer research (puede contener fragmentos de notes)
 .agents/customer-research-output.md
+
+# Impeccable: capturas de revisión y páginas de decisión (locales)
+.impeccable/review/
+.impeccable/questions/

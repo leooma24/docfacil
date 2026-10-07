@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-05T12:00:00-07:00",
+  "title": "Design System: DocFácil",
+  "scope": "Solo la landing pública (/ y /dentistas). El panel de Filament del doctor (vidrio teal) queda fuera.",
+  "extensions": {
+    "colorMeta": {
+      "acero": { "role": "neutral", "displayName": "Acero", "canonical": "#eef1f3", "tonalRamp": ["#1f2427", "#353c41", "#4f585e", "#6c767d", "#8f99a0", "#b3bcc2", "#d6dde1", "#eef1f3"] },
+      "acero-2": { "role": "neutral", "displayName": "Acero 2", "canonical": "#dde3e7", "tonalRamp": ["#1e2428", "#343c42", "#4e575e", "#6b757c", "#8e989f", "#b1bbc1", "#dde3e7", "#f2f5f7"] },
+      "acero-3": { "role": "neutral", "displayName": "Acero 3", "canonical": "#c3ccd3", "tonalRamp": ["#1d2429", "#333c43", "#4c565f", "#69747d", "#8c98a1", "#c3ccd3", "#dde3e7", "#f1f4f6"] },
+      "tinta": { "role": "primary", "displayName": "Tinta grafito", "canonical": "#15181c", "tonalRamp": ["#15181c", "#2a3037", "#353c44", "#565f69", "#7c858f", "#a4acb4", "#cfd5da", "#eef1f3"] },
+      "tinta-2": { "role": "neutral", "displayName": "Grafito 2", "canonical": "#353c44", "tonalRamp": ["#15181c", "#252b31", "#353c44", "#4f5862", "#727c87", "#9aa3ad", "#c6cdd3", "#eef1f3"] },
+      "tinta-3": { "role": "neutral", "displayName": "Grafito 3", "canonical": "#565f69", "tonalRamp": ["#15181c", "#2a3037", "#3e464f", "#565f69", "#78828c", "#9ea7b0", "#c8ced4", "#eef1f3"] },
+      "iso-15-blanco": { "role": "secondary", "displayName": "ISO 15 · Blanco (agenda)", "canonical": "#ffffff", "tonalRamp": ["#262626", "#3b3b3b", "#555555", "#777777", "#9b9b9b", "#c2c2c2", "#e6e6e6", "#ffffff"] },
+      "iso-20-amarillo": { "role": "secondary", "displayName": "ISO 20 · Amarillo (recordatorio)", "canonical": "#f2c400", "tonalRamp": ["#3a2e00", "#6b5300", "#977700", "#c49c00", "#f2c400", "#ffd84d", "#ffe991", "#fff4c2"] },
+      "iso-25-rojo": { "role": "secondary", "displayName": "ISO 25 · Rojo (consulta)", "canonical": "#d7262e", "tonalRamp": ["#3d0709", "#6b0f14", "#a3161d", "#d7262e", "#e85b61", "#f28e92", "#f9c1c3", "#ffe9ea"] },
+      "iso-30-azul": { "role": "secondary", "displayName": "ISO 30 · Azul (odontograma y presupuesto)", "canonical": "#1f5fd1", "tonalRamp": ["#08193b", "#0e2c69", "#163f97", "#1f5fd1", "#4f84e3", "#85aaee", "#bcd0f6", "#eaf1ff"] },
+      "iso-35-verde": { "role": "secondary", "displayName": "ISO 35 · Verde (mensualidades)", "canonical": "#178049", "note": "Oscurecido desde el #1E9E57 del código ISO para que el texto blanco del paso dé AA (4.9:1 contra 3.5:1).", "tonalRamp": ["#05200f", "#0a3a1d", "#12663a", "#178049", "#2fa565", "#6cc694", "#acdfc1", "#e3f6ea"] },
+      "iso-40-negro": { "role": "secondary", "displayName": "ISO 40 · Negro (Omar)", "canonical": "#15181c", "tonalRamp": ["#15181c", "#2a3037", "#3a4148", "#565f69", "#7c858f", "#a4acb4", "#d8dde2", "#eef1f3"] },
+      "wa": { "role": "tertiary", "displayName": "Verde WhatsApp", "canonical": "#18723f", "note": "Solo para lo que abre o representa WhatsApp. Oscurecido desde #1f8a52 para que el texto blanco pase AA (~5.9:1).", "tonalRamp": ["#07210f", "#0e3d21", "#18723f", "#1f8a52", "#3eaa70", "#78c89c", "#b4e3c8", "#d9fdd3"] },
+      "wa-burbuja": { "role": "tertiary", "displayName": "Burbuja WhatsApp", "canonical": "#d9fdd3" },
+      "wa-fondo": { "role": "tertiary", "displayName": "Fondo de chat", "canonical": "#efe7de" },
+      "carcasa": { "role": "neutral", "displayName": "Carcasa del celular", "canonical": "#0d0f12" },
+      "error": { "role": "neutral", "displayName": "Rojo de error", "canonical": "#a3161d" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "El titular de dos renglones del inicio." },
+      "headline": { "displayName": "Headline", "purpose": "Titular de cada paso y bloque." },
+      "title": { "displayName": "Title", "purpose": "Subtítulos dentro de tarjetas y bloques." },
+      "lead": { "displayName": "Lead", "purpose": "Párrafo bajo el titular del inicio, máx. 34ch." },
+      "body": { "displayName": "Body", "purpose": "Texto corrido, 17px mínimo, máx. 56ch." },
+      "label": { "displayName": "Label", "purpose": "Notas cortas, totales, pies de foto." },
+      "ejemplo": { "displayName": "Ejemplo", "purpose": "Solo la leyenda 'Datos de ejemplo' en mayúsculas sobre componentes vivos." },
+      "cifra": { "displayName": "Cifra", "purpose": "Precios y totales con números tabulares." }
+    },
+    "shadows": [
+      { "name": "hoja-acero", "value": "0 40px 70px -40px rgba(21,24,28,.45)", "purpose": "Hoja blanca sobre acero (formulario)." },
+      { "name": "hoja-amarillo", "value": "0 40px 70px -40px rgba(80,62,0,.55)", "purpose": "Hoja blanca sobre el campo 20." },
+      { "name": "hoja-azul", "value": "0 40px 70px -40px rgba(4,20,60,.7)", "purpose": "Odontograma y presupuesto sobre el campo 30." },
+      { "name": "hoja-verde", "value": "0 40px 70px -40px rgba(3,40,20,.7)", "purpose": "Plan de pagos sobre el campo 35." },
+      { "name": "celular", "value": "0 50px 80px -40px rgba(21,24,28,.75), inset 0 0 0 1.5px #3b4148", "purpose": "El celular dibujado del inicio." },
+      { "name": "video", "value": "0 30px 60px -30px rgba(0,0,0,.6)", "purpose": "Videos del producto." },
+      { "name": "boton", "value": "0 14px 30px -14px rgba(21,24,28,.7)", "purpose": "Botón grafito en reposo." },
+      { "name": "boton-hover", "value": "0 20px 36px -16px rgba(21,24,28,.75)", "purpose": "Botón grafito al pasar." },
+      { "name": "plan-hover", "value": "0 30px 50px -30px rgba(21,24,28,.45)", "purpose": "Tarjeta de plan al pasar." },
+      { "name": "mango", "value": "inset 0 0 0 1px rgba(0,0,0,.12), 0 8px 14px -8px rgba(21,24,28,.55)", "purpose": "Mango dibujado en CSS." },
+      { "name": "foco-campo", "value": "0 0 0 4px rgba(242,196,0,.45)", "purpose": "Halo amarillo del campo enfocado." }
+    ],
+    "motion": [
+      { "name": "sale", "value": "cubic-bezier(.16, 1, .3, 1)", "purpose": "Curva base de transiciones de estado (botones, riel, mangos, paneles)." },
+      { "name": "entrada-inicio", "value": "GSAP expo.out; foto se abre de inset(12% 8%) a 0 en 1.4s; celular sube 80px; mangos caen -60px con back.out(1.6), stagger .07s", "purpose": "Entrada del inicio." },
+      { "name": "campo-desde-mango", "value": "clip-path circle(0 -> r) centrado en el mango, scrub .4, power1.in; mango cae y=-80 rotate -18 con back.out(1.8)", "purpose": "Apertura de cada campo de color." },
+      { "name": "riel-activo", "value": "transform .45s var(--sale); scale(1.4) translateX(4px) en escritorio", "purpose": "El mango del paso en pantalla crece." },
+      { "name": "reduce", "value": "prefers-reduced-motion: duraciones a .01ms, sin GSAP, estados finales", "purpose": "Accesibilidad." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "900px" },
+      { "name": "lg", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Probar 15 días gratis: grafito sobre acero.",
+      "html": "<a class=\"ds-btn ds-btn-tinta\" href=\"#\">Probar 15 días gratis</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 26px; border-radius: 12px; font-family: Archivo, system-ui, sans-serif; font-size: 17px; font-weight: 750; text-decoration: none; white-space: nowrap; border: 2px solid transparent; cursor: pointer; transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s cubic-bezier(.16,1,.3,1), background-color .2s, color .2s; } .ds-btn:active { transform: translateY(1px) scale(.98); } .ds-btn:focus-visible { outline: 3px solid #1f5fd1; outline-offset: 3px; } .ds-btn-tinta { background: #15181c; color: #fff; box-shadow: 0 14px 30px -14px rgba(21,24,28,.7); } .ds-btn-tinta:hover { transform: translateY(-2px); box-shadow: 0 20px 36px -16px rgba(21,24,28,.75); }"
+    },
+    {
+      "name": "Botón de línea",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Acción secundaria sobre acero; se llena de grafito al pasar.",
+      "html": "<a class=\"ds-btn-linea\" href=\"#\">Escribirle a Omar</a>",
+      "css": ".ds-btn-linea { display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 26px; border-radius: 12px; font-family: Archivo, system-ui, sans-serif; font-size: 17px; font-weight: 750; text-decoration: none; background: transparent; color: #15181c; border: 2px solid #15181c; transition: background-color .2s, color .2s; } .ds-btn-linea:hover { background: #15181c; color: #fff; } .ds-btn-linea:focus-visible { outline: 3px solid #1f5fd1; outline-offset: 3px; }"
+    },
+    {
+      "name": "Botón WhatsApp",
+      "kind": "button",
+      "refersTo": "button-whatsapp",
+      "description": "Solo para acciones que abren WhatsApp.",
+      "html": "<a class=\"ds-btn-wa\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z\"/></svg>Abrirlo en mi WhatsApp</a>",
+      "css": ".ds-btn-wa { display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 26px; border-radius: 12px; font-family: Archivo, system-ui, sans-serif; font-size: 17px; font-weight: 750; text-decoration: none; background: #18723f; color: #fff; transition: transform .25s cubic-bezier(.16,1,.3,1), background-color .2s; } .ds-btn-wa:hover { background: #135f34; transform: translateY(-2px); } .ds-btn-wa:focus-visible { outline: 3px solid #1f5fd1; outline-offset: 3px; }"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo de formulario con etiqueta arriba y halo amarillo al enfocar.",
+      "html": "<div class=\"ds-campo\"><label for=\"ds-tel\">Su WhatsApp</label><input id=\"ds-tel\" placeholder=\"668 123 4567\"></div>",
+      "css": ".ds-campo { font-family: Archivo, system-ui, sans-serif; } .ds-campo label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #353c44; } .ds-campo input { width: 100%; box-sizing: border-box; min-height: 52px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #c3ccd3; background: #fff; font: inherit; font-size: 17px; color: #15181c; transition: border-color .2s, box-shadow .2s; } .ds-campo input::placeholder { color: #6c757f; } .ds-campo input:focus { outline: none; border-color: #15181c; box-shadow: 0 0 0 4px rgba(242,196,0,.45); }"
+    },
+    {
+      "name": "Barra de navegación",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Barra fija de acero translúcido con enlaces y botón principal.",
+      "html": "<nav class=\"ds-nav\"><strong class=\"ds-nav-logo\">DocFácil</strong><div class=\"ds-nav-links\"><a href=\"#\">Precios</a><a href=\"#\">Preguntas</a><a class=\"ds-nav-cta\" href=\"#\">Probar 15 días gratis</a></div></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; padding: 0 16px; background: rgba(238,241,243,.86); backdrop-filter: blur(14px) saturate(140%); border-bottom: 1px solid #c3ccd3; font-family: Archivo, system-ui, sans-serif; } .ds-nav-logo { font-size: 20px; font-weight: 850; font-variation-settings: 'wdth' 80; color: #15181c; } .ds-nav-links { display: flex; align-items: center; gap: 28px; } .ds-nav-links a { font-size: 15px; font-weight: 600; color: #353c44; text-decoration: none; padding: 6px 0; } .ds-nav-links a:hover { color: #15181c; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; } .ds-nav-links a.ds-nav-cta { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: #15181c; color: #fff; font-weight: 750; text-decoration: none; } .ds-nav-links a.ds-nav-cta:hover { background: #000; }"
+    },
+    {
+      "name": "Pastillas de estado",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "Estado de cita: por confirmar, recordado, confirmó.",
+      "html": "<div class=\"ds-pills\"><span class=\"ds-pill\">Por confirmar</span><span class=\"ds-pill ds-pill-enviado\">Recordado</span><span class=\"ds-pill ds-pill-confirmo\">Confirmó</span></div>",
+      "css": ".ds-pills { display: flex; gap: 8px; font-family: Archivo, system-ui, sans-serif; } .ds-pill { font-size: 11px; font-weight: 750; padding: 5px 8px; border-radius: 999px; background: #dde3e7; color: #353c44; transition: background-color .35s, color .35s; } .ds-pill-enviado { background: #fff4c2; color: #6b5300; } .ds-pill-confirmo { background: #dff5e7; color: #12663a; }"
+    },
+    {
+      "name": "Tarjeta de plan",
+      "kind": "card",
+      "refersTo": "plan-card",
+      "description": "Plan de precio; el popular va en grafito con sello amarillo.",
+      "html": "<div class=\"ds-plan ds-plan-popular\"><span class=\"ds-plan-sello\">El más elegido</span><h3>Pro</h3><div class=\"ds-plan-precio\">$999</div><div class=\"ds-plan-sub\">al mes</div></div>",
+      "css": ".ds-plan { position: relative; display: flex; flex-direction: column; max-width: 260px; border-radius: 16px; padding: 26px 22px 22px; background: #fff; color: #15181c; border: 1px solid #c3ccd3; font-family: Archivo, system-ui, sans-serif; transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s cubic-bezier(.16,1,.3,1); } .ds-plan:hover { transform: translateY(-4px); box-shadow: 0 30px 50px -30px rgba(21,24,28,.45); } .ds-plan-popular { background: #15181c; color: #fff; border-color: #15181c; } .ds-plan h3 { margin: 0; font-size: 22px; font-weight: 800; font-variation-settings: 'wdth' 85; } .ds-plan-precio { margin-top: 18px; font-size: 48px; font-weight: 850; line-height: 1; font-variation-settings: 'wdth' 75; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; } .ds-plan-sub { font-size: 14px; margin-top: 6px; color: #565f69; } .ds-plan-popular .ds-plan-sub { color: #cfd5da; } .ds-plan-sello { position: absolute; top: -13px; left: 22px; padding: 5px 12px; border-radius: 999px; background: #f2c400; color: #15181c; font-size: 12.5px; font-weight: 800; letter-spacing: .02em; }"
+    },
+    {
+      "name": "Mango ISO",
+      "kind": "custom",
+      "refersTo": "mango",
+      "description": "Objeto firma: mango moleteado con calibre y vástago de acero; un color por paso.",
+      "html": "<div class=\"ds-mangos\"><span class=\"ds-mango\" style=\"--c:#ffffff\"><b>15</b></span><span class=\"ds-mango\" style=\"--c:#f2c400\"><b>20</b></span><span class=\"ds-mango ds-claro\" style=\"--c:#d7262e\"><b>25</b></span><span class=\"ds-mango ds-claro\" style=\"--c:#1f5fd1\"><b>30</b></span><span class=\"ds-mango ds-claro\" style=\"--c:#178049\"><b>35</b></span><span class=\"ds-mango ds-claro\" style=\"--c:#15181c\"><b>40</b></span></div>",
+      "css": ".ds-mangos { display: flex; gap: 16px; padding: 8px 8px 44px; background: #eef1f3; font-family: Archivo, system-ui, sans-serif; } .ds-mango { position: relative; display: block; width: 30px; height: 74px; border-radius: 7px 7px 9px 9px; background: repeating-linear-gradient(180deg, rgba(0,0,0,0) 0 5px, rgba(0,0,0,.13) 5px 6.5px) 0 22px / 100% 44px no-repeat, linear-gradient(90deg, rgba(255,255,255,.35), rgba(255,255,255,0) 35%, rgba(0,0,0,.14) 80%, rgba(0,0,0,.22)), var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 8px 14px -8px rgba(21,24,28,.55); transition: transform .45s cubic-bezier(.16,1,.3,1); } .ds-mango:hover { transform: translateY(-8px) rotate(-4deg); } .ds-mango::after { content: ''; position: absolute; left: 50%; top: 100%; width: 3px; height: 34px; margin-left: -1.5px; border-radius: 0 0 2px 2px; background: linear-gradient(90deg, #8b949c, #f2f4f6 45%, #9aa3ab); } .ds-mango b { position: absolute; top: 5px; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 800; font-variation-settings: 'wdth' 65; color: rgba(21,24,28,.78); } .ds-mango.ds-claro b { color: rgba(255,255,255,.9); }"
+    },
+    {
+      "name": "Hoja sobre campo",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "description": "Hoja blanca de 28px sobre un campo ISO, con sombra teñida del campo y leyenda de datos de ejemplo.",
+      "html": "<div class=\"ds-campo-azul\"><div class=\"ds-hoja\"><div class=\"ds-hoja-cab\"><strong>Presupuesto</strong><span class=\"ds-ejemplo\">Datos de ejemplo</span></div><div class=\"ds-hoja-total\"><span>Total</span><strong>$7,450</strong></div></div></div>",
+      "css": ".ds-campo-azul { background: #1f5fd1; padding: 40px 24px; font-family: Archivo, system-ui, sans-serif; } .ds-hoja { background: #fff; color: #15181c; border-radius: 28px; padding: 24px 22px 20px; box-shadow: 0 40px 70px -40px rgba(4,20,60,.7); max-width: 360px; } .ds-hoja-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 14px; border-bottom: 1.5px dashed #c3ccd3; } .ds-hoja-cab strong { font-size: 20px; font-variation-settings: 'wdth' 85; } .ds-ejemplo { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-variation-settings: 'wdth' 75; color: #565f69; } .ds-hoja-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 14px; font-size: 14px; font-weight: 650; } .ds-hoja-total strong { font-size: 30px; font-weight: 850; font-variation-settings: 'wdth' 78; font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El estuche de limas",
+    "overview": "La página se recorre como un estuche de limas de endodoncia que se va abriendo. La serie ISO 15 a 40 es la ley de color: cada paso del consultorio (agenda, recordatorio, consulta, odontograma y presupuesto, mensualidades, Omar) tiene el color de su mango y ese color no se usa para nada más. La base es una charola de acero frío con tinta grafito; los pasos se abren como campos de color a sangre completa, y entre ellos el producto se muestra vivo (celular con agenda que se confirma, odontograma que marca sus dientes, escalera de pagos que se llena) sobre hojas blancas grandes.\n\nLa letra es una sola familia variable, Archivo, que se condensa en titulares, cifras y etiquetas de empaque, y se abre a ancho normal en el cuerpo. La densidad es de lectura en el celular: cuerpo de 17px, botones de 54px, mucho aire vertical por paso. El objeto firma es el mango moleteado con su vástago de acero, que aparece como índice del inicio, cabeza de cada paso, riel de navegación, marcador de las preguntas y firma del pie.\n\nRechazado de forma explícita por el contrato: la landing teal con laptop flotante y cuadrícula de funciones.",
+    "keyCharacteristics": [
+      "Charola de acero frío y tinta grafito como base neutral.",
+      "Seis colores ISO, uno por paso, a sangre completa.",
+      "El mango moleteado como objeto firma y como navegación.",
+      "Una familia variable (Archivo) con el ancho como eje expresivo.",
+      "Producto vivo con datos de ejemplo marcados, no capturas de adorno.",
+      "Movimiento que nace del mango: crece, cae, abre el campo."
+    ],
+    "rules": [
+      { "name": "The Un Calibre, Un Paso Rule", "body": "Cada color ISO se usa solo dentro de su paso (su campo, su mango, sus estados internos) o como la señal del mismo momento en otra parte. Si un color ISO aparece sin su paso, sobra.", "section": "colors" },
+      { "name": "The Contraste Antes Que Catálogo Rule", "body": "Cuando un color de calibre no da AA con su texto, se oscurece el campo y se anota por qué; el catálogo ISO no gana sobre la lectura.", "section": "colors" },
+      { "name": "The Ancho Es La Voz Rule", "body": "La jerarquía se marca con ancho y peso de la misma familia (wdth 72-90 condensado arriba, 100 en cuerpo), no con una segunda familia.", "section": "typography" },
+      { "name": "The Cuerpo De 17 Rule", "body": "Ningún texto de lectura baja de 17px; lo menor es solo etiqueta, nota o dato dentro de una maqueta.", "section": "typography" },
+      { "name": "The Sombra Del Campo Rule", "body": "La sombra de una hoja toma el tono de su campo, nunca un negro genérico sobre color.", "section": "elevation" },
+      { "name": "The Vidrio Solo Arriba Y Abajo Rule", "body": "El desenfoque (blur 12-14px sobre acero translúcido) es solo para la barra superior y el botón fijo inferior, que flotan sobre el contenido.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do asignar a cada paso nuevo uno de los seis calibres solo si es de verdad ese paso; lo demás vive en acero y grafito.",
+      "Do poner texto blanco solo sobre los campos 25, 30, 35 y 40, y grafito sobre 15 y 20.",
+      "Do marcar con \"Datos de ejemplo\" todo componente que muestre datos inventados.",
+      "Do usar números tabulares en horas, precios y totales.",
+      "Do mantener cuerpo de 17px, botones de 48px o más y contraste AA.",
+      "Do escribir el CSS de esta página en su propio bloque o en `style=\"\"`, no con utilidades responsive de Tailwind."
+    ],
+    "donts": [
+      "Don't usar un color ISO como acento decorativo fuera de su paso.",
+      "Don't volver al verde ISO de catálogo (#1E9E57) para el campo 35: no da AA con texto blanco.",
+      "Don't usar el verde WhatsApp para algo que no abra WhatsApp ni lo represente.",
+      "Don't agregar una segunda familia tipográfica; la jerarquía sale del ancho y el peso de Archivo.",
+      "Don't traer a esta página el vidrio teal del panel del doctor, ni llevar este sistema al panel sin una decisión aparte."
+    ]
+  }
+}
