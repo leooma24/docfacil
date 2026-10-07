@@ -63,6 +63,9 @@ class PromocionFundadorTest extends TestCase
         $ya = $this->prospecto(['name' => 'Dr. Ya La Tiene']);
         ProspectMensaje::create(['prospect_id' => $ya->id, 'user_id' => $this->omar->id, 'paso' => 99, 'version' => 'promo-fundador', 'enviado_at' => now()->subDays(3)]);
 
+        $despedido = $this->prospecto(['name' => 'Dr. Ya Despedido', 'contact_day' => 14]);
+        ProspectMensaje::create(['prospect_id' => $despedido->id, 'user_id' => $this->omar->id, 'paso' => 7, 'version' => 'p7-ultimo', 'enviado_at' => now()->subDays(5)]);
+
         $nombres = CargaDeTrabajo::promocionFundador($this->omar->id)->pluck('name')->all();
 
         $this->assertEqualsCanonicalizing(['Dra. Sí Recibió', 'Dr. Contestó'], $nombres);

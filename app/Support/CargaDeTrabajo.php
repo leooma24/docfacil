@@ -120,7 +120,8 @@ class CargaDeTrabajo
             ->where('has_whatsapp', true)
             ->whereNotNull('phone')
             ->where(fn (Builder $q) => $q->whereNull('last_followup_at')->orWhere('last_followup_at', '<', today()))
-            ->whereDoesntHave('mensajes', fn (Builder $q) => $q->where('version', MensajesDeVenta::PROMO_FUNDADOR))
+            // Ni a quien ya recibió el "último mensaje y ya no le insisto".
+            ->whereDoesntHave('mensajes', fn (Builder $q) => $q->whereIn('version', [MensajesDeVenta::PROMO_FUNDADOR, 'p7-ultimo']))
             ->orderByRaw('CASE WHEN replied_at IS NULL THEN 1 ELSE 0 END')
             ->orderBy('last_followup_at')
             ->limit(self::TOPE_PROMOCION)
