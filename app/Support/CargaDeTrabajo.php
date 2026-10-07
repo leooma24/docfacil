@@ -175,6 +175,45 @@ class CargaDeTrabajo
             ->get();
     }
 
+    /**
+     * Lo que pasa después de cerrar: se registró, entró, dejó su consultorio
+     * listo y lo usa esta semana.
+     *
+     * Los suyos son los que vendió con su liga (sold_by_user_id) y también
+     * los que se registraron sin ella pero eran su prospecto: las dos fuentes
+     * no siempre coinciden. "Entró" cuenta el login anotado desde el 7-oct y,
+     * para los de antes, el onboarding terminado. "Lo usa" es una cita creada
+     * o un recordatorio mandado en los últimos 7 días.
+     *
+     * @return array{registrados:int, entraron:int, configurados:int, usanEstaSemana:int, sinEntrar:Collection}
+     */
+    public static function activacion(int $repId): array
+    {
+        $porProspecto = Prospect::where('assigned_to_sales_rep_id', $repId)->whereNotNull('converted_clinic_id')->pluck('converted_clinic_id');
+
+        $clinicas = \App\Models\Clinic::withoutGlobalScopes()
+            ->where(fn (Builder $q) => $q->where('sold_by_user_id', $repId)->orWhereIn('id', $porProspecto))
+            ->orderBy('created_at')
+            ->get();
+
+        $ids = $clinicas->pluck('id');
+        $conEntrada = \App\Models\User::whereIn('clinic_id', $ids)->whereNotNull('last_login_at')->pluck('clinic_id')->unique();
+        $semana = now()->subDays(7);
+        $conUso = \App\Models\Appointment::withoutGlobalScopes()->whereIn('clinic_id', $ids)
+            ->where(fn (Builder $q) => $q->where('created_at', '>=', $semana)->orWhere('reminder_sent_at', '>=', $semana))
+            ->pluck('clinic_id')->unique();
+
+        $entro = fn ($c) => $conEntrada->contains($c->id) || $c->onboarding_status === 'completed';
+
+        return [
+            'registrados' => $clinicas->count(),
+            'entraron' => $clinicas->filter($entro)->count(),
+            'configurados' => $clinicas->where('onboarding_status', 'completed')->count(),
+            'usanEstaSemana' => $clinicas->filter(fn ($c) => $conUso->contains($c->id))->count(),
+            'sinEntrar' => $clinicas->reject($entro)->values(),
+        ];
+    }
+
     /** Los números de arriba: hoy, la semana y las demos por hacer. */
     public static function numeros(int $repId): array
     {
@@ -252,6 +291,20 @@ class CargaDeTrabajo
                     ? 'Contestarle a 1 doctor que te escribió'
                     : "Contestarles a {$contestaron} que te escribieron",
                 'porque' => 'Es lo primero: el que levantó la mano y se enfría ya no vuelve.',
+                'urgente' => true,
+            ];
+        }
+
+        // El que ya se registró y no ha entrado vale más que un prospecto
+        // nuevo: ya dijo que sí una vez.
+        $sinEntrar = self::activacion($repId)['sinEntrar'];
+
+        if ($sinEntrar->isNotEmpty()) {
+            $tareas[] = [
+                'que' => $sinEntrar->count() === 1
+                    ? "Llamarle a {$sinEntrar->first()->name}: se registró y no ha entrado"
+                    : "Llamarles a {$sinEntrar->count()} que se registraron y no han entrado",
+                'porque' => 'Ya dijeron que sí una vez. Entrar juntos por llamada, 5 minutos, es lo que los deja usándolo.',
                 'urgente' => true,
             ];
         }

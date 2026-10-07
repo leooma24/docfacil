@@ -96,7 +96,7 @@ class Appointment extends Model
 
     protected $fillable = [
         'clinic_id', 'doctor_id', 'patient_id', 'service_id',
-        'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent', 'treatment_plan_item_id',
+        'starts_at', 'ends_at', 'status', 'notes', 'reminder_sent', 'reminder_sent_at', 'treatment_plan_item_id',
         'consultation_data',
         'reminder_24h_sent_at', 'reminder_2h_sent_at', 'followup_sent_at', 'confirmed_at',
         'review_request_sent_at', 'arrived_at',
@@ -109,6 +109,7 @@ class Appointment extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'reminder_sent' => 'boolean',
+            'reminder_sent_at' => 'datetime',
             'consultation_data' => 'array',
             'reminder_24h_sent_at' => 'datetime',
             'reminder_2h_sent_at' => 'datetime',

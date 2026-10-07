@@ -148,6 +148,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             'two_factor_secret' => 'encrypted',
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'commission_rate_percent' => 'decimal:2',
             'is_active_sales_rep' => 'boolean',
             'chatbot_autologin_expires_at' => 'datetime',

@@ -288,7 +288,7 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     abort_unless($whatsapp, 422, 'El paciente no tiene teléfono.');
 
     \App\Models\Appointment::whereIn('id', \App\Support\RecordatorioDeCita::delMismoDia($cita)->pluck('id'))
-        ->update(['reminder_sent' => true]);
+        ->update(['reminder_sent' => true, 'reminder_sent_at' => now()]);
 
     return redirect()->away($whatsapp);
 })->name('cita.recordar');

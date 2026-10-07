@@ -9,6 +9,7 @@ use App\Observers\ClinicObserver;
 use Filament\Facades\Filament;
 use Filament\Notifications\Auth\ResetPassword;
 use Filament\Notifications\Auth\VerifyEmail;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Event;
@@ -24,6 +25,15 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Cuándo entró cada usuario (también con "recordarme"), para saber si
+        // el doctor que se registró llegó a entrar. Directo a la tabla: no es
+        // un cambio del usuario y no debe mover su updated_at ni sus eventos.
+        Event::listen(Login::class, function (Login $event) {
+            if ($event->user instanceof \App\Models\User) {
+                \App\Models\User::whereKey($event->user->getAuthIdentifier())->toBase()->update(['last_login_at' => now()]);
+            }
+        });
+
         // En producción, todas las URLs generadas (incluyendo signed routes,
         // emails, redirects) usan https. Defensa-en-profundidad sobre el
         // proxy Apache/nginx que ya hace 80→443. Previene cookies en HTTP
