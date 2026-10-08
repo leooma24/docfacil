@@ -14,16 +14,25 @@ use App\Support\SiguientePaso;
  */
 class LigaDelTableroController extends Controller
 {
+    /** Abre WhatsApp con el mensaje del paso en el que va. No anota nada: eso lo hace "Sí, lo envié". */
     public function enviar(Prospect $prospecto)
     {
         if ($r = $this->permiso($prospecto)) {
             return $r;
         }
-        // El mensaje es el del paso en el que va; se arma antes de avanzar la cadencia.
-        $liga = ProspectResource::buildContextualWhatsappUrl($prospecto);
-        EnvioDeVenta::registrar($prospecto);
 
-        return redirect()->away($liga);
+        return redirect()->away(ProspectResource::buildContextualWhatsappUrl($prospecto));
+    }
+
+    /** "Sí, lo envié": anota el envío en el CRM, igual que la cola del día, y lo confirma. */
+    public function registrar(Prospect $prospecto)
+    {
+        if ($r = $this->permiso($prospecto)) {
+            return $r;
+        }
+        $nuevo = EnvioDeVenta::registrar($prospecto);
+
+        return response()->view('ventas.anotado', ['prospecto' => $prospecto->fresh(), 'nuevo' => $nuevo]);
     }
 
     public function responder(Prospect $prospecto)

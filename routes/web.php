@@ -350,7 +350,8 @@ Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescripti
     return $pdf->stream("receta-{$prescription->id}.pdf");
 })->middleware('auth')->name('prescription.pdf');
 
-// Botones del tablero de Omar (cactus-seguimiento): abren WhatsApp con el mensaje armado y, al enviar,
-// lo anotan en el CRM igual que la cola del día. Solo el vendedor dueño del prospecto, con su sesión.
+// Botones del tablero de Omar (cactus-seguimiento): abren WhatsApp con el mensaje armado; "Sí, lo envié"
+// (registrar) lo anota en el CRM igual que la cola del día. Solo el vendedor dueño del prospecto, con su sesión.
 Route::get('/tablero/enviar/{prospecto}', [LigaDelTableroController::class, 'enviar'])->name('ventas.enviar');
 Route::get('/tablero/responder/{prospecto}', [LigaDelTableroController::class, 'responder'])->name('ventas.responder');
+Route::get('/tablero/registrar/{prospecto}', [LigaDelTableroController::class, 'registrar'])->name('ventas.registrar');

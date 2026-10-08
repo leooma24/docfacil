@@ -83,6 +83,6 @@ class ResumenJson extends Command
     private function enCola(Prospect $p, string $tipo): array
     {
         return ['id' => $p->id, 'nombre' => $p->name, 'consultorio' => $p->clinic_name, 'tipo' => $tipo,
-            'paso' => $p->contact_day, 'liga' => route('ventas.enviar', $p)];
+            'paso' => $p->contact_day, 'liga' => route('ventas.enviar', $p), 'registrar' => route('ventas.registrar', $p)];
     }
 }
