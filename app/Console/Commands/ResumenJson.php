@@ -51,12 +51,20 @@ class ResumenJson extends Command
             'contestaron' => CargaDeTrabajo::contestaron($rep->id)
                 ->reject(fn (Prospect $p) => in_array($p->status, ['lost', 'converted'], true))
                 ->map(fn (Prospect $p) => [
+                    'id' => $p->id,
                     'nombre' => $p->name,
                     'consultorio' => $p->clinic_name,
+                    'telefono' => $p->phone,
                     'contesto' => $p->replied_at?->toIso8601String(),
                     'dijo' => VentasHoy::notas($p)['dijo'],
                     'siguiente' => SiguientePaso::para($p)['que'],
+                    // Botón del tablero: abre WhatsApp con el mensaje del siguiente paso (no mueve la cadencia).
+                    'liga' => route('ventas.responder', $p),
                 ])->values()->all(),
+            // La cola del día con el botón que manda el mensaje del paso y lo anota en el CRM.
+            'cola' => CargaDeTrabajo::seguimientos($rep->id)->map(fn (Prospect $p) => $this->enCola($p, 'seguimiento'))
+                ->concat(CargaDeTrabajo::primerContacto($rep->id)->take(max(0, $numeros['tope'] - $numeros['enviadosHoy']))->map(fn (Prospect $p) => $this->enCola($p, 'primer contacto')))
+                ->values()->all(),
             'seguimientos' => CargaDeTrabajo::seguimientos($rep->id)->count(),
             'primer_contacto' => CargaDeTrabajo::primerContacto($rep->id)->count(),
             'por_verificar' => CargaDeTrabajo::porVerificar($rep->id)->count(),
@@ -69,5 +77,12 @@ class ResumenJson extends Command
         $this->line(json_encode($datos, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return self::SUCCESS;
+    }
+
+    /** Un prospecto de la cola para el tablero: quién es, en qué paso va y la liga que manda y anota. */
+    private function enCola(Prospect $p, string $tipo): array
+    {
+        return ['id' => $p->id, 'nombre' => $p->name, 'consultorio' => $p->clinic_name, 'tipo' => $tipo,
+            'paso' => $p->contact_day, 'liga' => route('ventas.enviar', $p)];
     }
 }

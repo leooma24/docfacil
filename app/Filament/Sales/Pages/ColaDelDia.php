@@ -82,21 +82,9 @@ class ColaDelDia extends Page
             return;
         }
 
-        $recienClicado = $prospecto->last_followup_at
-            && $prospecto->last_followup_at->isAfter(now()->subMinutes(5));
-
-        if ($recienClicado) {
+        if (! \App\Support\EnvioDeVenta::registrar($prospecto)) {
             return;
         }
-
-        if ($prospecto->status === 'new') {
-            $prospecto->update([
-                'status' => 'contacted',
-                'contacted_at' => $prospecto->contacted_at ?? now(),
-            ]);
-        }
-
-        $prospecto->advanceContactDay('whatsapp');
 
         $this->avisarSiSeCumplioLaMeta();
     }

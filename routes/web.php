@@ -5,6 +5,7 @@ use App\Http\Controllers\Billing\SpeiReceiptController;
 use App\Http\Controllers\Billing\StripeCheckoutController;
 use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\AppointmentConfirmationController;
+use App\Http\Controllers\Ventas\LigaDelTableroController;
 use App\Http\Controllers\EstrenarCuentaController;
 use App\Http\Controllers\PatientPortalActivationController;
 use App\Http\Controllers\BriefPdfController;
@@ -348,3 +349,8 @@ Route::get('/doctor/receta/{prescription}/pdf', function (\App\Models\Prescripti
     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.prescription', ['prescription' => $prescription]);
     return $pdf->stream("receta-{$prescription->id}.pdf");
 })->middleware('auth')->name('prescription.pdf');
+
+// Botones del tablero de Omar (cactus-seguimiento): abren WhatsApp con el mensaje armado y, al enviar,
+// lo anotan en el CRM igual que la cola del día. Solo el vendedor dueño del prospecto, con su sesión.
+Route::get('/tablero/enviar/{prospecto}', [LigaDelTableroController::class, 'enviar'])->name('ventas.enviar');
+Route::get('/tablero/responder/{prospecto}', [LigaDelTableroController::class, 'responder'])->name('ventas.responder');
