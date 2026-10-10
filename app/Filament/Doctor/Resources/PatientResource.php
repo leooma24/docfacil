@@ -85,6 +85,35 @@ class PatientResource extends Resource
                             ->placeholder('García López')
                             ->required()
                             ->maxLength(255),
+                        // NOM-024 (6.5): la CURP identifica al paciente. Se valida
+                        // y de ella se toman nacimiento, sexo y estado; nunca se
+                        // inventa. Opcional para no frenar el alta.
+                        Forms\Components\TextInput::make('curp')
+                            ->label('CURP')
+                            ->placeholder('GALR850315MSLRPS05')
+                            ->helperText('La pide la NOM-024. Al escribirla se llenan solos la fecha de nacimiento, el sexo y el estado donde nació.')
+                            ->maxLength(18)
+                            ->extraInputAttributes(['style' => 'text-transform:uppercase'])
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (?string $state, Forms\Set $set) {
+                                if ($datos = \App\Support\Curp::datos($state)) {
+                                    foreach ($datos as $campo => $valor) {
+                                        $set($campo, $valor);
+                                    }
+                                }
+                            })
+                            ->rule(fn () => function (string $attribute, $value, \Closure $fail) {
+                                if (filled($value) && ! \App\Support\Curp::valida($value)) {
+                                    $fail('Esa CURP no es válida: revise que tenga las 18 letras y números bien.');
+                                }
+                            })
+                            ->unique('patients', 'curp', ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->where('clinic_id', auth()->user()->clinic_id))
+                            ->dehydrateStateUsing(fn (?string $state) => \App\Support\Curp::limpia($state))
+                            ->validationMessages(['unique' => 'Ya hay un paciente con esa CURP en su consultorio.']),
+                        Forms\Components\Select::make('entidad_nacimiento')
+                            ->label('Estado donde nació')
+                            ->options(\App\Support\Curp::ENTIDADES)
+                            ->searchable(),
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->placeholder('maria@correo.com')
@@ -121,6 +150,17 @@ class PatientResource extends Resource
                         Forms\Components\Textarea::make('address')
                             ->label('Dirección')
                             ->columnSpanFull(),
+                        Forms\Components\Select::make('nacionalidad')
+                            ->label('Nacionalidad')
+                            ->options(['MEX' => 'Mexicana', 'EXT' => 'Otra']),
+                        Forms\Components\Select::make('estado_residencia')
+                            ->label('Estado donde vive')
+                            ->options(collect(\App\Support\Curp::ENTIDADES)->except('NE')->all())
+                            ->searchable(),
+                        Forms\Components\TextInput::make('municipio_residencia')
+                            ->label('Municipio donde vive')
+                            ->placeholder('Ahome')
+                            ->maxLength(100),
                         // Para niños: a la mamá le llegan los recordatorios y
                         // con ella se suma lo que debe la familia.
                         Forms\Components\Select::make('responsable_id')

@@ -70,6 +70,12 @@
                             @if($patient->gender)
                             <span class="pp-meta-item"><x-icono nombre="user" /> {{ $patient->gender === 'male' ? 'Masculino' : ($patient->gender === 'female' ? 'Femenino' : 'Otro') }}</span>
                             @endif
+                            {{-- NOM-024 (6.5): la CURP identifica al paciente. --}}
+                            @if($patient->curp)
+                            <span class="pp-meta-item">CURP {{ $patient->curp }}</span>
+                            @else
+                            <a href="{{ \App\Filament\Doctor\Resources\PatientResource::getUrl('edit', ['record' => $patient], panel: 'doctor') }}" class="pp-meta-item" style="background:rgba(254,243,199,.9);color:#92400e;" title="La pide la NOM-024 para identificar al paciente">Falta la CURP</a>
+                            @endif
                             @if($patient->blood_type)
                             <span class="pp-meta-item pp-meta-blood">Sangre {{ $patient->blood_type }}</span>
                             @endif

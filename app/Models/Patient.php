@@ -72,6 +72,8 @@ class Patient extends Model
     protected $fillable = [
         'clinic_id', 'first_name', 'last_name', 'email', 'phone',
         'birth_date', 'gender', 'address', 'allergies',
+        // Datos mínimos de la NOM-024 (6.5 y Tabla 1).
+        'curp', 'entidad_nacimiento', 'nacionalidad', 'estado_residencia', 'municipio_residencia',
         'medical_notes', 'blood_type', 'is_active',
         // Casillas de lo importante (ver AlertasClinicas::OPCIONES) y cuándo
         // se confirmó por última vez que sigue igual.
@@ -135,6 +137,12 @@ class Patient extends Model
     public function treatmentPlans(): HasMany
     {
         return $this->hasMany(TreatmentPlan::class);
+    }
+
+    /** La CURP siempre en mayúsculas y sin espacios; vacía es null. */
+    public function setCurpAttribute(?string $valor): void
+    {
+        $this->attributes['curp'] = \App\Support\Curp::limpia($valor);
     }
 
     /**
