@@ -7,6 +7,7 @@ use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\AppointmentConfirmationController;
 use App\Http\Controllers\Ventas\LigaDelTableroController;
 use App\Http\Controllers\EstrenarCuentaController;
+use App\Http\Controllers\ExportarDatosController;
 use App\Http\Controllers\PatientPortalActivationController;
 use App\Http\Controllers\BriefPdfController;
 use App\Http\Controllers\BrochureController;
@@ -47,6 +48,10 @@ Route::get('/brochure.pdf', [BrochureController::class, 'pdf'])->name('brochure.
 
 // Billing: Stripe Checkout (autenticado) + webhook (sin CSRF) + comprobantes SPEI privados
 Route::middleware(['auth'])->group(function () {
+    Route::get('/doctor/sus-datos/bajar', ExportarDatosController::class)
+        ->middleware('throttle:5,60')
+        ->name('datos.exportar');
+
     // CIE-10 catalog para autocompletado en la consulta médica (no-dental).
     // Rate limit: 60 búsquedas por minuto por usuario — suficiente para tipear
     // pero corta DoS si un user logueado intenta abusar.

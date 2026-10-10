@@ -74,6 +74,18 @@ class Register extends BaseRegister
                     ->default(request()->query('clinic_name'))
                     ->placeholder('Ej: Consultorio Dental Sonrisas')
                     ->maxLength(255),
+                // Los topes antes de entrar: el doctor con 800 pacientes se
+                // enteraba del de 200 del Básico ya adentro (prueba del 12-oct).
+                Forms\Components\Placeholder::make('limites_de_los_planes')
+                    ->hiddenLabel()
+                    ->content(fn () => new \Illuminate\Support\HtmlString(
+                        '<div style="font-size:.85rem;line-height:1.5;opacity:.85;">'
+                        . '<strong>15 días con todo</strong>, sin tarjeta. Después usted elige: '
+                        . 'Gratis hasta ' . \App\Models\Clinic::LIMITE_PACIENTES['free'] . ' pacientes · '
+                        . 'Básico $' . number_format(\App\Models\Commission::monthlyPriceForPlan('basico')) . ' al mes hasta ' . \App\Models\Clinic::LIMITE_PACIENTES['basico'] . ' pacientes · '
+                        . 'Pro $' . number_format(\App\Models\Commission::monthlyPriceForPlan('profesional')) . ' al mes sin límite de pacientes.'
+                        . '</div>'
+                    )),
                 Forms\Components\TextInput::make('website_url_backup')
                     ->label('')
                     ->extraAttributes([

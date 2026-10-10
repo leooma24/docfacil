@@ -143,6 +143,31 @@ class AlertsWidget extends Widget
             ];
         }
 
+        // El tope de pacientes, antes de toparse: en la prueba si ya pasó el
+        // del Básico (para que elija sabiendo), y en el Básico cuando se acerca.
+        $clinica = $user->clinic;
+        if ($clinica && ! $user->esAsistente()) {
+            $tieneBasico = \App\Models\Clinic::LIMITE_PACIENTES['basico'];
+            $suyos = $clinica->pacientesActuales();
+            if ($clinica->enPruebaVigente() && $suyos > $tieneBasico) {
+                $alerts[] = [
+                    'type' => 'warning',
+                    'icon' => 'heroicon-o-users',
+                    'title' => "Ya tiene {$suyos} pacientes: el Básico llega a {$tieneBasico}",
+                    'desc' => 'Al terminar la prueba, el Pro no tiene límite. No se borra ninguno: arriba del límite solo ya no puede agregar.',
+                    'url' => \App\Filament\Doctor\Pages\Upgrade::getUrl(panel: 'doctor'),
+                ];
+            } elseif (! $clinica->enPruebaVigente() && $clinica->limitePacientes() === $tieneBasico && $suyos >= $tieneBasico - 20) {
+                $alerts[] = [
+                    'type' => $suyos >= $tieneBasico ? 'danger' : 'warning',
+                    'icon' => 'heroicon-o-users',
+                    'title' => "Lleva {$suyos} de {$tieneBasico} pacientes",
+                    'desc' => 'Es el límite del Básico. El Pro no tiene límite.',
+                    'url' => \App\Filament\Doctor\Pages\Upgrade::getUrl(panel: 'doctor'),
+                ];
+            }
+        }
+
         // Today's income
         $todayIncome = Payment::cobradoEntre($clinicId, today(), today());
 
