@@ -82,6 +82,69 @@ class AlertasClinicas
         'Enfermedad hepática' => ['hepat', 'cirrosis'],
     ];
 
+    /** Las casillas que se marcan (clave => cómo se le dice al doctor). Mismos nombres que `antecedentes()`. */
+    public const OPCIONES = [
+        'diabetes' => 'Diabetes',
+        'hipertension' => 'Hipertensión',
+        'anticoagulado' => 'Anticoagulantes',
+        'embarazo' => 'Embarazo',
+        'cardiopatia' => 'Cardiopatía',
+        'asma' => 'Asma',
+        'epilepsia' => 'Epilepsia',
+        'renal' => 'Enfermedad renal',
+        'hepatica' => 'Enfermedad hepática',
+    ];
+
+    /** Cada cuántos meses se le pregunta al doctor si sigue igual. */
+    public const MESES_PARA_REVISAR = 6;
+
+    /**
+     * Lo importante de un paciente en un solo lugar, para que todas las
+     * pantallas digan lo mismo: sus alergias, sus antecedentes (casillas y
+     * notas juntas) y si ya toca preguntar si sigue igual.
+     *
+     * @return array{alergias: ?string, sinPreguntar: bool, riesgos: list<string>, revisar: bool, meses: ?int}
+     */
+    public static function delPaciente(\App\Models\Patient $paciente): array
+    {
+        $riesgos = self::antecedentes($paciente->notasParaAlertas());
+        $tieneAlgo = $paciente->tieneAlergias() || $riesgos !== [];
+        $revisado = $paciente->riesgos_revisados_at;
+
+        return [
+            'alergias' => $paciente->tieneAlergias() ? $paciente->allergies : null,
+            'sinPreguntar' => blank($paciente->allergies),
+            'riesgos' => $riesgos,
+            // Solo se pregunta si hay algo que confirmar: a quien nunca se le
+            // anotó nada, ya lo está pidiendo "alergias no registradas".
+            'revisar' => $tieneAlgo && (! $revisado || $revisado->lt(now()->subMonths(self::MESES_PARA_REVISAR))),
+            'meses' => $revisado ? (int) $revisado->diffInMonths(now()) : null,
+        ];
+    }
+
+    /**
+     * Lo importante del paciente en etiquetas cortas para una columna:
+     * "Alergia: Penicilina", "Embarazo"... Hasta 3, y "+N" si hay más.
+     *
+     * @return list<string>
+     */
+    public static function etiquetas(?\App\Models\Patient $paciente, int $maximo = 3): array
+    {
+        if (! $paciente) {
+            return [];
+        }
+
+        $a = self::delPaciente($paciente);
+        $todas = array_values(array_filter([
+            $a['alergias'] ? 'Alergia: ' . Str::limit($a['alergias'], 24) : null,
+            ...$a['riesgos'],
+        ]));
+
+        return count($todas) <= $maximo
+            ? $todas
+            : [...array_slice($todas, 0, $maximo), '+' . (count($todas) - $maximo)];
+    }
+
     private static function limpio(?string $texto): string
     {
         return Str::of((string) $texto)->lower()->ascii()->toString();

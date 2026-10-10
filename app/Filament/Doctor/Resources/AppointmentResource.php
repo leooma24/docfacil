@@ -238,6 +238,14 @@ class AppointmentResource extends Resource
                     ->label('Paciente')
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
                     ->searchable(query: self::buscarPorNombreDePaciente()),
+                // Lo importante del paciente, a la vista desde la lista: no hay
+                // que abrir su consulta para enterarse de la alergia.
+                Tables\Columns\TextColumn::make('alertas')
+                    ->label('Alertas')
+                    ->state(fn (Appointment $record) => \App\Support\AlertasClinicas::etiquetas($record->patient))
+                    ->badge()
+                    ->color('danger')
+                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('doctor.user.name')
                     ->visibleFrom('2xl')
                     ->label('Doctor')

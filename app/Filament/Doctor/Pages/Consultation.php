@@ -1039,6 +1039,38 @@ class Consultation extends Page implements HasForms
         Notification::make()->title('Alergias guardadas en su expediente')->success()->send();
     }
 
+    /**
+     * Marca o quita una casilla de lo importante (diabetes, anticoagulantes...)
+     * con un toque, sin salir de la consulta. Solo claves conocidas: lo demás
+     * se ignora, porque llega del navegador.
+     */
+    public function alternarRiesgo(string $clave): void
+    {
+        $paciente = $this->appointment?->patient;
+        if (! $paciente || ! array_key_exists($clave, \App\Support\AlertasClinicas::OPCIONES)) {
+            return;
+        }
+
+        $marcadas = collect($paciente->riesgos ?? []);
+        $paciente->update(['riesgos' => $marcadas->contains($clave)
+            ? $marcadas->reject(fn ($c) => $c === $clave)->values()->all()
+            : $marcadas->push($clave)->unique()->values()->all()]);
+        $this->appointment->load('patient');
+    }
+
+    /** "¿Sigue igual?" → sí: queda anotado que se revisó hoy. */
+    public function sigueIgual(): void
+    {
+        $paciente = $this->appointment?->patient;
+        if (! $paciente) {
+            return;
+        }
+
+        $paciente->forceFill(['riesgos_revisados_at' => now()])->save();
+        $this->appointment->load('patient');
+        Notification::make()->title('Anotado: sigue igual')->success()->send();
+    }
+
     /** Se le preguntó y no tiene: queda anotado para no volver a preguntar a ciegas. */
     public function sinAlergias(): void
     {

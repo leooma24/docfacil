@@ -96,7 +96,7 @@ class PrescriptionResource extends Resource
                                     // anticoagulantes anotados, el choque con lo que se receta.
                                     ->helperText(function (Forms\Get $get) {
                                         $paciente = Patient::find($get('../../patient_id'));
-                                        $choque = \App\Support\AlertasClinicas::alRecetar($get('medication'), $paciente?->allergies, $paciente?->medical_notes);
+                                        $choque = \App\Support\AlertasClinicas::alRecetar($get('medication'), $paciente?->allergies, $paciente?->notasParaAlertas());
                                         $avisos = array_filter([$choque ? '⚠️ ' . $choque['texto'] : null, \App\Support\Receta::avisoDeControl($get('medication'))]);
 
                                         return $avisos ? implode(' ', $avisos) : null;

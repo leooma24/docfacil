@@ -125,6 +125,12 @@ class PatientResource extends Resource
                 Forms\Components\Section::make('Información Médica')
                     ->description('Opcional, pero lo que pongas aquí te sale como alerta antes de cada consulta.')
                     ->schema([
+                        Forms\Components\CheckboxList::make('riesgos')
+                            ->label('Antecedentes importantes')
+                            ->helperText('Marque lo que tenga. Le sale en rojo en su cita, su perfil y su consulta, y avisa al recetar.')
+                            ->options(\App\Support\AlertasClinicas::OPCIONES)
+                            ->columns(3)
+                            ->columnSpanFull(),
                         Forms\Components\Textarea::make('allergies')
                             ->label('Alergias')
                             ->placeholder('Penicilina, látex, anestesia...')

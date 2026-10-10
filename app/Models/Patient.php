@@ -50,6 +50,14 @@ class Patient extends Model
                 throw new ExpedienteQueSeConserva($paciente->id);
             }
         });
+
+        // Cambiar alergias, notas o casillas cuenta como revisar: quien lo
+        // cambió ya lo vio, así que no se le vuelve a preguntar "¿sigue igual?".
+        static::saving(function (self $paciente) {
+            if ($paciente->isDirty(['allergies', 'medical_notes', 'riesgos']) && ! $paciente->isDirty('riesgos_revisados_at')) {
+                $paciente->riesgos_revisados_at = now();
+            }
+        });
     }
 
 
@@ -65,6 +73,9 @@ class Patient extends Model
         'clinic_id', 'first_name', 'last_name', 'email', 'phone',
         'birth_date', 'gender', 'address', 'allergies',
         'medical_notes', 'blood_type', 'is_active',
+        // Casillas de lo importante (ver AlertasClinicas::OPCIONES) y cuándo
+        // se confirmó por última vez que sigue igual.
+        'riesgos', 'riesgos_revisados_at',
         // Cuenta del paciente en el portal. Faltaba aqui, asi que Eloquent
         // descartaba la asignacion sin decir nada y el paciente nunca
         // quedaba ligado a su usuario.
@@ -78,6 +89,8 @@ class Patient extends Model
         return [
             'birth_date' => 'date',
             'is_active' => 'boolean',
+            'riesgos' => 'array',
+            'riesgos_revisados_at' => 'datetime',
             'aviso_privacidad_aceptado_at' => 'datetime',
         ];
     }
@@ -139,6 +152,19 @@ class Patient extends Model
 
     /** Se le preguntó y dijo que no tiene: "Ninguna conocida". */
     public const SIN_ALERGIAS = 'Ninguna conocida';
+
+    /**
+     * Las notas médicas más lo que el doctor marcó con casillas, en un solo
+     * texto: es lo que lee AlertasClinicas para avisar al recetar.
+     */
+    public function notasParaAlertas(): string
+    {
+        $marcadas = collect($this->riesgos ?? [])
+            ->map(fn ($clave) => \App\Support\AlertasClinicas::OPCIONES[$clave] ?? null)
+            ->filter()->implode(', ');
+
+        return trim((string) $this->medical_notes . "\n" . $marcadas);
+    }
 
     /** Tiene alergias de verdad (no vacío y no "Ninguna conocida"). */
     public function tieneAlergias(): bool

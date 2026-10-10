@@ -48,6 +48,12 @@ class TodayAppointments extends BaseWidget
                     ->formatStateUsing(fn ($record) => "{$record->patient->first_name} {$record->patient->last_name}")
                     ->description(fn ($record) => $record->patient->phone ?? '')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('alertas')
+                    ->label('Alertas')
+                    ->state(fn ($record) => \App\Support\AlertasClinicas::etiquetas($record->patient))
+                    ->badge()
+                    ->color('danger')
+                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('service.name')
                     ->visibleFrom('md')
                     ->label('Servicio')

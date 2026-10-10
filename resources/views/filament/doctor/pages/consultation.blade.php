@@ -811,7 +811,7 @@
                     <input type="text" wire:model="medications.{{ $i }}.duration" placeholder="7 días" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm">
                     <input type="text" wire:model="medications.{{ $i }}.instructions" placeholder="Indicaciones" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-600 text-sm med-wide">
                 </div>
-                @if($choque = \App\Support\AlertasClinicas::alRecetar($med['medication'] ?? null, $this->appointment?->patient?->allergies, $this->appointment?->patient?->medical_notes))
+                @if($choque = \App\Support\AlertasClinicas::alRecetar($med['medication'] ?? null, $this->appointment?->patient?->allergies, $this->appointment?->patient?->notasParaAlertas()))
                     <div style="margin-top:8px;padding:8px 10px;background:{{ $choque['tipo'] === 'alergia' ? '#fef2f2' : '#fff7ed' }};border-left:3px solid {{ $choque['tipo'] === 'alergia' ? '#ef4444' : '#f97316' }};border-radius:8px;font-size:12px;color:{{ $choque['tipo'] === 'alergia' ? '#991b1b' : '#9a3412' }};"><x-icono nombre="exclamation-triangle" /> {{ $choque['texto'] }}</div>
                 @endif
                 @if($aviso = \App\Support\Receta::avisoDeControl($med['medication'] ?? null))

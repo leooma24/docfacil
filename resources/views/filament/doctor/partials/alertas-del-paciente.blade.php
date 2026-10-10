@@ -1,10 +1,10 @@
 {{-- Lo que el doctor tiene que tener a la vista antes de tratar y recetar:
-     alergias (o que nadie ha preguntado), anticoagulantes y antecedentes
-     anotados en sus notas médicas. --}}
+     alergias (o que nadie ha preguntado), antecedentes (casillas y notas
+     juntas) y, cada 6 meses, la pregunta de si sigue igual. --}}
 @php
     $pac = $this->appointment?->patient;
-    $antecedentes = \App\Support\AlertasClinicas::antecedentes($pac?->medical_notes);
-    $anticoagulado = \App\Support\AlertasClinicas::tomaAnticoagulantes($pac?->medical_notes);
+    $al = $pac ? \App\Support\AlertasClinicas::delPaciente($pac) : null;
+    $anticoagulado = $pac ? \App\Support\AlertasClinicas::tomaAnticoagulantes($pac->notasParaAlertas()) : false;
 @endphp
 @if($pac)
     @if($this->isFieldEnabled('allergies_alert'))
@@ -27,12 +27,43 @@
     @if($this->isFieldEnabled('anticoagulants_alert') && $anticoagulado)
         <div style="background:#fff7ed;border-left:4px solid #f97316;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
             <span style="font-size:18px;color:#ea580c;"><x-icono nombre="exclamation-triangle" /></span>
-            <div style="font-size:13px;color:#9a3412;"><strong>Toma anticoagulantes</strong> (según sus notas): precaución con procedimientos invasivos y antiinflamatorios.</div>
+            <div style="font-size:13px;color:#9a3412;"><strong>Toma anticoagulantes:</strong> precaución con procedimientos invasivos y antiinflamatorios.</div>
         </div>
     @endif
-    @if($antecedentes)
-        <div style="background:#f8fafc;border-left:4px solid #64748b;padding:8px 14px;border-radius:8px;margin-bottom:12px;font-size:13px;color:#334155;">
-            <strong>Antecedentes en sus notas:</strong> {{ implode(' · ', $antecedentes) }}
+
+    {{-- Antecedentes: en rojo los que tiene, y las casillas para marcar o quitar con un toque. --}}
+    <div style="background:#f8fafc;border-left:4px solid {{ $al['riesgos'] ? '#dc2626' : '#64748b' }};padding:10px 14px;border-radius:8px;margin-bottom:12px;">
+        <div style="font-size:13px;color:#334155;margin-bottom:8px;">
+            <strong>Antecedentes importantes:</strong>
+            @if($al['riesgos'])
+                <span style="color:#b91c1c;font-weight:700;">{{ implode(' · ', $al['riesgos']) }}</span>
+            @else
+                <span style="color:#64748b;">ninguno marcado. Toque los que tenga.</span>
+            @endif
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            @foreach(\App\Support\AlertasClinicas::OPCIONES as $clave => $nombre)
+                @php $puesta = in_array($clave, $pac->riesgos ?? [], true); @endphp
+                <button type="button" wire:click="alternarRiesgo('{{ $clave }}')"
+                        style="padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid {{ $puesta ? '#dc2626' : '#cbd5e1' }};background:{{ $puesta ? '#fee2e2' : '#fff' }};color:{{ $puesta ? '#991b1b' : '#475569' }};">
+                    {{ $puesta ? '✓ ' : '' }}{{ $nombre }}
+                </button>
+            @endforeach
+        </div>
+    </div>
+
+    @if($al['revisar'])
+        <div style="background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;font-size:13px;color:#92400e;">
+                <strong>¿Sigue igual?</strong>
+                @if($al['meses'] !== null)
+                    Lo último que se anotó de {{ $pac->first_name }} es de hace {{ $al['meses'] }} {{ $al['meses'] === 1 ? 'mes' : 'meses' }}.
+                @else
+                    Nadie ha confirmado esto con {{ $pac->first_name }}.
+                @endif
+                Si cambió algo, toque las casillas de arriba.
+            </div>
+            <button type="button" wire:click="sigueIgual" style="padding:7px 14px;border-radius:8px;background:#b45309;color:#fff;font-size:12px;font-weight:700;">Sigue igual</button>
         </div>
     @endif
 @endif
