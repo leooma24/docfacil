@@ -269,6 +269,7 @@
                 'payments' => 'Pagos',
                 'appointments' => 'Citas',
                 'odontogram' => 'Odontograma',
+                'files' => 'Archivos',
             ];
             @endphp
             @foreach($tabs as $key => $label)
@@ -496,6 +497,39 @@
         @endif
 
         {{-- Odontogram tab — vista visual de la arcada dental (read-only) --}}
+        @if($activeTab === 'files')
+        {{-- La foto de su hoja de papel, radiografías, estudios: así no se captura el expediente viejo. --}}
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 md:p-6" style="border:1px solid #e5e7eb;">
+            <div style="font-weight:800;margin-bottom:4px;">Subir a su expediente</div>
+            <p style="font-size:0.85rem;color:#6b7280;margin-bottom:10px;">Tómele foto a su hoja de papel o suba una radiografía o un PDF. En el celular le deja usar la cámara.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <input type="file" wire:model="archivoNuevo" accept="image/*,application/pdf" style="font-size:0.85rem;">
+                <input type="text" wire:model="notaDelArchivo" placeholder="Nota (ej. Expediente en papel 2019)" style="flex:1;min-width:200px;padding:7px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:0.85rem;">
+                <button type="button" wire:click="subirArchivo" wire:loading.attr="disabled" style="padding:8px 14px;border-radius:8px;background:#0f766e;color:#fff;font-weight:700;font-size:0.85rem;">Guardar</button>
+            </div>
+            <div wire:loading wire:target="archivoNuevo" style="font-size:0.8rem;color:#6b7280;margin-top:6px;">Subiendo…</div>
+            @error('archivoNuevo')<div style="font-size:0.8rem;color:#b91c1c;margin-top:6px;">{{ $message }}</div>@enderror
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:16px;">
+                @forelse($this->archivos as $a)
+                    <a href="{{ route('paciente.archivo', $a) }}" target="_blank" rel="noopener" style="display:block;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;">
+                        @if($a->esImagen())
+                            <img src="{{ route('paciente.archivo', $a) }}" alt="" style="width:100%;height:120px;object-fit:cover;display:block;background:#f3f4f6;">
+                        @else
+                            <div style="height:120px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;font-weight:800;color:#6b7280;">PDF</div>
+                        @endif
+                        <div style="padding:6px 8px;font-size:0.75rem;">
+                            <div style="font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $a->nota ?: $a->nombre }}</div>
+                            <div style="color:#6b7280;">{{ $a->created_at->format('d/m/Y') }}</div>
+                        </div>
+                    </a>
+                @empty
+                    <p style="font-size:0.85rem;color:#6b7280;">Todavía no hay archivos.</p>
+                @endforelse
+            </div>
+        </div>
+        @endif
+
         @if($activeTab === 'odontogram')
         <div class="p-4 md:p-6">
             @php

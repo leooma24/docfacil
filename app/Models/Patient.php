@@ -168,6 +168,12 @@ class Patient extends Model
         return trim((string) $this->medical_notes . "\n" . $marcadas);
     }
 
+    /** Sus archivos: la foto de su hoja vieja, radiografías, estudios. */
+    public function archivos(): HasMany
+    {
+        return $this->hasMany(PatientFile::class);
+    }
+
     /** Quien responde por él (la mamá del niño, el papá que paga). */
     public function responsable(): BelongsTo
     {

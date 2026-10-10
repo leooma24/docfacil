@@ -294,6 +294,20 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     return redirect()->away($whatsapp);
 })->name('cita.recordar');
 
+// Un archivo del expediente (foto de la hoja vieja, radiografía, PDF). Viven en
+// el disco privado: solo se abren con sesión y desde su consultorio.
+Route::get('/doctor/archivos/{archivo}', function (int $archivo) {
+    abort_unless(auth()->check(), 403);
+
+    $file = \App\Models\PatientFile::where('clinic_id', auth()->user()->clinic_id)->findOrFail($archivo);
+    abort_unless(\Illuminate\Support\Facades\Storage::disk('local')->exists($file->path), 404);
+
+    return \Illuminate\Support\Facades\Storage::disk('local')->response($file->path, $file->nombre, [
+        'Content-Type' => $file->mime,
+        'Cache-Control' => 'private, no-store',
+    ]);
+})->name('paciente.archivo');
+
 // La agenda en papel, por si se va el internet: la de mañana por default,
 // con teléfono, alertas y lo que debe cada paciente. Solo su consultorio.
 Route::get('/doctor/agenda/imprimir', function () {

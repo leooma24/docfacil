@@ -10,9 +10,17 @@ use App\Models\Payment;
 use App\Models\Prescription;
 use App\Services\PatientAISummaryService;
 use Filament\Pages\Page;
+use Livewire\WithFileUploads;
 
 class PatientProfile extends Page
 {
+    use WithFileUploads;
+
+    /** El archivo que se va a subir (foto de la hoja vieja, radiografía, PDF). */
+    public $archivoNuevo = null;
+
+    public string $notaDelArchivo = '';
+
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     protected static ?string $title = 'Perfil del Paciente';
@@ -110,6 +118,51 @@ class PatientProfile extends Page
     public function setTab(string $tab): void
     {
         $this->activeTab = $tab;
+    }
+
+    /**
+     * Sube un archivo a su expediente: la foto de su hoja de papel, una
+     * radiografía o un PDF. Al disco privado, por consultorio y paciente.
+     */
+    public function subirArchivo(): void
+    {
+        if (! $this->patient) {
+            return;
+        }
+
+        $this->validate([
+            'archivoNuevo' => 'required|file|max:10240|mimes:jpg,jpeg,png,webp,pdf',
+            'notaDelArchivo' => 'nullable|string|max:255',
+        ], [
+            'archivoNuevo.mimes' => 'Solo fotos (JPG, PNG, WebP) o PDF.',
+            'archivoNuevo.max' => 'El archivo pesa más de 10 MB.',
+            'archivoNuevo.required' => 'Elija o tome una foto primero.',
+        ]);
+
+        $carpeta = "patient-files/{$this->patient->clinic_id}/{$this->patient->id}";
+        $path = $this->archivoNuevo->store($carpeta, 'local');
+
+        \App\Models\PatientFile::create([
+            'clinic_id' => $this->patient->clinic_id,
+            'patient_id' => $this->patient->id,
+            'path' => $path,
+            'nombre' => $this->archivoNuevo->getClientOriginalName(),
+            'mime' => $this->archivoNuevo->getMimeType(),
+            'size' => $this->archivoNuevo->getSize(),
+            'nota' => trim($this->notaDelArchivo) ?: null,
+            'subido_por' => auth()->id(),
+        ]);
+
+        $this->reset(['archivoNuevo', 'notaDelArchivo']);
+        \Filament\Notifications\Notification::make()->title('Guardado en su expediente')->success()->send();
+    }
+
+    /** Los archivos del paciente, del más nuevo al más viejo. */
+    public function getArchivosProperty()
+    {
+        return $this->patient
+            ? \App\Models\PatientFile::where('patient_id', $this->patient->id)->where('clinic_id', $this->patient->clinic_id)->latest()->get()
+            : collect();
     }
 
     public function loadAiSummary(): void
