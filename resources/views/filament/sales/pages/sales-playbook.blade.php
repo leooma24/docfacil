@@ -60,6 +60,35 @@
         </div>
     </div>
 
+    {{-- Lo que se le manda al dentista que pide información (12-oct-2026):
+         el brief de 2 páginas, el folleto largo y la demo con sus accesos. --}}
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px 20px;margin-bottom:20px;color:#0f172a;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#64748b;">Para mandar</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:12px;">Brief, folleto y demo</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+            <div style="border:1px solid #e5e7eb;border-radius:12px;padding:12px;">
+                <div style="font-weight:700;">Brief (2 páginas)</div>
+                <div style="font-size:13px;color:#64748b;margin:2px 0 8px;">Lo que le resuelve, planes y cómo probarlo. Es lo primero que se manda.</div>
+                <a href="{{ route('brief.web') }}" target="_blank" style="color:#0f766e;font-weight:700;font-size:14px;margin-right:12px;">Abrir</a>
+                <a href="{{ route('brief.pdf') }}" style="color:#0f766e;font-weight:700;font-size:14px;">PDF</a>
+                <div style="font-size:12px;color:#475569;margin-top:6px;word-break:break-all;">{{ route('brief.web') }}</div>
+            </div>
+            <div style="border:1px solid #e5e7eb;border-radius:12px;padding:12px;">
+                <div style="font-weight:700;">Brochure</div>
+                <div style="font-size:13px;color:#64748b;margin:2px 0 8px;">Cada función a detalle, para quien quiere saber más.</div>
+                <a href="{{ route('brochure.web') }}" target="_blank" style="color:#0f766e;font-weight:700;font-size:14px;margin-right:12px;">Abrir</a>
+                <a href="{{ route('brochure.pdf') }}" style="color:#0f766e;font-weight:700;font-size:14px;">PDF</a>
+                <div style="font-size:12px;color:#475569;margin-top:6px;word-break:break-all;">{{ route('brochure.web') }}</div>
+            </div>
+            <div style="border:1px solid #e5e7eb;border-radius:12px;padding:12px;">
+                <div style="font-weight:700;">Demo</div>
+                <div style="font-size:13px;color:#64748b;margin:2px 0 8px;">Consultorio de práctica; se reinicia cada día a las 4 am.</div>
+                <a href="{{ route('demo') }}" target="_blank" style="color:#0f766e;font-weight:700;font-size:14px;">Abrir</a>
+                <div style="font-size:12px;color:#475569;margin-top:6px;">{{ route('demo') }}<br>demo@docfacil.com · demo2026</div>
+            </div>
+        </div>
+    </div>
+
     <div class="sp-grid">
         {{-- ICP --}}
         <div class="sp-card sp-card-teal">

@@ -516,7 +516,6 @@
         .pie ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
         .pie a { color: #b7bfc7; text-decoration: none; }
         .pie a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
-        .pie-ciudades { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
         .pie-fin { margin-top: 44px; padding-top: 24px; border-top: 1px solid #2c3238; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; font-size: 14px; }
         .pie-mangos { display: flex; gap: 10px; margin-top: 18px; }
         .pie-mangos .mango { width: 14px; height: 30px; border-radius: 4px; }
@@ -1221,35 +1220,11 @@ Confirme o cancele aquí:
                     <ul>
                         <li><a href="#paso-agenda">Cómo le ayuda</a></li>
                         <li><a href="#pricing">Precios</a></li>
+                        <li><a href="{{ route('brief.web') }}">Brief para consultorios</a></li>
+                        <li><a href="{{ route('brief.pdf') }}">Brief en PDF</a></li>
                         <li><a href="{{ route('brochure.web') }}">Brochure</a></li>
-                        <li><a href="{{ route('brochure.pdf') }}">Descargar PDF</a></li>
+                        <li><a href="{{ route('brochure.pdf') }}">Brochure en PDF</a></li>
                     </ul>
-                </div>
-                <div>
-                    <h4>Ciudades</h4>
-                    @php
-                        $cityLinks = [
-                            ['slug' => 'cdmx', 'name' => 'CDMX'], ['slug' => 'guadalajara', 'name' => 'Guadalajara'],
-                            ['slug' => 'monterrey', 'name' => 'Monterrey'], ['slug' => 'merida', 'name' => 'Mérida'],
-                            ['slug' => 'culiacan', 'name' => 'Culiacán'], ['slug' => 'queretaro', 'name' => 'Querétaro'],
-                            ['slug' => 'tijuana', 'name' => 'Tijuana'], ['slug' => 'cancun', 'name' => 'Cancún'],
-                            ['slug' => 'leon', 'name' => 'León'], ['slug' => 'puebla', 'name' => 'Puebla'],
-                            ['slug' => 'hermosillo', 'name' => 'Hermosillo'], ['slug' => 'ciudad-obregon', 'name' => 'Cd. Obregón'],
-                            ['slug' => 'ciudad-juarez', 'name' => 'Cd. Juárez'], ['slug' => 'saltillo', 'name' => 'Saltillo'],
-                            ['slug' => 'torreon', 'name' => 'Torreón'], ['slug' => 'mazatlan', 'name' => 'Mazatlán'],
-                            ['slug' => 'los-mochis', 'name' => 'Los Mochis'], ['slug' => 'aguascalientes', 'name' => 'Aguascalientes'],
-                            ['slug' => 'cuernavaca', 'name' => 'Cuernavaca'], ['slug' => 'metepec', 'name' => 'Metepec'],
-                            ['slug' => 'toluca', 'name' => 'Toluca'], ['slug' => 'morelia', 'name' => 'Morelia'],
-                            ['slug' => 'chihuahua', 'name' => 'Chihuahua'], ['slug' => 'san-luis-potosi', 'name' => 'SLP'],
-                            ['slug' => 'boca-del-rio', 'name' => 'Boca del Río'], ['slug' => 'playa-del-carmen', 'name' => 'Playa del Carmen'],
-                            ['slug' => 'zapopan', 'name' => 'Zapopan'], ['slug' => 'san-pedro-garza-garcia', 'name' => 'San Pedro G.G.'],
-                        ];
-                    @endphp
-                    <div class="pie-ciudades">
-                        @foreach ($cityLinks as $c)
-                            <a href="/software-dental/{{ $c['slug'] }}">{{ $c['name'] }}</a>
-                        @endforeach
-                    </div>
                 </div>
                 <div>
                     {{-- Las comparativas son las de mayor intención de compra

@@ -36,12 +36,10 @@ class SitemapTest extends TestCase
         }
     }
 
-    public function test_incluye_las_ciudades_y_las_comparativas(): void
+    // Las páginas por ciudad se retiraron el 12-oct-2026 (SinPaginasPorCiudadTest).
+    public function test_incluye_las_comparativas(): void
     {
         $xml = $this->sitemap();
-
-        $ciudades = substr_count($xml, '/software-dental/');
-        $this->assertGreaterThanOrEqual(30, $ciudades, "Solo {$ciudades} ciudades en el sitemap.");
 
         foreach (['dentalink', 'doctorum'] as $competidor) {
             $this->assertStringContainsString("/vs/{$competidor}", $xml);

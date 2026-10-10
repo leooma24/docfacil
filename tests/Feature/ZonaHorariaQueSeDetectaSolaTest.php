@@ -122,16 +122,6 @@ class ZonaHorariaQueSeDetectaSolaTest extends TestCase
 
     // ── El cableado: de la landing de ciudad al registro ─────────
 
-    public function test_la_landing_de_ciudad_manda_ciudad_y_estado_al_registro(): void
-    {
-        // Antes el botón apuntaba a /doctor/register pelón: ni la ciudad
-        // llegaba, así que el registro no tenía de dónde deducir la zona.
-        $html = $this->get('/software-dental/tijuana')->assertOk()->getContent();
-
-        $this->assertStringContainsString('register?city=Tijuana', $html);
-        $this->assertStringContainsString('state=Baja+California', $html);
-    }
-
     public function test_un_consultorio_que_llega_de_la_landing_nace_a_su_hora(): void
     {
         Livewire::withQueryParams(['city' => 'La Paz', 'state' => 'Baja California Sur'])

@@ -68,7 +68,6 @@ class MaterialesDeVentaHonestosTest extends TestCase
         return [
             'brief' => ['/brief'],
             'folleto' => ['/brochure'],
-            'ciudad' => ['/software-dental/culiacan'],
             'vs dentalink' => ['/vs/dentalink'],
             'vs doctorum' => ['/vs/doctorum'],
             'alternativas a dentalink' => ['/alternativas-a-dentalink'],

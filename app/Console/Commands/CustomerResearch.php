@@ -153,34 +153,6 @@ class CustomerResearch extends Command
                 $output .= "| {$status} | {$r->c} |\n";
             });
 
-        // 8. CIUDADES SIN PÁGINA pSEO
-        $output .= "\n## 8. Ciudades con prospectos pero SIN página de software-dental\n\n";
-        $reflection = new \ReflectionClass(\App\Http\Controllers\CityLandingController::class);
-        $citiesProp = $reflection->getProperty('cities');
-        $citiesProp->setAccessible(true);
-        $existingCitySlugs = array_keys($citiesProp->getValue(new \App\Http\Controllers\CityLandingController()));
-        $output .= "Ciudades con página existente: " . count($existingCitySlugs) . "\n\n";
-        $allCities = Prospect::selectRaw('city, count(*) as c')
-            ->whereNotNull('city')
-            ->where('city', '!=', '')
-            ->groupBy('city')
-            ->orderByDesc('c')
-            ->get();
-
-        $output .= "| Ciudad | Prospectos | Slug sugerido |\n|---|---|---|\n";
-        $missingCount = 0;
-        foreach ($allCities as $r) {
-            $slug = \Illuminate\Support\Str::slug($r->city);
-            if (! in_array($slug, $existingCitySlugs, true)) {
-                $output .= "| {$r->city} | {$r->c} | {$slug} |\n";
-                $missingCount++;
-                if ($missingCount >= 25) break;
-            }
-        }
-        if ($missingCount === 0) {
-            $output .= "_Todas las ciudades con prospectos ya tienen página._\n";
-        }
-
         // Guardar
         $path = base_path('.agents/customer-research-output.md');
         if (! is_dir(dirname($path))) {

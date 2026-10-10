@@ -14,7 +14,6 @@ use App\Http\Controllers\BrochureController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\Cie10SearchController;
-use App\Http\Controllers\CityLandingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemoModeController;
 use App\Http\Controllers\InvitationController;
@@ -150,7 +149,10 @@ Route::get('/s/{code}', [ShortUrlController::class, 'redirect'])
 Route::post('/herramientas/calculadora-consultorio/lead', [ToolsController::class, 'calculadoraRoiLead'])
     ->middleware('throttle:5,1')
     ->name('tools.calculadora_roi.lead');
-Route::get('/software-dental/{city}', [CityLandingController::class, 'show']);
+// Las páginas por ciudad se retiraron (12-oct-2026): no traían a ningún
+// dentista y 40 copias del mismo texto son páginas puerta para Google. Las
+// ligas viejas llevan al inicio.
+Route::get('/software-dental/{city}', fn () => redirect()->route('landing.home', status: 301));
 
 // Páginas de comparativa vs competidores (alta intención SEO + AI-SEO)
 Route::get('/vs/{competitor}', [\App\Http\Controllers\ComparisonController::class, 'versus'])

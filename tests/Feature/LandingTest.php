@@ -47,19 +47,6 @@ class LandingTest extends TestCase
         $response->assertHeader('Content-Type', 'application/xml');
     }
 
-    public function test_city_landing_loads(): void
-    {
-        $response = $this->get('/software-dental/cdmx');
-        $response->assertStatus(200);
-        $response->assertSee('Ciudad de México');
-    }
-
-    public function test_city_landing_404_for_invalid_city(): void
-    {
-        $response = $this->get('/software-dental/invalid-city');
-        $response->assertStatus(404);
-    }
-
     public function test_contact_form_creates_prospect(): void
     {
         $response = $this->post('/contacto', [

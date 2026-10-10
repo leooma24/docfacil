@@ -9,9 +9,6 @@ class SitemapController extends Controller
 {
     public function index()
     {
-        // Source of truth de ciudades = CityLandingController. Evita drift.
-        $cities = (new CityLandingController())->getCitiesForFooter();
-
         $urls = [
             ['loc' => url('/'), 'priority' => '1.0', 'changefreq' => 'weekly'],
             ['loc' => url('/dentistas'), 'priority' => '0.95', 'changefreq' => 'weekly'],
@@ -25,10 +22,6 @@ class SitemapController extends Controller
 
         foreach (BlogController::articles() as $slug => $article) {
             $urls[] = ['loc' => url("/blog/{$slug}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
-        }
-
-        foreach ($cities as $c) {
-            $urls[] = ['loc' => url("/software-dental/{$c['slug']}"), 'priority' => '0.7', 'changefreq' => 'monthly'];
         }
 
         // Páginas de comparativa vs competidores
