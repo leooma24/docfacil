@@ -65,7 +65,7 @@ class RecordatoriosDeManana extends Page
 
     private static function telefono($cita): string
     {
-        return preg_replace('/\D/', '', (string) $cita->patient?->phone);
+        return preg_replace('/\D/', '', (string) $cita->patient?->telefonoDeContacto());
     }
 
     public function getViewData(): array

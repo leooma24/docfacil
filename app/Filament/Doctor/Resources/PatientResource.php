@@ -121,6 +121,25 @@ class PatientResource extends Resource
                         Forms\Components\Textarea::make('address')
                             ->label('Dirección')
                             ->columnSpanFull(),
+                        // Para niños: a la mamá le llegan los recordatorios y
+                        // con ella se suma lo que debe la familia.
+                        Forms\Components\Select::make('responsable_id')
+                            ->label('Responsable (mamá, papá o quien lo trae)')
+                            ->helperText('Los mensajes de WhatsApp le llegan a su responsable, y en su perfil se ve lo que debe toda la familia.')
+                            ->relationship('responsable', 'first_name', fn ($query, $record) => $query
+                                ->where('clinic_id', auth()->user()->clinic_id)
+                                ->when($record, fn ($q) => $q->whereKeyNot($record->id)))
+                            ->getOptionLabelFromRecordUsing(fn (Patient $p) => trim("{$p->first_name} {$p->last_name}") . ($p->phone ? " · {$p->phone}" : ''))
+                            ->searchable(['first_name', 'last_name', 'phone'])
+                            ->rule(fn ($record) => \Illuminate\Validation\Rule::exists('patients', 'id')
+                                ->where('clinic_id', auth()->user()->clinic_id)
+                                ->when($record, fn ($r) => $r->whereNot('id', $record->id)))
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('first_name')->label('Nombre')->required(),
+                                Forms\Components\TextInput::make('last_name')->label('Apellidos')->required(),
+                                Forms\Components\TextInput::make('phone')->label('WhatsApp')->tel()->required(),
+                            ])
+                            ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Información Médica')
                     ->description('Opcional, pero lo que pongas aquí te sale como alerta antes de cada consulta.')

@@ -126,6 +126,20 @@
                 </div>
             </div>
 
+            {{-- La familia: quién responde por él y lo que deben todos juntos. --}}
+            @php
+                $familia = ($patient->responsable_id || $patient->dependientes()->exists()) ? $patient->deudaFamiliar() : null;
+            @endphp
+            @if($patient->responsable)
+            <div class="pp-allergies" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);">
+                <span>Responsable: {{ $patient->responsable->first_name }} {{ $patient->responsable->last_name }}@if($patient->responsable->phone) · {{ $patient->responsable->phone }}@endif · a su WhatsApp llegan los mensajes · <a href="{{ \App\Filament\Doctor\Pages\PatientProfile::getUrl(['patient' => $patient->responsable_id]) }}" style="color:#fff;text-decoration:underline;">ver su perfil</a></span>
+            </div>
+            @endif
+            @if($familia && $familia['total'] > 0)
+            <div class="pp-allergies" style="background:rgba(251,191,36,0.25);border-color:rgba(251,191,36,0.45);">
+                <span>La familia debe ${{ number_format($familia['total'], 0) }} ({{ collect($familia['porPersona'])->map(fn ($s, $n) => $n . ' $' . number_format($s, 0))->implode(' · ') }})</span>
+            </div>
+            @endif
             @php $alertas = \App\Support\AlertasClinicas::delPaciente($patient); @endphp
             @if($alertas['riesgos'])
             <div class="pp-allergies">

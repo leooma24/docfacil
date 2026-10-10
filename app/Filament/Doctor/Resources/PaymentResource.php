@@ -301,11 +301,11 @@ class PaymentResource extends Resource
                     ->label('Recordar por WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color(fn (Payment $record) => auth()->user()?->clinic?->hasFeature('whatsapp_payment')
-                        && !empty($record->patient?->phone)
+                        && !empty($record->patient?->telefonoDeContacto())
                         && in_array($record->status, ['pending', 'partial'])
                             ? 'success'
                             : 'gray')
-                    ->visible(fn (Payment $record) => in_array($record->status, ['pending', 'partial']) && !empty($record->patient?->phone))
+                    ->visible(fn (Payment $record) => in_array($record->status, ['pending', 'partial']) && !empty($record->patient?->telefonoDeContacto()))
                     ->tooltip(fn () => auth()->user()?->clinic?->hasFeature('whatsapp_payment')
                         ? 'Abre WhatsApp con el mensaje de recordatorio listo'
                         : 'Disponible desde el plan Básico — actualiza tu plan para enviar cobros por WhatsApp')
@@ -313,14 +313,16 @@ class PaymentResource extends Resource
                         if (!auth()->user()?->clinic?->hasFeature('whatsapp_payment')) {
                             return null;
                         }
-                        $phone = preg_replace('/\D/', '', $record->patient->phone);
+                        $phone = preg_replace('/\D/', '', (string) $record->patient->telefonoDeContacto());
                         if (strlen($phone) === 10) $phone = '52' . $phone;
                         if (strlen($phone) < 12) return null;
 
                         $clinic = $record->clinic;
                         $clinicName = $clinic->name ?? 'DocFácil';
-                        $firstName = $record->patient->first_name ?? 'hola';
-                        $servicePart = $record->service?->name ? " por *{$record->service->name}*" : '';
+                        // A la mamá se le saluda a ella y se dice de quién es el tratamiento.
+                        $firstName = $record->patient->nombreDeContacto() ?: 'hola';
+                        $servicePart = ($record->service?->name ? " por *{$record->service->name}*" : '')
+                            . ($record->patient->responsable ? ' de ' . $record->patient->first_name : '');
 
                         // Status: partial (con abonos) vs pending (sin abonos)
                         $remaining = number_format((float) $record->remaining, 2);

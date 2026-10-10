@@ -76,6 +76,8 @@ class Patient extends Model
         // Casillas de lo importante (ver AlertasClinicas::OPCIONES) y cuándo
         // se confirmó por última vez que sigue igual.
         'riesgos', 'riesgos_revisados_at',
+        // Quien responde por él: la mamá del niño, el papá que paga.
+        'responsable_id',
         // Cuenta del paciente en el portal. Faltaba aqui, asi que Eloquent
         // descartaba la asignacion sin decir nada y el paciente nunca
         // quedaba ligado a su usuario.
@@ -164,6 +166,62 @@ class Patient extends Model
             ->filter()->implode(', ');
 
         return trim((string) $this->medical_notes . "\n" . $marcadas);
+    }
+
+    /** Quien responde por él (la mamá del niño, el papá que paga). */
+    public function responsable(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'responsable_id');
+    }
+
+    /** Los que tienen a este paciente como responsable (sus hijos). */
+    public function dependientes(): HasMany
+    {
+        return $this->hasMany(self::class, 'responsable_id');
+    }
+
+    /**
+     * A qué WhatsApp se le escribe: el de su responsable si tiene, si no el
+     * suyo. "Mi contacto es el WhatsApp de la mamá" (dentista, 10-oct-2026).
+     */
+    public function telefonoDeContacto(): ?string
+    {
+        $suyo = filled($this->phone) ? $this->phone : null;
+
+        return $this->responsable && filled($this->responsable->phone) ? $this->responsable->phone : $suyo;
+    }
+
+    /** A quién se saluda en el mensaje: al responsable si lo hay. */
+    public function nombreDeContacto(): string
+    {
+        return trim((string) ($this->responsable?->first_name ?: $this->first_name));
+    }
+
+    /**
+     * Lo que debe toda su familia (el responsable y sus dependientes), por
+     * persona. Desde el niño o desde la mamá, se ve lo mismo.
+     *
+     * @return array{total: float, porPersona: array<string, float>}
+     */
+    public function deudaFamiliar(): array
+    {
+        $cabeza = $this->responsable ?? $this;
+        $familia = collect([$cabeza])->merge($cabeza->dependientes()->get());
+
+        $saldos = Payment::withoutGlobalScopes()
+            ->where('clinic_id', $this->clinic_id)
+            ->whereIn('patient_id', $familia->pluck('id'))
+            ->withBalance()->yaToca()
+            ->selectRaw('patient_id, SUM(amount - amount_paid) as saldo')
+            ->groupBy('patient_id')
+            ->pluck('saldo', 'patient_id');
+
+        $porPersona = $familia
+            ->mapWithKeys(fn ($p) => [$p->first_name => round((float) ($saldos[$p->id] ?? 0), 2)])
+            ->filter(fn ($s) => $s > 0)
+            ->all();
+
+        return ['total' => round(array_sum($porPersona), 2), 'porPersona' => $porPersona];
     }
 
     /** Tiene alergias de verdad (no vacío y no "Ninguna conocida"). */

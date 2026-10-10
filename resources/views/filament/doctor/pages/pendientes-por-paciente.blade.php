@@ -51,7 +51,7 @@
                 </div>
                 <a href="{{ $this->ligaParaAgendar($plan) }}"
                    style="flex:none;background:#0f766e;color:#fff;font-weight:800;font-size:0.85rem;padding:0.55rem 1rem;border-radius:12px;text-decoration:none;">Agendar</a>
-                @if(empty($plan->patient->phone))
+                @if(empty($plan->patient->telefonoDeContacto()))
                     {{-- Sin teléfono no hay a dónde mandarlo. --}}
                 @elseif($fila['toca'])
                     <a href="{{ route('plan.recordar', $plan) }}" target="_blank" rel="noopener"

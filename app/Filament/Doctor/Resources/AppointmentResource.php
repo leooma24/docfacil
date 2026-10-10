@@ -321,7 +321,7 @@ class AppointmentResource extends Resource
                     ->icon(fn (Appointment $record) => $record->reminder_sent ? 'heroicon-o-check-circle' : 'heroicon-o-chat-bubble-left-ellipsis')
                     ->color(fn (Appointment $record) => $record->reminder_sent ? 'gray' : 'success')
                     ->tooltip(fn (Appointment $record) => $record->reminder_sent ? 'Ya se le mandó el recordatorio. Tóquelo para mandarlo otra vez.' : 'Mandar recordatorio por WhatsApp')
-                    ->visible(fn (Appointment $record) => !empty($record->patient->phone) && in_array($record->status, ['scheduled', 'confirmed']))
+                    ->visible(fn (Appointment $record) => !empty($record->patient->telefonoDeContacto()) && in_array($record->status, ['scheduled', 'confirmed']))
                     ->url(fn (Appointment $record) => route('cita.recordar', $record))
                     ->openUrlInNewTab()
                     // Solo el ícono: con la palabra, "Acciones" se salía de la

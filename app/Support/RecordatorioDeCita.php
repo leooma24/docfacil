@@ -35,9 +35,10 @@ class RecordatorioDeCita
      */
     public static function mensaje(Appointment $cita, string $momento = '24h'): string
     {
-        $cita->loadMissing(['patient', 'clinic']);
+        $cita->loadMissing(['patient.responsable', 'clinic']);
 
-        $nombre = trim((string) $cita->patient?->first_name) ?: 'Hola';
+        $nombre = $cita->patient?->nombreDeContacto() ?: 'Hola';
+        $deQuien = self::deQuien($cita, 'su cita', 'la cita');
         $consultorio = $cita->clinic?->name ?? 'su consultorio';
         $hora = $cita->starts_at->format('H:i');
 
@@ -46,7 +47,7 @@ class RecordatorioDeCita
             default => $cita->starts_at->locale('es')->isoFormat('dddd [a las] ') . $hora,
         };
 
-        return "Hola {$nombre}, le recordamos su cita en {$consultorio} {$cuando}.\n\n"
+        return "Hola {$nombre}, le recordamos {$deQuien} en {$consultorio} {$cuando}.\n\n"
             . "Confirme o cancele aquí:\n"
             . self::liga($cita) . "\n\n"
             . '¡Le esperamos!';
@@ -78,7 +79,7 @@ class RecordatorioDeCita
      */
     public static function deManana(int $clinicId): \Illuminate\Support\Collection
     {
-        return Appointment::withoutGlobalScopes()->with('patient')
+        return Appointment::withoutGlobalScopes()->with('patient.responsable')
             ->where('clinic_id', $clinicId)
             ->whereDate('starts_at', today()->addDay())
             ->where('status', 'scheduled')
@@ -112,8 +113,9 @@ class RecordatorioDeCita
             return self::mensaje($cita);
         }
 
-        $cita->loadMissing(['patient', 'clinic']);
-        $nombre = trim((string) $cita->patient?->first_name) ?: 'Hola';
+        $cita->loadMissing(['patient.responsable', 'clinic']);
+        $nombre = $cita->patient?->nombreDeContacto() ?: 'Hola';
+        $deQuien = self::deQuien($cita, 'sus citas', 'las citas');
         $consultorio = $cita->clinic?->name ?? 'su consultorio';
         $dia = $cita->starts_at->isToday() ? 'hoy' : $cita->starts_at->locale('es')->isoFormat('dddd');
         $horas = $citas->map(fn ($c) => $c->starts_at->format('H:i'))->values();
@@ -121,16 +123,24 @@ class RecordatorioDeCita
             ? $horas[0] . ' y a las ' . $horas[1]
             : $horas->slice(0, -1)->implode(', ') . ' y a las ' . $horas->last();
 
-        return "Hola {$nombre}, le recordamos sus citas en {$consultorio} {$dia} a las {$lista}.\n\n"
+        return "Hola {$nombre}, le recordamos {$deQuien} en {$consultorio} {$dia} a las {$lista}.\n\n"
             . "Confirme o cancele aquí:\n"
             . self::liga($citas->first()) . "\n\n"
             . '¡Le esperamos!';
     }
 
+    /** "su cita", o "la cita de Mateo" cuando el mensaje le llega a su mamá. */
+    private static function deQuien(Appointment $cita, string $suya, string $de): string
+    {
+        $p = $cita->patient;
+
+        return $p?->responsable ? "{$de} de " . trim((string) $p->first_name) : $suya;
+    }
+
     /** La dirección de WhatsApp con el recordatorio del día listo. */
     public static function ligaDeWhatsapp(Appointment $cita): ?string
     {
-        $telefono = preg_replace('/\D/', '', (string) $cita->patient?->phone);
+        $telefono = preg_replace('/\D/', '', (string) $cita->patient?->telefonoDeContacto());
         if ($telefono === '') {
             return null;
         }

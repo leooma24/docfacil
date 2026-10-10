@@ -347,7 +347,7 @@ Route::get('/doctor/presupuestos/{plan}/recordar', function (int $plan) {
         ->where('clinic_id', auth()->user()->clinic_id)
         ->findOrFail($plan);
 
-    $telefono = preg_replace('/\D/', '', (string) $presupuesto->patient?->phone);
+    $telefono = preg_replace('/\D/', '', (string) $presupuesto->patient?->telefonoDeContacto());
     abort_if($telefono === '', 422, 'El paciente no tiene teléfono.');
     if (strlen($telefono) === 10) {
         $telefono = '52' . $telefono;
@@ -357,15 +357,17 @@ Route::get('/doctor/presupuestos/{plan}/recordar', function (int $plan) {
         $presupuesto->generatePublicToken();
     }
 
-    $nombre = trim((string) $presupuesto->patient->first_name) ?: 'Hola';
+    $nombre = $presupuesto->patient->nombreDeContacto() ?: 'Hola';
+    // Si el mensaje le llega a su mamá, se dice de quién es el plan.
+    $deQuien = $presupuesto->patient->responsable ? ' de ' . trim((string) $presupuesto->patient->first_name) : '';
     $consultorio = $presupuesto->clinic?->name ?? 'su consultorio';
     $liga = route('treatment-plan.public', ['token' => $presupuesto->public_token]);
 
     // Los de usted y sin presión: es un recordatorio, no un empujón.
     $mensaje = $presupuesto->status === 'accepted'
-        ? "Hola {$nombre}, le escribimos de {$consultorio}. Le quedan tratamientos pendientes de su plan \"{$presupuesto->title}\". "
+        ? "Hola {$nombre}, le escribimos de {$consultorio}. Le quedan tratamientos pendientes del plan \"{$presupuesto->title}\"{$deQuien}. "
             . "Cuando guste le agendamos su siguiente cita; y si tiene alguna duda, con gusto se la resolvemos."
-        : "Hola {$nombre}, le escribimos de {$consultorio}. Le recordamos el plan de tratamiento \"{$presupuesto->title}\" que le presentamos. "
+        : "Hola {$nombre}, le escribimos de {$consultorio}. Le recordamos el plan de tratamiento \"{$presupuesto->title}\"{$deQuien} que le presentamos. "
             . "Si tiene alguna duda, con gusto se la resolvemos; cuando usted decida, aquí lo puede ver: {$liga}";
 
     $presupuesto->update(['last_reminded_at' => now()]);
