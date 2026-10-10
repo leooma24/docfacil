@@ -25,6 +25,10 @@ class Roadmap extends Page
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 
+    // Fuera del menú (12-oct-2026): los doctores no sabían qué era y les
+    // estorbaba. Sigue abriendo en /doctor/roadmap.
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?int $navigationSort = 9;
 
     protected static string $view = 'filament.doctor.pages.roadmap';

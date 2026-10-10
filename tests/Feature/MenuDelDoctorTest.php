@@ -70,7 +70,7 @@ class MenuDelDoctorTest extends TestCase
         $this->assertSame(['Caja del día', 'Cobros', 'Presupuestos', 'Planes de pago', 'Gastos', 'Corte del mes'], $menu['Dinero']);
         $this->assertSame(['Insumos', 'Movimientos', 'Residuos'], $menu['Inventario']);
         $this->assertContains('Servicios y precios', $menu['Consultorio']);
-        $this->assertContains('Check-in QR', $menu['Consultorio']);
+        $this->assertContains('Llegada con QR', $menu['Consultorio']);
         $this->assertContains('Mi perfil profesional', $menu['Mi cuenta']);
         $this->assertContains('Mi plan', $menu['Mi cuenta']);
     }

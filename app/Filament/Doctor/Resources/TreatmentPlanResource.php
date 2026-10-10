@@ -273,7 +273,9 @@ class TreatmentPlanResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('sent_at')
                     ->label('Enviado')
-                    ->since()
+                    // En días, igual que en Pendientes: "hace 1 semana" en una
+                    // pantalla y "hace 12 días" en otra confundía (12-oct-2026).
+                    ->formatStateUsing(fn ($state) => $state ? (($d = (int) $state->copy()->startOfDay()->diffInDays(today())) === 0 ? 'hoy' : 'hace ' . $d . ($d === 1 ? ' día' : ' días')) : null)
                     ->placeholder('—'),
             ])
             ->filters([

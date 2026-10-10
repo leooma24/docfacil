@@ -170,6 +170,6 @@ class PorCobrarTest extends TestCase
 
         $alertas = collect(Livewire::test(AlertsWidget::class)->instance()->getAlerts())->pluck('title')->all();
 
-        $this->assertContains('1 pagos vencidos', $alertas);
+        $this->assertContains('1 pago vencido', $alertas);
     }
 }

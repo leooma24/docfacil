@@ -303,8 +303,8 @@
     @php
     $stepConfig = [
         1 => ['label' => 'Signos vitales', 'short' => 'Vitales', 'icon' => 'heart', 'color' => '#ef4444', 'colorDark' => '#dc2626'],
-        2 => ['label' => 'Diagnóstico', 'short' => 'Dx', 'icon' => 'magnifying-glass', 'color' => '#0d9488', 'colorDark' => '#0f766e'],
-        3 => ['label' => 'Receta', 'short' => 'Rx', 'icon' => 'document-text', 'color' => '#8b5cf6', 'colorDark' => '#7c3aed'],
+        2 => ['label' => 'Diagnóstico', 'short' => 'Diagnóstico', 'icon' => 'magnifying-glass', 'color' => '#0d9488', 'colorDark' => '#0f766e'],
+        3 => ['label' => 'Receta', 'short' => 'Receta', 'icon' => 'document-text', 'color' => '#8b5cf6', 'colorDark' => '#7c3aed'],
         4 => ['label' => 'Cobro', 'short' => 'Cobro', 'icon' => 'banknotes', 'color' => '#f59e0b', 'colorDark' => '#d97706'],
         5 => ['label' => 'Siguiente cita', 'short' => 'Cita', 'icon' => 'calendar-days', 'color' => '#3b82f6', 'colorDark' => '#2563eb'],
     ];

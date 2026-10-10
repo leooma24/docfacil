@@ -24,6 +24,9 @@
             <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:16px;padding:1.25rem;margin-bottom:1.25rem;">
                 <div style="font-size:0.8rem;color:#065f46;">Sigue</div>
                 <div style="font-size:1.25rem;font-weight:800;color:#064e3b;">{{ $siguiente->patient->first_name }} {{ $siguiente->patient->last_name }} · {{ $siguiente->starts_at->format('H:i') }}</div>
+                @if($siguiente->patient->responsable)
+                    <div style="font-size:0.85rem;color:#065f46;">El mensaje le llega a {{ $siguiente->patient->responsable->first_name }}, su responsable.</div>
+                @endif
                 <a href="{{ route('cita.recordar', $siguiente->id) }}" target="_blank" rel="noopener"
                    style="display:inline-block;margin-top:0.75rem;background:#25d366;color:#05330f;font-weight:800;font-size:1rem;padding:0.75rem 1.25rem;border-radius:12px;text-decoration:none;">
                     Mandar por WhatsApp
@@ -43,7 +46,7 @@
             <h3 style="font-weight:700;margin:1rem 0 0.5rem;">Faltan</h3>
             @foreach($pendientes->skip(1) as $cita)
                 <div style="display:flex;align-items:center;gap:0.75rem;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:0.7rem 1rem;margin-bottom:0.4rem;">
-                    <div style="flex:1;min-width:0;"><strong>{{ $cita->patient->first_name }} {{ $cita->patient->last_name }}</strong> · {{ $cita->starts_at->format('H:i') }}</div>
+                    <div style="flex:1;min-width:0;"><strong>{{ $cita->patient->first_name }} {{ $cita->patient->last_name }}</strong> · {{ $cita->starts_at->format('H:i') }}@if($cita->patient->responsable) <span style="color:#6b7280;">· le llega a {{ $cita->patient->responsable->first_name }}</span>@endif</div>
                     <a href="{{ route('cita.recordar', $cita->id) }}" target="_blank" rel="noopener"
                        style="flex:none;color:#0f8a4d;font-weight:700;text-decoration:underline;">Mandar</a>
                 </div>

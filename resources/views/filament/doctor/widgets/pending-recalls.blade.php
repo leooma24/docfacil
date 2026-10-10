@@ -1,7 +1,7 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            <x-icono nombre="arrow-path" /> Recalls pendientes ({{ $total_due }})
+            <x-icono nombre="arrow-path" /> Les toca volver ({{ $total_due }})
         </x-slot>
         <x-slot name="description">
             Pacientes que hace meses no regresan y ya les toca. Click para abrir WhatsApp.

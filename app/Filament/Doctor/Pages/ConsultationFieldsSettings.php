@@ -35,6 +35,9 @@ class ConsultationFieldsSettings extends Page
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 
+    // Se llega desde Configuración, no desde el menú (12-oct-2026).
+    protected static bool $shouldRegisterNavigation = false;
+
     // Pestaña activa: 'clinic' o 'mine'
     #[Url]
     public string $tab = 'clinic';

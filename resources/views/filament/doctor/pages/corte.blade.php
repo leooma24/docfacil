@@ -85,8 +85,12 @@
                     {{ $pesos($n['utilidad']) }}
                 </div>
                 <div style="font-size:.8rem;margin-top:.4rem;opacity:.75;">
-                    @if ($n['margen'] !== null)
-                        De cada $100, te quedaron <strong>${{ number_format($n['margen'], 0) }}</strong>
+                    @if ($n['margen'] !== null && $n['gastos'] <= 0)
+                        {{-- Sin gastos anotados, "le quedó todo" es falso: es lo que entró. --}}
+                        Todavía no anota gastos de este periodo: esto es lo que entró, no lo que le quedó.
+                        <a href="{{ \App\Filament\Doctor\Resources\ExpenseResource::getUrl('create') }}" style="font-weight:600;text-decoration:underline;">Anotar un gasto</a>
+                    @elseif ($n['margen'] !== null)
+                        De cada $100, le quedaron <strong>${{ number_format($n['margen'], 0) }}</strong>
                     @else
                         Sin ingresos en el periodo
                     @endif
@@ -108,11 +112,13 @@
         {{-- Por cobrar: va aparte, no es ingreso --}}
         @if ($n['por_cobrar'] > 0)
             <div style="{{ $tarjeta }} border-left:5px solid #6366f1;">
-                <div style="{{ $etiqueta }}">Además, te deben</div>
+                <div style="{{ $etiqueta }}">Le deben de este periodo</div>
                 <div style="font-size:1.4rem;font-weight:800;margin-top:.3rem;color:#4f46e5;">
                     {{ $pesos($n['por_cobrar']) }}
                 </div>
                 <div style="font-size:.85rem;margin-top:.4rem;opacity:.7;line-height:1.5;">
+                    {{-- El escritorio cuenta todo lo que le deben; aquí es solo lo de estas fechas. Se dicen los dos. --}}
+                    En total le deben {{ $pesos(\App\Models\Payment::saldoPorCobrar(auth()->user()->clinic_id)) }}, contando lo de antes.
                     Esto <strong>no</strong> está contado arriba, porque todavía no entra a la caja.
                     <a href="{{ \App\Filament\Doctor\Resources\PaymentResource::getUrl() }}" style="color:#4f46e5;font-weight:600;">Ver quién debe →</a>
                 </div>

@@ -18,7 +18,8 @@ class ServicesMarketplace extends Page
 
     protected static ?string $slug = 'servicios-premium';
 
-    protected static bool $shouldRegisterNavigation = true;
+    // Fuera del menú (12-oct-2026): era de lo que más estorbaba.
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 

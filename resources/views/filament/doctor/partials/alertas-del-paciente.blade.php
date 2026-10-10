@@ -36,7 +36,9 @@
         <div style="font-size:13px;color:#334155;margin-bottom:8px;">
             <strong>Antecedentes importantes:</strong>
             @if($al['riesgos'])
-                <span style="color:#b91c1c;font-weight:700;">{{ implode(' · ', $al['riesgos']) }}</span>
+                {{-- Los anticoagulantes ya tienen su aviso arriba: no se repiten aquí. --}}
+                @php $resumen = $anticoagulado && $this->isFieldEnabled('anticoagulants_alert') ? array_values(array_diff($al['riesgos'], ['Anticoagulantes'])) : $al['riesgos']; @endphp
+                @if($resumen)<span style="color:#b91c1c;font-weight:700;">{{ implode(' · ', $resumen) }}</span>@else<span style="color:#64748b;">los de arriba.</span>@endif
             @else
                 <span style="color:#64748b;">ninguno marcado. Toque los que tenga.</span>
             @endif

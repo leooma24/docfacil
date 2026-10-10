@@ -156,6 +156,8 @@ class CalendarWidget extends FullCalendarWidget
     {
         return [
             \Filament\Actions\Action::make('magic_slot')
+                // La IA está apagada: no se ofrece lo que no funciona (12-oct-2026).
+                ->visible(fn () => \App\Services\AI::enabled())
                 ->label('Slot mágico')
                 ->icon('heroicon-o-sparkles')
                 ->color('info')

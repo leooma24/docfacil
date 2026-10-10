@@ -48,7 +48,7 @@ class AlertsWidget extends Widget
             $alerts[] = [
                 'type' => 'danger',
                 'icon' => 'heroicon-o-exclamation-triangle',
-                'title' => "{$overduePayments} pagos vencidos",
+                'title' => $overduePayments . ($overduePayments === 1 ? ' pago vencido' : ' pagos vencidos'),
                 'desc' => 'Tienen más de 7 días pendientes.',
             ];
         }

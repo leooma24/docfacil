@@ -46,7 +46,7 @@ class DoctorPanelProvider extends PanelProvider
             ->navigationGroups([
                 \Filament\Navigation\NavigationGroup::make('Pacientes'),
                 \Filament\Navigation\NavigationGroup::make('Dinero'),
-                \Filament\Navigation\NavigationGroup::make('Inventario'),
+                \Filament\Navigation\NavigationGroup::make('Inventario')->collapsed(),
                 \Filament\Navigation\NavigationGroup::make('Consultorio'),
                 \Filament\Navigation\NavigationGroup::make('Mi cuenta')->collapsed(),
             ])

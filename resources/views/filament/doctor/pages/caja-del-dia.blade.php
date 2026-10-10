@@ -36,6 +36,7 @@
     @endif
 
     <h3 style="font-weight:800;margin:0.5rem 0;">Movimientos</h3>
+    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.5rem;">"Pidió factura" solo deja anotado quién la quiere: la factura la hace su contador. Cuando ya se mandó, tóquele "Ya se la mandé".</p>
     @forelse($caja['movimientos'] as $m)
         <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:0.7rem 1rem;margin-bottom:0.4rem;">
             <div style="flex:none;width:3rem;color:#6b7280;font-size:0.85rem;">{{ $m['hora'] }}</div>

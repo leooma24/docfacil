@@ -95,7 +95,7 @@ class ServiceResource extends Resource
                             ->required()
                             ->default(30),
                         Forms\Components\Select::make('recall_months')
-                            ->label('Recall / seguimiento')
+                            ->label('Cada cuánto debe volver')
                             ->placeholder('Sin recall')
                             ->helperText('Los pacientes que reciben este servicio serán recordados para regresar. Típico: 6 meses para limpieza, 12 para revisión.')
                             ->options([

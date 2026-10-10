@@ -18,7 +18,7 @@ class AddOns extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-squares-plus';
 
-    protected static ?string $navigationLabel = 'Add-ons';
+    protected static ?string $navigationLabel = 'Extras';
 
     protected static ?string $title = 'Add-ons disponibles';
 

@@ -11,7 +11,7 @@ class CheckInQR extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-qr-code';
 
-    protected static ?string $navigationLabel = 'Check-in QR';
+    protected static ?string $navigationLabel = 'Llegada con QR';
 
     protected static ?string $title = 'Check-in por QR';
 
