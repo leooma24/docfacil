@@ -41,8 +41,13 @@ Schedule::command('docfacil:send-spei-reminders')->dailyAt('09:30');
 // Marketplace: cancela compras pending_payment > 24 hrs sin completar
 Schedule::command('docfacil:cleanup-stale-premium-purchases')->dailyAt('03:30');
 
-// Backups daily at 3am
+// Respaldos: se limpian los viejos (2:30) antes de hacer el del día (3:00),
+// y a las 9 se revisa que estén sanos; si no, le llega un correo a Omar
+// (BACKUP_NOTIFY_EMAIL). Sin la limpieza se juntaron 190 respaldos, 7.1 GB, y
+// el disco del servidor —el de las cinco apps— iba a llenarse (12-oct-2026).
+Schedule::command('backup:clean')->dailyAt('02:30');
 Schedule::command('backup:run')->dailyAt('03:00');
+Schedule::command('backup:monitor')->dailyAt('09:00');
 
 // Reset demo clinic daily at 4am (lets visitors create/edit freely during the day)
 Schedule::command('app:demo-reset')->dailyAt('04:00');
