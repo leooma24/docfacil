@@ -208,7 +208,7 @@ class PatientImporter extends Importer
         // Los importados no han aceptado el aviso de privacidad del consultorio
         // (ley de datos, arts. 8 y 17): se le recuerda al doctor dónde está.
         if ($import->successful_rows > 0) {
-            $cuerpo .= ' Falta que acepten tu aviso de privacidad: mándaselo desde la lista de pacientes con "Mandar aviso de privacidad".';
+            $cuerpo .= ' Falta que acepten su aviso de privacidad: mándeselo desde la lista de pacientes con "Mandar aviso de privacidad".';
         }
 
         return $cuerpo;

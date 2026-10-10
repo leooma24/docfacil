@@ -78,8 +78,8 @@ class AddOns extends Page
 
         if ($clinic && $clinic->planIncluyeFeature($addonCfg['feature_flag'] ?? '')) {
             Notification::make()
-                ->title($addonCfg['name'] . ' ya viene en tu plan')
-                ->body('No tienes que pagar extra: ya lo puedes usar.')
+                ->title($addonCfg['name'] . ' ya viene en su plan')
+                ->body('No tiene que pagar extra: ya lo puede usar.')
                 ->success()
                 ->send();
 
@@ -117,8 +117,8 @@ class AddOns extends Page
         Notification::make()
             ->title($addonCfg['name'] . ' activado')
             ->body($trialDays > 0
-                ? "Tienes {$trialDays} días gratis como beta tester. Después son \${$addonCfg['monthly_price']}/mes."
-                : "Add-on activo. Se cobrará \${$addonCfg['monthly_price']}/mes junto con tu plan.")
+                ? "Tiene {$trialDays} días gratis como beta tester. Después son \${$addonCfg['monthly_price']}/mes."
+                : "Add-on activo. Se cobrará \${$addonCfg['monthly_price']}/mes junto con su plan.")
             ->success()
             ->send();
     }
@@ -152,7 +152,7 @@ class AddOns extends Page
         $name = config("addons.{$slug}.name", $slug);
         Notification::make()
             ->title("{$name} cancelado")
-            ->body('Conservarás el acceso hasta el fin de tu periodo actual.')
+            ->body('Conservará el acceso hasta el fin de su periodo actual.')
             ->warning()
             ->send();
     }

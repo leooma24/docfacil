@@ -98,7 +98,7 @@ class ConsentFormResource extends Resource
                                         $procedure = $get('procedure_name');
                                         if (empty($procedure)) {
                                             \Filament\Notifications\Notification::make()
-                                                ->title('Escribe primero el procedimiento')
+                                                ->title('Escriba primero el procedimiento')
                                                 ->warning()
                                                 ->send();
                                             return;
@@ -111,7 +111,7 @@ class ConsentFormResource extends Resource
                                         if (!$template) {
                                             \Filament\Notifications\Notification::make()
                                                 ->title('No se pudo generar el consentimiento')
-                                                ->body('Verifica la configuración de IA.')
+                                                ->body('Verifique la configuración de IA.')
                                                 ->danger()
                                                 ->send();
                                             return;
@@ -124,7 +124,7 @@ class ConsentFormResource extends Resource
 
                                         \Filament\Notifications\Notification::make()
                                             ->title('Consentimiento generado')
-                                            ->body('Revisa y ajusta antes de guardar.')
+                                            ->body('Revise y ajuste antes de guardar.')
                                             ->success()
                                             ->send();
                                     })
@@ -267,7 +267,7 @@ class ConsentFormResource extends Resource
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
             ->emptyStateHeading('Sin consentimientos')
-            ->emptyStateDescription('Generas el formato, el paciente firma con el dedo en tu tablet y se guarda en PDF.')
+            ->emptyStateDescription('Genere el formato, el paciente firma con el dedo en su tablet y se guarda en PDF.')
             ->emptyStateIcon('heroicon-o-pencil-square')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

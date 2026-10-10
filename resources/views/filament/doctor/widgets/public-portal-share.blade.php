@@ -1,10 +1,10 @@
 <x-filament-widgets::widget>
     <x-filament::section>
         <x-slot name="heading">
-            <x-icono nombre="globe-alt" /> Tu portal público de reservas
+            <x-icono nombre="globe-alt" /> Su portal público de reservas
         </x-slot>
         <x-slot name="description">
-            Comparte esta URL en tu Instagram, firma de WhatsApp, o pon el QR en tu recepción. Los pacientes agendan sin llamarte.
+            Comparta esta URL en su Instagram, firma de WhatsApp, o ponga el QR en su recepción. Los pacientes agendan sin llamarle.
         </x-slot>
 
         <div class="grid md:grid-cols-[1fr_auto] gap-5 items-center">
@@ -40,10 +40,10 @@
                 <div class="text-xs text-gray-500 dark:text-gray-400 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg leading-relaxed">
                     <x-icono nombre="light-bulb" /> <strong>Ideas para usarlo:</strong>
                     <ul class="mt-1 ml-4 list-disc space-y-0.5">
-                        <li>Pega la URL en la bio de Instagram de tu consultorio</li>
-                        <li>Imprime el QR y ponlo en la recepción</li>
-                        <li>Agrégalo a tu firma de WhatsApp con "Agenda en: [link]"</li>
-                        <li>Compártelo cuando te pregunten por WhatsApp "¿a qué hora hay?"</li>
+                        <li>Pegue la URL en la bio de Instagram de su consultorio</li>
+                        <li>Imprima el QR y póngalo en la recepción</li>
+                        <li>Agréguelo a su firma de WhatsApp con "Agenda en: [link]"</li>
+                        <li>Compártalo cuando le pregunten por WhatsApp "¿a qué hora hay?"</li>
                     </ul>
                 </div>
             </div>

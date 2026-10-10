@@ -91,14 +91,14 @@ class ExpenseResource extends Resource
                         ->default(now()),
 
                     Forms\Components\Select::make('payment_method')
-                        ->label('¿Cómo lo pagaste?')
+                        ->label('¿Cómo lo pagó?')
                         ->options(Expense::FORMAS_DE_PAGO)
                         ->native(false)
                         ->placeholder('Sin especificar'),
                 ]),
 
             Forms\Components\Section::make('Lo demás (opcional)')
-                ->description('Nada de esto es obligatorio. Llénalo solo si te sirve después.')
+                ->description('Nada de esto es obligatorio. Llénelo solo si le sirve después.')
                 ->collapsed()
                 ->columns(2)
                 ->schema([
@@ -214,7 +214,7 @@ class ExpenseResource extends Resource
                     ->label('Repetir')
                     ->icon('heroicon-o-document-duplicate')
                     ->color('gray')
-                    ->tooltip('Crea otro gasto igual con la fecha de hoy')
+                    ->tooltip('Otro gasto igual, con la fecha de hoy')
                     ->action(function (Expense $record) {
                         $copia = $record->replicate(['receipt_path', 'last_generated_on']);
                         $copia->expense_date = now();
@@ -224,7 +224,7 @@ class ExpenseResource extends Resource
 
                         \Filament\Notifications\Notification::make()
                             ->title('Gasto copiado')
-                            ->body('Se creó otro igual con la fecha de hoy. Ajústalo si el monto cambió.')
+                            ->body('Se creó otro igual con la fecha de hoy. Ajústelo si el monto cambió.')
                             ->success()
                             ->send();
                     }),
@@ -236,9 +236,9 @@ class ExpenseResource extends Resource
                     ->label('Entrada de insumos')
                     ->icon('heroicon-o-cube')
                     ->color('gray')
-                    ->tooltip('Suma al inventario lo que compraste en este gasto')
+                    ->tooltip('Suma al inventario lo que compró en este gasto')
                     ->modalHeading(fn (Expense $record) => 'Entrada de insumos — ' . $record->concept)
-                    ->modalDescription('Un gasto puede traer varios insumos: registra cada uno y reparte el monto. Entre todos no pueden sumar más de lo que pagaste.')
+                    ->modalDescription('Un gasto puede traer varios insumos: registre cada uno y reparta el monto. Entre todos no pueden sumar más de lo que pagó.')
                     ->modalSubmitActionLabel('Registrar entrada')
                     ->visible(fn () => \App\Models\Supply::where('clinic_id', auth()->user()->clinic_id)->active()->exists())
                     ->form(fn (Expense $record) => [
@@ -262,7 +262,7 @@ class ExpenseResource extends Resource
                                 $insumo = \App\Models\Supply::find($get('supply_id'));
 
                                 if (! $insumo) {
-                                    return 'Elige primero el insumo.';
+                                    return 'Elija primero el insumo.';
                                 }
 
                                 $factor = (float) $insumo->units_per_purchase;
@@ -344,8 +344,8 @@ class ExpenseResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('Todavía no has capturado gastos')
-            ->emptyStateDescription('Anota lo que sale — renta, materiales, laboratorio, sueldos. Con eso el corte del mes te dice cuánto te quedó de verdad.')
+            ->emptyStateHeading('Todavía no ha capturado gastos')
+            ->emptyStateDescription('Anote lo que sale — renta, materiales, laboratorio, sueldos. Con eso el corte del mes le dice cuánto le quedó de verdad.')
             ->emptyStateIcon('heroicon-o-banknotes');
     }
 

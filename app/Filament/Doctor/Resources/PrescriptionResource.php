@@ -173,7 +173,7 @@ class PrescriptionResource extends Resource
                     ->color(fn () => auth()->user()?->clinic?->hasFeature('pdf_prescriptions') ? 'success' : 'gray')
                     ->tooltip(fn () => auth()->user()?->clinic?->hasFeature('pdf_prescriptions')
                         ? null
-                        : 'Disponible desde el plan Básico — actualiza tu plan para descargar recetas PDF.')
+                        : 'Disponible desde el plan Básico — actualice su plan para descargar recetas PDF.')
                     ->action(function (Prescription $record) {
                         if (!auth()->user()?->clinic?->hasFeature('pdf_prescriptions')) {
                             \Filament\Notifications\Notification::make()
@@ -197,7 +197,7 @@ class PrescriptionResource extends Resource
                         if ($faltan = \App\Support\Receta::datosQueFaltan($record->doctor)) {
                             \Filament\Notifications\Notification::make()
                                 ->title('A la receta le falta ' . implode(' y ', $faltan))
-                                ->body('La ley pide que la receta los lleve. Captúralos una vez en tu perfil profesional y ya salen en todas.')
+                                ->body('La ley pide que la receta los lleve. Captúrelos una vez en su perfil profesional y ya salen en todas.')
                                 ->warning()
                                 ->actions([
                                     \Filament\Notifications\Actions\Action::make('perfil')
@@ -222,7 +222,7 @@ class PrescriptionResource extends Resource
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
             ->emptyStateHeading('Aún no has hecho recetas')
-            ->emptyStateDescription('Tus recetas salen en PDF con tu cédula y el logo de tu consultorio, listas para imprimir o mandar.')
+            ->emptyStateDescription('Sus recetas salen en PDF con su cédula y el logo de su consultorio, listas para imprimir o mandar.')
             ->emptyStateIcon('heroicon-o-document-text')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

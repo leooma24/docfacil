@@ -52,7 +52,7 @@ class CreateDoctorInvitation extends CreateRecord
             ]);
             Notification::make()
                 ->title('Invitación creada, pero no se pudo enviar el correo')
-                ->body("Comparte manualmente este link con {$invitation->name}: " . route('invitation.accept', ['token' => $invitation->token]))
+                ->body("Comparta manualmente este link con {$invitation->name}: " . route('invitation.accept', ['token' => $invitation->token]))
                 ->warning()
                 ->persistent()
                 ->send();

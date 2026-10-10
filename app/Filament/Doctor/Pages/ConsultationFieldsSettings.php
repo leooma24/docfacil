@@ -142,7 +142,7 @@ class ConsultationFieldsSettings extends Page
         // tab === 'mine'
         $doctor = auth()->user()->doctor;
         if (! $doctor) {
-            Notification::make()->title('Tu usuario no tiene perfil de doctor')->danger()->send();
+            Notification::make()->title('Su usuario no tiene perfil de doctor')->danger()->send();
             return;
         }
 
@@ -155,10 +155,10 @@ class ConsultationFieldsSettings extends Page
         );
 
         Notification::make()
-            ->title('Tu configuración personal se guardó')
+            ->title('Su configuración personal se guardó')
             ->body($this->inheritsClinicConfig
-                ? 'Heredas la configuración de tu clínica.'
-                : 'Tus campos prevalecen sobre los de la clínica.')
+                ? 'Hereda la configuración de su clínica.'
+                : 'Sus campos prevalecen sobre los de la clínica.')
             ->success()
             ->send();
     }
@@ -170,7 +170,7 @@ class ConsultationFieldsSettings extends Page
         $this->enabled = $this->toToggleMap($defaults);
 
         Notification::make()
-            ->title('Restaurado a defaults de tu especialidad')
+            ->title('Restaurado a defaults de su especialidad')
             ->body('Los campos por defecto se cargaron. No olvides guardar.')
             ->success()
             ->send();

@@ -107,7 +107,7 @@ class Login extends BaseLogin
             $this->empezarDeNuevo();
 
             throw ValidationException::withMessages([
-                'data.email' => 'Pasó mucho tiempo. Vuelve a escribir tu correo y contraseña.',
+                'data.email' => 'Pasó mucho tiempo. Vuelva a escribir su correo y contraseña.',
             ]);
         }
 
@@ -121,7 +121,7 @@ class Login extends BaseLogin
 
         if (! $valido) {
             throw ValidationException::withMessages([
-                'data.code' => 'Ese código no coincide. Escribe el que muestra tu app en este momento.',
+                'data.code' => 'Ese código no coincide. Escriba el que muestra su app en este momento.',
             ]);
         }
 
@@ -171,8 +171,8 @@ class Login extends BaseLogin
                         $this->getPasswordFormComponent(),
                         $this->getRememberFormComponent(),
                         TextInput::make('code')
-                            ->label('Código de tu app de autenticación')
-                            ->helperText('Abre Google Authenticator, Authy o la app que usaste y escribe los 6 dígitos.')
+                            ->label('Código de su app de autenticación')
+                            ->helperText('Abra Google Authenticator, Authy o la app que usó y escriba los 6 dígitos.')
                             ->placeholder('000000')
                             ->maxLength(6)
                             ->autocomplete('one-time-code')
@@ -201,6 +201,6 @@ class Login extends BaseLogin
 
     public function getHeading(): string|Htmlable
     {
-        return $this->pidiendoCodigo ? 'Escribe tu código' : parent::getHeading();
+        return $this->pidiendoCodigo ? 'Escriba su código' : parent::getHeading();
     }
 }

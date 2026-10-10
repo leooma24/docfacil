@@ -11,10 +11,10 @@
                     <h3 class="text-lg font-bold">Autenticación de dos factores activa</h3>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         Habilitada el {{ auth()->user()->two_factor_confirmed_at->translatedFormat('d/m/Y H:i') }}.
-                        Tu cuenta está protegida con un código que cambia cada 30 segundos.
+                        Su cuenta está protegida con un código que cambia cada 30 segundos.
                     </p>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                        Si cambias o pierdes tu celular, escríbenos por WhatsApp al 668 249 3398 y te ayudamos a entrar.
+                        Si cambia o pierde su celular, escríbanos por WhatsApp al 668 249 3398 y le ayudamos a entrar.
                     </p>
                     {{-- Para apagarlo pedimos el código, igual que para encenderlo:
                          si no, cualquiera que agarre la sesión abierta lo quita. --}}
@@ -29,7 +29,7 @@
                         >
                         <button
                             wire:click="disable2FA"
-                            wire:confirm="¿Seguro que quieres deshabilitar 2FA? Tu cuenta quedará menos protegida."
+                            wire:confirm="¿Seguro que quiere deshabilitar 2FA? Su cuenta quedará menos protegida."
                             class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-50 rounded-lg hover:bg-red-100 border border-red-200"
                         >
                             Deshabilitar 2FA
@@ -43,29 +43,29 @@
             <div>
                 <h3 class="text-lg font-bold">Habilitar autenticación de dos factores</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Protege tu cuenta con un código que cambia cada 30 segundos. La NOM-024 lo recomienda para los sistemas de expediente electrónico.
+                    Proteja su cuenta con un código que cambia cada 30 segundos. La NOM-024 lo recomienda para los sistemas de expediente electrónico.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                    <h4 class="font-semibold text-sm mb-2">Paso 1: Escanea el código QR</h4>
+                    <h4 class="font-semibold text-sm mb-2">Paso 1: Escanee el código QR</h4>
                     <p class="text-xs text-gray-500 mb-3">
-                        Usa Google Authenticator, Authy, 1Password o cualquier app TOTP.
+                        Use Google Authenticator, Authy, 1Password o cualquier app TOTP.
                     </p>
                     <div class="bg-white p-4 rounded-lg border inline-block">
                         {!! $qrCodeSvg !!}
                     </div>
                     <div class="mt-3 text-xs">
-                        <p class="text-gray-500">¿No puedes escanear? Introduce manualmente:</p>
+                        <p class="text-gray-500">¿No puede escanear? Introdúzcalo manualmente:</p>
                         <code class="block mt-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg font-mono text-xs break-all">{{ $secret }}</code>
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="font-semibold text-sm mb-2">Paso 2: Verifica el código</h4>
+                    <h4 class="font-semibold text-sm mb-2">Paso 2: Verifique el código</h4>
                     <p class="text-xs text-gray-500 mb-3">
-                        Introduce el código de 6 dígitos que muestra tu app para confirmar.
+                        Introduzca el código de 6 dígitos que muestra su app para confirmar.
                     </p>
                     <input
                         type="text"

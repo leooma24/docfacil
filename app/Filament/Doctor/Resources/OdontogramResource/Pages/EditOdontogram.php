@@ -65,7 +65,7 @@ class EditOdontogram extends EditRecord
                     if (! $plan) {
                         Notification::make()
                             ->title('Presupuestos es un add-on')
-                            ->body('Actívalo en Add-ons para convertir lo que falta tratar en un presupuesto con tus precios.')
+                            ->body('Actívelo en Add-ons para convertir lo que falta tratar en un presupuesto con sus precios.')
                             ->warning()
                             ->send();
 

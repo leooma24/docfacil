@@ -61,8 +61,8 @@ class PerfilProfesional extends Page implements HasForms
         return $form
             ->statePath('data')
             ->schema([
-                Section::make('Lo que va en tus recetas')
-                    ->description('La ley pide que tus recetas y tu página pública digan tu cédula y la institución que te dio el título. Lo capturas una vez y sale en todas.')
+                Section::make('Lo que va en sus recetas')
+                    ->description('La ley pide que sus recetas y su página pública digan su cédula y la institución que le dio el título. Lo captura una vez y sale en todas.')
                     ->columns(2)
                     ->schema([
                         TextInput::make('license_number')
@@ -70,7 +70,7 @@ class PerfilProfesional extends Page implements HasForms
                             ->required()
                             ->maxLength(50),
                         TextInput::make('institucion_titulo')
-                            ->label('Institución que expidió tu título')
+                            ->label('Institución que expidió su título')
                             ->placeholder('Universidad Autónoma de Sinaloa')
                             ->required()
                             ->maxLength(150),
@@ -80,7 +80,7 @@ class PerfilProfesional extends Page implements HasForms
                             ->maxLength(255),
                         TextInput::make('cedula_especialidad')
                             ->label('Cédula de especialidad')
-                            ->helperText('Solo si eres especialista.')
+                            ->helperText('Solo si es especialista.')
                             ->maxLength(50),
                     ]),
             ]);
@@ -92,7 +92,7 @@ class PerfilProfesional extends Page implements HasForms
 
         Notification::make()
             ->title('Perfil guardado')
-            ->body('Tus recetas ya salen con estos datos.')
+            ->body('Sus recetas ya salen con estos datos.')
             ->success()
             ->send();
     }

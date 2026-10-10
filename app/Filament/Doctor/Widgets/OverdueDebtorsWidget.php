@@ -45,7 +45,7 @@ class OverdueDebtorsWidget extends Widget implements HasActions, HasForms
     {
         $clinicId = auth()->user()->clinic_id;
         $clinic = auth()->user()->clinic;
-        $clinicName = $clinic?->name ?? 'tu consultorio';
+        $clinicName = $clinic?->name ?? 'mi consultorio';
 
         $payments = Payment::where('clinic_id', $clinicId)
             ->overdue()
@@ -65,7 +65,7 @@ class OverdueDebtorsWidget extends Widget implements HasActions, HasForms
                     ? " de *{$payment->service->name}*"
                     : '';
 
-                $msg = "Hola {$firstName}, te escribo de *{$clinicName}*. Tienes un saldo pendiente{$servicePart} de *\${$remaining} MXN* con fecha límite del " . $payment->due_date->format('d/m/Y') . ".\n\nSi ya lo pagaste, avísame y lo descuento. Si no, cuando te acomode pasa o me avisas y lo ajustamos. ¡Gracias!";
+                $msg = "Hola {$firstName}, le escribo de *{$clinicName}*. Tiene un saldo pendiente{$servicePart} de *\${$remaining} MXN* con fecha límite del " . $payment->due_date->format('d/m/Y') . ".\n\nSi ya lo pagó, avíseme y lo descuento. Si no, cuando le acomode pase o me avisa y lo ajustamos. ¡Gracias!";
 
                 return [
                     'id' => $payment->id,

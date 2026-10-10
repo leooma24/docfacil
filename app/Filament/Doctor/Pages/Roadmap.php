@@ -136,7 +136,7 @@ class Roadmap extends Page
 
         Notification::make()
             ->title('¡Idea enviada al roadmap!')
-            ->body('Compártela con tus colegas para que voten — mientras más votos, más probable que gane el próximo mes.')
+            ->body('Compártela con sus colegas para que voten — mientras más votos, más probable que gane el próximo mes.')
             ->success()
             ->send();
     }
@@ -179,7 +179,7 @@ class Roadmap extends Page
             ]);
 
             Notification::make()
-                ->title('Tu voto cuenta')
+                ->title('Su voto cuenta')
                 ->body('Gracias por ayudar a decidir qué construimos este mes.')
                 ->success()
                 ->send();
@@ -200,7 +200,7 @@ class Roadmap extends Page
         if ($deleted) {
             Notification::make()
                 ->title('Voto retirado')
-                ->body('Puedes volver a votar cuando quieras.')
+                ->body('Puede volver a votar cuando quiera.')
                 ->warning()
                 ->send();
         }

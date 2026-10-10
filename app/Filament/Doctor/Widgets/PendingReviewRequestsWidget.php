@@ -40,9 +40,9 @@ class PendingReviewRequestsWidget extends BaseWidget
     {
         $clinic = auth()->user()?->clinic;
         if (empty($clinic?->google_review_url)) {
-            return '⚠️ Primero pega tu URL de reseña Google en Mi cuenta > Configuración para activar los botones.';
+            return '⚠️ Primero pegue su URL de reseña Google en Mi cuenta > Configuración para activar los botones.';
         }
-        return 'Citas completadas en las últimas 48h. Un clic manda al paciente a dejarte reseña.';
+        return 'Citas completadas en las últimas 48h. Un clic manda al paciente a dejar una reseña.';
     }
 
     public function table(Table $table): Table
@@ -88,8 +88,8 @@ class PendingReviewRequestsWidget extends BaseWidget
                         $googleUrl = $clinic->google_review_url;
 
                         $msg = "¡Hola {$firstName}!\n\n"
-                            . "Te escribo de *{$clinicName}*. Espero que hayas tenido una buena experiencia con nosotros.\n\n"
-                            . "Si te gustó cómo te atendimos, ¿nos ayudarías con una reseña corta en Google? Para nosotros es enorme — ayuda a que más personas encuentren el consultorio.\n\n"
+                            . "Le escribo de *{$clinicName}*. Espero que haya tenido una buena experiencia con nosotros.\n\n"
+                            . "Si le gustó nuestra atención, ¿nos ayudaría con una reseña corta en Google? Para nosotros es enorme — ayuda a que más personas encuentren el consultorio.\n\n"
                             . "Dejar reseña: {$googleUrl}\n\n"
                             . "¡Gracias!";
 
@@ -103,7 +103,7 @@ class PendingReviewRequestsWidget extends BaseWidget
                     ->color('gray')
                     ->requiresConfirmation()
                     ->modalHeading('¿Saltar esta reseña?')
-                    ->modalDescription('No se le pedirá reseña a este paciente para esta cita. Puedes pedir a otros pacientes.')
+                    ->modalDescription('No se le pedirá reseña a este paciente para esta cita. Puede pedir a otros pacientes.')
                     ->action(function (Appointment $record) {
                         $record->update(['review_request_sent_at' => now()]);
                         Notification::make()->title('Cita marcada como saltada')->success()->send();
@@ -111,8 +111,8 @@ class PendingReviewRequestsWidget extends BaseWidget
             ])
             ->emptyStateHeading('Sin reseñas por pedir')
             ->emptyStateDescription(fn () => empty(auth()->user()?->clinic?->google_review_url)
-                ? 'Configura tu URL de Google en Mi cuenta > Configuración para empezar.'
-                : 'Completa una cita para empezar a pedir reseñas a tus pacientes.')
+                ? 'Configure su URL de Google en Mi cuenta > Configuración para empezar.'
+                : 'Complete una cita para empezar a pedir reseñas a sus pacientes.')
             ->paginated(false);
     }
 }

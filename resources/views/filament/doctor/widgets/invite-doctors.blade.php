@@ -14,7 +14,7 @@
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-xs font-bold tracking-wider text-fuchsia-700 uppercase">
-                        Tu plan permite varios doctores
+                        Su plan permite varios doctores
                     </span>
                     @if($isUnlimited)
                         <span class="text-xs px-2 py-0.5 rounded-full bg-fuchsia-100 text-fuchsia-700 font-semibold">Plan Clínica · ilimitado</span>
@@ -25,19 +25,19 @@
 
                 <h3 class="mt-1 text-lg md:text-xl font-extrabold text-gray-900">
                     @if($isUnlimited)
-                        Suma a tu equipo dental
+                        Suma a su equipo dental
                     @elseif($slotsLeft === 1)
-                        Te queda 1 doctor por invitar
+                        Le queda 1 doctor por invitar
                     @else
-                        Te quedan {{ $slotsLeft }} doctores por invitar
+                        Le quedan {{ $slotsLeft }} doctores por invitar
                     @endif
                 </h3>
 
                 <p class="mt-1 text-sm text-gray-600">
                     @if($current > 0 || $pending > 0)
-                        Ya tienes {{ $current }} {{ $current === 1 ? 'doctor activo' : 'doctores activos' }}@if($pending > 0) y {{ $pending }} invitación{{ $pending === 1 ? '' : 'es' }} pendiente{{ $pending === 1 ? '' : 's' }}@endif. Cada doctor tiene su propia agenda y reportes — todo dentro de la misma clínica.
+                        Ya tiene {{ $current }} {{ $current === 1 ? 'doctor activo' : 'doctores activos' }}@if($pending > 0) y {{ $pending }} invitación{{ $pending === 1 ? '' : 'es' }} pendiente{{ $pending === 1 ? '' : 's' }}@endif. Cada doctor tiene su propia agenda y reportes — todo dentro de la misma clínica.
                     @else
-                        Invita a tu socio o socia. Cada doctor maneja su agenda, sus pacientes y sus reportes — todo dentro de la misma clínica.
+                        Invite a su socio o socia. Cada doctor maneja su agenda, sus pacientes y sus reportes — todo dentro de la misma clínica.
                     @endif
                 </p>
             </div>

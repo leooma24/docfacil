@@ -43,7 +43,7 @@ class BirthdaysTodayWidget extends Widget
     {
         $today = now();
         $clinic = auth()->user()?->clinic;
-        $clinicName = $clinic?->name ?? 'tu consultorio';
+        $clinicName = $clinic?->name ?? 'el consultorio';
 
         $patients = Patient::where('clinic_id', auth()->user()->clinic_id)
             ->whereMonth('birth_date', $today->month)
@@ -56,9 +56,9 @@ class BirthdaysTodayWidget extends Widget
                 if (strlen($phoneDigits) === 10) $phoneDigits = '52' . $phoneDigits;
 
                 $message = "*¡Feliz cumpleaños, {$name}!*\n\n"
-                    . "Todo el equipo de *{$clinicName}* te desea un día increíble. "
-                    . "Gracias por confiar en nosotros para cuidar tu salud.\n\n"
-                    . "Que cumplas muchos más.";
+                    . "Todo el equipo de *{$clinicName}* le desea un día increíble. "
+                    . "Gracias por confiar en nosotros para cuidar su salud.\n\n"
+                    . "Que cumpla muchos más.";
 
                 return [
                     'id' => $patient->id,

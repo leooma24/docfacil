@@ -10,14 +10,14 @@
         <div class="rounded-2xl p-6 text-white" style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);">
             <div class="text-xs font-semibold tracking-wider uppercase opacity-90 mb-1">Servicios premium</div>
             <h1 class="text-2xl sm:text-3xl font-extrabold">Llévalo al siguiente nivel</h1>
-            <p class="mt-2 opacity-95 max-w-2xl">Setup express, capacitación, branding profesional, WhatsApp Business API y más. Te dejamos tu consultorio funcionando como una clínica grande sin que muevas un dedo.</p>
+            <p class="mt-2 opacity-95 max-w-2xl">Setup express, capacitación, branding profesional, WhatsApp Business API y más. Le dejamos su consultorio funcionando como una clínica grande sin que mueva un dedo.</p>
         </div>
 
         {{-- Compras recientes (si las hay) --}}
         @if ($purchases->count() > 0)
         <div class="bg-white rounded-2xl border border-gray-200 p-5 dark:bg-gray-900 dark:border-gray-700">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold text-gray-900 dark:text-white">Tus compras recientes</h2>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white">Sus compras recientes</h2>
             </div>
             <div class="space-y-2">
                 @foreach ($purchases as $p)
@@ -105,7 +105,7 @@
         @endforeach
 
         <div class="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
-            ¿Algo más que necesitas y no está acá? Escríbeme directo: <a href="https://wa.me/526682493398" target="_blank" class="text-teal-600 font-semibold hover:underline">668 249 3398</a> — Omar Lerma
+            ¿Algo más que necesite y no está acá? Escríbame directo: <a href="https://wa.me/526682493398" target="_blank" class="text-teal-600 font-semibold hover:underline">668 249 3398</a> — Omar Lerma
         </div>
     </div>
 </x-filament-panels::page>

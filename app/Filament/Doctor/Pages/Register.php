@@ -97,7 +97,7 @@ class Register extends BaseRegister
                     ->accepted()
                     ->required()
                     ->validationMessages([
-                        'accepted' => 'Debes aceptar los Términos para continuar.',
+                        'accepted' => 'Debe aceptar los Términos para continuar.',
                     ]),
             ]);
     }
@@ -115,7 +115,7 @@ class Register extends BaseRegister
             ]);
             throw new \Illuminate\Validation\ValidationException(
                 \Illuminate\Support\Facades\Validator::make([], [])
-                    ->after(fn ($v) => $v->errors()->add('email', 'No pudimos procesar tu registro. Intenta de nuevo en unos minutos.'))
+                    ->after(fn ($v) => $v->errors()->add('email', 'No pudimos procesar su registro. Intente de nuevo en unos minutos.'))
             );
         }
 

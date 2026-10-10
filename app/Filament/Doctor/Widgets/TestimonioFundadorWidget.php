@@ -64,10 +64,10 @@ class TestimonioFundadorWidget extends Widget
                 'permiso' => ['boolean'],
             ],
             [
-                'frase.required' => 'Escribe tu frase.',
+                'frase.required' => 'Escriba su frase.',
                 'frase.min' => 'Cuéntame un poco más: con una o dos oraciones basta.',
                 'frase.max' => 'Que sea corta: máximo 600 letras.',
-                'firma.required' => 'Dime cómo quieres que aparezca tu nombre.',
+                'firma.required' => 'Dígame cómo quiere que aparezca su nombre.',
                 'firma.max' => 'El nombre va muy largo: máximo 120 letras.',
             ],
         );

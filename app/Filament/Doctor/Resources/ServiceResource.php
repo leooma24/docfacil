@@ -116,7 +116,7 @@ class ServiceResource extends Resource
                 // La receta. Sin ella no hay nada que descontar al cerrar la
                 // consulta; con ella, el doctor confirma y el kardex se mueve.
                 Forms\Components\Section::make('Receta de insumos')
-                    ->description('Qué gasta este servicio. Es de donde sale el descuento de inventario. Se puede dejar vacío y llenarlo después: la primera vez que uses el servicio en una consulta, te lo vamos a preguntar.')
+                    ->description('Qué gasta este servicio. Es de donde sale el descuento de inventario. Se puede dejar vacío y llenarlo después: la primera vez que use el servicio en una consulta, se lo vamos a preguntar.')
                     ->schema([
                         Forms\Components\Repeater::make('recipe')
                             ->relationship('recipe')

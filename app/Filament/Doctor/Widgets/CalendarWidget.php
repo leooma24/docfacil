@@ -189,7 +189,7 @@ class CalendarWidget extends FullCalendarWidget
                     $doctor = auth()->user()->doctor;
                     if (!$doctor) {
                         \Filament\Notifications\Notification::make()
-                            ->title('No tienes perfil de doctor')
+                            ->title('No tiene perfil de doctor')
                             ->danger()
                             ->send();
                         return;
@@ -206,7 +206,7 @@ class CalendarWidget extends FullCalendarWidget
                     if (empty($slots)) {
                         \Filament\Notifications\Notification::make()
                             ->title('No hay slots disponibles')
-                            ->body('Tu agenda está muy llena. Intenta con más días o menor duración.')
+                            ->body('Su agenda está muy llena. Intente con más días o menor duración.')
                             ->warning()
                             ->send();
                         return;

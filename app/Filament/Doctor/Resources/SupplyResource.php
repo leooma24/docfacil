@@ -91,7 +91,7 @@ class SupplyResource extends Resource
                         Forms\Components\TextInput::make('sku')
                             ->label('Código / SKU')
                             ->maxLength(255)
-                            ->helperText('Opcional. El que uses con tu proveedor.'),
+                            ->helperText('Opcional. El que use con su proveedor.'),
                         Forms\Components\TextInput::make('category')
                             ->label('Categoría')
                             ->maxLength(255)
@@ -141,7 +141,7 @@ class SupplyResource extends Resource
                             ->numeric()
                             ->prefix('$')
                             ->default(0)
-                            ->helperText('Lo que te cuesta una unidad de gasto.'),
+                            ->helperText('Lo que le cuesta una unidad de gasto.'),
                         Forms\Components\Toggle::make('is_active')
                             ->label('Activo')
                             ->default(true),

@@ -318,7 +318,7 @@ class Onboarding extends Page implements HasForms
 
         Notification::make()
             ->title('¡Consultorio listo!')
-            ->body("Configuraste {$servicesCount} servicios" . ($addonCount ? " + {$addonCount} add-ons activos" : '') . '. Ya puedes empezar a atender pacientes.')
+            ->body("Configuró {$servicesCount} servicios" . ($addonCount ? " + {$addonCount} add-ons activos" : '') . '. Ya puede empezar a atender pacientes.')
             ->success()
             ->send();
 

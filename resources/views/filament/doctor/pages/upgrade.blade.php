@@ -16,8 +16,8 @@
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div>
-                <div class="font-bold text-amber-900 dark:text-amber-200">Tu {{ $clinic->is_beta ? 'período beta' : 'prueba gratuita' }} ha terminado</div>
-                <div class="text-sm text-amber-800 dark:text-amber-300">Tus datos están seguros. Activa un plan para seguir usando todas las funciones.</div>
+                <div class="font-bold text-amber-900 dark:text-amber-200">Su {{ $clinic->is_beta ? 'período beta' : 'prueba gratuita' }} ha terminado</div>
+                <div class="text-sm text-amber-800 dark:text-amber-300">Sus datos están seguros. Active un plan para seguir usando todas las funciones.</div>
             </div>
         </div>
         @endif
@@ -25,7 +25,7 @@
         {{-- Info plan actual --}}
         <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between dark:bg-gray-900 dark:border-gray-700">
             <div>
-                <div class="text-xs font-bold tracking-wider text-gray-500 dark:text-gray-400 uppercase">Tu plan actual</div>
+                <div class="text-xs font-bold tracking-wider text-gray-500 dark:text-gray-400 uppercase">Su plan actual</div>
                 <div class="text-2xl font-extrabold text-gray-900 dark:text-white">{{ \App\Models\Clinic::displayNameForPlan($clinic->plan) }}</div>
                 @if ($clinic->plan_ends_at)
                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">

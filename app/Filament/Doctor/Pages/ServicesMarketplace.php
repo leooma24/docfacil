@@ -14,7 +14,7 @@ class ServicesMarketplace extends Page
 
     protected static ?string $navigationLabel = 'Servicios premium';
 
-    protected static ?string $title = 'Servicios premium para tu consultorio';
+    protected static ?string $title = 'Servicios premium para su consultorio';
 
     protected static ?string $slug = 'servicios-premium';
 
@@ -64,7 +64,7 @@ class ServicesMarketplace extends Page
             $seconds = RateLimiter::availableIn($key);
             Notification::make()
                 ->title('Demasiados intentos')
-                ->body("Espera {$seconds} segundos antes de intentar de nuevo.")
+                ->body("Espere {$seconds} segundos antes de intentar de nuevo.")
                 ->warning()
                 ->send();
             return;
@@ -93,8 +93,8 @@ class ServicesMarketplace extends Page
         $clinic = auth()->user()?->clinic;
         if (!$clinic) {
             Notification::make()
-                ->title('No encontramos tu consultorio')
-                ->body('Cierra sesión y vuelve a entrar. Si el problema persiste, contáctanos por WhatsApp.')
+                ->title('No encontramos su consultorio')
+                ->body('Cierre sesión y vuelva a entrar. Si el problema persiste, contáctenos por WhatsApp.')
                 ->danger()
                 ->persistent()
                 ->send();

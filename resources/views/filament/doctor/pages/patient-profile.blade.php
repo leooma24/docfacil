@@ -620,7 +620,7 @@
                 @endif
             </div>
             @empty
-            <div style="text-align:center;color:#94a3b8;padding:28px 0;font-size:14px;">Sin odontogramas todavía. Crea el primero con el botón de arriba; los siguientes arrancan de lo que ya marcaste.</div>
+            <div style="text-align:center;color:#94a3b8;padding:28px 0;font-size:14px;">Sin odontogramas todavía. Cree el primero con el botón de arriba; los siguientes arrancan de lo que ya marcó.</div>
             @endforelse
         </div>
         @endif

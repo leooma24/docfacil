@@ -15,8 +15,8 @@
             <div style="width:56px;height:56px;background:#ccfbf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
                 <svg style="width:28px;height:28px;color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
-            <h2 style="font-size:1.5rem;font-weight:800;">Tu consultorio</h2>
-            <p style="color:#6b7280;font-size:0.875rem;">Paso 1 de 5 — Datos básicos de tu consultorio</p>
+            <h2 style="font-size:1.5rem;font-weight:800;">Su consultorio</h2>
+            <p style="color:#6b7280;font-size:0.875rem;">Paso 1 de 5 — Datos básicos de su consultorio</p>
         </div>
         <div style="display:grid;gap:1rem;">
             <div>
@@ -50,13 +50,13 @@
                 </select>
                 <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">
                     Ahí son las <strong style="color:#0d9488;">{{ now($this->zonaElegida())->format('H:i') }}</strong>.
-                    Tu agenda pública y tu escritorio usan esta hora.
+                    Su agenda pública y su escritorio usan esta hora.
                 </p>
             </div>
 
             {{-- Logo upload --}}
             <div style="margin-top:0.5rem;padding-top:1rem;border-top:1px dashed #e5e7eb;">
-                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.75rem;">(opcional · aparece en tu página pública de citas)</span></label>
+                <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem;">Logo del consultorio <span style="font-weight:400;color:#9ca3af;font-size:0.75rem;">(opcional · aparece en su página pública de citas)</span></label>
                 <div style="display:flex;align-items:center;gap:1rem;">
                     <div style="width:64px;height:64px;border-radius:50%;border:2px dashed #d1d5db;background:#f9fafb;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
                         @if($logo && method_exists($logo, 'temporaryUrl'))
@@ -86,14 +86,14 @@
             <div style="width:56px;height:56px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
                 <svg style="width:28px;height:28px;color:#3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             </div>
-            <h2 style="font-size:1.5rem;font-weight:800;">Tu perfil profesional</h2>
-            <p style="color:#6b7280;font-size:0.875rem;">Paso 2 de 5 — Esta información aparece en tus recetas</p>
+            <h2 style="font-size:1.5rem;font-weight:800;">Su perfil profesional</h2>
+            <p style="color:#6b7280;font-size:0.875rem;">Paso 2 de 5 — Esta información aparece en sus recetas</p>
         </div>
         <div style="display:grid;gap:1rem;">
             <div>
                 <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.375rem;">Especialidad</label>
                 <input type="text" wire:model.live.debounce.300ms="specialty" placeholder="Ej: Odontología General, Ortodoncia, Implantología..." style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:12px;font-size:0.875rem;">
-                <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">Sugerimos servicios según tu especialidad en el siguiente paso.</p>
+                <p style="margin-top:0.375rem;font-size:0.75rem;color:#6b7280;">Sugerimos servicios según su especialidad en el siguiente paso.</p>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                 <div>
@@ -101,7 +101,7 @@
                     <input type="text" wire:model="license_number" placeholder="12345678" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:12px;font-size:0.875rem;">
                 </div>
                 <div>
-                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.375rem;">Tu celular</label>
+                    <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.375rem;">Su celular</label>
                     <input type="tel" wire:model="doctor_phone" placeholder="55 9876 5432" style="width:100%;padding:0.75rem;border:1px solid #d1d5db;border-radius:12px;font-size:0.875rem;">
                 </div>
             </div>
@@ -116,13 +116,13 @@
             <div style="width:56px;height:56px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
                 <svg style="width:28px;height:28px;color:#f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
             </div>
-            <h2 style="font-size:1.5rem;font-weight:800;">Tus servicios</h2>
-            <p style="color:#6b7280;font-size:0.875rem;">Paso 3 de 5 — @if($suggestions_loaded)Pre-cargamos servicios típicos de tu especialidad. Edita o elimina los que no apliquen.@else Agrega los servicios que ofreces.@endif</p>
+            <h2 style="font-size:1.5rem;font-weight:800;">Sus servicios</h2>
+            <p style="color:#6b7280;font-size:0.875rem;">Paso 3 de 5 — @if($suggestions_loaded)Pre-cargamos servicios típicos de su especialidad. Edite o elimine los que no apliquen.@else Agregue los servicios que ofrece.@endif</p>
         </div>
 
         @if($suggestions_loaded && count($quick_services) > 0)
         <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:12px;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.8rem;color:#0f766e;">
-            <x-icono nombre="sparkles" /> Te dejamos {{ count($quick_services) }} servicios pre-cargados. Edita precios y duración a tu gusto.
+            <x-icono nombre="sparkles" /> Le dejamos {{ count($quick_services) }} servicios pre-cargados. Edite precios y duración a su gusto.
         </div>
         @endif
 
@@ -149,7 +149,7 @@
         </button>
 
         @if(empty($quick_services))
-        <p style="text-align:center;color:#9ca3af;font-size:0.8rem;margin-top:1rem;">Puedes agregar servicios ahora o después desde el menú "Servicios".</p>
+        <p style="text-align:center;color:#9ca3af;font-size:0.8rem;margin-top:1rem;">Puede agregar servicios ahora o después desde el menú "Servicios".</p>
         @endif
     </div>
     @endif
@@ -162,7 +162,7 @@
                 <svg style="width:28px;height:28px;color:#7c3aed;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
             </div>
             <h2 style="font-size:1.5rem;font-weight:800;">Add-ons opcionales</h2>
-            <p style="color:#6b7280;font-size:0.875rem;">Paso 4 de 5 — Activa los que te interesen con <strong>30 días gratis</strong>. Cancelas cuando quieras.</p>
+            <p style="color:#6b7280;font-size:0.875rem;">Paso 4 de 5 — Active los que le interesen con <strong>30 días gratis</strong>. Cancele cuando quiera.</p>
         </div>
 
         <div style="display:grid;gap:0.75rem;">
@@ -189,7 +189,7 @@
         </div>
 
         <p style="margin-top:1rem;text-align:center;font-size:0.75rem;color:#9ca3af;">
-            @if(count($addons_activate) === 0)Selecciona los que te interesen, o sigue sin activar ninguno.
+            @if(count($addons_activate) === 0)Seleccione los que le interesen, o siga sin activar ninguno.
             @else{{ count($addons_activate) }} add-on{{ count($addons_activate) === 1 ? '' : 's' }} seleccionado{{ count($addons_activate) === 1 ? '' : 's' }} · 30 días gratis cada uno
             @endif
         </p>
@@ -204,12 +204,12 @@
         </div>
         <h2 style="font-size:1.5rem;font-weight:800;">¡Todo listo!</h2>
         <p style="color:#6b7280;font-size:0.9rem;margin-top:0.5rem;max-width:400px;margin-left:auto;margin-right:auto;">
-            Tu consultorio está configurado. Ya puedes empezar a atender pacientes.
+            Su consultorio está configurado. Ya puede empezar a atender pacientes.
         </p>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.5rem;max-width:440px;margin-left:auto;margin-right:auto;text-align:left;">
             <div style="padding:1rem;background:#f0fdfa;border-radius:12px;">
-                <div style="font-weight:700;font-size:0.9rem;">{{ $clinic_name ?: 'Tu consultorio' }}</div>
+                <div style="font-weight:700;font-size:0.9rem;">{{ $clinic_name ?: 'Su consultorio' }}</div>
                 <div style="font-size:0.75rem;color:#6b7280;">{{ $clinic_city ?: 'Sin ciudad' }}</div>
             </div>
             <div style="padding:1rem;background:#eff6ff;border-radius:12px;">
@@ -231,25 +231,25 @@
         <div style="margin-top:1.75rem;padding:1rem 1.25rem;background:linear-gradient(135deg,#ecfeff,#f0fdfa);border:1px solid #99f6e4;border-radius:16px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
             <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
                 <span style="font-size:1.25rem;color:#0d9488;"><x-icono nombre="globe-alt" /></span>
-                <span style="font-weight:700;font-size:0.9rem;color:#0f766e;">Tu portal de agendamiento ya está vivo</span>
+                <span style="font-weight:700;font-size:0.9rem;color:#0f766e;">Su portal de agendamiento ya está vivo</span>
             </div>
             <div style="background:white;padding:0.6rem 0.85rem;border-radius:8px;border:1px solid #99f6e4;font-size:0.78rem;color:#0d9488;font-family:monospace;word-break:break-all;">{{ $this->portalUrl }}</div>
             <div style="display:flex;gap:0.5rem;margin-top:0.625rem;flex-wrap:wrap;">
                 <a href="{{ $this->portalUrl }}" target="_blank" style="font-size:0.75rem;color:#0d9488;text-decoration:none;font-weight:600;padding:0.3rem 0.6rem;background:white;border-radius:8px;border:1px solid #99f6e4;">Abrir portal ↗</a>
-                <a href="https://wa.me/?text={{ urlencode('Agenda tu cita conmigo aquí: ' . $this->portalUrl) }}" target="_blank" style="font-size:0.75rem;color:#16a34a;text-decoration:none;font-weight:600;padding:0.3rem 0.6rem;background:white;border-radius:8px;border:1px solid #bbf7d0;">Compartir por WhatsApp</a>
+                <a href="https://wa.me/?text={{ urlencode('Agende su cita conmigo aquí: ' . $this->portalUrl) }}" target="_blank" style="font-size:0.75rem;color:#16a34a;text-decoration:none;font-weight:600;padding:0.3rem 0.6rem;background:white;border-radius:8px;border:1px solid #bbf7d0;">Compartir por WhatsApp</a>
             </div>
-            <p style="font-size:0.75rem;color:#6b7280;margin-top:0.5rem;">Tus pacientes pueden agendar sin descargar nada. Compártelo en tu Instagram, ficha de Google, o por WhatsApp.</p>
+            <p style="font-size:0.75rem;color:#6b7280;margin-top:0.5rem;">Sus pacientes pueden agendar sin descargar nada. Compártalo en su Instagram, ficha de Google, o por WhatsApp.</p>
         </div>
         @endif
 
         <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #f3f4f6;text-align:left;max-width:440px;margin-left:auto;margin-right:auto;">
-            <p style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;"><x-icono nombre="light-bulb" /> Para terminar tu marca:</p>
+            <p style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;"><x-icono nombre="light-bulb" /> Para terminar su marca:</p>
             <ul style="font-size:0.8rem;color:#6b7280;list-style:none;padding:0;margin:0;display:grid;gap:0.375rem;">
                 @if(!$logo)
-                <li>→ Agrega tu logo desde <strong>Mi cuenta › Configuración</strong></li>
+                <li>→ Agregue su logo desde <strong>Mi cuenta › Configuración</strong></li>
                 @endif
-                <li>→ Conecta tu link de Google para pedir reseñas con un clic</li>
-                <li>→ Comparte tu QR de check-in en recepción</li>
+                <li>→ Conecte su link de Google para pedir reseñas con un clic</li>
+                <li>→ Comparta su QR de check-in en recepción</li>
             </ul>
         </div>
     </div>

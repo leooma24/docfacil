@@ -82,7 +82,7 @@
         @else
         <div class="pi-loading">
             <div class="pi-loading-spinner"></div>
-            <div>Analizando los datos de tu consultorio...</div>
+            <div>Analizando los datos de su consultorio...</div>
             <div style="font-size:12px;margin-top:6px;opacity:0.7;">Esto tarda unos segundos la primera vez</div>
         </div>
         @endif

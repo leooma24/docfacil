@@ -27,7 +27,7 @@ class CreatePatient extends CreateRecord
 
         if ($clinica && ! $clinica->puedeAgregarPacientes()) {
             \Filament\Notifications\Notification::make()
-                ->title('Llegaste al tope de tu plan')
+                ->title('Llegó al tope de su plan')
                 ->body($clinica->mensajeDeTopeDePacientes())
                 ->warning()
                 ->persistent()

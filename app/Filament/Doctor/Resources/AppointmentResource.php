@@ -95,7 +95,7 @@ class AppointmentResource extends Resource
 
                                 return new \Illuminate\Support\HtmlString(
                                     '<span style="color:#b45309;font-weight:600;">⚠️ Ha movido sus citas '
-                                    . $veces . ' veces en los últimos 6 meses. Confírmale por WhatsApp antes de apartarle el horario.</span>'
+                                    . $veces . ' veces en los últimos 6 meses. Confírmele por WhatsApp antes de apartarle el horario.</span>'
                                 );
                             })
                             // Pre-fill desde ?patient= cuando se llega desde
@@ -202,7 +202,7 @@ class AppointmentResource extends Resource
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')
                             ->minutesStep(15)
-                            ->helperText('Se calcula automáticamente al elegir servicio + inicio. Puedes ajustarlo.'),
+                            ->helperText('Se calcula automáticamente al elegir servicio + inicio. Puede ajustarlo.'),
                         Forms\Components\Select::make('status')
                             ->label('Estado')
                             ->options([
@@ -380,7 +380,7 @@ class AppointmentResource extends Resource
                             Forms\Components\Section::make('Próxima cita')
                                 ->description(fn () => \App\Services\AppointmentPatternService::suggestNextDate($record->patient_id, $record->clinic_id)
                                     ? 'Pre-sugerimos la fecha basados en el patrón de visitas anteriores de este paciente.'
-                                    : 'Sin patrón previo — captura la fecha si quieres agendar.')
+                                    : 'Sin patrón previo — capture la fecha si quiere agendar.')
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('next_appointment_date')
                                         ->label('Fecha y hora')
@@ -398,7 +398,7 @@ class AppointmentResource extends Resource
                                 ->columns(2)
                                 ->collapsible(),
                             Forms\Components\Section::make('Cobro')
-                                ->description('Solo marca si esta visita NO está pre-pagada (ej. ortodoncia mensualidad ya cobrada).')
+                                ->description('Solo marque si esta visita NO está pre-pagada (ej. ortodoncia mensualidad ya cobrada).')
                                 ->schema([
                                     Forms\Components\Toggle::make('charge')
                                         ->label('Registrar cobro de esta visita')
@@ -592,8 +592,8 @@ class AppointmentResource extends Resource
             ])
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
-            ->emptyStateHeading('Tu agenda está vacía')
-            ->emptyStateDescription('Crea tu primera cita: eliges paciente, día y servicio, y la duración se calcula sola.')
+            ->emptyStateHeading('Su agenda está vacía')
+            ->emptyStateDescription('Cree su primera cita: elige paciente, día y servicio, y la duración se calcula sola.')
             ->emptyStateIcon('heroicon-o-calendar-days')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
@@ -629,7 +629,7 @@ class AppointmentResource extends Resource
         if ($candidatos->isEmpty()) {
             Notification::make()
                 ->title('Cita cancelada')
-                ->body('Nadie de tu lista de espera pedía ese día.')
+                ->body('Nadie de su lista de espera pedía ese día.')
                 ->success()
                 ->send();
 

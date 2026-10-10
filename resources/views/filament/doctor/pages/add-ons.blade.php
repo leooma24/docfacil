@@ -4,9 +4,9 @@
             <div class="flex items-start gap-3">
                 <div class="text-3xl" style="color:#0d9488;"><x-icono nombre="sparkles" /></div>
                 <div>
-                    <h3 class="font-extrabold text-teal-900 text-lg">Amplía tu plan con features específicos</h3>
+                    <h3 class="font-extrabold text-teal-900 text-lg">Amplíe su plan con features específicos</h3>
                     <p class="text-sm text-teal-800 mt-1 leading-relaxed">
-                        Paga solo lo que usas. Activa cualquier add-on con <strong>30 días gratis</strong> como founding member. Puedes cancelarlo cuando quieras desde esta página.
+                        Pague solo lo que usa. Active cualquier add-on con <strong>30 días gratis</strong> como founding member. Puede cancelarlo cuando quiera desde esta página.
                     </p>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                             </span>
                         @elseif($addon['incluido_en_plan'])
                             <span class="inline-block text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
-                                ✓ Incluido en tu plan
+                                ✓ Incluido en su plan
                             </span>
                         @else
                             <span class="inline-block text-xs font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700">
@@ -49,12 +49,12 @@
 
                 @if($addon['incluido_en_plan'] && !$addon['is_active'])
                     <div class="w-full px-4 py-2.5 text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg text-center">
-                        Ya lo tienes activo — no pagas extra
+                        Ya lo tiene activo — no paga extra
                     </div>
                 @elseif($addon['is_active'])
                     <button
                         wire:click="cancelAddon('{{ $addon['slug'] }}')"
-                        wire:confirm="¿Seguro que quieres cancelar {{ $addon['name'] }}? Conservarás acceso hasta el fin del periodo."
+                        wire:confirm="¿Seguro que quiere cancelar {{ $addon['name'] }}? Conservará acceso hasta el fin del periodo."
                         class="w-full px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
                         Cancelar add-on
                     </button>
@@ -75,7 +75,7 @@
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-8 italic">
-            Los add-ons se cobran junto con tu plan base. Puedes cancelar cuando quieras — el cargo se detiene en el siguiente ciclo.
+            Los add-ons se cobran junto con su plan base. Puede cancelar cuando quiera — el cargo se detiene en el siguiente ciclo.
         </p>
     </div>
 </x-filament-panels::page>

@@ -49,7 +49,7 @@
                             <strong class="text-amber-900 dark:text-amber-100 font-mono">{{ $this->referenceCode }}</strong>
                             <button type="button" onclick="navigator.clipboard.writeText('{{ $this->referenceCode }}'); this.innerText='✓ Copiado'; setTimeout(()=>this.innerText='Copiar',2000)" class="text-xs text-amber-700 hover:text-amber-900 font-semibold border border-amber-300 px-2 py-1 rounded-lg">Copiar</button>
                         </div>
-                        <p class="text-xs text-amber-800 mt-1 dark:text-amber-200/80">Pon este código como <strong>concepto</strong> o <strong>referencia</strong> de tu transferencia. Así lo cruzamos contigo.</p>
+                        <p class="text-xs text-amber-800 mt-1 dark:text-amber-200/80">Ponga este código como <strong>concepto</strong> o <strong>referencia</strong> de su transferencia. Así lo cruzamos con usted.</p>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 dark:bg-gray-900 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                     <span class="w-7 h-7 rounded-full bg-teal-500 text-white flex items-center justify-center text-sm font-bold">2</span>
-                    Sube el comprobante
+                    Suba el comprobante
                 </h2>
 
                 <form wire:submit="submit" class="space-y-4">
@@ -68,7 +68,7 @@
                         Enviar comprobante
                     </button>
 
-                    <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Lo revisaremos en 1-24 horas hábiles. Recibirás un correo y WhatsApp con la resolución.</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Lo revisaremos en 1-24 horas hábiles. Recibirá un correo y WhatsApp con la resolución.</p>
                 </form>
             </div>
         </div>
@@ -78,8 +78,8 @@
         <div class="rounded-2xl p-5 border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 flex items-start gap-4 dark:border-amber-800 dark:from-amber-900/20 dark:to-orange-900/20">
             <div class="text-3xl" style="color:#0d9488;"><x-icono nombre="light-bulb" /></div>
             <div class="flex-1">
-                <div class="font-bold text-amber-900 dark:text-amber-200">¿Te conviene el plan anual con SPEI?</div>
-                <p class="text-sm text-amber-800 dark:text-amber-200/80 mt-1">Con SPEI mensual tendrás que subir comprobante cada mes. Con anual pagas 1 vez, te ahorras 2 meses y te olvidas del trámite.</p>
+                <div class="font-bold text-amber-900 dark:text-amber-200">¿Le conviene el plan anual con SPEI?</div>
+                <p class="text-sm text-amber-800 dark:text-amber-200/80 mt-1">Con SPEI mensual tendrá que subir comprobante cada mes. Con anual paga 1 vez, se ahorra 2 meses y se olvida del trámite.</p>
                 <a href="{{ route('filament.doctor.pages.pago-spei', ['plan' => $this->plan, 'cycle' => 'annual']) }}" class="inline-block mt-2 text-sm font-bold text-amber-900 dark:text-amber-200 underline">Cambiar a anual y ahorrar 2 meses →</a>
             </div>
         </div>

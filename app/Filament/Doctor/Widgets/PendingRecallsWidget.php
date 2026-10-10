@@ -47,7 +47,7 @@ class PendingRecallsWidget extends Widget
     {
         $clinicId = auth()->user()->clinic_id;
         $clinic = auth()->user()->clinic;
-        $clinicName = $clinic?->name ?? 'tu consultorio';
+        $clinicName = $clinic?->name ?? 'nuestro consultorio';
 
         // Subquery: la cita más reciente completada con servicio de recall por paciente
         $latestRecallAppointments = Appointment::query()
@@ -103,10 +103,10 @@ class PendingRecallsWidget extends Widget
             $serviceName = $appt->service->name;
             $monthsAgo = (int) $appt->starts_at->diffInMonths(now());
 
-            $message = "¡Hola {$firstName}! Te escribimos de *{$clinicName}*.\n\n"
-                . "Hace {$monthsAgo} meses te hicimos *{$serviceName}* y ya te toca tu seguimiento. "
-                . "Recordarte es parte de cuidarte bien.\n\n"
-                . "¿Te apartamos una cita esta o la próxima semana? Responde cuándo te acomoda mejor y lo arreglamos.";
+            $message = "¡Hola {$firstName}! Le escribimos de *{$clinicName}*.\n\n"
+                . "Hace {$monthsAgo} meses le hicimos *{$serviceName}* y ya le toca su seguimiento. "
+                . "Recordarle es parte de cuidar su salud.\n\n"
+                . "¿Le apartamos una cita esta o la próxima semana? Responda cuándo le acomoda mejor y lo arreglamos.";
 
             $dueRecalls->push([
                 'patient_id' => $patient->id,

@@ -5,14 +5,14 @@
     <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;padding:2rem;margin-bottom:1.5rem;">
         <div style="text-align:center;margin-bottom:1.5rem;">
             <div style="font-size:3rem;margin-bottom:0.5rem;color:#0d9488;"><x-icono nombre="gift" /></div>
-            <h2 style="font-size:1.5rem;font-weight:800;">Invita a un colega y ambos ganan</h2>
+            <h2 style="font-size:1.5rem;font-weight:800;">Invite a un colega y ambos ganan</h2>
             <p style="color:#6b7280;font-size:0.875rem;margin-top:0.5rem;max-width:560px;margin-left:auto;margin-right:auto;">
-                Tu colega gana <strong style="color:#0d9488;">30 días de trial</strong> (vs 15 normales). Tú ganas <strong style="color:#0d9488;">15 días extra al registrarse</strong> + <strong style="color:#0d9488;">1 mes gratis por cada mes que pague</strong> (hasta 12 meses = 1 año completo de DocFácil sin costo).
+                Su colega gana <strong style="color:#0d9488;">30 días de trial</strong> (vs 15 normales). Usted gana <strong style="color:#0d9488;">15 días extra al registrarse</strong> + <strong style="color:#0d9488;">1 mes gratis por cada mes que pague</strong> (hasta 12 meses = 1 año completo de DocFácil sin costo).
             </p>
         </div>
 
         <div style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border:2px solid #14b8a6;border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1.5rem;">
-            <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.05em;">Tu código de referido</div>
+            <div style="font-size:0.75rem;color:#6b7280;text-transform:uppercase;font-weight:600;letter-spacing:0.05em;">Su código de referido</div>
             <div style="font-size:2.5rem;font-weight:800;color:#0d9488;letter-spacing:0.1em;margin-top:0.5rem;">{{ $this->getReferralCode() }}</div>
             <div style="font-size:0.8rem;color:#6b7280;margin-top:0.5rem;">Compártelo con otros doctores</div>
         </div>
@@ -54,7 +54,7 @@
     @if(count($this->referrals) > 0)
     <div class="bg-white dark:bg-gray-800" style="border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:1.5rem;">
         <div style="padding:1rem 1.25rem;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-weight:700;font-size:0.875rem;" class="dark:bg-gray-700">
-            Tus referidos
+            Sus referidos
         </div>
         <div style="overflow-x:auto;">
         <table style="width:100%;font-size:0.85rem;min-width:560px;">
@@ -110,7 +110,7 @@
                 </div>
                 <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#14b8a6,#0d9488);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">{{ $row['initials'] }}</div>
                 <div style="flex:1;min-width:0;">
-                    <div style="font-weight:600;color:#1f2937;">{{ $row['name'] }}{{ $row['is_me'] ? ' (tú)' : '' }}</div>
+                    <div style="font-weight:600;color:#1f2937;">{{ $row['name'] }}{{ $row['is_me'] ? ' (usted)' : '' }}</div>
                     <div style="font-size:0.75rem;color:#6b7280;">{{ $row['referred'] }} colegas invitados</div>
                 </div>
                 <div style="text-align:right;">

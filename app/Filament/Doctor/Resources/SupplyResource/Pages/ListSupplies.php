@@ -38,7 +38,7 @@ class ListSupplies extends ListRecords
 
         return [
             'title'    => 'Insumos',
-            'subtitle' => 'Lo que tienes en el consultorio y lo que está por acabarse. El stock sale del kardex de movimientos.',
+            'subtitle' => 'Lo que tiene en el consultorio y lo que está por acabarse. El stock sale del kardex de movimientos.',
             'gradient' => '#14b8a6 0%, #0d9488 40%, #0f766e 100%',
             'accent'   => '#14b8a6',
             'stats' => [

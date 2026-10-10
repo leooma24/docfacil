@@ -36,9 +36,9 @@ class Referrals extends Page
         $code = $this->getReferralCode();
         $link = $this->getReferralLink();
         $msg = urlencode(
-            "Hola! Te recomiendo *DocFácil* para tu consultorio. Software para agenda, pacientes, recetas PDF, cobros por WhatsApp y más.\n\n".
-            "Usa mi código *{$code}* al registrarte y ambos ganamos:\n\n".
-            "*Tú*: 30 días gratis (vs 15 normales)\n".
+            "Hola! Le recomiendo *DocFácil* para su consultorio. Software para agenda, pacientes, recetas PDF, cobros por WhatsApp y más.\n\n".
+            "Use mi código *{$code}* al registrarse y ambos ganamos:\n\n".
+            "*Usted*: 30 días gratis (vs 15 normales)\n".
             "*Yo*: 15 días extra + 1 mes gratis por cada mes que pagues (hasta 12 meses)\n\n".
             "Regístrate aquí: {$link}"
         );

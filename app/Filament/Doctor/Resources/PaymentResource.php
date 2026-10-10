@@ -307,8 +307,8 @@ class PaymentResource extends Resource
                             : 'gray')
                     ->visible(fn (Payment $record) => in_array($record->status, ['pending', 'partial']) && !empty($record->patient?->telefonoDeContacto()))
                     ->tooltip(fn () => auth()->user()?->clinic?->hasFeature('whatsapp_payment')
-                        ? 'Abre WhatsApp con el mensaje de recordatorio listo'
-                        : 'Disponible desde el plan Básico — actualiza tu plan para enviar cobros por WhatsApp')
+                        ? 'Abra WhatsApp con el mensaje de recordatorio listo'
+                        : 'Disponible desde el plan Básico — actualice su plan para enviar cobros por WhatsApp')
                     ->url(function (Payment $record) {
                         if (!auth()->user()?->clinic?->hasFeature('whatsapp_payment')) {
                             return null;

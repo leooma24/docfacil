@@ -137,7 +137,7 @@ class TodayAppointments extends BaseWidget
                     ->action(fn (Appointment $record) => $record->update(['status' => 'no_show'])),
             ])
             ->emptyStateHeading('No hay citas para hoy')
-            ->emptyStateDescription('Tu agenda está libre. ¡Buen momento para revisar pendientes!')
+            ->emptyStateDescription('Su agenda está libre. ¡Buen momento para revisar pendientes!')
             ->emptyStateIcon('heroicon-o-calendar')
             ->paginated(false);
     }

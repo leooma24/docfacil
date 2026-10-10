@@ -141,14 +141,14 @@
                 <div style="flex:1;min-width:0;">
                     <div class="dh-hero-kicker">{{ $d['date'] }}</div>
                     @if($d['empty_state'] === 'fresh')
-                        <h2 class="dh-hero-title">Te damos la bienvenida, {{ $d['name'] }}</h2>
-                        <div class="dh-hero-subtitle">Tu consultorio está listo. Empieza por aquí — te toma 5 minutos y ya tendrás corriendo el sistema.</div>
+                        <h2 class="dh-hero-title">Le damos la bienvenida, {{ $d['name'] }}</h2>
+                        <div class="dh-hero-subtitle">Su consultorio está listo. Empiece por aquí — le toma 5 minutos y ya tendrá corriendo el sistema.</div>
                     @elseif($d['empty_state'] === 'has_patients')
                         <h2 class="dh-hero-title">Buen avance, {{ $d['name'] }}</h2>
-                        <div class="dh-hero-subtitle">Ya tienes {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente' : 'pacientes' }}. Falta agendar su primera cita y mandar su primer recordatorio.</div>
+                        <div class="dh-hero-subtitle">Ya tiene {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente' : 'pacientes' }}. Falta agendar su primera cita y mandar su primer recordatorio.</div>
                     @else
                         <h2 class="dh-hero-title">{{ $d['greeting'] }}, {{ $d['name'] }}</h2>
-                        <div class="dh-hero-subtitle">Este es el resumen de tu consultorio de hoy. Que tengas un gran día.</div>
+                        <div class="dh-hero-subtitle">Este es el resumen de su consultorio de hoy. Que tenga un gran día.</div>
                     @endif
                 </div>
             </div>
@@ -183,13 +183,13 @@
                     <div class="dh-empty-step {{ $d['total_patients'] > 0 ? 'done' : '' }}">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="dh-empty-num">{{ $d['total_patients'] > 0 ? '✓' : '1' }}</div>
-                            <div class="dh-empty-step-title">Agrega tu primer paciente</div>
+                            <div class="dh-empty-step-title">Agregue su primer paciente</div>
                         </div>
                         <div class="dh-empty-step-desc">
                             @if($d['total_patients'] > 0)
                                 Listo · {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente registrado' : 'pacientes registrados' }}
                             @else
-                                Solo nombre, teléfono y email. Lo demás lo llenas después.
+                                Solo nombre, teléfono y email. Lo demás lo llena después.
                             @endif
                         </div>
                         <a href="{{ $d['patients_create_url'] }}" class="dh-empty-cta">
@@ -200,13 +200,13 @@
                     <div class="dh-empty-step {{ $d['total_appointments'] > 0 ? 'done' : '' }}">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="dh-empty-num">{{ $d['total_appointments'] > 0 ? '✓' : '2' }}</div>
-                            <div class="dh-empty-step-title">Crea tu primera cita</div>
+                            <div class="dh-empty-step-title">Cree su primera cita</div>
                         </div>
                         <div class="dh-empty-step-desc">
                             @if($d['total_appointments'] > 0)
                                 Listo · {{ $d['total_appointments'] }} {{ $d['total_appointments'] === 1 ? 'cita agendada' : 'citas agendadas' }}
                             @else
-                                Selecciona paciente, fecha y servicio. La duración se calcula sola.
+                                Seleccione paciente, fecha y servicio. La duración se calcula sola.
                             @endif
                         </div>
                         <a href="{{ $d['appointments_create_url'] }}" class="dh-empty-cta">
@@ -217,13 +217,13 @@
                     <div class="dh-empty-step">
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div class="dh-empty-num">3</div>
-                            <div class="dh-empty-step-title">Manda tu primer recordatorio WhatsApp</div>
+                            <div class="dh-empty-step-title">Mande su primer recordatorio WhatsApp</div>
                         </div>
                         <div class="dh-empty-step-desc">
-                            Desde la cita: 1 clic abre WhatsApp con el mensaje listo. Tú solo le das enviar.
+                            Desde la cita: 1 clic abre WhatsApp con el mensaje listo. Usted solo le da enviar.
                         </div>
                         <span class="dh-empty-cta" style="opacity:0.7;cursor:default;">
-                            {{ $d['total_appointments'] > 0 ? 'Abre la cita ↗' : 'Disponible al crear cita' }}
+                            {{ $d['total_appointments'] > 0 ? 'Abra la cita ↗' : 'Disponible al crear cita' }}
                         </span>
                     </div>
                 </div>

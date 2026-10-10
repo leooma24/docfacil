@@ -109,17 +109,17 @@
 
         <div class="sc-header">
             <div class="sc-header-left">
-                <div class="sc-kicker"><x-icono nombre="bolt" /> Pon a punto tu DocFácil</div>
+                <div class="sc-kicker"><x-icono nombre="bolt" /> Ponga a punto su DocFácil</div>
                 <h3 class="sc-title">
                     @if($percent >= 80)
                         Casi listo · {{ ($total_count - $completed_count) === 1 ? 'falta 1 paso' : 'faltan ' . ($total_count - $completed_count) . ' pasos' }}
                     @elseif($percent >= 40)
                         Buen avance · {{ $completed_count }} de {{ $total_count }} hechos
                     @else
-                        Empieza por aquí
+                        Empiece por aquí
                     @endif
                 </h3>
-                <div class="sc-subtitle">Termina estos pasos y tu consultorio queda corriendo al 100%.</div>
+                <div class="sc-subtitle">Termine estos pasos y su consultorio queda corriendo al 100%.</div>
             </div>
             <div class="sc-percent-block">
                 <div class="sc-percent">{{ $percent }}%</div>

@@ -21,7 +21,7 @@ class AssistantChat extends Component
         $this->messages = [
             [
                 'role' => 'assistant',
-                'content' => '¡Hola! Soy tu asistente IA. Puedo responder preguntas sobre tu consultorio. Ejemplo: "¿Cuánto facturé esta semana?" o "¿Quién tiene cita mañana?"',
+                'content' => '¡Hola! Soy su asistente. Puedo responder preguntas sobre su consultorio. Ejemplo: "¿Cuánto facturé esta semana?" o "¿Quién tiene cita mañana?"',
             ],
         ];
     }
@@ -46,7 +46,7 @@ class AssistantChat extends Component
 
         $this->messages[] = [
             'role' => 'assistant',
-            'content' => $answer ?: 'No pude procesar tu pregunta. Intenta de nuevo o verifica la configuración de IA.',
+            'content' => $answer ?: 'No pude procesar su pregunta. Intente de nuevo o revise la configuración de IA.',
         ];
         $this->thinking = false;
     }
@@ -56,7 +56,7 @@ class AssistantChat extends Component
         $this->messages = [
             [
                 'role' => 'assistant',
-                'content' => '¡Listo! ¿En qué más te puedo ayudar?',
+                'content' => '¡Listo! ¿En qué más le puedo ayudar?',
             ],
         ];
     }

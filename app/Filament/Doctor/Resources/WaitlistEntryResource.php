@@ -63,14 +63,14 @@ class WaitlistEntryResource extends Resource
                             ->label('Servicio (opcional)')
                             ->relationship('service', 'name')
                             ->preload()
-                            ->helperText('Déjalo en blanco si le sirve cualquier servicio'),
+                            ->helperText('Déjelo en blanco si le sirve cualquier servicio'),
                         Forms\Components\Select::make('doctor_id')
                             ->label('Doctor preferido (opcional)')
                             ->options(fn () => \App\Models\Doctor::where('clinic_id', auth()->user()->clinic_id)
                                 ->with('user')->get()
                                 ->mapWithKeys(fn ($d) => [$d->id => $d->user?->name ?? 'Doctor ' . $d->id]))
                             ->searchable()
-                            ->helperText('Déjalo en blanco si le sirve cualquier doctor'),
+                            ->helperText('Déjelo en blanco si le sirve cualquier doctor'),
                         Forms\Components\DatePicker::make('desired_from')
                             ->label('Disponible desde')
                             ->default(now())
@@ -254,7 +254,7 @@ class WaitlistEntryResource extends Resource
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
             ->emptyStateHeading('Nadie en lista de espera')
-            ->emptyStateDescription('Anota aquí a quien quiera adelantar su cita. Cuando alguien te cancele, sabes a quién ofrecerle el hueco.')
+            ->emptyStateDescription('Anote aquí a quien quiera adelantar su cita. Cuando alguien le cancele, sabe a quién ofrecerle el hueco.')
             ->emptyStateIcon('heroicon-o-clock')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

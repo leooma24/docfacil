@@ -4,7 +4,7 @@
             <x-icono nombre="cake" /> Cumpleaños de hoy
         </x-slot>
         <x-slot name="description">
-            Abre WhatsApp con el mensaje listo en un clic.
+            Abra WhatsApp con el mensaje listo en un clic.
         </x-slot>
 
         <div class="space-y-2">

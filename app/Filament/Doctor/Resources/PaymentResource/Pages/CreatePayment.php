@@ -25,7 +25,7 @@ class CreatePayment extends CreateRecord
     {
         return [
             'title'    => 'Nuevo cobro',
-            'subtitle' => 'Registra un cobro. Puedes enlazarlo a una cita y enviar link de pago por WhatsApp.',
+            'subtitle' => 'Registre un cobro. Puede enlazarlo a una cita y enviar link de pago por WhatsApp.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',
         ];

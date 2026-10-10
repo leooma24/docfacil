@@ -72,7 +72,7 @@ class PatientResource extends Resource
                 Forms\Components\Section::make('Datos Personales')
                     // Con el nombre y el telefono ya se puede agendar y
                     // recordarle la cita. Lo demas se llena cuando lo tengas.
-                    ->description('Con el nombre y el teléfono es suficiente para empezar. Lo demás lo llenas cuando lo tengas.')
+                    ->description('Con el nombre y el teléfono es suficiente para empezar. Lo demás lo llena cuando lo tenga.')
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('first_name')
@@ -88,7 +88,7 @@ class PatientResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->placeholder('maria@correo.com')
-                            ->helperText('Lo necesitas si le vas a dar acceso al portal.')
+                            ->helperText('Lo necesita si le va a dar acceso al portal.')
                             ->email()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
@@ -142,7 +142,7 @@ class PatientResource extends Resource
                             ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Información Médica')
-                    ->description('Opcional, pero lo que pongas aquí te sale como alerta antes de cada consulta.')
+                    ->description('Opcional, pero lo que ponga aquí le sale como alerta antes de cada consulta.')
                     ->schema([
                         Forms\Components\CheckboxList::make('riesgos')
                             ->label('Antecedentes importantes')
@@ -153,7 +153,7 @@ class PatientResource extends Resource
                         Forms\Components\Textarea::make('allergies')
                             ->label('Alergias')
                             ->placeholder('Penicilina, látex, anestesia...')
-                            ->helperText('Te aparece en rojo al abrir su consulta.')
+                            ->helperText('Le aparece en rojo al abrir su consulta.')
                             ->rows(2),
                         Forms\Components\Textarea::make('medical_notes')
                             ->label('Notas médicas')
@@ -254,7 +254,7 @@ class PatientResource extends Resource
                             if (User::where('email', $correo)->exists()) {
                                 Notification::make()
                                     ->title('Ese correo ya tiene cuenta en DocFacil')
-                                    ->body('Registra otro correo para este paciente.')
+                                    ->body('Registre otro correo para este paciente.')
                                     ->danger()
                                     ->send();
 
@@ -344,8 +344,8 @@ class PatientResource extends Resource
             ])
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
-            ->emptyStateHeading('Todavía no tienes pacientes')
-            ->emptyStateDescription('Agrega el primero con su nombre y teléfono. Lo demás lo llenas cuando lo tengas a la mano.')
+            ->emptyStateHeading('Todavía no tiene pacientes')
+            ->emptyStateDescription('Agregue el primero con su nombre y teléfono. Lo demás lo llena cuando lo tenga a la mano.')
             ->emptyStateIcon('heroicon-o-users')
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),

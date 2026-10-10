@@ -73,7 +73,7 @@ class SetupChecklistWidget extends Widget
         $items = [
             [
                 'key' => 'logo',
-                'title' => 'Sube el logo de tu consultorio',
+                'title' => 'Suba el logo de su consultorio',
                 'desc' => 'Aparece en recetas y portal público.',
                 'done' => ! empty($logo),
                 'cta' => 'Subir logo',
@@ -82,9 +82,9 @@ class SetupChecklistWidget extends Widget
             ],
             [
                 'key' => 'services',
-                'title' => 'Configura al menos 5 servicios',
+                'title' => 'Configure al menos 5 servicios',
                 'desc' => $servicesCount > 0
-                    ? "Tienes {$servicesCount} de 5 mínimos sugeridos."
+                    ? "Tiene {$servicesCount} de 5 mínimos sugeridos."
                     : 'Limpieza, consulta, extracciones, etc. Cada uno con su precio.',
                 'done' => $servicesCount >= 5,
                 'cta' => $servicesCount > 0 ? 'Agregar más' : 'Agregar servicios',
@@ -97,10 +97,10 @@ class SetupChecklistWidget extends Widget
             // ventana del importador en la lista de pacientes.
             [
                 'key' => 'patient',
-                'title' => 'Sube tus pacientes',
+                'title' => 'Suba sus pacientes',
                 'desc' => $patientsCount > 0
-                    ? "Tienes {$patientsCount} " . ($patientsCount === 1 ? 'paciente' : 'pacientes') . '.'
-                    : '¿Los tienes en Excel o Google Sheets? Súbelos todos de una vez. Si no, captura el primero: solo nombre y teléfono.',
+                    ? "Tiene {$patientsCount} " . ($patientsCount === 1 ? 'paciente' : 'pacientes') . '.'
+                    : '¿Los tiene en Excel o Google Sheets? Súbalos todos de una vez. Si no, capture el primero: solo nombre y teléfono.',
                 'done' => $patientsCount > 0,
                 'cta' => $patientsCount > 0 ? 'Ver pacientes' : 'Importar de Excel',
                 'url' => $patientsCount > 0
@@ -112,10 +112,10 @@ class SetupChecklistWidget extends Widget
             ],
             [
                 'key' => 'appointment',
-                'title' => 'Crea tu primera cita',
+                'title' => 'Cree su primera cita',
                 'desc' => $appointmentsCount > 0
-                    ? "Tienes {$appointmentsCount} " . ($appointmentsCount === 1 ? 'cita agendada' : 'citas agendadas') . '.'
-                    : 'Selecciona paciente, fecha y servicio.',
+                    ? "Tiene {$appointmentsCount} " . ($appointmentsCount === 1 ? 'cita agendada' : 'citas agendadas') . '.'
+                    : 'Seleccione paciente, fecha y servicio.',
                 'done' => $appointmentsCount > 0,
                 'cta' => $appointmentsCount > 0 ? 'Ver agenda' : 'Crear cita',
                 'url' => $appointmentsCount > 0
@@ -125,10 +125,10 @@ class SetupChecklistWidget extends Widget
             ],
             [
                 'key' => 'payment',
-                'title' => 'Registra tu primer cobro',
+                'title' => 'Registre su primer cobro',
                 'desc' => $paymentsCount > 0
-                    ? "Tienes {$paymentsCount} cobros registrados."
-                    : 'Desde la cita o desde Cobros. Mándalo por WhatsApp en 1 clic.',
+                    ? "Tiene {$paymentsCount} cobros registrados."
+                    : 'Desde la cita o desde Cobros. Mándelo por WhatsApp en 1 clic.',
                 'done' => $paymentsCount > 0,
                 'cta' => $paymentsCount > 0 ? 'Ver cobros' : 'Registrar cobro',
                 'url' => \App\Filament\Doctor\Resources\PaymentResource::getUrl('index'),

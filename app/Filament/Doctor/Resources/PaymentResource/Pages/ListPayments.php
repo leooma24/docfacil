@@ -39,7 +39,7 @@ class ListPayments extends ListRecords
 
         return [
             'title'    => 'Cobros',
-            'subtitle' => 'Todos los cobros realizados y pendientes. Registra pagos en efectivo o envía links por WhatsApp.',
+            'subtitle' => 'Todos los cobros realizados y pendientes. Registre pagos en efectivo o envíe links por WhatsApp.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',
             'stats' => [

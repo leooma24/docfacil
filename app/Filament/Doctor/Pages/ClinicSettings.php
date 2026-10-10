@@ -91,7 +91,7 @@ class ClinicSettings extends Page implements HasForms
                             ->live()
                             ->helperText(fn (callable $get) => 'Ahí son las '
                                 . now($get('timezone') ?: \App\Support\ZonaHoraria::CENTRO)->format('H:i')
-                                . '. Tu agenda pública y tu escritorio usan esta hora.'),
+                                . '. Su agenda pública y su escritorio usan esta hora.'),
                         FileUpload::make('logo')
                             ->label('Logo del consultorio')
                             ->image()
@@ -109,7 +109,7 @@ class ClinicSettings extends Page implements HasForms
                 // afirmar que está bien sin poder saberlo — que en una app
                 // clínica sería peor que callarse.
                 Section::make('Seguridad clínica')
-                    ->description('Con esto el sistema te avisa si la anestesia propuesta se pasa del máximo para el peso del paciente. Si lo dejas vacío, no compara nada.')
+                    ->description('Con esto el sistema le avisa si la anestesia propuesta se pasa del máximo para el peso del paciente. Si lo deja vacío, no compara nada.')
                     ->columns(3)
                     ->collapsed()
                     ->schema([
@@ -117,7 +117,7 @@ class ClinicSettings extends Page implements HasForms
                             ->label('Máximo mg por kg')
                             ->numeric()
                             ->minValue(0)
-                            ->helperText('El límite por toxicidad del anestésico que usas.'),
+                            ->helperText('El límite por toxicidad del anestésico que usa.'),
                         TextInput::make('anesthetic_mg_ml')
                             ->label('Concentración (mg/ml)')
                             ->numeric()
@@ -136,10 +136,10 @@ class ClinicSettings extends Page implements HasForms
                     ->schema([
                         Toggle::make('corte_por_correo')
                             ->label('Mandarme el corte del mes por correo')
-                            ->helperText('El día 1 te llega cuánto entró, cuánto salió y cuánto te quedó el mes anterior.'),
+                            ->helperText('El día 1 le llega cuánto entró, cuánto salió y cuánto le quedó el mes anterior.'),
                     ]),
                 Section::make('Horario de atención')
-                    ->description('Con esto, tus pacientes no pueden pedir cita cuando estás cerrado desde tu página de agendamiento.')
+                    ->description('Con esto, sus pacientes no pueden pedir cita cuando está cerrado desde su página de agendamiento.')
                     ->schema(
                         collect(Clinic::DIAS)
                             ->map(fn (string $nombre, string $clave) => Fieldset::make($nombre)
@@ -180,7 +180,7 @@ class ClinicSettings extends Page implements HasForms
                     ),
 
                 Section::make('Tiempo entre pacientes')
-                    ->description('El rato que necesitas para limpiar el sillón, esterilizar y guardar. Se aparta solo: tu página de agendamiento deja de ofrecer horarios pegados.')
+                    ->description('El rato que necesita para limpiar el sillón, esterilizar y guardar. Se aparta solo: su página de agendamiento deja de ofrecer horarios pegados.')
                     ->schema([
                         TextInput::make('minutos_entre_citas')
                             ->label('Minutos entre una cita y la siguiente')
@@ -190,11 +190,11 @@ class ClinicSettings extends Page implements HasForms
                             ->step(5)
                             ->suffix('minutos')
                             ->default(0)
-                            ->helperText('Déjalo en 0 si no lo necesitas. La mayoría de los consultorios usa entre 10 y 15.'),
+                            ->helperText('Déjelo en 0 si no lo necesita. La mayoría de los consultorios usa entre 10 y 15.'),
                     ]),
 
                 Section::make('Días que cierras')
-                    ->description('Vacaciones, días feriados, un congreso. Estos días no aparecen disponibles para tus pacientes aunque sea tu horario normal.')
+                    ->description('Vacaciones, días feriados, un congreso. Estos días no aparecen disponibles para sus pacientes aunque sea su horario normal.')
                     ->schema([
                         Repeater::make('cierres')
                             ->label('')
@@ -220,16 +220,16 @@ class ClinicSettings extends Page implements HasForms
                     ]),
 
                 Section::make('Integraciones')
-                    ->description('URLs públicas de tu consultorio para que DocFácil te ayude a aprovecharlas.')
+                    ->description('URLs públicas de su consultorio para que DocFácil le ayude a aprovecharlas.')
                     ->schema([
                         TextInput::make('google_review_url')
-                            ->label('Link de tu reseña en Google')
+                            ->label('Link de su reseña en Google')
                             ->url()
                             ->maxLength(500)
                             ->placeholder('https://g.page/r/...')
                             ->helperText(new \Illuminate\Support\HtmlString(
-                                'Abre tu <a href="https://business.google.com" target="_blank" class="text-teal-600 underline">perfil de Google Business</a>, '.
-                                'haz clic en "Reseñas" > "Recibir más reseñas" y copia el link corto. '.
+                                'Abra su <a href="https://business.google.com" target="_blank" class="text-teal-600 underline">perfil de Google Business</a>, '.
+                                'dé clic en "Reseñas" > "Recibir más reseñas" y copie el link corto. '.
                                 'Se usa en el add-on de <strong>Reseñas en Google</strong>: va en el mensaje que se le manda al paciente.'
                             )),
                     ]),

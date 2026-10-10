@@ -14,11 +14,11 @@
 
     {{-- Hero --}}
     <div style="border-radius:16px;padding:1.75rem 2rem;color:#fff;background:linear-gradient(135deg,#0f766e 0%,#0891b2 45%,#0ea5e9 100%);box-shadow:0 10px 30px rgba(8,145,178,.25);">
-        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85;"><x-icono nombre="chart-bar" /> Cuánto te quedó</div>
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85;"><x-icono nombre="chart-bar" /> Cuánto le quedó</div>
         <div style="font-size:1.75rem;font-weight:800;margin-top:.25rem;">Corte del consultorio</div>
         <div style="opacity:.92;margin-top:.4rem;max-width:46rem;line-height:1.5;">
-            Lo que entró, lo que salió y lo que te quedó. No es contabilidad para el SAT — eso lo hace tu contador.
-            Esto es para que sepas cómo te fue sin sacar la calculadora.
+            Lo que entró, lo que salió y lo que le quedó. No es contabilidad para el SAT — eso lo hace su contador.
+            Esto es para que sepa cómo le fue sin sacar la calculadora.
         </div>
     </div>
 
@@ -37,8 +37,8 @@
             <div style="font-size:3rem;color:#94a3b8;"><x-icono nombre="chart-bar" /></div>
             <div style="font-size:1.15rem;font-weight:700;margin-top:.5rem;">Todavía no hay nada que cortar</div>
             <p style="opacity:.65;margin-top:.5rem;max-width:32rem;margin-left:auto;margin-right:auto;line-height:1.55;">
-                En cuanto registres cobros y gastos de este periodo, aquí te va a aparecer cuánto entró,
-                cuánto salió y con cuánto te quedaste.
+                En cuanto registre cobros y gastos de este periodo, aquí le va a aparecer cuánto entró,
+                cuánto salió y con cuánto se quedó.
             </p>
             <div style="margin-top:1.25rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;">
                 <a href="{{ \App\Filament\Doctor\Resources\ExpenseResource::getUrl('create') }}"
@@ -80,7 +80,7 @@
             </div>
 
             <div style="{{ $tarjeta }} border-left:5px solid {{ $n['utilidad'] >= 0 ? '#059669' : '#dc2626' }};">
-                <div style="{{ $etiqueta }}">Te quedó</div>
+                <div style="{{ $etiqueta }}">Le quedó</div>
                 <div style="{{ $cifra }} color:{{ $n['utilidad'] >= 0 ? '#059669' : '#dc2626' }};">
                     {{ $pesos($n['utilidad']) }}
                 </div>
@@ -101,10 +101,10 @@
 
         @if ($n['utilidad'] < 0)
             <div style="{{ $tarjeta }} border-left:5px solid #dc2626;background:#fef2f2;">
-                <strong style="color:#991b1b;">Este periodo gastaste más de lo que cobraste.</strong>
+                <strong style="color:#991b1b;">Este periodo gastó más de lo que cobró.</strong>
                 <span style="opacity:.8;">
-                    Puede ser normal si compraste equipo o pagaste algo grande de una vez.
-                    Revisa abajo qué categoría se llevó más.
+                    Puede ser normal si compró equipo o pagó algo grande de una vez.
+                    Revise abajo qué categoría se llevó más.
                 </span>
             </div>
         @endif
@@ -130,7 +130,7 @@
             @php $mayor = max($n['categorias']); @endphp
 
             <div style="{{ $tarjeta }}">
-                <div style="font-size:1.05rem;font-weight:700;">En qué se te fue</div>
+                <div style="font-size:1.05rem;font-weight:700;">En qué se le fue</div>
                 <div style="font-size:.85rem;opacity:.6;margin-top:.15rem;margin-bottom:1rem;">
                     De mayor a menor. Aquí es donde se ve qué vale la pena negociar.
                 </div>
@@ -178,7 +178,7 @@
                         @foreach ([
                             ['Entró', $n['ingresos_antes'], $n['ingresos']],
                             ['Salió', $n['gastos_antes'], $n['gastos']],
-                            ['Te quedó', $n['utilidad_antes'], $n['utilidad']],
+                            ['Le quedó', $n['utilidad_antes'], $n['utilidad']],
                         ] as [$fila, $antes, $ahora])
                             @php $dif = $ahora - $antes; @endphp
                             <tr style="border-top:1px solid rgba(0,0,0,.06);">

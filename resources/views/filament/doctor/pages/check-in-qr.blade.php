@@ -43,10 +43,10 @@
         <div class="instructions">
             <strong>Cómo usarlo:</strong>
             <div style="line-height: 1.8;">
-                <div><span class="step-num">1</span> Imprime este código QR y pégalo en la recepción</div>
+                <div><span class="step-num">1</span> Imprima este código QR y péguelo en la recepción</div>
                 <div><span class="step-num">2</span> Los pacientes lo escanean con su celular al llegar</div>
                 <div><span class="step-num">3</span> Llenan sus datos desde su teléfono mientras esperan</div>
-                <div><span class="step-num">4</span> Cuando los atiendes, ya aparecen en tu lista de pacientes</div>
+                <div><span class="step-num">4</span> Cuando los atiende, ya aparecen en su lista de pacientes</div>
             </div>
         </div>
 

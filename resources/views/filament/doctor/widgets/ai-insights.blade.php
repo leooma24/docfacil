@@ -8,7 +8,7 @@
                 </div>
                 <div>
                     <div style="font-size:12px;color:#0f766e;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Asesor IA</div>
-                    <div style="font-size:16px;font-weight:800;color:#064e3b;">Análisis de tu consultorio</div>
+                    <div style="font-size:16px;font-weight:800;color:#064e3b;">Análisis de su consultorio</div>
                 </div>
             </div>
             <button wire:click="refresh" wire:loading.attr="disabled" style="display:inline-flex;align-items:center;gap:4px;padding:8px 12px;background:white;border:1px solid #99f6e4;border-radius:8px;font-size:12px;color:#0f766e;cursor:pointer;font-weight:600;">
@@ -44,9 +44,9 @@
         </div>
         @else
         <div style="padding:20px;text-align:center;color:#64748b;font-size:12px;">
-            <div wire:loading wire:target="refresh">Analizando datos de tu consultorio...</div>
+            <div wire:loading wire:target="refresh">Analizando datos de su consultorio...</div>
             <div wire:loading.remove wire:target="refresh">
-                No hay insights disponibles. Registra más actividad en el consultorio para ver análisis.
+                No hay insights disponibles. Registre más actividad en el consultorio para ver análisis.
             </div>
         </div>
         @endif

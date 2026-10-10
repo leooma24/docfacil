@@ -30,7 +30,7 @@ class ListPatients extends ListRecords
         if ($lleno) {
             return [
                 Actions\Action::make('subir_plan')
-                    ->label('Actualiza tu plan para agregar más')
+                    ->label('Actualice su plan para agregar más')
                     ->icon('heroicon-o-arrow-up-circle')
                     ->color('warning')
                     ->url(\App\Filament\Doctor\Pages\Upgrade::getUrl())
@@ -47,14 +47,14 @@ class ListPatients extends ListRecords
                 ->label('Importar de Excel')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->color('gray')
-                ->modalHeading('Importar tus pacientes')
+                ->modalHeading('Importar sus pacientes')
                 ->modalDescription(new HtmlString(
-                    '<p style="margin-bottom:.5rem;">Sube el archivo con los pacientes que ya tenías. Sirve Excel, Google Sheets o cualquier sistema viejo.</p>'
-                    . '<p style="margin-bottom:.5rem;"><strong>Si los tienes en Google Sheets:</strong> Archivo → Descargar → Valores separados por comas (.csv).</p>'
-                    . '<p style="margin-bottom:.5rem;"><strong>Si los tienes en Excel:</strong> Archivo → Guardar como → CSV UTF-8.</p>'
-                    . '<p>Después te dejamos decir qué columna es cuál. No importa el orden ni cómo se llamen.</p>'
+                    '<p style="margin-bottom:.5rem;">Suba el archivo con los pacientes que ya tenía. Sirve Excel, Google Sheets o cualquier sistema viejo.</p>'
+                    . '<p style="margin-bottom:.5rem;"><strong>Si los tiene en Google Sheets:</strong> Archivo → Descargar → Valores separados por comas (.csv).</p>'
+                    . '<p style="margin-bottom:.5rem;"><strong>Si los tiene en Excel:</strong> Archivo → Guardar como → CSV UTF-8.</p>'
+                    . '<p>Después le dejamos decir qué columna es cuál. No importa el orden ni cómo se llamen.</p>'
                     . ($restantes !== null
-                        ? '<p style="margin-top:.75rem;color:#b45309;"><strong>Tu plan permite ' . $restantes . ' más.</strong> Si el archivo trae de sobra, se importan los que caben y el resto te lo decimos al final.</p>'
+                        ? '<p style="margin-top:.75rem;color:#b45309;"><strong>Su plan permite ' . $restantes . ' más.</strong> Si el archivo trae de sobra, se importan los que caben y el resto se lo decimos al final.</p>'
                         : '')
                 ))
                 ->modalSubmitActionLabel('Importar'),
@@ -82,7 +82,7 @@ class ListPatients extends ListRecords
 
         return [
             'title'    => 'Pacientes',
-            'subtitle' => 'Buscar, crear y gestionar todos tus pacientes. Click en uno para ver su perfil completo.',
+            'subtitle' => 'Buscar, crear y gestionar todos sus pacientes. Dé clic en uno para ver su perfil completo.',
             'gradient' => '#0d9488 0%, #0891b2 40%, #06b6d4 100%',
             'accent'   => '#0d9488',
             'stats' => [
@@ -91,7 +91,7 @@ class ListPatients extends ListRecords
                 ['label' => 'Activos 30 días',    'value' => number_format($activeLastMonth)],
                 ['label' => '🆕 Nuevos este mes',    'value' => number_format($newThisMonth)],
                 $restantes !== null
-                    ? ['label' => 'Te quedan', 'value' => number_format($restantes)]
+                    ? ['label' => 'Le quedan', 'value' => number_format($restantes)]
                     : ['label' => 'Con saldo', 'value' => number_format($withBalance)],
             ],
         ];

@@ -62,7 +62,7 @@ class Security extends Page
         if (!$valid) {
             Notification::make()
                 ->title('Código inválido')
-                ->body('Revisa el código de tu app y vuelve a intentarlo.')
+                ->body('Revise el código de su app y vuelva a intentarlo.')
                 ->danger()
                 ->send();
             return;
@@ -75,7 +75,7 @@ class Security extends Page
 
         Notification::make()
             ->title('2FA habilitado correctamente')
-            ->body('A partir de ahora te pediremos un código al iniciar sesión.')
+            ->body('A partir de ahora le pediremos un código al iniciar sesión.')
             ->success()
             ->send();
 
@@ -94,8 +94,8 @@ class Security extends Page
 
         if (! $valido) {
             Notification::make()
-                ->title('Escribe tu código para desactivarlo')
-                ->body('Por seguridad, necesitamos el código de tu app para apagar la verificación en dos pasos.')
+                ->title('Escriba su código para desactivarlo')
+                ->body('Por seguridad, necesitamos el código de su app para apagar la verificación en dos pasos.')
                 ->danger()
                 ->send();
             return;

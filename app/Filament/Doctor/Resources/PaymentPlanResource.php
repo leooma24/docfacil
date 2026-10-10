@@ -116,7 +116,7 @@ class PaymentPlanResource extends Resource
     {
         $total = (float) $total; $enganche = (float) $enganche; $n = (int) $n;
         if ($total <= 0 || $n < 1 || ! $primera) {
-            return 'Escribe el total, el enganche y cuántas mensualidades.';
+            return 'Escriba el total, el enganche y cuántas mensualidades.';
         }
         if ($enganche > $total) {
             return 'El enganche no puede ser mayor al total.';

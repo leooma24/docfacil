@@ -452,8 +452,8 @@ class Consultation extends Page implements HasForms
         // de otro consultorio. Mejor no crear nada y decirlo.
         if (! $doctor) {
             Notification::make()
-                ->title('Tu cuenta no tiene ficha de doctor')
-                ->body('Pídele al administrador del consultorio que te la cree para poder atender consultas.')
+                ->title('Su cuenta no tiene ficha de doctor')
+                ->body('Pídale al administrador del consultorio que se la cree para poder atender consultas.')
                 ->danger()
                 ->send();
 
@@ -594,7 +594,7 @@ class Consultation extends Page implements HasForms
 
         Notification::make()
             ->title('Sugerencia aplicada')
-            ->body('Revisa y ajusta si es necesario.')
+            ->body('Revise y ajuste si es necesario.')
             ->success()
             ->send();
     }
@@ -644,7 +644,7 @@ class Consultation extends Page implements HasForms
 
             Notification::make()
                 ->title('Dictado procesado')
-                ->body('Se llenaron los campos automáticamente. Revisa antes de guardar.')
+                ->body('Se llenaron los campos automáticamente. Revise antes de guardar.')
                 ->success()
                 ->send();
         } finally {

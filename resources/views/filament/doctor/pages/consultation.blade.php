@@ -97,7 +97,7 @@
                 },
                 toggle(key) {
                     if (!this.supported) {
-                        alert('Tu navegador no soporta dictado por voz. Usa Chrome o Edge.');
+                        alert('Su navegador no soporta dictado por voz. Use Chrome o Edge.');
                         return;
                     }
                     if (this.activeKey === key) {
@@ -157,7 +157,7 @@
                 },
                 async toggle() {
                     if (!this.recognition) {
-                        alert('Tu navegador no soporta transcripción por voz. Usa Chrome o Edge.');
+                        alert('Su navegador no soporta transcripción por voz. Use Chrome o Edge.');
                         return;
                     }
                     if (this.listening) {
@@ -399,7 +399,7 @@
             <span class="step-title-icon"><x-icono nombre="heart" /></span>
             <span class="step-title-text">Signos Vitales</span>
         </div>
-        <p class="step-subtitle">Opcional. Registra los signos vitales del paciente.</p>
+        <p class="step-subtitle">Opcional. Registre los signos vitales del paciente.</p>
 
         @include('filament.doctor.partials.alertas-del-paciente')
 
@@ -519,7 +519,7 @@
             <span class="step-title-icon"><x-icono nombre="magnifying-glass" /></span>
             <span class="step-title-text">Diagnóstico y Tratamiento</span>
         </div>
-        <p class="step-subtitle">{{ config('services.ai.enabled') ? 'Usa la IA para llenar todo automáticamente o escribe manual.' : 'Registra el diagnóstico, tratamiento y notas.' }}</p>
+        <p class="step-subtitle">{{ config('services.ai.enabled') ? 'Use la IA para llenar todo automáticamente o escriba manual.' : 'Registre el diagnóstico, tratamiento y notas.' }}</p>
 
         @if(config('services.ai.enabled'))
         {{-- LIVE CONSULTATION MODE --}}
@@ -551,7 +551,7 @@
 
                 <div x-show="processing" x-cloak style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,0.25);border:1px solid rgba(13,148,136,0.4);border-radius:8px;display:flex;align-items:center;gap:10px;">
                     <div style="width:10px;height:10px;background:#5eead4;border-radius:50%;animation:pulse 1s infinite;"></div>
-                    <span style="font-size:12px;font-weight:600;"><x-icono nombre="sparkles" /> La IA está estructurando tu consulta...</span>
+                    <span style="font-size:12px;font-weight:600;"><x-icono nombre="sparkles" /> La IA está estructurando su consulta...</span>
                 </div>
             </div>
 
@@ -573,7 +573,7 @@
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:12px;color:#0d9488;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;"><x-icono nombre="sparkles" /> Con IA</div>
                         <div style="font-size:14px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">Dictado inteligente</div>
-                        <div style="font-size:12px;color:#64748b;margin-top:1px;">Escribe o dicta lo que pasó en la consulta y la IA llena todo</div>
+                        <div style="font-size:12px;color:#64748b;margin-top:1px;">Escriba o dicte lo que pasó en la consulta y la IA llena todo</div>
                     </div>
                 </div>
             <div class="field-with-mic">
@@ -639,7 +639,7 @@
                         </button>
                         @endforeach
                     </div>
-                    <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center;">Haz click en una sugerencia para aplicarla</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center;">Dé clic en una sugerencia para aplicarla</div>
                 </div>
                 @endif
                 @endif {{-- config('services.ai.enabled') for Dx suggestions --}}
@@ -784,7 +784,7 @@
             <span class="step-title-icon"><x-icono nombre="document-text" /></span>
             <span class="step-title-text">Receta Médica</span>
         </div>
-        <p class="step-subtitle">Opcional. Agrega medicamentos si es necesario.</p>
+        <p class="step-subtitle">Opcional. Agregue medicamentos si es necesario.</p>
 
         {{-- Las alergias y antecedentes también aquí: es donde se receta. --}}
         @include('filament.doctor.partials.alertas-del-paciente')
@@ -842,7 +842,7 @@
             <span class="step-title-icon"><x-icono nombre="banknotes" /></span>
             <span class="step-title-text">Cobro</span>
         </div>
-        <p class="step-subtitle">Registra el pago de esta consulta.</p>
+        <p class="step-subtitle">Registre el pago de esta consulta.</p>
 
         {{-- Mensualidades de su plan de pagos que ya tocan: se cobran aquí mismo. --}}
         @php $mensualidadesPorCobrar = $this->mensualidadesPorCobrar(); @endphp
@@ -1077,7 +1077,7 @@
         @endphp
         <div style="margin-top:1rem;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
             <div style="font-size:12px;color:#166534;">
-                <strong><x-icono nombre="chat-bubble-left-ellipsis" /> Envía el cobro por WhatsApp</strong><br>
+                <strong><x-icono nombre="chat-bubble-left-ellipsis" /> Envíe el cobro por WhatsApp</strong><br>
                 <span style="font-size:12px;color:#15803d;">Mensaje pre-armado con el monto y concepto</span>
             </div>
             <a href="https://wa.me/52{{ $waPhone }}?text={{ urlencode($waMsg) }}" target="_blank"
@@ -1095,7 +1095,7 @@
             <span class="step-title-icon"><x-icono nombre="calendar-days" /></span>
             <span class="step-title-text">Siguiente Cita</span>
         </div>
-        <p class="step-subtitle">Opcional. Agenda la próxima visita antes de que se vaya el paciente.</p>
+        <p class="step-subtitle">Opcional. Agende la próxima visita antes de que se vaya el paciente.</p>
 
         {{-- Lo que ya se sabe que sigue: un clic llena fecha y servicio. --}}
         @php $sugerencias = $this->sugerenciasSiguienteCita(); @endphp
@@ -1174,7 +1174,7 @@
                 </a>
                 @if($appointment->patient->phone)
                 @php
-                $waMsg = "Hola {$appointment->patient->first_name}, gracias por tu visita en {$appointment->clinic->name}.";
+                $waMsg = "Hola {$appointment->patient->first_name}, gracias por su visita en {$appointment->clinic->name}.";
                 if ($diagnosis) $waMsg .= "\n\n*Diagnóstico:* {$diagnosis}";
                 if (!empty($medications)) {
                     $waMsg .= "\n\n*Medicamentos:*";
@@ -1188,7 +1188,7 @@
                     }
                 }
                 if ($next_appointment_date) $waMsg .= "\n\n*Próxima cita:* " . \Carbon\Carbon::parse($next_appointment_date)->format('d/m/Y H:i');
-                $waMsg .= "\n\n¡Que te mejores pronto!";
+                $waMsg .= "\n\n¡Que se mejore pronto!";
                 @endphp
                 <a href="https://wa.me/52{{ preg_replace('/\D/', '', $appointment->patient->phone) }}?text={{ urlencode($waMsg) }}" target="_blank"
                     style="background:#22c55e;color:white;">
@@ -1252,7 +1252,7 @@
             <div class="text-center mb-4 md:mb-6">
                 <div class="text-4xl md:text-5xl mb-2" style="color:#0d9488;"><x-icono nombre="clipboard-document-check" /></div>
                 <div class="font-extrabold text-lg md:text-xl">Iniciar consulta</div>
-                <div class="text-xs md:text-sm text-gray-500 mt-1">Busca un paciente o crea uno nuevo con el botón +</div>
+                <div class="text-xs md:text-sm text-gray-500 mt-1">Busque un paciente o crea uno nuevo con el botón +</div>
             </div>
 
             {{ $this->walkinForm }}

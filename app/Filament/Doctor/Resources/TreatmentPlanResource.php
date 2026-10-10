@@ -225,7 +225,7 @@ class TreatmentPlanResource extends Resource
                 ->collapsed()
                 ->schema([
                     Forms\Components\Textarea::make('notes')
-                        ->label('Notas solo para ti (no aparecen en el PDF)')
+                        ->label('Notas solo para usted (no aparecen en el PDF)')
                         ->rows(3),
                 ]),
         ]);

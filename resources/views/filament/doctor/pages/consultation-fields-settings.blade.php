@@ -5,9 +5,9 @@
         <div class="rounded-xl p-4 text-white" style="background:linear-gradient(135deg,#0d9488,#0891b2);">
             <div class="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                    <div class="text-xs uppercase opacity-80 font-bold tracking-wider">Tu especialidad detectada</div>
+                    <div class="text-xs uppercase opacity-80 font-bold tracking-wider">Su especialidad detectada</div>
                     <div class="text-xl font-extrabold mt-1">{{ $this->specialtyLabel }}</div>
-                    <div class="text-xs opacity-90 mt-1">Los defaults se eligen según esta especialidad. Puedes ajustarlos abajo.</div>
+                    <div class="text-xs opacity-90 mt-1">Los defaults se eligen según esta especialidad. Puede ajustarlos abajo.</div>
                 </div>
                 <button type="button" wire:click="resetToDefaults"
                     class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-sm font-bold transition">
@@ -37,20 +37,20 @@
 
             @if($tab === 'clinic')
                 <div class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 text-sm">
-                    <strong>Esta config afecta a TODOS los doctores de la clínica</strong> que no hayan configurado un override personal. Si solo eres tú, ajusta aquí.
+                    <strong>Esta config afecta a TODOS los doctores de la clínica</strong> que no hayan configurado un override personal. Si solo es usted, ajuste aquí.
                 </div>
             @endif
 
             @if($tab === 'mine')
                 <div class="mb-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 text-sm">
-                    <strong>Override personal</strong> — solo afecta a tu pantalla de consulta. Cuando está activado "Usar configuración de la clínica" heredas lo de arriba.
+                    <strong>Override personal</strong> — solo afecta a su pantalla de consulta. Cuando está activado "Usar configuración de la clínica" hereda lo de arriba.
                 </div>
 
                 <label class="flex items-center gap-3 mb-4 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 cursor-pointer">
                     <input type="checkbox" wire:model.live="inheritsClinicConfig" class="rounded-lg text-teal-600 focus:ring-teal-500">
                     <div>
                         <div class="font-bold text-sm">Usar configuración de la clínica</div>
-                        <div class="text-xs text-gray-500">Si lo prendes, heredas lo que el dueño configure para todos.</div>
+                        <div class="text-xs text-gray-500">Si lo prendes, hereda lo que el dueño configure para todos.</div>
                     </div>
                 </label>
             @endif

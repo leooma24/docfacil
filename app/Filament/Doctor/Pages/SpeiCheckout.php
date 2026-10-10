@@ -62,11 +62,11 @@ class SpeiCheckout extends Page implements HasForms
                     ->directory('spei-receipts/' . auth()->user()->clinic_id)
                     ->visibility('private')
                     ->required()
-                    ->helperText('Sube la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB. Tu comprobante se guarda en un espacio privado del servidor y solo lo vemos nosotros para aprobar el pago.'),
+                    ->helperText('Suba la captura o PDF del comprobante SPEI. Se acepta JPG, PNG o PDF hasta 5 MB. Su comprobante se guarda en un espacio privado del servidor y solo lo vemos nosotros para aprobar el pago.'),
 
                 Textarea::make('notes')
                     ->label('Notas (opcional)')
-                    ->placeholder('Cualquier observación que te ayude a rastrear este pago')
+                    ->placeholder('Cualquier observación que le ayude a rastrear este pago')
                     ->rows(3)
                     ->maxLength(500),
             ])
@@ -79,7 +79,7 @@ class SpeiCheckout extends Page implements HasForms
 
         $clinic = auth()->user()->clinic;
         if (!$clinic) {
-            Notification::make()->title('No se encontró tu consultorio')->danger()->send();
+            Notification::make()->title('No se encontró su consultorio')->danger()->send();
             return;
         }
 
@@ -89,7 +89,7 @@ class SpeiCheckout extends Page implements HasForms
         }
 
         if (!$receiptPath) {
-            Notification::make()->title('Sube el comprobante para continuar')->warning()->send();
+            Notification::make()->title('Suba el comprobante para continuar')->warning()->send();
             return;
         }
 
@@ -147,7 +147,7 @@ class SpeiCheckout extends Page implements HasForms
 
         Notification::make()
             ->title('Comprobante recibido')
-            ->body('Tu pago está en revisión. Te avisaremos en cuanto se apruebe (1-24 hrs).')
+            ->body('Su pago está en revisión. Le avisaremos en cuanto se apruebe (1-24 hrs).')
             ->success()
             ->duration(8000)
             ->send();

@@ -6,9 +6,9 @@
         <div style="display:flex;align-items:start;gap:1rem;">
             <div style="font-size:2.5rem;flex-shrink:0;color:#7c3aed;"><x-icono nombre="light-bulb" /></div>
             <div style="flex:1;">
-                <h2 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;">Tú diseñas el futuro de DocFácil</h2>
+                <h2 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;">Usted diseña el futuro de DocFácil</h2>
                 <p style="font-size:0.875rem;color:#5b21b6;line-height:1.55;">
-                    Cada mes elegimos <strong>2 ideas ganadoras</strong>: una la construimos como add-on de pago (al precio que la mayoría votó), otra queda <strong>gratis para todos</strong>. Si tu idea gana, aparece tu nombre en el landing y ganas meses gratis de DocFácil.
+                    Cada mes elegimos <strong>2 ideas ganadoras</strong>: una la construimos como add-on de pago (al precio que la mayoría votó), otra queda <strong>gratis para todos</strong>. Si su idea gana, aparece su nombre en el landing y gana meses gratis de DocFácil.
                 </p>
             </div>
         </div>
@@ -50,7 +50,7 @@
             <div style="font-size:3rem;margin-bottom:0.5rem;opacity:0.4;"><x-icono nombre="inbox" /></div>
             <p style="color:#6b7280;font-size:0.9rem;">
                 @if($activeTab === 'proposed')
-                    No hay propuestas abiertas. <strong>¡Sé el primero!</strong> Propón una idea y empiezas con tu voto automático.
+                    No hay propuestas abiertas. <strong>¡Sea el primero!</strong> Proponga una idea y empieza con su voto automático.
                 @elseif($activeTab === 'in_progress')
                     Nada en construcción por ahora. El ganador del próximo mes aparecerá aquí.
                 @else
@@ -105,7 +105,7 @@
     <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;" wire:click.self="closeProposeModal">
         <div class="bg-white dark:bg-gray-800" style="max-width:540px;width:100%;border-radius:16px;padding:1.75rem;max-height:90vh;overflow-y:auto;">
             <h3 style="font-size:1.15rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;"><x-icono nombre="light-bulb" /> Propón una idea</h3>
-            <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1.25rem;">Tu voto se registra automáticamente. Compártela después para que tus colegas voten.</p>
+            <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1.25rem;">Su voto se registra automáticamente. Compártala después para que sus colegas voten.</p>
 
             <form wire:submit.prevent="submitProposal">
                 <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.35rem;">Título (resumen corto)</label>
@@ -144,8 +144,8 @@
     @if($votingFeatureId)
     <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;" wire:click.self="closeVoteModal">
         <div class="bg-white dark:bg-gray-800" style="max-width:440px;width:100%;border-radius:16px;padding:1.75rem;">
-            <h3 style="font-size:1.1rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;"><x-icono nombre="hand-raised" /> Tu voto con precio</h3>
-            <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1.25rem;">¿Cuánto pagarías al mes por esta feature? Tu respuesta nos ayuda a decidir si la construimos como pagada o gratis.</p>
+            <h3 style="font-size:1.1rem;font-weight:800;color:#4c1d95;margin-bottom:0.25rem;"><x-icono nombre="hand-raised" /> Su voto con precio</h3>
+            <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1.25rem;">¿Cuánto pagaría al mes por esta feature? Su respuesta nos ayuda a decidir si la construimos como pagada o gratis.</p>
 
             <div style="display:grid;gap:0.4rem;margin-bottom:1.25rem;">
                 @foreach(App\Models\FeatureRequest::PRICE_TIERS as $tier => $label)

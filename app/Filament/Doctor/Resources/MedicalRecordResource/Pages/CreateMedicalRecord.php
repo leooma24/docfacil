@@ -25,7 +25,7 @@ class CreateMedicalRecord extends CreateRecord
     {
         return [
             'title'    => 'Nueva consulta',
-            'subtitle' => 'Registra motivo, diagnóstico, tratamiento y notas. Cada nota queda bloqueada 24 horas después de guardarla.',
+            'subtitle' => 'Registre motivo, diagnóstico, tratamiento y notas. Cada nota queda bloqueada 24 horas después de guardarla.',
             'gradient' => '#ef4444 0%, #f97316 40%, #f59e0b 100%',
             'accent'   => '#ef4444',
         ];

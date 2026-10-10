@@ -25,7 +25,7 @@ class CreatePrescription extends CreateRecord
     {
         return [
             'title'    => 'Nueva receta',
-            'subtitle' => 'Genera una receta con tu cédula y los datos del consultorio, con espacio para tu firma. Descargable como PDF al guardar.',
+            'subtitle' => 'Genere una receta con su cédula y los datos del consultorio, con espacio para su firma. Descargable como PDF al guardar.',
             'gradient' => '#8b5cf6 0%, #a855f7 40%, #c084fc 100%',
             'accent'   => '#8b5cf6',
         ];

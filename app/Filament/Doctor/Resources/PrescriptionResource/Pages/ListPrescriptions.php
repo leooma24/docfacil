@@ -35,7 +35,7 @@ class ListPrescriptions extends ListRecords
 
         return [
             'title'    => 'Recetas',
-            'subtitle' => 'Recetas PDF con tu cédula, la institución de tu título y los datos del consultorio, con espacio para tu firma.',
+            'subtitle' => 'Recetas PDF con su cédula, la institución de su título y los datos del consultorio, con espacio para su firma.',
             'gradient' => '#8b5cf6 0%, #a855f7 40%, #c084fc 100%',
             'accent'   => '#8b5cf6',
             'stats' => [

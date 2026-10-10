@@ -21,9 +21,9 @@
                     <img src="{{ asset('images/founder-omar.jpg') }}" alt="Omar" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid #fbbf24;flex-shrink:0;">
                     <div style="flex:1;min-width:0;">
                         <div style="font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b45309;"><x-icono nombre="star" /> Programa Fundador</div>
-                        <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-top:2px;line-height:1.25;">Ya llevas un mes con DocFácil. ¿Me regalas una frase?</h3>
+                        <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-top:2px;line-height:1.25;">Ya lleva un mes con DocFácil. ¿Me regalas una frase?</h3>
                         <p style="font-size:.9rem;color:#475569;margin-top:6px;line-height:1.5;">
-                            Cómo era tu consultorio antes y qué cambió. Con una o dos oraciones basta, en tus palabras, como se lo contarías a un colega. — Omar
+                            Cómo era su consultorio antes y qué cambió. Con una o dos oraciones basta, en sus palabras, como se lo contaría a un colega. — Omar
                         </p>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     @enderror
 
                     <label style="display:block;margin-top:12px;font-size:.8rem;font-weight:700;color:#334155;">
-                        Cómo quieres que aparezca tu nombre
+                        Cómo quiere que aparezca su nombre
                         <input type="text" wire:model="firma" maxlength="120"
                             style="display:block;width:100%;margin-top:4px;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:.9rem;font-weight:500;color:#0f172a;background:#fff;">
                     </label>

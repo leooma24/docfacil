@@ -39,7 +39,7 @@ class ListExpenses extends ListRecords
 
         return [
             'title'    => 'Gastos',
-            'subtitle' => 'Anota lo que gastas y el corte del mes te dice cuánto te quedó de verdad.',
+            'subtitle' => 'Anote lo que gasta y el corte del mes le dice cuánto le quedó de verdad.',
             'gradient' => '#b45309 0%, #d97706 40%, #f59e0b 100%',
             'accent'   => '#d97706',
             'stats' => [

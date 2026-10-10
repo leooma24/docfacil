@@ -42,7 +42,7 @@ class ListAppointments extends ListRecords
 
         return [
             'title'    => 'Citas',
-            'subtitle' => 'Lista de todas las citas. Usa el Calendario para arrastrar y reagendar visualmente.',
+            'subtitle' => 'Lista de todas las citas. Use el Calendario para arrastrar y reagendar visualmente.',
             'gradient' => '#3b82f6 0%, #0891b2 40%, #0ea5e9 100%',
             'accent'   => '#3b82f6',
             'stats' => [
