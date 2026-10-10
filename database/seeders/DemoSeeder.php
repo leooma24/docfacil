@@ -16,6 +16,7 @@ use App\Models\Service;
 use App\Models\ServiceSupply;
 use App\Models\Supply;
 use App\Models\SupplyLot;
+use App\Models\TreatmentPlan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -740,6 +741,8 @@ class DemoSeeder extends Seeder
             'notes' => 'Ya se le ofreció el jueves, quedó de confirmar.',
         ]);
 
+        $this->loQueMasLesSirvio($clinic, $doctor, $patients, $services);
+
         // =============================================
         // PACIENTE CON PORTAL ACTIVO
         //
@@ -761,6 +764,75 @@ class DemoSeeder extends Seeder
             'user_id' => $portalUser->id,
             'email' => 'paciente@docfacil.com',
         ]);
+    }
+
+    /**
+     * Lo que más le sirvió a los dentistas (prueba con 20 doctores, 12-oct-2026),
+     * para que quien abra el demo desde el brief lo vea y no encuentre módulos
+     * vacíos: alergia y anticoagulantes en rojo, lo último del diente en la
+     * cita de mañana, un presupuesto sin respuesta y otro aceptado por
+     * agendar, un trabajo de laboratorio que no ha llegado y su cita es en dos
+     * días, y una ortodoncia con una mensualidad vencida.
+     */
+    private function loQueMasLesSirvio(Clinic $clinic, Doctor $doctor, array $patients, array $services): void
+    {
+        $servicio = fn (string $nombre) => collect($services)->firstWhere('name', $nombre);
+        $habil = function (int $dias) {
+            $dia = now()->addDays($dias);
+
+            return $dia->isSunday() ? $dia->addDay() : $dia;
+        };
+        $manana = $habil(1);
+        $roberto = $patients[3];   // alérgico a la penicilina
+        $fernando = $patients[7];
+        $gabriela = $patients[6];
+        $hector = $patients[13];   // prótesis parcial
+        $valentina = $patients[14];
+
+        // Alergia y anticoagulantes: lo que sale en rojo en la consulta y en la agenda.
+        $roberto->update(['riesgos' => ['anticoagulado', 'hipertension'], 'medical_notes' => 'Toma acenocumarol (Sintrom) por arritmia.']);
+        $cita = fn (Patient $p, $dia, int $hora, string $servicioNombre, string $estado = 'scheduled') => Appointment::create([
+            'clinic_id' => $clinic->id, 'doctor_id' => $doctor->id, 'patient_id' => $p->id,
+            'service_id' => $servicio($servicioNombre)?->id,
+            'starts_at' => $dia->copy()->setTime($hora, 0), 'ends_at' => $dia->copy()->setTime($hora, 50), 'status' => $estado,
+        ]);
+        $cita($roberto, $manana, 18, 'Extracción simple');
+
+        // Lo último del diente: endodoncia en el 36 hace 10 días, corona aceptada
+        // por colocar, y su cita de mañana.
+        $endo = $cita($fernando, now()->subDays(10), 17, 'Endodoncia', 'completed');
+        \App\Models\ConsultationProcedure::create(['clinic_id' => $clinic->id, 'appointment_id' => $endo->id, 'service_id' => $servicio('Endodoncia')?->id,
+            'tooth_number' => '36', 'quantity' => 1, 'unit' => 'visit', 'unit_price' => $servicio('Endodoncia')?->price ?? 3500]);
+        MedicalRecord::create(['clinic_id' => $clinic->id, 'patient_id' => $fernando->id, 'doctor_id' => $doctor->id, 'appointment_id' => $endo->id,
+            'visit_date' => now()->subDays(10)->toDateString(), 'chief_complaint' => 'Dolor al masticar del lado izquierdo',
+            'diagnosis' => 'Pulpitis irreversible en 36', 'treatment' => '3 conductos, longitud de trabajo 21 mm, obturación con gutapercha. Queda para corona.']);
+        $corona = TreatmentPlan::create(['clinic_id' => $clinic->id, 'patient_id' => $fernando->id, 'doctor_id' => $doctor->id, 'title' => 'Rehabilitación del 36',
+            'status' => 'accepted', 'sent_at' => now()->subDays(9), 'accepted_at' => now()->subDays(8), 'subtotal' => 6500, 'discount' => 0, 'total' => 6500]);
+        $corona->items()->create(['service_id' => $servicio('Corona dental zirconia')?->id, 'description' => 'Corona de zirconia', 'quantity' => 1,
+            'unit_price' => 6500, 'subtotal' => 6500, 'tooth_number' => '36']);
+        $cita($fernando, $manana, 17, 'Consulta general');
+
+        // Un presupuesto que se mandó hace 12 días y no ha contestado.
+        $limpieza = TreatmentPlan::create(['clinic_id' => $clinic->id, 'patient_id' => $gabriela->id, 'doctor_id' => $doctor->id, 'title' => 'Limpieza y dos resinas',
+            'status' => 'sent', 'sent_at' => now()->subDays(12), 'subtotal' => 2300, 'discount' => 0, 'total' => 2300]);
+        $limpieza->items()->create(['service_id' => $servicio('Limpieza dental')?->id, 'description' => 'Limpieza dental', 'quantity' => 1, 'unit_price' => 700, 'subtotal' => 700]);
+        $limpieza->items()->create(['service_id' => $servicio('Resina (obturación)')?->id, 'description' => 'Resina', 'quantity' => 2, 'unit_price' => 800, 'subtotal' => 1600, 'tooth_number' => '14-15']);
+
+        // Laboratorio: la prótesis no ha llegado y su cita es en dos días.
+        $colocar = $cita($hector, $habil(2), 18, 'Prótesis parcial removible');
+        \App\Models\LabOrder::create(['clinic_id' => $clinic->id, 'patient_id' => $hector->id, 'appointment_id' => $colocar->id,
+            'laboratorio' => 'Laboratorio Dental Arte', 'telefono_laboratorio' => '5521113999', 'trabajo' => 'Prótesis parcial superior',
+            'color' => 'A2', 'costo' => 2800, 'enviada_at' => now()->subDays(6)->toDateString(), 'prometida_para' => $habil(1)->toDateString(), 'created_by' => $doctor->user_id]);
+        // Y uno que ya llegó y falta pagarle al laboratorio.
+        \App\Models\LabOrder::create(['clinic_id' => $clinic->id, 'patient_id' => $fernando->id,
+            'laboratorio' => 'Laboratorio Dental Arte', 'telefono_laboratorio' => '5521113999', 'trabajo' => 'Corona de zirconia', 'diente' => '36',
+            'color' => 'A3', 'costo' => 1900, 'enviada_at' => now()->subDays(7)->toDateString(), 'llego_at' => now()->subDay(), 'created_by' => $doctor->user_id]);
+
+        // Ortodoncia en mensualidades, con una vencida.
+        $orto = \App\Models\PaymentPlan::crear(['clinic_id' => $clinic->id, 'patient_id' => $valentina->id, 'doctor_id' => $doctor->id,
+            'service_id' => $servicio('Ortodoncia (mensualidad)')?->id, 'description' => 'Ortodoncia (brackets)', 'total' => 18000, 'down_payment' => 3000,
+            'installments_count' => 15, 'first_due_date' => now()->subDays(40)->toDateString()], 'cash');
+        $orto->payments()->where('installment_number', 1)->first()?->registrarAbono(1000, 'transfer');
     }
 }
 

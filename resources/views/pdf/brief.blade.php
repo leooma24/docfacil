@@ -1,338 +1,230 @@
+{{-- Brief comercial de DocFácil para enseñarle a un dentista (12-oct-2026).
+     Dos páginas que sirven en la web (/brief) y en PDF (/brief.pdf, DomPDF):
+     por eso las columnas son tablas y no flex/grid. Solo lo que existe hoy
+     (MaterialesDeVentaHonestosTest), capturas del consultorio de práctica y
+     los planes de LoQueTraeCadaPlan. --}}
+@php
+    $web = $mode === 'web';
+    $nombres = ['Free' => 'Gratis'];
+@endphp
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DocFácil — Brief para consultorios dentales</title>
-    <meta name="description" content="Brief de DocFácil: agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros. Empiece gratis.">
-
-    {{-- OpenGraph --}}
-    <meta property="og:title" content="DocFácil — Brief para consultorios dentales">
-    <meta property="og:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros — todo en un solo lugar.">
+    <title>DocFácil · Brief para consultorios dentales</title>
+    <meta name="description" content="Agenda, expediente y cobros del consultorio dental en un solo lugar. Vea la demo y pruébelo 15 días sin tarjeta.">
+    <meta property="og:title" content="DocFácil · Brief para consultorios dentales">
+    <meta property="og:description" content="Agenda, expediente y cobros del consultorio dental en un solo lugar.">
     <meta property="og:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
-    <meta property="og:image:secure_url" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="DocFácil — Software para consultorios dentales">
     <meta property="og:url" content="{{ url('/brief') }}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="DocFácil">
     <meta property="og:locale" content="es_MX">
-
-    {{-- Twitter --}}
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="DocFácil — Brief para consultorios">
-    <meta name="twitter:description" content="Agenda, expedientes, recetas PDF, recordatorios WhatsApp y cobros.">
-    <meta name="twitter:image" content="https://docfacil.tu-app.co/images/og-docfacil.jpg">
-
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="canonical" href="{{ url('/brief') }}">
-
     <style>
-        @page { margin: 1cm; }
+        @page { margin: 1.1cm 1.2cm; }
         * { box-sizing: border-box; }
-        body {
-            font-family: 'DejaVu Sans', sans-serif;
-            color: #1f2937;
-            font-size: 10pt;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0;
+        body { font-family: 'DejaVu Sans', sans-serif; color: #0f172a; font-size: 9.2pt; line-height: 1.38; margin: 0; padding: 0; background: #fff; }
+        .hoja { page-break-after: always; }
+        .hoja:last-child { page-break-after: auto; }
+        table { border-collapse: collapse; width: 100%; }
+        td { vertical-align: top; }
+        img { max-width: 100%; }
+
+        .cabeza td { vertical-align: middle; padding-bottom: 8px; border-bottom: 2px solid #0d9488; }
+        .marca { font-size: 15pt; font-weight: bold; color: #0d9488; }
+        
+        .cabeza-der { text-align: right; font-size: 8pt; color: #64748b; }
+
+        h1 { font-size: 17pt; line-height: 1.15; margin: 10px 0 4px; color: #0f172a; letter-spacing: -0.3px; }
+        .sub { font-size: 10pt; color: #475569; margin: 0 0 9px; }
+        h2 { font-size: 11pt; color: #0f766e; margin: 10px 0 6px; }
+        .etiqueta { font-size: 7.5pt; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; }
+
+        .captura { border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px; background: #f8fafc; }
+        .captura img { display: block; width: 100%; border-radius: 6px; }
+        .pie-foto { font-size: 8pt; color: #64748b; margin: 4px 2px 0; }
+
+        .caja { border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 10px; }
+        .dolor { font-size: 8.3pt; color: #b45309; font-weight: bold; margin-bottom: 3px; }
+        .caja h3 { font-size: 10pt; margin: 0 0 3px; color: #0f172a; }
+        .caja p { margin: 0; font-size: 8.4pt; line-height: 1.32; color: #334155; }
+
+        .planes td { border: 1px solid #e2e8f0; padding: 7px 8px; width: 25%; }
+        .planes .destacado { border: 2px solid #0d9488; background: #f0fdfa; }
+        .plan-nombre { font-size: 10.5pt; font-weight: bold; }
+        .plan-precio { font-size: 15pt; font-weight: bold; color: #0f766e; }
+        .plan-precio small { font-size: 8pt; color: #64748b; font-weight: normal; }
+        .plan-limite { font-size: 8pt; color: #334155; font-weight: bold; margin: 3px 0 4px; }
+        .planes ul { margin: 0; padding-left: 13px; font-size: 8pt; color: #334155; }
+        .planes li { margin-bottom: 2px; }
+        .recomendado { font-size: 7pt; font-weight: bold; color: #fff; background: #0d9488; border-radius: 4px; padding: 1px 6px; }
+
+        .faq td { width: 50%; padding: 0 8px 6px 0; }
+        .faq strong { display: block; font-size: 9pt; margin-bottom: 1px; }
+        .faq span { font-size: 8.6pt; color: #475569; }
+
+        .probar { background: #0f172a; color: #fff; border-radius: 10px; padding: 12px 14px; }
+        .probar h2 { color: #5eead4; margin-top: 0; }
+        .probar p, .probar li { color: #e2e8f0; font-size: 9pt; margin: 0 0 4px; }
+        .probar ol { margin: 4px 0 0; padding-left: 16px; }
+        .acceso { background: #1e293b; border-radius: 6px; padding: 7px 9px; font-size: 9pt; margin: 6px 0; }
+        .acceso b { color: #5eead4; }
+        .contacto { margin-top: 10px; font-size: 8.6pt; color: #475569; border-top: 1px solid #e2e8f0; padding-top: 8px; }
+        .contacto b { color: #0f172a; }
+        a { color: #0f766e; }
+
+        @if($web)
+        body { background: #f1f5f9; }
+        .hoja { max-width: 860px; margin: 24px auto; background: #fff; padding: 34px 38px; border-radius: 16px; box-shadow: 0 10px 30px -18px rgba(15,23,42,.35); }
+        .barra { max-width: 860px; margin: 18px auto 0; text-align: right; }
+        .barra a { display: inline-block; background: #0d9488; color: #fff; text-decoration: none; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 10pt; margin-left: 6px; }
+        .barra a.claro { background: #fff; color: #0f766e; border: 1px solid #99f6e4; }
+        @media (max-width: 700px) {
+            .hoja { margin: 12px; padding: 20px 16px; }
+            .apila, .apila tbody, .apila tr, .apila td { display: block; width: 100% !important; }
+            .apila td { padding: 0 0 10px 0 !important; }
+            .barra { margin: 12px 12px 0; text-align: left; }
+            .barra a { margin: 0 6px 6px 0; }
+            h1 { font-size: 16pt; }
+            .captura { width: 100% !important; }
         }
-        .page { page-break-after: always; }
-        .page:last-child { page-break-after: auto; }
-
-        /* Header */
-        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #14b8a6; padding-bottom: 8px; margin-bottom: 12px; }
-        .brand { font-size: 20pt; font-weight: bold; color: #0d9488; letter-spacing: -0.5px; }
-        .brand small { font-weight: normal; color: #6b7280; font-size: 9pt; display: block; margin-top: 2px; }
-        .header-right { text-align: right; font-size: 8pt; color: #6b7280; }
-
-        /* Hero */
-        .hero { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; }
-        .hero h1 { margin: 0 0 4px 0; font-size: 15pt; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; }
-        .hero p { margin: 0; font-size: 9pt; opacity: 0.95; line-height: 1.4; }
-
-        /* Sections */
-        h2 { font-size: 12pt; color: #0d9488; margin: 10px 0 6px 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 3px; }
-        h3 { font-size: 10pt; font-weight: 700; color: #111827; margin: 0 0 3px 0; }
-
-        /* 2 column grid */
-        .row { width: 100%; margin-bottom: 8px; }
-        .col-2 { width: 48%; display: inline-block; vertical-align: top; margin-right: 3%; }
-        .col-2:last-child { margin-right: 0; }
-
-        /* Pain / Solution boxes */
-        .pain-box, .solution-box { padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; font-size: 8.8pt; line-height: 1.35; }
-        .pain-box { background: #fef2f2; border-left: 3px solid #ef4444; }
-        .solution-box { background: #f0fdfa; border-left: 3px solid #14b8a6; }
-        .pain-box strong { color: #b91c1c; }
-        .solution-box strong { color: #0d9488; }
-
-        /* Screenshot frame */
-        .shot { width: 100%; border-radius: 8px; border: 1px solid #e5e7eb; display: block; }
-        .shot-hero { margin: 8px 0 10px 0; box-shadow: 0 2px 8px rgba(13,148,136,0.12); }
-        .shot-cap { font-size: 8pt; color: #6b7280; text-align: center; margin-top: 2px; font-style: italic; }
-
-        /* Feature block grande (página 2) */
-        .feat-big { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; page-break-inside: avoid; }
-        .feat-big .feat-num { display: inline-block; background: #0d9488; color: white; font-weight: bold; font-size: 9pt; padding: 2px 8px; border-radius: 5px; margin-bottom: 4px; }
-        .feat-big h3 { margin: 0 0 4px 0; font-size: 12pt; color: #111827; }
-        .feat-big p { margin: 0 0 8px 0; font-size: 9.5pt; color: #4b5563; line-height: 1.45; }
-        .feat-big .shot { margin-top: 4px; }
-
-        /* 2x2 screenshot grid */
-        .shot-grid { width: 100%; border-collapse: separate; border-spacing: 6px; margin: 6px 0 10px 0; }
-        .shot-grid td { width: 50%; vertical-align: top; padding: 0; }
-        .shot-card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px; }
-        .shot-card img { width: 100%; display: block; border-radius: 4px; }
-        .shot-card .title { font-size: 9pt; font-weight: 700; color: #0d9488; margin: 4px 0 1px 0; }
-        .shot-card .desc { font-size: 7.8pt; color: #6b7280; line-height: 1.3; }
-
-        /* Features grid */
-        .features { width: 100%; border-collapse: collapse; margin: 6px 0; }
-        .features td { padding: 5px 6px; vertical-align: top; font-size: 8.8pt; border-bottom: 1px solid #f3f4f6; width: 50%; line-height: 1.3; }
-        .features td strong { color: #0d9488; display: block; margin-bottom: 1px; font-size: 9pt; }
-        .icon { display: inline-block; width: 12px; color: #14b8a6; font-weight: bold; }
-
-        /* Stats */
-        .stats { width: 100%; background: #f9fafb; border-radius: 8px; padding: 10px; margin: 8px 0; }
-        .stats td { text-align: center; padding: 3px 2px; }
-        .stats .num { font-size: 16pt; font-weight: 800; color: #0d9488; line-height: 1; }
-        .stats .label { font-size: 8pt; color: #6b7280; margin-top: 2px; }
-
-        /* Pricing */
-        .pricing { width: 100%; border-collapse: collapse; margin: 8px 0; }
-        .pricing th { background: #f0fdfa; color: #0d9488; padding: 6px; font-size: 9pt; text-align: left; border-bottom: 2px solid #14b8a6; }
-        .pricing td { padding: 6px; font-size: 8.8pt; border-bottom: 1px solid #e5e7eb; }
-        .pricing .popular { background: #fff7ed; }
-        .pricing .popular td:first-child strong { color: #ea580c; }
-        .price { font-weight: bold; color: #111827; font-size: 10pt; }
-        .price-free { color: #059669; font-weight: bold; }
-
-        /* CTA box */
-        .cta-box { background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%); color: white; padding: 14px 16px; border-radius: 10px; margin-top: 10px; }
-        .cta-box h3 { color: white; margin: 0 0 3px 0; font-size: 13pt; }
-        .cta-box p { margin: 0; font-size: 9pt; opacity: 0.95; }
-        .cta-grid { width: 100%; margin-top: 8px; }
-        .cta-grid td { vertical-align: middle; }
-        .cta-grid .qr { width: 100px; text-align: center; }
-        .cta-grid .qr img { width: 94px; height: 94px; background: white; padding: 3px; border-radius: 5px; }
-        .cta-grid .info { padding-left: 12px; font-size: 9pt; }
-        .cta-grid .info strong { display: block; color: white; font-size: 10pt; margin-bottom: 2px; }
-        .cta-grid .info a { color: white; text-decoration: none; }
-
-        /* Badge row */
-        .badges { margin: 6px 0; font-size: 8pt; color: #6b7280; }
-        .badge { display: inline-block; background: #f0fdfa; color: #0d9488; padding: 3px 8px; border-radius: 10px; margin-right: 4px; font-weight: 600; }
-
-        /* Footer */
-        .footer { border-top: 1px solid #e5e7eb; margin-top: 10px; padding-top: 6px; font-size: 7.5pt; color: #9ca3af; text-align: center; }
-        .footer a { color: #0d9488; text-decoration: none; }
+        @endif
     </style>
 </head>
 <body>
-
-{{-- ============================================================ --}}
-{{-- PÁGINA 1 — PROBLEMA, SOLUCIÓN Y PROOF VISUAL                  --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="header">
-        <div>
-            <div class="brand">DocFácil</div>
-            <small>Software para consultorios dentales</small>
-        </div>
-        <div class="header-right">
-            Brief 2026<br>
-            docfacil.tu-app.co
-        </div>
+@if($web)
+    <div class="barra">
+        <a class="claro" href="{{ url('/brief.pdf?view=1') }}">Ver en PDF</a>
+        <a href="{{ $demoUrl }}">Abrir la demo</a>
     </div>
+@endif
 
-    <div class="hero">
-        <h1>Su consultorio dental, en orden y en un solo lugar</h1>
-        <p>Agenda, expediente, odontograma, recetas y cobros. Los recordatorios salen de su propio WhatsApp a 1 clic: DocFácil escribe el mensaje y usted da enviar.</p>
-    </div>
+{{-- ── Página 1: qué es y qué le resuelve ─────────────────────────── --}}
+<div class="hoja">
+    <table class="cabeza"><tr>
+        <td class="marca">DocFácil</td>
+        <td class="cabeza-der">Brief para consultorios dentales<br>docfacil.tu-app.co</td>
+    </tr></table>
 
-    <img src="{{ $screens['dashboard'] }}" alt="Escritorio DocFácil" class="shot shot-hero">
-    <p class="shot-cap">Su día en un vistazo: ingresos del mes, próximas citas y lo que pasó hoy.</p>
+    <h1>La agenda, el expediente y los cobros de su consultorio, en un solo lugar.</h1>
+    <p class="sub">Para el dentista que trabaja solo o con su asistente. También lleva el laboratorio, la caja del día y el corte del mes. Se usa desde la computadora y el celular, sin instalar nada.</p>
 
-    <div class="row">
-        <div class="col-2">
-            <h2 style="margin-top:4px;">Lo que hoy cuesta trabajo</h2>
-            <div class="pain-box"><strong>Citas que no llegan</strong><br>Al paciente se le olvidó y nadie le recordó.</div>
-            <div class="pain-box"><strong>Tiempo en papeleo</strong><br>Buscar expedientes, escribir recetas a mano, llamar a confirmar.</div>
-            <div class="pain-box"><strong>Cobros que se olvidan</strong><br>"Le pago después" que nunca regresó. Trabajo hecho sin cobrar.</div>
-            <div class="pain-box"><strong>Decidir a ojo</strong><br>No sabe qué servicio le deja más ni cuánto le deben.</div>
-        </div>
-        <div class="col-2">
-            <h2 style="margin-top:4px;">Lo que hace DocFácil</h2>
-            <div class="solution-box"><strong>Recordatorio a 1 clic</strong><br>Abre su WhatsApp con el mensaje escrito; usted da enviar. El paciente confirma con un link.</div>
-            <div class="solution-box"><strong>Todo en un solo lugar</strong><br>Agenda, expediente, odontograma y recetas PDF con su cédula, ligados a cada paciente.</div>
-            <div class="solution-box"><strong>Cobro el mismo día</strong><br>Registra el cobro al terminar. Si queda saldo, abre su WhatsApp con el recordatorio escrito.</div>
-            <div class="solution-box"><strong>Sabe cuánto gana cada día</strong><br>Ingresos, pendientes y gastos del mes al entrar, sin Excel.</div>
-        </div>
-    </div>
+    <div class="captura" style="width:78%;margin:0 auto;"><img src="{{ $img('atender') }}" alt="Lo que hay que atender hoy"></div>
+    <p class="pie-foto" style="text-align:center;">Al entrar ve lo que hay que atender hoy, lo urgente primero, cada cosa con su botón.</p>
 
-    <div class="stats">
-        <table style="width:100%;">
-            <tr>
-                <td><div class="num">$0</div><div class="label">plan Free, para siempre</div></td>
-                <td><div class="num">$499</div><div class="label">al mes, plan Básico</div></td>
-                <td><div class="num">30 días</div><div class="label">garantía de devolución</div></td>
-                <td><div class="num">15 días</div><div class="label">prueba gratis sin tarjeta</div></td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="footer">
-        Sigue en la página siguiente → Cómo se ve trabajando DocFácil en cada área del consultorio
-    </div>
-</div>
-
-{{-- ============================================================ --}}
-{{-- PÁGINA 2 — 2 FEATURES CLAVE CON SCREENSHOT GRANDE             --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="header">
-        <div>
-            <div class="brand">DocFácil</div>
-            <small>Dos funciones que marcan la diferencia</small>
-        </div>
-        <div class="header-right">
-            Brief 2026<br>
-            docfacil.tu-app.co
-        </div>
-    </div>
-
-    <h2 style="margin-top:0;">Dos funciones que cambian el consultorio</h2>
-
-    <div class="feat-big">
-        <span class="feat-num">01</span>
-        <h3>Odontograma interactivo</h3>
-        <p>Diagrama dental FDI. Usted hace clic en el diente o en la cara, elige el estado y se guarda. Lo imprime en PDF para explicarle al paciente su tratamiento.</p>
-        <img src="{{ $screens['odontograma'] }}" alt="Odontograma interactivo" class="shot">
-    </div>
-
-    <div class="feat-big">
-        <span class="feat-num">02</span>
-        <h3>Recetas PDF profesionales</h3>
-        <p>Con su nombre, especialidad, cédula, datos del consultorio y espacio para su firma. Se descargan en PDF y el paciente también las ve en su portal.</p>
-        <img src="{{ $screens['recetas'] }}" alt="Recetas PDF" class="shot">
-    </div>
-
-    <div class="badges" style="text-align:center; margin-top:10px;">
-        <span class="badge">✓ Hecho en México</span>
-        <span class="badge">✓ Datos en la nube</span>
-        <span class="badge">✓ Cifrado TLS</span>
-        <span class="badge">✓ Backups diarios</span>
-        <span class="badge">✓ Soporte en español</span>
-    </div>
-
-    <div class="footer">
-        Sigue en la página siguiente → Funciones, precios y cómo empezar
-    </div>
-</div>
-
-{{-- ============================================================ --}}
-{{-- PÁGINA 3 — FEATURES, PRECIOS Y CTA                            --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="header">
-        <div>
-            <div class="brand">DocFácil</div>
-            <small>Pensado para consultorios dentales</small>
-        </div>
-        <div class="header-right">
-            Brief 2026<br>
-            docfacil.tu-app.co
-        </div>
-    </div>
-
-    <h2 style="margin-top:0;">Todo lo que incluye</h2>
-    <table class="features">
+    <h2>Lo que le resuelve</h2>
+    <table class="apila">
         <tr>
-            <td><span class="icon">✓</span> <strong>Agenda de citas</strong> Calendario visual, varios doctores, arrastrar y soltar</td>
-            <td><span class="icon">✓</span> <strong>Recordatorios WhatsApp</strong> A 1 clic desde su WhatsApp; usted da enviar</td>
+            <td style="width:50%;padding:0 6px 8px 0;">
+                <div class="caja">
+                    <div class="dolor">"Se le olvidó la cita"</div>
+                    <h3>Recordatorios de mañana, uno tras otro</h3>
+                    <p>Toca el botón y se abre su WhatsApp con el mensaje ya escrito; usted da enviar. El paciente confirma con una liga.</p>
+                </div>
+            </td>
+            <td style="width:50%;padding:0 0 8px 6px;">
+                <div class="caja">
+                    <div class="dolor">"Le pago después"</div>
+                    <h3>Le deben: quién, cuánto y desde cuándo</h3>
+                    <p>Cobra con abonos, lleva mensualidades de ortodoncia y le recuerda por WhatsApp a quien paga, aunque sea la mamá.</p>
+                </div>
+            </td>
         </tr>
         <tr>
-            <td><span class="icon">✓</span> <strong>Expediente clínico</strong> Motivo, diagnóstico CIE-10, tratamiento, signos vitales, alergias</td>
-            <td><span class="icon">✓</span> <strong>Recetas PDF</strong> Con cédula y espacio para firma</td>
-        </tr>
-        <tr>
-            <td><span class="icon">✓</span> <strong>Odontograma interactivo</strong> Diagrama FDI, se imprime en PDF</td>
-            <td><span class="icon">✓</span> <strong>Cobro por WhatsApp</strong> Monto y saldo, a 1 clic</td>
-        </tr>
-        <tr>
-            <td><span class="icon">✓</span> <strong>Check-in con QR</strong> Sin papeleo, el paciente escanea</td>
-            <td><span class="icon">✓</span> <strong>Consentimientos</strong> Firmados en pantalla, con fecha y hora (Pro)</td>
-        </tr>
-        <tr>
-            <td><span class="icon">✓</span> <strong>Portal del paciente</strong> Sus citas, recetas y pagos</td>
-            <td><span class="icon">✓</span> <strong>Dashboard con gráficas</strong> Ingresos, citas, alertas</td>
-        </tr>
-        <tr>
-            <td><span class="icon">✓</span> <strong>Alertas inteligentes</strong> Pacientes sin visita, pagos vencidos (Pro)</td>
-            <td><span class="icon">✓</span> <strong>Varios doctores</strong> Producción por doctor (Pro hasta 3, Clínica ilimitados)</td>
+            <td style="width:50%;padding:0 6px 0 0;">
+                <div class="caja">
+                    <div class="dolor">"¿Qué le hice la vez pasada?"</div>
+                    <h3>Al abrir la cita, todo a la vista</h3>
+                    <p>Alergias y anticoagulantes en rojo, lo último que se le hizo en cada diente y lo que falta del presupuesto. Odontograma y recetas en PDF.</p>
+                </div>
+            </td>
+            <td style="width:50%;padding:0 0 0 6px;">
+                <div class="caja">
+                    <div class="dolor">"Lo voy a pensar"</div>
+                    <h3>Presupuestos que no se quedan en el cajón</h3>
+                    <p>El paciente lo ve y lo acepta desde su celular. Los que no contestan aparecen en Pendientes con su recordatorio.</p>
+                </div>
+            </td>
         </tr>
     </table>
 
-    <h2>Planes y precios</h2>
+    <table class="apila" style="margin-top:9px;"><tr>
+        <td style="width:50%;padding-right:5px;">
+            <div class="captura"><img src="{{ $img('consulta') }}" alt="La consulta con alergias y lo último del diente"></div>
+            <p class="pie-foto">Al abrir la cita: alergias en rojo y "Lo último en cada diente".</p>
+        </td>
+        <td style="width:50%;padding-left:5px;">
+            <div class="captura"><img src="{{ $img('le-deben') }}" alt="Le deben"></div>
+            <p class="pie-foto">Le deben: Cobrar pregunta cuánto trae; Recordarle abre su WhatsApp.</p>
+        </td>
+    </tr></table>
 
-    <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 8.5pt;">
-        <strong style="color: #92400e;">💡 Pague anual y ahorre 2 meses</strong> <span style="color:#78350f;">— el plan anual cuesta solo 10 meses (16.7% de descuento).</span>
-    </div>
-
-    <table class="pricing">
-        <thead>
-            <tr>
-                <th style="width:16%;">Plan</th>
-                <th style="width:20%;">Mensual</th>
-                <th style="width:22%;">Anual (2 meses gratis)</th>
-                <th>Ideal para</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(\App\Support\LoQueTraeCadaPlan::planes() as $p)
-            <tr @if($p['popular']) class="popular" @endif>
-                <td><strong>{{ $p['name'] }}{{ $p['popular'] ? ' ★' : '' }}</strong></td>
-                @if($p['annual'] === 0)
-                <td class="price-free">$0 / mes</td>
-                <td style="color:#6b7280;">—</td>
-                @else
-                <td class="price">${{ $p['price'] }} / mes</td>
-                <td class="price" style="color:#059669;">${{ number_format($p['annual']) }} / año</td>
-                @endif
-                <td>{{ $p['limits'] }}<br><span style="color:#6b7280;">{{ $p['lead'] ? $p['lead'] . ' ' : '' }}{{ implode(' · ', array_slice($p['features'], 0, 3)) }}</span></td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <p style="font-size:8.5pt; color:#6b7280; margin:3px 0 0 0;">15 días gratis con todas las funciones. Sin tarjeta. Garantía de 30 días en su primer pago. Precios en MXN.</p>
-
-    <div class="cta-box">
-        <h3>Empiece gratis</h3>
-        <p>Escanee el QR o visite <strong>docfacil.tu-app.co</strong> y cree su cuenta sin tarjeta.</p>
-        <table class="cta-grid">
-            <tr>
-                <td class="qr">
-                    <img src="{{ $qrDataUri }}" alt="QR registro">
-                </td>
-                <td class="info">
-                    <strong>Omar Lerma · Fundador</strong>
-                    <span style="display:inline-block; width:12px; font-weight:bold;">☎</span> <a href="{{ $whatsappLink }}">668 249 3398</a> (WhatsApp)<br>
-                    <span style="display:inline-block; width:12px; font-weight:bold;">✉</span> <a href="mailto:contacto@docfacil.com">contacto@docfacil.com</a><br>
-                    <span style="display:inline-block; width:12px; font-weight:bold;">⌂</span> <a href="{{ url('/') }}">docfacil.tu-app.co</a><br>
-                    <span style="opacity:0.9;">Demo en vivo · Onboarding gratuito</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="footer">
-        DocFácil © {{ date('Y') }} · Software para consultorios dentales en México · <a href="{{ url('/') }}">docfacil.tu-app.co</a>
-    </div>
 </div>
 
+{{-- ── Página 2: planes, preguntas y cómo probarlo ─────────────────── --}}
+<div class="hoja">
+    <table class="cabeza"><tr>
+        <td class="marca">DocFácil</td>
+        <td class="cabeza-der">Planes, preguntas y cómo probarlo</td>
+    </tr></table>
+
+    <h2>Planes</h2>
+    <table class="planes apila"><tr>
+        @foreach($planes as $plan)
+            <td class="{{ $plan['popular'] ? 'destacado' : '' }}">
+                <div class="plan-nombre">{{ $nombres[$plan['name']] ?? $plan['name'] }} @if($plan['popular'])<span class="recomendado">Recomendado</span>@endif</div>
+                <div class="plan-precio">${{ $plan['price'] }} <small>al mes</small></div>
+                <div class="etiqueta" style="text-transform:none;letter-spacing:0;">{{ $plan['ideal'] }}</div>
+                <div class="plan-limite">{{ $plan['limits'] }}</div>
+                <ul>
+                    @if($plan['lead'])<li><b>{{ rtrim($plan['lead'], ':') }}</b></li>@endif
+                    @foreach(array_slice($plan['features'], 0, 4) as $f)<li>{{ $f }}</li>@endforeach
+                </ul>
+            </td>
+        @endforeach
+    </tr></table>
+    <p class="pie-foto">Precios en pesos mexicanos. Pagando anual son 10 meses. 15 días de prueba con todo, sin tarjeta, y garantía de 30 días en su primer pago.</p>
+
+    <h2>Lo que siempre preguntan</h2>
+    <table class="faq apila">
+        <tr>
+            <td><strong>¿Los mensajes salen solos?</strong><span>No. Se abre su WhatsApp con el mensaje ya escrito y usted da enviar: sale de su número, el que sus pacientes conocen.</span></td>
+            <td><strong>¿Hace facturas?</strong><span>No timbra facturas. Deja anotado quién pidió factura y la hace su contador.</span></td>
+        </tr>
+        <tr>
+            <td><strong>¿Y mis pacientes de antes?</strong><span>Los sube desde un Excel, o los va capturando conforme vienen.</span></td>
+            <td><strong>¿Y si dejo de pagar?</strong><span>Nada se borra: su cuenta pasa al plan Gratis y puede bajar todos sus datos cuando quiera.</span></td>
+        </tr>
+    </table>
+
+    <div class="probar">
+        <table class="apila"><tr>
+            <td style="width:72%;padding-right:12px;">
+                <h2>Véalo funcionando</h2>
+                <p>Es un consultorio de práctica con pacientes inventados. Puede mover lo que quiera: se reinicia cada día.</p>
+                <div class="acceso">
+                    <b>{{ str_replace(['https://', 'http://'], '', $demoUrl) }}</b><br>
+                    Correo: <b>demo@docfacil.com</b> &nbsp;·&nbsp; Contraseña: <b>demo2026</b>
+                </div>
+                <p>Tres cosas para probar:</p>
+                <ol>
+                    <li>En el Escritorio, vea "Lo que hay que atender".</li>
+                    <li>En Citas, abra una cita de hoy o de mañana: alergias y lo último del diente.</li>
+                    <li>En "Le deben", toque Cobrar y registre un abono.</li>
+                </ol>
+            </td>
+            <td style="width:28%;text-align:center;">
+                <img src="{{ $qrDataUri }}" alt="Crear cuenta" style="width:96px;height:96px;background:#fff;border-radius:6px;padding:4px;">
+                <p style="font-size:8pt;margin-top:4px;">Su cuenta: 15 días con todo, sin tarjeta</p>
+            </td>
+        </tr></table>
+        <p style="margin:8px 0 0;padding-top:8px;border-top:1px solid #334155;font-size:8.6pt;">
+            <b style="color:#fff;">Omar Lerma</b>, fundador de DocFácil · Los Mochis, Sinaloa · WhatsApp <a href="{{ $whatsappLink }}" style="color:#5eead4;"><b>668 249 3398</b></a> · leooma24@gmail.com
+        </p>
+    </div>
+
+</div>
 </body>
 </html>

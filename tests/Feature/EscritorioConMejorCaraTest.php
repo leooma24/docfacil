@@ -68,6 +68,18 @@ class EscritorioConMejorCaraTest extends TestCase
             ->assertSeeInOrder(['Corona de Rosa no ha llegado', 'mañana sin recordatorio']);
     }
 
+    public function test_el_aviso_del_laboratorio_no_repite_la_palabra(): void
+    {
+        $cita = $this->cita('2026-10-16 11:00');
+        LabOrder::create(['clinic_id' => $this->clinica->id, 'patient_id' => $this->rosa->id, 'appointment_id' => $cita->id,
+            'laboratorio' => 'Laboratorio Dental Arte', 'trabajo' => 'Corona', 'costo' => 1500, 'enviada_at' => '2026-10-05']);
+
+        $avisos = collect((new AlertsWidget())->getAlerts())->pluck('desc')->implode(' | ');
+
+        $this->assertStringContainsString('Llámele a Laboratorio Dental Arte', $avisos);
+        $this->assertStringNotContainsString('laboratorio Laboratorio', $avisos);
+    }
+
     public function test_sin_avisos_dice_que_todo_esta_en_orden(): void
     {
         $this->cita('2026-10-07 09:00', ['status' => 'completed']); // Rosa vino la semana pasada

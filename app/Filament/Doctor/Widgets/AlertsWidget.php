@@ -101,7 +101,7 @@ class AlertsWidget extends Widget
                     'type' => 'danger',
                     'icon' => 'heroicon-o-beaker',
                     'title' => "{$orden->trabajo} de {$orden->patient?->first_name} no ha llegado",
-                    'desc' => 'Su cita es ' . ($cita->starts_at->isToday() ? 'hoy' : ($cita->starts_at->isTomorrow() ? 'mañana' : $cita->starts_at->locale('es')->isoFormat('dddd'))) . ' a las ' . $cita->starts_at->format('H:i') . '. Llámele al laboratorio ' . $orden->laboratorio . ' o reagéndela.',
+                    'desc' => 'Su cita es ' . ($cita->starts_at->isToday() ? 'hoy' : ($cita->starts_at->isTomorrow() ? 'mañana' : $cita->starts_at->locale('es')->isoFormat('dddd'))) . ' a las ' . $cita->starts_at->format('H:i') . '. Llámele ' . (str_starts_with(mb_strtolower($orden->laboratorio), 'laboratorio') ? 'a ' : 'al laboratorio ') . $orden->laboratorio . ' o reagéndela.',
                     'url' => \App\Filament\Doctor\Resources\LabOrderResource::getUrl('index', panel: 'doctor'),
                     'boton' => 'Ver laboratorio',
                 ];

@@ -321,7 +321,7 @@
                     <div>
                         <div class="cal-hero-label"><x-icono nombre="calendar-days" /> Su agenda</div>
                         <h2 class="cal-hero-title">Calendario de Citas</h2>
-                        <div class="cal-hero-subtitle">Arrastra para mover citas · Click para ver detalles · Redimensiona para ajustar duración</div>
+                        <div class="cal-hero-subtitle">Toque una cita para verla · Arrástrela para cambiarla de hora</div>
                     </div>
                 </div>
             </div>
