@@ -563,13 +563,16 @@ class DemoSeeder extends Seeder
         // laboratorio se llevan la mitad, que es lo que a un dentista le
         // suena real.
         $gastosDemo = [
-            ['renta',        'Renta del consultorio',                18000, 1,  true],
-            ['laboratorio',  'Coronas y prótesis — Lab Dental Norte', 12400, 5,  false],
-            ['nomina',       'Sueldo de la asistente',                9500, 1,  true],
-            ['materiales',   'Resinas, anestesia y guantes',          6800, 8,  false],
-            ['servicios',    'Luz, agua e internet',                  2900, 3,  true],
-            ['equipo',       'Mantenimiento de la unidad dental',     4200, 12, false],
-            ['publicidad',   'Anuncios en Facebook',                  1500, 10, false],
+            // La asistente cobra por quincena, el 15 y el 30: con todo cargado
+            // el día 1, a mitad de mes el corte del demo salía en rojo.
+            ['renta',        'Renta del consultorio',                12000, 1,  true],
+            ['laboratorio',  'Coronas y prótesis — Lab Dental Norte', 5800, 5,  false],
+            ['nomina',       'Sueldo de la asistente (1a quincena)',  4500, 15, true],
+            ['nomina',       'Sueldo de la asistente (2a quincena)',  4500, 30, true],
+            ['materiales',   'Resinas, anestesia y guantes',          3400, 8,  false],
+            ['servicios',    'Luz, agua e internet',                  1900, 3,  true],
+            ['equipo',       'Mantenimiento de la unidad dental',     2500, 12, false],
+            ['publicidad',   'Anuncios en Facebook',                  1200, 10, false],
         ];
 
         foreach ($gastosDemo as [$categoria, $concepto, $monto, $dia, $cadaMes]) {

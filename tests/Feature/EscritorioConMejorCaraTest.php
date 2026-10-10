@@ -80,6 +80,19 @@ class EscritorioConMejorCaraTest extends TestCase
         $this->assertStringNotContainsString('laboratorio Laboratorio', $avisos);
     }
 
+    public function test_el_corte_en_rojo_se_escribe_bien(): void
+    {
+        \App\Models\Payment::create(['clinic_id' => $this->clinica->id, 'patient_id' => $this->rosa->id, 'amount' => 1000, 'amount_paid' => 1000,
+            'status' => 'paid', 'payment_method' => 'cash', 'payment_date' => '2026-10-05']);
+        \App\Models\Expense::create(['clinic_id' => $this->clinica->id, 'category' => 'renta', 'concept' => 'Renta', 'amount' => 3000,
+            'expense_date' => '2026-10-01', 'payment_method' => 'transfer']);
+
+        $this->get('/doctor/corte')->assertOk()
+            ->assertSee('−$2,000.00')
+            ->assertDontSee('$-2,000')
+            ->assertDontSee('De cada $100');
+    }
+
     public function test_sin_avisos_dice_que_todo_esta_en_orden(): void
     {
         $this->cita('2026-10-07 09:00', ['status' => 'completed']); // Rosa vino la semana pasada

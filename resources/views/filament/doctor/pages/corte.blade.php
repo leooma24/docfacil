@@ -1,6 +1,7 @@
 @php
     $n = $this->getNumeros();
-    $pesos = fn ($v) => '$' . number_format((float) $v, 2);
+    // Lo negativo con su signo por delante: "−$2,000.00", no "$-2,000.00".
+    $pesos = fn ($v) => ((float) $v < 0 ? '−$' : '$') . number_format(abs((float) $v), 2);
 
     // Estilos en linea a proposito: en produccion algunas utilidades de
     // Tailwind v4 no compilan, y este bloque es justo lo que el doctor viene
@@ -89,6 +90,8 @@
                         {{-- Sin gastos anotados, "le quedó todo" es falso: es lo que entró. --}}
                         Todavía no anota gastos de este periodo: esto es lo que entró, no lo que le quedó.
                         <a href="{{ \App\Filament\Doctor\Resources\ExpenseResource::getUrl('create') }}" style="font-weight:600;text-decoration:underline;">Anotar un gasto</a>
+                    @elseif ($n['margen'] !== null && $n['margen'] < 0)
+                        Este periodo salió más de lo que entró.
                     @elseif ($n['margen'] !== null)
                         De cada $100, le quedaron <strong>${{ number_format($n['margen'], 0) }}</strong>
                     @else
