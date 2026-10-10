@@ -18,6 +18,8 @@ class Payment extends Model
         'clinic_id', 'patient_id', 'appointment_id', 'service_id', 'payment_plan_id', 'installment_number',
         'amount', 'amount_paid', 'payment_method', 'status', 'notes',
         'payment_date', 'due_date',
+        // La factura la hace el contador (no hay CFDI): solo se anota.
+        'factura_solicitada', 'factura_enviada_at',
     ];
 
     protected function casts(): array
@@ -27,6 +29,8 @@ class Payment extends Model
             'amount_paid' => 'decimal:2',
             'payment_date' => 'date',
             'due_date' => 'date',
+            'factura_solicitada' => 'boolean',
+            'factura_enviada_at' => 'datetime',
         ];
     }
 

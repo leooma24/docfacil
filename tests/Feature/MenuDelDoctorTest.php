@@ -66,7 +66,8 @@ class MenuDelDoctorTest extends TestCase
 
         // Pendientes (10-oct-2026): presupuestos sin respuesta y tratamientos a medias, por paciente.
         $this->assertSame(['Pacientes', 'Expediente clínico', 'Odontograma', 'Recetas', 'Consentimientos', 'Lista de espera', 'Pendientes'], $menu['Pacientes']);
-        $this->assertSame(['Cobros', 'Presupuestos', 'Planes de pago', 'Gastos', 'Corte del mes'], $menu['Dinero']);
+        // Caja del día (10-oct-2026): lo que entró hoy por forma de pago, para cuadrar.
+        $this->assertSame(['Caja del día', 'Cobros', 'Presupuestos', 'Planes de pago', 'Gastos', 'Corte del mes'], $menu['Dinero']);
         $this->assertSame(['Insumos', 'Movimientos', 'Residuos'], $menu['Inventario']);
         $this->assertContains('Servicios y precios', $menu['Consultorio']);
         $this->assertContains('Check-in QR', $menu['Consultorio']);

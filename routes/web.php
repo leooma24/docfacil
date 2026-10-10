@@ -294,6 +294,17 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     return redirect()->away($whatsapp);
 })->name('cita.recordar');
 
+// El recibo de un cobro: lo que cuesta, cada abono y lo que falta. Solo del
+// consultorio de quien entra. Es un comprobante, no una factura (no hay CFDI).
+Route::get('/doctor/cobros/{payment}/recibo', function (int $payment) {
+    abort_unless(auth()->check(), 403);
+
+    $cobro = \App\Models\Payment::where('clinic_id', auth()->user()->clinic_id)->findOrFail($payment);
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.recibo', \App\Support\CajaDelDia::datosDelRecibo($cobro));
+
+    return $pdf->stream("recibo-{$cobro->id}.pdf");
+})->name('cobro.recibo');
+
 // Recordarle a un paciente su presupuesto pendiente: marca la fecha (un
 // recordatorio al mes, no más) y abre WhatsApp con el mensaje escrito. Nada sale
 // solo: el doctor da enviar desde su propio WhatsApp.

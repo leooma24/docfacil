@@ -258,6 +258,12 @@ class PaymentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                Tables\Actions\Action::make('recibo')
+                    ->label('Recibo (PDF)')
+                    ->icon('heroicon-o-document-text')
+                    ->color('gray')
+                    ->url(fn (Payment $record) => route('cobro.recibo', $record))
+                    ->openUrlInNewTab(),
                 Tables\Actions\Action::make('pay_installment')
                     ->label('Pagar abono')
                     ->icon('heroicon-o-banknotes')
