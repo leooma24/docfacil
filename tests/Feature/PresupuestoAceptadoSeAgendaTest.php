@@ -58,7 +58,7 @@ class PresupuestoAceptadoSeAgendaTest extends TestCase
 
     private function aceptar(): void
     {
-        $this->get(URL::signedRoute('treatment-plan.accept', ['token' => $this->plan->public_token]))->assertOk();
+        $this->post(URL::signedRoute('treatment-plan.accept', ['token' => $this->plan->public_token]))->assertOk();
     }
 
     // ── Al aceptar, el doctor se entera ──────────────────────────

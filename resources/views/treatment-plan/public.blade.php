@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $plan->title }} · {{ $plan->clinic->name }}</title>
-    <meta name="description" content="Plan de tratamiento de {{ $plan->clinic->name }}. Revisa los detalles y acepta en línea.">
+    <meta name="description" content="Plan de tratamiento de {{ $plan->clinic->name }}. Revise los detalles y acéptelo en línea.">
     <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
 
     {{-- OpenGraph / Twitter Cards --}}
@@ -108,10 +108,16 @@
 
         @if($plan->status === 'sent')
         <div class="actions">
-            <a href="{{ $acceptUrl }}" class="btn btn-accept">✓ Aceptar plan</a>
-            <a href="{{ $rejectUrl }}" class="btn btn-reject" onclick="return confirm('¿Seguro que quieres rechazar este plan?');">Por ahora no</a>
+            <form method="POST" action="{{ $acceptUrl }}" style="display:contents;">
+                @csrf
+                <button type="submit" class="btn btn-accept" style="border:none;cursor:pointer;font:inherit;">✓ Aceptar plan</button>
+            </form>
+            <form method="POST" action="{{ $rejectUrl }}" style="display:contents;" onsubmit="return confirm('¿Seguro que por ahora no quiere este plan?');">
+                @csrf
+                <button type="submit" class="btn btn-reject" style="border:none;cursor:pointer;font:inherit;">Por ahora no</button>
+            </form>
         </div>
-        <p style="text-align:center;color:#6b7280;font-size:12px;margin-top:12px;">Al aceptar, {{ $plan->clinic->name }} te contactará para agendar la primera cita.</p>
+        <p style="text-align:center;color:#6b7280;font-size:12px;margin-top:12px;">Al aceptar, en {{ $plan->clinic->name }} le van a escribir para agendar su primera cita.</p>
         @endif
     </div>
 

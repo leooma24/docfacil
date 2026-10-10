@@ -24,7 +24,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="none" stroke="#059669" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
         <h1>¡Plan aceptado!</h1>
-        <p class="sub">Gracias por aceptar tu plan con <strong>{{ $plan->clinic->name }}</strong>. El equipo te contactará pronto por WhatsApp para agendar tu primera cita.</p>
+        <p class="sub">Gracias por aceptar su plan con <strong>{{ $plan->clinic->name }}</strong>. En el consultorio ya se enteraron y le van a escribir para agendar su primera cita.</p>
 
         <div class="plan-box">
             <div style="color:#6b7280;font-size:12px;margin-bottom:4px;">PLAN ACEPTADO</div>

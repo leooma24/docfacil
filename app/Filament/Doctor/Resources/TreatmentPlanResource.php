@@ -375,7 +375,6 @@ class TreatmentPlanResource extends Resource
         $phone = preg_replace('/\D/', '', $record->patient->phone);
         if (strlen($phone) === 10) $phone = '52' . $phone;
 
-        $acceptUrl = URL::signedRoute('treatment-plan.accept', ['token' => $record->public_token]);
         $pdfUrl = route('treatment-plan.public', ['token' => $record->public_token]);
 
         $clinicName = $record->clinic->name ?? 'su consultorio';
@@ -386,8 +385,9 @@ class TreatmentPlanResource extends Resource
         $msg = "Hola {$firstName}, le comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
             . "*{$record->title}*\n"
             . "Total: *\${$total} MXN*\n\n"
-            . "Ver el presupuesto: {$pdfUrl}\n\n"
-            . "Si le parece bien, puede aceptarlo aquí: {$acceptUrl}\n\n"
+            // Solo la liga para verlo: ahí lo acepta con un botón. La liga
+            // directa de aceptar se aceptaba sola con la vista previa.
+            . "Aquí lo puede ver; si le parece bien, puede aceptarlo ahí mismo: {$pdfUrl}\n\n"
             . "Cualquier duda, me la comenta por aquí.";
 
         Notification::make()

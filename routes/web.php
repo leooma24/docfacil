@@ -271,14 +271,24 @@ Route::get('/p/{token}', [TreatmentPlanController::class, 'publicShow'])
     ->middleware('throttle:30,1')
     ->where('token', '[a-f0-9]{64}')
     ->name('treatment-plan.public');
-Route::get('/p/{token}/aceptar', [TreatmentPlanController::class, 'accept'])
+// Abrir la liga no acepta ni rechaza: lleva al presupuesto. Lo hace el
+// botón (POST), que el paciente tiene que tocar. La vista previa de WhatsApp
+// o un antivirus abren las ligas solos (auditoría del 12-oct-2026). Las ligas
+// viejas que ya se mandaron siguen sirviendo para ver el presupuesto.
+Route::get('/p/{token}/aceptar', [TreatmentPlanController::class, 'aVerlo'])
     ->middleware('throttle:10,1')
     ->where('token', '[a-f0-9]{64}')
     ->name('treatment-plan.accept');
-Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
+Route::post('/p/{token}/aceptar', [TreatmentPlanController::class, 'accept'])
+    ->middleware('throttle:10,1')
+    ->where('token', '[a-f0-9]{64}');
+Route::get('/p/{token}/rechazar', [TreatmentPlanController::class, 'aVerlo'])
     ->middleware('throttle:10,1')
     ->where('token', '[a-f0-9]{64}')
     ->name('treatment-plan.reject');
+Route::post('/p/{token}/rechazar', [TreatmentPlanController::class, 'reject'])
+    ->middleware('throttle:10,1')
+    ->where('token', '[a-f0-9]{64}');
 
 // El botón de WhatsApp del recordatorio pasa por aquí: deja recordadas todas
 // las citas del paciente de ese día y abre WhatsApp con un solo mensaje. Así

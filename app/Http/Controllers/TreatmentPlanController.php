@@ -95,12 +95,22 @@ class TreatmentPlanController extends Controller
         }
     }
 
+    /** Abrir la liga de aceptar o de "por ahora no" solo lleva a verlo. */
+    public function aVerlo(string $token)
+    {
+        return redirect()->route('treatment-plan.public', ['token' => $token]);
+    }
+
+    /**
+     * "Por ahora no": solo de uno enviado (ya no deshace uno aceptado), y el
+     * consultorio se entera para hablarle.
+     */
     public function reject(Request $request, string $token)
     {
         abort_unless($request->hasValidSignature(), 403, 'Enlace expirado');
 
         $plan = TreatmentPlan::where('public_token', $token)
-            ->whereIn('status', ['sent', 'accepted'])
+            ->where('status', 'sent')
             ->firstOrFail();
 
         $plan->update([
@@ -108,6 +118,17 @@ class TreatmentPlanController extends Controller
             'rejected_at' => now(),
         ]);
 
-        return response()->view('treatment-plan.rejected', ['plan' => $plan->load('clinic')]);
+        $plan->load(['patient', 'clinic']);
+        $nombre = trim(($plan->patient?->first_name ?? '') . ' ' . ($plan->patient?->last_name ?? '')) ?: 'Un paciente';
+        foreach (\App\Models\User::where('clinic_id', $plan->clinic_id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
+            \Filament\Notifications\Notification::make()
+                ->title("{$nombre} dijo que por ahora no a su presupuesto")
+                ->body($plan->title . '. Puede hablarle para ver si se ajusta algo.')
+                ->icon('heroicon-o-x-circle')
+                ->iconColor('warning')
+                ->sendToDatabase($usuario);
+        }
+
+        return response()->view('treatment-plan.rejected', ['plan' => $plan]);
     }
 }
