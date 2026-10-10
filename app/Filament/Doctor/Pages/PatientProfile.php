@@ -47,7 +47,17 @@ class PatientProfile extends Page
 
         if (!$this->patient) {
             $this->redirect(route('filament.doctor.resources.pacientes.index'));
+
+            return;
         }
+
+        // Bitácora (NOM-024): quién abrió el expediente y cuándo. Solo al
+        // entrar, no en cada pestaña.
+        activity()
+            ->performedOn($this->patient)
+            ->causedBy(auth()->user())
+            ->event('viewed')
+            ->log('Abrió el expediente');
     }
 
     /** "Cobrar" de Lo que sigue: todo lo vencido, con el total ya puesto. */

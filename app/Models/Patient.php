@@ -139,6 +139,54 @@ class Patient extends Model
         return $this->hasMany(TreatmentPlan::class);
     }
 
+    /**
+     * Bitácora del expediente (NOM-024, trazabilidad): quién lo abrió y
+     * quién creó o cambió sus datos, notas, recetas, consentimientos y
+     * odontogramas. Lo más reciente primero.
+     */
+    public function bitacora(int $cuantos = 100): \Illuminate\Support\Collection
+    {
+        $de = fn (string $modelo, $relacion) => [$modelo, $relacion->withoutGlobalScopes()->pluck('id')];
+        $piezas = [
+            $de(MedicalRecord::class, $this->medicalRecords()),
+            $de(Prescription::class, $this->prescriptions()),
+            $de(ConsentForm::class, $this->consentForms()),
+            $de(Odontogram::class, $this->odontograms()),
+        ];
+
+        return \Spatie\Activitylog\Models\Activity::with('causer')
+            ->where(function ($q) use ($piezas) {
+                $q->where(fn ($q) => $q->where('subject_type', self::class)->where('subject_id', $this->id));
+                foreach ($piezas as [$modelo, $ids]) {
+                    if ($ids->isNotEmpty()) {
+                        $q->orWhere(fn ($q) => $q->where('subject_type', $modelo)->whereIn('subject_id', $ids));
+                    }
+                }
+            })
+            ->latest('id')
+            ->limit($cuantos)
+            ->get();
+    }
+
+    /** Una línea de la bitácora en palabras: "Creó una receta". */
+    public static function queHizo(\Spatie\Activitylog\Models\Activity $a): string
+    {
+        if ($a->event === 'viewed' || ! in_array($a->event, ['created', 'updated', 'deleted'], true)) {
+            return $a->description;
+        }
+
+        $que = [
+            self::class => 'los datos del paciente',
+            MedicalRecord::class => 'una nota de consulta',
+            Prescription::class => 'una receta',
+            ConsentForm::class => 'un consentimiento',
+            Odontogram::class => 'un odontograma',
+        ][$a->subject_type] ?? 'un registro';
+        $verbo = ['created' => 'Creó', 'updated' => 'Cambió', 'deleted' => 'Borró'][$a->event];
+
+        return $a->subject_type === self::class && $a->event === 'created' ? 'Dio de alta al paciente' : "{$verbo} {$que}";
+    }
+
     /** La CURP siempre en mayúsculas y sin espacios; vacía es null. */
     public function setCurpAttribute(?string $valor): void
     {

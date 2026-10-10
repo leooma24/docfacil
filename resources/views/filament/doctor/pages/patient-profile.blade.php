@@ -277,6 +277,10 @@
                 'odontogram' => 'Odontograma',
                 'files' => 'Archivos',
             ];
+            // Bitácora (NOM-024): la ve el doctor, no la asistente.
+            if (! auth()->user()->esAsistente()) {
+                $tabs['bitacora'] = 'Bitácora';
+            }
             @endphp
             @foreach($tabs as $key => $label)
             <button wire:click="setTab('{{ $key }}')" style="min-height:44px;font-size:0.875rem;"
@@ -533,6 +537,21 @@
                     <p style="font-size:0.85rem;color:#6b7280;">Todavía no hay archivos.</p>
                 @endforelse
             </div>
+        </div>
+        @endif
+
+        @if($activeTab === 'bitacora' && ! auth()->user()->esAsistente())
+        <div style="padding:16px 20px;">
+            <div style="font-size:13px;color:#64748b;margin-bottom:10px;">Quién abrió este expediente y quién cambió algo, lo más reciente primero. Lo pide la NOM-024.</div>
+            @forelse($patient->bitacora() as $a)
+            <div style="display:flex;gap:12px;padding:8px 0;border-top:1px solid #f1f5f9;font-size:14px;color:#0f172a;">
+                <span style="flex-shrink:0;width:120px;color:#64748b;">{{ $a->created_at->format('d/m/Y H:i') }}</span>
+                <span style="flex-shrink:0;width:160px;font-weight:600;">{{ $a->causer?->name ?? 'Sistema' }}</span>
+                <span>{{ \App\Models\Patient::queHizo($a) }}</span>
+            </div>
+            @empty
+            <div style="font-size:14px;color:#64748b;">Todavía no hay movimientos.</div>
+            @endforelse
         </div>
         @endif
 

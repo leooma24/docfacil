@@ -4,11 +4,22 @@ namespace App\Models;
 
 use App\Models\Concerns\BelongsToClinic;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ConsentForm extends Model
 {
-    use BelongsToClinic;
+    use BelongsToClinic, LogsActivity;
+
+    /** Bitácora (NOM-024, trazabilidad): quién creó o cambió Consentimiento. */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'procedure_name', 'status'])
+            ->logOnlyDirty()
+            ->setDescriptionForEvent(fn (string $evento) => "Consentimiento {$evento}");
+    }
 
     protected $fillable = [
         'clinic_id', 'patient_id', 'doctor_id',
