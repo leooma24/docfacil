@@ -376,16 +376,17 @@ class TreatmentPlanResource extends Resource
         $acceptUrl = URL::signedRoute('treatment-plan.accept', ['token' => $record->public_token]);
         $pdfUrl = route('treatment-plan.public', ['token' => $record->public_token]);
 
-        $clinicName = $record->clinic->name ?? 'tu consultorio';
+        $clinicName = $record->clinic->name ?? 'su consultorio';
         $firstName = $record->patient->first_name ?: 'hola';
         $total = number_format((float) $record->total, 2);
 
-        $msg = "Hola {$firstName}, te comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
+        // De usted, como todo lo que sale a un paciente.
+        $msg = "Hola {$firstName}, le comparto el plan de tratamiento que armamos en *{$clinicName}*:\n\n"
             . "*{$record->title}*\n"
             . "Total: *\${$total} MXN*\n\n"
             . "Ver el presupuesto: {$pdfUrl}\n\n"
-            . "Si te parece bien, puedes aceptarlo aquí: {$acceptUrl}\n\n"
-            . "Cualquier duda me la platicas por aquí.";
+            . "Si le parece bien, puede aceptarlo aquí: {$acceptUrl}\n\n"
+            . "Cualquier duda, me la comenta por aquí.";
 
         Notification::make()
             ->title('Presupuesto listo para enviar')
