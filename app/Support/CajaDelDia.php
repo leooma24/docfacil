@@ -48,7 +48,8 @@ class CajaDelDia
             'porMetodo' => $porMetodo,
             'total' => round(array_sum($porMetodo), 2),
             'movimientos' => $recibos->map(fn (PaymentReceipt $r) => [
-                'hora' => $r->paid_at?->format('H:i'),
+                // El cobro de la consulta guarda solo la fecha: sin hora real no se inventa "00:00".
+                'hora' => $r->paid_at && $r->paid_at->format('H:i:s') !== '00:00:00' ? $r->paid_at->format('H:i') : '',
                 'paciente' => trim(($r->payment?->patient?->first_name ?? '') . ' ' . ($r->payment?->patient?->last_name ?? '')),
                 'concepto' => self::concepto($r->payment),
                 'monto' => (float) $r->amount,
