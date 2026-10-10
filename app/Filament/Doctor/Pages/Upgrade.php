@@ -100,8 +100,10 @@ class Upgrade extends Page
             $plans[] = [
                 'key' => $key,
                 'name' => $plan['name'],
-                'monthly' => \App\Models\Commission::monthlyPriceForPlan($key),
-                'annual' => \App\Models\Commission::annualPriceForPlan($key),
+                // Con su precio de fundador si lo tiene (Clinic::precioDelPlan).
+                'monthly' => $this->getClinic()?->precioDelPlan($key, 'monthly') ?? \App\Models\Commission::monthlyPriceForPlan($key),
+                'annual' => $this->getClinic()?->precioDelPlan($key, 'annual') ?? \App\Models\Commission::annualPriceForPlan($key),
+                'fundador' => (bool) $this->getClinic()?->tienePrecioDeFundador($key),
                 'ideal' => $plan['ideal'],
                 'popular' => $plan['popular'],
                 'features' => array_merge($features, $plan['features']),

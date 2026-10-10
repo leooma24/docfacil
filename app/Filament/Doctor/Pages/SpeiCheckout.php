@@ -44,7 +44,7 @@ class SpeiCheckout extends Page implements HasForms
         $clinic = auth()->user()->clinic;
         abort_unless($clinic, 403);
 
-        $this->amount = Commission::priceForCycle($this->plan, $this->cycle);
+        $this->amount = $clinic->precioDelPlan($this->plan, $this->cycle);
         $this->referenceCode = SpeiPayment::generateReferenceCode($clinic->id);
 
         $this->form->fill();

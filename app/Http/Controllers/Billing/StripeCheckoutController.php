@@ -29,7 +29,8 @@ class StripeCheckoutController extends Controller
         $priceKey = $plan . '_' . $cycle; // basico_monthly, pro_annual, etc.
         $priceId = config("services.stripe.prices.{$priceKey}");
 
-        if (!$secret || !$priceId) {
+        // El fundador no usa el precio fijo de Stripe: se arma con el suyo.
+        if (!$secret || (!$priceId && ! $user->clinic->tienePrecioDeFundador($plan))) {
             return redirect()
                 ->route('filament.doctor.pages.actualizar-plan')
                 ->with('error', 'Pagos con tarjeta todavía no están habilitados. Mientras tanto puedes pagar por SPEI.');
@@ -59,10 +60,7 @@ class StripeCheckoutController extends Controller
             $session = $stripe->checkout->sessions->create([
                 'mode' => 'subscription',
                 'customer' => $clinic->stripe_id,
-                'line_items' => [[
-                    'price' => $priceId,
-                    'quantity' => 1,
-                ]],
+                'line_items' => [self::lineaDeCobro($clinic, $plan, $cycle)],
                 'success_url' => route('stripe.checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('filament.doctor.pages.actualizar-plan'),
                 'metadata' => [
@@ -89,6 +87,27 @@ class StripeCheckoutController extends Controller
                 ->route('filament.doctor.pages.actualizar-plan')
                 ->with('error', 'No pudimos iniciar el pago con tarjeta. Intenta por SPEI o contacta soporte.');
         }
+    }
+
+    /**
+     * Lo que se cobra en Stripe: el precio fijo del plan, o el precio de
+     * fundador armado al momento (Clinic::precioDelPlan).
+     */
+    public static function lineaDeCobro(\App\Models\Clinic $clinic, string $plan, string $cycle): array
+    {
+        if (! $clinic->tienePrecioDeFundador($plan)) {
+            return ['price' => config("services.stripe.prices.{$plan}_{$cycle}"), 'quantity' => 1];
+        }
+
+        return [
+            'price_data' => [
+                'currency' => 'mxn',
+                'unit_amount' => $clinic->precioDelPlan($plan, $cycle) * 100,
+                'recurring' => ['interval' => $cycle === 'annual' ? 'year' : 'month'],
+                'product_data' => ['name' => 'DocFácil ' . (\App\Support\LoQueTraeCadaPlan::plan($plan)['name'] ?? $plan) . ' · precio de fundador'],
+            ],
+            'quantity' => 1,
+        ];
     }
 
     /**

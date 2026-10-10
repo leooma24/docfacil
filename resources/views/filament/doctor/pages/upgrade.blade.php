@@ -33,7 +33,7 @@
                 </div>
                 @elseif ($clinic->trial_ends_at)
                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Trial {{ $clinic->trial_ends_at->isPast() ? 'venció el' : 'vence el' }} {{ $clinic->trial_ends_at->format('d/m/Y') }}
+                    Su prueba {{ $clinic->trial_ends_at->isPast() ? 'venció el' : 'vence el' }} {{ $clinic->trial_ends_at->format('d/m/Y') }}
                 </div>
                 @endif
             </div>
@@ -52,7 +52,7 @@
             <div class="flex items-center gap-3">
                 <div class="text-3xl" style="color:#0d9488;"><x-icono nombre="light-bulb" /></div>
                 <div>
-                    <div class="font-bold text-amber-900 dark:text-amber-200">Paga anual y ahorra 2 meses</div>
+                    <div class="font-bold text-amber-900 dark:text-amber-200">Pague anual y ahorre 2 meses</div>
                     <div class="text-sm text-amber-800 dark:text-amber-300/80">El plan anual cuesta solo 10 meses (16.7% descuento).</div>
                 </div>
             </div>
@@ -94,6 +94,9 @@
                 <div class="mb-4 inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300">
                     Equivale a ${{ number_format($plan['annual'] / 12) }}/mes
                 </div>
+                @endif
+                @if(!empty($plan['fundador']))
+                <div style="margin-bottom:8px;display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;font-size:12px;font-weight:700;">Su precio de fundador, de por vida</div>
                 @endif
                 <p class="text-xs text-gray-500 mb-4 min-h-[32px] dark:text-gray-400">{{ $plan['ideal'] }}</p>
 

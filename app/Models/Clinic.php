@@ -667,6 +667,29 @@ class Clinic extends Model
      * dice "ahora no" se le pregunta otra vez en dos semanas; si dice que no,
      * ya no se le pregunta.
      */
+    /**
+     * Lo que este consultorio paga por un plan. El fundador tiene el Pro a su
+     * precio de fundador de por vida ($499 al mes; anual = 10 meses, como
+     * todos). Mi plan, la tarjeta y la transferencia leen de aquí: antes le
+     * cobraban el Pro a $999 (auditoría del 12-oct-2026).
+     */
+    public function precioDelPlan(string $plan, string $cycle): int
+    {
+        if ($this->is_founder && (float) $this->founder_price > 0 && $plan === 'profesional') {
+            $mensual = (int) round((float) $this->founder_price);
+
+            return $cycle === 'annual' ? $mensual * 10 : $mensual;
+        }
+
+        return Commission::priceForCycle($plan, $cycle);
+    }
+
+    /** ¿Ese plan le sale a precio de fundador? */
+    public function tienePrecioDeFundador(string $plan): bool
+    {
+        return $this->precioDelPlan($plan, 'monthly') !== Commission::monthlyPriceForPlan($plan);
+    }
+
     public function tocaPedirTestimonio(): bool
     {
         if (! $this->is_founder) {

@@ -19,7 +19,7 @@ class VerifyClinicPlan
         $clinic = $user->clinic;
 
         if (!$clinic || !$clinic->is_active) {
-            abort(403, 'Tu consultorio ha sido desactivado. Contacta soporte.');
+            abort(403, 'Su consultorio está desactivado. Escríbanos y lo revisamos.');
         }
 
         // Allow access to special pages
