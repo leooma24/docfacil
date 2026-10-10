@@ -19,7 +19,7 @@ trait Lockable
             if ($model->isLocked() && !$model->isDirty('locked_at')) {
                 throw new \LogicException(
                     'Este registro está bloqueado por normativa NOM-004 ' .
-                    '(expediente clínico inmutable). Crea un addendum en su lugar.'
+                    '(expediente clínico inmutable). Agregue una corrección en su lugar.'
                 );
             }
         });

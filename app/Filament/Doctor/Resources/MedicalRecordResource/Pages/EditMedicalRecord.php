@@ -26,7 +26,7 @@ class EditMedicalRecord extends EditRecord
         if ($this->record->isLocked()) {
             Notification::make()
                 ->title('Esta nota ya no se puede editar')
-                ->body('Pasaron 24 horas desde que se guardó. Si hay que corregir o agregar algo, registra una nota nueva.')
+                ->body('Pasaron 24 horas desde que se guardó y la norma pide que no se modifique. Para corregirla use «Agregar corrección» en la lista de notas: queda ligada a esta.')
                 ->warning()
                 ->send();
 

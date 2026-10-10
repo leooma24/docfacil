@@ -26,6 +26,8 @@ class MedicalRecord extends Model
         'clinic_id', 'patient_id', 'doctor_id', 'appointment_id',
         'visit_date', 'chief_complaint', 'diagnosis', 'treatment',
         'notes', 'vital_signs', 'attachments',
+        // La nota bloqueada que esta corrige (addendum).
+        'corrige_a_id',
         // Extended vitals (configurables por especialidad — ver SpecialtyService::FIELD_CATALOG)
         'respiratory_rate', 'oxygen_saturation', 'height',
         'head_circumference', 'cie10_codes',
@@ -83,5 +85,17 @@ class MedicalRecord extends Model
             $doctor?->license_number ? 'Céd. Prof. ' . $doctor->license_number : null,
             $this->created_at ? $this->created_at->format('d/m/Y') . ' a las ' . $this->created_at->format('H:i') : null,
         ])->filter()->implode(' · ');
+    }
+
+    /** La nota que esta corrige. */
+    public function corrigeA(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(self::class, 'corrige_a_id');
+    }
+
+    /** Las correcciones que se le agregaron a esta nota. */
+    public function correcciones(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(self::class, 'corrige_a_id');
     }
 }

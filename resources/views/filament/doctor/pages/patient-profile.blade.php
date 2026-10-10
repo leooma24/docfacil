@@ -333,11 +333,18 @@
                         <span class="text-xs md:text-sm font-bold text-gray-900 dark:text-white">{{ $record->visit_date->format('d/m/Y') }}</span>
                         {{-- NOM-004 5.10: quién la elaboró, con cédula, fecha y hora. --}}
                         <span class="text-xs md:text-xs text-gray-500 ml-2">Elaboró: {{ $record->autoria() }}</span>
+                        {{-- Correcciones (NOM-024 6.3.4): la original no se toca. --}}
+                        @if($record->corrige_a_id && $record->corrigeA)
+                        <span style="margin-left:8px;padding:2px 8px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700;">Corrección a la nota del {{ $record->corrigeA->visit_date->format('d/m/Y') }}</span>
+                        @elseif($record->correcciones()->exists())
+                        <span style="margin-left:8px;padding:2px 8px;border-radius:999px;background:#fffbeb;color:#b45309;font-size:12px;font-weight:700;">Tiene una corrección</span>
+                        @endif
                     </div>
                 </div>
                 @if($record->chief_complaint)<div class="text-xs md:text-sm"><span class="text-gray-500">Motivo:</span> {{ $record->chief_complaint }}</div>@endif
                 @if($record->diagnosis)<div class="text-xs md:text-sm mt-0.5 md:mt-1"><span class="text-gray-500">Dx:</span> <span class="font-medium">{{ $record->diagnosis }}</span></div>@endif
                 @if($record->treatment)<div class="text-xs md:text-sm mt-0.5 md:mt-1"><span class="text-gray-500">Tx:</span> {{ $record->treatment }}</div>@endif
+                @if($record->corrige_a_id && $record->notes)<div class="text-xs md:text-sm mt-0.5 md:mt-1">{{ $record->notes }}</div>@endif
                 {{-- De la consulta a lo que salió de ella: su receta y su cobro. --}}
                 @php $cobroDeLaConsulta = $record->appointment?->payments->first(); @endphp
                 @if($record->prescriptions->isNotEmpty() || $cobroDeLaConsulta)

@@ -168,6 +168,34 @@ class MedicalRecordResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                // NOM-024 (6.3.4): la nota bloqueada no se toca; se le agrega
+                // una corrección ligada a ella.
+                Tables\Actions\Action::make('corregir')
+                    ->label('Agregar corrección')
+                    ->icon('heroicon-o-pencil-square')
+                    ->color('gray')
+                    ->visible(fn (MedicalRecord $record) => $record->isLocked())
+                    ->modalHeading(fn (MedicalRecord $record) => 'Corrección a la nota del ' . $record->visit_date->format('d/m/Y'))
+                    ->modalDescription('La nota original se queda como está. La corrección se guarda aparte, con su fecha y quién la hizo, y se ven juntas en el historial.')
+                    ->form([
+                        Forms\Components\Textarea::make('correccion')
+                            ->label('¿Qué se corrige o se agrega?')
+                            ->placeholder('Ej. El diente tratado fue el 46, no el 36.')
+                            ->rows(4)
+                            ->required(),
+                    ])
+                    ->modalSubmitActionLabel('Guardar corrección')
+                    ->action(function (MedicalRecord $record, array $data) {
+                        MedicalRecord::create([
+                            'clinic_id' => $record->clinic_id,
+                            'patient_id' => $record->patient_id,
+                            'doctor_id' => auth()->user()->doctor?->id ?? $record->doctor_id,
+                            'visit_date' => today(),
+                            'notes' => 'Corrección a la nota del ' . $record->visit_date->format('d/m/Y') . ': ' . trim($data['correccion']),
+                            'corrige_a_id' => $record->id,
+                        ]);
+                        \Filament\Notifications\Notification::make()->title('Corrección guardada')->success()->send();
+                    }),
                 // A las 24 horas la nota queda bloqueada (NOM-004). Antes el
                 // botón seguía ahí y al guardar salía un error.
                 Tables\Actions\EditAction::make()
