@@ -19,7 +19,7 @@ class ListDoctorInvitations extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Invitar Doctor'),
+            Actions\CreateAction::make()->label('Invitar a alguien de su equipo'),
         ];
     }
 

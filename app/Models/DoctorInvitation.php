@@ -60,6 +60,12 @@ class DoctorInvitation extends Model
         return $this->expires_at->isPast();
     }
 
+    /** La persona que entró con esta invitación (si ya entró). */
+    public function usuario(): ?User
+    {
+        return User::where('clinic_id', $this->clinic_id)->where('email', $this->email)->first();
+    }
+
     public function isPending(): bool
     {
         return $this->status === 'pending' && !$this->isExpired();

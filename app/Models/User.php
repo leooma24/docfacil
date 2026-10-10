@@ -195,6 +195,28 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return ! $this->esAsistente() || (bool) $this->ve_dinero;
     }
 
+    /** Rol de quien era del equipo y se le quitó el acceso ("Su equipo"). */
+    public const SIN_ACCESO = 'sin_acceso';
+
+    /**
+     * Quitarle el acceso a alguien del equipo que se fue: ya no entra al
+     * panel y se le cierran las sesiones abiertas. Sus registros (citas,
+     * cobros que capturó) se quedan.
+     */
+    public function quitarAcceso(): void
+    {
+        $this->forceFill(['role' => self::SIN_ACCESO, 'remember_token' => null])->save();
+
+        if (config('session.driver') === 'database') {
+            \Illuminate\Support\Facades\DB::table(config('session.table', 'sessions'))->where('user_id', $this->id)->delete();
+        }
+    }
+
+    public function devolverAcceso(): void
+    {
+        $this->forceFill(['role' => 'staff'])->save();
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {

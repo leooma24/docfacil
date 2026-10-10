@@ -155,7 +155,8 @@ class DoctorInvitationResource extends Resource
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
                     ->formatStateUsing(fn (string $state, $record) => match (true) {
-                        $state === 'accepted' => 'Aceptada',
+                        $state === 'accepted' && $record->usuario()?->role === \App\Models\User::SIN_ACCESO => 'Sin acceso',
+                        $state === 'accepted' => 'Entra',
                         $state === 'pending' && $record->isExpired() => 'Expirada',
                         $state === 'pending' => 'Pendiente',
                         default => 'Expirada',
@@ -181,18 +182,61 @@ class DoctorInvitationResource extends Resource
                     ->color('success')
                     ->url(fn (DoctorInvitation $record) => static::ligaDeWhatsApp($record), shouldOpenInNewTab: true)
                     ->visible(fn (DoctorInvitation $record) => $record->isPending()),
+                // Antes cambiaba la liga y no mandaba nada: la que ya tenía
+                // dejaba de servir (auditoría del 12-oct-2026).
                 Tables\Actions\Action::make('resend')
                     ->label('Reenviar')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->visible(fn (DoctorInvitation $record) => $record->status === 'pending')
+                    ->requiresConfirmation()
+                    ->modalDescription('Le llega una liga nueva por correo. La que tenía antes deja de servir.')
                     ->action(function (DoctorInvitation $record) {
                         $record->update([
                             'expires_at' => now()->addDays(7),
                             'token' => \Illuminate\Support\Str::random(64),
                         ]);
+                        try {
+                            \Illuminate\Support\Facades\Mail::to($record->email)->send(new \App\Mail\DoctorInvitationMail($record));
+                            \Filament\Notifications\Notification::make()->title("Le mandamos la liga de nuevo a {$record->email}")->success()->send();
+                        } catch (\Throwable $e) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('No se pudo mandar el correo')
+                                ->body('Mándele la liga por WhatsApp desde esta lista.')
+                                ->warning()
+                                ->send();
+                        }
                     }),
-                Tables\Actions\DeleteAction::make(),
+                // A quien se fue se le quita el acceso; sus registros se quedan.
+                Tables\Actions\Action::make('quitar_acceso')
+                    ->label('Quitar acceso')
+                    ->icon('heroicon-o-no-symbol')
+                    ->color('danger')
+                    ->visible(fn (DoctorInvitation $record) => $record->status === 'accepted' && $record->role === 'staff'
+                        && $record->usuario()?->role === 'staff')
+                    ->requiresConfirmation()
+                    ->modalHeading(fn (DoctorInvitation $record) => "¿Quitarle el acceso a {$record->name}?")
+                    ->modalDescription('Ya no va a poder entrar a DocFácil y se le cierra la sesión si la tiene abierta. Lo que capturó (citas, cobros) se queda. Se lo puede devolver después.')
+                    ->modalSubmitActionLabel('Sí, quitar acceso')
+                    ->action(function (DoctorInvitation $record) {
+                        $record->usuario()?->quitarAcceso();
+                        \Filament\Notifications\Notification::make()->title("{$record->name} ya no tiene acceso")->success()->send();
+                    }),
+                Tables\Actions\Action::make('devolver_acceso')
+                    ->label('Devolverle el acceso')
+                    ->icon('heroicon-o-arrow-uturn-left')
+                    ->color('gray')
+                    ->visible(fn (DoctorInvitation $record) => $record->usuario()?->role === \App\Models\User::SIN_ACCESO)
+                    ->requiresConfirmation()
+                    ->action(function (DoctorInvitation $record) {
+                        $record->usuario()?->devolverAcceso();
+                        \Filament\Notifications\Notification::make()->title("{$record->name} ya puede entrar otra vez")->success()->send();
+                    }),
+                // Borrar solo la invitación que no se usó: la de alguien que ya
+                // entra no le quitaba el acceso y confundía.
+                Tables\Actions\DeleteAction::make()
+                    ->label('Borrar invitación')
+                    ->visible(fn (DoctorInvitation $record) => $record->status !== 'accepted'),
             ])
             ->defaultSort('created_at', 'desc');
     }
