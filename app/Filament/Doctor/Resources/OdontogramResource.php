@@ -67,6 +67,8 @@ class OdontogramResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('patient_id')
                             ->label('Paciente')
+                            // Ya hecho, el odontograma es de ese paciente.
+                            ->disabledOn('edit')
                             ->relationship('patient')
                             ->getOptionLabelFromRecordUsing(fn (Patient $record) => "{$record->first_name} {$record->last_name}")
                             ->searchable(['first_name', 'last_name'])

@@ -21,6 +21,24 @@ class EditOdontogram extends EditRecord
     {
         parent::mount($record);
 
+        // Solo el más reciente se trabaja (ahí escribe también la consulta);
+        // los anteriores son el historial y se conservan como quedaron
+        // (auditoría del 12-oct-2026). Se pueden ver impresos.
+        $masReciente = \App\Models\Odontogram::where('clinic_id', $this->record->clinic_id)
+            ->where('patient_id', $this->record->patient_id)
+            ->latest('id')
+            ->first();
+        if ($masReciente && ! $masReciente->is($this->record)) {
+            Notification::make()
+                ->title('Ese odontograma es de una visita anterior')
+                ->body('Se conserva como quedó; puede verlo con "Imprimir" desde el perfil. Aquí está el más reciente.')
+                ->info()
+                ->send();
+            $this->redirect(OdontogramResource::getUrl('edit', ['record' => $masReciente]));
+
+            return;
+        }
+
         // Load existing teeth data
         $this->teethData = $this->record->teeth->mapWithKeys(fn (OdontogramTooth $t) => [$t->tooth_number => [
             'condition' => $t->condition,
@@ -29,10 +47,12 @@ class EditOdontogram extends EditRecord
         ]])->toArray();
     }
 
+    /** Cada marca se guarda al momento: salir sin "Guardar" ya no la pierde. */
     #[On('teeth-updated')]
     public function onTeethUpdated(array $teeth): void
     {
         $this->teethData = $teeth;
+        $this->guardarDientes();
     }
 
     protected function getHeaderActions(): array
@@ -82,8 +102,11 @@ class EditOdontogram extends EditRecord
                 ->openUrlInNewTab(),
             // Borrar va aparte, en el menú de más acciones: pegado a
             // "Guardar" era fácil tocarlo sin querer.
+            // Solo el mismo día, por si se hizo por error: después es
+            // expediente y se conserva.
             Actions\ActionGroup::make([
-                Actions\DeleteAction::make(),
+                Actions\DeleteAction::make()
+                    ->visible(fn () => $this->record->created_at?->gt(now()->subDay())),
             ])->tooltip('Más acciones'),
         ];
     }

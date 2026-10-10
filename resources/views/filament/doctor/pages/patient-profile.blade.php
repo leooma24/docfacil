@@ -559,11 +559,14 @@
                             {{ $odonto->teeth->count() }} dientes con condición
                         </div>
                     </div>
+                    {{-- Solo el más reciente (el último que se hizo) se edita; los anteriores se conservan y se ven impresos. --}}
+                    @if($odonto->id === $this->odontograms->max('id'))
                     <a href="{{ route('filament.doctor.resources.odontogramas.edit', ['record' => $odonto->id]) }}"
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 text-xs font-semibold rounded-lg border border-teal-200 transition">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         Editar
                     </a>
+                    @endif
                     <a href="{{ route('odontograma.imprimir', $odonto) }}" target="_blank"
                         style="display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding:6px 12px;background:#fff;color:#334155;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e2e8f0;">
                         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
