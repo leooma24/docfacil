@@ -94,7 +94,14 @@ class PaymentPlanResource extends Resource
                 ->columns(['default' => 1, 'md' => 4])
                 ->schema([
                     Forms\Components\TextInput::make('total')->label('Total')->numeric()->prefix('$')->required()->minValue(1)->live(onBlur: true),
-                    Forms\Components\TextInput::make('down_payment')->label('Enganche')->numeric()->prefix('$')->default(0)->minValue(0)->live(onBlur: true),
+                    // Menor que el total: si no, quedaban mensualidades de $0 o la
+                    // pantalla tronaba al guardar (auditoría del 12-oct-2026).
+                    Forms\Components\TextInput::make('down_payment')->label('Enganche')->numeric()->prefix('$')->default(0)->minValue(0)->live(onBlur: true)
+                        ->rule(fn (Forms\Get $get) => function (string $attribute, $value, \Closure $fail) use ($get) {
+                            if ((float) $value >= (float) $get('total')) {
+                                $fail('El enganche tiene que ser menor que el total.');
+                            }
+                        }),
                     Forms\Components\TextInput::make('installments_count')->label('Mensualidades')->numeric()->default(20)->required()->minValue(1)->maxValue(120)->live(onBlur: true),
                     Forms\Components\DatePicker::make('first_due_date')->label('Primera mensualidad')
                         ->default(fn () => now()->addMonthNoOverflow()->startOfDay())->required()->native(false)->displayFormat('d/m/Y')->live(),

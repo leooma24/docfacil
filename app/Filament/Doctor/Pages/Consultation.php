@@ -95,11 +95,14 @@ class Consultation extends Page implements HasForms
     public string $payment_method = 'cash';
 
     /**
-     * Si el doctor llegó a ver la pantalla del cobro. Sin eso el cobro no se
-     * da por pagado: "Guardar y terminar" desde el diagnóstico lo deja por
-     * cobrar, con el monto que traía, en vez de inventar un pago.
+     * "¿Ya pagó?": 'todo', 'abono' o 'pendiente'. Si nadie contesta queda por
+     * cobrar. Antes, con solo pasar por el paso del cobro se daba por pagado
+     * en efectivo, y la caja del día no cuadraba (auditoría del 12-oct-2026).
      */
-    public bool $vioElCobro = false;
+    public ?string $ya_pago = null;
+
+    /** Lo que dejó, si dejó un abono. */
+    public $abono = '';
 
     /** El tratamiento ya se paga en mensualidades: la consulta no lo cobra aparte. */
     public bool $cubiertoPorPlan = false;
@@ -255,7 +258,8 @@ class Consultation extends Page implements HasForms
             $this->next_appointment_date = $saved['next_appointment_date'] ?? null;
             $this->next_appointment_service_id = $saved['next_appointment_service_id'] ?? null;
             $this->next_appointment_item_id = $saved['next_appointment_item_id'] ?? null;
-            $this->vioElCobro = (bool) ($saved['vioElCobro'] ?? false);
+            $this->ya_pago = $saved['ya_pago'] ?? null;
+            $this->abono = $saved['abono'] ?? '';
             $this->cubiertoPorPlan = (bool) ($saved['cubiertoPorPlan'] ?? false);
         } else {
             // Pre-fill payment amount from service
@@ -535,15 +539,16 @@ class Consultation extends Page implements HasForms
     /** Si el doctor movió el cobro, lo vio: cuenta igual que llegar a su pantalla. */
     public function updated(string $propiedad): void
     {
-        if (in_array($propiedad, ['payment_amount', 'payment_method', 'payment_service_id'], true)) {
-            $this->vioElCobro = true;
+        // Lo que contestó del pago se guarda luego luego: si se recarga la
+        // página, no se pierde.
+        if (in_array($propiedad, ['ya_pago', 'abono'], true)) {
+            $this->saveConsultationState();
         }
     }
 
     public function nextStep(): void
     {
         $this->currentStep = min($this->currentStep + 1, 5);
-        $this->vioElCobro = $this->vioElCobro || $this->currentStep >= 4;
         $this->saveConsultationState();
     }
 
@@ -556,7 +561,6 @@ class Consultation extends Page implements HasForms
     public function goToStep(int $step): void
     {
         $this->currentStep = $step;
-        $this->vioElCobro = $this->vioElCobro || $this->currentStep >= 4;
         $this->saveConsultationState();
     }
 
@@ -699,7 +703,8 @@ class Consultation extends Page implements HasForms
                 'next_appointment_date' => $this->next_appointment_date,
                 'next_appointment_service_id' => $this->next_appointment_service_id,
                 'next_appointment_item_id' => $this->next_appointment_item_id,
-                'vioElCobro' => $this->vioElCobro,
+                'ya_pago' => $this->ya_pago,
+                'abono' => $this->abono,
                 'cubiertoPorPlan' => $this->cubiertoPorPlan,
             ],
         ]);
@@ -787,6 +792,7 @@ class Consultation extends Page implements HasForms
 
         // Save payment if amount > 0
         if (!empty($this->payment_amount) && $this->payment_amount > 0) {
+            [$estado, $pagado] = $this->loQuePago((float) $this->payment_amount);
             Payment::create([
                 'clinic_id' => $clinicId,
                 'patient_id' => $this->appointment->patient_id,
@@ -794,7 +800,8 @@ class Consultation extends Page implements HasForms
                 'service_id' => $this->payment_service_id ?: null,
                 'amount' => $this->payment_amount,
                 'payment_method' => $this->payment_method,
-                'status' => $this->vioElCobro ? 'paid' : 'pending',
+                'status' => $estado,
+                'amount_paid' => $pagado,
                 'payment_date' => now()->toDateString(),
                 'due_date' => now()->toDateString(),
             ]);
@@ -923,6 +930,23 @@ class Consultation extends Page implements HasForms
         if ($previa) {
             $this->treatment = trim((string) $this->treatment) === '' ? $previa : rtrim($this->treatment) . "\n" . $previa;
         }
+    }
+
+    /**
+     * Lo que contestó en "¿Ya pagó?", en estado y monto pagado. Un abono por
+     * todo es pagado; un abono vacío es pendiente.
+     *
+     * @return array{0: string, 1: float}
+     */
+    private function loQuePago(float $total): array
+    {
+        $abono = round((float) $this->abono, 2);
+
+        return match (true) {
+            $this->ya_pago === 'todo', $this->ya_pago === 'abono' && $abono >= $total => ['paid', $total],
+            $this->ya_pago === 'abono' && $abono > 0 => ['partial', $abono],
+            default => ['pending', 0.0],
+        };
     }
 
     public bool $showHistory = false;

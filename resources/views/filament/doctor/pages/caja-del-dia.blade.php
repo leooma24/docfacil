@@ -44,7 +44,7 @@
                 <strong>{{ $m['paciente'] }}</strong> · {{ $m['concepto'] }}
                 <div style="font-size:0.8rem;color:#6b7280;">{{ $m['metodo'] }}@if($m['factura']) · {{ $m['facturaEnviada'] ? 'factura enviada' : 'pidió factura' }}@endif</div>
             </div>
-            <div style="flex:none;font-weight:800;">${{ number_format($m['monto'], 0) }}</div>
+            <div style="flex:none;font-weight:800;color:{{ $m['monto'] < 0 ? '#b91c1c' : '#0f172a' }};">{{ $m['monto'] < 0 ? '−$' . number_format(abs($m['monto']), 0) : '$' . number_format($m['monto'], 0) }}</div>
             <a href="{{ route('cobro.recibo', $m['cobro']) }}" target="_blank" rel="noopener" style="flex:none;font-size:0.8rem;text-decoration:underline;color:#0f766e;">Recibo</a>
             @unless($m['factura'])
                 <button type="button" wire:click="pidioFactura({{ $m['cobro'] }})" style="flex:none;font-size:0.8rem;text-decoration:underline;color:#92400e;background:none;">Pidió factura</button>

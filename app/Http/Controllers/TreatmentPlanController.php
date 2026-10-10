@@ -81,7 +81,8 @@ class TreatmentPlanController extends Controller
         foreach (\App\Models\User::where('clinic_id', $plan->clinic_id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
             \Filament\Notifications\Notification::make()
                 ->title("{$nombre} aceptó su presupuesto")
-                ->body('$' . number_format((float) $plan->total, 0) . ' · ' . $tratamientos . ($tratamientos === 1 ? ' tratamiento' : ' tratamientos') . '. Falta agendarlo.')
+                // El monto, solo a quien ve el dinero del consultorio.
+                ->body(($usuario->veElDinero() ? '$' . number_format((float) $plan->total, 0) . ' · ' : '') . $tratamientos . ($tratamientos === 1 ? ' tratamiento' : ' tratamientos') . '. Falta agendarlo.')
                 ->icon('heroicon-o-check-badge')
                 ->iconColor('success')
                 ->actions([

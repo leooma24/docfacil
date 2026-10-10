@@ -39,14 +39,18 @@ class ListPayments extends ListRecords
 
         return [
             'title'    => 'Cobros',
-            'subtitle' => 'Todos los cobros realizados y pendientes. Registre pagos en efectivo o envíe links por WhatsApp.',
+            'subtitle' => 'Todos los cobros, pagados y pendientes. Desde aquí registra pagos y le manda el recordatorio por WhatsApp; usted lo envía desde su teléfono.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',
-            'stats' => [
+            // Lo que entró es del doctor; la asistente lo ve si él se lo dio.
+            // Lo que falta cobrar sí lo ve: ella es la que cobra.
+            'stats' => auth()->user()->veElDinero() ? [
                 ['label' => 'Cobrado hoy',     'value' => '$' . number_format($today)],
                 ['label' => 'Este mes',         'value' => '$' . number_format($month)],
                 ['label' => 'Pendiente',        'value' => '$' . number_format($pending)],
                 ['label' => 'Pagos del mes',    'value' => number_format($countMonth)],
+            ] : [
+                ['label' => 'Pendiente',        'value' => '$' . number_format($pending)],
             ],
         ];
     }

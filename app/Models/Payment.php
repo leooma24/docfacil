@@ -97,7 +97,7 @@ class Payment extends Model
             'amount' => $diferencia,
             'payment_method' => $this->payment_method,
             'paid_at' => $fecha,
-            'notes' => $diferencia < 0 ? 'Ajuste: se corrigió lo pagado' : null,
+            'notes' => $diferencia < 0 ? ($this->status === 'refunded' ? 'Devolución' : 'Ajuste: se corrigió lo pagado') : null,
         ]);
     }
 
@@ -255,6 +255,9 @@ class Payment extends Model
         return (float) static::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
             ->whereIn('status', ['pending', 'partial'])
+            // Sin mensualidades que no vencen: con "Este año" el periodo
+            // sumaba más que el total que le deben (auditoría del 12-oct-2026).
+            ->yaToca()
             // Hasta el final del día, igual que en cobradoEntre().
             ->whereBetween('payment_date', [$desde->format('Y-m-d'), $hasta->format('Y-m-d') . ' 23:59:59'])
             ->selectRaw('SUM(amount - amount_paid) as saldo')

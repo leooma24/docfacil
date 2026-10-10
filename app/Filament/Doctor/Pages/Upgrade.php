@@ -6,6 +6,12 @@ use Filament\Pages\Page;
 
 class Upgrade extends Page
 {
+    /** Comprar o cambiar el plan es cosa del doctor, no de la asistente. */
+    public static function canAccess(): bool
+    {
+        return auth()->check() && ! auth()->user()->esAsistente();
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-circle';
 
     protected static ?string $navigationLabel = 'Mi plan';

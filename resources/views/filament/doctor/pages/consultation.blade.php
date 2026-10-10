@@ -964,7 +964,7 @@
             </div>
             @empty
             <div style="padding:0.75rem;font-size:0.8rem;color:#6b7280;text-align:center;background:#ffffff;border:1px dashed #d1d5db;border-radius:8px;">
-                Sin procedimientos capturados. Si el cobro es de un solo servicio, usa los campos de abajo.
+                Sin procedimientos capturados. Si el cobro es de un solo servicio, use los campos de abajo.
             </div>
             @endforelse
 
@@ -1079,6 +1079,35 @@
                 </select>
             </div>
         </div>
+        {{-- "¿Ya pagó?": sin contestar queda por cobrar. Antes, con solo pasar
+             por aquí se daba por pagado en efectivo (auditoría del 12-oct-2026). --}}
+        @if((float) $payment_amount > 0)
+        <div style="margin-top:1rem;padding:14px;border:1px solid #e5e7eb;border-radius:12px;background:#fff;">
+            <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:10px;">¿Ya pagó?</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                @foreach(['todo' => 'Pagó todo', 'abono' => 'Dejó un abono', 'pendiente' => 'Queda pendiente'] as $valor => $texto)
+                    @php $elegido = $ya_pago === $valor; @endphp
+                    <button type="button" wire:click="$set('ya_pago', '{{ $valor }}')"
+                        style="flex:1;min-width:130px;min-height:44px;padding:0 14px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:2px solid {{ $elegido ? '#0d9488' : '#e5e7eb' }};background:{{ $elegido ? '#f0fdfa' : '#fff' }};color:{{ $elegido ? '#0f766e' : '#334155' }};">
+                        {{ $texto }}
+                    </button>
+                @endforeach
+            </div>
+            @if($ya_pago === 'abono')
+                <div style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <label for="abono" style="font-size:14px;font-weight:600;color:#334155;">¿Cuánto dejó?</label>
+                    <div style="position:relative;">
+                        <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#64748b;">$</span>
+                        <input id="abono" type="number" min="0" step="0.01" wire:model.blur="abono" placeholder="0.00"
+                            style="width:160px;padding:10px 10px 10px 22px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;">
+                    </div>
+                    <span style="font-size:13px;color:#64748b;">El resto queda por cobrar.</span>
+                </div>
+            @elseif($ya_pago === null)
+                <div style="margin-top:8px;font-size:13px;color:#64748b;">Si no lo marca, queda por cobrar y lo ve en "Le deben".</div>
+            @endif
+        </div>
+        @endif
         @if($appointment->patient->phone && $payment_amount > 0)
         @php
             $serviceName = collect($this->services)->get($payment_service_id) ?? 'consulta';
@@ -1166,7 +1195,7 @@
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-xs md:text-xs">Cobro</div>
-                    <div class="font-medium mt-0.5 md:mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) . ($vioElCobro ? '' : ' por cobrar') : 'Sin cobro' }}</div>
+                    <div class="font-medium mt-0.5 md:mt-1">{{ $payment_amount ? '$'.number_format($payment_amount, 0) . match (true) { $ya_pago === 'todo' => ' pagado', $ya_pago === 'abono' && (float) $abono >= (float) $payment_amount => ' pagado', $ya_pago === 'abono' && (float) $abono > 0 => ' · dejó $' . number_format((float) $abono, 0), default => ' por cobrar' } : 'Sin cobro' }}</div>
                 </div>
                 <div class="p-2 md:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="text-gray-500 text-xs md:text-xs">Siguiente cita</div>

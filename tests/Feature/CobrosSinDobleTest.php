@@ -27,7 +27,8 @@ use Tests\TestCase;
  * Octubre 2026, revisando la consulta de punta a punta: una cita ya
  * terminada se podía volver a abrir desde el calendario y cerrarla otra vez
  * dejaba un segundo cobro; "Guardar y terminar" desde el diagnóstico daba
- * por pagado un cobro que el doctor nunca vio; "Cobros pendientes" ofrecía
+ * por pagado un cobro que el doctor nunca vio (y desde el 12-oct, ni
+ * pasar por el cobro basta: se contesta "¿Ya pagó?"); "Cobros pendientes" ofrecía
  * marcar pagadas mensualidades que todavía no vencen; y un tratamiento del
  * presupuesto que el paciente ya paga en mensualidades se volvía a cobrar
  * completo, al precio del catálogo y no al del presupuesto.
@@ -173,23 +174,26 @@ class CobrosSinDobleTest extends TestCase
         $this->assertEquals(0, (float) $cobro->receipts()->sum('amount'));
     }
 
-    public function test_pasando_por_el_cobro_queda_pagado(): void
+    // Pasar por el cobro ya no basta (auditoría del 12-oct-2026): queda pagado
+    // cuando se contesta "Pagó todo".
+    public function test_contestando_que_pago_todo_queda_pagado(): void
     {
         $cita = $this->cita();
 
         $this->consulta($cita)
             ->call('goToStep', 4)
+            ->set('ya_pago', 'todo')
             ->call('goToStep', 2)
             ->call('saveAndComplete');
 
         $this->assertSame('paid', Payment::where('appointment_id', $cita->id)->sole()->status);
     }
 
-    public function test_haber_visto_el_cobro_sobrevive_a_recargar_la_pagina(): void
+    public function test_lo_que_contesto_del_cobro_sobrevive_a_recargar_la_pagina(): void
     {
         $cita = $this->cita();
 
-        $this->consulta($cita)->call('goToStep', 4)->call('goToStep', 2);
+        $this->consulta($cita)->call('goToStep', 4)->set('ya_pago', 'todo')->call('goToStep', 2);
 
         $this->consulta($cita->fresh())->call('saveAndComplete');
 

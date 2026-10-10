@@ -422,6 +422,7 @@ class ConsultationTest extends TestCase
             ->set('payment_service_id', (string) $this->service->id)
             ->set('payment_amount', '500')
             ->set('payment_method', 'card')
+            ->set('ya_pago', 'todo') // pagado solo si se contesta "Pagó todo"
             ->call('saveAndComplete');
 
         $this->assertDatabaseHas('payments', [
@@ -648,6 +649,7 @@ class ConsultationTest extends TestCase
             // Step 4: Cobro
             ->assertSet('payment_amount', (string) $this->service->price)
             ->set('payment_method', 'card')
+            ->set('ya_pago', 'todo')
             ->call('nextStep')
             ->assertSet('currentStep', 5)
             // Step 5: Siguiente cita

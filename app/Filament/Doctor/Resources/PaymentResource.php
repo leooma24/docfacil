@@ -88,6 +88,7 @@ class PaymentResource extends Resource
                             ->getOptionLabelFromRecordUsing(fn (Patient $record) => "{$record->first_name} {$record->last_name}")
                             ->searchable(['first_name', 'last_name'])
                             ->preload()
+                            ->live()
                             ->required(),
                         Forms\Components\Select::make('service_id')
                             ->label('Servicio')
@@ -153,9 +154,13 @@ class PaymentResource extends Resource
                             ->native(false)
                             ->displayFormat('d/m/Y')
                             ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
+                        // Solo las citas del paciente elegido: antes salían las de
+                        // todos y era fácil ligar el cobro a la cita de otro.
                         Forms\Components\Select::make('appointment_id')
                             ->label('Cita asociada')
-                            ->relationship('appointment')
+                            ->relationship('appointment', modifyQueryUsing: fn ($query, Forms\Get $get) => $query->where('patient_id', $get('patient_id') ?: 0)->latest('starts_at'))
+                            ->disabled(fn (Forms\Get $get) => blank($get('patient_id')))
+                            ->helperText(fn (Forms\Get $get) => blank($get('patient_id')) ? 'Primero elija al paciente.' : null)
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->starts_at->format('d/m/Y H:i') . ' - ' . $record->patient->full_name)
                             ->searchable()
                             ->preload(),
@@ -175,7 +180,12 @@ class PaymentResource extends Resource
     {
         $total = (float) ($data['amount'] ?? 0);
 
-        if (($data['status'] ?? null) === 'pending') {
+        // Se le regresó el dinero: lo pagado vuelve a cero y la caja de hoy
+        // lo registra como devolución. Antes el estado cambiaba y el dinero
+        // seguía contando como entrado (auditoría del 12-oct-2026).
+        if (($data['status'] ?? null) === 'refunded') {
+            $data['amount_paid'] = 0;
+        } elseif (($data['status'] ?? null) === 'pending') {
             $data['amount_paid'] = 0;
         } elseif (($data['status'] ?? null) === 'paid') {
             $data['amount_paid'] = $total;

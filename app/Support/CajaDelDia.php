@@ -51,7 +51,8 @@ class CajaDelDia
                 // El cobro de la consulta guarda solo la fecha: sin hora real no se inventa "00:00".
                 'hora' => $r->paid_at && $r->paid_at->format('H:i:s') !== '00:00:00' ? $r->paid_at->format('H:i') : '',
                 'paciente' => trim(($r->payment?->patient?->first_name ?? '') . ' ' . ($r->payment?->patient?->last_name ?? '')),
-                'concepto' => self::concepto($r->payment),
+                // Lo que salió (devolución o corrección) dice qué fue.
+                'concepto' => (float) $r->amount < 0 && $r->notes ? $r->notes . ' · ' . self::concepto($r->payment) : self::concepto($r->payment),
                 'monto' => (float) $r->amount,
                 'metodo' => self::FORMAS[$r->payment_method] ?? 'Otro',
                 'cobro' => $r->payment_id,

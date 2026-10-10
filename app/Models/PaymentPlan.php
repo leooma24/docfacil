@@ -58,8 +58,8 @@ class PaymentPlan extends Model
         $enganche = round((float) ($datos['down_payment'] ?? 0), 2);
         $n = (int) $datos['installments_count'];
 
-        if ($total <= 0 || $n < 1 || $enganche < 0 || $enganche > $total) {
-            throw new \InvalidArgumentException('Revisa el total, el enganche y el número de mensualidades.');
+        if ($total <= 0 || $n < 1 || $enganche < 0 || $enganche >= $total) {
+            throw new \InvalidArgumentException('Revise el total, el enganche y el número de mensualidades: el enganche tiene que ser menor que el total.');
         }
 
         $restante = round($total - $enganche, 2);
@@ -131,6 +131,25 @@ class PaymentPlan extends Model
     public function siguiente(): ?Payment
     {
         return $this->payments()->withBalance()->orderBy('due_date')->first();
+    }
+
+    /**
+     * Cancelar un plan mal hecho o que el paciente dejó: se quitan las partes
+     * que no se han pagado, la que lleva abono se cierra en lo que se dio, y
+     * lo pagado se queda (ya entró a la caja).
+     */
+    public function cancelar(): void
+    {
+        DB::transaction(function () {
+            foreach ($this->payments()->withBalance()->get() as $parte) {
+                if ((float) $parte->amount_paid > 0) {
+                    $parte->update(['amount' => $parte->amount_paid, 'status' => 'paid']);
+                } else {
+                    $parte->delete();
+                }
+            }
+            $this->update(['status' => 'cancelled']);
+        });
     }
 
     /** Se liquida al pagarse todo; si se reabre un cobro vuelve a activo. */

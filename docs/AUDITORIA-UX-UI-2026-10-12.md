@@ -24,9 +24,9 @@
 | A1 | ✅ *Arreglado el 12-oct: `public/css/panel-doctor.css` (`npm run css:panel`) con las 367 clases que faltaban, colores en hex y la prueba `ClasesQueSiExistenTest`* · ✔ **Botones y colores que no se ven.** El panel no compila su propio Tailwind: solo existe el CSS de Filament. Los fondos de color no existen, así que el texto blanco queda sobre blanco. Pasa en "Habilitar 2FA" (comprobado en la demo), "Agendar" (les toca volver), "Felicitar", "Copiar"/"Compartir WhatsApp", "Enviar comprobante" (SPEI), "Invitar doctor" y "RECOMENDADO" en Mi plan. Además, rojo, ámbar y verde salen grises: deudores vencidos, Pagado contra Pendiente en el perfil, alergias en el perfil y el % por doctor. | 9 botones + ~10 vistas (ver detalle abajo) |
 | A2 | ✅ *Arreglado el 12-oct: el panel va siempre en modo claro* · **Modo oscuro roto.** Si el celular está en modo oscuro, en Caja, Recordatorios, Pendientes, Su mes y Corte el nombre del paciente y los montos quedan blancos sobre blanco. | vistas con `background:#fff` |
 | A3 | ✔ **Abrir una cita la pone "En curso".** Tocar una cita del calendario solo para verla la marca en consulta y no se puede deshacer. Desaparece de Recordatorios de mañana y la tele de la sala la anuncia. | `CalendarWidget.php:267`, `Consultation.php:227` |
-| A4 | **Pasar por el paso "Cobro" lo da por pagado.** Si el doctor da "Siguiente" pensando que recepción cobra después, queda "pagado en efectivo" algo que nadie recibió. | `Consultation.php:797` |
+| A4 | ✅ *Arreglado el 12-oct: «¿Ya pagó?» (Pagó todo / Dejó un abono / Queda pendiente); sin contestar queda por cobrar* · **Pasar por el paso "Cobro" lo da por pagado.** Si el doctor da "Siguiente" pensando que recepción cobra después, queda "pagado en efectivo" algo que nadie recibió. | `Consultation.php:797` |
 | A5 | ✅ *Arreglado el 12-oct ("Le deben" en tarjetas)* · ✔ **"Cobrar" en Cobros pendientes lo da todo por pagado.** Un clic marca $3,000 como pagados aunque el paciente traiga $500. | `PendingPayments.php:49` |
-| A6 | **"Se le regresó el dinero" no descuenta.** La Caja, el Corte y el recibo siguen contando ese dinero como entrado. | `PaymentResource::cuadrarLoQueQuedo` |
+| A6 | ✅ *Arreglado el 12-oct: lo pagado vuelve a cero y la Caja enseña «Devolución» en rojo* · **"Se le regresó el dinero" no descuenta.** La Caja, el Corte y el recibo siguen contando ese dinero como entrado. | `PaymentResource::cuadrarLoQueQuedo` |
 | A7 | **Re-agendar no borra "ya se le recordó".** Al paciente nunca se le recuerda la fecha nueva. | `Appointment` (updating) |
 | A8 | ✔ **El fundador ve y paga el precio normal.** `getFounderPrice()` existe pero nadie lo usa: Mi plan, Stripe y SPEI cobran $999 por el Pro. | `Upgrade.php:72`, `SpeiCheckout.php:47` |
 | A9 | ✔ **El 403 está de tú, no dice que es por el plan y ofrece ligas a "Panel Ventas" y "Administración".** "Volver al inicio" saca al doctor a la landing. Lo ven un Free al terminar la prueba y la asistente cuando su lista de pasos la manda a Configuración. | `errors/403.blade.php` |
@@ -34,8 +34,8 @@
 | A11 | **Borrar en bloque citas o un paciente "sin expediente" se lleva cobros, procedimientos y fotos de la hoja vieja,** sin decir qué se pierde. | `AppointmentResource.php:611`, `Patient::tieneExpediente()` |
 | A12 | **El odontograma se puede editar o borrar para siempre** (aun el de hace 3 años), y **las marcas se pierden si sale sin "Guardar"**: no hay autoguardado ni aviso. | `Odontogram`, `EditOdontogram` |
 | A13 | **El presupuesto se acepta solo con abrir la liga.** La vista previa de WhatsApp o un antivirus pueden aceptarlo. "Rechazar" puede deshacer un aceptado sin avisar. | `TreatmentPlanController.php:46` |
-| A14 | **La asistente sin permiso de dinero ve ingresos** en el encabezado de Cobros y en el aviso "aceptó su presupuesto". También ve Mi plan y puede comprar. | `ListPayments.php:32`, `Upgrade` |
-| A15 | **Un plan de pagos mal hecho no se puede corregir ni cancelar.** Si el enganche es mayor al total, la pantalla truena. | `PaymentPlanResource` |
+| A14 | ✅ *Arreglado el 12-oct: sin permiso de dinero no ve lo que entró en Cobros ni el monto del aviso; Mi plan solo para el doctor* · **La asistente sin permiso de dinero ve ingresos** en el encabezado de Cobros y en el aviso "aceptó su presupuesto". También ve Mi plan y puede comprar. | `ListPayments.php:32`, `Upgrade` |
+| A15 | ✅ *Arreglado el 12-oct: «Cancelar plan» y el enganche tiene que ser menor que el total* · **Un plan de pagos mal hecho no se puede corregir ni cancelar.** Si el enganche es mayor al total, la pantalla truena. | `PaymentPlanResource` |
 | A16 | ✔ **Confiabilidad al subir:** al borrar archivos, el autoload de Composer y el caché de Filament quedan un momento apuntando a lo borrado. Hoy un doctor vio un error unos segundos; ya se corrigió en el servidor. `deploy.sh` debería regenerar el autoload (`composer dump-autoload -o`). | `deploy.sh` |
 
 ## B. Siguiente: confunde o hace perder tiempo
@@ -46,7 +46,7 @@
   - Varios lugares usan `phone` en lugar de `telefonoDeContacto()`: el niño contra la mamá.
   - Otros pegan "52" fijo, y un número con "+52" queda "5252…".
   - Va en consulta, perfil, deudores, presupuestos y lista de espera. Hace falta un solo ayudante para todos.
-- **Selectores que mezclan pacientes:** "Cita asociada" en cobro y en nota, y "Consulta asociada" en receta, enseñan citas y diagnósticos de otros pacientes.
+- ✅ *Cobro, arreglado el 12-oct: «Cita asociada» solo enseña las citas del paciente elegido.* **Selectores que mezclan pacientes:** "Cita asociada" en cobro y en nota, y "Consulta asociada" en receta, enseñan citas y diagnósticos de otros pacientes.
 - **Dos botones para cerrar la consulta**, sin confirmar y sin "Guardando…".
 - **Calendario en celular:** abre en semana (7 columnas en 375 px) y un dedazo mueve la cita.
 - **"Nueva cita" desde el calendario** no revisa choques ni el tope del plan.
