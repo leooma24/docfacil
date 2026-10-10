@@ -68,6 +68,39 @@ class RecordatorioDeCita
     }
 
     /**
+     * Los pacientes con cita programada mañana, uno por paciente (su primera
+     * cita del día, que es la que abre el mensaje) y en orden de hora.
+     *
+     * Las confirmadas no entran: el paciente ya dijo que viene. `recordado`
+     * es verdadero solo si TODAS sus citas de mañana ya se recordaron.
+     *
+     * @return \Illuminate\Support\Collection<int, Appointment>
+     */
+    public static function deManana(int $clinicId): \Illuminate\Support\Collection
+    {
+        return Appointment::withoutGlobalScopes()->with('patient')
+            ->where('clinic_id', $clinicId)
+            ->whereDate('starts_at', today()->addDay())
+            ->where('status', 'scheduled')
+            ->orderBy('starts_at')
+            ->get()
+            ->groupBy('patient_id')
+            ->map(function ($citas) {
+                $primera = $citas->first();
+                $primera->setAttribute('recordado', $citas->every(fn ($c) => (bool) $c->reminder_sent));
+
+                return $primera;
+            })
+            ->values();
+    }
+
+    /** A quién le falta el recordatorio de mañana: lo que cuenta el aviso del escritorio. */
+    public static function pendientesDeManana(int $clinicId): \Illuminate\Support\Collection
+    {
+        return self::deManana($clinicId)->reject(fn ($c) => $c->recordado)->values();
+    }
+
+    /**
      * El recordatorio de todo el día del paciente: si tiene una cita es el de
      * siempre; si tiene varias, un solo mensaje con todas las horas.
      */

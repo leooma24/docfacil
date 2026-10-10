@@ -91,22 +91,16 @@ class AlertsWidget extends Widget
         // Pacientes de mañana a los que falta recordarles. Se cuenta por
         // paciente (uno con tres citas recibe un solo mensaje) y no entran los
         // que ya confirmaron. Se quita al mandar el recordatorio.
-        $noReminder = Appointment::where('clinic_id', $clinicId)
-            ->whereDate('starts_at', today()->addDay())
-            ->where('reminder_sent', false)
-            ->where('status', 'scheduled')
-            ->distinct()
-            ->count('patient_id');
+        // La misma cuenta que la fila de recordatorios de mañana.
+        $noReminder = \App\Support\RecordatorioDeCita::pendientesDeManana($clinicId)->count();
 
         if ($noReminder > 0) {
             $alerts[] = [
                 'type' => 'info',
                 'icon' => 'heroicon-o-chat-bubble-left-ellipsis',
                 'title' => $noReminder . ($noReminder === 1 ? ' paciente mañana sin recordatorio' : ' pacientes mañana sin recordatorio'),
-                'desc' => 'Tóquelo para verlos y mandarles WhatsApp.',
-                'url' => \App\Filament\Doctor\Resources\AppointmentResource::getUrl('index', [
-                    'tableFilters' => ['sin_recordatorio' => ['isActive' => true], 'upcoming' => ['isActive' => false]],
-                ], panel: 'doctor'),
+                'desc' => 'Tóquelo y se los va mandando uno por uno, sin buscarlos.',
+                'url' => \App\Filament\Doctor\Pages\RecordatoriosDeManana::getUrl(panel: 'doctor'),
             ];
         }
 

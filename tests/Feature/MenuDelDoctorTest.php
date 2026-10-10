@@ -56,7 +56,8 @@ class MenuDelDoctorTest extends TestCase
 
     public function test_arriba_solo_lo_de_todos_los_dias(): void
     {
-        $this->assertSame(['Escritorio', 'Consulta', 'Calendario', 'Citas'], $this->menu()['']);
+        // Los recordatorios de mañana se mandan cada tarde (10-oct-2026): son de todos los días.
+        $this->assertSame(['Escritorio', 'Consulta', 'Calendario', 'Citas', 'Recordatorios de mañana'], $this->menu()['']);
     }
 
     public function test_cada_cosa_en_su_tema(): void

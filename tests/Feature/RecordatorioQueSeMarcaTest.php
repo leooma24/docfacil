@@ -120,7 +120,8 @@ class RecordatorioQueSeMarcaTest extends TestCase
         $alertas = $this->alertas();
 
         $this->assertArrayHasKey('1 paciente mañana sin recordatorio', $alertas);
-        $this->assertStringContainsString('sin_recordatorio', $alertas['1 paciente mañana sin recordatorio']['url']);
+        // Desde el 10-oct el aviso lleva a la fila de recordatorios de mañana.
+        $this->assertStringContainsString('/doctor/recordatorios', $alertas['1 paciente mañana sin recordatorio']['url']);
     }
 
     public function test_el_aviso_se_quita_al_mandar_el_recordatorio(): void
