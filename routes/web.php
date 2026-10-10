@@ -294,6 +294,38 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     return redirect()->away($whatsapp);
 })->name('cita.recordar');
 
+// La agenda en papel, por si se va el internet: la de mañana por default,
+// con teléfono, alertas y lo que debe cada paciente. Solo su consultorio.
+Route::get('/doctor/agenda/imprimir', function () {
+    abort_unless(auth()->check(), 403);
+    $clinicId = auth()->user()->clinic_id;
+
+    $pedido = request()->query('dia');
+    $dia = is_string($pedido) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $pedido)
+        ? rescue(fn () => \Carbon\Carbon::createFromFormat('!Y-m-d', $pedido), today()->addDay(), false)
+        : today()->addDay();
+
+    $citas = \App\Models\Appointment::with(['patient', 'service', 'doctor.user'])
+        ->where('clinic_id', $clinicId)
+        ->whereDate('starts_at', $dia->toDateString())
+        ->whereNotIn('status', ['cancelled'])
+        ->orderBy('starts_at')
+        ->get();
+
+    $deudas = \App\Models\Payment::where('clinic_id', $clinicId)
+        ->whereIn('patient_id', $citas->pluck('patient_id')->unique())
+        ->withBalance()->yaToca()
+        ->selectRaw('patient_id, SUM(amount - amount_paid) as saldo')
+        ->groupBy('patient_id')->pluck('saldo', 'patient_id');
+
+    return view('agenda.imprimir', [
+        'clinica' => auth()->user()->clinic,
+        'dia' => $dia,
+        'citas' => $citas,
+        'deudas' => $deudas,
+    ]);
+})->name('agenda.imprimir');
+
 // El recibo de un cobro: lo que cuesta, cada abono y lo que falta. Solo del
 // consultorio de quien entra. Es un comprobante, no una factura (no hay CFDI).
 Route::get('/doctor/cobros/{payment}/recibo', function (int $payment) {

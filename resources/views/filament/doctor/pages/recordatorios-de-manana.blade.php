@@ -4,6 +4,10 @@
          x-on:visibilitychange.document="if (! document.hidden) $wire.$refresh()"
          x-on:focus.window="$wire.$refresh()">
 
+        <p style="font-size:0.85rem;margin-bottom:0.5rem;">
+            <a href="{{ route('agenda.imprimir') }}" target="_blank" rel="noopener" style="color:#0f766e;text-decoration:underline;font-weight:700;">Imprimir la agenda de mañana</a>
+            <span style="color:#6b7280;">· por si se va el internet</span>
+        </p>
         <p style="font-size:0.9rem;color:#6b7280;margin-bottom:1rem;">
             Citas de {{ $manana }}. Toque el botón: se abre su WhatsApp con el mensaje ya escrito, usted da enviar y regresa aquí por el siguiente.
         </p>

@@ -19,6 +19,12 @@ class ListAppointments extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            // La agenda de mañana en papel, por si se va el internet.
+            Actions\Action::make('imprimir_agenda')
+                ->label('Imprimir agenda')
+                ->icon('heroicon-o-printer')
+                ->color('gray')
+                ->url(route('agenda.imprimir'), shouldOpenInNewTab: true),
             Actions\CreateAction::make()->label('Nueva Cita'),
         ];
     }
