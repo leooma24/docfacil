@@ -102,7 +102,7 @@ class PanelSinEmojisTest extends TestCase
     {
         return [
             'encabezado del escritorio' => [Widgets\DashboardHeroWidget::class],
-            'adeudos vencidos' => [Widgets\OverdueDebtorsWidget::class],
+            'le deben' => [Widgets\LeDebenWidget::class],
             'portal público' => [Widgets\PublicPortalShareWidget::class],
             'primeros pasos' => [Widgets\SetupChecklistWidget::class],
             'avisos' => [Widgets\AlertsWidget::class],

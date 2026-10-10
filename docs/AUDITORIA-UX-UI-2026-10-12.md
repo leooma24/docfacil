@@ -25,7 +25,7 @@
 | A2 | **Modo oscuro roto.** Si el celular está en modo oscuro, en Caja, Recordatorios, Pendientes, Su mes y Corte el nombre del paciente y los montos quedan blancos sobre blanco. | vistas con `background:#fff` |
 | A3 | ✔ **Abrir una cita la pone "En curso".** Tocar una cita del calendario solo para verla la marca en consulta y no se puede deshacer. Desaparece de Recordatorios de mañana y la tele de la sala la anuncia. | `CalendarWidget.php:267`, `Consultation.php:227` |
 | A4 | **Pasar por el paso "Cobro" lo da por pagado.** Si el doctor da "Siguiente" pensando que recepción cobra después, queda "pagado en efectivo" algo que nadie recibió. | `Consultation.php:797` |
-| A5 | ✔ **"Cobrar" en Cobros pendientes lo da todo por pagado.** Un clic marca $3,000 como pagados aunque el paciente traiga $500. | `PendingPayments.php:49` |
+| A5 | ✅ *Arreglado el 12-oct ("Le deben" en tarjetas)* · ✔ **"Cobrar" en Cobros pendientes lo da todo por pagado.** Un clic marca $3,000 como pagados aunque el paciente traiga $500. | `PendingPayments.php:49` |
 | A6 | **"Se le regresó el dinero" no descuenta.** La Caja, el Corte y el recibo siguen contando ese dinero como entrado. | `PaymentResource::cuadrarLoQueQuedo` |
 | A7 | **Re-agendar no borra "ya se le recordó".** Al paciente nunca se le recuerda la fecha nueva. | `Appointment` (updating) |
 | A8 | ✔ **El fundador ve y paga el precio normal.** `getFounderPrice()` existe pero nadie lo usa: Mi plan, Stripe y SPEI cobran $999 por el Pro. | `Upgrade.php:72`, `SpeiCheckout.php:47` |

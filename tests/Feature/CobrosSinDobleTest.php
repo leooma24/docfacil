@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Filament\Doctor\Pages\Consultation;
 use App\Filament\Doctor\Widgets\CalendarWidget;
-use App\Filament\Doctor\Widgets\PendingPayments;
+use App\Filament\Doctor\Widgets\LeDebenWidget;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Doctor;
@@ -213,10 +213,10 @@ class CobrosSinDobleTest extends TestCase
         $vencida = $plan->payments()->where('installment_number', 1)->sole();
         $futura = $plan->payments()->where('installment_number', 6)->sole();
 
-        Livewire::test(PendingPayments::class)
-            ->call('loadTable')
-            ->assertCanSeeTableRecords([$vencida])
-            ->assertCanNotSeeTableRecords([$futura]);
+        // "Le deben" solo cuenta lo que ya toca: la de septiembre y la de octubre.
+        Livewire::test(LeDebenWidget::class)
+            ->assertSee('$' . number_format((float) $vencida->amount * 2, 2))
+            ->assertDontSee('$12,000.00');
     }
 
     // ── El presupuesto manda: lo financiado no se cobra otra vez ─

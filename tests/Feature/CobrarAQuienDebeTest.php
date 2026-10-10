@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Filament\Doctor\Pages\PatientProfile;
 use App\Filament\Doctor\Resources\PaymentResource\Pages\EditPayment;
-use App\Filament\Doctor\Widgets\OverdueDebtorsWidget;
+use App\Filament\Doctor\Widgets\LeDebenWidget;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Patient;
@@ -86,8 +86,8 @@ class CobrarAQuienDebeTest extends TestCase
     {
         $adeudo = $this->adeudo(800, 10, 300);
 
-        Livewire::test(OverdueDebtorsWidget::class)
-            ->mountAction('cobrar', ['payment' => $adeudo->id])
+        Livewire::test(LeDebenWidget::class)
+            ->mountAction('cobrar', ['patient' => $this->ana->id])
             ->assertActionDataSet(['monto' => 500.0])
             ->callMountedAction();
 
@@ -98,7 +98,7 @@ class CobrarAQuienDebeTest extends TestCase
     {
         $this->adeudo(800, 10);
 
-        Livewire::test(OverdueDebtorsWidget::class)
+        Livewire::test(LeDebenWidget::class)
             ->assertSee('Recordarle')
             ->assertSee('wa.me/526681234567', false);
     }

@@ -75,8 +75,8 @@ class EscritorioQueAyudaTest extends TestCase
         $donde = fn ($w) => array_search($w, $orden, true);
 
         $this->assertLessThan($donde(Widgets\AlertsWidget::class), $donde(Widgets\TodayAppointments::class), 'Las citas de hoy van antes de los avisos');
-        $this->assertLessThan($donde(Widgets\OverdueDebtorsWidget::class), $donde(Widgets\AlertsWidget::class), 'Lo que hay que atender va antes de lo que le deben');
-        $this->assertLessThan($donde(Widgets\PendingRecallsWidget::class), $donde(Widgets\OverdueDebtorsWidget::class));
+        $this->assertLessThan($donde(Widgets\LeDebenWidget::class), $donde(Widgets\AlertsWidget::class), 'Lo que hay que atender va antes de lo que le deben');
+        $this->assertLessThan($donde(Widgets\PendingRecallsWidget::class), $donde(Widgets\LeDebenWidget::class));
         $this->assertLessThan($donde(Widgets\SuMesWidget::class), $donde(Widgets\PendingRecallsWidget::class), 'Su mes va hasta abajo');
     }
 
