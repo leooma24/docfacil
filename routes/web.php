@@ -294,6 +294,42 @@ Route::get('/doctor/citas/{appointment}/recordar', function (int $appointment) {
     return redirect()->away($whatsapp);
 })->name('cita.recordar');
 
+// Recordarle a un paciente su presupuesto pendiente: marca la fecha (un
+// recordatorio al mes, no más) y abre WhatsApp con el mensaje escrito. Nada sale
+// solo: el doctor da enviar desde su propio WhatsApp.
+Route::get('/doctor/presupuestos/{plan}/recordar', function (int $plan) {
+    abort_unless(auth()->check(), 403);
+
+    $presupuesto = \App\Models\TreatmentPlan::with(['patient', 'clinic'])
+        ->where('clinic_id', auth()->user()->clinic_id)
+        ->findOrFail($plan);
+
+    $telefono = preg_replace('/\D/', '', (string) $presupuesto->patient?->phone);
+    abort_if($telefono === '', 422, 'El paciente no tiene teléfono.');
+    if (strlen($telefono) === 10) {
+        $telefono = '52' . $telefono;
+    }
+
+    if (empty($presupuesto->public_token)) {
+        $presupuesto->generatePublicToken();
+    }
+
+    $nombre = trim((string) $presupuesto->patient->first_name) ?: 'Hola';
+    $consultorio = $presupuesto->clinic?->name ?? 'su consultorio';
+    $liga = route('treatment-plan.public', ['token' => $presupuesto->public_token]);
+
+    // Los de usted y sin presión: es un recordatorio, no un empujón.
+    $mensaje = $presupuesto->status === 'accepted'
+        ? "Hola {$nombre}, le escribimos de {$consultorio}. Le quedan tratamientos pendientes de su plan \"{$presupuesto->title}\". "
+            . "Cuando guste le agendamos su siguiente cita; y si tiene alguna duda, con gusto se la resolvemos."
+        : "Hola {$nombre}, le escribimos de {$consultorio}. Le recordamos el plan de tratamiento \"{$presupuesto->title}\" que le presentamos. "
+            . "Si tiene alguna duda, con gusto se la resolvemos; cuando usted decida, aquí lo puede ver: {$liga}";
+
+    $presupuesto->update(['last_reminded_at' => now()]);
+
+    return redirect()->away('https://wa.me/' . $telefono . '?text=' . urlencode($mensaje));
+})->name('plan.recordar');
+
 // "Ofrecer a Diego" en el aviso de una cancelación: lo deja notificado para
 // ese hueco y abre WhatsApp con el mensaje. Solo huecos que de verdad se
 // cancelaron y del consultorio de quien entra.

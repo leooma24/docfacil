@@ -64,7 +64,8 @@ class MenuDelDoctorTest extends TestCase
     {
         $menu = $this->menu();
 
-        $this->assertSame(['Pacientes', 'Expediente clínico', 'Odontograma', 'Recetas', 'Consentimientos', 'Lista de espera'], $menu['Pacientes']);
+        // Pendientes (10-oct-2026): presupuestos sin respuesta y tratamientos a medias, por paciente.
+        $this->assertSame(['Pacientes', 'Expediente clínico', 'Odontograma', 'Recetas', 'Consentimientos', 'Lista de espera', 'Pendientes'], $menu['Pacientes']);
         $this->assertSame(['Cobros', 'Presupuestos', 'Planes de pago', 'Gastos', 'Corte del mes'], $menu['Dinero']);
         $this->assertSame(['Insumos', 'Movimientos', 'Residuos'], $menu['Inventario']);
         $this->assertContains('Servicios y precios', $menu['Consultorio']);

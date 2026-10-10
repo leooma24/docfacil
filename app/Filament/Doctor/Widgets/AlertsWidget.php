@@ -17,7 +17,8 @@ class AlertsWidget extends Widget
 
     public function getAlerts(): array
     {
-        $clinicId = auth()->user()->clinic_id;
+        $user = auth()->user();
+        $clinicId = $user->clinic_id;
         $alerts = [];
 
         // Patients without visit in 6+ months
@@ -85,6 +86,19 @@ class AlertsWidget extends Widget
                 'title' => $sinAgendar . ($sinAgendar === 1 ? ' tratamiento aceptado sin agendar' : ' tratamientos aceptados sin agendar'),
                 'desc' => 'El paciente ya dijo que sí. Agéndelos desde su presupuesto.',
                 'url' => \App\Filament\Doctor\Resources\TreatmentPlanResource::getUrl('index', ['tableFilters' => ['status' => ['value' => 'accepted']]], panel: 'doctor'),
+            ];
+        }
+
+        // Presupuestos que se quedaron en "lo voy a pensar" y ya toca
+        // recordarles (una vez al mes). Es dinero que se enfría.
+        $presupuestos = \App\Support\PendientesDelConsultorio::cuantosTocan($clinicId);
+        if ($presupuestos > 0 && $user?->clinic?->hasFeature('treatment_plans')) {
+            $alerts[] = [
+                'type' => 'warning',
+                'icon' => 'heroicon-o-clipboard-document-list',
+                'title' => $presupuestos . ($presupuestos === 1 ? ' presupuesto sin respuesta' : ' presupuestos sin respuesta'),
+                'desc' => 'Ya pasó más de una semana. Un recordatorio amable a 1 clic.',
+                'url' => \App\Filament\Doctor\Pages\PendientesPorPaciente::getUrl(panel: 'doctor'),
             ];
         }
 

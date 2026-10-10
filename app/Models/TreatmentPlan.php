@@ -17,7 +17,7 @@ class TreatmentPlan extends Model
         'subtotal', 'discount', 'total',
         'status', 'public_token',
         'sent_at', 'accepted_at', 'accepted_ip',
-        'rejected_at', 'valid_until', 'notes',
+        'rejected_at', 'last_reminded_at', 'valid_until', 'notes',
     ];
 
     protected function casts(): array
@@ -29,6 +29,7 @@ class TreatmentPlan extends Model
             'sent_at' => 'datetime',
             'accepted_at' => 'datetime',
             'rejected_at' => 'datetime',
+            'last_reminded_at' => 'datetime',
             'valid_until' => 'date',
         ];
     }
