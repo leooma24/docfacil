@@ -371,12 +371,23 @@ class AppointmentResource extends Resource
                                     . '</div>'
                                     . '</div>'
                                 )),
+                            // La nota en 30 segundos: un toque por frase.
+                            Forms\Components\CheckboxList::make('frases')
+                                ->label('¿Qué se hizo?')
+                                ->options(fn () => array_merge(
+                                    ($previa = \App\Support\NotaRapida::laVezPasada($record))
+                                        ? ['previa' => 'Igual que la vez pasada: ' . \Illuminate\Support\Str::limit($previa, 60)]
+                                        : [],
+                                    array_combine(\App\Support\NotaRapida::FRASES, \App\Support\NotaRapida::FRASES),
+                                ))
+                                ->columns(2)
+                                ->gridDirection('row'),
                             Forms\Components\Textarea::make('note')
-                                ->label('Nota (opcional)')
-                                ->placeholder('Ej. Ajuste de ligas, sin novedad. Higiene buena.')
+                                ->label('Algo más (opcional)')
+                                ->placeholder('Ej. Viene en 4 semanas.')
                                 ->rows(2)
                                 ->maxLength(500)
-                                ->helperText('1 línea es suficiente. Esto se guarda en el expediente.'),
+                                ->helperText('Todo se guarda en el expediente.'),
                             Forms\Components\Section::make('Próxima cita')
                                 ->description(fn () => \App\Services\AppointmentPatternService::suggestNextDate($record->patient_id, $record->clinic_id)
                                     ? 'Pre-sugerimos la fecha basados en el patrón de visitas anteriores de este paciente.'
@@ -425,6 +436,18 @@ class AppointmentResource extends Resource
                         ->modalSubmitActionLabel('Registrar y cerrar')
                         ->modalWidth('xl')
                         ->action(function (Appointment $record, array $data) {
+                            $nota = '';
+                            foreach ($data['frases'] ?? [] as $frase) {
+                                $frase = $frase === 'previa' ? \App\Support\NotaRapida::laVezPasada($record) : (in_array($frase, \App\Support\NotaRapida::FRASES, true) ? $frase : null);
+                                if ($frase) {
+                                    $nota = \App\Support\NotaRapida::agregar($nota, $frase);
+                                }
+                            }
+                            if (filled($data['note'] ?? null)) {
+                                $nota = \App\Support\NotaRapida::agregar($nota, $data['note']);
+                            }
+                            $data['note'] = $nota;
+
                             \App\Services\AppointmentPatternService::executeQuickVisit($record, $data);
 
                             \Filament\Notifications\Notification::make()

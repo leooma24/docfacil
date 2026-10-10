@@ -14,6 +14,17 @@ class CreateConsentForm extends CreateRecord
 
     protected static string $view = 'filament.doctor.resources.create-with-hero';
 
+    /** Desde el perfil del paciente (?patient=) llega con él puesto. */
+    protected function fillForm(): void
+    {
+        parent::fillForm();
+
+        $paciente = \App\Models\Patient::where('clinic_id', auth()->user()->clinic_id)->find(request('patient'));
+        if ($paciente) {
+            $this->form->fill(array_merge($this->form->getRawState(), ['patient_id' => $paciente->id]));
+        }
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['clinic_id'] = auth()->user()->clinic_id;
@@ -26,7 +37,7 @@ class CreateConsentForm extends CreateRecord
     {
         return [
             'title'    => 'Nuevo consentimiento',
-            'subtitle' => 'Genera el texto del consentimiento. El paciente firma digital con dedo en tablet o celular.',
+            'subtitle' => 'Escriba el procedimiento y el texto. El paciente firma con el dedo en la tablet o el celular.',
             'gradient' => '#6366f1 0%, #8b5cf6 40%, #a855f7 100%',
             'accent'   => '#6366f1',
         ];

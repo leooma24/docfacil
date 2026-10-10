@@ -402,6 +402,7 @@
         <p class="step-subtitle">Opcional. Registre los signos vitales del paciente.</p>
 
         @include('filament.doctor.partials.alertas-del-paciente')
+        @include('filament.doctor.partials.lo-ultimo-del-diente')
 
         <div class="vitals-grid" x-data="bmiCalc()" x-init="watch()">
             @if($this->isFieldEnabled('blood_pressure'))
@@ -520,6 +521,8 @@
             <span class="step-title-text">Diagnóstico y Tratamiento</span>
         </div>
         <p class="step-subtitle">{{ config('services.ai.enabled') ? 'Use la IA para llenar todo automáticamente o escriba manual.' : 'Registre el diagnóstico, tratamiento y notas.' }}</p>
+
+        @include('filament.doctor.partials.lo-ultimo-del-diente')
 
         @if(config('services.ai.enabled'))
         {{-- LIVE CONSULTATION MODE --}}
@@ -757,6 +760,18 @@
             @endif
             <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tratamiento realizado</label>
+                {{-- La nota en 30 segundos: un toque por frase. --}}
+                @php $vezPasada = $this->appointment ? \App\Support\NotaRapida::laVezPasada($this->appointment) : null; @endphp
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+                    @if($vezPasada)
+                    <button type="button" wire:click="igualQueLaVezPasada" title="{{ $vezPasada }}"
+                        style="padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#0d9488;color:#fff;border:none;cursor:pointer;">Igual que la vez pasada</button>
+                    @endif
+                    @foreach(\App\Support\NotaRapida::FRASES as $frase)
+                    <button type="button" wire:click="agregarFrase(@js($frase))"
+                        style="padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;background:#f0fdfa;color:#115e59;border:1px solid #99f6e4;cursor:pointer;">{{ $frase }}</button>
+                    @endforeach
+                </div>
                 <div class="field-with-mic">
                     <textarea wire:model="treatment" rows="3" class="field-main w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm" placeholder="Tratamiento aplicado hoy..."></textarea>
                     <button type="button" class="mic-btn" :class="{ recording: activeKey === 'treatment' }" @click="toggle('treatment')" title="Dictar por voz">

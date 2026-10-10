@@ -31,13 +31,18 @@ class EditPayment extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return PaymentResource::cuadrarLoQueQuedo($data);
+    }
+
     protected function getFormHeroConfig(): array
     {
         $amount = number_format($this->record->amount ?? 0, 2);
 
         return [
             'title'    => 'Editar cobro',
-            'subtitle' => 'Actualiza monto, método de pago o estado del cobro.',
+            'subtitle' => 'Cambie el total, la forma de pago o cómo quedó.',
             'gradient' => '#10b981 0%, #059669 40%, #047857 100%',
             'accent'   => '#059669',
         ];

@@ -75,8 +75,10 @@
                 $price = $cycle === 'annual' ? $plan['annual'] : $plan['monthly'];
                 $subtitle = $cycle === 'annual' ? '/año' : '/mes';
                 $isPopular = !empty($plan['popular']);
-                $visible = array_slice($plan['features'], 0, 4);
-                $hidden = array_slice($plan['features'], 4);
+                // Todo a la vista: "Ver 8 funciones más" escondía justo lo que
+                // hace que valga el plan (prueba del 12-oct-2026).
+                $visible = $plan['features'];
+                $hidden = [];
             @endphp
             <div x-data="{ expanded: false }" class="relative flex flex-col bg-white rounded-2xl p-6 border-2 transition {{ $isPopular ? 'border-teal-500 shadow-xl scale-[1.02]' : 'border-gray-200 hover:border-teal-300' }} dark:bg-gray-900 dark:border-gray-700">
                 @if ($isPopular)

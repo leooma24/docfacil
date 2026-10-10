@@ -70,6 +70,18 @@ class PaymentResource extends Resource
                 Forms\Components\Section::make('Información del Cobro')
                     ->columns(2)
                     ->schema([
+                        // Las mensualidades ya existen en Planes de pago, pero el
+                        // ortodoncista de la prueba del 12-oct las buscó aquí.
+                        Forms\Components\Placeholder::make('a_meses')
+                            ->hiddenLabel()
+                            ->content(fn () => new \Illuminate\Support\HtmlString(
+                                '<div style="font-size:.85rem;padding:8px 12px;border-radius:8px;background:#f0fdfa;color:#115e59;">'
+                                . '¿Es un tratamiento a meses, como ortodoncia? Hágalo en '
+                                . '<a href="' . e(PaymentPlanResource::getUrl('create', panel: 'doctor')) . '" style="font-weight:700;text-decoration:underline;">Planes de pago</a>: '
+                                . 'pone el enganche y las mensualidades, y cada una queda como su cobro.</div>'
+                            ))
+                            ->visible(fn (string $operation) => $operation === 'create')
+                            ->columnSpanFull(),
                         Forms\Components\Select::make('patient_id')
                             ->label('Paciente')
                             ->relationship('patient')
@@ -91,47 +103,56 @@ class PaymentResource extends Resource
                                 }
                             }),
                         Forms\Components\TextInput::make('amount')
-                            ->label('Monto total')
-                            ->helperText('Total del tratamiento o servicio')
+                            ->label('Total')
+                            ->helperText('Lo que cuesta el tratamiento completo')
                             ->numeric()
                             ->prefix('$')
+                            ->minValue(0.01)
                             ->reactive()
                             ->required(),
+                        // "¿Cómo quedó?" en vez de "Estado" + "Pagado hasta
+                        // ahora": 6 de los 20 doctores de la prueba del
+                        // 12-oct no sabían qué poner en cada uno.
+                        Forms\Components\Radio::make('status')
+                            ->label('¿Cómo quedó?')
+                            ->options(fn (?Payment $record) => array_filter([
+                                'paid' => 'Pagó todo',
+                                'partial' => 'Dejó un abono',
+                                'pending' => 'No ha pagado',
+                                // Solo al editar: un cobro nuevo no nace reembolsado.
+                                'refunded' => $record ? 'Se le regresó el dinero' : null,
+                            ]))
+                            ->default('paid')
+                            ->inline()
+                            ->live()
+                            ->required()
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('amount_paid')
-                            ->label('Pagado hasta ahora')
-                            ->helperText('Para pagos parciales; si ya cobraste todo déjalo en 0 y marca estado Pagado')
+                            ->label('¿Cuánto dejó?')
                             ->numeric()
                             ->prefix('$')
-                            ->default(0)
-                            ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
-                        Forms\Components\DatePicker::make('due_date')
-                            ->label('Fecha límite de pago')
-                            ->helperText('Si pasa esta fecha sin cobrar se marca como vencido')
-                            ->native(false)
-                            ->displayFormat('d/m/Y')
-                            ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
+                            ->minValue(0.01)
+                            ->required(fn (Forms\Get $get) => $get('status') === 'partial')
+                            ->visible(fn (Forms\Get $get) => $get('status') === 'partial'),
                         Forms\Components\Select::make('payment_method')
-                            ->label('Método de pago')
+                            ->label('¿Cómo pagó?')
                             ->options(self::FORMAS_DE_PAGO)
                             ->default('cash')
-                            ->required(),
-                        Forms\Components\Select::make('status')
-                            ->label('Estado')
-                            ->options([
-                                'paid' => 'Pagado',
-                                'pending' => 'Pendiente',
-                                'partial' => 'Parcial',
-                                'refunded' => 'Reembolsado',
-                            ])
-                            ->default('paid')
-                            ->reactive()
-                            ->required(),
+                            ->required(fn (Forms\Get $get) => in_array($get('status'), ['paid', 'partial']))
+                            ->visible(fn (Forms\Get $get) => $get('status') !== 'pending'),
                         Forms\Components\DatePicker::make('payment_date')
-                            ->label('Fecha de pago')
+                            ->label(fn (Forms\Get $get) => $get('status') === 'pending' ? 'Fecha del tratamiento' : 'Fecha en que pagó')
+                            ->helperText(fn (Forms\Get $get) => $get('status') === 'pending' ? 'Desde ese día cuenta lo que le debe.' : null)
                             ->default(now())
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y'),
+                        Forms\Components\DatePicker::make('due_date')
+                            ->label('¿Para cuándo queda de pagar?')
+                            ->helperText('Opcional. Si pasa esa fecha, sale como vencido.')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
+                            ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
                         Forms\Components\Select::make('appointment_id')
                             ->label('Cita asociada')
                             ->relationship('appointment')
@@ -144,6 +165,30 @@ class PaymentResource extends Resource
                             ->columnSpanFull(),
                     ]),
             ]);
+    }
+
+    /**
+     * Lo que dice "¿Cómo quedó?" se vuelve los números del cobro: pagó todo
+     * es pagado = total; no ha pagado es cero; un abono por todo es pagado.
+     */
+    public static function cuadrarLoQueQuedo(array $data): array
+    {
+        $total = (float) ($data['amount'] ?? 0);
+
+        if (($data['status'] ?? null) === 'pending') {
+            $data['amount_paid'] = 0;
+        } elseif (($data['status'] ?? null) === 'paid') {
+            $data['amount_paid'] = $total;
+        } elseif (($data['status'] ?? null) === 'partial' && (float) ($data['amount_paid'] ?? 0) >= $total) {
+            $data['amount_paid'] = $total;
+            $data['status'] = 'paid';
+        }
+
+        if (empty($data['payment_method'])) {
+            $data['payment_method'] = 'cash';
+        }
+
+        return $data;
     }
 
     public static function table(Table $table): Table

@@ -907,6 +907,24 @@ class Consultation extends Page implements HasForms
         $this->currentStep = 6;
     }
 
+    /** Un botón de la nota rápida: agrega la frase a "Tratamiento realizado". */
+    public function agregarFrase(string $frase): void
+    {
+        if (in_array($frase, \App\Support\NotaRapida::FRASES, true)) {
+            $this->treatment = \App\Support\NotaRapida::agregar($this->treatment, $frase);
+        }
+    }
+
+    /** Copia lo que se le hizo la vez pasada (ortodoncia: el mismo ajuste cada mes). */
+    public function igualQueLaVezPasada(): void
+    {
+        $previa = $this->appointment ? \App\Support\NotaRapida::laVezPasada($this->appointment) : null;
+
+        if ($previa) {
+            $this->treatment = trim((string) $this->treatment) === '' ? $previa : rtrim($this->treatment) . "\n" . $previa;
+        }
+    }
+
     public bool $showHistory = false;
 
     public function toggleHistory(): void

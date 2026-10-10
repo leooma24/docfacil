@@ -18,7 +18,7 @@ class CreatePayment extends CreateRecord
     {
         $data['clinic_id'] = auth()->user()->clinic_id;
 
-        return $data;
+        return PaymentResource::cuadrarLoQueQuedo($data);
     }
 
     protected function getFormHeroConfig(): array

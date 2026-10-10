@@ -75,6 +75,21 @@ class PatientProfile extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // Ya existían, pero en la prueba del 12-oct nadie los encontró:
+            // el plan de pagos vivía dentro de la pestaña Cobros y el
+            // consentimiento solo en el menú.
+            \Filament\Actions\Action::make('plan_de_pagos')
+                ->label('Plan de pagos')
+                ->icon('heroicon-o-calendar-days')
+                ->color('gray')
+                ->visible(fn () => $this->patient !== null)
+                ->url(fn () => \App\Filament\Doctor\Resources\PaymentPlanResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor')),
+            \Filament\Actions\Action::make('consentimiento')
+                ->label('Consentimiento')
+                ->icon('heroicon-o-pencil-square')
+                ->color('gray')
+                ->visible(fn () => $this->patient !== null && \App\Filament\Doctor\Resources\ConsentFormResource::canAccess())
+                ->url(fn () => \App\Filament\Doctor\Resources\ConsentFormResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor')),
             \Filament\Actions\Action::make('descargar_expediente')
                 ->label('Descargar expediente (PDF)')
                 ->icon('heroicon-o-arrow-down-tray')
