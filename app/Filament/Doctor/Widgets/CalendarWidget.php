@@ -272,9 +272,14 @@ class CalendarWidget extends FullCalendarWidget
             return;
         }
 
-        $this->redirect(in_array($cita->status, ['completed', 'cancelled', 'no_show'], true)
-            ? route('filament.doctor.pages.perfil-paciente', ['patient' => $cita->patient_id])
-            : route('filament.doctor.pages.consulta', ['appointment' => $cita->id]));
+        // La de otro día se abre para verla o re-agendarla: abrir su consulta
+        // la ponía "En curso", desaparecía de Recordatorios de mañana y la
+        // tele de la sala la anunciaba (auditoría del 12-oct-2026).
+        $this->redirect(match (true) {
+            in_array($cita->status, ['completed', 'cancelled', 'no_show'], true) => route('filament.doctor.pages.perfil-paciente', ['patient' => $cita->patient_id]),
+            ! $cita->starts_at->isToday() => \App\Filament\Doctor\Resources\AppointmentResource::getUrl('edit', ['record' => $cita]),
+            default => route('filament.doctor.pages.consulta', ['appointment' => $cita->id]),
+        });
     }
 
     public function onEventDrop(array $event, array $oldEvent, array $relatedEvents, array $delta, ?array $oldResource, ?array $newResource): bool

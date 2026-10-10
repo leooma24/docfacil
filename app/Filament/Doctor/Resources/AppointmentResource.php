@@ -608,11 +608,10 @@ class AppointmentResource extends Resource
                     ->color('gray')
                     ->button(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
+            // Sin borrar en bloque: se llevaba procedimientos y dejaba cobros
+            // sueltos, y la cita futura se iba sin pasar por "Cancelar" (que
+            // le ofrece el hueco a la lista de espera). Auditoría del 12-oct.
+            ->bulkActions([])
             // Sin esto Filament dice "No se encontraron registros", que no
             // le dice al doctor que hacer ni con que llenarlo.
             ->emptyStateHeading('Su agenda está vacía')

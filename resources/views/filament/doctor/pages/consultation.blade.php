@@ -247,6 +247,11 @@
                     <div class="cons-service">{{ $appointment->service->name }}</div>
                     @endif
                 </div>
+                @if($appointment->status === 'in_progress' && ! $completed)
+                <button wire:click="salirSinAtender" wire:confirm="¿Salir sin atender? La cita regresa a la agenda como estaba y lo que capturó se queda guardado." type="button" class="cons-history-btn">
+                    Salir sin atender
+                </button>
+                @endif
                 <button wire:click="toggleHistory" type="button" class="cons-history-btn">
                     <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Historial

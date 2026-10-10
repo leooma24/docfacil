@@ -320,7 +320,7 @@ class PatientResource extends Resource
                     // nada clínico, y dice cuántos se conservaron y por qué.
                     Tables\Actions\DeleteBulkAction::make()
                         ->action(function ($records) {
-                            [$conExpediente, $sinExpediente] = $records->partition(fn ($paciente) => $paciente->tieneExpediente());
+                            [$conExpediente, $sinExpediente] = $records->partition(fn ($paciente) => $paciente->porQueNoSeBorra() !== null);
 
                             $sinExpediente->each->delete();
 
@@ -334,7 +334,7 @@ class PatientResource extends Resource
                             if ($conExpediente->isNotEmpty()) {
                                 Notification::make()
                                     ->title($conExpediente->count() === 1 ? '1 paciente no se borró' : "{$conExpediente->count()} pacientes no se borraron")
-                                    ->body('Tienen expediente clínico, y la NOM-004 pide conservarlo al menos 5 años.')
+                                    ->body('Tienen expediente clínico (la NOM-004 pide conservarlo al menos 5 años) o cobros registrados (se irían de la caja y del corte).')
                                     ->warning()
                                     ->persistent()
                                     ->send();

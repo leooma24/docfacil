@@ -226,8 +226,9 @@ class Consultation extends Page implements HasForms
             return;
         }
 
-        // Mark as in progress
-        if (in_array($this->appointment->status, ['scheduled', 'confirmed'])) {
+        // "En curso" solo la cita de hoy: abrir la de otro día para revisarla
+        // no la saca de los recordatorios ni la anuncia en la sala.
+        if (in_array($this->appointment->status, ['scheduled', 'confirmed']) && $this->appointment->starts_at->isToday()) {
             $this->appointment->update(['status' => 'in_progress']);
         }
 
@@ -947,6 +948,21 @@ class Consultation extends Page implements HasForms
             $this->ya_pago === 'abono' && $abono > 0 => ['partial', $abono],
             default => ['pending', 0.0],
         };
+    }
+
+    /**
+     * Se abrió la consulta por error o el paciente se fue: la cita regresa
+     * como estaba (confirmada si había confirmado) y lo capturado se queda
+     * guardado para cuando sí se atienda.
+     */
+    public function salirSinAtender(): void
+    {
+        if ($this->appointment?->status === 'in_progress') {
+            $this->saveConsultationState();
+            $this->appointment->update(['status' => $this->appointment->confirmed_at ? 'confirmed' : 'scheduled']);
+        }
+
+        $this->redirect(\App\Filament\Doctor\Pages\CalendarPage::getUrl());
     }
 
     public bool $showHistory = false;

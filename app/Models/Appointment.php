@@ -54,6 +54,17 @@ class Appointment extends Model
         static::updating(function (self $cita) {
             if ($cita->isDirty('starts_at') && $cita->getOriginal('starts_at')) {
                 $cita->veces_reagendada = (int) $cita->veces_reagendada + 1;
+
+                // El recordatorio y la confirmación eran de la fecha vieja: a
+                // la nueva hay que recordársela otra vez (auditoría del 12-oct).
+                $cita->reminder_sent = false;
+                $cita->reminder_sent_at = null;
+                $cita->reminder_24h_sent_at = null;
+                $cita->reminder_2h_sent_at = null;
+                $cita->confirmed_at = null;
+                if ($cita->status === 'confirmed' && ! $cita->isDirty('status')) {
+                    $cita->status = 'scheduled';
+                }
             }
         });
     }

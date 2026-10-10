@@ -149,7 +149,29 @@ class Patient extends Model
             || $this->prescriptions()->withoutGlobalScopes()->exists()
             || $this->consentForms()->withoutGlobalScopes()->exists()
             || $this->odontograms()->withoutGlobalScopes()->exists()
-            || $this->treatmentPlans()->withoutGlobalScopes()->exists();
+            || $this->treatmentPlans()->withoutGlobalScopes()->exists()
+            // Las fotos de su hoja vieja y sus radiografías también son
+            // expediente (auditoría del 12-oct-2026).
+            || $this->archivos()->withoutGlobalScopes()->exists();
+    }
+
+    /**
+     * ¿Tiene cobros? Entonces tampoco se borra: se irían de la caja y del
+     * corte de meses ya cerrados.
+     */
+    public function tieneCobros(): bool
+    {
+        return $this->payments()->withoutGlobalScopes()->exists();
+    }
+
+    /** Lo que impide borrarlo, en palabras; null si se puede. */
+    public function porQueNoSeBorra(): ?string
+    {
+        return match (true) {
+            $this->tieneExpediente() => 'Tiene expediente: la NOM-004 pide conservarlo al menos 5 años.',
+            $this->tieneCobros() => 'Tiene cobros registrados: si se borra, se van de la caja y del corte.',
+            default => null,
+        };
     }
 
     /** Se le preguntó y dijo que no tiene: "Ninguna conocida". */

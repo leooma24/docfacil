@@ -174,7 +174,7 @@ class ExpedienteQueSeConservaTest extends TestCase
 
         Livewire::test(EditPatient::class, ['record' => $this->paciente->getRouteKey()])
             ->assertActionHidden('delete')
-            ->assertActionVisible('tiene_expediente');
+            ->assertActionVisible('no_se_borra');
     }
 
     public function test_en_la_ficha_si_se_ofrece_borrar_si_no_tiene_nada(): void
