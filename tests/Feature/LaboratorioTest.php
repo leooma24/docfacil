@@ -175,6 +175,69 @@ class LaboratorioTest extends TestCase
         Livewire::test(ListAppointments::class)->assertSee('Lab: no ha llegado');
     }
 
+    // ── Preguntarle al laboratorio cómo va ──────────────────────
+
+    public function test_preguntar_abre_whatsapp_del_laboratorio_con_el_mensaje_escrito(): void
+    {
+        $orden = $this->orden(['telefono_laboratorio' => '668 555 1234', 'color' => 'A2', 'appointment_id' => $this->cita(3)->id]);
+
+        $liga = LabOrderResource::ligaParaPreguntar($orden->fresh());
+
+        $this->assertStringStartsWith('https://wa.me/526685551234?text=', $liga);
+        parse_str(parse_url($liga, PHP_URL_QUERY), $q);
+        $texto = $q['text'];
+        $this->assertStringContainsString('Consultorio Sonrisas', $texto);
+        $this->assertStringContainsString('Rosa Valenzuela', $texto);
+        $this->assertStringContainsString('Corona de zirconia', $texto);
+        $this->assertStringContainsString('diente 36', $texto);
+        $this->assertStringContainsString('color A2', $texto);
+        $this->assertStringContainsString('7 de octubre', $texto);   // cuándo se mandó
+        $this->assertStringContainsString('jueves', $texto);         // para qué cita
+        $this->assertSame(1, substr_count($texto, '?'), 'Una sola pregunta.');
+    }
+
+    public function test_el_boton_solo_sale_si_hay_telefono_y_no_ha_llegado(): void
+    {
+        $conTel = $this->orden(['telefono_laboratorio' => '6685551234']);
+        $sinTel = $this->orden(['trabajo' => 'Puente']);
+        $yaLlego = $this->orden(['telefono_laboratorio' => '6685551234', 'llego_at' => now()]);
+
+        Livewire::test(ListLabOrders::class)
+            ->assertTableActionVisible('preguntar', $conTel)
+            ->assertTableActionHidden('preguntar', $sinTel)
+            ->assertTableActionHidden('preguntar', $yaLlego);
+    }
+
+    public function test_el_mensaje_se_puede_cambiar_antes_de_abrir_whatsapp(): void
+    {
+        $orden = $this->orden(['telefono_laboratorio' => '6685551234']);
+
+        Livewire::test(ListLabOrders::class)
+            ->mountTableAction('preguntar', $orden)
+            ->assertTableActionDataSet(fn (array $data) => str_contains($data['mensaje'] ?? '', 'Corona de zirconia'))
+            ->setTableActionData(['mensaje' => 'Hola, ¿ya quedó la corona de Rosa?'])
+            ->callMountedTableAction()
+            ->assertRedirect('https://wa.me/526685551234?text=' . urlencode('Hola, ¿ya quedó la corona de Rosa?'));
+    }
+
+    public function test_si_borra_el_mensaje_solo_abre_el_chat(): void
+    {
+        $orden = $this->orden(['telefono_laboratorio' => '6685551234']);
+
+        Livewire::test(ListLabOrders::class)
+            ->callTableAction('preguntar', $orden, data: ['mensaje' => ''])
+            ->assertRedirect('https://wa.me/526685551234');
+    }
+
+    public function test_el_telefono_del_laboratorio_se_llena_solo_la_segunda_vez(): void
+    {
+        $this->orden(['laboratorio' => 'Lab Dental Mochis', 'telefono_laboratorio' => '6685551234']);
+
+        Livewire::test(CreateLabOrder::class)
+            ->set('data.laboratorio', 'Lab Dental Mochis')
+            ->assertSet('data.telefono_laboratorio', '6685551234');
+    }
+
     // ── Quién lo ve ─────────────────────────────────────────────
 
     public function test_la_asistente_sin_permiso_de_dinero_no_ve_costos_ni_pagada(): void

@@ -20,7 +20,7 @@ class LabOrder extends Model
     public const DIAS_DE_AVISO = 3;
 
     protected $fillable = [
-        'clinic_id', 'patient_id', 'appointment_id', 'laboratorio', 'trabajo', 'diente', 'color', 'costo',
+        'clinic_id', 'patient_id', 'appointment_id', 'laboratorio', 'telefono_laboratorio', 'trabajo', 'diente', 'color', 'costo',
         'enviada_at', 'prometida_para', 'llego_at', 'entregada_at', 'pagada_at', 'expense_id', 'notas', 'created_by',
     ];
 
@@ -34,6 +34,11 @@ class LabOrder extends Model
             'entregada_at' => 'datetime',
             'pagada_at' => 'datetime',
         ];
+    }
+
+    public function clinic(): BelongsTo
+    {
+        return $this->belongsTo(Clinic::class);
     }
 
     public function patient(): BelongsTo

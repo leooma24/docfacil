@@ -101,7 +101,23 @@ class LabOrderResource extends Resource
                         ->label('Laboratorio')
                         ->required()
                         ->maxLength(255)
-                        ->datalist(fn () => LabOrder::where('clinic_id', auth()->user()->clinic_id)->distinct()->orderBy('laboratorio')->pluck('laboratorio')->all()),
+                        ->datalist(fn () => LabOrder::where('clinic_id', auth()->user()->clinic_id)->distinct()->orderBy('laboratorio')->pluck('laboratorio')->all())
+                        ->live(onBlur: true)
+                        // Si ya se le había mandado antes, su WhatsApp se llena solo.
+                        ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
+                            if (blank($get('telefono_laboratorio')) && filled($state)) {
+                                $tel = LabOrder::where('clinic_id', auth()->user()->clinic_id)->where('laboratorio', $state)
+                                    ->whereNotNull('telefono_laboratorio')->latest('id')->value('telefono_laboratorio');
+                                if ($tel) {
+                                    $set('telefono_laboratorio', $tel);
+                                }
+                            }
+                        }),
+                    Forms\Components\TextInput::make('telefono_laboratorio')
+                        ->label('WhatsApp del laboratorio')
+                        ->helperText('Para preguntarle "¿cómo va?" con un toque.')
+                        ->tel()
+                        ->maxLength(30),
                     Forms\Components\TextInput::make('costo')
                         ->label('Cuánto cobra el laboratorio')
                         ->numeric()->prefix('$')->minValue(0)->default(0)
@@ -174,6 +190,24 @@ class LabOrderResource extends Resource
                     ->visible(fn () => auth()->user()->veElDinero()),
             ])
             ->actions([
+                // Preguntarle al laboratorio cómo va: el mensaje sale escrito y
+                // se puede cambiar; si se borra, solo abre el chat. Abre su
+                // WhatsApp y usted da enviar.
+                Tables\Actions\Action::make('preguntar')
+                    ->label('Preguntar por WhatsApp')
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->color('success')
+                    ->visible(fn (LabOrder $r) => ! $r->llego_at && filled(preg_replace('/\D/', '', (string) $r->telefono_laboratorio)))
+                    ->modalHeading('Preguntarle al laboratorio')
+                    ->modalDescription('Cámbielo si quiere. Si lo borra todo, solo se abre el chat para escribir usted.')
+                    ->modalSubmitActionLabel('Abrir WhatsApp')
+                    ->form([
+                        Forms\Components\Textarea::make('mensaje')
+                            ->label('Mensaje')
+                            ->rows(5)
+                            ->default(fn (LabOrder $record) => static::textoParaPreguntar($record)),
+                    ])
+                    ->action(fn (LabOrder $record, array $data) => redirect()->away(static::ligaParaPreguntar($record, $data['mensaje'] ?? ''))),
                 Tables\Actions\Action::make('llego')
                     ->label('Llegó')
                     ->icon('heroicon-o-check-circle')
@@ -199,6 +233,49 @@ class LabOrderResource extends Resource
             ->defaultSort('enviada_at', 'desc')
             ->emptyStateHeading('Nada por llegar del laboratorio')
             ->emptyStateDescription('Cuando mande una corona o un puente, anótelo aquí: le avisa si su cita llega y el trabajo no.');
+    }
+
+    /**
+     * "¿Cómo va el trabajo de Rosa…?": el WhatsApp del laboratorio con el
+     * mensaje escrito, con lo que el laboratorio necesita para encontrarlo
+     * (paciente, trabajo, diente, color, cuándo se mandó) y para qué cita es.
+     */
+    public static function ligaParaPreguntar(LabOrder $orden, ?string $mensaje = null): ?string
+    {
+        $tel = preg_replace('/\D/', '', (string) $orden->telefono_laboratorio);
+        if ($tel === '') {
+            return null;
+        }
+        if (strlen($tel) === 10) {
+            $tel = '52' . $tel;
+        }
+
+        // Sin mensaje (lo borró), solo se abre el chat.
+        $texto = $mensaje === null ? static::textoParaPreguntar($orden) : trim($mensaje);
+
+        return 'https://wa.me/' . $tel . ($texto !== '' ? '?text=' . urlencode($texto) : '');
+    }
+
+    /** El mensaje de "¿cómo va?" ya escrito, con lo que el laboratorio necesita para encontrar el trabajo. */
+    public static function textoParaPreguntar(LabOrder $orden): string
+    {
+        $orden->loadMissing(['patient', 'appointment', 'clinic']);
+        $consultorio = $orden->clinic?->name ?? 'el consultorio';
+        $detalle = collect([
+            $orden->trabajo,
+            $orden->diente ? "diente {$orden->diente}" : null,
+            $orden->color ? "color {$orden->color}" : null,
+        ])->filter()->implode(', ');
+        $paciente = trim($orden->patient?->first_name . ' ' . $orden->patient?->last_name);
+        $mandado = $orden->enviada_at->locale('es')->isoFormat('D [de] MMMM');
+
+        $texto = "Buen día, le escribimos de {$consultorio}. ¿Cómo va el trabajo de {$paciente}: {$detalle}, que les mandamos el {$mandado}?";
+        if ($orden->appointment && $orden->appointment->starts_at->isFuture()) {
+            $texto .= ' Lo necesitamos para su cita del ' . $orden->appointment->starts_at->locale('es')->isoFormat('dddd D [a las] HH:mm') . '.';
+        }
+        $texto .= ' Gracias.';
+
+        return $texto;
     }
 
     public static function getPages(): array
