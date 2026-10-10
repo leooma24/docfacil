@@ -455,6 +455,8 @@ class Clinic extends Model
                                        // que más usa el sistema es ella: agenda,
                                        // cobra y manda recordatorios (entrevista
                                        // del 10-oct-2026).
+            'laboratorio',             // Órdenes de laboratorio: qué ya llegó y
+                                       // cuánto se le debe (12-oct-2026).
             'treatment_plans',         // Presupuestos desde el odontograma. Era
                                        // add-on de $129: el dentista lo usaba en
                                        // la prueba y al pagar el Basico se le

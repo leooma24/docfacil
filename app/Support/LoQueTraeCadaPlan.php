@@ -62,6 +62,7 @@ class LoQueTraeCadaPlan
                     'Confirmar cita con link',
                     'Check-in con QR',
                     'Su asistente con su propio usuario',
+                    'Laboratorio: qué ya llegó y cuánto se le debe',
                     'Escritorio con sus números del día',
                 ],
                 'cta' => 'Probar 15 días gratis',

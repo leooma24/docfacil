@@ -37,7 +37,10 @@
         <table>
             <tr><th>Hora</th><th>Paciente</th><th>Teléfono</th><th>Tratamiento</th><th>Alertas</th><th>Debe</th><th class="notas">Notas</th></tr>
             @foreach($citas as $c)
-                @php $alertas = \App\Support\AlertasClinicas::etiquetas($c->patient); $debe = (float) ($deudas[$c->patient_id] ?? 0); @endphp
+                @php
+                    $alertas = [...(\App\Models\LabOrder::pendienteParaCita($c->id) ? ['Lab: no ha llegado'] : []), ...\App\Support\AlertasClinicas::etiquetas($c->patient)];
+                    $debe = (float) ($deudas[$c->patient_id] ?? 0);
+                @endphp
                 <tr>
                     <td class="hora">{{ $c->starts_at->format('H:i') }}</td>
                     <td>{{ $c->patient?->first_name }} {{ $c->patient?->last_name }}@if($c->doctor?->user)<br><span style="color:#555;font-size:11px;">{{ $c->doctor->user->name }}</span>@endif</td>

@@ -50,7 +50,7 @@ class TodayAppointments extends BaseWidget
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alertas')
                     ->label('Alertas')
-                    ->state(fn ($record) => \App\Support\AlertasClinicas::etiquetas($record->patient))
+                    ->state(fn ($record) => [...(\App\Models\LabOrder::pendienteParaCita($record->id) ? ['Lab: no ha llegado'] : []), ...\App\Support\AlertasClinicas::etiquetas($record->patient)])
                     ->badge()
                     ->color('danger')
                     ->placeholder('—'),

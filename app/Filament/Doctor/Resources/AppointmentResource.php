@@ -242,7 +242,7 @@ class AppointmentResource extends Resource
                 // que abrir su consulta para enterarse de la alergia.
                 Tables\Columns\TextColumn::make('alertas')
                     ->label('Alertas')
-                    ->state(fn (Appointment $record) => \App\Support\AlertasClinicas::etiquetas($record->patient))
+                    ->state(fn ($record) => [...(\App\Models\LabOrder::pendienteParaCita($record->id) ? ['Lab: no ha llegado'] : []), ...\App\Support\AlertasClinicas::etiquetas($record->patient)])
                     ->badge()
                     ->color('danger')
                     ->placeholder('—'),

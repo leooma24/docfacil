@@ -89,6 +89,31 @@ class AlertsWidget extends Widget
             ];
         }
 
+        // Laboratorio: que la paciente no llegue a su cita y la corona no esté.
+        if ($user?->clinic?->hasFeature('laboratorio')) {
+            foreach (\App\Models\LabOrder::enRiesgoDe($clinicId) as $orden) {
+                $cita = $orden->appointment;
+                $alerts[] = [
+                    'type' => 'danger',
+                    'icon' => 'heroicon-o-beaker',
+                    'title' => "{$orden->trabajo} de {$orden->patient?->first_name} no ha llegado",
+                    'desc' => 'Su cita es ' . ($cita->starts_at->isToday() ? 'hoy' : ($cita->starts_at->isTomorrow() ? 'mañana' : $cita->starts_at->locale('es')->isoFormat('dddd'))) . ' a las ' . $cita->starts_at->format('H:i') . '. Llámele al laboratorio ' . $orden->laboratorio . ' o reagéndela.',
+                    'url' => \App\Filament\Doctor\Resources\LabOrderResource::getUrl('index', panel: 'doctor'),
+                ];
+            }
+
+            $atrasadas = \App\Models\LabOrder::atrasadasDe($clinicId)->count();
+            if ($atrasadas > 0) {
+                $alerts[] = [
+                    'type' => 'warning',
+                    'icon' => 'heroicon-o-beaker',
+                    'title' => $atrasadas . ($atrasadas === 1 ? ' trabajo atrasado con el laboratorio' : ' trabajos atrasados con el laboratorio'),
+                    'desc' => 'Ya pasó la fecha que le prometieron.',
+                    'url' => \App\Filament\Doctor\Resources\LabOrderResource::getUrl('index', panel: 'doctor'),
+                ];
+            }
+        }
+
         // Presupuestos que se quedaron en "lo voy a pensar" y ya toca
         // recordarles (una vez al mes). Es dinero que se enfría.
         $presupuestos = \App\Support\PendientesDelConsultorio::cuantosTocan($clinicId);
