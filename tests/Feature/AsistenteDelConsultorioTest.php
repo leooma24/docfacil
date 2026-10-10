@@ -5,8 +5,7 @@ namespace Tests\Feature;
 use App\Filament\Doctor\Resources\DoctorInvitationResource;
 use App\Filament\Doctor\Resources\DoctorInvitationResource\Pages\CreateDoctorInvitation;
 use App\Filament\Doctor\Resources\DoctorInvitationResource\Pages\ListDoctorInvitations;
-use App\Filament\Doctor\Widgets\IncomeChart;
-use App\Filament\Doctor\Widgets\StatsOverview;
+use App\Filament\Doctor\Widgets\SuMesWidget;
 use App\Mail\DoctorInvitationMail;
 use App\Models\Clinic;
 use App\Models\Doctor;
@@ -148,8 +147,7 @@ class AsistenteDelConsultorioTest extends TestCase
         $this->actingAs($this->asistente(false));
 
         $this->get('/doctor')->assertOk();
-        Livewire::test(StatsOverview::class)->assertDontSee('Ingresos del mes')->assertSee('Citas hoy');
-        $this->assertFalse(IncomeChart::canView());
+        Livewire::test(SuMesWidget::class)->assertDontSee('Cobrado de saldos de antes');
         $this->get('/doctor/cobros')->assertOk();
         $this->get('/doctor/citas')->assertOk();
 
@@ -172,7 +170,7 @@ class AsistenteDelConsultorioTest extends TestCase
     {
         $this->actingAs($this->doctor);
 
-        Livewire::test(StatsOverview::class)->assertSee('Ingresos del mes');
+        Livewire::test(SuMesWidget::class)->assertSee('Cobrado de saldos de antes');
         $this->get('/doctor/corte')->assertOk();
         $this->get('/doctor/clinic-settings')->assertOk();
     }

@@ -26,7 +26,7 @@ class PendingRecallsWidget extends Widget
 {
     protected static string $view = 'filament.doctor.widgets.pending-recalls';
 
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 1;
 
     protected int|string|array $columnSpan = 'full';
 

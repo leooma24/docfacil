@@ -21,7 +21,7 @@ use Filament\Tables\Table;
  */
 class PendingReviewRequestsWidget extends BaseWidget
 {
-    protected static ?int $sort = 7;
+    protected static ?int $sort = 3;
 
     protected int|string|array $columnSpan = 'full';
 

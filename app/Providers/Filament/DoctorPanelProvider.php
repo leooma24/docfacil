@@ -70,6 +70,9 @@ class DoctorPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Doctor/Widgets'), for: 'App\\Filament\\Doctor\\Widgets')
+            // Lo que hay que hacer hoy, en orden (12-oct-2026). Las gráficas de
+            // citas, ingresos y servicios y los números sueltos salieron: no
+            // decían qué hacer. El dinero del mes está en "Su mes" y en el Corte.
             ->widgets([
                 \App\Filament\Doctor\Widgets\DashboardHeroWidget::class,
                 \App\Filament\Doctor\Widgets\SetupChecklistWidget::class,
@@ -78,13 +81,9 @@ class DoctorPanelProvider extends PanelProvider
                 \App\Filament\Doctor\Widgets\AIInsightsWidget::class,
                 \App\Filament\Doctor\Widgets\NextAppointment::class,
                 \App\Filament\Doctor\Widgets\QuickActions::class,
-                \App\Filament\Doctor\Widgets\StatsOverview::class,
                 \App\Filament\Doctor\Widgets\TodayAppointments::class,
-                \App\Filament\Doctor\Widgets\AppointmentsChart::class,
-                \App\Filament\Doctor\Widgets\IncomeChart::class,
                 \App\Filament\Doctor\Widgets\PendingPayments::class,
                 \App\Filament\Doctor\Widgets\AlertsWidget::class,
-                \App\Filament\Doctor\Widgets\TopServicesChart::class,
                 \App\Filament\Doctor\Widgets\DoctorProductionWidget::class,
                 \App\Filament\Doctor\Widgets\BirthdaysTodayWidget::class,
                 \App\Filament\Doctor\Widgets\OverdueDebtorsWidget::class,

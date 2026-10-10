@@ -16,7 +16,7 @@ class PublicPortalShareWidget extends Widget
 {
     protected static string $view = 'filament.doctor.widgets.public-portal-share';
 
-    protected static ?int $sort = 8;
+    protected static ?int $sort = 9;
 
     protected int|string|array $columnSpan = 'full';
 

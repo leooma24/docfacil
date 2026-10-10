@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class NextAppointment extends Widget
 {
-    protected static ?int $sort = -1;
+    protected static ?int $sort = -6;
 
     protected int|string|array $columnSpan = 'full';
 

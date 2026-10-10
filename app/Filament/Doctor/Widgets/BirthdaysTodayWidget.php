@@ -21,7 +21,7 @@ class BirthdaysTodayWidget extends Widget
 {
     protected static string $view = 'filament.doctor.widgets.birthdays-today';
 
-    protected static ?int $sort = 7;
+    protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 1;
 

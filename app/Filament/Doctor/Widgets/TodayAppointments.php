@@ -10,7 +10,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class TodayAppointments extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = -4;
 
     protected int|string|array $columnSpan = 'full';
 

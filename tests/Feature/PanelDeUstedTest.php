@@ -23,7 +23,7 @@ class PanelDeUstedTest extends TestCase
     private const ORDENES = ['Registra', 'Envía', 'Invita', 'Anota', 'Elige', 'Escribe', 'Selecciona', 'Agrega', 'Revisa', 'Configura',
         'Sube', 'Usa', 'Llena', 'Captura', 'Personaliza', 'Activa', 'Descarga', 'Comparte', 'Pega', 'Toca', 'Abre', 'Cambia',
         'Completa', 'Crea', 'Busca', 'Imprime', 'Copia', 'Edita', 'Confirma', 'Cobra', 'Asigna', 'Define', 'Ingresa', 'Haz', 'Dale',
-        'Prueba', 'Empieza', 'Deja', 'Manda', 'Avisa', 'Mira', 'Pídele', 'Escríbele', 'Mándale', 'Recuérdale', 'Sigue', 'Descubre',
+        'Prueba', 'Empieza', 'Deja', 'Manda', 'Avisa', 'Mira', 'Pídele', 'Escríbele', 'Mándale', 'Recuérdale', 'Envíales', 'Mándales', 'Escríbeles', 'Llámales', 'Recuérdales', 'Llámale', 'Envíale', 'Sigue', 'Descubre',
         'Aprovecha', 'Conoce', 'Ahorra', 'Olvídate', 'Agenda una', 'Agenda la', 'Agenda tu', 'Agenda su'];
 
     /**

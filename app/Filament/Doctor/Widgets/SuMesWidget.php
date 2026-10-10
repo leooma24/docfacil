@@ -11,7 +11,7 @@ use Filament\Widgets\Widget;
  */
 class SuMesWidget extends Widget
 {
-    protected static ?int $sort = 7;
+    protected static ?int $sort = 5;
 
     protected int|string|array $columnSpan = 'full';
 

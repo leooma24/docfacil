@@ -20,7 +20,7 @@ class InviteDoctorsWidget extends Widget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 8;
 
     public static function canView(): bool
     {

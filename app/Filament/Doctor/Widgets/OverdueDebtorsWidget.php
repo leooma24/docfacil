@@ -23,7 +23,7 @@ class OverdueDebtorsWidget extends Widget implements HasActions, HasForms
 
     protected static string $view = 'filament.doctor.widgets.overdue-debtors';
 
-    protected static ?int $sort = 5;
+    protected static ?int $sort = -1;
 
     protected int|string|array $columnSpan = 1;
 

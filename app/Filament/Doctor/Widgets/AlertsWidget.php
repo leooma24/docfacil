@@ -9,9 +9,9 @@ use Filament\Widgets\Widget;
 
 class AlertsWidget extends Widget
 {
-    protected static ?int $sort = 6;
+    protected static ?int $sort = -3;
 
-    protected int|string|array $columnSpan = 1;
+    protected int|string|array $columnSpan = 'full';
 
     protected static string $view = 'filament.doctor.widgets.alerts-widget';
 
@@ -34,7 +34,7 @@ class AlertsWidget extends Widget
                 'type' => 'warning',
                 'icon' => 'heroicon-o-clock',
                 'title' => "{$inactivePatients} pacientes sin visita",
-                'desc' => 'Hace más de 6 meses que no vienen. Envíales un recordatorio.',
+                'desc' => 'Hace más de 6 meses que no vienen: vale la pena escribirles.',
             ];
         }
 
@@ -168,18 +168,63 @@ class AlertsWidget extends Widget
             }
         }
 
-        // Today's income
-        $todayIncome = Payment::cobradoEntre($clinicId, today(), today());
-
-        if ($todayIncome > 0) {
+        // Huecos de los próximos días que ya tienen citas: horas para
+        // ofrecerle a quien le toca volver o está en lista de espera. Un día
+        // sin ninguna cita no se cuenta: "mañana libre de 9 a 19" no dice nada.
+        $huecos = $clinica ? self::huecosParaOfrecer($clinica, $user->doctor?->id) : [];
+        if ($huecos !== []) {
             $alerts[] = [
-                'type' => 'success',
-                'icon' => 'heroicon-o-banknotes',
-                'title' => 'Ingresos hoy: $' . number_format($todayIncome, 0),
-                'desc' => 'Buen trabajo.',
+                'type' => 'info',
+                'icon' => 'heroicon-o-calendar',
+                'title' => 'Tiene libre ' . implode('; ', $huecos),
+                'desc' => 'Ofrézcalo a quien le toca volver o a quien quedó de agendar.',
+                'url' => \App\Filament\Doctor\Pages\CalendarPage::getUrl(panel: 'doctor'),
             ];
         }
 
         return $alerts;
+    }
+
+    /**
+     * Los ratos libres de 1 hora o más en los próximos días que ya tienen
+     * alguna cita (hasta 2 días, en la semana que sigue).
+     * Ej. ["mañana de 10:00 a 14:00"].
+     *
+     * @return list<string>
+     */
+    public static function huecosParaOfrecer(\App\Models\Clinic $clinica, ?int $doctorId): array
+    {
+        $dias = [];
+
+        for ($dia = \Carbon\CarbonImmutable::tomorrow(); count($dias) < 2 && $dia->lessThan(\Carbon\CarbonImmutable::tomorrow()->addDays(6)); $dia = $dia->addDay()) {
+            $tieneCitas = Appointment::where('clinic_id', $clinica->id)
+                ->when($doctorId, fn ($q) => $q->where('doctor_id', $doctorId))
+                ->whereIn('status', Appointment::ESTADOS_QUE_OCUPAN)
+                ->whereDate('starts_at', $dia->toDateString())
+                ->exists();
+            $horas = $tieneCitas ? \App\Services\HuecosDisponibles::delDia($clinica, $dia, $doctorId, 60) : [];
+            if ($horas === []) {
+                continue;
+            }
+
+            // Inicios de 1 hora cada 30 min → ratos seguidos: 10:00, 10:30… 13:00 = 10:00 a 14:00.
+            $ratos = [];
+            foreach ($horas as $hora) {
+                $inicio = $dia->setTimeFromTimeString($hora);
+                $ultimo = end($ratos);
+                if ($ultimo && $ultimo[1]->addMinutes(\App\Services\HuecosDisponibles::PASO_MINUTOS)->equalTo($inicio)) {
+                    $ratos[array_key_last($ratos)][1] = $inicio;
+                } else {
+                    $ratos[] = [$inicio, $inicio];
+                }
+            }
+
+            $nombre = $dia->isTomorrow() ? 'mañana' : $dia->locale('es')->isoFormat('dddd');
+            $dias[] = $nombre . ' ' . collect($ratos)
+                ->map(fn ($r) => 'de ' . $r[0]->format('H:i') . ' a ' . $r[1]->addHour()->format('H:i'))
+                ->implode(' y ');
+        }
+
+        return array_slice($dias, 0, 2);
     }
 }
