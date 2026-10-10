@@ -1,0 +1,36 @@
+/*
+ * Las clases de Tailwind que usan las pantallas del panel del doctor.
+ *
+ * El panel solo carga el CSS ya compilado de Filament, que no trae los
+ * colores de Tailwind (bg-teal-600, text-red-600…): esos botones salían con
+ * letra blanca sobre blanco (auditoría del 12-oct-2026). Este archivo genera
+ * public/css/panel-doctor.css con solo las clases que se usan. Se arma con
+ * `npm run css:panel` y se sube al repo: deploy.sh no compila CSS.
+ *
+ * Las clases sencillas que Filament ya trae no se repiten (el script las
+ * quita); las variantes (md:, hover:, dark:) sí, para que vayan después de
+ * todas las bases y ganen como deben.
+ *
+ * Sin @layer: el CSS de Filament no usa capas, y una regla sin capa le gana
+ * a cualquiera con capa. Así, .bg-teal-600 le gana al "button { fondo
+ * transparente }" de Filament.
+ */
+@import "tailwindcss/theme.css";
+
+/* Modo oscuro como en Filament: con la clase .dark, no con el del celular. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source "../views/filament/doctor";
+@source "../views/filament/custom";
+@source "../views/livewire";
+@source "../views/components";
+@source "../../app/Filament/Doctor";
+@source "../../app/Livewire";
+
+/* Las pestañas del perfil se deslizan de lado sin enseñar la barra. */
+@utility scrollbar-hide {
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+}
+
+@tailwind utilities;

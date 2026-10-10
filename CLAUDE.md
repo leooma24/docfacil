@@ -114,7 +114,7 @@ Both are worked through in the `verifying-stack-behavior` skill.
 
 ## Key Gotchas
 
-- **Tailwind v4 on prod**: Some responsive utility classes don't compile on production. For critical UI (hero gradients, glassmorphism), use inline `style=""` attributes instead of Tailwind classes.
+- **Tailwind in the doctor panel**: the panel loads Filament's precompiled CSS plus `public/css/panel-doctor.css`, which holds only the Tailwind classes Filament lacks. After adding classes to doctor views, run `npm run css:panel` and commit the CSS: `deploy.sh` does not build CSS, and `ClasesQueSiExistenTest` fails if a class exists in no CSS. Before 12-oct-2026 that file didn't exist and 367 classes (all non-gray colors) silently did nothing. The panel is light-mode only (`->darkMode(false)`).
 - **Filament Resource slugs are Spanish**: `'pacientes'`, `'citas'`, `'recetas'`, `'cobros'`, `'expediente-clinico'`, `'consentimientos'`, `'servicios'`, `'odontogramas'`.
 - **EditOdontogram has a custom Livewire view** — don't add `HasFormHero` to it; it has its own interactive canvas editor.
 - **Production deploy** is `deploy.sh` (in the repo), run on the server: `ssh root@206.189.203.228 'cd /var/www/docfacil && git pull --ff-only && bash deploy.sh'`. It migrates and refreshes Filament's cache WITHOUT deleting compiled views: `optimize:clear` / `view:clear` / `view:cache` during a live deploy made a page fail with "File does not exist at path storage/framework/views" (1-oct-2026). Blade recompiles changed views by itself. Then check `/`, `/doctor/login` and `storage/logs/laravel.log`.

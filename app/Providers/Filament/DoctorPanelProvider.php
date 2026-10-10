@@ -25,6 +25,9 @@ class DoctorPanelProvider extends PanelProvider
         return $panel
             ->id('doctor')
             ->path('doctor')
+            // Modo claro siempre: varias pantallas (Caja, Corte, Su mes) no están
+            // hechas para modo oscuro y salían blanco sobre blanco (12-oct-2026).
+            ->darkMode(false)
             ->login(\App\Filament\Doctor\Pages\Login::class)
             // Sin esto, quien olvida su contraseña no tiene forma de
             // recuperarla: no hay ruta de reset en todo el panel.
@@ -57,6 +60,11 @@ class DoctorPanelProvider extends PanelProvider
             // Sin Google Analytics dentro del panel: los títulos de las páginas
             // llevan nombres de pacientes ("Editar Juan Pérez") y se mandaban a
             // Google. El sitio público sí lo sigue midiendo.
+            // Las clases de Tailwind que usan sus pantallas y Filament no trae
+            // (npm run css:panel). Va antes de theme-styles, que manda al final.
+            ->renderHook('panels::head.end', fn () => new \Illuminate\Support\HtmlString(
+                '<link rel="stylesheet" href="' . asset('css/panel-doctor.css') . '?v=' . @filemtime(public_path('css/panel-doctor.css')) . '">'
+            ))
             ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
             // En qué consultorio está (arriba del menú) y su plan (abajo).
             ->renderHook('panels::sidebar.nav.start', fn () => view('filament.custom.menu-consultorio'))
