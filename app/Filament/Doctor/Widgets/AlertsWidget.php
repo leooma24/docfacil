@@ -50,6 +50,8 @@ class AlertsWidget extends Widget
                 'icon' => 'heroicon-o-exclamation-triangle',
                 'title' => $overduePayments . ($overduePayments === 1 ? ' pago vencido' : ' pagos vencidos'),
                 'desc' => 'Tienen más de 7 días pendientes.',
+                'url' => \App\Filament\Doctor\Resources\PaymentResource::getUrl('index', ['tableFilters' => ['with_balance' => ['isActive' => true]]], panel: 'doctor'),
+                'boton' => 'Ver quién debe',
             ];
         }
 
@@ -66,6 +68,7 @@ class AlertsWidget extends Widget
                         'title' => "Se liberó {$cuando} {$hueco->starts_at->format('H:i')} · {$candidatos} en lista de espera",
                         'desc' => 'Ofrézcale el horario a quien lo esperaba.',
                         'url' => $hueco->ligaAListaDeEspera(),
+                        'boton' => 'Ofrecer el horario',
                     ];
                 }
             }
@@ -86,6 +89,7 @@ class AlertsWidget extends Widget
                 'title' => $sinAgendar . ($sinAgendar === 1 ? ' tratamiento aceptado sin agendar' : ' tratamientos aceptados sin agendar'),
                 'desc' => 'El paciente ya dijo que sí. Agéndelos desde su presupuesto.',
                 'url' => \App\Filament\Doctor\Resources\TreatmentPlanResource::getUrl('index', ['tableFilters' => ['status' => ['value' => 'accepted']]], panel: 'doctor'),
+                'boton' => 'Ver presupuestos',
             ];
         }
 
@@ -99,6 +103,7 @@ class AlertsWidget extends Widget
                     'title' => "{$orden->trabajo} de {$orden->patient?->first_name} no ha llegado",
                     'desc' => 'Su cita es ' . ($cita->starts_at->isToday() ? 'hoy' : ($cita->starts_at->isTomorrow() ? 'mañana' : $cita->starts_at->locale('es')->isoFormat('dddd'))) . ' a las ' . $cita->starts_at->format('H:i') . '. Llámele al laboratorio ' . $orden->laboratorio . ' o reagéndela.',
                     'url' => \App\Filament\Doctor\Resources\LabOrderResource::getUrl('index', panel: 'doctor'),
+                    'boton' => 'Ver laboratorio',
                 ];
             }
 
@@ -110,6 +115,7 @@ class AlertsWidget extends Widget
                     'title' => $atrasadas . ($atrasadas === 1 ? ' trabajo atrasado con el laboratorio' : ' trabajos atrasados con el laboratorio'),
                     'desc' => 'Ya pasó la fecha que le prometieron.',
                     'url' => \App\Filament\Doctor\Resources\LabOrderResource::getUrl('index', panel: 'doctor'),
+                    'boton' => 'Ver laboratorio',
                 ];
             }
         }
@@ -124,6 +130,7 @@ class AlertsWidget extends Widget
                 'title' => $presupuestos . ($presupuestos === 1 ? ' presupuesto sin respuesta' : ' presupuestos sin respuesta'),
                 'desc' => 'Ya pasó más de una semana. Un recordatorio amable a 1 clic.',
                 'url' => \App\Filament\Doctor\Pages\PendientesPorPaciente::getUrl(panel: 'doctor'),
+                'boton' => 'Ver pendientes',
             ];
         }
 
@@ -140,6 +147,7 @@ class AlertsWidget extends Widget
                 'title' => $noReminder . ($noReminder === 1 ? ' paciente mañana sin recordatorio' : ' pacientes mañana sin recordatorio'),
                 'desc' => 'Tóquelo y se los va mandando uno por uno, sin buscarlos.',
                 'url' => \App\Filament\Doctor\Pages\RecordatoriosDeManana::getUrl(panel: 'doctor'),
+                'boton' => 'Mandar',
             ];
         }
 
@@ -156,6 +164,7 @@ class AlertsWidget extends Widget
                     'title' => "Ya tiene {$suyos} pacientes: el Básico llega a {$tieneBasico}",
                     'desc' => 'Al terminar la prueba, el Pro no tiene límite. No se borra ninguno: arriba del límite solo ya no puede agregar.',
                     'url' => \App\Filament\Doctor\Pages\Upgrade::getUrl(panel: 'doctor'),
+                    'boton' => 'Ver planes',
                 ];
             } elseif (! $clinica->enPruebaVigente() && $clinica->limitePacientes() === $tieneBasico && $suyos >= $tieneBasico - 20) {
                 $alerts[] = [
@@ -164,6 +173,7 @@ class AlertsWidget extends Widget
                     'title' => "Lleva {$suyos} de {$tieneBasico} pacientes",
                     'desc' => 'Es el límite del Básico. El Pro no tiene límite.',
                     'url' => \App\Filament\Doctor\Pages\Upgrade::getUrl(panel: 'doctor'),
+                    'boton' => 'Ver planes',
                 ];
             }
         }
@@ -179,8 +189,13 @@ class AlertsWidget extends Widget
                 'title' => 'Tiene libre ' . implode('; ', $huecos),
                 'desc' => 'Ofrézcalo a quien le toca volver o a quien quedó de agendar.',
                 'url' => \App\Filament\Doctor\Pages\CalendarPage::getUrl(panel: 'doctor'),
+                'boton' => 'Ver agenda',
             ];
         }
+
+        // Primero lo urgente, luego lo que conviene, al último lo informativo.
+        $orden = ['danger' => 0, 'warning' => 1, 'info' => 2, 'success' => 3];
+        usort($alerts, fn ($a, $b) => ($orden[$a['type']] ?? 9) <=> ($orden[$b['type']] ?? 9));
 
         return $alerts;
     }

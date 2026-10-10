@@ -1,130 +1,74 @@
+{{-- Lo que hay que atender: primero lo urgente, cada aviso con lo que hay
+     que hacer escrito en su botón. Estilos en línea: los colores de Tailwind
+     no existen en el CSS del panel (auditoría del 12-oct-2026). --}}
 <x-filament-widgets::widget>
-    @php $alerts = $this->getAlerts(); @endphp
+    @php
+        $alerts = $this->getAlerts();
+        $tonos = [
+            'danger'  => ['fondo' => '#fef2f2', 'tinta' => '#b91c1c', 'borde' => '#fecaca'],
+            'warning' => ['fondo' => '#fffbeb', 'tinta' => '#b45309', 'borde' => '#fde68a'],
+            'info'    => ['fondo' => '#eff6ff', 'tinta' => '#1d4ed8', 'borde' => '#bfdbfe'],
+            'success' => ['fondo' => '#f0fdf4', 'tinta' => '#15803d', 'borde' => '#bbf7d0'],
+        ];
+        $urgentes = collect($alerts)->where('type', 'danger')->count();
+    @endphp
 
     <style>
-        .aw-card {
-            position: relative;
-            border-radius: 16px;
-            padding: 22px 24px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f59e0b 0%, #f97316 40%, #ef4444 100%);
-            color: white;
-            box-shadow: 0 16px 40px -15px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+        .lqa-fila { display:flex; align-items:center; gap:14px; padding:14px 4px; border-top:1px solid #f1f5f9; color:#0f172a; text-decoration:none; }
+        .lqa-fila:first-child { border-top:0; }
+        a.lqa-fila:hover { background:#f8fafc; }
+        .lqa-boton { flex-shrink:0; min-height:40px; padding:0 16px; display:inline-flex; align-items:center; border-radius:999px; border:1px solid #99f6e4; background:#f0fdfa; color:#0f766e; font-size:14px; font-weight:700; white-space:nowrap; }
+        a.lqa-fila:hover .lqa-boton { background:#ccfbf1; }
+        @media (max-width: 560px) {
+            .lqa-fila { flex-wrap:wrap; }
+            .lqa-boton { margin-left:50px; }
         }
-        .aw-card::before {
-            content: ''; position: absolute; top: -60px; right: -50px;
-            width: 220px; height: 220px;
-            background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%);
-            border-radius: 50%; pointer-events: none;
-        }
-        .aw-card::after {
-            content: ''; position: absolute; bottom: -80px; left: -30px;
-            width: 180px; height: 180px;
-            background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);
-            border-radius: 50%; pointer-events: none;
-        }
-        .aw-grain {
-            position: absolute; inset: 0;
-            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
-            background-size: 20px 20px; pointer-events: none;
-        }
-        .aw-content { position: relative; z-index: 1; }
-        .aw-head {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
-        }
-        .aw-head-icon {
-            width: 44px; height: 44px; border-radius: 12px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(255,255,255,0.3);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 22px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-        .aw-head-label {
-            font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.12em;
-            opacity: 0.85;
-        }
-        .aw-head-title {
-            font-size: 1.2rem; font-weight: 800; letter-spacing: -0.01em;
-            line-height: 1.15; color: white !important;
-        }
-
-        .aw-list { display: flex; flex-direction: column; gap: 10px; }
-        .aw-item {
-            display: flex; align-items: flex-start; gap: 12px;
-            padding: 14px 16px;
-            background: rgba(255,255,255,0.14);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.22);
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-        .aw-item:hover {
-            background: rgba(255,255,255,0.22);
-            transform: translateX(3px);
-        }
-        .aw-item-icon {
-            width: 32px; height: 32px; border-radius: 8px;
-            background: rgba(255,255,255,0.22);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .aw-item-title {
-            font-size: 0.85rem; font-weight: 700; color: white;
-        }
-        .aw-item-desc {
-            font-size: 0.75rem; opacity: 0.85; margin-top: 2px;
-        }
-
-        .aw-empty {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 20px 16px; text-align: center;
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(10px);
-            border: 1px dashed rgba(255,255,255,0.3);
-            border-radius: 12px;
-        }
-        .aw-empty-emoji { font-size: 28px; margin-bottom: 4px; }
-        .aw-empty-text { font-size: 0.8rem; opacity: 0.92; font-weight: 600; }
     </style>
 
-    <div class="aw-card">
-        <div class="aw-grain"></div>
-        <div class="aw-content">
-            <div class="aw-head">
-                <div class="aw-head-icon"><x-icono nombre="bell-alert" /></div>
-                <div>
-                    <div class="aw-head-label">Para hoy</div>
-                    <div class="aw-head-title">Lo que hay que atender</div>
-                </div>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px 18px 8px;color:#0f172a;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+            <div style="width:40px;height:40px;border-radius:12px;background:#f0fdfa;color:#0f766e;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <x-filament::icon icon="heroicon-o-bell-alert" style="width:22px;height:22px;" />
             </div>
-
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#64748b;">Para hoy</div>
+                <div style="font-size:18px;font-weight:800;line-height:1.25;">Lo que hay que atender</div>
+            </div>
             @if(count($alerts) > 0)
-            <div class="aw-list">
-                @foreach($alerts as $alert)
-                {{-- Con liga, el aviso lleva directo a resolverlo. --}}
-                <{{ isset($alert['url']) ? 'a' : 'div' }} @isset($alert['url']) href="{{ $alert['url'] }}" @endisset class="aw-item" @isset($alert['url']) style="cursor:pointer;" @endisset>
-                    <div class="aw-item-icon">
-                        <x-filament::icon :icon="$alert['icon']" class="w-4 h-4 text-white" />
-                    </div>
-                    <div style="min-width:0;flex:1;">
-                        <div class="aw-item-title">{{ $alert['title'] }}</div>
-                        <div class="aw-item-desc">{{ $alert['desc'] }}</div>
-                    </div>
-                    @isset($alert['url'])
-                        <x-filament::icon icon="heroicon-m-chevron-right" class="w-4 h-4" style="color:rgba(255,255,255,.7);flex:0 0 1rem;" />
-                    @endisset
-                </{{ isset($alert['url']) ? 'a' : 'div' }}>
-                @endforeach
-            </div>
-            @else
-            <div class="aw-empty">
-                <div class="aw-empty-emoji" style="color:#059669;"><x-icono nombre="check-circle" /></div>
-                <div class="aw-empty-text">Todo en orden. Nada que reportar ahora mismo.</div>
-            </div>
+                <span style="flex-shrink:0;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;background:{{ $urgentes ? '#fef2f2' : '#f1f5f9' }};color:{{ $urgentes ? '#b91c1c' : '#475569' }};">
+                    {{ $urgentes ? $urgentes . ($urgentes === 1 ? ' urgente' : ' urgentes') : count($alerts) . (count($alerts) === 1 ? ' pendiente' : ' pendientes') }}
+                </span>
             @endif
         </div>
+
+        @if(count($alerts) > 0)
+            <div>
+                @foreach($alerts as $alert)
+                    @php $t = $tonos[$alert['type']] ?? $tonos['info']; @endphp
+                    <{{ isset($alert['url']) ? 'a' : 'div' }} @isset($alert['url']) href="{{ $alert['url'] }}" @endisset class="lqa-fila">
+                        <div style="width:36px;height:36px;border-radius:12px;background:{{ $t['fondo'] }};border:1px solid {{ $t['borde'] }};color:{{ $t['tinta'] }};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <x-filament::icon :icon="$alert['icon']" style="width:18px;height:18px;" />
+                        </div>
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-size:15px;font-weight:700;line-height:1.35;color:{{ $alert['type'] === 'danger' ? '#b91c1c' : '#0f172a' }};">{{ $alert['title'] }}</div>
+                            <div style="font-size:13px;color:#64748b;margin-top:2px;line-height:1.4;">{{ $alert['desc'] }}</div>
+                        </div>
+                        @isset($alert['url'])
+                            <span class="lqa-boton">{{ $alert['boton'] ?? 'Ver' }}</span>
+                        @endisset
+                    </{{ isset($alert['url']) ? 'a' : 'div' }}>
+                @endforeach
+            </div>
+        @else
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 4px 12px;">
+                <div style="width:36px;height:36px;border-radius:12px;background:#f0fdf4;color:#15803d;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <x-filament::icon icon="heroicon-o-check-circle" style="width:20px;height:20px;" />
+                </div>
+                <div>
+                    <div style="font-size:15px;font-weight:700;">Todo en orden por ahora</div>
+                    <div style="font-size:13px;color:#64748b;">Aquí le avisamos cuando haya algo que atender.</div>
+                </div>
+            </div>
+        @endif
     </div>
 </x-filament-widgets::widget>
