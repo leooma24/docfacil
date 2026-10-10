@@ -28,6 +28,12 @@ class AddOns extends Page
 
     protected static ?string $navigationGroup = 'Mi cuenta';
 
+    /** Contratar add-ons es del doctor, no de la asistente. */
+    public static function canAccess(): bool
+    {
+        return auth()->check() && ! auth()->user()->esAsistente();
+    }
+
     public function getCatalog(): array
     {
         $catalog = config('addons', []);

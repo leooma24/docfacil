@@ -43,7 +43,13 @@ class ExpenseResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return (bool) auth()->user()?->clinic?->hasFeature('expenses');
+        return (bool) auth()->user()?->clinic?->hasFeature('expenses') && auth()->user()->veElDinero();
+    }
+
+    /** La asistente ve los gastos solo si el doctor se lo dio al invitarla. */
+    public static function canAccess(): bool
+    {
+        return (bool) auth()->user()?->veElDinero() && parent::canAccess();
     }
 
     public static function form(Form $form): Form

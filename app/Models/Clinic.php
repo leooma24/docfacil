@@ -451,6 +451,10 @@ class Clinic extends Model
             'expenses',                // Gastos y corte del mes. Va en Basico
                                        // porque es justo lo que hace que el
                                        // doctor deje su hoja de calculo.
+            'asistente',               // Su asistente con su propio usuario. La
+                                       // que más usa el sistema es ella: agenda,
+                                       // cobra y manda recordatorios (entrevista
+                                       // del 10-oct-2026).
             'treatment_plans',         // Presupuestos desde el odontograma. Era
                                        // add-on de $129: el dentista lo usaba en
                                        // la prueba y al pagar el Basico se le

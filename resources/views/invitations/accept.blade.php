@@ -14,9 +14,9 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-xl font-bold text-gray-900 mb-2">Te han invitado</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-2">Lo invitaron a DocFácil</h2>
             <p class="text-gray-600 mb-6">
-                <strong>{{ $invitation->clinic->name }}</strong> te invita a unirte como doctor en su consultorio.
+                <strong>{{ $invitation->clinic->name }}</strong> lo invita a entrar como {{ $invitation->esDeAsistente() ? 'asistente' : 'doctor' }} de su consultorio. Ponga su contraseña y listo.
             </p>
 
             <div class="bg-gray-50 rounded-lg p-4 mb-6">

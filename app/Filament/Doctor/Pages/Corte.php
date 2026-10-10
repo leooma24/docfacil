@@ -42,12 +42,14 @@ class Corte extends Page implements HasForms
 
     public static function shouldRegisterNavigation(): bool
     {
-        return (bool) auth()->user()?->clinic?->hasFeature('expenses');
+        return (bool) auth()->user()?->clinic?->hasFeature('expenses') && auth()->user()->veElDinero();
     }
 
     public function mount(): void
     {
         abort_unless(auth()->user()?->clinic?->hasFeature('expenses'), 403);
+        // La asistente lo ve solo si el doctor se lo dio al invitarla.
+        abort_unless(auth()->user()->veElDinero(), 403);
 
         // El correo del corte mensual trae ?desde=&hasta= para abrir justo en
         // el mes del que habla, y no en el mes que va corriendo.

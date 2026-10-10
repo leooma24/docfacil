@@ -23,14 +23,38 @@ class DoctorInvitationResource extends Resource
         return 'multi_doctor';
     }
 
+    /**
+     * Su equipo: desde el Básico invita a su asistente; desde el Pro, también
+     * a otros doctores. Es cosa del doctor: la asistente no invita a nadie.
+     */
     public static function shouldRegisterNavigation(): bool
     {
-        return static::clinicHasPlanFeature();
+        return static::canAccess();
     }
 
     public static function canAccess(): bool
     {
+        $user = auth()->user();
+
+        return $user && ! $user->esAsistente()
+            && ($user->clinic?->hasFeature('asistente') || static::clinicHasPlanFeature());
+    }
+
+    /** Si el plan deja invitar a otro doctor (Pro en adelante). */
+    public static function puedeInvitarDoctores(): bool
+    {
         return static::clinicHasPlanFeature();
+    }
+
+    /** La liga de la invitación, lista para mandar por WhatsApp a quien la elija el doctor. */
+    public static function ligaDeWhatsApp(DoctorInvitation $invitacion): string
+    {
+        $como = $invitacion->esDeAsistente() ? 'asistente' : 'doctor';
+        $texto = "Hola {$invitacion->name}, le comparto la liga para entrar a DocFácil como {$como} de "
+            . ($invitacion->clinic?->name ?? 'nuestro consultorio') . '. Ahí pone su contraseña y listo: '
+            . route('invitation.accept', ['token' => $invitacion->token]);
+
+        return 'https://wa.me/?text=' . urlencode($texto);
     }
 
     public static function getEloquentQuery(): Builder
@@ -42,7 +66,7 @@ class DoctorInvitationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-    protected static ?string $navigationLabel = 'Invitar doctores';
+    protected static ?string $navigationLabel = 'Su equipo';
 
     protected static ?string $modelLabel = 'Invitación';
 
@@ -56,22 +80,42 @@ class DoctorInvitationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Invitar Doctor al Consultorio')
-                    ->description('Envía una invitación para que otro doctor se una a tu consultorio.')
+                Forms\Components\Section::make('¿A quién invita?')
+                    ->description('Le llega una liga para poner su contraseña. También se la puede mandar por WhatsApp desde la lista.')
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Nombre del doctor')
+                        Forms\Components\Radio::make('role')
+                            ->label('Va a entrar como')
+                            ->options(fn () => static::puedeInvitarDoctores()
+                                ? ['staff' => 'Asistente o recepcionista', 'doctor' => 'Doctor']
+                                : ['staff' => 'Asistente o recepcionista'])
+                            ->default('staff')
                             ->required()
-                            ->placeholder('Dr. Juan Pérez'),
+                            ->in(fn () => static::puedeInvitarDoctores() ? ['staff', 'doctor'] : ['staff'])
+                            ->validationMessages(['in' => 'Para invitar a otro doctor se necesita el plan Pro.'])
+                            ->live()
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
+                            ->required()
+                            ->placeholder(fn (Forms\Get $get) => $get('role') === 'doctor' ? 'Dra. Paola Ruiz' : 'Lupita'),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email')
+                            ->label('Correo (con él entra)')
                             ->email()
                             ->required()
-                            ->placeholder('doctor@email.com'),
+                            ->unique('users', 'email')
+                            ->validationMessages(['unique' => 'Ese correo ya tiene cuenta en DocFácil.'])
+                            ->placeholder('nombre@gmail.com'),
                         Forms\Components\TextInput::make('specialty')
                             ->label('Especialidad')
-                            ->placeholder('Ej: Ortodoncia, Endodoncia'),
+                            ->placeholder('Ej: Ortodoncia, Endodoncia')
+                            ->visible(fn (Forms\Get $get) => $get('role') === 'doctor'),
+                        Forms\Components\Toggle::make('ve_dinero')
+                            ->label('¿Puede ver el corte, los gastos y los ingresos?')
+                            ->helperText('Los cobros de los pacientes los ve siempre, para poder cobrar. Esto es lo demás del dinero del consultorio.')
+                            ->default(false)
+                            ->visible(fn (Forms\Get $get) => $get('role') !== 'doctor')
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
@@ -81,8 +125,11 @@ class DoctorInvitationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Doctor')
+                    ->label('Nombre')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('role')
+                    ->label('Entra como')
+                    ->formatStateUsing(fn (?string $state) => $state === 'staff' ? 'Asistente' : 'Doctor'),
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
                     ->searchable(),
@@ -112,6 +159,12 @@ class DoctorInvitationResource extends Resource
                     ->sortable(),
             ])
             ->actions([
+                Tables\Actions\Action::make('whatsapp')
+                    ->label('Mandar por WhatsApp')
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->color('success')
+                    ->url(fn (DoctorInvitation $record) => static::ligaDeWhatsApp($record), shouldOpenInNewTab: true)
+                    ->visible(fn (DoctorInvitation $record) => $record->isPending()),
                 Tables\Actions\Action::make('resend')
                     ->label('Reenviar')
                     ->icon('heroicon-o-arrow-path')

@@ -11,6 +11,12 @@ class IncomeChart extends ChartWidget
 
     protected static ?int $sort = 3;
 
+    /** Ingresos: la asistente los ve solo si el doctor se lo dio. */
+    public static function canView(): bool
+    {
+        return (bool) auth()->user()?->veElDinero();
+    }
+
     protected function getData(): array
     {
         $clinicId = auth()->user()->clinic_id;

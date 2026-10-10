@@ -34,8 +34,8 @@ class ListDoctorInvitations extends ListRecords
         $expired = (clone $base)->where('status', 'pending')->where('expires_at', '<=', now())->count();
 
         return [
-            'title'    => 'Invitar Doctores',
-            'subtitle' => 'Invita a otros doctores a unirse a tu clínica. Reciben un link de registro por email y WhatsApp.',
+            'title'    => 'Su equipo',
+            'subtitle' => 'Invite a su asistente y, desde el plan Pro, a otros doctores. Les llega una liga para poner su contraseña.',
             'gradient' => '#ec4899 0%, #d946ef 40%, #a855f7 100%',
             'accent'   => '#ec4899',
             'stats' => [

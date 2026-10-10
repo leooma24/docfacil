@@ -49,10 +49,11 @@ class StatsOverview extends BaseWidget
                 ->description('Registrados')
                 ->descriptionIcon('heroicon-m-users')
                 ->color('success'),
-            Stat::make('Ingresos del mes', '$' . number_format($monthlyIncome, 2))
+            // Lo que entró en el mes es del doctor; la asistente lo ve si él se lo dio.
+            ...(auth()->user()->veElDinero() ? [Stat::make('Ingresos del mes', '$' . number_format($monthlyIncome, 2))
                 ->description(now()->translatedFormat('F Y'))
                 ->descriptionIcon('heroicon-m-banknotes')
-                ->color('success'),
+                ->color('success')] : []),
             Stat::make('Cobros pendientes', '$' . number_format($pendingPayments, 2))
                 ->description('Por cobrar')
                 ->descriptionIcon('heroicon-m-clock')

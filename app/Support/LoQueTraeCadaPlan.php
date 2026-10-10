@@ -61,6 +61,7 @@ class LoQueTraeCadaPlan
                     'Cobro por WhatsApp a 1 clic',
                     'Confirmar cita con link',
                     'Check-in con QR',
+                    'Su asistente con su propio usuario',
                     'Escritorio con sus números del día',
                 ],
                 'cta' => 'Probar 15 días gratis',

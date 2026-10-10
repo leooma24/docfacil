@@ -149,6 +149,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             'two_factor_enabled' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
             'last_login_at' => 'datetime',
+            've_dinero' => 'boolean',
             'commission_rate_percent' => 'decimal:2',
             'is_active_sales_rep' => 'boolean',
             'chatbot_autologin_expires_at' => 'datetime',
@@ -177,6 +178,21 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
             'sales' => 'ventas',
             default => 'doctor',
         };
+    }
+
+    /** La asistente o recepcionista del consultorio (rol staff). */
+    public function esAsistente(): bool
+    {
+        return $this->role === 'staff';
+    }
+
+    /**
+     * Si ve el dinero del consultorio: corte, gastos e ingresos. Los doctores
+     * siempre; la asistente solo si el doctor se lo dio al invitarla.
+     */
+    public function veElDinero(): bool
+    {
+        return ! $this->esAsistente() || (bool) $this->ve_dinero;
     }
 
     public function canAccessPanel(Panel $panel): bool

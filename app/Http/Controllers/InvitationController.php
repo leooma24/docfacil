@@ -41,7 +41,8 @@ class InvitationController extends Controller
             'name' => $invitation->name,
             'email' => $invitation->email,
             'password' => Hash::make($validated['password']),
-            'role' => 'doctor',
+            'role' => $invitation->esDeAsistente() ? 'staff' : 'doctor',
+            've_dinero' => $invitation->esDeAsistente() && $invitation->ve_dinero,
             'clinic_id' => $invitation->clinic_id,
             // Email verificado: ya demostró acceso al inbox al dar clic
             // al link de invitación. Y aceptó terminos al completar registro.
@@ -49,11 +50,14 @@ class InvitationController extends Controller
             'terms_accepted_at' => now(),
         ]);
 
-        Doctor::create([
-            'user_id' => $user->id,
-            'clinic_id' => $invitation->clinic_id,
-            'specialty' => $invitation->specialty,
-        ]);
+        // La asistente no es doctor: no sale en la agenda ni firma recetas.
+        if (! $invitation->esDeAsistente()) {
+            Doctor::create([
+                'user_id' => $user->id,
+                'clinic_id' => $invitation->clinic_id,
+                'specialty' => $invitation->specialty,
+            ]);
+        }
 
         $invitation->update([
             'status' => 'accepted',

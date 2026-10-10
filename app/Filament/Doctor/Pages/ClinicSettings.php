@@ -40,6 +40,12 @@ class ClinicSettings extends Page implements HasForms
 
     public ?array $data = [];
 
+    /** La configuración del consultorio es del doctor, no de la asistente. */
+    public static function canAccess(): bool
+    {
+        return auth()->check() && ! auth()->user()->esAsistente();
+    }
+
     public function mount(): void
     {
         $clinic = auth()->user()->clinic;

@@ -29,7 +29,7 @@ class DoctorProductionWidget extends Widget
     public static function canView(): bool
     {
         $clinic = auth()->user()?->clinic;
-        if (!$clinic || !$clinic->hasFeature('per_doctor_reports')) {
+        if (!$clinic || !$clinic->hasFeature('per_doctor_reports') || ! auth()->user()->veElDinero()) {
             return false;
         }
         return $clinic->doctors()->count() >= 2;

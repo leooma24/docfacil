@@ -32,6 +32,7 @@ class DoctorInvitationMail extends Mailable
                 'clinicName' => $this->invitation->clinic?->name ?? 'un consultorio',
                 'inviterName' => $this->invitation->invitedBy?->name ?? 'el equipo',
                 'specialty' => $this->invitation->specialty,
+                'asistente' => $this->invitation->esDeAsistente(),
                 'acceptUrl' => route('invitation.accept', ['token' => $this->invitation->token]),
                 'expiresAt' => $this->invitation->expires_at?->translatedFormat('d \d\e F \a \l\a\s H:i'),
             ],

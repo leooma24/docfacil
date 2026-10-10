@@ -22,12 +22,18 @@
 
             <div class="info">
                 <strong>Lo que vas a poder hacer:</strong><br>
+                @if($asistente)
+                ▸ Agendar y ver las citas del consultorio<br>
+                ▸ Cobrar y ver cuánto debe cada paciente<br>
+                ▸ Mandar recordatorios WhatsApp a 1 clic
+                @else
                 ▸ Ver y gestionar tu propia agenda dentro de la clínica<br>
                 ▸ Llevar expedientes y recetas con tu cédula<br>
                 @if($specialty)
                 ▸ Consulta como <strong>{{ $specialty }}</strong><br>
                 @endif
                 ▸ Mandar recordatorios WhatsApp a 1 clic
+                @endif
             </div>
 
             <p>Acepta la invitación y crea tu contraseña aquí:</p>

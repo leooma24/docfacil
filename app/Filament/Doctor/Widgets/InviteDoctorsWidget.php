@@ -25,7 +25,7 @@ class InviteDoctorsWidget extends Widget
     public static function canView(): bool
     {
         $clinic = auth()->user()?->clinic;
-        if (!$clinic || !$clinic->hasFeature('multi_doctor')) {
+        if (!$clinic || !$clinic->hasFeature('multi_doctor') || auth()->user()->esAsistente()) {
             return false;
         }
 

@@ -12,7 +12,7 @@ class DoctorInvitation extends Model
     use BelongsToClinic;
     protected $fillable = [
         'clinic_id', 'invited_by', 'email', 'name',
-        'specialty', 'token', 'status',
+        'specialty', 'role', 've_dinero', 'token', 'status',
         'accepted_at', 'expires_at',
     ];
 
@@ -21,6 +21,7 @@ class DoctorInvitation extends Model
         return [
             'accepted_at' => 'datetime',
             'expires_at' => 'datetime',
+            've_dinero' => 'boolean',
         ];
     }
 
@@ -47,6 +48,11 @@ class DoctorInvitation extends Model
     public function invitedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'invited_by');
+    }
+
+    public function esDeAsistente(): bool
+    {
+        return $this->role === 'staff';
     }
 
     public function isExpired(): bool
