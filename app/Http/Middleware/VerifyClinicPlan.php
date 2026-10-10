@@ -73,7 +73,11 @@ class VerifyClinicPlan
             }
 
             $limits = $this->getPlanLimits($clinic->plan);
+            // La asistente no cuenta como doctor: desde el Básico se puede
+            // invitar siempre, y el tope de doctores lo revisa el formulario
+            // (DoctorInvitationResource::puedeInvitarDoctores).
             if ($limits && $limits['doctors'] && $request->routeIs('*.invitar-doctores.create')
+                && ! $clinic->hasFeature('asistente')
                 && $clinic->doctors()->count() >= $limits['doctors']) {
                 return redirect()->route('filament.doctor.pages.actualizar-plan');
             }

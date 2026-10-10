@@ -40,10 +40,26 @@ class DoctorInvitationResource extends Resource
             && ($user->clinic?->hasFeature('asistente') || static::clinicHasPlanFeature());
     }
 
-    /** Si el plan deja invitar a otro doctor (Pro en adelante). */
+    /**
+     * Si todavía puede invitar a otro doctor: el plan lo permite (Pro en
+     * adelante) y no ha llegado al tope. Cuentan los doctores que ya están y
+     * las invitaciones pendientes, para no pasarse invitando.
+     */
     public static function puedeInvitarDoctores(): bool
     {
-        return static::clinicHasPlanFeature();
+        $clinica = auth()->user()?->clinic;
+        if (! $clinica || ! static::clinicHasPlanFeature()) {
+            return false;
+        }
+        if ($clinica->hasFeature('unlimited_doctors')) {
+            return true;
+        }
+
+        $ocupados = $clinica->doctors()->count()
+            + DoctorInvitation::where('clinic_id', $clinica->id)->where('role', 'doctor')
+                ->where('status', 'pending')->where('expires_at', '>', now())->count();
+
+        return $ocupados < 3;
     }
 
     /** La liga de la invitación, lista para mandar por WhatsApp a quien la elija el doctor. */
@@ -92,7 +108,7 @@ class DoctorInvitationResource extends Resource
                             ->default('staff')
                             ->required()
                             ->in(fn () => static::puedeInvitarDoctores() ? ['staff', 'doctor'] : ['staff'])
-                            ->validationMessages(['in' => 'Para invitar a otro doctor se necesita el plan Pro.'])
+                            ->validationMessages(['in' => 'Para invitar a otro doctor se necesita el plan Pro, con lugar libre (hasta 3 doctores).'])
                             ->live()
                             ->columnSpanFull(),
                         Forms\Components\TextInput::make('name')

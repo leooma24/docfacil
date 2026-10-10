@@ -73,6 +73,38 @@ class AsistenteDelConsultorioTest extends TestCase
         Mail::assertSent(DoctorInvitationMail::class);
     }
 
+    public function test_la_pantalla_de_equipo_abre_en_el_basico_aunque_ya_tenga_su_doctor(): void
+    {
+        // El tope de 1 doctor del Básico no aplica a la asistente: esta prueba
+        // pasa por el servidor de verdad, no por Livewire, que se salta las reglas de plan.
+        $this->actingAs($this->doctor);
+
+        $this->get('/doctor/invitar-doctores')->assertOk();
+        $this->get('/doctor/invitar-doctores/create')->assertOk();
+    }
+
+    public function test_en_el_pro_con_tres_doctores_ya_no_invita_otro_pero_si_a_su_asistente(): void
+    {
+        $this->clinica->update(['plan' => 'profesional']);
+        foreach (['b', 'c'] as $l) {
+            $u = User::forceCreate(['name' => "Dr. {$l}", 'email' => "{$l}@test.com", 'password' => bcrypt('x'), 'role' => 'doctor', 'email_verified_at' => now(), 'clinic_id' => $this->clinica->id]);
+            Doctor::create(['user_id' => $u->id, 'clinic_id' => $this->clinica->id, 'specialty' => 'Ortodoncia']);
+        }
+        $this->actingAs($this->doctor);
+
+        $this->get('/doctor/invitar-doctores/create')->assertOk();
+
+        Livewire::test(CreateDoctorInvitation::class)
+            ->fillForm(['role' => 'doctor', 'name' => 'Dra. Cuarta', 'email' => 'cuarta@test.com'])
+            ->call('create')
+            ->assertHasFormErrors(['role']);
+
+        Livewire::test(CreateDoctorInvitation::class)
+            ->fillForm(['role' => 'staff', 'name' => 'Lupita', 'email' => 'lupita@test.com'])
+            ->call('create')
+            ->assertHasNoFormErrors();
+    }
+
     public function test_en_el_basico_no_puede_invitar_otro_doctor(): void
     {
         $this->actingAs($this->doctor);
