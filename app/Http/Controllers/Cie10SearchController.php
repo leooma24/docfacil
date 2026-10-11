@@ -22,19 +22,22 @@ class Cie10SearchController extends Controller
         $catalog = $this->loadCatalog();
         $needle = mb_strtolower($this->stripAccents($query));
 
+        // El catálogo oficial trae 14 mil diagnósticos (11-oct-2026): primero
+        // los de la boca (K00 a K14) y los que empiezan con lo que se escribió.
         $matches = [];
         foreach ($catalog as $entry) {
             $code = $entry['code'];
-            $name = $entry['name'];
-            $haystack = mb_strtolower($code . ' ' . $this->stripAccents($name));
+            $haystack = mb_strtolower($code . ' ' . $this->stripAccents($entry['name']));
 
             if (str_contains($haystack, $needle)) {
-                $matches[] = $entry;
-                if (count($matches) >= 20) break;
+                $deLaBoca = preg_match('/^K(0\d|1[0-4])/', $code) === 1;
+                $empieza = str_starts_with(mb_strtolower($code), $needle) || str_starts_with(mb_strtolower($this->stripAccents($entry['name'])), $needle);
+                $matches[] = [($deLaBoca ? 0 : 2) + ($empieza ? 0 : 1), $entry];
             }
         }
+        usort($matches, fn ($a, $b) => $a[0] <=> $b[0]);
 
-        return response()->json($matches);
+        return response()->json(array_map(fn ($m) => $m[1], array_slice($matches, 0, 20)));
     }
 
     /**
@@ -63,7 +66,7 @@ class Cie10SearchController extends Controller
 
     private function loadCatalog(): array
     {
-        return Cache::remember('cie10_catalog_v1', now()->addDay(), function () {
+        return Cache::remember('cie10_catalog_v2', now()->addDay(), function () {
             $path = base_path(self::CATALOG_PATH);
             if (! File::exists($path)) {
                 return [];

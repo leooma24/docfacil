@@ -17,7 +17,7 @@ Fuente principal: el texto del DOF del 30-nov-2012 (https://dof.gob.mx/nota_deta
 |---|---|---|
 | **CURP** como identificador, más nombre y apellidos | 6.5.1, 6.5.5 | ✅ *12-oct:* CURP validada (formato y dígito verificador, nunca se inventa); no se repite en el consultorio; el perfil avisa si falta. Nombre y apellidos sí (los apellidos van en un solo campo). |
 | Fecha de nacimiento, sexo, entidad de nacimiento, nacionalidad, residencia (estado, municipio, localidad) | Tabla 1 | ✅ *12-oct:* fecha, sexo y estado salen solos de la CURP; nacionalidad, estado y municipio donde vive. (Municipio en texto, todavía sin catálogo oficial.) |
-| Diagnósticos con el catálogo oficial (CIE-10) | 6.4.2, Apéndice A | ❌ **No es el oficial:** `database/data/cie10-mx.json` tiene 391 códigos de 3 caracteres armados a mano (jun-2026). El de la DGIS tiene miles de códigos de 4 caracteres (p. ej. K02.1). Falta bajarlo y cargarlo. Tampoco hay catálogo de procedimientos. |
+| Diagnósticos con el catálogo oficial (CIE-10) | 6.4.2, Apéndice A | ✅ *11-oct:* el catálogo oficial de la DGIS (DIAGNOSTICOS_20240416, 14,485 diagnósticos de 3 y 4 caracteres), cargado con `php artisan docfacil:cie10 DIAGNOSTICOS_AAAAMMDD.xlsx` cuando salga uno nuevo. Al buscar salen primero los de la boca. Todavía no hay catálogo de procedimientos. |
 | Usuario y contraseña; **se recomienda** un segundo factor | 6.6.3 | ✅ Contraseña y verificación en dos pasos opcional. El texto de Seguridad ("la NOM-024 lo recomienda") es correcto. |
 | Permisos por rol | 6.6.4 | 🟡 Doctor y asistente (con o sin dinero). No hay perfiles a la medida. |
 | Registros **inalterables** | 6.3.4, 5.9 | ✅ *12-oct:* notas y recetas se bloquean a las 24 h; una nota bloqueada se corrige con «Agregar corrección», que queda ligada a la original sin tocarla y se ve junta en el historial. Odontograma anterior y consentimiento firmado no se editan. |
@@ -32,7 +32,7 @@ Fuente principal: el texto del DOF del 30-nov-2012 (https://dof.gob.mx/nota_deta
 - ✅ CURP y datos mínimos (12-oct).
 - ✅ Bitácora de quién abre y quién cambia (12-oct).
 - ✅ Corrección (addendum) de notas bloqueadas (12-oct).
-- ⏳ **CIE-10 oficial de la DGIS:** hay que bajar el catálogo y cargarlo (necesita el visto bueno de Omar para descargarlo).
+- ✅ **CIE-10 oficial de la DGIS** (11-oct). Se bajó de gobi.salud.gob.mx (catálogos maestros) con el visto bueno de Omar.
 - ⏳ **Respaldo fuera del servidor** y uno al año conservado 5 años (necesita las llaves de Spaces).
 - Pendiente menor: catálogo oficial de municipios (hoy es texto libre).
 
