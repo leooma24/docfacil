@@ -368,6 +368,17 @@ Route::get('/doctor/cobros/{payment}/recibo', function (int $payment) {
     return $pdf->stream("recibo-{$cobro->id}.pdf");
 })->name('cobro.recibo');
 
+// Estado de cuenta del paciente: cada cobro con sus abonos y lo que debe.
+// Solo del consultorio de quien entra (10-oct-2026).
+Route::get('/doctor/pacientes/{patient}/estado-de-cuenta', function (int $patient) {
+    abort_unless(auth()->check(), 403);
+
+    $paciente = \App\Models\Patient::where('clinic_id', auth()->user()->clinic_id)->findOrFail($patient);
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.estado-de-cuenta', \App\Support\EstadoDeCuenta::de($paciente));
+
+    return $pdf->stream('estado-de-cuenta-' . \Illuminate\Support\Str::slug($paciente->first_name . ' ' . $paciente->last_name) . '.pdf');
+})->name('paciente.estado-de-cuenta');
+
 // Recordarle a un paciente su presupuesto pendiente: marca la fecha (un
 // recordatorio al mes, no más) y abre WhatsApp con el mensaje escrito. Nada sale
 // solo: el doctor da enviar desde su propio WhatsApp.

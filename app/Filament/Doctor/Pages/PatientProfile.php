@@ -82,9 +82,73 @@ class PatientProfile extends Page
             ->size('sm');
     }
 
+    /**
+     * "Cobrar $300": todo lo que debe hoy, en un clic. Solo sale si debe, y
+     * el monto está en el botón (como la caja de DaleControl), para que nadie
+     * tenga que abrir la pestaña Cobros a sumar.
+     */
+    private function adeudosDeHoy(): \Illuminate\Support\Collection
+    {
+        return Payment::where('clinic_id', auth()->user()->clinic_id)
+            ->where('patient_id', $this->patient?->id)
+            ->withBalance()
+            ->yaToca()
+            ->get();
+    }
+
     protected function getHeaderActions(): array
     {
+        $debeHoy = fn () => round($this->adeudosDeHoy()->sum(fn (Payment $c) => $c->remaining), 2);
+
         return [
+            \App\Filament\Doctor\Actions\CobrarAbono::make('cobrarSaldo', fn () => $this->adeudosDeHoy())
+                ->label(fn () => 'Cobrar $' . number_format($debeHoy(), 0))
+                ->visible(fn () => $this->patient !== null && $debeHoy() > 0),
+            // Cobrar algo nuevo sin salir de la ficha: el servicio, cuánto
+            // paga hoy y cómo. Antes había que ir a Cobros → Nuevo.
+            \Filament\Actions\Action::make('cobrarHoy')
+                ->label(fn () => $debeHoy() > 0 ? 'Nuevo cobro' : 'Cobrar')
+                ->icon('heroicon-o-plus-circle')
+                ->color(fn () => $debeHoy() > 0 ? 'gray' : 'success')
+                ->visible(fn () => $this->patient !== null)
+                ->modalHeading(fn () => 'Cobrar a ' . $this->patient?->first_name)
+                ->modalSubmitActionLabel('Guardar cobro')
+                ->fillForm(['como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card'])
+                ->form([
+                    \Filament\Forms\Components\Select::make('service_id')
+                        ->label('Servicio')
+                        ->options(fn () => \App\Models\Service::where('clinic_id', auth()->user()->clinic_id)->where('is_active', true)->orderBy('name')->pluck('name', 'id'))
+                        ->searchable()
+                        ->live()
+                        ->afterStateUpdated(function ($state, \Filament\Forms\Set $set) {
+                            $precio = \App\Models\Service::where('clinic_id', auth()->user()->clinic_id)->find($state)?->price;
+                            if ($precio !== null) {
+                                $set('amount', (float) $precio);
+                            }
+                        })
+                        ->helperText('O escriba el concepto si no está en su lista.'),
+                    \Filament\Forms\Components\TextInput::make('concepto')
+                        ->label('Concepto')
+                        ->placeholder('Ej. Resina en 36')
+                        ->maxLength(255)
+                        ->required(fn (\Filament\Forms\Get $get) => blank($get('service_id'))),
+                    \Filament\Forms\Components\TextInput::make('amount')
+                        ->label('Total')
+                        ->numeric()
+                        ->prefix('$')
+                        ->minValue(0.01)
+                        ->live(onBlur: true)
+                        ->required(),
+                    ...\App\Filament\Doctor\Actions\Cobro::camposDePago(),
+                ])
+                ->action(function (array $data) {
+                    $cobro = \App\Filament\Doctor\Actions\Cobro::nuevo($data, $this->patient->id);
+                    \Filament\Notifications\Notification::make()
+                        ->title('Cobro guardado')
+                        ->body($cobro->remaining > 0 ? 'Queda debiendo $' . number_format($cobro->remaining, 2) . '.' : 'Pagado completo.')
+                        ->success()
+                        ->send();
+                }),
             // Ya existían, pero en la prueba del 12-oct nadie los encontró:
             // el plan de pagos vivía dentro de la pestaña Cobros y el
             // consentimiento solo en el menú.
@@ -100,12 +164,25 @@ class PatientProfile extends Page
                 ->color('gray')
                 ->visible(fn () => $this->patient !== null && \App\Filament\Doctor\Resources\ConsentFormResource::canAccess())
                 ->url(fn () => \App\Filament\Doctor\Resources\ConsentFormResource::getUrl('create', ['patient' => $this->patient->id], panel: 'doctor')),
-            \Filament\Actions\Action::make('descargar_expediente')
-                ->label('Descargar expediente (PDF)')
+            // Los dos PDF juntos, para que los botones quepan en una línea.
+            \Filament\Actions\ActionGroup::make([
+                \Filament\Actions\Action::make('descargar_expediente')
+                    ->label('Expediente (PDF)')
+                    ->icon('heroicon-o-document-text')
+                    ->visible(fn () => $this->patient !== null)
+                    ->action(fn () => $this->descargarExpediente()),
+                // Cada cobro con sus abonos y lo que debe (10-oct-2026).
+                \Filament\Actions\Action::make('estado_de_cuenta')
+                    ->label('Estado de cuenta (PDF)')
+                    ->icon('heroicon-o-banknotes')
+                    ->visible(fn () => $this->patient !== null)
+                    ->url(fn () => route('paciente.estado-de-cuenta', $this->patient->id))
+                    ->openUrlInNewTab(),
+            ])
+                ->label('Descargar')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('gray')
-                ->visible(fn () => $this->patient !== null)
-                ->action(fn () => $this->descargarExpediente()),
+                ->button(),
         ];
     }
 

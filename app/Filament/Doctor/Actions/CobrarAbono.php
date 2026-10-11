@@ -2,7 +2,6 @@
 
 namespace App\Filament\Doctor\Actions;
 
-use App\Filament\Doctor\Resources\PaymentResource;
 use App\Models\Payment;
 use Closure;
 use Filament\Actions\Action;
@@ -44,16 +43,16 @@ class CobrarAbono
                     ->numeric()
                     ->prefix('$')
                     ->required()
+                    ->live(onBlur: true)
                     ->minValue(0.01)
                     ->maxValue($debe($arguments)),
-                Forms\Components\Select::make('payment_method')
-                    ->label('Forma de pago')
-                    ->options(PaymentResource::FORMAS_DE_PAGO)
-                    ->required(),
+                // Con "Combinado": una parte en efectivo y el resto con
+                // tarjeta o transferencia, cada una con su recibo.
+                ...Cobro::camposDeForma(fn (Forms\Get $get) => round((float) $get('monto'), 2)),
             ])
             ->action(function (array $data, array $arguments) use ($cobros) {
                 $adeudos = $cobros($arguments);
-                Payment::abonarEnOrden($adeudos, (float) $data['monto'], $data['payment_method'] ?? null);
+                Cobro::abonar($adeudos, (float) $data['monto'], $data);
 
                 $queda = round($adeudos->map->fresh()->sum(fn (Payment $c) => $c->remaining), 2);
                 Notification::make()

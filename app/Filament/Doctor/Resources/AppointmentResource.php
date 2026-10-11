@@ -470,46 +470,37 @@ class AppointmentResource extends Resource
                             ? round($debe, 2)
                             : $record->service?->price,
                         'payment_method' => 'cash',
+                        'como' => 'todo',
+                        'otra_forma' => 'card',
                     ])
+                    // Igual que "Cobrar" de la ficha: paga todo o una parte, y
+                    // en efectivo, con tarjeta o combinado (10-oct-2026).
+                    // Antes siempre cobraba todo de una forma.
                     ->form([
                         Forms\Components\TextInput::make('amount')
-                            ->label('Monto')
+                            ->label('Total')
                             ->numeric()
                             ->prefix('$')
                             ->required()
+                            ->live(onBlur: true)
                             ->minValue(0.01),
-                        Forms\Components\Select::make('payment_method')
-                            ->label('Método de pago')
-                            ->options([
-                                'cash' => 'Efectivo',
-                                'card' => 'Tarjeta',
-                                'transfer' => 'Transferencia',
-                            ])
-                            ->required(),
+                        ...\App\Filament\Doctor\Actions\Cobro::camposDePago(conSinPago: false),
                     ])
                     ->action(function (Appointment $record, array $data) {
                         $pendientes = $record->payments()->whereIn('status', ['pending', 'partial'])->get();
 
-                        if ($pendientes->isNotEmpty()) {
-                            try {
-                                \App\Models\Payment::abonarEnOrden($pendientes, (float) $data['amount'], $data['payment_method']);
-                            } catch (\InvalidArgumentException $e) {
-                                Notification::make()->title('No se registró')->body($e->getMessage())->warning()->send();
+                        try {
+                            if ($pendientes->isNotEmpty()) {
+                                $hoy = \App\Filament\Doctor\Actions\Cobro::pagaHoy($data['como'] ?? 'todo', (float) $data['amount'], (float) ($data['recibido'] ?? 0));
+                                \App\Filament\Doctor\Actions\Cobro::abonar($pendientes, $hoy, $data);
+
+                                return;
                             }
 
-                            return;
+                            \App\Filament\Doctor\Actions\Cobro::nuevo($data + ['service_id' => $record->service_id], $record->patient_id, $record->id);
+                        } catch (\InvalidArgumentException $e) {
+                            Notification::make()->title('No se registró')->body($e->getMessage())->warning()->send();
                         }
-
-                        \App\Models\Payment::create([
-                            'clinic_id' => auth()->user()->clinic_id,
-                            'patient_id' => $record->patient_id,
-                            'appointment_id' => $record->id,
-                            'service_id' => $record->service_id,
-                            'amount' => $data['amount'],
-                            'payment_method' => $data['payment_method'],
-                            'status' => 'paid',
-                            'payment_date' => now()->toDateString(),
-                        ]);
                     }),
                 Tables\Actions\Action::make('complete')
                     ->label('Completar')
