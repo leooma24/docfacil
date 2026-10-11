@@ -274,6 +274,10 @@
                 Siguiente →
             </button>
             @else
+            {{-- Quien viene de otro sistema o de Excel sigue directo a subir lo que ya tiene. --}}
+            <button type="button" wire:click="completeOnboarding(true)" style="padding:0.75rem 1.25rem;margin-right:0.5rem;background:#fff;color:#0f766e;border:1px solid #99f6e4;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer;">
+                Traer mis pacientes de Excel
+            </button>
             <button type="button" wire:click="completeOnboarding" style="padding:0.75rem 2rem;background:linear-gradient(135deg,#0d9488,#0891b2);color:white;border:none;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer;">
                 Empezar a usar DocFácil
             </button>

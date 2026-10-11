@@ -249,9 +249,15 @@ class Appointment extends Model
             ->orderBy('id')
             ->pluck('id');
 
-        $margen = Clinic::withoutGlobalScopes()->find($clinicId)?->minutosEntreCitas() ?? 0;
+        $clinica = Clinic::withoutGlobalScopes()->find($clinicId);
+        $margen = $clinica?->minutosEntreCitas() ?? 0;
 
         foreach ($doctores as $doctorId) {
+            // El que está de vacaciones ese día no recibe citas (11-oct-2026).
+            if ($clinica?->closures()->where('doctor_id', $doctorId)
+                ->whereDate('starts_on', '<=', $inicio->format('Y-m-d'))->whereDate('ends_on', '>=', $inicio->format('Y-m-d'))->exists()) {
+                continue;
+            }
             if (self::traslapes($clinicId, $doctorId, $inicio, $fin, null, $margen)->isEmpty()) {
                 return $doctorId;
             }

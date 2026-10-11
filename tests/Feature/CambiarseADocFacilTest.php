@@ -211,4 +211,19 @@ class CambiarseADocFacilTest extends TestCase
             ->fillForm(['first_name' => 'Ana', 'last_name' => 'Ruiz', 'phone' => '6681234567'])
             ->assertDontSee('¿Es esta persona?');
     }
+
+    // ── Al terminar la configuración inicial ────────────────────
+
+    public function test_al_terminar_la_configuracion_puede_ir_directo_a_traer_sus_datos(): void
+    {
+        $this->clinica->update(['onboarding_status' => 'pending']);
+
+        Livewire::test(\App\Filament\Doctor\Pages\Onboarding::class)
+            ->set('step', 5)
+            ->assertSee('Traer mis pacientes')
+            ->call('completeOnboarding', true)
+            ->assertRedirect(TraerMisDatos::getUrl());
+
+        $this->assertSame('completed', $this->clinica->fresh()->onboarding_status);
+    }
 }

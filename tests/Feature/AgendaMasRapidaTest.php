@@ -131,6 +131,15 @@ class AgendaMasRapidaTest extends TestCase
         $this->assertNull($this->clinica->cierraEse($martes), 'El consultorio sigue abierto');
     }
 
+    public function test_si_piden_cualquier_doctor_no_le_toca_al_que_esta_de_vacaciones(): void
+    {
+        ClinicClosure::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->javier->id, 'starts_on' => '2026-10-13', 'ends_on' => '2026-10-13']);
+
+        $doctor = Appointment::doctorLibreEn($this->clinica->id, \Carbon\Carbon::parse('2026-10-13 10:00'), \Carbon\Carbon::parse('2026-10-13 10:30'));
+
+        $this->assertSame($this->paola->id, $doctor);
+    }
+
     public function test_en_configuracion_se_elige_de_quien_son_los_dias_cerrados(): void
     {
         Livewire::test(ClinicSettings::class)

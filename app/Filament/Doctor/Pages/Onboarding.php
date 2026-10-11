@@ -231,7 +231,8 @@ class Onboarding extends Page implements HasForms
         return route('public.booking.show', ['slug' => $clinic->slug]);
     }
 
-    public function completeOnboarding(): void
+    /** @param bool $traerDatos  «Terminar y traer mis pacientes»: va directo a Traer sus datos. */
+    public function completeOnboarding(bool $traerDatos = false): void
     {
         $user = auth()->user();
         $clinic = $user->clinic;
@@ -322,7 +323,7 @@ class Onboarding extends Page implements HasForms
             ->success()
             ->send();
 
-        $this->redirect(route('filament.doctor.pages.dashboard'));
+        $this->redirect($traerDatos ? TraerMisDatos::getUrl() : route('filament.doctor.pages.dashboard'));
     }
 
     public function skipOnboarding(): void
