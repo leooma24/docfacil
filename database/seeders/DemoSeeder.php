@@ -836,6 +836,23 @@ class DemoSeeder extends Seeder
             'service_id' => $servicio('Ortodoncia (mensualidad)')?->id, 'description' => 'Ortodoncia (brackets)', 'total' => 18000, 'down_payment' => 3000,
             'installments_count' => 15, 'first_due_date' => now()->subDays(40)->toDateString()], 'cash');
         $orto->payments()->where('installment_number', 1)->first()?->registrarAbono(1000, 'transfer');
+
+        // Lo del plan de los días 1 a 10 (10-oct-2026), para enseñarlo en la demo.
+        // El presupuesto de Gabriela, por etapas y con un opcional.
+        $limpieza->update(['descuento_porcentaje' => 5]);
+        $limpieza->items()->where('description', 'Limpieza dental')->update(['etapa' => '1. Prevención']);
+        $limpieza->items()->where('description', 'Resina')->update(['etapa' => '2. Restauración']);
+        $limpieza->items()->create(['description' => 'Blanqueamiento dental', 'quantity' => 1, 'unit_price' => 3500, 'subtotal' => 3500,
+            'etapa' => '3. Estética', 'opcional' => true, 'sort_order' => 9]);
+        $limpieza->recalculateTotal();
+        // Un anticipo que queda a su favor.
+        Payment::create(['clinic_id' => $clinic->id, 'patient_id' => $patients[0]->id, 'notes' => 'Anticipo', 'es_anticipo' => true,
+            'amount' => 1500, 'amount_paid' => 1500, 'status' => 'paid', 'payment_method' => 'transfer', 'payment_date' => now()->subDays(2)->toDateString()]);
+        // La comisión de la segunda doctora.
+        Doctor::where('clinic_id', $clinic->id)->where('id', '!=', $doctor->id)->first()?->update(['comision_porcentaje' => 30]);
+        // Lo que dijo Fernando de su endodoncia.
+        \App\Models\Encuesta::create(['clinic_id' => $clinic->id, 'patient_id' => $fernando->id, 'appointment_id' => $endo->id, 'doctor_id' => $doctor->id,
+            'estrellas' => 5, 'comentario' => 'Me explicaron todo y no me dolió nada.']);
     }
 }
 
