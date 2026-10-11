@@ -31,6 +31,8 @@ class Clinic extends Model
         'stripe_id', 'pm_type', 'pm_last_four',
         'billing_cycle', 'payment_method',
         'plan_started_at', 'plan_ends_at', 'auto_renew',
+        // El dueño pide la verificación en dos pasos a todo el equipo.
+        'exigir_dos_pasos',
     ];
 
     // Nota: sold_by_user_id NO está en $fillable a propósito.
@@ -56,6 +58,7 @@ class Clinic extends Model
             'is_beta' => 'boolean',
             'is_founder' => 'boolean',
             'recordatorios_automaticos' => 'boolean',
+            'exigir_dos_pasos' => 'boolean',
             'show_as_case_study' => 'boolean',
             'testimonio_permiso_at' => 'datetime',
             'testimonio_pospuesto_hasta' => 'datetime',

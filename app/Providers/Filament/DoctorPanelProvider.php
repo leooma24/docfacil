@@ -121,6 +121,7 @@ class DoctorPanelProvider extends PanelProvider
                 Authenticate::class,
                 \App\Http\Middleware\VerifyClinicPlan::class,
                 \App\Http\Middleware\DemoMode::class,
+                \App\Http\Middleware\ExigirDosPasos::class,
             ], isPersistent: true);
     }
 }

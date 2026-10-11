@@ -13,6 +13,8 @@ class Doctor extends Model
     use BelongsToClinic;
     protected $fillable = [
         'user_id', 'clinic_id', 'specialty', 'license_number',
+        // Su comisión (día 8 del plan): % general y montos fijos por servicio.
+        'comision_porcentaje', 'comision_montos',
         // Van en la receta y en la página pública (reglamento de atención
         // médica, arts. 64 y 65; Ley General de Salud, art. 83).
         'institucion_titulo', 'cedula_especialidad',
@@ -22,6 +24,8 @@ class Doctor extends Model
     protected function casts(): array
     {
         return [
+            'comision_porcentaje' => 'decimal:2',
+            'comision_montos' => 'array',
             'working_hours' => 'array',
             'is_active' => 'boolean',
         ];

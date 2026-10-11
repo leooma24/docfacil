@@ -27,6 +27,28 @@ class Security extends Page
     public ?string $qrCodeSvg = null;
     public string $verificationCode = '';
 
+    /**
+     * El dueño pide la verificación en dos pasos a todo el equipo (día 8 del
+     * plan, 10-oct-2026). Quien no la tenga, al entrar llega aquí a activarla.
+     */
+    public function exigirATodos(bool $si): void
+    {
+        $usuario = auth()->user();
+        if (! $usuario->esDuenoDelConsultorio()) {
+            return;
+        }
+        if ($si && ! $usuario->hasTwoFactorEnabled()) {
+            \Filament\Notifications\Notification::make()->title('Primero actívela usted')->body('Así no se queda fuera de su propio consultorio.')->warning()->send();
+
+            return;
+        }
+
+        $usuario->clinic->update(['exigir_dos_pasos' => $si]);
+        \Filament\Notifications\Notification::make()
+            ->title($si ? 'Ahora todo su equipo la necesita para entrar' : 'Ya no se le pide a todo el equipo')
+            ->success()->send();
+    }
+
     public function mount(): void
     {
         // Si ya tiene 2FA habilitado, no generar secret nuevo

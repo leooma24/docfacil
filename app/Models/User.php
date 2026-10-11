@@ -190,6 +190,20 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      * Si ve el dinero del consultorio: corte, gastos e ingresos. Los doctores
      * siempre; la asistente solo si el doctor se lo dio al invitarla.
      */
+    /**
+     * El dueño del consultorio: el primer doctor que se registró. Los demás
+     * llegaron por invitación. Ve las comisiones de todos y la bitácora de
+     * todo el consultorio (día 8 del plan, 10-oct-2026).
+     */
+    public function esDuenoDelConsultorio(): bool
+    {
+        if ($this->role !== 'doctor' || ! $this->clinic_id) {
+            return false;
+        }
+
+        return $this->id === (int) static::where('clinic_id', $this->clinic_id)->where('role', 'doctor')->min('id');
+    }
+
     public function veElDinero(): bool
     {
         return ! $this->esAsistente() || (bool) $this->ve_dinero;

@@ -185,6 +185,9 @@ class Patient extends Model
             Prescription::class => 'una receta',
             ConsentForm::class => 'un consentimiento',
             Odontogram::class => 'un odontograma',
+            Appointment::class => 'una cita',
+            Payment::class => 'un cobro',
+            Expense::class => 'un gasto',
         ][$a->subject_type] ?? 'un registro';
         $verbo = ['created' => 'Creó', 'updated' => 'Cambió', 'deleted' => 'Borró'][$a->event];
 

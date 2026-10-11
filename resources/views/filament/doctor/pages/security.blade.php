@@ -1,4 +1,10 @@
 <x-filament-panels::page>
+    @php $usuario = auth()->user(); $exige = (bool) $usuario->clinic?->exigir_dos_pasos; @endphp
+    @if($exige && ! $usuario->hasTwoFactorEnabled())
+        <div style="padding:0.85rem 1rem;border-radius:12px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;font-weight:600;">
+            Su consultorio pide la verificación en dos pasos para entrar. Actívela aquí abajo; toma un minuto.
+        </div>
+    @endif
     @if(auth()->user()->hasTwoFactorEnabled())
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-6">
             <div class="flex items-start gap-4">
@@ -82,6 +88,18 @@
                     </button>
                 </div>
             </div>
+        </div>
+    @endif
+    @if($usuario->esDuenoDelConsultorio())
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <div style="flex:1;min-width:240px;">
+                <div style="font-weight:800;color:#0f172a;">Pedírsela a todo su equipo</div>
+                <div style="font-size:0.85rem;color:#64748b;">Quien no la tenga activa, al entrar tendrá que activarla antes de ver pacientes. La NOM-024 la recomienda.</div>
+            </div>
+            <button type="button" wire:click="exigirATodos({{ $exige ? 'false' : 'true' }})"
+                style="flex:none;padding:0.5rem 1rem;border-radius:8px;font-weight:700;{{ $exige ? 'background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;' : 'background:#0f766e;color:#fff;' }}">
+                {{ $exige ? 'Dejar de pedirla' : 'Pedirla a todos' }}
+            </button>
         </div>
     @endif
 </x-filament-panels::page>
