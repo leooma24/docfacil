@@ -65,17 +65,22 @@ class Cobro
                 ->required(fn (Forms\Get $get) => $get('como') === 'parte'),
             ...self::camposDeForma(fn (Forms\Get $get) => self::pagaHoy($get('como'), $total($get), (float) $get('recibido')),
                 fn (Forms\Get $get) => $get('como') !== 'nada'),
+            // El resumen, como un recibo: total, lo que pone su saldo a favor,
+            // lo que paga hoy y lo que queda.
             Forms\Components\Placeholder::make('resumen')
-                ->label('')
+                ->hiddenLabel()
+                ->columnSpanFull()
                 ->content(function (Forms\Get $get) use ($total) {
                     $t = $total($get);
                     $hoy = self::pagaHoy($get('como'), $t, (float) $get('recibido'));
-
                     $saldo = round((float) $get('amount') - $t, 2);
 
-                    return 'Total $' . number_format((float) $get('amount'), 2)
-                        . ($saldo > 0 ? ' · con su saldo a favor $' . number_format($saldo, 2) : '')
-                        . ' · paga hoy $' . number_format($hoy, 2) . ' · queda $' . number_format(max(0, $t - $hoy), 2);
+                    return new \Illuminate\Support\HtmlString(self::recibo([
+                        ['Total', (float) $get('amount'), '#0f172a'],
+                        ...($saldo > 0 ? [['Con su saldo a favor', -$saldo, '#047857']] : []),
+                        ['Paga hoy', $hoy, '#0f766e'],
+                        ['Queda debiendo', max(0, $t - $hoy), max(0, $t - $hoy) > 0 ? '#b45309' : '#64748b'],
+                    ]));
                 }),
         ];
     }
@@ -115,6 +120,16 @@ class Cobro
                 ->visible(fn (Forms\Get $get) => $visible($get) && $get('payment_method') === self::COMBINADO)
                 ->required(fn (Forms\Get $get) => $visible($get) && $get('payment_method') === self::COMBINADO),
         ];
+    }
+
+    /** @param list<array{0: string, 1: float, 2: string}> $renglones */
+    public static function recibo(array $renglones): string
+    {
+        $celdas = collect($renglones)->map(fn ($r) => '<td style="padding:10px 12px;text-align:center;">'
+            . '<div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.03em;">' . e($r[0]) . '</div>'
+            . '<div style="font-size:20px;font-weight:800;color:' . $r[2] . ';margin-top:2px;">' . ($r[1] < 0 ? '−' : '') . '$' . number_format(abs($r[1]), 2) . '</div></td>')->implode('');
+
+        return '<table style="width:100%;border-collapse:separate;border-spacing:0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;"><tr>' . $celdas . '</tr></table>';
     }
 
     public static function pagaHoy(?string $como, float $total, float $recibido): float

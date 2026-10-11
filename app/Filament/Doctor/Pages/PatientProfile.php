@@ -113,7 +113,13 @@ class PatientProfile extends Page
                 ->icon('heroicon-o-plus-circle')
                 ->color(fn () => $debeHoy() > 0 ? 'gray' : 'success')
                 ->visible(fn () => $this->patient !== null)
-                ->modalHeading(fn () => 'Cobrar a ' . $this->patient?->first_name)
+                ->modalHeading(fn () => 'Cobrar a ' . trim($this->patient?->first_name . ' ' . $this->patient?->last_name))
+                ->modalDescription(fn () => $debeHoy() > 0
+                    ? 'Debe $' . number_format($debeHoy(), 2) . ' de antes; eso se cobra con «Cobrar $' . number_format($faltaHoy(), 0) . '».'
+                    : ($this->patient->saldoAFavor() > 0 ? null : 'No debe nada.'))
+                ->modalIcon('heroicon-o-banknotes')
+                ->modalIconColor('success')
+                ->modalWidth('2xl')
                 ->modalSubmitActionLabel('Guardar cobro')
                 ->fillForm(['tipo' => 'cobro', 'como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card'])
                 ->form(fn () => [
@@ -126,14 +132,15 @@ class PatientProfile extends Page
                         ->required(),
                     \Filament\Forms\Components\Placeholder::make('saldo_a_favor')
                         ->label('')
-                        ->content(fn () => 'Tiene $' . number_format($this->patient->saldoAFavor(), 2) . ' a favor: se descuentan solos de este cobro.')
+                        ->content(fn () => new \Illuminate\Support\HtmlString('<div style="padding:10px 12px;border-radius:8px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-weight:600;">Tiene $' . number_format($this->patient->saldoAFavor(), 2) . ' a favor: se descuentan solos de este cobro.</div>'))
                         ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'cobro' && $this->patient->saldoAFavor() > 0),
                     \Filament\Forms\Components\Placeholder::make('que_es_anticipo')
                         ->label('')
-                        ->content(fn () => $debeHoy() > 0
+                        ->content(fn () => new \Illuminate\Support\HtmlString('<div style="padding:10px 12px;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-weight:600;">' . e($debeHoy() > 0
                             ? 'Primero se paga lo que debe ($' . number_format($debeHoy(), 2) . '); lo demás queda a su favor.'
-                            : 'Entra hoy a la caja y queda a su favor; se descuenta solo en su siguiente cobro.')
+                            : 'Entra hoy a la caja y queda a su favor; se descuenta solo en su siguiente cobro.') . '</div>'))
                         ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo'),
+                    \Filament\Forms\Components\Grid::make(2)->schema([
                     \Filament\Forms\Components\Select::make('service_id')
                         ->label('Servicio')
                         ->options(fn () => \App\Models\Service::where('clinic_id', auth()->user()->clinic_id)->where('is_active', true)->orderBy('name')->pluck('name', 'id'))
@@ -153,8 +160,10 @@ class PatientProfile extends Page
                         ->maxLength(255)
                         ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo')
                         ->required(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo' && blank($get('service_id'))),
+                    ]),
                     \Filament\Forms\Components\TextInput::make('amount')
                         ->label(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo' ? 'Monto del anticipo' : 'Total')
+                        ->extraInputAttributes(['style' => 'font-size:1.35rem;font-weight:800;'])
                         ->numeric()
                         ->prefix('$')
                         ->minValue(0.01)

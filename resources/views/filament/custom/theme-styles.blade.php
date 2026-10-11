@@ -416,9 +416,12 @@
         z-index: 0;
     }
 
+    /* Sin z-index propio (11-oct-2026): con z-index 1 el contenido quedaba
+       en su propia capa y las ventanas emergentes no podían pasar sobre la
+       barra de arriba, que les tapaba el título. Así sigue arriba del fondo
+       (va después en la página) sin encerrar a las ventanas. */
     .fi-main > * {
         position: relative;
-        z-index: 1;
     }
 
     /* Main content padding */

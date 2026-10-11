@@ -34,6 +34,11 @@ class CobrarAbono
             ->icon('heroicon-o-banknotes')
             ->color('success')
             ->modalHeading('Registrar pago')
+            ->modalIcon('heroicon-o-banknotes')
+            ->modalIconColor('success')
+            ->modalDescription(fn (array $arguments) => 'Debe $' . number_format($debe($arguments), 2)
+                . ($aFavor($arguments) > 0 ? ' · $' . number_format($aFavor($arguments), 2) . ' se pagan con su saldo a favor' : '') . '.')
+            ->modalWidth('lg')
             ->modalSubmitActionLabel('Guardar pago')
             ->fillForm(fn (array $arguments) => [
                 'monto' => $falta($arguments),
