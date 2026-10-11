@@ -138,7 +138,7 @@ class SusDatosYElLimiteTest extends TestCase
 
         $this->get('/doctor/register')->assertOk()
             ->assertSee('15 días con todo')
-            ->assertSee('hasta 30 pacientes')
+            ->assertSee('hasta 50 pacientes')
             ->assertSee('IVA incluido')
             ->assertSee('sin límite de pacientes');
     }

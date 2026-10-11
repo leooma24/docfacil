@@ -139,7 +139,7 @@ class MaterialesDeVentaHonestosTest extends TestCase
         $this->assertContains('Presupuestos por etapas que el paciente firma en línea', $basico['features']);
         $this->assertStringContainsString('IVA incluido', $basico['subtitle']);
         $this->assertStringContainsString('pacientes ilimitados', $basico['limits']);
-        $this->assertStringContainsString('30 pacientes', \App\Support\LoQueTraeCadaPlan::plan('free')['limits']);
+        $this->assertStringContainsString('50 pacientes', \App\Support\LoQueTraeCadaPlan::plan('free')['limits']);
     }
 
     /**

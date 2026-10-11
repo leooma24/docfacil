@@ -67,7 +67,7 @@
             {
                 "@@type": "Question",
                 "name": "¿Cuánto cuesta DocFácil?",
-                "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 30 pacientes, 10 citas al mes). Básico $499 MXN al mes, Pro $999 y Clínica $1,999. Si paga el año, le sale en 10 meses. 15 días con todo, sin tarjeta, y garantía de 30 días sobre su primer pago." }
+                "acceptedAnswer": { "@@type": "Answer", "text": "Plan Free de por vida (1 doctor, 50 pacientes, 60 citas al mes). Básico $499 MXN al mes, Pro $999 y Clínica $1,999. Si paga el año, le sale en 10 meses. 15 días con todo, sin tarjeta, y garantía de 30 días sobre su primer pago." }
             },
             {
                 "@@type": "Question",
@@ -190,7 +190,7 @@
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>WhatsApp a 1 clic</strong>: abre su propio WhatsApp con el mensaje ya escrito, sin pagar mensajes a Meta</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Hecho en México para consultorios mexicanos</strong>: pensado para la NOM-004, en español de México, precios en pesos</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Soporte con el fundador</strong>: Omar Lerma responde por WhatsApp</span></li>
-                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Plan Free de por vida</strong>: 1 doctor, 30 pacientes y 10 citas al mes, sin tarjeta</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Plan Free de por vida</strong>: 1 doctor, 50 pacientes y 60 citas al mes, sin tarjeta</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Garantía</strong>: 30 días de garantía sobre su primer pago</span></li>
                         <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5">✓</span><span><strong>Se instala como app</strong> en el celular (iPhone o Android) desde el navegador</span></li>
                     </ul>

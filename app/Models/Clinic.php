@@ -499,7 +499,9 @@ class Clinic extends Model
         ]);
 
         return match ($plan) {
-            'free' => [],
+            // Lo básico del día a día para quien va empezando (11-oct-2026):
+            // odontograma y recetas en PDF; cobros y agenda ya venían.
+            'free' => ['pdf_prescriptions', 'odontogram'],
             'basico' => $basico,
             'profesional' => $profesional,
             'clinica' => $clinica,
@@ -743,8 +745,9 @@ class Clinic extends Model
     }
 
     public const LIMITE_PACIENTES = [
-        // 11-oct-2026: Free de 15 a 30 y Básico sin tope (ver docs de precios).
-        'free' => 30,
+        // 11-oct-2026: Free de 15 a 50 (para el dentista que va empezando) y
+        // Básico sin tope.
+        'free' => 50,
         'basico' => null,
         'profesional' => null,
         'clinica' => null,
@@ -806,7 +809,8 @@ class Clinic extends Model
 
     /** Citas al mes que incluye cada plan. null = sin tope. */
     public const LIMITE_CITAS_DEL_MES = [
-        'free' => 10,
+        // 11-oct-2026: de 10 a 60, unas 3 al día (10 no alcanzaban ni para la semana).
+        'free' => 60,
         'basico' => null,
         'profesional' => null,
         'clinica' => null,

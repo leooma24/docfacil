@@ -49,7 +49,7 @@ class FreeQueSiFuncionaTest extends TestCase
     {
         for ($i = 0; $i < $cuantas; $i++) {
             Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
-                'starts_at' => now()->startOfMonth()->addDays($i)->setTime(10, 0), 'ends_at' => now()->startOfMonth()->addDays($i)->setTime(10, 30),
+                'starts_at' => now()->startOfMonth()->addDays($i % 28)->setTime(8 + intdiv($i, 28), 0), 'ends_at' => now()->startOfMonth()->addDays($i % 28)->setTime(8 + intdiv($i, 28), 30),
                 'status' => 'completed']);
         }
     }
@@ -72,11 +72,11 @@ class FreeQueSiFuncionaTest extends TestCase
 
     // ── Sus límites sí se cumplen ────────────────────────────────
 
-    public function test_free_tiene_diez_citas_al_mes(): void
+    public function test_free_tiene_sesenta_citas_al_mes(): void
     {
-        $this->assertSame(10, $this->clinica->limiteDeCitasDelMes());
+        $this->assertSame(60, $this->clinica->limiteDeCitasDelMes());
 
-        $this->citas(9);
+        $this->citas(59);
         $this->assertTrue($this->clinica->puedeAgendar());
 
         $this->citas(1);
@@ -84,9 +84,9 @@ class FreeQueSiFuncionaTest extends TestCase
         $this->get('/doctor/citas/create')->assertRedirect(route('filament.doctor.pages.actualizar-plan'));
     }
 
-    public function test_la_cita_once_no_se_crea_por_ningun_camino(): void
+    public function test_la_cita_sesenta_y_uno_no_se_crea_por_ningun_camino(): void
     {
-        $this->citas(10);
+        $this->citas(60);
 
         $this->expectException(LimiteDeCitasAlcanzado::class);
         $this->citas(1);
@@ -106,15 +106,15 @@ class FreeQueSiFuncionaTest extends TestCase
 
         // El que ya venció sí cae al tope de Free.
         $this->clinica->forceFill(['plan' => 'basico', 'plan_ends_at' => now()->subDay()])->save();
-        $this->assertSame(10, $this->clinica->fresh()->limiteDeCitasDelMes());
+        $this->assertSame(60, $this->clinica->fresh()->limiteDeCitasDelMes());
     }
 
     public function test_las_citas_del_mes_pasado_no_cuentan(): void
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 60; $i++) {
             Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
-                'starts_at' => now()->subMonthNoOverflow()->startOfMonth()->addDays($i)->setTime(10, 0),
-                'ends_at' => now()->subMonthNoOverflow()->startOfMonth()->addDays($i)->setTime(10, 30), 'status' => 'completed']);
+                'starts_at' => now()->subMonthNoOverflow()->startOfMonth()->addDays($i % 28)->setTime(8 + intdiv($i, 28), 0),
+                'ends_at' => now()->subMonthNoOverflow()->startOfMonth()->addDays($i % 28)->setTime(8 + intdiv($i, 28), 30), 'status' => 'completed']);
         }
 
         $this->assertTrue($this->clinica->puedeAgendar());
@@ -122,7 +122,7 @@ class FreeQueSiFuncionaTest extends TestCase
 
     public function test_al_llegar_al_tope_el_formulario_avisa_en_vez_de_tronar(): void
     {
-        $this->citas(10);
+        $this->citas(60);
 
         \Livewire\Livewire::test(\App\Filament\Doctor\Resources\AppointmentResource\Pages\CreateAppointment::class)
             ->fillForm(['patient_id' => $this->ana->id, 'doctor_id' => $this->doctor->id,
@@ -130,18 +130,18 @@ class FreeQueSiFuncionaTest extends TestCase
             ->call('create')
             ->assertNotified('Llegaste al tope de tu plan');
 
-        $this->assertSame(10, Appointment::count());
+        $this->assertSame(60, Appointment::count());
     }
 
     public function test_la_consulta_sin_cita_tambien_avisa(): void
     {
-        $this->citas(10);
+        $this->citas(60);
 
         \Livewire\Livewire::withQueryParams(['patient' => $this->ana->id])
             ->test(\App\Filament\Doctor\Pages\Consultation::class)
             ->assertNotified('Llegaste al tope de tu plan');
 
-        $this->assertSame(10, Appointment::count());
+        $this->assertSame(60, Appointment::count());
     }
 
     public function test_free_tiene_un_doctor(): void

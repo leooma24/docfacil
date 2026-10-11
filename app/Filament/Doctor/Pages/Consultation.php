@@ -465,7 +465,7 @@ class Consultation extends Page implements HasForms
             return;
         }
 
-        // Free con sus 10 citas del mes ya usadas: se le dice, sin pantalla de error.
+        // Free con sus citas del mes ya usadas: se le dice, sin pantalla de error.
         $clinica = auth()->user()->clinic;
         if ($clinica && ! $clinica->puedeAgendar()) {
             $clinica->avisarTopeDeCitas();

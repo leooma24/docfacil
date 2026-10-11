@@ -53,12 +53,12 @@ class LimiteDePacientesTest extends TestCase
 
     // ── El tope de cada plan ─────────────────────────────────────
 
-    // Precios del 11-oct-2026: el Free sube a 30 (los demás gratis dan unos
-    // 30) y el Básico ya no tiene tope: 200 era el más bajo del mercado y le
+    // Precios del 11-oct-2026: el Free sube a 50, para el dentista que va
+    // empezando, y el Básico ya no tiene tope: 200 era el más bajo del mercado y le
     // estorbaba al dentista que llega de otro sistema con sus 500 pacientes.
-    public function test_free_llega_a_treinta(): void
+    public function test_free_llega_a_cincuenta(): void
     {
-        $this->assertSame(30, $this->clinica('free')->limitePacientes());
+        $this->assertSame(50, $this->clinica('free')->limitePacientes());
     }
 
     public function test_basico_no_tiene_tope(): void
@@ -86,7 +86,7 @@ class LimiteDePacientesTest extends TestCase
     {
         $vencido = $this->clinica('profesional', ['plan_ends_at' => now()->subDay()]);
 
-        $this->assertSame(30, $vencido->limitePacientes());
+        $this->assertSame(50, $vencido->limitePacientes());
     }
 
     // ── La cuenta ────────────────────────────────────────────────
@@ -96,14 +96,14 @@ class LimiteDePacientesTest extends TestCase
         $clinica = $this->clinica('free');
         $this->llenar($clinica, 10);
 
-        $this->assertSame(20, $clinica->pacientesRestantes());
+        $this->assertSame(40, $clinica->pacientesRestantes());
         $this->assertTrue($clinica->puedeAgregarPacientes());
     }
 
     public function test_al_llegar_al_tope_ya_no_puede(): void
     {
         $clinica = $this->clinica('free');
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         $this->assertSame(0, $clinica->pacientesRestantes());
         $this->assertFalse($clinica->puedeAgregarPacientes());
@@ -111,25 +111,25 @@ class LimiteDePacientesTest extends TestCase
 
     public function test_el_que_ya_venia_pasado_no_pierde_pacientes(): void
     {
-        // Un consultorio que capturó 40 durante la prueba y no pagó conserva
-        // los 40: son expedientes clínicos suyos. Nada más ya no agrega.
+        // Un consultorio que capturó 60 durante la prueba y no pagó conserva
+        // los 60: son expedientes clínicos suyos. Nada más ya no agrega.
         $clinica = $this->clinica('free', ['trial_ends_at' => now()->addDay()]);
-        $this->llenar($clinica, 40);
+        $this->llenar($clinica, 60);
 
         $clinica->update(['trial_ends_at' => now()->subDay()]);
         $clinica->refresh();
 
-        $this->assertSame(40, Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count());
+        $this->assertSame(60, Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count());
         $this->assertSame(0, $clinica->pacientesRestantes(), 'No puede quedar en negativo.');
         $this->assertFalse($clinica->puedeAgregarPacientes());
     }
 
     // ── El candado del modelo ────────────────────────────────────
 
-    public function test_el_paciente_treinta_y_uno_no_se_crea(): void
+    public function test_el_paciente_cincuenta_y_uno_no_se_crea(): void
     {
         $clinica = $this->clinica('free');
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         $this->expectException(LimiteDePacientesAlcanzado::class);
 
@@ -146,7 +146,7 @@ class LimiteDePacientesTest extends TestCase
         $clinica = $this->clinica('free');
         $mensaje = $clinica->mensajeDeTopeDePacientes();
 
-        $this->assertStringContainsString('30', $mensaje);
+        $this->assertStringContainsString('50', $mensaje);
         $this->assertStringContainsString('Free', $mensaje);
         // Que no crea que va a perder los que ya tiene.
         $this->assertStringContainsString('se quedan', $mensaje);
@@ -156,7 +156,7 @@ class LimiteDePacientesTest extends TestCase
     {
         // El tope es para agregar, no para trabajar con los que ya tiene.
         $clinica = $this->clinica('free');
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         $paciente = Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->first();
         $paciente->update(['first_name' => 'Corregido']);
@@ -167,7 +167,7 @@ class LimiteDePacientesTest extends TestCase
     public function test_un_consultorio_sin_tope_agrega_sin_problema(): void
     {
         $clinica = $this->clinica('profesional');
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         $this->assertNull($clinica->pacientesRestantes());
         $this->assertTrue($clinica->puedeAgregarPacientes());
@@ -176,7 +176,7 @@ class LimiteDePacientesTest extends TestCase
     public function test_el_tope_de_un_consultorio_no_afecta_a_otro(): void
     {
         $lleno = $this->clinica('free');
-        $this->llenar($lleno, 30);
+        $this->llenar($lleno, 50);
 
         $otro = $this->clinica('free');
 
@@ -189,7 +189,7 @@ class LimiteDePacientesTest extends TestCase
     {
         $clinica = $this->clinica('free', ['trial_ends_at' => now()->subDay()]);
         $clinica->forceFill(['slug' => 'consultorio-' . $clinica->id])->save();
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         // La liga del check-in va firmada desde el QR del consultorio, así que
         // la prueba entra por donde entra el paciente de verdad.
@@ -204,7 +204,7 @@ class LimiteDePacientesTest extends TestCase
 
         // Desde el 11-oct-2026 solo el Free tiene tope (y no trae check-in con
         // QR): lo que importa es que no entre un paciente de más por ahí.
-        $this->assertSame(30, Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count());
+        $this->assertSame(50, Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count());
     }
 
     public function test_un_consultorio_topado_no_registra_pacientes_por_la_agenda_publica(): void
@@ -228,7 +228,7 @@ class LimiteDePacientesTest extends TestCase
         ]);
         Doctor::create(['user_id' => $usuario->id, 'clinic_id' => $clinica->id, 'specialty' => 'Odontología']);
 
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
         $clinica->update(['plan' => 'free', 'plan_ends_at' => null]);
 
         $this->post("/clinica/{$clinica->slug}/agendar", [
@@ -240,7 +240,7 @@ class LimiteDePacientesTest extends TestCase
         ]);
 
         $this->assertSame(
-            30,
+            50,
             Patient::withoutGlobalScopes()->where('clinic_id', $clinica->id)->count(),
             'No debe entrar un paciente de más por la agenda pública.'
         );
@@ -249,7 +249,7 @@ class LimiteDePacientesTest extends TestCase
     public function test_el_guardia_de_la_agenda_publica_reconoce_el_tope(): void
     {
         $clinica = $this->clinica('free', ['trial_ends_at' => now()->subDay()]);
-        $this->llenar($clinica, 30);
+        $this->llenar($clinica, 50);
 
         $this->assertFalse($clinica->puedeAgregarPacientes());
     }

@@ -146,7 +146,7 @@ class BlogController extends Controller
                     ['type' => 'h2', 'text' => '¿En la nube o instalado en una computadora?'],
                     ['type' => 'p', 'text' => 'Un sistema instalado vive en una computadora: si esa computadora falla y no hay respaldo, la información se puede perder. Un sistema en la nube funciona desde cualquier dispositivo con internet y se actualiza solo. En cualquiera de los dos, pregunte cada cuánto se respalda la información y dónde se guarda.'],
                     ['type' => 'h2', 'text' => '¿Cuánto cuesta?'],
-                    ['type' => 'p', 'text' => 'Hay planes gratuitos con límites y planes de paga que cobran por mes o por año. Más que el precio, compare qué incluye cada plan, cuántos doctores y pacientes permite, y si puede cancelar cuando quiera. Como referencia, en DocFácil el plan Free cuesta $0 para siempre (1 doctor, 15 pacientes y 10 citas al mes), el Básico $499 al mes, el Pro $999 y el Clínica $1,999.'],
+                    ['type' => 'p', 'text' => 'Hay planes gratuitos con límites y planes de paga que cobran por mes o por año. Más que el precio, compare qué incluye cada plan, cuántos doctores y pacientes permite, y si puede cancelar cuando quiera. Como referencia, en DocFácil el plan Free cuesta $0 para siempre (1 doctor, 15 pacientes y 60 citas al mes), el Básico $499 al mes, el Pro $999 y el Clínica $1,999.'],
                     ['type' => 'h2', 'text' => 'Errores comunes'],
                     ['type' => 'p', 'text' => '1) Pagar por funciones que nunca va a usar. 2) No revisar que tenga soporte en español. 3) No probarlo antes de pagar. 4) Elegir el más caro pensando que es el mejor.'],
                     ['type' => 'h2', 'text' => '¿Qué preguntar antes de contratar?'],

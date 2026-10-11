@@ -87,7 +87,8 @@ class TrialFeaturesTest extends TestCase
     {
         // El regalo de la prueba es permiso en tiempo real, no cambia lo que
         // el plan Free dice que incluye.
-        $this->assertSame([], Clinic::featuresForPlan('free'));
+        // Desde el 11-oct-2026 el Free trae odontograma y recetas PDF.
+        $this->assertSame(['pdf_prescriptions', 'odontogram'], Clinic::featuresForPlan('free'));
     }
 
     public function test_un_plan_pagado_vencido_no_revive_como_prueba(): void

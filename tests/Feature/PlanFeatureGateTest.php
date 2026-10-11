@@ -32,8 +32,9 @@ class PlanFeatureGateTest extends TestCase
         $clinic = $this->clinic('free');
 
         $paidFeatures = [
-            'pdf_prescriptions', 'whatsapp_reminders', 'whatsapp_payment', 'qr_checkin',
-            'odontogram', 'consent_forms', 'patient_portal', 'multi_doctor',
+            // Odontograma y recetas PDF van en Free desde el 11-oct-2026.
+            'whatsapp_reminders', 'whatsapp_payment', 'qr_checkin',
+            'consent_forms', 'patient_portal', 'multi_doctor',
             'advanced_reports', 'smart_alerts', 'unlimited_doctors', 'multi_branch',
         ];
 
