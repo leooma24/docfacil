@@ -185,7 +185,7 @@
             </td>
         @endforeach
     </tr></table>
-    <p class="pie-foto">Precios en pesos mexicanos. Pagando anual son 10 meses. 15 días de prueba con todo, sin tarjeta, y garantía de 30 días en su primer pago.</p>
+    <p class="pie-foto">Precios en pesos mexicanos, con IVA incluido. Pagando anual son 10 meses. 15 días de prueba con todo, sin tarjeta, y garantía de 30 días en su primer pago.</p>
 
     <h2>Lo que siempre preguntan</h2>
     <table class="faq apila">
