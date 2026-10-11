@@ -27,7 +27,11 @@ class EditPayment extends EditRecord
                     $this->record->refresh();
                     $this->refreshFormData(['amount_paid', 'status']);
                 }),
-            Actions\DeleteAction::make(),
+            // Un cobro que ya tiene dinero no se borra: el dinero desaparecía
+            // de la caja del día sin rastro. Se le regresa ("Se le regresó el
+            // dinero"), y eso sí queda en la caja (10-oct-2026).
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $this->record->receipts()->exists()),
         ];
     }
 

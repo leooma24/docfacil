@@ -288,6 +288,25 @@ class Patient extends Model
         return (bool) $this->no_quiere_whatsapp || (bool) $this->responsable?->no_quiere_whatsapp;
     }
 
+    /**
+     * Lo que dejó de anticipo y todavía no se usa (10-oct-2026). Se descuenta
+     * solo en el siguiente cobro (ver Cobro).
+     */
+    public function saldoAFavor(): float
+    {
+        $dejo = (float) Payment::withoutGlobalScopes()
+            ->where('clinic_id', $this->clinic_id)->where('patient_id', $this->id)
+            ->where('es_anticipo', true)->where('status', '!=', 'refunded')
+            ->sum('amount');
+        $uso = (float) PaymentReceipt::withoutGlobalScopes()
+            ->join('payments', 'payments.id', '=', 'payment_receipts.payment_id')
+            ->where('payments.clinic_id', $this->clinic_id)->where('payments.patient_id', $this->id)
+            ->where('payment_receipts.payment_method', PaymentReceipt::SALDO_A_FAVOR)
+            ->sum('payment_receipts.amount');
+
+        return round(max(0, $dejo - $uso), 2);
+    }
+
     /** A quién se saluda en el mensaje: al responsable si lo hay. */
     public function nombreDeContacto(): string
     {

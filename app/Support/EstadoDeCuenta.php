@@ -21,6 +21,8 @@ class EstadoDeCuenta
             ->where('clinic_id', $paciente->clinic_id)
             ->where('patient_id', $paciente->id)
             ->where('status', '!=', 'refunded')
+            // El anticipo no es un tratamiento: va aparte, como saldo a favor.
+            ->where('es_anticipo', false)
             ->yaToca()
             ->with(['service', 'receipts'])
             ->orderBy('payment_date')
@@ -38,7 +40,7 @@ class EstadoDeCuenta
                     'debe' => round($total - $pagado, 2),
                     'abonos' => $c->receipts->sortBy('paid_at')->map(fn ($r) => [
                         'fecha' => $r->paid_at?->format('d/m/Y'),
-                        'forma' => CajaDelDia::FORMAS[$r->payment_method] ?? 'Otro',
+                        'forma' => CajaDelDia::nombreDeForma($r->payment_method),
                         'monto' => (float) $r->amount,
                     ])->values()->all(),
                 ];
@@ -51,6 +53,7 @@ class EstadoDeCuenta
             'total' => round($cobros->sum('total'), 2),
             'pagado' => round($cobros->sum('pagado'), 2),
             'debe' => round($cobros->sum('debe'), 2),
+            'aFavor' => $paciente->saldoAFavor(),
         ];
     }
 }

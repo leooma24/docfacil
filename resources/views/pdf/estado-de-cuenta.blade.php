@@ -42,6 +42,9 @@
             <td><div class="muted">Total</div><div class="cifra">${{ number_format($total, 2) }}</div></td>
             <td><div class="muted">Pagado</div><div class="cifra">${{ number_format($pagado, 2) }}</div></td>
             <td><div class="muted">Saldo</div><div class="cifra {{ $debe > 0 ? 'debe' : '' }}">${{ number_format($debe, 2) }}</div></td>
+            @if($aFavor > 0)
+            <td><div class="muted">A su favor</div><div class="cifra" style="color:#047857;">${{ number_format($aFavor, 2) }}</div></td>
+            @endif
         </tr>
     </table>
 

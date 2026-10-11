@@ -20,6 +20,35 @@
         </div>
     </div>
 
+    {{-- Cerrar la caja: contar el efectivo y ver la diferencia antes de irse. --}}
+    @php $diferencia = $cierre ? (float) $cierre->diferencia : 0; @endphp
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;margin-bottom:1rem;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem 1.25rem;">
+            <div style="font-weight:800;color:#111827;">Debe haber en efectivo: ${{ number_format($caja['porMetodo']['cash'], 2) }}</div>
+            @if($cierre)
+                <span style="padding:0.2rem 0.7rem;border-radius:999px;font-size:0.8rem;font-weight:800;{{ abs($diferencia) < 0.01 ? 'background:#d1fae5;color:#065f46;' : 'background:#fee2e2;color:#991b1b;' }}">
+                    @if(abs($diferencia) < 0.01) Cuadra @elseif($diferencia < 0) Faltan ${{ number_format(abs($diferencia), 0) }} @else Sobran ${{ number_format($diferencia, 0) }} @endif
+                </span>
+                <span style="font-size:0.85rem;color:#6b7280;">Cerró {{ $cierre->user?->name ?? 'alguien del equipo' }} a las {{ $cierre->created_at->format('H:i') }} · contó ${{ number_format((float) $cierre->contado, 2) }}@if($cierre->notas) · {{ $cierre->notas }}@endif</span>
+            @endif
+        </div>
+        @if($entroDespues)
+            <div style="margin-top:0.6rem;padding:0.5rem 0.75rem;border-radius:8px;background:#fffbeb;color:#92400e;font-size:0.85rem;font-weight:600;">Entró dinero después del cierre: vuelva a contar y cierre otra vez.</div>
+        @endif
+        @if(! $cierre || $entroDespues)
+            <form wire:submit="cerrarCaja" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:0.75rem;margin-top:0.75rem;">
+                <label style="font-size:0.85rem;color:#374151;">¿Cuánto contó en el cajón?
+                    <input type="number" step="0.01" min="0" wire:model="contado" placeholder="0.00" style="display:block;margin-top:0.25rem;width:10rem;padding:0.45rem 0.6rem;border:1px solid #d1d5db;border-radius:8px;">
+                </label>
+                <label style="flex:1;min-width:180px;font-size:0.85rem;color:#374151;">Notas (opcional)
+                    <input type="text" wire:model="notasDelCierre" maxlength="500" placeholder="Ej. Se dio cambio de más" style="display:block;margin-top:0.25rem;width:100%;padding:0.45rem 0.6rem;border:1px solid #d1d5db;border-radius:8px;">
+                </label>
+                <button type="submit" style="padding:0.55rem 1rem;border-radius:8px;background:#0f766e;color:#fff;font-weight:700;font-size:0.9rem;">Cerrar caja</button>
+            </form>
+            @error('contado')<div style="color:#b91c1c;font-size:0.8rem;margin-top:0.3rem;">{{ $message }}</div>@enderror
+        @endif
+    </div>
+
     @if($facturas->isNotEmpty())
         <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:0.9rem 1rem;margin-bottom:1rem;">
             <div style="font-weight:800;color:#92400e;margin-bottom:0.4rem;">Facturas por mandar · {{ $facturas->count() }}</div>

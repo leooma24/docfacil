@@ -39,6 +39,7 @@ class SuMes
             // el saldo que antes se quedaba en la libreta.
             'cobradoDeAntes' => $par(fn ($d, $h) => round((float) PaymentReceipt::withoutGlobalScopes()
                 ->where('payment_receipts.clinic_id', $clinicId)
+                ->queEntraron()
                 ->whereBetween('payment_receipts.paid_at', [$d, $h])
                 ->join('payments', 'payments.id', '=', 'payment_receipts.payment_id')
                 ->whereDate('payments.payment_date', '<', $d->toDateString())

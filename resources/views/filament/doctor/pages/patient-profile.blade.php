@@ -82,6 +82,9 @@
                             @if($patient->phone)
                             <span class="pp-meta-item"><x-icono nombre="phone" /> {{ $patient->phone }}</span>
                             @endif
+                            @if(($aFavor = $patient->saldoAFavor()) > 0)
+                            <span class="pp-meta-item" style="background:rgba(209,250,229,.95);color:#065f46;font-weight:700;" title="Anticipo: se descuenta solo en su siguiente cobro">A favor ${{ number_format($aFavor, 0) }}</span>
+                            @endif
                             @if($patient->noQuiereWhatsapp())
                             <span class="pp-meta-item" style="background:rgba(254,226,226,.9);color:#991b1b;" title="No le sale ningún recordatorio automático">No quiere WhatsApp</span>
                             @endif

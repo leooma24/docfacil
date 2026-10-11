@@ -99,10 +99,12 @@ class PatientProfile extends Page
     protected function getHeaderActions(): array
     {
         $debeHoy = fn () => round($this->adeudosDeHoy()->sum(fn (Payment $c) => $c->remaining), 2);
+        // Lo que falta después de su saldo a favor, que se descuenta solo.
+        $faltaHoy = fn () => round(max(0, $debeHoy() - (float) $this->patient?->saldoAFavor()), 2);
 
         return [
             \App\Filament\Doctor\Actions\CobrarAbono::make('cobrarSaldo', fn () => $this->adeudosDeHoy())
-                ->label(fn () => 'Cobrar $' . number_format($debeHoy(), 0))
+                ->label(fn () => $faltaHoy() > 0 ? 'Cobrar $' . number_format($faltaHoy(), 0) : 'Pagar con su saldo a favor')
                 ->visible(fn () => $this->patient !== null && $debeHoy() > 0),
             // Cobrar algo nuevo sin salir de la ficha: el servicio, cuánto
             // paga hoy y cómo. Antes había que ir a Cobros → Nuevo.
@@ -113,13 +115,31 @@ class PatientProfile extends Page
                 ->visible(fn () => $this->patient !== null)
                 ->modalHeading(fn () => 'Cobrar a ' . $this->patient?->first_name)
                 ->modalSubmitActionLabel('Guardar cobro')
-                ->fillForm(['como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card'])
-                ->form([
+                ->fillForm(['tipo' => 'cobro', 'como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card'])
+                ->form(fn () => [
+                    \Filament\Forms\Components\ToggleButtons::make('tipo')
+                        ->hiddenLabel()
+                        ->options(['cobro' => 'Cobrar un tratamiento', 'anticipo' => 'Dejar un anticipo'])
+                        ->colors(['cobro' => 'success', 'anticipo' => 'info'])
+                        ->inline()
+                        ->live()
+                        ->required(),
+                    \Filament\Forms\Components\Placeholder::make('saldo_a_favor')
+                        ->label('')
+                        ->content(fn () => 'Tiene $' . number_format($this->patient->saldoAFavor(), 2) . ' a favor: se descuentan solos de este cobro.')
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'cobro' && $this->patient->saldoAFavor() > 0),
+                    \Filament\Forms\Components\Placeholder::make('que_es_anticipo')
+                        ->label('')
+                        ->content(fn () => $debeHoy() > 0
+                            ? 'Primero se paga lo que debe ($' . number_format($debeHoy(), 2) . '); lo demás queda a su favor.'
+                            : 'Entra hoy a la caja y queda a su favor; se descuenta solo en su siguiente cobro.')
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo'),
                     \Filament\Forms\Components\Select::make('service_id')
                         ->label('Servicio')
                         ->options(fn () => \App\Models\Service::where('clinic_id', auth()->user()->clinic_id)->where('is_active', true)->orderBy('name')->pluck('name', 'id'))
                         ->searchable()
                         ->live()
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo')
                         ->afterStateUpdated(function ($state, \Filament\Forms\Set $set) {
                             $precio = \App\Models\Service::where('clinic_id', auth()->user()->clinic_id)->find($state)?->price;
                             if ($precio !== null) {
@@ -131,17 +151,31 @@ class PatientProfile extends Page
                         ->label('Concepto')
                         ->placeholder('Ej. Resina en 36')
                         ->maxLength(255)
-                        ->required(fn (\Filament\Forms\Get $get) => blank($get('service_id'))),
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo')
+                        ->required(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo' && blank($get('service_id'))),
                     \Filament\Forms\Components\TextInput::make('amount')
-                        ->label('Total')
+                        ->label(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo' ? 'Monto del anticipo' : 'Total')
                         ->numeric()
                         ->prefix('$')
                         ->minValue(0.01)
                         ->live(onBlur: true)
                         ->required(),
-                    ...\App\Filament\Doctor\Actions\Cobro::camposDePago(),
+                    \Filament\Forms\Components\Group::make(\App\Filament\Doctor\Actions\Cobro::camposDePago(aFavor: fn () => $this->patient->saldoAFavor()))
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo'),
+                    \Filament\Forms\Components\Group::make(\App\Filament\Doctor\Actions\Cobro::camposDeForma(fn (\Filament\Forms\Get $get) => round((float) $get('amount'), 2)))
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo'),
                 ])
                 ->action(function (array $data) {
+                    if (($data['tipo'] ?? 'cobro') === 'anticipo') {
+                        $aFavor = \App\Filament\Doctor\Actions\Cobro::anticipo($data, $this->patient->id);
+                        \Filament\Notifications\Notification::make()
+                            ->title('Anticipo guardado')
+                            ->body($aFavor > 0 ? 'Le quedan $' . number_format($this->patient->saldoAFavor(), 2) . ' a favor.' : 'Se usó para pagar lo que debía.')
+                            ->success()
+                            ->send();
+
+                        return;
+                    }
                     $cobro = \App\Filament\Doctor\Actions\Cobro::nuevo($data, $this->patient->id);
                     \Filament\Notifications\Notification::make()
                         ->title('Cobro guardado')

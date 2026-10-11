@@ -34,6 +34,8 @@ class CajaDelDia
         $recibos = PaymentReceipt::withoutGlobalScopes()
             ->with(['payment' => fn ($q) => $q->withoutGlobalScopes()->with(['patient' => fn ($p) => $p->withoutGlobalScopes(), 'service'])])
             ->where('clinic_id', $clinicId)
+            // Lo pagado con saldo a favor ya entró el día del anticipo.
+            ->queEntraron()
             ->whereBetween('paid_at', [$dia->format('Y-m-d') . ' 00:00:00', $dia->format('Y-m-d') . ' 23:59:59'])
             ->orderBy('paid_at')
             ->get();
@@ -54,12 +56,18 @@ class CajaDelDia
                 // Lo que salió (devolución o corrección) dice qué fue.
                 'concepto' => (float) $r->amount < 0 && $r->notes ? $r->notes . ' · ' . self::concepto($r->payment) : self::concepto($r->payment),
                 'monto' => (float) $r->amount,
-                'metodo' => self::FORMAS[$r->payment_method] ?? 'Otro',
+                'metodo' => self::nombreDeForma($r->payment_method),
                 'cobro' => $r->payment_id,
                 'factura' => (bool) $r->payment?->factura_solicitada,
                 'facturaEnviada' => (bool) $r->payment?->factura_enviada_at,
             ])->values(),
         ];
+    }
+
+    /** "Efectivo", "Tarjeta"… y "Saldo a favor" para lo que se pagó con un anticipo. */
+    public static function nombreDeForma(?string $forma): string
+    {
+        return self::FORMAS[$forma] ?? ($forma === PaymentReceipt::SALDO_A_FAVOR ? 'Saldo a favor' : 'Otro');
     }
 
     /** Las facturas que pidieron y todavía no se mandan, sean del día que sean. */
@@ -88,7 +96,7 @@ class CajaDelDia
             'total' => (float) $cobro->amount,
             'abonos' => $cobro->receipts->sortBy('paid_at')->map(fn ($r) => [
                 'fecha' => $r->paid_at?->format('d/m/Y'),
-                'metodo' => self::FORMAS[$r->payment_method] ?? 'Otro',
+                'metodo' => self::nombreDeForma($r->payment_method),
                 'monto' => (float) $r->amount,
             ])->values(),
             'pagado' => $pagado,

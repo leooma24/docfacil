@@ -18,6 +18,19 @@ class PaymentReceipt extends Model
 
     protected $fillable = ['clinic_id', 'payment_id', 'amount', 'payment_method', 'paid_at', 'notes'];
 
+    /**
+     * Lo que se pagó con el saldo a favor del paciente (un anticipo). Ese
+     * dinero ya entró a la caja el día del anticipo: no se cuenta otra vez.
+     */
+    public const SALDO_A_FAVOR = 'saldo_a_favor';
+
+    /** Solo el dinero que de verdad entró ese día (sin lo pagado con saldo a favor). */
+    public function scopeQueEntraron($query)
+    {
+        return $query->where(fn ($q) => $q->whereNull('payment_receipts.payment_method')
+            ->orWhere('payment_receipts.payment_method', '!=', self::SALDO_A_FAVOR));
+    }
+
     protected function casts(): array
     {
         return [

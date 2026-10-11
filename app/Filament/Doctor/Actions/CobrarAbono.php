@@ -25,6 +25,9 @@ class CobrarAbono
     public static function make(string $nombre, Closure $cobros): Action
     {
         $debe = fn (array $arguments) => round($cobros($arguments)->sum(fn (Payment $c) => $c->remaining), 2);
+        // Su saldo a favor (anticipo) se descuenta solo: aquí va lo que falta.
+        $aFavor = fn (array $arguments) => round(min((float) ($cobros($arguments)->first()?->patient?->saldoAFavor() ?? 0), $debe($arguments)), 2);
+        $falta = fn (array $arguments) => round($debe($arguments) - $aFavor($arguments), 2);
 
         return Action::make($nombre)
             ->label('Cobrar')
@@ -33,19 +36,21 @@ class CobrarAbono
             ->modalHeading('Registrar pago')
             ->modalSubmitActionLabel('Guardar pago')
             ->fillForm(fn (array $arguments) => [
-                'monto' => $debe($arguments),
+                'monto' => $falta($arguments),
                 'payment_method' => 'cash',
             ])
             ->form(fn (array $arguments) => [
                 Forms\Components\TextInput::make('monto')
                     ->label('Monto que paga')
-                    ->helperText('Debe $' . number_format($debe($arguments), 2) . '. Si trae menos, cámbielo y queda como abono.')
+                    ->helperText(fn () => 'Debe $' . number_format($debe($arguments), 2)
+                        . ($aFavor($arguments) > 0 ? ', y $' . number_format($aFavor($arguments), 2) . ' se pagan con su saldo a favor' : '')
+                        . '. Si trae menos, cámbielo y queda como abono.')
                     ->numeric()
                     ->prefix('$')
                     ->required()
                     ->live(onBlur: true)
-                    ->minValue(0.01)
-                    ->maxValue($debe($arguments)),
+                    ->minValue(fn () => $aFavor($arguments) > 0 ? 0 : 0.01)
+                    ->maxValue($falta($arguments)),
                 // Con "Combinado": una parte en efectivo y el resto con
                 // tarjeta o transferencia, cada una con su recibo.
                 ...Cobro::camposDeForma(fn (Forms\Get $get) => round((float) $get('monto'), 2)),

@@ -17,6 +17,8 @@ class Payment extends Model
     protected $fillable = [
         'clinic_id', 'patient_id', 'appointment_id', 'service_id', 'payment_plan_id', 'installment_number',
         'amount', 'amount_paid', 'payment_method', 'status', 'notes',
+        // Dinero que dejó antes del tratamiento: queda a su favor.
+        'es_anticipo',
         'payment_date', 'due_date',
         // La factura la hace el contador (no hay CFDI): solo se anota.
         'factura_solicitada', 'factura_enviada_at',
@@ -30,6 +32,7 @@ class Payment extends Model
             'payment_date' => 'date',
             'due_date' => 'date',
             'factura_solicitada' => 'boolean',
+            'es_anticipo' => 'boolean',
             'factura_enviada_at' => 'datetime',
         ];
     }
@@ -238,6 +241,8 @@ class Payment extends Model
         // el cobro sea del mes pasado.
         return (float) PaymentReceipt::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
+            // Lo pagado con saldo a favor ya entró el día del anticipo.
+            ->queEntraron()
             // Hasta el final del día: SQLite guarda la fecha con hora, y un
             // periodo de un solo día (el "cobrado hoy") salía en cero.
             ->whereBetween('paid_at', [$desde->format('Y-m-d') . ' 00:00:00', $hasta->format('Y-m-d') . ' 23:59:59'])

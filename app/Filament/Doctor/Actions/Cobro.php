@@ -3,7 +3,9 @@
 namespace App\Filament\Doctor\Actions;
 
 use App\Filament\Doctor\Resources\PaymentResource;
+use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\PaymentReceipt;
 use Filament\Forms;
 use Illuminate\Support\Facades\DB;
 
@@ -29,11 +31,14 @@ class Cobro
 
     /**
      * Los campos de "¿cuánto paga hoy?" para un cobro nuevo. El total se lee
-     * del campo `amount` del mismo formulario.
+     * del campo `amount` del mismo formulario; si tiene saldo a favor, se
+     * descuenta y "Paga todo" es lo que falta.
+     *
+     * @param  (\Closure(): float)|null  $aFavor
      */
-    public static function camposDePago(bool $conSinPago = true): array
+    public static function camposDePago(bool $conSinPago = true, ?\Closure $aFavor = null): array
     {
-        $total = fn (Forms\Get $get) => round((float) $get('amount'), 2);
+        $total = fn (Forms\Get $get) => round(max(0, (float) $get('amount') - min((float) $get('amount'), $aFavor ? $aFavor() : 0)), 2);
 
         return [
             Forms\Components\ToggleButtons::make('como')
@@ -66,7 +71,11 @@ class Cobro
                     $t = $total($get);
                     $hoy = self::pagaHoy($get('como'), $t, (float) $get('recibido'));
 
-                    return 'Total $' . number_format($t, 2) . ' · paga hoy $' . number_format($hoy, 2) . ' · queda $' . number_format(max(0, $t - $hoy), 2);
+                    $saldo = round((float) $get('amount') - $t, 2);
+
+                    return 'Total $' . number_format((float) $get('amount'), 2)
+                        . ($saldo > 0 ? ' · con su saldo a favor $' . number_format($saldo, 2) : '')
+                        . ' · paga hoy $' . number_format($hoy, 2) . ' · queda $' . number_format(max(0, $t - $hoy), 2);
                 }),
         ];
     }
@@ -148,14 +157,18 @@ class Cobro
     }
 
     /**
-     * Crea el cobro y registra lo que paga hoy, en un solo paso.
+     * Crea el cobro y registra lo que paga hoy, en un solo paso. Si el
+     * paciente tiene saldo a favor (un anticipo), se descuenta primero y
+     * "Paga todo" es solo lo que falta.
      */
     public static function nuevo(array $data, int $pacienteId, ?int $citaId = null): Payment
     {
         $total = round((float) $data['amount'], 2);
-        $partes = self::partes(self::pagaHoy($data['como'] ?? 'todo', $total, (float) ($data['recibido'] ?? 0)), $data);
+        $paciente = Patient::where('clinic_id', auth()->user()->clinic_id)->findOrFail($pacienteId);
+        $deSaldo = round(min($paciente->saldoAFavor(), $total), 2);
+        $partes = self::partes(self::pagaHoy($data['como'] ?? 'todo', round($total - $deSaldo, 2), (float) ($data['recibido'] ?? 0)), $data);
 
-        return DB::transaction(function () use ($data, $pacienteId, $citaId, $total, $partes) {
+        return DB::transaction(function () use ($data, $pacienteId, $citaId, $total, $deSaldo, $partes) {
             $cobro = Payment::create([
                 'clinic_id' => auth()->user()->clinic_id,
                 'patient_id' => $pacienteId,
@@ -170,21 +183,81 @@ class Cobro
                 'due_date' => today(),
             ]);
 
+            if ($deSaldo > 0) {
+                $cobro->registrarAbono($deSaldo, PaymentReceipt::SALDO_A_FAVOR, 'Con su saldo a favor');
+            }
             foreach ($partes as [$monto, $forma]) {
-                $cobro->registrarAbono($monto, $forma);
+                $cobro->fresh()->registrarAbono($monto, $forma);
             }
 
             return $cobro->fresh();
         });
     }
 
-    /** Abona a varios adeudos, del más viejo al más nuevo, con cada forma de pago. */
+    /**
+     * Abona a varios adeudos, del más viejo al más nuevo: primero con su
+     * saldo a favor, si tiene, y luego lo que paga hoy con cada forma.
+     */
     public static function abonar(iterable $adeudos, float $pagaHoy, array $data): void
     {
+        $adeudos = collect($adeudos);
+
         DB::transaction(function () use ($adeudos, $pagaHoy, $data) {
-            foreach (self::partes(round($pagaHoy, 2), $data) as [$monto, $forma]) {
-                Payment::abonarEnOrden(collect($adeudos)->map->fresh(), $monto, $forma);
+            $paciente = $adeudos->first()?->patient;
+            $debe = round($adeudos->map->fresh()->sum(fn (Payment $c) => $c->remaining), 2);
+            $deSaldo = $paciente ? round(min($paciente->saldoAFavor(), $debe), 2) : 0.0;
+            if ($deSaldo > 0) {
+                Payment::abonarEnOrden($adeudos->map->fresh(), $deSaldo, PaymentReceipt::SALDO_A_FAVOR);
             }
+
+            foreach (self::partes(round($pagaHoy, 2), $data) as [$monto, $forma]) {
+                Payment::abonarEnOrden($adeudos->map->fresh(), $monto, $forma);
+            }
+        });
+    }
+
+    /**
+     * Un anticipo: el dinero entra hoy a la caja. Si debe algo, primero paga
+     * eso; lo demás queda a su favor y se descuenta solo en el siguiente cobro.
+     */
+    public static function anticipo(array $data, int $pacienteId): float
+    {
+        $partes = self::partes(round((float) $data['amount'], 2), $data);
+
+        return DB::transaction(function () use ($partes, $pacienteId) {
+            $adeudos = Payment::where('clinic_id', auth()->user()->clinic_id)->where('patient_id', $pacienteId)
+                ->withBalance()->yaToca()->get();
+            $sobra = [];
+            foreach ($partes as [$monto, $forma]) {
+                $debe = round($adeudos->map->fresh()->sum(fn (Payment $c) => $c->remaining), 2);
+                $aDeuda = round(min($monto, $debe), 2);
+                if ($aDeuda > 0) {
+                    Payment::abonarEnOrden($adeudos->map->fresh(), $aDeuda, $forma);
+                }
+                if ($monto - $aDeuda > 0.004) {
+                    $sobra[] = [round($monto - $aDeuda, 2), $forma];
+                }
+            }
+
+            $aFavor = round(array_sum(array_column($sobra, 0)), 2);
+            if ($aFavor > 0) {
+                $anticipo = Payment::create([
+                    'clinic_id' => auth()->user()->clinic_id,
+                    'patient_id' => $pacienteId,
+                    'notes' => 'Anticipo',
+                    'es_anticipo' => true,
+                    'amount' => $aFavor,
+                    'amount_paid' => 0,
+                    'status' => 'pending',
+                    'payment_method' => $sobra[0][1],
+                    'payment_date' => today(),
+                ]);
+                foreach ($sobra as [$monto, $forma]) {
+                    $anticipo->fresh()->registrarAbono($monto, $forma);
+                }
+            }
+
+            return $aFavor;
         });
     }
 }
