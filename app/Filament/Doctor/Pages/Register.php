@@ -82,8 +82,8 @@ class Register extends BaseRegister
                         '<div style="font-size:.85rem;line-height:1.5;opacity:.85;">'
                         . '<strong>15 días con todo</strong>, sin tarjeta. Después usted elige: '
                         . 'Gratis hasta ' . \App\Models\Clinic::LIMITE_PACIENTES['free'] . ' pacientes · '
-                        . 'Básico $' . number_format(\App\Models\Commission::monthlyPriceForPlan('basico')) . ' al mes hasta ' . \App\Models\Clinic::LIMITE_PACIENTES['basico'] . ' pacientes · '
-                        . 'Pro $' . number_format(\App\Models\Commission::monthlyPriceForPlan('profesional')) . ' al mes sin límite de pacientes.'
+                        . 'Básico $' . number_format(\App\Models\Commission::monthlyPriceForPlan('basico')) . ' al mes sin límite de pacientes · '
+                        . 'Pro $' . number_format(\App\Models\Commission::monthlyPriceForPlan('profesional')) . ' al mes para 2 o 3 doctores. IVA incluido.'
                         . '</div>'
                     )),
                 Forms\Components\TextInput::make('website_url_backup')

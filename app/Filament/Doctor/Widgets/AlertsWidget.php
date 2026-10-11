@@ -153,9 +153,10 @@ class AlertsWidget extends Widget
 
         // El tope de pacientes, antes de toparse: en la prueba si ya pasó el
         // del Básico (para que elija sabiendo), y en el Básico cuando se acerca.
+        // Desde el 11-oct-2026 el Básico no tiene tope: solo avisa si vuelve a tenerlo.
         $clinica = $user->clinic;
-        if ($clinica && ! $user->esAsistente()) {
-            $tieneBasico = \App\Models\Clinic::LIMITE_PACIENTES['basico'];
+        $tieneBasico = \App\Models\Clinic::LIMITE_PACIENTES['basico'];
+        if ($clinica && ! $user->esAsistente() && $tieneBasico !== null) {
             $suyos = $clinica->pacientesActuales();
             if ($clinica->enPruebaVigente() && $suyos > $tieneBasico) {
                 $alerts[] = [

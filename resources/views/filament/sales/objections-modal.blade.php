@@ -34,7 +34,7 @@
              'follow' => '¿Cuánto tiempo al día se le va mandando los recordatorios?'],
             ['clave' => 'price_free',
              'q' => 'Hay opciones gratis',
-             'a' => 'Sí las hay, y el plan Free de DocFácil también lo es: un doctor y 15 pacientes, de por vida. Úselo así el tiempo que quiera. Se paga cuando ya no le alcanza, no antes.',
+             'a' => 'Sí las hay, y el plan Free de DocFácil también lo es: un doctor y 30 pacientes, de por vida. Úselo así el tiempo que quiera. Se paga cuando ya no le alcanza, no antes.',
              'follow' => '¿Cuántos pacientes tiene hoy en su expediente?'],
             ['clave' => 'price_unsure',
              'q' => 'No sé si lo voy a usar',

@@ -138,43 +138,21 @@ class SusDatosYElLimiteTest extends TestCase
 
         $this->get('/doctor/register')->assertOk()
             ->assertSee('15 días con todo')
-            ->assertSee('hasta 15 pacientes')
-            ->assertSee('hasta 200 pacientes')
+            ->assertSee('hasta 30 pacientes')
+            ->assertSee('IVA incluido')
             ->assertSee('sin límite de pacientes');
     }
 
-    public function test_en_la_prueba_con_mas_de_200_le_avisa_antes_de_que_termine(): void
+    public function test_el_basico_ya_no_tiene_tope_y_no_avisa_de_limite(): void
     {
-        $this->clinica->update(['plan' => 'free', 'plan_ends_at' => null, 'trial_ends_at' => now()->addDays(5)]);
-        for ($i = 0; $i < 205; $i++) {
+        for ($i = 0; $i < 250; $i++) {
             Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => "P{$i}", 'last_name' => 'X']);
         }
 
         $avisos = collect((new AlertsWidget())->getAlerts())->pluck('title')->implode(' | ');
 
-        $this->assertStringContainsString('205 pacientes', $avisos);
-        $this->assertStringContainsString('200', $avisos);
-    }
-
-    public function test_en_el_basico_cerca_del_tope_le_avisa(): void
-    {
-        for ($i = 0; $i < 185; $i++) {
-            Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => "P{$i}", 'last_name' => 'X']);
-        }
-
-        $avisos = collect((new AlertsWidget())->getAlerts())->pluck('title')->implode(' | ');
-
-        $this->assertStringContainsString('185 de 200 pacientes', $avisos);
-    }
-
-    public function test_lejos_del_tope_no_molesta(): void
-    {
-        for ($i = 0; $i < 20; $i++) {
-            Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => "P{$i}", 'last_name' => 'X']);
-        }
-
-        $avisos = collect((new AlertsWidget())->getAlerts())->pluck('title')->implode(' | ');
-
+        $this->assertStringNotContainsString('pacientes: el Básico', $avisos);
         $this->assertStringNotContainsString('de 200 pacientes', $avisos);
+        $this->assertTrue($this->clinica->fresh()->puedeAgregarPacientes());
     }
 }

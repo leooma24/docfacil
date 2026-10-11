@@ -725,9 +725,27 @@ class Clinic extends Model
      * consultorio en Free podía capturar mil pacientes, y con el importador
      * podía subirlos de un jalón.
      */
+    /**
+     * Recordatorios automáticos por WhatsApp al mes (11-oct-2026). Meta cobra
+     * cada mensaje: el tope cuida que un consultorio no nos cueste más de lo
+     * que paga. Van desde el Básico, como en la competencia.
+     */
+    public const RECORDATORIOS_AL_MES = [
+        'free' => 0,
+        'basico' => 300,
+        'profesional' => 1000,
+        'clinica' => 3000,
+    ];
+
+    public function recordatoriosAlMes(): int
+    {
+        return (int) (self::RECORDATORIOS_AL_MES[$this->plan] ?? 0);
+    }
+
     public const LIMITE_PACIENTES = [
-        'free' => 15,
-        'basico' => 200,
+        // 11-oct-2026: Free de 15 a 30 y Básico sin tope (ver docs de precios).
+        'free' => 30,
+        'basico' => null,
         'profesional' => null,
         'clinica' => null,
     ];

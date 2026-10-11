@@ -54,7 +54,7 @@
         "operatingSystem": "Web",
         "url": "{{ url('/dentistas') }}",
         "offers": [
-            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free", "description": "1 doctor, 15 pacientes, agenda básica. Gratis de por vida." },
+            { "@@type": "Offer", "price": "0", "priceCurrency": "MXN", "name": "Plan Free", "description": "1 doctor, 30 pacientes, agenda básica. Gratis de por vida." },
             { "@@type": "Offer", "price": "499", "priceCurrency": "MXN", "name": "Plan Básico", "description": "Odontograma FDI + WhatsApp + recetas PDF + cobros." },
             { "@@type": "Offer", "price": "999", "priceCurrency": "MXN", "name": "Plan Pro", "description": "Hasta 3 doctores, portal público, consentimientos, reportes avanzados." },
             { "@@type": "Offer", "price": "1999", "priceCurrency": "MXN", "name": "Plan Clínica", "description": "Doctores ilimitados, reportes por doctor, onboarding 1:1." }
@@ -105,7 +105,7 @@
     // Las mismas preguntas que se ven en la página (sección #faq): el JSON-LD
     // no puede prometer más que lo que el doctor lee.
     $landingFaqsForSchema = $landingFaqs = [
-        ['q' => '¿Cuánto cuesta?', 'a' => 'Hay un plan Free para siempre (1 doctor, 15 pacientes). Básico $499 al mes, Pro $999 y Clínica $1,999. Si paga el año, le sale en 10 meses. Los primeros 15 días tiene todo, sin tarjeta, y su primer pago tiene garantía de 30 días.'],
+        ['q' => '¿Cuánto cuesta?', 'a' => 'Hay un plan Free para siempre (1 doctor, 30 pacientes). Básico $499 al mes, Pro $999 y Clínica $1,999, con IVA incluido. Si paga el año, le sale en 10 meses. Los primeros 15 días tiene todo, sin tarjeta, y su primer pago tiene garantía de 30 días.'],
         ['q' => '¿Y si no me llevo bien con la tecnología?', 'a' => 'Si usa WhatsApp, puede usar DocFácil. Yo le acompaño por WhatsApp las primeras semanas, sin costo extra, y le dejo cargada su agenda.'],
         ['q' => '¿Me ayudan a pasar mis pacientes?', 'a' => 'Sí. Me manda su Excel por WhatsApp y lo subo a su cuenta, sin costo y sin importar cuántos pacientes tenga. Si los tiene en la libreta, le ayudo a armar la lista con los datos que importan.'],
         ['q' => '¿Funciona en el celular?', 'a' => 'Sí. Funciona en el navegador del celular, la tablet o la computadora, y se puede instalar como app en iPhone o Android sin pasar por la tienda de apps.'],

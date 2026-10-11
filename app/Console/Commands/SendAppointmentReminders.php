@@ -54,7 +54,7 @@ class SendAppointmentReminders extends Command
     {
         // La demo le escribe solo a Omar: con 3 al día basta para probar, no 40.
         $tope = $clinic->is_demo ? min(3, (int) $clinic->recordatorios_por_dia) : (int) $clinic->recordatorios_por_dia;
-        $quedan = max(0, $tope - $this->mandadosHoy($clinic));
+        $quedan = max(0, min($tope - $this->mandadosHoy($clinic), $clinic->recordatoriosAlMes() - $this->mandadosEnElMes($clinic)));
         $enviados = 0;
 
         $tandas = [
@@ -103,6 +103,17 @@ class SendAppointmentReminders extends Command
         }
 
         return $enviados;
+    }
+
+    /** Los del mes, contra el tope de su plan (Clinic::RECORDATORIOS_AL_MES). */
+    private function mandadosEnElMes(Clinic $clinic): int
+    {
+        $desde = now()->startOfMonth();
+
+        return Appointment::withoutGlobalScopes()->where('clinic_id', $clinic->id)
+            ->where(fn ($q) => $q->where('reminder_24h_sent_at', '>=', $desde)->orWhere('reminder_2h_sent_at', '>=', $desde))
+            ->get(['reminder_24h_sent_at', 'reminder_2h_sent_at'])
+            ->sum(fn ($c) => ($c->reminder_24h_sent_at && $c->reminder_24h_sent_at->gte($desde) ? 1 : 0) + ($c->reminder_2h_sent_at && $c->reminder_2h_sent_at->gte($desde) ? 1 : 0));
     }
 
     private function mandadosHoy(Clinic $clinic): int

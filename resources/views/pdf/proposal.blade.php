@@ -94,7 +94,7 @@
 
         <div class="cta-box">
             <h3>15 días gratis con todo · Sin tarjeta</h3>
-            <p>Si paga y en los primeros 30 días no le sirve, le devolvemos su primer pago. También existe el plan Free, gratis para siempre (1 doctor, 15 pacientes, 10 citas al mes).</p>
+            <p>Si paga y en los primeros 30 días no le sirve, le devolvemos su primer pago. También existe el plan Free, gratis para siempre (1 doctor, 30 pacientes, 10 citas al mes).</p>
             <p>Regístrese en docfacil.tu-app.co/doctor/register o contacte a {{ $repName }} para una demo personalizada.</p>
         </div>
     </div>

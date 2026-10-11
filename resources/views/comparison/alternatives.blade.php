@@ -138,7 +138,7 @@
                         <p class="text-sm text-gray-500 mt-0.5">Hecho en México para consultorios mexicanos</p>
                     </div>
                     <div class="text-right">
-                        <div class="text-2xl font-extrabold text-teal-600">$499 MXN<span class="text-sm font-normal text-gray-500">/mes</span></div>
+                        <div class="text-2xl font-extrabold text-teal-600">$499 MXN<span class="text-sm font-normal text-gray-500">/mes, IVA incluido</span></div>
                         <div class="text-xs text-gray-500">+ Plan Free de por vida</div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                     Recordatorios por WhatsApp a 1 clic: DocFácil abre su WhatsApp con el mensaje ya escrito y usted le da enviar.
                     Expediente pensado para la NOM-004 (notas y recetas que se bloquean a las 24 horas), recetas PDF con cédula,
                     odontograma FDI, presupuestos que el paciente acepta en línea y cobros. Soporte por WhatsApp con el fundador.
-                    Plan Free de por vida (1 doctor, 15 pacientes, 10 citas al mes) y 30 días de garantía sobre su primer pago.
+                    Plan Free de por vida (1 doctor, 30 pacientes, 10 citas al mes) y 30 días de garantía sobre su primer pago.
                 </p>
                 <div class="mt-5 grid sm:grid-cols-2 gap-2 text-sm">
                     <div class="flex items-center gap-2"><span class="text-emerald-600">✓</span> WhatsApp a 1 clic desde su número</div>

@@ -39,7 +39,8 @@ class MaterialesDeVentaHonestosTest extends TestCase
         'Triplica', 'Triplicar', '2-3x', 'en 10 segundos', '$7,000', '$6,301', 'cobra por ti',
         // Lo que no existe
         'SOAP', 'link de pago', 'links de pago', 'link de cobro', 'links de cobro', 'Multi-sede', 'Multisede', 'sucursal',
-        'comisiones', 'Correo automático', 'Pagos en línea', 'intermitente', 'recetas vencidas', 'sin límite',
+        // 'comisiones' ya existe (Comisiones de cada doctor, desde Pro, 11-oct-2026).
+        'Correo automático', 'Pagos en línea', 'intermitente', 'recetas vencidas', 'sin límite',
         'Plantilla personalizada', 'WhatsApp Business', '2h antes', '2 horas antes', 'Soporte prioritario 24/7',
         'WhatsApp automático', 'mensaje automático', 'recordatorios automáticos', 'recordatorio automático',
         'confirmación automática', 'seguimientos post-consulta', 'firma consentimiento en tablet',
@@ -135,8 +136,10 @@ class MaterialesDeVentaHonestosTest extends TestCase
         $basico = \App\Support\LoQueTraeCadaPlan::plan('basico');
 
         $this->assertContains('Odontograma FDI interactivo', $basico['features']);
-        $this->assertContains('Presupuestos que el paciente acepta en línea', $basico['features']);
-        $this->assertStringContainsString('15 pacientes', \App\Support\LoQueTraeCadaPlan::plan('free')['limits']);
+        $this->assertContains('Presupuestos por etapas que el paciente firma en línea', $basico['features']);
+        $this->assertStringContainsString('IVA incluido', $basico['subtitle']);
+        $this->assertStringContainsString('pacientes ilimitados', $basico['limits']);
+        $this->assertStringContainsString('30 pacientes', \App\Support\LoQueTraeCadaPlan::plan('free')['limits']);
     }
 
     /**
@@ -152,8 +155,7 @@ class MaterialesDeVentaHonestosTest extends TestCase
             // Lo que no existe
             'WhatsApp automático', 'recordatorios automáticos', 'recordatorio automático',
             'confirmación automática', 'lista de espera automática', 'notificación automática',
-            'mande solo', 'link de pago', 'SOAP', 'multi-sucursal', 'sucursal',
-            'comisiones entre doctores', 'SMS', 'Compartir por WhatsApp',
+            'mande solo', 'link de pago', 'SOAP', 'multi-sucursal', 'sucursal', 'SMS', 'Compartir por WhatsApp',
             'compartir al paciente por WhatsApp', 'recibe por WhatsApp', 'Recetas PDF firmadas',
             'modo offline', 'sync automático', 'sincroniza solo', 'Export completo', 'Export CSV',
             'exportar TODO', 'servidores en México', 'servidores MX', 'territorio mexicano',

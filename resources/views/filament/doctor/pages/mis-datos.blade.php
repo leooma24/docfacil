@@ -25,7 +25,7 @@
 
             <p>
                 Nada se borra. Su cuenta pasa al plan Gratis: sigue con su agenda y el expediente de sus pacientes,
-                con tope de 15 pacientes y 10 citas al mes (si ya tiene más pacientes, no pierde ninguno: solo no puede agregar).
+                con tope de 30 pacientes y 10 citas al mes (si ya tiene más pacientes, no pierde ninguno: solo no puede agregar).
                 Lo de los planes de pago, como presupuestos o laboratorio, se queda guardado y se vuelve a abrir cuando renueva.
                 Y puede bajar todos sus datos aquí cuando quiera, pague o no.
             </p>

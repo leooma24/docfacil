@@ -47,7 +47,7 @@ class VerifyClinicPlan
         $isExpired = false;
 
         // Free con la prueba vencida NO se bloquea: Free es para siempre, con
-        // sus límites (1 doctor, 15 pacientes, 10 citas al mes), como promete
+        // sus límites (1 doctor, 30 pacientes, 10 citas al mes), como promete
         // la página. Antes aquí se volvía de solo lectura.
 
         // Beta tester with expired beta

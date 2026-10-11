@@ -163,7 +163,7 @@
             capturedData: {},
             showFaqChips: false,
             faqs: [
-                { q: '¿Cuánto cuesta?', a: 'Tenemos 4 planes: Free (1 doctor, 15 pacientes, 10 citas/mes), Básico $499/mes, Pro $999/mes (multi-doctor) y Clínica $1,999/mes (multi-sucursal). 15 días de prueba gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
+                { q: '¿Cuánto cuesta?', a: 'Tenemos 4 planes: Free (1 doctor, 30 pacientes, 10 citas/mes), Básico $499/mes con pacientes ilimitados, Pro $999/mes (multi-doctor) y Clínica $1,999/mes (doctores ilimitados). Con IVA incluido. 15 días de prueba gratis con todas las funciones. Sin tarjeta. Paga anual y ahorra 2 meses.' },
                 { q: '¿Cómo funcionan los recordatorios?', a: 'Desde tu agenda, con un clic se abre tu WhatsApp con el mensaje listo (24h o 2h antes de la cita) y tú le das enviar. Así es más fácil que no se te olvide confirmar ninguna.' },
                 { q: '¿Para qué especialidades funciona?', a: '¡Para todas! Odontología, medicina general, pediatría, dermatología, ginecología y más. Los dentistas tienen odontograma interactivo; los demás tienen expediente clínico completo. Todo en español mexicano.' },
                 { q: '¿Los pacientes pueden firmar digital?', a: '¡Sí! Firma con el dedo en tablet o celular. Se guarda con fecha, hora e IP. Genera PDF con firma visible. Ideal para consentimientos informados.' },

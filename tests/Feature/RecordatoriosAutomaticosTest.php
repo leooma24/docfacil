@@ -173,6 +173,25 @@ class RecordatoriosAutomaticosTest extends TestCase
         $this->assertCount(2, $this->enviosAMeta());
     }
 
+    public function test_respeta_el_tope_al_mes_de_su_plan(): void
+    {
+        Http::fake(['graph.facebook.com/*' => Http::response(['messages' => [['id' => 'wamid.1']]])]);
+        $this->clinica->update(['plan' => 'basico']);
+        // Ya mandó 299 este mes: le queda uno.
+        foreach (range(1, 299) as $i) {
+            Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
+                'starts_at' => now()->subDays(1)->setTime(8, 0), 'ends_at' => now()->subDays(1)->setTime(8, 30), 'status' => 'completed', 'reminder_24h_sent_at' => now()->startOfMonth()->addHours($i % 200)]);
+        }
+        foreach (range(1, 3) as $i) {
+            $p = Patient::create(['clinic_id' => $this->clinica->id, 'first_name' => "P{$i}", 'last_name' => 'X', 'phone' => '668123450' . $i]);
+            $this->cita('2026-10-15 ' . (9 + $i) . ':00', $p);
+        }
+
+        $this->artisan('docfacil:send-reminders');
+
+        $this->assertCount(1, $this->enviosAMeta());
+    }
+
     // ── Los botones ─────────────────────────────────────────────
 
     private function tocar(Appointment $cita, string $accion, ?string $firma = null)
