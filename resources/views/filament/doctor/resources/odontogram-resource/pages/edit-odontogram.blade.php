@@ -1,4 +1,8 @@
 <x-filament-panels::page>
+    {{-- Las alertas del paciente también aquí (día 10 del plan). --}}
+    @if($alertas = \App\Support\AlertasClinicas::etiquetas($this->record->patient, 5))
+        {!! \App\Filament\Doctor\Concerns\AvisoDeAlertas::chips($alertas) !!}
+    @endif
     <x-filament-panels::form wire:submit="save">
         {{ $this->form }}
     </x-filament-panels::form>

@@ -30,6 +30,13 @@
                                 <span style="font-size:0.7rem;font-weight:700;padding:0.05rem 0.45rem;border-radius:999px;color:{{ $e[1] }};background:{{ $e[2] }};">{{ $e[0] }}</span>
                             </div>
                             <div style="font-size:0.85rem;">{{ $cita->patient?->first_name }} {{ $cita->patient?->last_name }}</div>
+                            @php $alertas = \App\Support\AlertasClinicas::etiquetas($cita->patient, 2); $falta = $cita->patient?->datosQueFaltan() ?? []; @endphp
+                            @if($alertas || $falta)
+                                <div style="display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.2rem;">
+                                    @foreach($alertas as $a)<span style="font-size:0.68rem;font-weight:700;padding:0.05rem 0.4rem;border-radius:999px;background:#fee2e2;color:#991b1b;">{{ $a }}</span>@endforeach
+                                    @if($falta)<span style="font-size:0.68rem;font-weight:700;padding:0.05rem 0.4rem;border-radius:999px;background:#fef3c7;color:#92400e;" title="{{ implode(', ', $falta) }}">Faltan datos</span>@endif
+                                </div>
+                            @endif
                             <div style="font-size:0.75rem;color:#64748b;">{{ $cita->service?->name ?? 'Consulta' }} · hasta {{ $cita->ends_at->format('H:i') }}</div>
                         </a>
                     @empty

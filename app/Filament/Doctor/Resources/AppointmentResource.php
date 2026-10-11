@@ -321,9 +321,11 @@ class AppointmentResource extends Resource
                 // que abrir su consulta para enterarse de la alergia.
                 Tables\Columns\TextColumn::make('alertas')
                     ->label('Alertas')
-                    ->state(fn ($record) => [...(\App\Models\LabOrder::pendienteParaCita($record->id) ? ['Lab: no ha llegado'] : []), ...\App\Support\AlertasClinicas::etiquetas($record->patient)])
+                    ->state(fn ($record) => [...(\App\Models\LabOrder::pendienteParaCita($record->id) ? ['Lab: no ha llegado'] : []), ...\App\Support\AlertasClinicas::etiquetas($record->patient),
+                        // Lo que falta para atenderlo y recordarle (día 10 del plan).
+                        ...(($falta = $record->patient?->datosQueFaltan() ?? []) ? ['Faltan datos: ' . implode(', ', $falta)] : [])])
                     ->badge()
-                    ->color('danger')
+                    ->color(fn (string $state) => str_starts_with($state, 'Faltan datos') ? 'warning' : 'danger')
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('doctor.user.name')
                     ->visibleFrom('2xl')

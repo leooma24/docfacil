@@ -59,7 +59,9 @@ class TreatmentPlanResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (Patient $record) => "{$record->first_name} {$record->last_name}")
                         ->searchable(['first_name', 'last_name'])
                         ->preload()
-                        ->required(),
+                        ->required()
+                        ->live(),
+                    \App\Filament\Doctor\Concerns\AvisoDeAlertas::campo(),
                     Forms\Components\Select::make('doctor_id')
                         ->label('Doctor a cargo')
                         ->options(fn () => \App\Models\Doctor::where('clinic_id', auth()->user()->clinic_id)

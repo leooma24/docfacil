@@ -310,6 +310,20 @@ class Patient extends Model
         return round(max(0, $dejo - $uso), 2);
     }
 
+    /**
+     * Lo básico que falta para atenderlo y recordarle sus citas (día 10 del
+     * plan, 10-oct-2026): la agenda lo marca para pedírselo al llegar.
+     *
+     * @return list<string>
+     */
+    public function datosQueFaltan(): array
+    {
+        return array_values(array_filter([
+            blank($this->telefonoDeContacto()) ? 'teléfono' : null,
+            $this->birth_date ? null : 'fecha de nacimiento',
+        ]));
+    }
+
     /** A quién se saluda en el mensaje: al responsable si lo hay. */
     public function nombreDeContacto(): string
     {

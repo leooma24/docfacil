@@ -25,6 +25,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10px; color: #333; line-height: 1.45; }
         .page { padding: 28px 36px 50px; }
+        .pie-foliado { position: fixed; bottom: 30px; left: 36px; right: 36px; font-size: 8px; color: #6b7280; text-align: right; }
+        .pie-foliado:after { content: "Hoja " counter(page); }
         .encabezado { border-bottom: 3px solid #14b8a6; padding-bottom: 10px; margin-bottom: 14px; }
         .consultorio { font-size: 13px; font-weight: bold; color: #111; }
         .detalle { font-size: 9px; color: #666; }
@@ -44,6 +46,10 @@
     </style>
 </head>
 <body>
+{{-- Folio y número de hoja en cada página (día 10 del plan): la historia
+     clínica impresa se puede ordenar y nadie le quita una hoja sin notarse. --}}
+@php $folio = 'EXP-' . str_pad((string) $patient->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('Ymd'); @endphp
+<div class="pie-foliado">Folio {{ $folio }} · {{ $patient->full_name }} · </div>
 <div class="page">
     <div class="encabezado">
         @if($clinica)
@@ -52,7 +58,7 @@
             @if($clinica->phone)<div class="detalle">Tel: {{ $clinica->phone }}</div>@endif
         @endif
         <h1>Resumen del expediente clínico</h1>
-        <div class="detalle">Generado el {{ now()->format('d/m/Y') }} a las {{ now()->format('H:i') }}@if(auth()->user()) por {{ auth()->user()->name }}@endif</div>
+        <div class="detalle">Folio {{ $folio }} · Generado el {{ now()->format('d/m/Y') }} a las {{ now()->format('H:i') }}@if(auth()->user()) por {{ auth()->user()->name }}@endif</div>
     </div>
 
     {{-- Ficha de identificación --}}
