@@ -52,6 +52,9 @@ return [
         // Meta App Secret — usado para validar firma X-Hub-Signature-256
         // de los webhooks entrantes. Si no esta seteado el webhook rechaza todo.
         'app_secret' => env('WHATSAPP_APP_SECRET'),
+        // Interruptor general de los recordatorios automáticos (12-oct-2026).
+        // Apagado, ningún consultorio manda nada aunque lo haya prendido.
+        'automaticos' => (bool) env('WHATSAPP_AUTOMATICOS', false),
     ],
 
     'mercadopago' => [

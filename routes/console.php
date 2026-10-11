@@ -20,7 +20,11 @@ Schedule::command('docfacil:send-engagement')->dailyAt('10:00');
 // 1 clic desde el WhatsApp del consultorio, sin costo por mensaje) y lo que
 // dice el aviso de privacidad. Si se decide activar recordatorios automaticos,
 // antes hay que agregar a Meta a la lista de proveedores del aviso.
-// Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
+// 12-oct-2026: vuelve, con plantillas y botones, solo para los consultorios
+// que lo prenden en Configuración y solo si WHATSAPP_AUTOMATICOS está
+// prendido en el servidor; el aviso de privacidad de esos consultorios ya
+// nombra a Meta. Apagado el interruptor general, no manda nada.
+Schedule::command('docfacil:send-reminders')->hourly()->withoutOverlapping();
 
 // Cumpleanos: el comando existe para cuando una clinica conecte su propia
 // WA Business API. Por default NO se programa — los doctores ven los

@@ -75,6 +75,13 @@ class WhatsAppWebhookController extends Controller
                 // Metadata only — NEVER el body del mensaje (PHI + LFPDPPP)
                 Log::info('WhatsApp webhook msg', ['type' => $type, 'id' => $msgId]);
 
+                // Un botón de un recordatorio: "Confirmo" o "Necesito cambiar".
+                // Nunca pasa al bot: es la respuesta a una cita.
+                if ($type === 'button') {
+                    $this->contestoUnRecordatorio($msg['from'] ?? '', $msg['button']['payload'] ?? null);
+                    continue;
+                }
+
                 if ($type !== 'text') continue;
 
                 $from = $msg['from'] ?? '';
@@ -89,6 +96,49 @@ class WhatsAppWebhookController extends Controller
         }
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * El paciente tocó un botón del recordatorio. La firma del dato dice qué
+     * cita es; si no cuadra, no se hace nada.
+     */
+    private function contestoUnRecordatorio(string $from, ?string $payload): void
+    {
+        $dato = \App\Support\PlantillasDeWhatsapp::leer($payload);
+        if (! $dato) {
+            Log::warning('WhatsApp webhook: botón con dato inválido');
+
+            return;
+        }
+
+        $cita = \App\Models\Appointment::withoutGlobalScopes()->with(['patient', 'clinic'])->find($dato['cita']);
+        if (! $cita || ! in_array($cita->status, ['scheduled', 'confirmed'], true)) {
+            return;
+        }
+
+        $whatsapp = app(\App\Services\WhatsAppService::class);
+        $cuando = $cita->starts_at->locale('es')->isoFormat('dddd D [a las] H:mm');
+
+        if ($dato['accion'] === 'confirmar') {
+            $cita->forceFill(['status' => 'confirmed', 'confirmed_at' => $cita->confirmed_at ?? now()])->saveQuietly();
+            $whatsapp->sendMessage($from, "¡Gracias! Su cita del {$cuando} en {$cita->clinic?->name} quedó confirmada.");
+
+            return;
+        }
+
+        // Quiere cambiarla: le avisa al consultorio para que le escriba.
+        $nombre = trim(($cita->patient?->first_name ?? '') . ' ' . ($cita->patient?->last_name ?? '')) ?: 'Un paciente';
+        foreach (\App\Models\User::where('clinic_id', $cita->clinic_id)->whereIn('role', ['doctor', 'staff'])->get() as $usuario) {
+            \Filament\Notifications\Notification::make()
+                ->title("{$nombre} quiere cambiar su cita")
+                ->body("La del {$cuando}. Escríbale para darle otro horario.")
+                ->icon('heroicon-o-arrow-path')
+                ->iconColor('warning')
+                ->actions([\Filament\Notifications\Actions\Action::make('ver')->label('Ver cita')
+                    ->url(\App\Filament\Doctor\Resources\AppointmentResource::getUrl('edit', ['record' => $cita], panel: 'doctor'))->markAsRead()])
+                ->sendToDatabase($usuario);
+        }
+        $whatsapp->sendMessage($from, "Le avisamos a {$cita->clinic?->name}; le van a escribir para darle otro horario.");
     }
 
     private function isValidSignature(string $rawBody, string $header, string $secret): bool

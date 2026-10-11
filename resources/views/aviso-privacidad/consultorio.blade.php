@@ -66,6 +66,9 @@
         <h2>4. Con quién los compartimos</h2>
         <ul>
             <li><strong>DocFácil</strong>, la plataforma donde llevamos tu expediente y nuestra agenda. Solo guarda y procesa tus datos por encargo nuestro y no los usa para nada más. Sus servidores están en Estados Unidos.</li>
+            @if($clinic->recordatorios_automaticos)
+            <li><strong>Meta Platforms (WhatsApp)</strong>, para mandarte el recordatorio de tu cita por WhatsApp: recibe tu nombre, tu teléfono y el día, la hora y el consultorio de la cita.</li>
+            @endif
             <li>Laboratorios, gabinetes u otros especialistas, solo cuando hace falta para tu diagnóstico o tratamiento.</li>
             <li>Autoridades, solo cuando una ley nos obliga.</li>
         </ul>

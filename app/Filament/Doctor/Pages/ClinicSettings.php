@@ -58,6 +58,7 @@ class ClinicSettings extends Page implements HasForms
             'google_review_url' => $clinic->google_review_url,
             'minutos_entre_citas' => $clinic->minutosEntreCitas(),
             'corte_por_correo' => $clinic->corte_por_correo ?? true,
+            'recordatorios_automaticos' => (bool) $clinic->recordatorios_automaticos,
             'timezone' => \App\Support\ZonaHoraria::delConsultorio($clinic),
             'anesthetic_max_mg_kg' => $clinic->anesthetic_max_mg_kg,
             'anesthetic_mg_ml' => $clinic->anesthetic_mg_ml,
@@ -129,6 +130,17 @@ class ClinicSettings extends Page implements HasForms
                             ->default(1.8)
                             ->minValue(0.1)
                             ->helperText('El estándar dental es 1.8 ml.'),
+                    ]),
+
+                // Solo se ofrece cuando el servidor ya puede mandarlos
+                // (WHATSAPP_AUTOMATICOS) y su plan trae recordatorios.
+                Section::make('Recordatorios automáticos por WhatsApp')
+                    ->visible(fn () => config('services.whatsapp.automaticos') && auth()->user()->clinic?->hasFeature('whatsapp_reminders'))
+                    ->description('Un día antes y, si no ha confirmado, dos horas antes, le llega al paciente un WhatsApp con botones «Confirmo» y «Necesito cambiar». Si confirma, la cita se marca sola; si quiere cambiar, le avisamos aquí.')
+                    ->schema([
+                        Toggle::make('recordatorios_automaticos')
+                            ->label('Mandar los recordatorios solos')
+                            ->helperText('Salen del número de WhatsApp de DocFácil con el nombre de su consultorio. A los niños les llega a su responsable. Los datos de la cita pasan por Meta (WhatsApp), y así lo dice su aviso de privacidad.'),
                     ]),
 
                 Section::make('Correos')
@@ -262,6 +274,10 @@ class ClinicSettings extends Page implements HasForms
 
         // Solo viene si su plan trae el corte. Si no viene, no se toca: no
         // hay que volver a prenderle un correo que apagó desde la liga.
+        if (array_key_exists('recordatorios_automaticos', $data)) {
+            $cambios['recordatorios_automaticos'] = (bool) $data['recordatorios_automaticos'];
+        }
+
         if (array_key_exists('corte_por_correo', $data)) {
             $cambios['corte_por_correo'] = (bool) $data['corte_por_correo'];
         }

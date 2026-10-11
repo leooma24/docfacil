@@ -122,7 +122,10 @@ class WhatsAppService
         }
     }
 
-    public function sendTemplate(string $to, string $templateName, array $parameters = [], string $language = 'es_MX'): bool
+    /**
+     * @param  list<string>  $botones  el dato (payload) de cada botón de respuesta rápida, en orden
+     */
+    public function sendTemplate(string $to, string $templateName, array $parameters = [], string $language = 'es_MX', array $botones = []): bool
     {
         if (empty($this->token) || empty($this->phoneNumberId)) {
             return false;
@@ -138,6 +141,15 @@ class WhatsAppService
                     'type' => 'text',
                     'text' => $value,
                 ], $parameters),
+            ];
+        }
+
+        foreach (array_values($botones) as $i => $payload) {
+            $components[] = [
+                'type' => 'button',
+                'sub_type' => 'quick_reply',
+                'index' => (string) $i,
+                'parameters' => [['type' => 'payload', 'payload' => $payload]],
             ];
         }
 
