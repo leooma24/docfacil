@@ -38,7 +38,7 @@
             <ul class="list-disc pl-6 space-y-1">
                 <li>Dar acceso a la Plataforma de gestión de consultorios.</li>
                 <li>Guardar y organizar, por cuenta de cada consultorio, expedientes clínicos, recetas, citas, pagos y consentimientos.</li>
-                <li>Preparar los recordatorios de WhatsApp que el consultorio manda a sus pacientes desde su propio WhatsApp, y enviar por correo los mensajes que el consultorio pida, como la invitación al portal del paciente.</li>
+                <li>Preparar los recordatorios de WhatsApp que el consultorio manda a sus pacientes desde su propio WhatsApp; mandar los recordatorios automáticos de cita por WhatsApp a los consultorios que los activen; y enviar por correo los mensajes que el consultorio pida, como la invitación al portal del paciente.</li>
                 <li>Enviar a los usuarios los correos propios del servicio, como la verificación de la cuenta y los avisos de la suscripción.</li>
                 <li>Cobrar la suscripción del consultorio.</li>
                 <li>Cumplir obligaciones legales, como la conservación de expedientes y la conservación fiscal.</li>
@@ -58,10 +58,11 @@
                 <li><strong>Resend</strong> — Estados Unidos. Envío de correos electrónicos: verificación de cuenta, avisos del servicio, correos a prospectos y los correos que el consultorio manda a sus pacientes desde la Plataforma.</li>
                 <li><strong>Stripe</strong> — Estados Unidos. Cobro con tarjeta de la suscripción. Los datos de la tarjeta los captura Stripe; DocFácil no los recibe ni los guarda.</li>
                 <li><strong>Google</strong> (Google Analytics) — Estados Unidos. Medición de visitas al sitio público (ver sección 6). No se usa dentro de la Plataforma, donde están los datos de pacientes.</li>
+                <li><strong>Meta Platforms, Inc.</strong> (WhatsApp) — Estados Unidos. Solo si el consultorio activa los recordatorios automáticos: recibe el teléfono del paciente (o de quien paga por él), su nombre y el día, la hora y el motivo de la cita, para entregar el recordatorio por la API oficial de WhatsApp y devolvernos la respuesta del paciente.</li>
                 <li><strong>DeepSeek</strong> — China. Genera las respuestas del chat de ventas de la página pública. Recibe lo que usted escriba en ese chat, incluidos los datos que dé para crear su cuenta. La Plataforma no le envía datos de pacientes.</li>
             </ul>
             <p>Por lo tanto, <strong>los datos se alojan en Estados Unidos</strong>. La remisión de datos a encargados y subencargados no requiere su consentimiento. Si cambiamos o agregamos proveedores, actualizaremos esta lista y lo avisaremos antes a nuestros usuarios.</p>
-            <p><strong>WhatsApp.</strong> Los recordatorios y mensajes para pacientes se abren en el WhatsApp del propio consultorio con el texto ya escrito, y es el consultorio quien los envía. DocFácil no los envía.</p>
+            <p><strong>WhatsApp.</strong> Normalmente los recordatorios y mensajes para pacientes se abren en el WhatsApp del propio consultorio con el texto ya escrito, y es el consultorio quien los envía. Si el consultorio activa los recordatorios automáticos, DocFácil manda por la API oficial de WhatsApp un recordatorio un día antes y, si no ha confirmado, otro dos horas antes, a nombre del consultorio. El paciente puede contestar «Confirmo» o «Necesito cambiar», y esa respuesta solo se usa para marcar la cita o avisarle al consultorio. Si el paciente no quiere recibirlos, puede pedirle a su consultorio que quite su teléfono.</p>
             <p><strong>Inteligencia artificial.</strong> Las funciones de inteligencia artificial de la Plataforma están desactivadas, y DocFácil no envía datos de pacientes a ningún proveedor de inteligencia artificial. Si se activan, avisaremos antes qué proveedor procesaría qué datos. El chat de ventas de la página pública funciona aparte y se describe arriba.</p>
             <p><strong>Transferencias.</strong> Solo transferimos datos personales a autoridades competentes cuando una ley o una orden lo exigen. Los datos de pacientes solo se comunican a terceros por instrucción del consultorio responsable o por requerimiento de autoridad; en ese caso avisaremos al consultorio, salvo que la ley lo impida.</p>
 
