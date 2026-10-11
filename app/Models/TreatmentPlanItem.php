@@ -11,6 +11,8 @@ class TreatmentPlanItem extends Model
         'treatment_plan_id', 'service_id',
         'description', 'quantity', 'unit_price', 'subtotal',
         'tooth_number', 'sort_order', 'completed_at',
+        // Etapa ("1. Urgencia") y si es opcional: no suma al total.
+        'etapa', 'opcional',
     ];
 
     protected function casts(): array
@@ -21,6 +23,7 @@ class TreatmentPlanItem extends Model
             'subtotal' => 'decimal:2',
             'sort_order' => 'integer',
             'completed_at' => 'datetime',
+            'opcional' => 'boolean',
         ];
     }
 

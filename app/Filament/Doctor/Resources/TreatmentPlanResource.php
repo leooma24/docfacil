@@ -96,6 +96,15 @@ class TreatmentPlanResource extends Resource
                         ])
                         ->default('draft')
                         ->required(),
+                    // La firma con la que el paciente aceptó desde su celular.
+                    Forms\Components\Placeholder::make('firma')
+                        ->label('Firma del paciente')
+                        ->visible(fn (?TreatmentPlan $record) => filled($record?->firma_paciente))
+                        ->content(fn (?TreatmentPlan $record) => new \Illuminate\Support\HtmlString(
+                            '<img src="' . e($record->firma_paciente) . '" alt="Firma" style="max-width:240px;max-height:80px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:4px;">'
+                            . '<div style="font-size:.85rem;color:#64748b;margin-top:4px;">' . e($record->firmado_por) . ' · ' . e($record->accepted_at?->format('d/m/Y H:i')) . '</div>'
+                        ))
+                        ->columnSpanFull(),
                 ]),
 
             Forms\Components\Section::make('Servicios y costos')
@@ -104,6 +113,21 @@ class TreatmentPlanResource extends Resource
                         ->label('Tratamientos')
                         ->relationship()
                         ->schema([
+                            // Etapas como en Dentalink y DaleControl (10-oct-2026):
+                            // "1. Urgencia", "2. Rehabilitación". El paciente lo ve
+                            // agrupado y en ese orden.
+                            Forms\Components\TextInput::make('etapa')
+                                ->label('Etapa')
+                                ->placeholder('1. Urgencia')
+                                ->datalist(['1. Diagnóstico', '1. Urgencia', '2. Rehabilitación', '3. Estética', '4. Mantenimiento'])
+                                ->maxLength(60)
+                                ->columnSpan(['md' => 4]),
+                            Forms\Components\Toggle::make('opcional')
+                                ->label('Opcional (no suma al total)')
+                                ->helperText('Una opción B: el paciente la ve con su precio, aparte.')
+                                ->inline(false)
+                                ->live()
+                                ->columnSpan(['md' => 8]),
                             Forms\Components\Select::make('service_id')
                                 ->label('Servicio')
                                 ->columnSpan(['md' => 5])
@@ -122,10 +146,10 @@ class TreatmentPlanResource extends Resource
                                     }
                                 }),
                             Forms\Components\TextInput::make('tooth_number')
-                                ->label('Diente')
-                                ->placeholder('16')
+                                ->label('Diente(s)')
+                                ->placeholder('11, 12, 21')
                                 ->columnSpan(['md' => 2])
-                                ->maxLength(10),
+                                ->maxLength(60),
                             Forms\Components\TextInput::make('quantity')
                                 ->label('Cant.')
                                 ->numeric()
@@ -203,12 +227,22 @@ class TreatmentPlanResource extends Resource
                         ->orderColumn('sort_order')
                         ->reorderable()
                         ->addActionLabel('Agregar servicio'),
-                    Forms\Components\Grid::make(2)->schema([
+                    Forms\Components\Grid::make(['default' => 1, 'md' => 3])->schema([
+                        Forms\Components\TextInput::make('descuento_porcentaje')
+                            ->label('Descuento (%)')
+                            ->helperText('Si lo pone, el descuento en pesos sale solo.')
+                            ->numeric()
+                            ->suffix('%')
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->live(onBlur: true),
                         Forms\Components\TextInput::make('discount')
                             ->label('Descuento (monto)')
                             ->numeric()
                             ->prefix('$')
                             ->default(0)
+                            ->disabled(fn (Forms\Get $get) => (float) $get('descuento_porcentaje') > 0)
+                            ->dehydrated()
                             ->live(onBlur: true),
                         // En vivo, con lo que el doctor va escribiendo; antes era el
                         // total guardado y quedaba viejo al cambiar un precio.
@@ -216,9 +250,20 @@ class TreatmentPlanResource extends Resource
                             ->label('Total')
                             ->content(fn (Forms\Get $get) => new \Illuminate\Support\HtmlString(
                                 '<span style="font-size:1.6rem;font-weight:800;color:#0f766e;">$'
-                                . number_format(self::totalEstimado($get('items') ?? [], $get('discount')), 2) . '</span>'
+                                . number_format(self::totalEstimado($get('items') ?? [], $get('discount'), $get('descuento_porcentaje')), 2) . '</span>'
                             )),
                     ]),
+                    // Tres niveles, como en Dentalink: hay quien no quiere que el
+                    // paciente vea el precio de cada cosa.
+                    Forms\Components\Radio::make('detalle_al_enviar')
+                        ->label('¿Qué ve el paciente?')
+                        ->options([
+                            'completo' => 'El precio de cada tratamiento',
+                            'solo_total' => 'Solo el total',
+                            'sin_precios' => 'Sin precios',
+                        ])
+                        ->default('completo')
+                        ->inline(),
                 ]),
 
             Forms\Components\Section::make('Notas internas')
@@ -355,9 +400,13 @@ class TreatmentPlanResource extends Resource
     }
 
     /** Suma de cantidad × precio de las líneas, menos el descuento. Nunca negativo. */
-    public static function totalEstimado(array $items, mixed $descuento): float
+    public static function totalEstimado(array $items, mixed $descuento, mixed $porcentaje = null): float
     {
-        $subtotal = collect($items)->sum(fn ($i) => (float) ($i['quantity'] ?? 0) * (float) ($i['unit_price'] ?? 0));
+        $subtotal = collect($items)->reject(fn ($i) => ! empty($i['opcional']))
+            ->sum(fn ($i) => (float) ($i['quantity'] ?? 0) * (float) ($i['unit_price'] ?? 0));
+        if ((float) $porcentaje > 0) {
+            $descuento = $subtotal * min(100, (float) $porcentaje) / 100;
+        }
 
         return round(max(0, $subtotal - (float) $descuento), 2);
     }

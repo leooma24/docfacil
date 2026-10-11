@@ -29,7 +29,7 @@
         <div class="plan-box">
             <div style="color:#6b7280;font-size:12px;margin-bottom:4px;">PLAN ACEPTADO</div>
             <div style="font-weight:700;color:#1f2937;">{{ $plan->title }}</div>
-            <div class="total">${{ number_format($plan->total, 2) }} MXN</div>
+            @if($plan->muestra('total'))<div class="total">${{ number_format($plan->total, 2) }} MXN</div>@endif
         </div>
 
         <p class="sub" style="font-size:13px;">Aceptado el {{ $plan->accepted_at->translatedFormat('l d \d\e F, H:i') }}</p>

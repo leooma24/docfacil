@@ -65,6 +65,7 @@
     <p class="plan-desc">{{ $plan->description }}</p>
     @endif
 
+    @php $etapas = $plan->porEtapas(); $conEtapas = $etapas->keys()->filter()->isNotEmpty(); $opcionales = $plan->items->where('opcional', true); @endphp
     <table class="items">
         <thead>
             <tr>
@@ -76,17 +77,42 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($plan->items as $item)
+            @foreach($etapas as $etapa => $items)
+                @php $incluidos = $items->where('opcional', false); @endphp
+                @continue($incluidos->isEmpty())
+                @if($conEtapas)
+                <tr><td colspan="4" style="background:#f0fdfa;color:#0f766e;font-weight:700;">{{ $etapa !== '' ? $etapa : 'Otros' }}</td>
+                    <td class="right" style="background:#f0fdfa;color:#0f766e;font-weight:700;">${{ number_format($incluidos->sum('subtotal'), 2) }}</td></tr>
+                @endif
+                @foreach($incluidos as $item)
+                <tr>
+                    <td>{{ $item->description }}</td>
+                    <td>{{ $item->tooth_number ?: '—' }}</td>
+                    <td class="right">{{ $item->quantity }}</td>
+                    <td class="right">${{ number_format($item->unit_price, 2) }}</td>
+                    <td class="right">${{ number_format($item->subtotal, 2) }}</td>
+                </tr>
+                @endforeach
+            @endforeach
+        </tbody>
+    </table>
+
+    @if($opcionales->isNotEmpty())
+    <table class="items">
+        <thead><tr><th colspan="5" style="background:#b45309;">Opcional (no incluido en el total)</th></tr></thead>
+        <tbody>
+            @foreach($opcionales as $item)
             <tr>
-                <td>{{ $item->description }}</td>
-                <td>{{ $item->tooth_number ?: '—' }}</td>
-                <td class="right">{{ $item->quantity }}</td>
-                <td class="right">${{ number_format($item->unit_price, 2) }}</td>
-                <td class="right">${{ number_format($item->subtotal, 2) }}</td>
+                <td style="width:45%;">{{ $item->description }}</td>
+                <td style="width:12%;">{{ $item->tooth_number ?: '—' }}</td>
+                <td class="right" style="width:10%;">{{ $item->quantity }}</td>
+                <td class="right" style="width:16%;">${{ number_format($item->unit_price, 2) }}</td>
+                <td class="right" style="width:17%;">${{ number_format($item->subtotal, 2) }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    @endif
 
     <div class="totals">
         <div class="totals-row">
@@ -95,7 +121,7 @@
         </div>
         @if($plan->discount > 0)
         <div class="totals-row">
-            <span class="label">Descuento</span>
+            <span class="label">Descuento @if($plan->descuento_porcentaje > 0) ({{ rtrim(rtrim(number_format($plan->descuento_porcentaje, 2), '0'), '.') }}%)@endif</span>
             <span class="amount">− ${{ number_format($plan->discount, 2) }}</span>
         </div>
         @endif
@@ -105,14 +131,21 @@
         </div>
     </div>
 
+    @if($plan->firma_paciente)
+    <div style="margin-top:36px;text-align:center;">
+        <img src="{{ $plan->firma_paciente }}" alt="Firma" style="max-width:220px;max-height:80px;">
+        <div class="signature-line" style="margin-top:2px;">Firma del paciente · {{ $plan->firmado_por }}</div>
+    </div>
+    @else
     <div class="signature-line">
         Firma del paciente
     </div>
+    @endif
 
     <div class="footer-note">
         Este presupuesto es informativo y no constituye factura fiscal.<br>
         @if($plan->accepted_at)
-            <strong>Aceptado el {{ $plan->accepted_at->format('d/m/Y H:i') }}</strong> desde IP {{ $plan->accepted_ip }}.
+            <strong>Aceptado @if($plan->firma_paciente)y firmado en línea @endif el {{ $plan->accepted_at->format('d/m/Y H:i') }}</strong> @if($plan->accepted_ip)desde IP {{ $plan->accepted_ip }}@endif.
         @endif
     </div>
 </body>

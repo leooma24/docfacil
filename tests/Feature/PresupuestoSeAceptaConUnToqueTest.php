@@ -53,13 +53,14 @@ class PresupuestoSeAceptaConUnToqueTest extends TestCase
     {
         $this->get(route('treatment-plan.public', ['token' => $this->plan->public_token]))->assertOk()
             ->assertSee('method="POST"', false)
-            ->assertSee('Aceptar plan')
+            // Desde el 10-oct-2026 se acepta firmando.
+            ->assertSee('Firmar y aceptar')
             ->assertDontSee('quieres');
     }
 
     public function test_tocar_aceptar_lo_acepta_y_avisa(): void
     {
-        $this->post($this->liga('accept'))->assertOk();
+        $this->post($this->liga('accept'), ['firma' => 'data:image/png;base64,iVBORw0KGgo=', 'firmado_por' => 'Ana Ruiz'])->assertOk();
 
         $this->assertSame('accepted', $this->plan->fresh()->status);
         $this->assertSame(1, $this->doctor->notifications()->count());

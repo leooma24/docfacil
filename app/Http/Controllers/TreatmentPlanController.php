@@ -51,10 +51,24 @@ class TreatmentPlanController extends Controller
             ->where('status', 'sent')
             ->firstOrFail();
 
+        // El paciente firma al aceptar (10-oct-2026): la firma dibujada en su
+        // celular, como imagen, y su nombre. Queda en el presupuesto y en el PDF.
+        $datos = $request->validate([
+            'firma' => ['required', 'string', 'max:400000', 'regex:/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/'],
+            'firmado_por' => ['required', 'string', 'max:120'],
+        ], [
+            'firma.required' => 'Firme con el dedo en el recuadro para aceptar.',
+            'firma.regex' => 'La firma no se pudo leer. Bórrela y vuelva a firmar.',
+            'firma.max' => 'La firma no se pudo leer. Bórrela y vuelva a firmar.',
+            'firmado_por.required' => 'Escriba su nombre.',
+        ]);
+
         $plan->update([
             'status' => 'accepted',
             'accepted_at' => now(),
             'accepted_ip' => $request->ip(),
+            'firma_paciente' => $datos['firma'],
+            'firmado_por' => trim($datos['firmado_por']),
         ]);
 
         Log::info('Treatment plan accepted', [

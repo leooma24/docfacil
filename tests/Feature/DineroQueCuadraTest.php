@@ -37,6 +37,9 @@ class DineroQueCuadraTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** Desde el 10-oct-2026 el paciente firma al aceptar. */
+    private const FIRMADO = ['firma' => 'data:image/png;base64,iVBORw0KGgo=', 'firmado_por' => 'Ana Ruiz'];
+
     private Clinic $clinica;
     private User $usuario;
     private Doctor $doctor;
@@ -150,7 +153,7 @@ class DineroQueCuadraTest extends TestCase
         $plan = \App\Models\TreatmentPlan::create(['clinic_id' => $this->clinica->id, 'patient_id' => $this->ana->id, 'title' => 'Corona', 'status' => 'sent',
             'subtotal' => 7654, 'discount' => 0, 'total' => 7654, 'public_token' => str_repeat('a', 64)]);
 
-        $this->post(\Illuminate\Support\Facades\URL::signedRoute('treatment-plan.accept', $plan->public_token))->assertOk();
+        $this->post(\Illuminate\Support\Facades\URL::signedRoute('treatment-plan.accept', $plan->public_token), self::FIRMADO)->assertOk();
 
         $this->assertStringContainsString('7,654', json_encode($this->usuario->fresh()->notifications->first()?->data));
         $this->assertStringNotContainsString('7,654', json_encode($lupita->fresh()->notifications->first()?->data));

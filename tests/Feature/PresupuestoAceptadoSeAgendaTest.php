@@ -31,6 +31,9 @@ class PresupuestoAceptadoSeAgendaTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** Desde el 10-oct-2026 el paciente firma al aceptar. */
+    private const FIRMADO = ['firma' => 'data:image/png;base64,iVBORw0KGgo=', 'firmado_por' => 'Ana Ruiz'];
+
     private Clinic $clinica;
     private User $user;
     private Doctor $doctor;
@@ -58,7 +61,7 @@ class PresupuestoAceptadoSeAgendaTest extends TestCase
 
     private function aceptar(): void
     {
-        $this->post(URL::signedRoute('treatment-plan.accept', ['token' => $this->plan->public_token]))->assertOk();
+        $this->post(URL::signedRoute('treatment-plan.accept', ['token' => $this->plan->public_token]), self::FIRMADO)->assertOk();
     }
 
     // ── Al aceptar, el doctor se entera ──────────────────────────
