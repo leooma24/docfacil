@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 
 class BrochureController extends Controller
 {
+    /** La misma hoja que el PDF, para verla en el navegador (11-oct-2026). */
     public function web()
     {
-        return view('brochure.index', $this->viewData('web'));
+        return view('pdf.brochure', $this->viewData('web'));
     }
 
     public function pdf(Request $request)
@@ -30,18 +31,19 @@ class BrochureController extends Controller
 
     private function viewData(string $mode): array
     {
+        // Capturas del 11-oct-2026, de la demo con datos inventados.
         $screenFiles = [
-            'dashboard'   => 'images/screenshots/01-dashboard.png',
-            'citas'       => 'images/screenshots/02-citas-lista.png',
-            'calendario'  => 'images/screenshots/03-calendario.png',
-            'pacientes'   => 'images/screenshots/04-pacientes.png',
-            'expediente'  => 'images/screenshots/05-expediente.png',
-            'recetas'     => 'images/screenshots/06-recetas.png',
-            'odontograma' => 'images/screenshots/07-odontograma-editor.png',
-            'cobros'      => 'images/screenshots/08-cobros.png',
-            'consulta'    => 'images/screenshots/09-consulta.png',
-            'servicios'   => 'images/screenshots/10-servicios.png',
-            'landing'     => 'images/screenshots/11-landing-hero.png',
+            'escritorio' => 'images/brochure/escritorio.jpg',
+            'agenda' => 'images/brochure/agenda-doctor.jpg',
+            'consulta' => 'images/brochure/consulta.jpg',
+            'cobro' => 'images/brochure/cobro.jpg',
+            'presupuesto' => 'images/brochure/presupuesto-cel.jpg',
+            'llamar' => 'images/brochure/llamar.jpg',
+            'ortodoncia' => 'images/brochure/ortodoncia.jpg',
+            'comisiones' => 'images/brochure/comisiones.jpg',
+            'portal' => 'images/brochure/portal-cel.jpg',
+            'traer' => 'images/brochure/traer.jpg',
+            'perfil' => 'images/brochure/perfil.jpg',
         ];
 
         $screens = [];
