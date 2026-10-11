@@ -126,6 +126,12 @@ class PatientResource extends Resource
                             ->helperText('A este número le llegan los recordatorios por WhatsApp.')
                             ->tel()
                             ->maxLength(255),
+                        Forms\Components\Toggle::make('no_quiere_whatsapp')
+                            ->label('No quiere recordatorios por WhatsApp')
+                            ->helperText('No le sale ningún recordatorio automático. Si lo pidió contestando por WhatsApp, se marcó solo.')
+                            ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('no_quiere_whatsapp_at', $state ? now()->toDateTimeString() : null))
+                            ->live(),
+                        Forms\Components\Hidden::make('no_quiere_whatsapp_at'),
                         Forms\Components\DatePicker::make('birth_date')
                             ->label('Fecha de nacimiento')
                             ->placeholder('dd/mm/aaaa')

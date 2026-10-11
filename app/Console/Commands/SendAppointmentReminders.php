@@ -83,7 +83,7 @@ class SendAppointmentReminders extends Command
                     return $enviados;
                 }
                 $telefono = $cita->patient?->telefonoDeContacto();
-                if (! $telefono) {
+                if (! $telefono || $cita->patient->noQuiereWhatsapp()) {
                     continue;
                 }
 

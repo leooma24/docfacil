@@ -86,6 +86,8 @@ class Patient extends Model
         'user_id',
         // Prueba de que aceptó el aviso de privacidad (ver AvisoDePrivacidad).
         'aviso_privacidad_aceptado_at', 'aviso_privacidad_version', 'aviso_privacidad_medio',
+        // Pidió que no le escriban por WhatsApp (ver NoQuiereWhatsapp).
+        'no_quiere_whatsapp', 'no_quiere_whatsapp_at',
     ];
 
     protected function casts(): array
@@ -96,6 +98,8 @@ class Patient extends Model
             'riesgos' => 'array',
             'riesgos_revisados_at' => 'datetime',
             'aviso_privacidad_aceptado_at' => 'datetime',
+            'no_quiere_whatsapp' => 'boolean',
+            'no_quiere_whatsapp_at' => 'datetime',
         ];
     }
 
@@ -273,6 +277,15 @@ class Patient extends Model
         $suyo = filled($this->phone) ? $this->phone : null;
 
         return $this->responsable && filled($this->responsable->phone) ? $this->responsable->phone : $suyo;
+    }
+
+    /**
+     * Si a quien le llegan sus mensajes pidió que no le escriban por WhatsApp:
+     * él mismo o, si es un niño, quien paga por él.
+     */
+    public function noQuiereWhatsapp(): bool
+    {
+        return (bool) $this->no_quiere_whatsapp || (bool) $this->responsable?->no_quiere_whatsapp;
     }
 
     /** A quién se saluda en el mensaje: al responsable si lo hay. */

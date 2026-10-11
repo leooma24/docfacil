@@ -89,6 +89,13 @@ class WhatsAppWebhookController extends Controller
 
                 if (empty($from) || empty($text)) continue;
 
+                // "Ya no me manden": se respeta antes que nada (WhatsApp lo exige).
+                if (\App\Support\NoQuiereWhatsapp::loPide($text)) {
+                    \App\Support\NoQuiereWhatsapp::marcar($from);
+                    app(\App\Services\WhatsAppService::class)->sendMessage($from, 'Listo, ya no le mandaremos recordatorios por WhatsApp. Si cambia de opinión, dígaselo a su consultorio.');
+                    continue;
+                }
+
                 $bot->handleIncoming($from, $text);
             }
         } catch (\Throwable $e) {
