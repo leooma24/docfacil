@@ -191,6 +191,13 @@ class PublicBookingController extends Controller
                 ->withErrors(['preferred_at' => $clinic->horarioDelDia($startsAt)]);
         }
 
+        // El doctor que eligió está de vacaciones ese día (10-oct-2026).
+        if (! empty($data['doctor_id']) && $clinic->cierraEse($startsAt, (int) $data['doctor_id'])) {
+            return back()
+                ->withInput()
+                ->withErrors(['preferred_at' => 'Ese día el doctor no atiende. Elija otra fecha u otro doctor.']);
+        }
+
         // La reserva va dentro de una transaccion con candado, y el traslape se
         // vuelve a revisar adentro.
         //

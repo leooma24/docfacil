@@ -51,7 +51,8 @@ class HuecosDisponibles
             return [];
         }
 
-        if ($clinic->cierraEse($dia)) {
+        // El consultorio cerrado, o ese doctor de vacaciones.
+        if ($clinic->cierraEse($dia, $doctorId)) {
             return [];
         }
 

@@ -14,7 +14,8 @@ class ClinicClosure extends Model
 {
     use BelongsToClinic;
 
-    protected $fillable = ['clinic_id', 'starts_on', 'ends_on', 'reason'];
+    /** Con doctor, solo cierra su agenda (sus vacaciones); sin doctor, todo el consultorio. */
+    protected $fillable = ['clinic_id', 'doctor_id', 'starts_on', 'ends_on', 'reason'];
 
     protected function casts(): array
     {
@@ -22,6 +23,11 @@ class ClinicClosure extends Model
             'starts_on' => 'date',
             'ends_on' => 'date',
         ];
+    }
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(Doctor::class);
     }
 
     public function clinic(): BelongsTo

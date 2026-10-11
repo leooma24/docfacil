@@ -309,11 +309,13 @@ class Clinic extends Model
      * Sin esto, el portal público seguía aceptando citas para toda la semana
      * que el doctor se iba de vacaciones.
      */
-    public function cierraEse(\DateTimeInterface $momento): ?\App\Models\ClinicClosure
+    public function cierraEse(\DateTimeInterface $momento, ?int $doctorId = null): ?\App\Models\ClinicClosure
     {
         $dia = $momento->format('Y-m-d');
 
+        // Las vacaciones de un doctor solo cierran su agenda (10-oct-2026).
         return $this->closures()
+            ->where(fn ($q) => $q->whereNull('doctor_id')->when($doctorId, fn ($w) => $w->orWhere('doctor_id', $doctorId)))
             ->whereDate('starts_on', '<=', $dia)
             ->whereDate('ends_on', '>=', $dia)
             ->first();

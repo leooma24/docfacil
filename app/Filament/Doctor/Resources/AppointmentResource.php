@@ -63,6 +63,14 @@ class AppointmentResource extends Resource
         return 'Citas que faltan hoy';
     }
 
+    /** Cuánto dura una cita de ese servicio (30 minutos si no hay servicio). */
+    public static function duracionDe(mixed $servicioId): int
+    {
+        $minutos = $servicioId ? (int) Service::where('clinic_id', auth()->user()->clinic_id)->whereKey($servicioId)->value('duration_minutes') : 0;
+
+        return $minutos > 0 ? $minutos : 30;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -121,7 +129,9 @@ class AppointmentResource extends Resource
                             // Doctor logueado por default. El usuario puede
                             // cambiarlo en el dropdown sin que se revierta
                             // (porque es declared default, no mount override).
-                            ->default(fn () => auth()->user()?->doctor?->id),
+                            // Desde «El día por doctor», el doctor del hueco que se tocó.
+                            ->default(fn () => \App\Models\Doctor::where('clinic_id', auth()->user()?->clinic_id)->whereKey(request()->query('doctor'))->value('id')
+                                ?? auth()->user()?->doctor?->id),
                         Forms\Components\Select::make('service_id')
                             ->label('Servicio')
                             ->relationship('service', 'name')
@@ -151,10 +161,35 @@ class AppointmentResource extends Resource
                             }),
                         Forms\Components\DateTimePicker::make('starts_at')
                             ->label('Inicio')
+                            ->default(fn () => preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', (string) request()->query('inicio'))
+                                ? \Carbon\Carbon::parse(request()->query('inicio'))->format('Y-m-d H:i:s') : null)
+                            ->helperText(fn (string $operation) => $operation === 'create' ? 'La lupa busca el primer hueco libre de este doctor.' : null)
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')
                             ->minutesStep(15)
+                            // «Buscar espacio» (día 6 del plan, 10-oct-2026): el
+                            // primer hueco libre de ese doctor que alcance para el
+                            // servicio, contando horario, comida, cierres y sus citas.
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('buscarEspacio')
+                                    ->label('Buscar espacio')
+                                    ->tooltip('Buscar el primer hueco libre')
+                                    ->icon('heroicon-o-magnifying-glass')
+                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                        $minutos = self::duracionDe($get('service_id'));
+                                        $agenda = \App\Services\HuecosDisponibles::proximosDias(auth()->user()->clinic, $get('doctor_id') ? (int) $get('doctor_id') : null, $minutos, 1);
+                                        $fecha = array_key_first($agenda);
+                                        if (! $fecha) {
+                                            Notification::make()->title('No hay huecos libres en los próximos 60 días')->warning()->send();
+
+                                            return;
+                                        }
+                                        $inicio = \Carbon\Carbon::parse($fecha . ' ' . $agenda[$fecha][0]);
+                                        $set('starts_at', $inicio->format('Y-m-d H:i:s'));
+                                        $set('ends_at', $inicio->copy()->addMinutes($minutos)->format('Y-m-d H:i:s'));
+                                    })
+                            )
                             ->reactive()
                             ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
                                 // Cuando cambian el inicio, recalcular el fin segun la duracion
@@ -196,8 +231,35 @@ class AppointmentResource extends Resource
                                     }
                                 };
                             }),
+                        // Los huecos libres de ese día para ese doctor: tocar uno
+                        // pone la hora. Así no se escribe una hora a ciegas.
+                        Forms\Components\ToggleButtons::make('hueco')
+                            ->label(fn (Forms\Get $get) => 'Libres el ' . \Carbon\Carbon::parse($get('starts_at') ?: today())->locale('es')->isoFormat('dddd D [de] MMMM'))
+                            ->options(fn (Forms\Get $get) => collect(\App\Services\HuecosDisponibles::delDia(
+                                auth()->user()->clinic,
+                                \Carbon\CarbonImmutable::parse($get('starts_at') ?: today())->startOfDay(),
+                                $get('doctor_id') ? (int) $get('doctor_id') : null,
+                                self::duracionDe($get('service_id')),
+                            ))->mapWithKeys(fn ($h) => [$h => $h])->all())
+                            ->inline()
+                            ->live()
+                            ->dehydrated(false)
+                            ->helperText(fn (Forms\Components\ToggleButtons $component) => $component->getOptions() === []
+                                ? 'Ese día no hay huecos libres para este doctor. Toque la lupa de Inicio para buscar el siguiente.' : null)
+                            ->visible(fn (string $operation, Forms\Get $get) => $operation === 'create' && filled($get('starts_at')))
+                            ->afterStateUpdated(function (?string $state, Forms\Get $get, Forms\Set $set) {
+                                if (! $state) {
+                                    return;
+                                }
+                                $inicio = \Carbon\Carbon::parse(\Carbon\Carbon::parse($get('starts_at') ?: today())->toDateString() . ' ' . $state);
+                                $set('starts_at', $inicio->format('Y-m-d H:i:s'));
+                                $set('ends_at', $inicio->copy()->addMinutes(self::duracionDe($get('service_id')))->format('Y-m-d H:i:s'));
+                            })
+                            ->columnSpanFull(),
                         Forms\Components\DateTimePicker::make('ends_at')
                             ->label('Fin')
+                            ->default(fn () => preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', (string) request()->query('inicio'))
+                                ? \Carbon\Carbon::parse(request()->query('inicio'))->addMinutes(30)->format('Y-m-d H:i:s') : null)
                             ->required()
                             ->native(false)
                             ->displayFormat('d/m/Y H:i')

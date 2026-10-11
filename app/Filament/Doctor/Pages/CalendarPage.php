@@ -23,6 +23,18 @@ class CalendarPage extends Page
     // NOTE: CalendarWidget se renderiza manualmente en la vista, NO como header widget.
     // Tener ambos causaba que se mostrara 2 veces.
 
+    /** El día con una columna por doctor (día 6 del plan, 10-oct-2026). */
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('porDoctor')
+                ->label('El día por doctor')
+                ->icon('heroicon-o-view-columns')
+                ->color('gray')
+                ->url(fn () => AgendaDelDia::getUrl()),
+        ];
+    }
+
     public function getStatsProperty(): array
     {
         $clinicId = auth()->user()->clinic_id;

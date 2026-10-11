@@ -66,7 +66,7 @@ class ClinicSettings extends Page implements HasForms
         ] + $this->horarioParaElFormulario($clinic) + [
             'cierres' => $clinic->closures()
                 ->orderBy('starts_on')
-                ->get(['starts_on', 'ends_on', 'reason'])
+                ->get(['starts_on', 'ends_on', 'reason', 'doctor_id'])
                 ->toArray(),
         ]);
     }
@@ -211,7 +211,7 @@ class ClinicSettings extends Page implements HasForms
                         Repeater::make('cierres')
                             ->label('')
                             ->addActionLabel('Agregar días cerrados')
-                            ->columns(3)
+                            ->columns(4)
                             ->defaultItems(0)
                             ->schema([
                                 DatePicker::make('starts_on')
@@ -228,6 +228,13 @@ class ClinicSettings extends Page implements HasForms
                                 TextInput::make('reason')
                                     ->label('Motivo (opcional)')
                                     ->placeholder('Vacaciones'),
+                                // Las vacaciones de un doctor cierran solo su
+                                // agenda; los demás siguen atendiendo.
+                                \Filament\Forms\Components\Select::make('doctor_id')
+                                    ->label('¿Quién cierra?')
+                                    ->placeholder('Todo el consultorio')
+                                    ->options(fn () => \App\Models\Doctor::where('clinic_id', auth()->user()->clinic_id)->with('user')->get()
+                                        ->mapWithKeys(fn ($d) => [$d->id => $d->user?->name ?? 'Doctor ' . $d->id])),
                             ]),
                     ]),
 
@@ -247,6 +254,46 @@ class ClinicSettings extends Page implements HasForms
                     ]),
             ])
             ->statePath('data');
+    }
+
+    /**
+     * Festivos de México propuestos (día 6 del plan): se marcan los
+     * oficiales y se cierran solo los que el doctor deje marcados.
+     */
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('proponerFestivos')
+                ->label('Proponer festivos')
+                ->icon('heroicon-o-calendar')
+                ->color('gray')
+                ->modalHeading('Festivos de México')
+                ->modalDescription('Marcados, los de descanso obligatorio. Los de costumbre van sin marcar. Solo se cierran los que deje marcados; luego los puede quitar en «Días que cierras».')
+                ->modalSubmitActionLabel('Cerrar esos días')
+                ->fillForm(fn () => ['festivos' => collect(\App\Support\FestivosDeMexico::proximos())->where('oficial', true)->pluck('fecha')->all()])
+                ->form([
+                    \Filament\Forms\Components\CheckboxList::make('festivos')
+                        ->hiddenLabel()
+                        ->options(fn () => collect(\App\Support\FestivosDeMexico::proximos())->mapWithKeys(fn ($f) => [
+                            $f['fecha'] => \Carbon\Carbon::parse($f['fecha'])->locale('es')->isoFormat('ddd D [de] MMMM YYYY') . ' · ' . $f['nombre'] . ($f['oficial'] ? '' : ' (de costumbre)'),
+                        ])->all())
+                        ->columns(1),
+                ])
+                ->action(function (array $data) {
+                    $clinic = auth()->user()->clinic;
+                    $validos = collect(\App\Support\FestivosDeMexico::proximos())->keyBy('fecha');
+                    $nuevos = 0;
+                    foreach ($data['festivos'] ?? [] as $fecha) {
+                        if (! $validos->has($fecha) || $clinic->closures()->whereNull('doctor_id')->whereDate('starts_on', '<=', $fecha)->whereDate('ends_on', '>=', $fecha)->exists()) {
+                            continue;
+                        }
+                        ClinicClosure::create(['clinic_id' => $clinic->id, 'starts_on' => $fecha, 'ends_on' => $fecha, 'reason' => $validos[$fecha]['nombre']]);
+                        $nuevos++;
+                    }
+                    $this->data['cierres'] = $clinic->closures()->orderBy('starts_on')->get(['starts_on', 'ends_on', 'reason', 'doctor_id'])->toArray();
+                    Notification::make()->title($nuevos === 1 ? 'Se cerró 1 día' : "Se cerraron {$nuevos} días")->success()->send();
+                }),
+        ];
     }
 
     public function save(): void
@@ -359,6 +406,7 @@ class ClinicSettings extends Page implements HasForms
                 'starts_on' => $cierre['starts_on'],
                 'ends_on' => $cierre['ends_on'],
                 'reason' => $cierre['reason'] ?? null,
+                'doctor_id' => \App\Models\Doctor::where('clinic_id', $clinic->id)->whereKey($cierre['doctor_id'] ?? null)->value('id'),
             ]);
         }
     }
