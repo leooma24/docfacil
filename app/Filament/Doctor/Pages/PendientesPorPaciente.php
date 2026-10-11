@@ -57,7 +57,8 @@ class PendientesPorPaciente extends Page
             return null;
         }
 
-        $tocan = PendientesDelConsultorio::cuantosTocan($user->clinic_id);
+        $tocan = PendientesDelConsultorio::cuantosTocan($user->clinic_id)
+            + \App\Support\Seguimiento::lista($user->clinic_id)->count();
 
         return $tocan > 0 ? (string) $tocan : null;
     }
@@ -67,10 +68,27 @@ class PendientesPorPaciente extends Page
         $clinicId = auth()->user()->clinic_id;
 
         return [
+            'porLlamar' => \App\Support\Seguimiento::lista($clinicId),
+            'motivos' => \App\Support\Seguimiento::MOTIVOS,
+            'resumen' => \App\Support\Seguimiento::resumenDelMes($clinicId),
             'sinRespuesta' => PendientesDelConsultorio::sinRespuesta($clinicId),
             'aMedias' => PendientesDelConsultorio::aMedias($clinicId),
             'diasEntreRecordatorios' => PendientesDelConsultorio::DIAS_ENTRE_RECORDATORIOS,
         ];
+    }
+
+    /** Logrado, volver a llamar en X días o cerrar caso (día 5 del plan). */
+    public function marcar(int $paciente, string $motivo, string $resultado, ?int $dias = null): void
+    {
+        if (\App\Support\Seguimiento::marcar(auth()->user()->clinic_id, $paciente, $motivo, $resultado, $dias)) {
+            \Filament\Notifications\Notification::make()
+                ->title(match ($resultado) {
+                    'logrado' => 'Anotado: logrado',
+                    'volver' => 'Le volvemos a sacar en ' . max(1, min(90, $dias ?? 7)) . ' días',
+                    default => 'Caso cerrado',
+                })
+                ->success()->send();
+        }
     }
 
     public function ligaParaAgendar($plan): string
