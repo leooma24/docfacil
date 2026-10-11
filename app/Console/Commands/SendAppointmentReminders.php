@@ -52,7 +52,9 @@ class SendAppointmentReminders extends Command
 
     private function mandar(WhatsAppService $whatsapp, Clinic $clinic): int
     {
-        $quedan = max(0, (int) $clinic->recordatorios_por_dia - $this->mandadosHoy($clinic));
+        // La demo le escribe solo a Omar: con 3 al día basta para probar, no 40.
+        $tope = $clinic->is_demo ? min(3, (int) $clinic->recordatorios_por_dia) : (int) $clinic->recordatorios_por_dia;
+        $quedan = max(0, $tope - $this->mandadosHoy($clinic));
         $enviados = 0;
 
         $tandas = [
@@ -82,7 +84,8 @@ class SendAppointmentReminders extends Command
                 if ($enviados >= $quedan) {
                     return $enviados;
                 }
-                $telefono = $cita->patient?->telefonoDeContacto();
+                // En la demo, siempre al número de Omar (11-oct-2026).
+                $telefono = $clinic->is_demo ? \App\Http\Middleware\DemoSoloAOmar::numero() : $cita->patient?->telefonoDeContacto();
                 if (! $telefono || $cita->patient->noQuiereWhatsapp()) {
                     continue;
                 }

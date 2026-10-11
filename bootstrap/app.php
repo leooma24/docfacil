@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // X-Content-Type-Options, Referrer-Policy, HSTS en prod, etc.)
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
+        // En la demo, todo WhatsApp va al número de Omar (11-oct-2026).
+        $middleware->append(\App\Http\Middleware\DemoSoloAOmar::class);
+
         // Cada consultorio a su hora (Los Mochis va una hora atrás del centro,
         // Cancún una adelante). En el grupo web para que alcance las páginas
         // públicas del consultorio y las peticiones de Livewire del panel.
