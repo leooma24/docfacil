@@ -121,7 +121,10 @@ class PatientProfile extends Page
                 ->modalIconColor('success')
                 ->modalWidth('2xl')
                 ->modalSubmitActionLabel('Guardar cobro')
-                ->fillForm(['tipo' => 'cobro', 'como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card'])
+                // Ya sabe qué se cobra: lo de su cita de hoy (11-oct-2026).
+                ->fillForm(fn () => array_merge(['tipo' => 'cobro', 'como' => 'todo', 'payment_method' => 'cash', 'otra_forma' => 'card',
+                    'appointment_id' => null, 'service_id' => null, 'concepto' => null, 'amount' => null],
+                    \Illuminate\Support\Arr::only(\App\Filament\Doctor\Actions\Cobro::sugerencia($this->patient) ?? [], ['appointment_id', 'service_id', 'concepto', 'amount'])))
                 ->form(fn () => [
                     \Filament\Forms\Components\ToggleButtons::make('tipo')
                         ->hiddenLabel()
@@ -130,6 +133,12 @@ class PatientProfile extends Page
                         ->inline()
                         ->live()
                         ->required(),
+                    \Filament\Forms\Components\Hidden::make('appointment_id'),
+                    \Filament\Forms\Components\Placeholder::make('de_su_cita')
+                        ->hiddenLabel()
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'cobro' && filled($get('appointment_id')))
+                        ->content(fn () => new \Illuminate\Support\HtmlString('<div style="padding:10px 12px;border-radius:8px;background:#f0fdfa;border:1px solid #99f6e4;color:#115e59;font-weight:600;">'
+                            . e(\App\Filament\Doctor\Actions\Cobro::sugerencia($this->patient)['texto'] ?? '') . ' Cámbielo si se le hizo algo más.</div>')),
                     \Filament\Forms\Components\Placeholder::make('saldo_a_favor')
                         ->label('')
                         ->content(fn () => new \Illuminate\Support\HtmlString('<div style="padding:10px 12px;border-radius:8px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-weight:600;">Tiene $' . number_format($this->patient->saldoAFavor(), 2) . ' a favor: se descuentan solos de este cobro.</div>'))

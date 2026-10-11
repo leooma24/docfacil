@@ -122,6 +122,43 @@ class Cobro
         ];
     }
 
+    /**
+     * Lo que toca cobrarle (11-oct-2026): su cita de hoy o, si no, la última
+     * que se atendió en estos 30 días y no se ha cobrado. Si en la consulta se
+     * anotaron procedimientos, esos y su total; si no, el servicio de la cita.
+     *
+     * @return array{appointment_id: int, service_id: ?int, concepto: ?string, amount: float, texto: string}|null
+     */
+    public static function sugerencia(Patient $paciente): ?array
+    {
+        $cita = \App\Models\Appointment::withoutGlobalScopes()->with(['service', 'procedures.service'])
+            ->where('clinic_id', $paciente->clinic_id)->where('patient_id', $paciente->id)
+            ->where(fn ($q) => $q->whereIn('status', ['completed', 'in_progress'])->orWhere(fn ($w) => $w->whereIn('status', \App\Models\Appointment::ESTADOS_QUE_OCUPAN)->whereDate('starts_at', today())))
+            ->where('starts_at', '>=', now()->subDays(30))->where('starts_at', '<=', now()->endOfDay())
+            ->whereDoesntHave('payments')
+            ->latest('starts_at')->first();
+        if (! $cita) {
+            return null;
+        }
+
+        $cuando = $cita->starts_at->isToday() ? 'de hoy' : 'del ' . $cita->starts_at->locale('es')->isoFormat('D [de] MMMM');
+        if ($cita->procedures->isNotEmpty()) {
+            $concepto = $cita->procedures->map(fn ($p) => ($p->service?->name ?? 'Procedimiento')
+                . ($p->tooth_number ? ' en ' . $p->tooth_number : '') . ((int) $p->quantity > 1 ? ' (' . (int) $p->quantity . ')' : ''))->implode(', ');
+            $total = round((float) $cita->procedures->sum(fn ($p) => (float) $p->unit_price * max(1, (int) $p->quantity)), 2);
+            $soloUno = $cita->procedures->count() === 1 && (int) $cita->procedures->first()->quantity <= 1;
+
+            return ['appointment_id' => $cita->id, 'service_id' => $soloUno ? $cita->procedures->first()->service_id : null,
+                'concepto' => $soloUno ? null : mb_substr($concepto, 0, 255), 'amount' => $total, 'texto' => "Lo de su cita {$cuando}: {$concepto}."];
+        }
+        if ($cita->service) {
+            return ['appointment_id' => $cita->id, 'service_id' => $cita->service_id, 'concepto' => null,
+                'amount' => round((float) $cita->service->price, 2), 'texto' => "Lo de su cita {$cuando}: {$cita->service->name}."];
+        }
+
+        return null;
+    }
+
     /** @param list<array{0: string, 1: float, 2: string}> $renglones */
     public static function recibo(array $renglones): string
     {
@@ -180,6 +217,9 @@ class Cobro
     {
         $total = round((float) $data['amount'], 2);
         $paciente = Patient::where('clinic_id', auth()->user()->clinic_id)->findOrFail($pacienteId);
+        // La cita que se sugirió al abrir, solo si es de este paciente.
+        $citaId ??= \App\Models\Appointment::where('clinic_id', $paciente->clinic_id)->where('patient_id', $paciente->id)
+            ->whereKey($data['appointment_id'] ?? null)->value('id');
         $deSaldo = round(min($paciente->saldoAFavor(), $total), 2);
         $partes = self::partes(self::pagaHoy($data['como'] ?? 'todo', round($total - $deSaldo, 2), (float) ($data['recibido'] ?? 0)), $data);
 

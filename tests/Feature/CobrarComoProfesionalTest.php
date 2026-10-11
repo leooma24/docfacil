@@ -206,6 +206,44 @@ class CobrarComoProfesionalTest extends TestCase
         $this->assertCount(2, $datos['cobros']);
     }
 
+    // ── Ya sabe qué se cobra ────────────────────────────────────
+
+    public function test_al_abrir_cobrar_ya_trae_lo_de_su_cita_de_hoy(): void
+    {
+        $cita = Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
+            'service_id' => $this->limpieza->id, 'starts_at' => now()->subHour(), 'ends_at' => now()->subMinutes(30), 'status' => 'completed']);
+
+        $this->perfil()->mountAction('cobrarHoy')
+            ->assertActionDataSet(['service_id' => $this->limpieza->id, 'amount' => 800.0, 'appointment_id' => $cita->id])
+            ->callMountedAction();
+
+        $this->assertSame($cita->id, Payment::where('patient_id', $this->ana->id)->sole()->appointment_id);
+    }
+
+    public function test_si_en_la_consulta_se_anotaron_procedimientos_trae_esos_y_su_total(): void
+    {
+        $resina = Service::create(['clinic_id' => $this->clinica->id, 'name' => 'Resina', 'price' => 700]);
+        $cita = Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
+            'starts_at' => now()->subHour(), 'ends_at' => now()->subMinutes(30), 'status' => 'completed']);
+        \App\Models\ConsultationProcedure::create(['clinic_id' => $this->clinica->id, 'appointment_id' => $cita->id, 'service_id' => $resina->id,
+            'tooth_number' => '36', 'quantity' => 2, 'unit' => 'pieza', 'unit_price' => 700]);
+        \App\Models\ConsultationProcedure::create(['clinic_id' => $this->clinica->id, 'appointment_id' => $cita->id, 'service_id' => $this->limpieza->id,
+            'quantity' => 1, 'unit' => 'visit', 'unit_price' => 800]);
+
+        $this->perfil()->mountAction('cobrarHoy')
+            ->assertActionDataSet(['amount' => 2200.0, 'concepto' => 'Resina en 36 (2), Limpieza', 'appointment_id' => $cita->id]);
+    }
+
+    public function test_si_esa_cita_ya_se_cobro_no_la_vuelve_a_sugerir(): void
+    {
+        $cita = Appointment::create(['clinic_id' => $this->clinica->id, 'doctor_id' => $this->doctor->id, 'patient_id' => $this->ana->id,
+            'service_id' => $this->limpieza->id, 'starts_at' => now()->subHour(), 'ends_at' => now()->subMinutes(30), 'status' => 'completed']);
+        Payment::create(['clinic_id' => $this->clinica->id, 'patient_id' => $this->ana->id, 'appointment_id' => $cita->id, 'amount' => 800,
+            'status' => 'paid', 'payment_method' => 'cash', 'payment_date' => today()]);
+
+        $this->perfil()->mountAction('cobrarHoy')->assertActionDataSet(['amount' => null, 'appointment_id' => null]);
+    }
+
     // ── Cobrar desde la cita ────────────────────────────────────
 
     public function test_desde_la_cita_puede_dejar_un_abono_en_vez_de_cobrar_todo(): void
