@@ -90,7 +90,10 @@ class AppointmentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Detalles de la Cita')
+                Forms\Components\Section::make('La cita')
+                    ->description('Paciente, doctor y hora. La lupa busca el primer hueco libre.')
+                    ->icon('heroicon-o-calendar-days')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('patient_id')

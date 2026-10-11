@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CreatePaymentPlan extends CreateRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = PaymentPlanResource::class;
 
     protected static ?string $title = 'Nuevo plan de pagos';

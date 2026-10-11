@@ -81,6 +81,9 @@ class SupplyResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Qué es')
+                    ->description('El nombre y la categoría del insumo.')
+                    ->icon('heroicon-o-cube')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('name')
@@ -106,6 +109,8 @@ class SupplyResource extends Resource
                     ]),
 
                 Forms\Components\Section::make('Cómo se compra y cómo se gasta')
+                    ->icon('heroicon-o-shopping-cart')
+                    ->aside()
                     ->description('Si compras por caja y gastas por pieza, aquí va el puente. Sin esto el inventario miente desde el primer día.')
                     ->columns(3)
                     ->schema([
@@ -129,6 +134,9 @@ class SupplyResource extends Resource
                     ]),
 
                 Forms\Components\Section::make('Punto de reorden y costo')
+                    ->description('Cuándo avisar que se acaba y cuánto cuesta.')
+                    ->icon('heroicon-o-arrow-trending-down')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('min_stock')

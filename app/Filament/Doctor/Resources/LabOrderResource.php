@@ -80,6 +80,9 @@ class LabOrderResource extends Resource
 
         return $form->schema([
             Forms\Components\Section::make('El trabajo')
+                ->description('Qué se mandó hacer, para quién y a qué laboratorio.')
+                ->icon('heroicon-o-beaker')
+                ->aside()
                 ->columns(2)
                 ->schema([
                     Forms\Components\Select::make('patient_id')
@@ -124,6 +127,9 @@ class LabOrderResource extends Resource
                         ->visible(fn () => auth()->user()->veElDinero()),
                 ]),
             Forms\Components\Section::make('Fechas')
+                ->description('Cuándo se mandó, cuándo lo prometieron y en qué cita se coloca.')
+                ->icon('heroicon-o-calendar')
+                ->aside()
                 ->columns(3)
                 ->schema([
                     Forms\Components\DatePicker::make('enviada_at')->label('Se mandó')->default(today())->native(false)->displayFormat('d/m/Y')->required(),

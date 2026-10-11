@@ -49,7 +49,10 @@ class WaitlistEntryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Datos del paciente en lista')
+                Forms\Components\Section::make('Quién espera')
+                    ->description('El paciente, qué necesita y cuándo puede venir.')
+                    ->icon('heroicon-o-clock')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('patient_id')

@@ -9,6 +9,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditTreatmentPlan extends EditRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = TreatmentPlanResource::class;
 
     protected function getHeaderActions(): array

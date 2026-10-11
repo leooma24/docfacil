@@ -38,4 +38,38 @@ trait HasFormHero
             ['formHeroConfig' => $this->getFormHeroConfig()],
         );
     }
+
+    /**
+     * «Nuevo paciente», «Nueva cita» en vez de «Crear Paciente» (11-oct-2026),
+     * y botones que dicen lo que hacen: «Guardar», «Guardar y agregar otro»,
+     * «Guardar cambios».
+     */
+    private const FEMENINOS = ['cita', 'receta', 'nota', 'consulta', 'orden', 'invitación', 'entrada', 'salida'];
+
+    public function getTitle(): string|\Illuminate\Contracts\Support\Htmlable
+    {
+        if (! $this instanceof \Filament\Resources\Pages\CreateRecord) {
+            return parent::getTitle();
+        }
+
+        $nombre = mb_strtolower(static::getResource()::getModelLabel());
+        $primera = explode(' ', $nombre)[0];
+
+        return (in_array($primera, self::FEMENINOS, true) ? 'Nueva ' : 'Nuevo ') . $nombre;
+    }
+
+    protected function getCreateFormAction(): \Filament\Actions\Action
+    {
+        return parent::getCreateFormAction()->label('Guardar');
+    }
+
+    protected function getCreateAnotherFormAction(): \Filament\Actions\Action
+    {
+        return parent::getCreateAnotherFormAction()->label('Guardar y agregar otro');
+    }
+
+    protected function getSaveFormAction(): \Filament\Actions\Action
+    {
+        return parent::getSaveFormAction()->label('Guardar cambios');
+    }
 }

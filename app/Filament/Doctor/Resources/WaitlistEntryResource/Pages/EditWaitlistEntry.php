@@ -8,6 +8,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditWaitlistEntry extends EditRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = WaitlistEntryResource::class;
 
     protected function getHeaderActions(): array

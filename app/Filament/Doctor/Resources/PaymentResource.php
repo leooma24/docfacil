@@ -67,7 +67,10 @@ class PaymentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Información del Cobro')
+                Forms\Components\Section::make('Qué se cobra')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->description('El paciente, el tratamiento y cuánto cuesta.')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         // Las mensualidades ya existen en Planes de pago, pero el
@@ -111,20 +114,42 @@ class PaymentResource extends Resource
                             ->minValue(0.01)
                             ->reactive()
                             ->required(),
+                        // Solo las citas del paciente elegido: antes salían las de
+                        // todos y era fácil ligar el cobro a la cita de otro.
+                        Forms\Components\Select::make('appointment_id')
+                            ->label('Cita asociada')
+                            ->relationship('appointment', modifyQueryUsing: fn ($query, Forms\Get $get) => $query->where('patient_id', $get('patient_id') ?: 0)->latest('starts_at'))
+                            ->disabled(fn (Forms\Get $get) => blank($get('patient_id')))
+                            ->helperText(fn (Forms\Get $get) => blank($get('patient_id')) ? 'Primero elija al paciente.' : null)
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->starts_at->format('d/m/Y H:i') . ' - ' . $record->patient->full_name)
+                            ->searchable()
+                            ->preload(),
+                        Forms\Components\Textarea::make('notes')
+                            ->label('Notas')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                    ]),
+                Forms\Components\Section::make('Cómo quedó')
+                    ->icon('heroicon-o-banknotes')
+                    ->description('Si pagó todo, dejó un abono o queda debiendo.')
+                    ->aside()
+                    ->columns(2)
+                    ->schema([
                         // "¿Cómo quedó?" en vez de "Estado" + "Pagado hasta
                         // ahora": 6 de los 20 doctores de la prueba del
                         // 12-oct no sabían qué poner en cada uno.
+                                // Solo al editar: un cobro nuevo no nace reembolsado.
                         Forms\Components\Radio::make('status')
                             ->label('¿Cómo quedó?')
                             ->options(fn (?Payment $record) => array_filter([
                                 'paid' => 'Pagó todo',
                                 'partial' => 'Dejó un abono',
                                 'pending' => 'No ha pagado',
-                                // Solo al editar: un cobro nuevo no nace reembolsado.
                                 'refunded' => $record ? 'Se le regresó el dinero' : null,
                             ]))
                             ->default('paid')
                             ->inline()
+                            ->inlineLabel(false)
                             ->live()
                             ->required()
                             ->columnSpanFull(),
@@ -154,20 +179,6 @@ class PaymentResource extends Resource
                             ->native(false)
                             ->displayFormat('d/m/Y')
                             ->visible(fn (Forms\Get $get) => in_array($get('status'), ['pending', 'partial'])),
-                        // Solo las citas del paciente elegido: antes salían las de
-                        // todos y era fácil ligar el cobro a la cita de otro.
-                        Forms\Components\Select::make('appointment_id')
-                            ->label('Cita asociada')
-                            ->relationship('appointment', modifyQueryUsing: fn ($query, Forms\Get $get) => $query->where('patient_id', $get('patient_id') ?: 0)->latest('starts_at'))
-                            ->disabled(fn (Forms\Get $get) => blank($get('patient_id')))
-                            ->helperText(fn (Forms\Get $get) => blank($get('patient_id')) ? 'Primero elija al paciente.' : null)
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->starts_at->format('d/m/Y H:i') . ' - ' . $record->patient->full_name)
-                            ->searchable()
-                            ->preload(),
-                        Forms\Components\Textarea::make('notes')
-                            ->label('Notas')
-                            ->rows(2)
-                            ->columnSpanFull(),
                     ]),
             ]);
     }

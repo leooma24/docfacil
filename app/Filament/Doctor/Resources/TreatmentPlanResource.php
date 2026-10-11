@@ -51,6 +51,7 @@ class TreatmentPlanResource extends Resource
     {
         return $form->schema([
             Forms\Components\Section::make('Información general')
+                ->icon('heroicon-o-document-text')
                 ->columns(2)
                 ->schema([
                     Forms\Components\Select::make('patient_id')
@@ -110,6 +111,7 @@ class TreatmentPlanResource extends Resource
                 ]),
 
             Forms\Components\Section::make('Servicios y costos')
+                ->icon('heroicon-o-currency-dollar')
                 ->schema([
                     Forms\Components\Repeater::make('items')
                         ->label('Tratamientos')
@@ -269,6 +271,7 @@ class TreatmentPlanResource extends Resource
                 ]),
 
             Forms\Components\Section::make('Notas internas')
+                ->icon('heroicon-o-lock-closed')
                 ->collapsed()
                 ->schema([
                     Forms\Components\Textarea::make('notes')

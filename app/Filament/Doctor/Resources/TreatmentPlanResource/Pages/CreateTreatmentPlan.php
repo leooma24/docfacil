@@ -8,6 +8,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateTreatmentPlan extends CreateRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = TreatmentPlanResource::class;
 
     protected function afterCreate(): void

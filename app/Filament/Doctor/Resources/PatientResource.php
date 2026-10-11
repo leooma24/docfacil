@@ -99,10 +99,12 @@ class PatientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Datos Personales')
-                    // Con el nombre y el telefono ya se puede agendar y
-                    // recordarle la cita. Lo demas se llena cuando lo tengas.
-                    ->description('Con el nombre y el teléfono es suficiente para empezar. Lo demás lo llena cuando lo tenga.')
+                // En secciones con su título a un lado (11-oct-2026): antes era
+                // una sola tarjeta larga con 17 campos seguidos.
+                Forms\Components\Section::make('Identificación')
+                    ->icon('heroicon-o-identification')
+                    ->description('Con el nombre basta para empezar. La CURP llena sola nacimiento, sexo y estado.')
+                    ->aside()
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('first_name')
@@ -146,18 +148,49 @@ class PatientResource extends Resource
                             ->label('Estado donde nació')
                             ->options(\App\Support\Curp::ENTIDADES)
                             ->searchable(),
-                        Forms\Components\TextInput::make('email')
-                            ->label('Email')
-                            ->placeholder('maria@correo.com')
-                            ->helperText('Lo necesita si le va a dar acceso al portal.')
-                            ->email()
-                            ->maxLength(255),
+                        Forms\Components\DatePicker::make('birth_date')
+                            ->label('Fecha de nacimiento')
+                            ->placeholder('dd/mm/aaaa')
+                            ->helperText('Con esto aparece en "Cumpleaños de hoy" del escritorio, para felicitarlo con un clic.')
+                            ->native(false)
+                            ->displayFormat('d/m/Y'),
+                        Forms\Components\Select::make('gender')
+                            ->label('Género')
+                            ->options([
+                                'male' => 'Masculino',
+                                'female' => 'Femenino',
+                                'other' => 'Otro',
+                            ]),
+                        Forms\Components\Select::make('nacionalidad')
+                            ->label('Nacionalidad')
+                            ->options(['MEX' => 'Mexicana', 'EXT' => 'Otra']),
+                        Forms\Components\Select::make('blood_type')
+                            ->label('Tipo de sangre')
+                            ->options([
+                                'A+' => 'A+', 'A-' => 'A-',
+                                'B+' => 'B+', 'B-' => 'B-',
+                                'AB+' => 'AB+', 'AB-' => 'AB-',
+                                'O+' => 'O+', 'O-' => 'O-',
+                            ]),
+                    ]),
+                Forms\Components\Section::make('Contacto')
+                    ->icon('heroicon-o-phone')
+                    ->description('A este teléfono le llegan sus recordatorios.')
+                    ->aside()
+                    ->columns(2)
+                    ->schema([
                         Forms\Components\TextInput::make('phone')
                             ->label('Teléfono')
                             ->placeholder('55 1234 5678')
                             ->helperText('A este número le llegan los recordatorios por WhatsApp.')
                             ->tel()
                             ->live(onBlur: true)
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email')
+                            ->placeholder('maria@correo.com')
+                            ->helperText('Lo necesita si le va a dar acceso al portal.')
+                            ->email()
                             ->maxLength(255),
                         // «¿Es esta persona?» (10-oct-2026): al dar de alta, si ya
                         // hay alguien con ese teléfono o ese nombre, se avisa antes
@@ -182,41 +215,6 @@ class PatientResource extends Resource
                             ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('no_quiere_whatsapp_at', $state ? now()->toDateTimeString() : null))
                             ->live(),
                         Forms\Components\Hidden::make('no_quiere_whatsapp_at'),
-                        Forms\Components\DatePicker::make('birth_date')
-                            ->label('Fecha de nacimiento')
-                            ->placeholder('dd/mm/aaaa')
-                            ->helperText('Con esto aparece en "Cumpleaños de hoy" del escritorio, para felicitarlo con un clic.')
-                            ->native(false)
-                            ->displayFormat('d/m/Y'),
-                        Forms\Components\Select::make('gender')
-                            ->label('Género')
-                            ->options([
-                                'male' => 'Masculino',
-                                'female' => 'Femenino',
-                                'other' => 'Otro',
-                            ]),
-                        Forms\Components\Select::make('blood_type')
-                            ->label('Tipo de sangre')
-                            ->options([
-                                'A+' => 'A+', 'A-' => 'A-',
-                                'B+' => 'B+', 'B-' => 'B-',
-                                'AB+' => 'AB+', 'AB-' => 'AB-',
-                                'O+' => 'O+', 'O-' => 'O-',
-                            ]),
-                        Forms\Components\Textarea::make('address')
-                            ->label('Dirección')
-                            ->columnSpanFull(),
-                        Forms\Components\Select::make('nacionalidad')
-                            ->label('Nacionalidad')
-                            ->options(['MEX' => 'Mexicana', 'EXT' => 'Otra']),
-                        Forms\Components\Select::make('estado_residencia')
-                            ->label('Estado donde vive')
-                            ->options(collect(\App\Support\Curp::ENTIDADES)->except('NE')->all())
-                            ->searchable(),
-                        Forms\Components\TextInput::make('municipio_residencia')
-                            ->label('Municipio donde vive')
-                            ->placeholder('Ahome')
-                            ->maxLength(100),
                         // Para niños: a la mamá le llegan los recordatorios y
                         // con ella se suma lo que debe la familia.
                         Forms\Components\Select::make('responsable_id')
@@ -236,8 +234,30 @@ class PatientResource extends Resource
                                 Forms\Components\TextInput::make('phone')->label('WhatsApp')->tel()->required(),
                             ])
                             ->columnSpanFull(),
+                    
                     ]),
-                Forms\Components\Section::make('Información Médica')
+                Forms\Components\Section::make('Domicilio')
+                    ->icon('heroicon-o-home')
+                    ->description('Lo pide la NOM-024. Puede llenarlo después.')
+                    ->aside()
+                    ->collapsible()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Textarea::make('address')
+                            ->label('Dirección')
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('estado_residencia')
+                            ->label('Estado donde vive')
+                            ->options(collect(\App\Support\Curp::ENTIDADES)->except('NE')->all())
+                            ->searchable(),
+                        Forms\Components\TextInput::make('municipio_residencia')
+                            ->label('Municipio donde vive')
+                            ->placeholder('Ahome')
+                            ->maxLength(100),
+                    ]),
+                Forms\Components\Section::make('Salud')
+                    ->icon('heroicon-o-heart')
+                    ->aside()
                     ->description('Opcional, pero lo que ponga aquí le sale como alerta antes de cada consulta.')
                     ->schema([
                         Forms\Components\CheckboxList::make('riesgos')
@@ -257,9 +277,13 @@ class PatientResource extends Resource
                             ->helperText('Lo que quieras tener presente antes de atenderlo.')
                             ->rows(3),
                     ]),
+                // Al darlo de alta siempre está activo (lo pone la base); el
+                // interruptor solo hace falta al editarlo.
                 Forms\Components\Toggle::make('is_active')
                     ->label('Activo')
-                    ->default(true),
+                    ->helperText('Apáguelo si ya no es su paciente: deja de salir en listas y avisos, y su expediente se conserva.')
+                    ->default(true)
+                    ->visibleOn('edit'),
             ]);
     }
 

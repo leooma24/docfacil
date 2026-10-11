@@ -53,7 +53,8 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Información del Servicio')
+                Forms\Components\Section::make('El servicio')
+                    ->icon('heroicon-o-tag')
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('name')
@@ -116,6 +117,7 @@ class ServiceResource extends Resource
                 // La receta. Sin ella no hay nada que descontar al cerrar la
                 // consulta; con ella, el doctor confirma y el kardex se mueve.
                 Forms\Components\Section::make('Receta de insumos')
+                    ->icon('heroicon-o-cube')
                     ->description('Qué gasta este servicio. Es de donde sale el descuento de inventario. Se puede dejar vacío y llenarlo después: la primera vez que use el servicio en una consulta, se lo vamos a preguntar.')
                     ->schema([
                         Forms\Components\Repeater::make('recipe')

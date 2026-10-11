@@ -8,6 +8,8 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditLabOrder extends EditRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = LabOrderResource::class;
 
     protected function getHeaderActions(): array

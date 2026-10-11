@@ -7,6 +7,8 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateLabOrder extends CreateRecord
 {
+    use \App\Filament\Doctor\Concerns\HasFormHero;
+
     protected static string $resource = LabOrderResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array

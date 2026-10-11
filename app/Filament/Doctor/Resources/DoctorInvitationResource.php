@@ -97,6 +97,8 @@ class DoctorInvitationResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('¿A quién invita?')
+                    ->icon('heroicon-o-user-plus')
+                    ->aside()
                     ->description('Le llega una liga para poner su contraseña. También se la puede mandar por WhatsApp desde la lista.')
                     ->columns(2)
                     ->schema([

@@ -56,6 +56,9 @@ class ExpenseResource extends Resource
     {
         return $form->schema([
             Forms\Components\Section::make('El gasto')
+                ->description('Qué se pagó, cuánto y cuándo.')
+                ->icon('heroicon-o-banknotes')
+                ->aside()
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('concept')
@@ -98,6 +101,8 @@ class ExpenseResource extends Resource
                 ]),
 
             Forms\Components\Section::make('Lo demás (opcional)')
+                ->icon('heroicon-o-ellipsis-horizontal-circle')
+                ->aside()
                 ->description('Nada de esto es obligatorio. Llénelo solo si le sirve después.')
                 ->collapsed()
                 ->columns(2)

@@ -61,7 +61,8 @@ class ConsentFormResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Datos del Consentimiento')
+                Forms\Components\Section::make('Paciente y procedimiento')
+                    ->icon('heroicon-o-document-check')
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('patient_id')
@@ -132,7 +133,8 @@ class ConsentFormResource extends Resource
                                     })
                             ),
                     ]),
-                Forms\Components\Section::make('Contenido del Documento')
+                Forms\Components\Section::make('Lo que firma')
+                    ->icon('heroicon-o-document-text')
                     ->schema([
                         Forms\Components\RichEditor::make('content')
                             ->label('Texto del consentimiento')
@@ -148,7 +150,8 @@ class ConsentFormResource extends Resource
                             ->rows(3)
                             ->placeholder('Describa las alternativas disponibles...'),
                     ]),
-                Forms\Components\Section::make('Firma Digital')
+                Forms\Components\Section::make('Firmas')
+                    ->icon('heroicon-o-pencil-square')
                     ->description('Al guardar con la firma, se registran la fecha y la hora, y el documento ya no se puede cambiar.')
                     ->schema([
                         \Saade\FilamentAutograph\Forms\Components\SignaturePad::make('signature')

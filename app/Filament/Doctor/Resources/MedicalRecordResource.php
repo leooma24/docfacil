@@ -43,7 +43,8 @@ class MedicalRecordResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Datos de la Consulta')
+                Forms\Components\Section::make('La consulta')
+                    ->icon('heroicon-o-calendar')
                     ->columns(2)
                     ->schema([
                         // NOM-004 5.10: fecha, hora y nombre de quien elabora la nota.
@@ -78,7 +79,8 @@ class MedicalRecordResource extends Resource
                             ->searchable()
                             ->preload(),
                     ]),
-                Forms\Components\Section::make('Información Clínica')
+                Forms\Components\Section::make('Información clínica')
+                    ->icon('heroicon-o-clipboard-document-list')
                     ->schema([
                         Forms\Components\Textarea::make('chief_complaint')
                             ->label('Motivo de consulta')
@@ -93,7 +95,8 @@ class MedicalRecordResource extends Resource
                             ->label('Notas adicionales')
                             ->rows(2),
                     ]),
-                Forms\Components\Section::make('Signos Vitales')
+                Forms\Components\Section::make('Signos vitales')
+                    ->icon('heroicon-o-heart')
                     ->columns(4)
                     ->collapsible()
                     ->schema([
@@ -114,6 +117,7 @@ class MedicalRecordResource extends Resource
                             ->suffix('kg'),
                     ]),
                 Forms\Components\Section::make('Archivos')
+                    ->icon('heroicon-o-paper-clip')
                     ->collapsible()
                     ->schema([
                         Forms\Components\FileUpload::make('attachments')

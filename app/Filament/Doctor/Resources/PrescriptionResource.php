@@ -44,7 +44,8 @@ class PrescriptionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Datos de la Receta')
+                Forms\Components\Section::make('La receta')
+                    ->icon('heroicon-o-document-text')
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('patient_id')
@@ -79,6 +80,7 @@ class PrescriptionResource extends Resource
                             ->columnSpanFull(),
                     ]),
                 Forms\Components\Section::make('Medicamentos')
+                    ->icon('heroicon-o-beaker')
                     ->schema([
                         Forms\Components\Repeater::make('items')
                             ->relationship()

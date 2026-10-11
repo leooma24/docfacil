@@ -72,6 +72,9 @@ class PaymentPlanResource extends Resource
         return $form->schema([
             Forms\Components\Hidden::make('treatment_plan_id'),
             Forms\Components\Section::make('El tratamiento')
+                ->description('Para quién y qué tratamiento se paga a meses.')
+                ->icon('heroicon-o-clipboard-document-list')
+                ->aside()
                 ->columns(2)
                 ->schema([
                     Forms\Components\Select::make('patient_id')
@@ -91,6 +94,9 @@ class PaymentPlanResource extends Resource
                         ->searchable(),
                 ]),
             Forms\Components\Section::make('Cómo se paga')
+                ->description('El total, el enganche y las mensualidades.')
+                ->icon('heroicon-o-calendar-days')
+                ->aside()
                 ->columns(['default' => 1, 'md' => 4])
                 ->schema([
                     Forms\Components\TextInput::make('total')->label('Total')->numeric()->prefix('$')->required()->minValue(1)->live(onBlur: true),

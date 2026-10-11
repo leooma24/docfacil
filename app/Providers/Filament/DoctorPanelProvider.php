@@ -66,6 +66,8 @@ class DoctorPanelProvider extends PanelProvider
                 '<link rel="stylesheet" href="' . asset('css/panel-doctor.css') . '?v=' . @filemtime(public_path('css/panel-doctor.css')) . '">'
             ))
             ->renderHook('panels::head.end', fn () => view('filament.custom.theme-styles'))
+            // Formularios más claros (11-oct-2026).
+            ->renderHook('panels::head.end', fn () => view('filament.custom.formularios'))
             // En qué consultorio está (arriba del menú) y su plan (abajo).
             ->renderHook('panels::sidebar.nav.start', fn () => view('filament.custom.menu-consultorio'))
             ->renderHook('panels::sidebar.footer', fn () => view('filament.custom.menu-plan'))
