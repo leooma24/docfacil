@@ -63,6 +63,21 @@ class AppointmentResource extends Resource
         return 'Citas que faltan hoy';
     }
 
+    /**
+     * Lo que se cobra en una cita: lo que quedó pendiente de ella o, si es un
+     * control de ortodoncia, las mensualidades de su plan que ya tocan (día 7
+     * del plan, 10-oct-2026): el control del mes y su mensualidad son un solo
+     * cobro.
+     */
+    public static function porCobrarDeLaCita(Appointment $cita): \Illuminate\Support\Collection
+    {
+        $pendientes = $cita->payments()->whereIn('status', ['pending', 'partial'])->get();
+
+        return $pendientes->isNotEmpty() || $cita->payments()->exists()
+            ? $pendientes
+            : \App\Support\TableroDeOrtodoncia::mensualidadesPorCobrar($cita);
+    }
+
     /** Cuánto dura una cita de ese servicio (30 minutos si no hay servicio). */
     public static function duracionDe(mixed $servicioId): int
     {
@@ -135,6 +150,8 @@ class AppointmentResource extends Resource
                         Forms\Components\Select::make('service_id')
                             ->label('Servicio')
                             ->relationship('service', 'name')
+                            // Desde el tablero de ortodoncia: «Agendar control».
+                            ->default(fn () => Service::where('clinic_id', auth()->user()?->clinic_id)->whereKey(request()->query('servicio'))->value('id'))
                             ->preload()
                             ->reactive()
                             ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
@@ -528,7 +545,7 @@ class AppointmentResource extends Resource
                     ->visible(fn (Appointment $record) => in_array($record->status, ['completed', 'in_progress'])
                         && ! ($record->payments()->exists() && ! $record->payments()->whereIn('status', ['pending', 'partial'])->exists()))
                     ->fillForm(fn (Appointment $record) => [
-                        'amount' => ($debe = $record->payments()->whereIn('status', ['pending', 'partial'])->get()->sum(fn ($p) => $p->remaining))
+                        'amount' => ($debe = self::porCobrarDeLaCita($record)->sum(fn ($p) => $p->remaining))
                             ? round($debe, 2)
                             : $record->service?->price,
                         'payment_method' => 'cash',
@@ -549,7 +566,7 @@ class AppointmentResource extends Resource
                         ...\App\Filament\Doctor\Actions\Cobro::camposDePago(conSinPago: false),
                     ])
                     ->action(function (Appointment $record, array $data) {
-                        $pendientes = $record->payments()->whereIn('status', ['pending', 'partial'])->get();
+                        $pendientes = self::porCobrarDeLaCita($record);
 
                         try {
                             if ($pendientes->isNotEmpty()) {
