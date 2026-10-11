@@ -62,8 +62,9 @@ class ChecklistDeArranqueTest extends TestCase
     {
         $paso = $this->pasoDePacientes();
 
-        $this->assertSame('Importar de Excel', $paso['cta']);
-        $this->assertStringEndsWith('/doctor/pacientes?action=import', $paso['url']);
+        // Desde el 10-oct-2026, a «Traer sus datos»: pacientes, citas y saldos.
+        $this->assertSame('Traer mis datos', $paso['cta']);
+        $this->assertStringEndsWith('/doctor/traer-mis-datos', $paso['url']);
     }
 
     public function test_capturar_a_mano_sigue_ahi_como_segunda_opcion(): void
@@ -96,8 +97,8 @@ class ChecklistDeArranqueTest extends TestCase
         $this->actingAs($this->doctor);
 
         Livewire::test(SetupChecklistWidget::class)
-            ->assertSee('Importar de Excel')
+            ->assertSee('Traer mis datos')
             ->assertSee('o Crear uno')
-            ->assertSee('action=import', escape: false);
+            ->assertSee('traer-mis-datos', escape: false);
     }
 }

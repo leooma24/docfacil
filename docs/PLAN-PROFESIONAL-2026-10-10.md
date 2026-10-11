@@ -111,3 +111,21 @@ Contésteme por correo con el número y su respuesta, por ejemplo: «1 sí, 2 Pr
 6. **CIE-10 oficial.** ¿Me deja bajar el catálogo de la DGIS?
 7. **Respaldos fuera del servidor.** ¿Me consigue las llaves de DigitalOcean Spaces?
 8. **Correo de contacto.** ¿`contacto@docfacil.com` existe y le llega a usted? Si no, ¿qué correo ponemos en la página?
+
+## Avance
+
+- **Días 1 a 3 hechos el 10-oct-2026** (Omar: «Dale a 1 al 3»). Con pruebas y revisados en la demo local. **Sin subir a producción.**
+  - **Día 1:**
+    - En la ficha, «Cobrar $X» con lo que debe y «Cobrar» / «Nuevo cobro» para algo nuevo, con Paga todo / Una parte / Sin pago hoy.
+    - Pago combinado (efectivo + tarjeta o transferencia) con un recibo por forma.
+    - «Cobrar» de la cita acepta un abono.
+    - Estado de cuenta en PDF, en «Descargar».
+  - **Día 2:**
+    - Anticipos: queda a su favor y se descuenta solo en el siguiente cobro, sin contarse dos veces en la caja.
+    - Cierre de caja con conteo y diferencia: Cuadra / Faltan / Sobran, quién cerró y a qué hora.
+    - Un cobro con dinero ya no se borra.
+  - **Día 3:**
+    - Pantalla «Traer sus datos» (Mi cuenta): pacientes (ahora también con CURP), citas que vienen y saldos. Reconoce al paciente por teléfono o nombre y lo da de alta si no existe; subir dos veces no duplica.
+    - «¿Es esta persona?» al dar de alta un teléfono o nombre repetido.
+    - La lista de primeros pasos lleva a «Traer sus datos».
+- Pendiente del Día 3: ofrecerlo dentro del asistente de configuración inicial. Por ahora sale en la lista de primeros pasos del escritorio, que es lo primero que ve al terminar.

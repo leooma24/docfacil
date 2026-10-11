@@ -50,6 +50,15 @@ class PatientImporter extends Importer
                 ->castStateUsing(fn (?string $state) => self::telefonoLimpio($state))
                 ->example('6682493398'),
 
+            // La CURP (NOM-024): si es válida, llena sola nacimiento, sexo y
+            // estado; si no lo es, no se guarda (nunca se inventa).
+            ImportColumn::make('curp')
+                ->label('CURP')
+                ->rules(['nullable', 'string', 'max:18'])
+                ->guess(['curp', 'c.u.r.p.', 'clave unica', 'clave única'])
+                ->castStateUsing(fn (?string $state) => \App\Support\Curp::valida(\App\Support\Curp::limpia($state)) ? \App\Support\Curp::limpia($state) : null)
+                ->example('GALR850315MSLRPS05'),
+
             ImportColumn::make('email')
                 ->label('Correo')
                 ->rules(['nullable', 'email', 'max:255'])
@@ -115,18 +124,22 @@ class PatientImporter extends Importer
         // se puede comparar directo contra lo que hay guardado.
         $telefono = $this->data['phone'] ?? null;
         $correo = $this->data['email'] ?? null;
+        $curp = $this->data['curp'] ?? null;
 
         $existente = Patient::withoutGlobalScopes()
             ->where('clinic_id', $clinicId)
-            ->where(function ($query) use ($telefono, $correo) {
+            ->where(function ($query) use ($telefono, $correo, $curp) {
+                if ($curp) {
+                    $query->orWhere('curp', $curp);
+                }
                 if ($telefono) {
                     $query->orWhere('phone', $telefono);
                 }
                 if ($correo) {
                     $query->orWhere('email', $correo);
                 }
-                // Sin teléfono ni correo no hay con qué reconocerlo: se crea.
-                if (! $telefono && ! $correo) {
+                // Sin teléfono, correo ni CURP no hay con qué reconocerlo: se crea.
+                if (! $telefono && ! $correo && ! $curp) {
                     $query->whereRaw('1 = 0');
                 }
             })
@@ -162,6 +175,15 @@ class PatientImporter extends Importer
         // así que se pone explícito: sin esto un paciente podría caer en
         // otro consultorio.
         $this->record->clinic_id = $this->clinicId();
+
+        // Lo que dice la CURP llena lo que el archivo no trae.
+        if ($datos = \App\Support\Curp::datos($this->record->curp)) {
+            foreach ($datos as $campo => $valor) {
+                if (blank($this->record->{$campo})) {
+                    $this->record->{$campo} = $valor;
+                }
+            }
+        }
 
         if (blank($this->record->is_active)) {
             $this->record->is_active = true;
@@ -265,7 +287,7 @@ class PatientImporter extends Importer
      * 03/09/2026 es 3 de septiembre, no 9 de marzo. Carbon::parse le pone
      * mes primero y le cambia el cumpleaños a medio consultorio.
      */
-    public static function fechaMexicana(?string $valor): ?string
+    public static function fechaMexicana(?string $valor, bool $puedeSerFutura = false): ?string
     {
         if (blank($valor)) {
             return null;
@@ -275,7 +297,7 @@ class PatientImporter extends Importer
 
         // aaaa-mm-dd: ya viene sin ambigüedad.
         if (preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $valor)) {
-            return self::fechaValida($valor);
+            return self::fechaValida($valor, $puedeSerFutura);
         }
 
         // d/m/aaaa, d-m-aaaa, d.m.aaaa — el formato de acá.
@@ -287,7 +309,7 @@ class PatientImporter extends Importer
                 $anio = (int) $anio > (int) date('y') ? '19' . $anio : '20' . $anio;
             }
 
-            return self::fechaValida(sprintf('%04d-%02d-%02d', $anio, $mes, $dia));
+            return self::fechaValida(sprintf('%04d-%02d-%02d', $anio, $mes, $dia), $puedeSerFutura);
         }
 
         // "15 de marzo de 1985" y demás: que lo intente Carbon.
@@ -298,13 +320,18 @@ class PatientImporter extends Importer
         }
     }
 
-    private static function fechaValida(string $fecha): ?string
+    private static function fechaValida(string $fecha, bool $puedeSerFutura = false): ?string
     {
         try {
-            $carbon = Carbon::createFromFormat('Y-m-d', $fecha);
+            $carbon = Carbon::createFromFormat('!Y-m-d', $fecha);
+            // 31/02 no existe: Carbon lo pasaría a marzo sin decir nada.
+            if (! $carbon || $carbon->format('Y-m-d') !== sprintf('%04d-%02d-%02d', ...array_map('intval', explode('-', $fecha)))) {
+                return null;
+            }
 
-            // Una fecha de nacimiento en el futuro es un dedazo, no un dato.
-            return $carbon && ! $carbon->isFuture() ? $carbon->toDateString() : null;
+            // Una fecha de nacimiento en el futuro es un dedazo, no un dato
+            // (una cita sí puede ser en el futuro).
+            return $puedeSerFutura || ! $carbon->isFuture() ? $carbon->toDateString() : null;
         } catch (\Throwable) {
             return null;
         }

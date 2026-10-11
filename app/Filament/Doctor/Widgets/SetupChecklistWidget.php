@@ -100,12 +100,14 @@ class SetupChecklistWidget extends Widget
                 'title' => 'Suba sus pacientes',
                 'desc' => $patientsCount > 0
                     ? "Tiene {$patientsCount} " . ($patientsCount === 1 ? 'paciente' : 'pacientes') . '.'
-                    : '¿Los tiene en Excel o Google Sheets? Súbalos todos de una vez. Si no, capture el primero: solo nombre y teléfono.',
+                    : '¿Viene de otro sistema o de Excel? Traiga sus pacientes, sus citas que vienen y lo que le deben. Si no, capture el primero: solo nombre y teléfono.',
                 'done' => $patientsCount > 0,
-                'cta' => $patientsCount > 0 ? 'Ver pacientes' : 'Importar de Excel',
+                'cta' => $patientsCount > 0 ? 'Ver pacientes' : 'Traer mis datos',
+                // «Traer sus datos» (10-oct-2026): pacientes, citas y saldos en
+                // una sola pantalla, en ese orden.
                 'url' => $patientsCount > 0
                     ? \App\Filament\Doctor\Resources\PatientResource::getUrl('index')
-                    : \App\Filament\Doctor\Resources\PatientResource::getUrl('index') . '?action=import',
+                    : \App\Filament\Doctor\Pages\TraerMisDatos::getUrl(),
                 'cta2' => $patientsCount > 0 ? null : 'Crear uno',
                 'url2' => $patientsCount > 0 ? null : \App\Filament\Doctor\Resources\PatientResource::getUrl('create'),
                 'icon' => 'user-group',

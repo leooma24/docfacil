@@ -65,6 +65,36 @@ class PatientResource extends Resource
         return route('filament.doctor.pages.perfil-paciente', ['patient' => $record->id]);
     }
 
+    /**
+     * Pacientes del consultorio con ese teléfono (los últimos 10 dígitos) o
+     * ese nombre completo, para preguntar «¿Es esta persona?» antes de
+     * duplicarlo.
+     */
+    public static function posiblesRepetidos(?string $nombre, ?string $apellidos, ?string $telefono): \Illuminate\Support\Collection
+    {
+        $clinicId = auth()->user()?->clinic_id;
+        $digitos = substr(preg_replace('/\D/', '', (string) $telefono), -10);
+        $nombre = mb_strtolower(trim((string) $nombre));
+        $apellidos = mb_strtolower(trim((string) $apellidos));
+        if (! $clinicId || (strlen($digitos) < 10 && ($nombre === '' || $apellidos === ''))) {
+            return collect();
+        }
+
+        $limpio = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '(', ''), ')', ''), '+', ''), '.', '')";
+
+        return Patient::where('clinic_id', $clinicId)
+            ->where(function ($q) use ($digitos, $nombre, $apellidos, $limpio) {
+                if (strlen($digitos) === 10) {
+                    $q->orWhereRaw("{$limpio} LIKE ?", ['%' . $digitos]);
+                }
+                if ($nombre !== '' && $apellidos !== '') {
+                    $q->orWhere(fn ($w) => $w->whereRaw('LOWER(first_name) = ?', [$nombre])->whereRaw('LOWER(last_name) = ?', [$apellidos]));
+                }
+            })
+            ->limit(3)
+            ->get();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -79,11 +109,13 @@ class PatientResource extends Resource
                             ->label('Nombre')
                             ->placeholder('María Elena')
                             ->required()
+                            ->live(onBlur: true)
                             ->maxLength(255),
                         Forms\Components\TextInput::make('last_name')
                             ->label('Apellidos')
                             ->placeholder('García López')
                             ->required()
+                            ->live(onBlur: true)
                             ->maxLength(255),
                         // NOM-024 (6.5): la CURP identifica al paciente. Se valida
                         // y de ella se toman nacimiento, sexo y estado; nunca se
@@ -125,7 +157,25 @@ class PatientResource extends Resource
                             ->placeholder('55 1234 5678')
                             ->helperText('A este número le llegan los recordatorios por WhatsApp.')
                             ->tel()
+                            ->live(onBlur: true)
                             ->maxLength(255),
+                        // «¿Es esta persona?» (10-oct-2026): al dar de alta, si ya
+                        // hay alguien con ese teléfono o ese nombre, se avisa antes
+                        // de duplicarlo. No impide guardar: puede ser otra persona.
+                        Forms\Components\Placeholder::make('es_esta_persona')
+                            ->hiddenLabel()
+                            ->columnSpanFull()
+                            ->visible(fn (string $operation, Forms\Get $get) => $operation === 'create'
+                                && self::posiblesRepetidos($get('first_name'), $get('last_name'), $get('phone'))->isNotEmpty())
+                            ->content(fn (Forms\Get $get) => new \Illuminate\Support\HtmlString(
+                                '<div style="padding:.75rem 1rem;border-radius:10px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;font-size:.9rem;">'
+                                . '<strong>¿Es esta persona?</strong> Ya tiene a: '
+                                . self::posiblesRepetidos($get('first_name'), $get('last_name'), $get('phone'))
+                                    ->map(fn (Patient $p) => '<a href="' . e(route('filament.doctor.pages.perfil-paciente', ['patient' => $p->id])) . '" style="text-decoration:underline;font-weight:700;">'
+                                        . e(trim($p->first_name . ' ' . $p->last_name)) . '</a>' . ($p->phone ? ' (' . e($p->phone) . ')' : ''))
+                                    ->implode(', ')
+                                . '. Si es la misma, ábrala en vez de crear otra.</div>'
+                            )),
                         Forms\Components\Toggle::make('no_quiere_whatsapp')
                             ->label('No quiere recordatorios por WhatsApp')
                             ->helperText('No le sale ningún recordatorio automático. Si lo pidió contestando por WhatsApp, se marcó solo.')
