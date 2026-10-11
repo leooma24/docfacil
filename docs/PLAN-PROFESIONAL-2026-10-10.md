@@ -129,3 +129,29 @@ Contésteme por correo con el número y su respuesta, por ejemplo: «1 sí, 2 Pr
     - «¿Es esta persona?» al dar de alta un teléfono o nombre repetido.
     - La lista de primeros pasos lleva a «Traer sus datos».
 - Pendiente del Día 3: ofrecerlo dentro del asistente de configuración inicial. Por ahora sale en la lista de primeros pasos del escritorio, que es lo primero que ve al terminar.
+
+- **Días 1 a 3 en producción** desde el 11-oct-2026.
+- **Días 4 a 10 hechos el 11-oct-2026.** Tienen pruebas y se revisaron en la demo local. **Sin subir.**
+  - **Día 4:** presupuesto por etapas, varios dientes por renglón, opcionales que no suman, descuento en %, qué ve el paciente (todo, solo total, sin precios) y firma del paciente al aceptar.
+  - **Día 5:** «A quién hay que llamar» en Pendientes: canceló o no vino, debe, revisión, 6 meses sin venir. Se cierra con Logrado, Volver a llamar o Cerrar caso, y muestra lo logrado y lo cobrado en el mes.
+  - **Día 6:** lupa «Buscar espacio» y huecos libres al dar la cita; «El día por doctor»; vacaciones de un solo doctor; «Proponer festivos».
+  - **Día 7:** tablero de Ortodoncia (control atrasado, sin próxima cita, mensualidad vencida). Al cobrar el control se cobra la mensualidad del plan.
+  - **Día 8:**
+    - Comisiones por doctor: % y montos fijos, solo sobre lo cobrado, con semáforo y «Explicar». Se marca pagada y queda como gasto.
+    - Verificación en dos pasos para todo el equipo.
+    - Bitácora del consultorio para el dueño.
+  - **Día 9:** portal del paciente con próxima cita, saldo, presupuestos, firma de consentimientos, recibos y «¿Cómo le fue?». El consultorio ve las respuestas en «Opiniones».
+  - **Día 10:**
+    - Alertas médicas también en odontograma, consentimientos, presupuestos y el día por doctor.
+    - «Faltan datos» en la agenda.
+    - Historia clínica en PDF con folio y número de hoja.
+    - Landing, brief y demo al día.
+- **Sigue pendiente:**
+  - CIE-10 oficial: necesita el visto bueno de Omar.
+  - Respaldo fuera del servidor: faltan las llaves de Spaces.
+  - Ofrecer «Traer sus datos» dentro del asistente de configuración inicial.
+  - Preguntas 2 a 5 del correo. Sin respuesta, se decidió así:
+    - comisiones desde Pro;
+    - ortodoncia desde Básico;
+    - la caja se cuenta al cerrar;
+    - no se ofreció la carga asistida de citas y saldos más allá de lo que ya dice la landing.
