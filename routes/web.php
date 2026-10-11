@@ -379,6 +379,23 @@ Route::get('/doctor/pacientes/{patient}/estado-de-cuenta', function (int $patien
     return $pdf->stream('estado-de-cuenta-' . \Illuminate\Support\Str::slug($paciente->first_name . ' ' . $paciente->last_name) . '.pdf');
 })->name('paciente.estado-de-cuenta');
 
+// El paciente baja su estado de cuenta y sus recibos desde su portal
+// (día 9 del plan, 10-oct-2026). Solo lo suyo.
+Route::middleware('auth')->group(function () {
+    Route::get('/portal-paciente/estado-de-cuenta', function () {
+        $paciente = \App\Models\Patient::withoutGlobalScopes()->where('user_id', auth()->id())->firstOrFail();
+
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.estado-de-cuenta', \App\Support\EstadoDeCuenta::de($paciente))->stream('estado-de-cuenta.pdf');
+    })->name('portal.estado-de-cuenta');
+
+    Route::get('/portal-paciente/recibos/{payment}', function (int $payment) {
+        $paciente = \App\Models\Patient::withoutGlobalScopes()->where('user_id', auth()->id())->firstOrFail();
+        $cobro = \App\Models\Payment::withoutGlobalScopes()->where('clinic_id', $paciente->clinic_id)->where('patient_id', $paciente->id)->findOrFail($payment);
+
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.recibo', \App\Support\CajaDelDia::datosDelRecibo($cobro))->stream("recibo-{$cobro->id}.pdf");
+    })->name('portal.recibo');
+});
+
 // Recordarle a un paciente su presupuesto pendiente: marca la fecha (un
 // recordatorio al mes, no más) y abre WhatsApp con el mensaje escrito. Nada sale
 // solo: el doctor da enviar desde su propio WhatsApp.

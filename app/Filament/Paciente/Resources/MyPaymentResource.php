@@ -73,6 +73,14 @@ class MyPaymentResource extends Resource
                         'other' => 'Otro',
                     }),
             ])
+            ->actions([
+                // Su recibo en PDF (día 9 del plan).
+                Tables\Actions\Action::make('recibo')
+                    ->label('Recibo')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->url(fn (Payment $record) => route('portal.recibo', $record))
+                    ->openUrlInNewTab(),
+            ])
             ->defaultSort('payment_date', 'desc');
     }
 
