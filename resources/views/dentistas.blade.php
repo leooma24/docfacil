@@ -902,7 +902,7 @@ Confirme o cancele aquí:
                 <span class="mango foto" data-iso="30" aria-hidden="true"><b>30</b></span>
                 <div>
                     <h2 class="e-h2">Su odontograma ya es su presupuesto.</h2>
-                    <p class="e-p">Marca lo que encuentra, cara por cara, y con un clic sale el presupuesto con sus precios. El paciente lo acepta desde su celular y lo aceptado se agenda en un clic.</p>
+                    <p class="e-p">Marca lo que encuentra, cara por cara, y con un clic sale el presupuesto con sus precios, por etapas si quiere. El paciente lo firma con el dedo desde su celular y lo aceptado se agenda en un clic.</p>
                 </div>
             </div>
             <div class="odo-grid" data-odonto>
@@ -918,7 +918,7 @@ Confirme o cancele aquí:
                         @endforeach
                     </ol>
                     <div class="ticket-total"><span class="e-nota">Total</span><strong>${{ number_format($totalEjemplo) }}</strong></div>
-                    <div class="ticket-acepta" data-acepta><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">{!! $ico['check'] !!}</svg>El paciente lo aceptó desde su celular</div>
+                    <div class="ticket-acepta" data-acepta><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">{!! $ico['check'] !!}</svg>El paciente lo firmó desde su celular</div>
                 </div>
             </div>
             <div class="odo-pie">
@@ -939,7 +939,7 @@ Confirme o cancele aquí:
                 <span class="mango foto" data-iso="35" aria-hidden="true"><b>35</b></span>
                 <div>
                     <h2 class="e-h2">Sepa quién va al día y quién le debe.</h2>
-                    <p class="e-p">Pone el total, el enganche y las mensualidades. Cuando el paciente viene a su ajuste, la mensualidad aparece en la consulta y queda en su corte del día.</p>
+                    <p class="e-p">Pone el total, el enganche y las mensualidades. Cuando el paciente viene a su ajuste, la mensualidad aparece en la consulta y queda en su corte del día. Si deja un anticipo, queda a su favor y se descuenta solo; y al cerrar el día, cuenta el efectivo y ve si cuadra.</p>
                 </div>
             </div>
             <div class="men-grid">
@@ -978,7 +978,7 @@ Confirme o cancele aquí:
                     <span class="mango foto" data-iso="40" aria-hidden="true"><b>40</b></span>
                     <div>
                         <h2 class="e-h2">Usted no captura nada solo: yo le ayudo a empezar.</h2>
-                        <p class="e-p">Me manda su Excel por WhatsApp y le dejo cargados sus pacientes; si los tiene en la libreta, le ayudo a armar la lista. Cualquier duda, le contesto yo.</p>
+                        <p class="e-p">Me manda su Excel por WhatsApp y le dejo cargados sus pacientes; si los tiene en la libreta, le ayudo a armar la lista. También los puede subir usted, con sus citas que vienen y lo que le deben, desde «Traer sus datos». Cualquier duda, le contesto yo.</p>
                     </div>
                 </div>
                 <ul class="omar-pasos">

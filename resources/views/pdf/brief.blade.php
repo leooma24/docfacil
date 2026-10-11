@@ -144,7 +144,7 @@
                 <div class="caja">
                     <div class="dolor">"Lo voy a pensar"</div>
                     <h3>Presupuestos que no se quedan en el cajón</h3>
-                    <p>El paciente lo ve y lo acepta desde su celular. Los que no contestan aparecen en Pendientes con su recordatorio.</p>
+                    <p>Por etapas, y el paciente lo firma desde su celular. Los que no contestan aparecen en Pendientes con su recordatorio.</p>
                 </div>
             </td>
         </tr>
@@ -194,7 +194,7 @@
             <td><strong>¿Hace facturas?</strong><span>No timbra facturas. Deja anotado quién pidió factura y la hace su contador.</span></td>
         </tr>
         <tr>
-            <td><strong>¿Y mis pacientes de antes?</strong><span>Los sube desde un Excel, o los va capturando conforme vienen.</span></td>
+            <td><strong>¿Y mis pacientes de antes?</strong><span>Los sube desde un Excel con sus citas que vienen y lo que le deben, o los va capturando conforme vienen.</span></td>
             <td><strong>¿Y si dejo de pagar?</strong><span>Nada se borra: su cuenta pasa al plan Gratis y puede bajar todos sus datos cuando quiera.</span></td>
         </tr>
     </table>
