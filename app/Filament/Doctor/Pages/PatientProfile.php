@@ -180,6 +180,14 @@ class PatientProfile extends Page
                         ->required(),
                     \Filament\Forms\Components\Group::make(\App\Filament\Doctor\Actions\Cobro::camposDePago(aFavor: fn () => $this->patient->saldoAFavor()))
                         ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo'),
+                    // Se anota aquí, donde el paciente lo pide; sale en la lista
+                    // para su contador (11-oct-2026).
+                    \Filament\Forms\Components\Toggle::make('factura')
+                        ->label('Pide factura')
+                        ->helperText(fn () => blank($this->patient->rfc)
+                            ? 'Sus datos fiscales se ponen en su ficha: Editar → Datos para factura.'
+                            : 'RFC ' . $this->patient->rfc . '. Sale en la lista para su contador.')
+                        ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') !== 'anticipo'),
                     \Filament\Forms\Components\Group::make(\App\Filament\Doctor\Actions\Cobro::camposDeForma(fn (\Filament\Forms\Get $get) => round((float) $get('amount'), 2)))
                         ->visible(fn (\Filament\Forms\Get $get) => $get('tipo') === 'anticipo'),
                 ])

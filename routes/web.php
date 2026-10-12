@@ -51,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('throttle:5,60')
         ->name('datos.exportar');
 
+    // Los cobros del mes que pidieron factura, en Excel, para su contador.
+    Route::get('/doctor/cobros/lista-para-su-contador/{mes}', \App\Http\Controllers\ListaParaSuContadorController::class)
+        ->middleware('throttle:30,1')
+        ->name('cobros.lista-para-su-contador');
+
     // CIE-10 catalog para autocompletado en la consulta médica (no-dental).
     // Rate limit: 60 búsquedas por minuto por usuario — suficiente para tipear
     // pero corta DoS si un user logueado intenta abusar.

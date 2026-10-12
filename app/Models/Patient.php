@@ -74,6 +74,8 @@ class Patient extends Model
         'birth_date', 'gender', 'address', 'allergies',
         // Datos mínimos de la NOM-024 (6.5 y Tabla 1).
         'curp', 'entidad_nacimiento', 'nacionalidad', 'estado_residencia', 'municipio_residencia',
+        // Para la lista de su contador (11-oct-2026; el CFDI va en la fase 2).
+        'rfc', 'razon_social', 'regimen_fiscal', 'cp_fiscal', 'uso_cfdi',
         'medical_notes', 'blood_type', 'is_active',
         // Casillas de lo importante (ver AlertasClinicas::OPCIONES) y cuándo
         // se confirmó por última vez que sigue igual.

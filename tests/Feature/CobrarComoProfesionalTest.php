@@ -82,6 +82,16 @@ class CobrarComoProfesionalTest extends TestCase
         $this->assertSame([['card', 800.0]], $this->metodosDeLosRecibos($cobro));
     }
 
+    public function test_al_cobrar_se_anota_que_pide_factura(): void
+    {
+        // Para la lista de su contador (11-oct-2026): se anota donde lo pide.
+        $this->perfil()->callAction('cobrarHoy', data: [
+            'concepto' => 'Resina', 'amount' => 1200, 'como' => 'todo', 'payment_method' => 'card', 'factura' => true,
+        ])->assertHasNoActionErrors();
+
+        $this->assertTrue(Payment::where('patient_id', $this->ana->id)->sole()->factura_solicitada);
+    }
+
     public function test_paga_una_parte_y_queda_el_saldo(): void
     {
         $this->perfil()->callAction('cobrarHoy', data: [

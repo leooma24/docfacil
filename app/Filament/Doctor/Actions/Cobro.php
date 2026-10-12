@@ -236,6 +236,7 @@ class Cobro
                 'payment_method' => self::formaPrincipal($data),
                 'payment_date' => today(),
                 'due_date' => today(),
+                'factura_solicitada' => (bool) ($data['factura'] ?? false),
             ]);
 
             if ($deSaldo > 0) {

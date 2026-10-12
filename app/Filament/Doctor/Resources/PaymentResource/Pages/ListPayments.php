@@ -20,6 +20,27 @@ class ListPayments extends ListRecords
     {
         return [
             Actions\CreateAction::make()->label('Nuevo Cobro'),
+            // El CFDI va en la fase 2 (11-oct-2026): mientras, la lista para
+            // su contador con quién pidió factura y sus datos fiscales.
+            Actions\Action::make('listaParaSuContador')
+                ->label('Lista para su contador')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('gray')
+                ->visible(fn () => auth()->user()->veElDinero())
+                ->modalHeading('Lista para su contador')
+                ->modalDescription('Los cobros del mes que pidieron factura, con los datos fiscales de cada paciente, en Excel. Los datos fiscales se ponen en la ficha del paciente.')
+                ->modalSubmitActionLabel('Bajar en Excel')
+                ->modalWidth('md')
+                ->form([
+                    \Filament\Forms\Components\Select::make('mes')
+                        ->label('Mes')
+                        ->options(fn () => collect(range(0, 11))->mapWithKeys(fn ($i) => [
+                            now()->startOfMonth()->subMonths($i)->format('Y-m') => ucfirst(now()->startOfMonth()->subMonths($i)->translatedFormat('F Y')),
+                        ])->all())
+                        ->default(now()->format('Y-m'))
+                        ->required(),
+                ])
+                ->action(fn (array $data) => redirect()->route('cobros.lista-para-su-contador', ['mes' => $data['mes']])),
         ];
     }
 

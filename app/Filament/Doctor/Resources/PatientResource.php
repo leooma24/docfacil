@@ -255,6 +255,41 @@ class PatientResource extends Resource
                             ->placeholder('Ahome')
                             ->maxLength(100),
                     ]),
+                Forms\Components\Section::make('Datos para factura')
+                    ->icon('heroicon-o-document-text')
+                    ->description('Solo si pide factura. Salen en la lista para su contador (en Cobros).')
+                    ->aside()
+                    ->collapsible()
+                    ->collapsed(fn (?Patient $record) => blank($record?->rfc))
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('rfc')
+                            ->label('RFC')
+                            ->placeholder('RUAA900101AB1')
+                            ->maxLength(13)
+                            ->dehydrateStateUsing(fn (?string $state) => filled($state) ? mb_strtoupper(trim($state)) : null)
+                            ->rule(fn () => function (string $attribute, $value, \Closure $fail) {
+                                if (filled($value) && ! preg_match(\App\Support\DatosFiscales::RFC, mb_strtoupper(trim($value)))) {
+                                    $fail('El RFC no se ve bien: son 4 letras, 6 números de la fecha y 3 caracteres (12 o 13 en total).');
+                                }
+                            }),
+                        Forms\Components\TextInput::make('razon_social')
+                            ->label('Nombre o razón social')
+                            ->helperText('Como viene en su constancia de situación fiscal.')
+                            ->maxLength(255),
+                        Forms\Components\Select::make('regimen_fiscal')
+                            ->label('Régimen fiscal')
+                            ->options(\App\Support\DatosFiscales::REGIMENES),
+                        Forms\Components\TextInput::make('cp_fiscal')
+                            ->label('Código postal fiscal')
+                            ->maxLength(5)
+                            ->rule('nullable')
+                            ->rule('digits:5'),
+                        Forms\Components\Select::make('uso_cfdi')
+                            ->label('Uso del CFDI')
+                            ->options(\App\Support\DatosFiscales::USOS)
+                            ->default('D01'),
+                    ]),
                 Forms\Components\Section::make('Salud')
                     ->icon('heroicon-o-heart')
                     ->aside()
