@@ -47,6 +47,15 @@ class AppServiceProvider extends ServiceProvider
 
         $this->personalizarCorreosDeAcceso();
 
+        // Estilos en línea en todos los correos (11-oct-2026): Gmail a veces
+        // ignora el <style> del encabezado y el correo llegaba plano.
+        Event::listen(function (MessageSending $event) {
+            $html = $event->message->getHtmlBody();
+            if (is_string($html) && str_contains($html, '<style')) {
+                $event->message->html((new \TijsVerkoyen\CssToInlineStyles\CssToInlineStyles())->convert($html));
+            }
+        });
+
         $bccAll = array_filter(array_map(
             'trim',
             explode(',', (string) env('MAIL_BCC_ALL', ''))
@@ -98,7 +107,7 @@ class AppServiceProvider extends ServiceProvider
             );
 
             return (new MailMessage())
-                ->subject('Restablece tu contraseña de DocFácil')
+                ->subject('Restablezca su contraseña de DocFácil')
                 ->view('emails.restablecer-contrasena', [
                     'nombre' => $this->primerNombre($notifiable),
                     'url' => $panel->getResetPasswordUrl($token, $notifiable),

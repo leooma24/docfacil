@@ -60,15 +60,16 @@ class CorreosDeAccesoTest extends TestCase
         $html = $this->verificacion();
 
         $this->assertStringContainsString('DocFácil', $html);
-        $this->assertStringContainsString('#14b8a6', $html);          // el teal de la marca
+        $this->assertStringContainsString('#0d9488', $html);          // el teal de la marca
+        $this->assertStringContainsString('logo_doc_facil.png', $html);
         $this->assertStringContainsString('https://docfacil.tu-app.co/verificar/abc123', $html);
     }
 
     public function test_saluda_por_su_nombre_respetando_el_titulo(): void
     {
-        // "Dra. Ana Ruiz" guardado → "Hola Dra. Ana", sin duplicar el titulo
+        // "Dra. Ana Ruiz" guardado → "listo, Dra. Ana", sin duplicar el titulo
         // ni asumir que es hombre.
-        $this->assertStringContainsString('Hola Dra. Ana', $this->verificacion());
+        $this->assertStringContainsString('Su consultorio ya está listo, Dra. Ana', $this->verificacion());
     }
 
     public function test_menciona_los_15_dias_de_prueba(): void
@@ -92,7 +93,7 @@ class CorreosDeAccesoTest extends TestCase
         $mail = (new ResetPassword('token-de-prueba'))->toMail($this->doctor);
         $html = $mail->render();
 
-        $this->assertSame('Restablece tu contraseña de DocFácil', $mail->subject);
+        $this->assertSame('Restablezca su contraseña de DocFácil', $mail->subject);
         $this->assertStringContainsString('Elegir nueva contraseña', $html);
         $this->assertStringNotContainsString('Reset Password', $html);
         $this->assertStringContainsString('DocFácil', $html);
