@@ -24,6 +24,11 @@ class InviteDoctorsWidget extends Widget
 
     public static function canView(): bool
     {
+        // El que va empezando solo ve «Agendar mi primera cita» (11-oct-2026).
+        if (auth()->user()?->clinic?->vaEmpezando()) {
+            return false;
+        }
+
         $clinic = auth()->user()?->clinic;
         if (!$clinic || !$clinic->hasFeature('multi_doctor') || auth()->user()->esAsistente()) {
             return false;

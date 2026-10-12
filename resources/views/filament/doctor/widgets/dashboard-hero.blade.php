@@ -142,10 +142,10 @@
                     <div class="dh-hero-kicker">{{ $d['date'] }}</div>
                     @if($d['empty_state'] === 'fresh')
                         <h2 class="dh-hero-title">Le damos la bienvenida, {{ $d['name'] }}</h2>
-                        <div class="dh-hero-subtitle">Su consultorio está listo. Empiece por aquí — le toma 5 minutos y ya tendrá corriendo el sistema.</div>
+                        <div class="dh-hero-subtitle">Su consultorio ya está listo, con sus servicios y su horario. Agende su primera cita: el paciente se da de alta ahí mismo.</div>
                     @elseif($d['empty_state'] === 'has_patients')
                         <h2 class="dh-hero-title">Buen avance, {{ $d['name'] }}</h2>
-                        <div class="dh-hero-subtitle">Ya tiene {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente' : 'pacientes' }}. Falta agendar su primera cita y mandar su primer recordatorio.</div>
+                        <div class="dh-hero-subtitle">Ya tiene {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente' : 'pacientes' }}. Falta agendar su primera cita.</div>
                     @else
                         <h2 class="dh-hero-title">{{ $d['greeting'] }}, {{ $d['name'] }}</h2>
                         <div class="dh-hero-subtitle">Este es el resumen de su consultorio de hoy. Que tenga un gran día.</div>
@@ -178,54 +178,15 @@
                     </div>
                 </div>
             @else
-                {{-- Empty state: 3 pasos guiados al primer uso --}}
-                <div class="dh-empty-steps">
-                    <div class="dh-empty-step {{ $d['total_patients'] > 0 ? 'done' : '' }}">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div class="dh-empty-num">{{ $d['total_patients'] > 0 ? '✓' : '1' }}</div>
-                            <div class="dh-empty-step-title">Agregue su primer paciente</div>
-                        </div>
-                        <div class="dh-empty-step-desc">
-                            @if($d['total_patients'] > 0)
-                                Listo · {{ $d['total_patients'] }} {{ $d['total_patients'] === 1 ? 'paciente registrado' : 'pacientes registrados' }}
-                            @else
-                                Solo nombre, teléfono y email. Lo demás lo llena después.
-                            @endif
-                        </div>
-                        <a href="{{ $d['patients_create_url'] }}" class="dh-empty-cta">
-                            {{ $d['total_patients'] > 0 ? 'Agregar otro' : 'Crear paciente' }} →
-                        </a>
-                    </div>
-
-                    <div class="dh-empty-step {{ $d['total_appointments'] > 0 ? 'done' : '' }}">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div class="dh-empty-num">{{ $d['total_appointments'] > 0 ? '✓' : '2' }}</div>
-                            <div class="dh-empty-step-title">Cree su primera cita</div>
-                        </div>
-                        <div class="dh-empty-step-desc">
-                            @if($d['total_appointments'] > 0)
-                                Listo · {{ $d['total_appointments'] }} {{ $d['total_appointments'] === 1 ? 'cita agendada' : 'citas agendadas' }}
-                            @else
-                                Seleccione paciente, fecha y servicio. La duración se calcula sola.
-                            @endif
-                        </div>
-                        <a href="{{ $d['appointments_create_url'] }}" class="dh-empty-cta">
-                            {{ $d['total_appointments'] > 0 ? 'Agregar otra' : 'Crear cita' }} →
-                        </a>
-                    </div>
-
-                    <div class="dh-empty-step">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div class="dh-empty-num">3</div>
-                            <div class="dh-empty-step-title">Mande su primer recordatorio WhatsApp</div>
-                        </div>
-                        <div class="dh-empty-step-desc">
-                            Desde la cita: 1 clic abre WhatsApp con el mensaje listo. Usted solo le da enviar.
-                        </div>
-                        <span class="dh-empty-cta" style="opacity:0.7;cursor:default;">
-                            {{ $d['total_appointments'] > 0 ? 'Abra la cita ↗' : 'Disponible al crear cita' }}
-                        </span>
-                    </div>
+                {{-- Primer uso (11-oct-2026, KISS): una sola cosa que hacer. El
+                     paciente se da de alta ahí mismo, dentro de la cita. --}}
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.75rem 1.25rem;margin-top:1.25rem;">
+                    <a href="{{ $d['appointments_create_url'] }}" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 1.5rem;background:#fff;color:#0f766e;font-weight:800;font-size:1.05rem;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.15);">
+                        <x-icono nombre="calendar-days" /> Agendar mi primera cita
+                    </a>
+                    <a href="{{ \App\Filament\Doctor\Pages\TraerMisDatos::getUrl() }}" style="color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px;">
+                        ¿Ya tiene sus pacientes en Excel? Tráigalos
+                    </a>
                 </div>
             @endif
         </div>

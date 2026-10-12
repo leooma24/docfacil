@@ -81,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
     {
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new MailMessage())
-                ->subject('Confirma tu correo para entrar a DocFácil')
+                ->subject('Su consultorio en DocFácil: confirme su correo')
                 ->view('emails.verificar-correo', [
                     'nombre' => $this->primerNombre($notifiable),
                     'url' => $url,

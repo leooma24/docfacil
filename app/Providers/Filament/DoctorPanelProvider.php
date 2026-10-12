@@ -33,7 +33,9 @@ class DoctorPanelProvider extends PanelProvider
             // recuperarla: no hay ruta de reset en todo el panel.
             ->passwordReset()
             ->registration(\App\Filament\Doctor\Pages\Register::class)
-            ->emailVerification(\Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt::class)
+            // El correo sin confirmar ya no detiene la entrada (11-oct-2026): se
+            // registra y lo usa. Arriba le queda el aviso para confirmarlo.
+            ->emailVerification(\Filament\Pages\Auth\EmailVerification\EmailVerificationPrompt::class, isRequired: false)
             ->brandName('DocFácil')
             ->brandLogo(asset('images/solo_logo_white.png'))
             ->brandLogoHeight('3rem')
@@ -71,6 +73,7 @@ class DoctorPanelProvider extends PanelProvider
             // En qué consultorio está (arriba del menú) y su plan (abajo).
             ->renderHook('panels::sidebar.nav.start', fn () => view('filament.custom.menu-consultorio'))
             ->renderHook('panels::sidebar.footer', fn () => view('filament.custom.menu-plan'))
+            ->renderHook('panels::content.start', fn () => view('filament.custom.confirme-su-correo'))
             ->renderHook('panels::body.end', fn () => \Livewire\Livewire::mount('assistant-chat') . \Livewire\Livewire::mount('command-palette'))
             // Ayuda por WhatsApp: el doctor no tenia a donde acudir si se atoraba.
             ->renderHook('panels::body.end', fn () => view('filament.custom.boton-ayuda'))

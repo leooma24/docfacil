@@ -37,6 +37,12 @@ class SpecialtyService
 
     public static function isDental(?string $specialty): bool
     {
+        // DocFácil es solo para dentistas (4-oct-2026): quien todavía no puso
+        // su especialidad —el que acaba de registrarse— es dentista.
+        if (blank($specialty)) {
+            return true;
+        }
+
         return in_array(self::normalizeSpecialty($specialty), self::DENTAL_SPECIALTIES);
     }
 

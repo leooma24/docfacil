@@ -160,5 +160,9 @@
                 </div>
             @endforeach
         </div>
+        <div style="margin-top:0.75rem;font-size:0.85rem;color:#64748b;">
+            ¿Usa inventario, laboratorio, consentimientos o planes de pago?
+            <a href="{{ \App\Filament\Doctor\Pages\Modulos::getUrl() }}" style="color:#0f766e;font-weight:700;text-decoration:underline;">Prenda lo que use</a>
+        </div>
     </div>
 </x-filament-widgets::widget>

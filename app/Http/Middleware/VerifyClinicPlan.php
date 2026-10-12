@@ -38,10 +38,8 @@ class VerifyClinicPlan
             return $next($request);
         }
 
-        // Redirect new doctors to onboarding
-        if ($clinic->onboarding_status === 'pending' && !$request->routeIs('filament.doctor.pages.configuracion')) {
-            return redirect()->route('filament.doctor.pages.configuracion');
-        }
+        // La configuración inicial ya no es obligatoria (11-oct-2026): el
+        // registro deja el consultorio listo y el doctor entra a usarlo.
 
         // Check if plan/trial/beta has expired
         $isExpired = false;
@@ -89,11 +87,13 @@ class VerifyClinicPlan
     private function getPlanLimits(string $plan): ?array
     {
         return match ($plan) {
-            'free' => ['doctors' => 1, 'patients' => 15, 'appointments' => 10],
-            'basico' => ['doctors' => 1, 'patients' => 200, 'appointments' => null],
+            // Los topes de pacientes y citas los revisan puedeAgregarPacientes()
+            // y puedeAgendar() (Clinic::LIMITE_PACIENTES); aquí solo los doctores.
+            'free' => ['doctors' => 1, 'patients' => \App\Models\Clinic::LIMITE_PACIENTES['free'], 'appointments' => \App\Models\Clinic::LIMITE_CITAS_DEL_MES['free']],
+            'basico' => ['doctors' => 1, 'patients' => null, 'appointments' => null],
             'profesional' => ['doctors' => 3, 'patients' => null, 'appointments' => null],
             'clinica' => null,
-            default => ['doctors' => 1, 'patients' => 15, 'appointments' => 10],
+            default => ['doctors' => 1, 'patients' => \App\Models\Clinic::LIMITE_PACIENTES['free'], 'appointments' => \App\Models\Clinic::LIMITE_CITAS_DEL_MES['free']],
         };
     }
 

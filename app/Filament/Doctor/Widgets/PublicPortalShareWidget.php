@@ -22,6 +22,11 @@ class PublicPortalShareWidget extends Widget
 
     public static function canView(): bool
     {
+        // El que va empezando solo ve «Agendar mi primera cita» (11-oct-2026).
+        if (auth()->user()?->clinic?->vaEmpezando()) {
+            return false;
+        }
+
         $clinic = auth()->user()?->clinic;
         return (bool) ($clinic && $clinic->hasFeature('public_booking') && $clinic->slug);
     }

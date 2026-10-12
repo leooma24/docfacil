@@ -2,7 +2,6 @@
 
 namespace App\Filament\Doctor\Pages;
 
-use App\Mail\WelcomeOnboardingMail;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Prospect;
@@ -11,7 +10,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class Register extends BaseRegister
 {
@@ -62,12 +60,17 @@ class Register extends BaseRegister
                 $this->getEmailFormComponent()
                     ->default(request()->query('email'))
                     ->placeholder('doctor@email.com'),
-                $this->getPasswordFormComponent()
-                    ->revealable() // Show/hide toggle — mejor UX que confirmation
-                    ->rule(\Illuminate\Validation\Rules\Password::min(10)->mixedCase()->numbers())
-                    ->helperText('Mínimo 10 caracteres con mayúsculas, minúsculas y números'),
-                $this->getPasswordConfirmationFormComponent()
-                    ->revealable(),
+                // Sin confirmación: con el ojito ve lo que escribió (KISS, 11-oct-2026).
+                // Sin el cifrado de Filament: handleRegistration() la cifra una
+                // vez. Con los dos, se guardaba cifrada dos veces y la
+                // contraseña ya no servía para volver a entrar.
+                Forms\Components\TextInput::make('password')
+                    ->label('Contraseña')
+                    ->password()
+                    ->revealable()
+                    ->required()
+                    ->rule(\Illuminate\Validation\Rules\Password::min(8))
+                    ->helperText('Mínimo 8 caracteres.'),
                 Forms\Components\TextInput::make('clinic_name')
                     ->label('Nombre del consultorio')
                     ->required()
@@ -165,6 +168,10 @@ class Register extends BaseRegister
             'state' => $queryState,
             'plan' => 'free',
             'trial_ends_at' => now()->addDays(15),
+            // Entra directo a usarlo (11-oct-2026): la configuración inicial ya
+            // no es obligatoria y los módulos nacen apagados; prende lo que use.
+            'onboarding_status' => 'completed',
+            'modulos' => [],
             'sold_by_user_id' => $salesRep?->id,
             'sold_at' => $salesRep ? now() : null,
         ])->save();
@@ -204,6 +211,19 @@ class Register extends BaseRegister
             'license_number' => null,
         ]);
 
+        // Sus servicios con precio, para que pueda agendar desde el primer minuto.
+        foreach (Onboarding::serviciosSugeridos($querySpecialty) as $servicio) {
+            \App\Models\Service::create([
+                'clinic_id' => $clinic->id,
+                'name' => $servicio['name'],
+                'price' => $servicio['price'],
+                'unit' => \App\Support\WorkUnit::VISIT,
+                'duration_minutes' => $servicio['duration'] ?? 30,
+                'recall_months' => $servicio['recall_months'] ?? null,
+                'is_active' => true,
+            ]);
+        }
+
         // Create/update prospect for CRM tracking
         $existingProspect = Prospect::where('email', $data['email'])->first();
         if ($existingProspect) {
@@ -237,17 +257,8 @@ class Register extends BaseRegister
             \App\Models\Referral::processReferral($user, $queryRef);
         }
 
-        // Send welcome email — no rompemos registro si falla, pero loggeamos
-        // para que sepamos cuando hay degradación silenciosa del onboarding.
-        try {
-            Mail::to($user->email)->send(new WelcomeOnboardingMail($user));
-        } catch (\Throwable $e) {
-            Log::error('WelcomeOnboardingMail failed at registration', [
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        // Un solo correo (11-oct-2026): el de confirmar su correo ya le da la
+        // bienvenida. Antes llegaban dos, uno de tú y otro de usted.
 
         // Analytics: flash event para que el partial lo dispare en el proximo
         // pageload (sera el dashboard/onboarding del doctor recien creado).

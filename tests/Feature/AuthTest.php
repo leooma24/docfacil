@@ -96,7 +96,9 @@ class AuthTest extends TestCase
      * mandamos al prompt de verificación. Esto protege el expediente
      * clínico de cuentas creadas con correos que no son del doctor.
      */
-    public function test_doctor_without_verified_email_is_sent_to_verification(): void
+    // Desde el 11-oct-2026 el correo sin confirmar no detiene la entrada
+    // (KISS): entra y arriba le queda el aviso para confirmarlo.
+    public function test_doctor_without_verified_email_enters_and_sees_the_reminder(): void
     {
         $clinic = Clinic::create(['name' => 'Test Clinic 2', 'onboarding_status' => 'completed']);
         $user = User::forceCreate([
@@ -108,13 +110,9 @@ class AuthTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor');
-
-        $response->assertStatus(302);
-        $this->assertStringContainsString(
-            'email-verification',
-            $response->headers->get('Location'),
-            'Un doctor sin correo verificado debe ir al prompt de verificación'
-        );
+        $this->actingAs($user)->get('/doctor')
+            ->assertOk()
+            ->assertSee('Confirme su correo');
     }
+
 }

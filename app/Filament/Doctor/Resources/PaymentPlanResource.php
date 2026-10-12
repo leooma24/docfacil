@@ -38,6 +38,12 @@ class PaymentPlanResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Planes de pago';
 
+    // Es un módulo (11-oct-2026): el consultorio lo prende si cobra en mensualidades.
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->clinic?->tieneModulo('planes_de_pago') ?? true;
+    }
+
     protected static ?string $slug = 'planes-de-pago';
 
     protected static ?int $navigationSort = 3;

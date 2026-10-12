@@ -56,11 +56,13 @@ class NewDoctorFirstEntryTest extends TestCase
         $this->get('/doctor/email-verification/prompt')->assertSuccessful();
     }
 
-    public function test_con_el_correo_verificado_entra_al_onboarding(): void
+    // Desde el 11-oct-2026 la configuración inicial ya no es obligatoria:
+    // entra a su escritorio y la configuración queda a la mano.
+    public function test_con_la_configuracion_pendiente_entra_a_su_escritorio(): void
     {
         $this->actingAs($this->doctorRecienRegistrado(correoVerificado: true));
 
-        $this->get('/doctor')->assertRedirect('/doctor/configuracion');
+        $this->get('/doctor')->assertOk();
         $this->get('/doctor/configuracion')->assertSuccessful();
     }
 

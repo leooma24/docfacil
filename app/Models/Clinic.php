@@ -24,6 +24,7 @@ class Clinic extends Model
         'testimonio_pospuesto_hasta', 'testimonio_descartado_at',
         'corte_por_correo',
         'onboarding_status',
+        'modulos',
         'sold_at',
         'first_payment_received_at', 'second_payment_received_at', 'cancelled_at',
         'is_demo', 'demo_expires_at',
@@ -44,6 +45,7 @@ class Clinic extends Model
     {
         return [
             'working_hours' => 'array',
+            'modulos' => 'array',
             // MySQL devuelve los decimales como texto y SQLite como float; sin
             // estos tres, la dosis de anestesia se calcularia distinto en las
             // pruebas y en produccion.
@@ -537,7 +539,41 @@ class Clinic extends Model
         return in_array($feature, self::featuresForPlan($this->plan), true);
     }
 
+    /**
+     * Todavía no agenda su primera cita: el escritorio le muestra solo eso
+     * (11-oct-2026). Los avisos, el mes y las invitaciones salen cuando ya
+     * hay algo que mostrar.
+     */
+    public function vaEmpezando(): bool
+    {
+        return ! Appointment::withoutGlobalScopes()->where('clinic_id', $this->id)->exists();
+    }
+
+    /**
+     * Si el consultorio tiene prendido ese módulo (App\Support\Modulos).
+     * NULL = todo prendido: así siguen los consultorios de antes del 11-oct.
+     */
+    public function tieneModulo(string $clave): bool
+    {
+        return $this->modulos === null || in_array($clave, $this->modulos, true);
+    }
+
+    /**
+     * Si puede usar esa función: su plan la incluye y, si es de un módulo,
+     * lo tiene prendido.
+     */
     public function hasFeature(string $feature): bool
+    {
+        $modulo = \App\Support\Modulos::deLaFuncion($feature);
+        if ($modulo && ! $this->tieneModulo($modulo)) {
+            return false;
+        }
+
+        return $this->planIncluye($feature);
+    }
+
+    /** Si su plan (o su prueba, o un extra) incluye esa función, prendida o no. */
+    public function planIncluye(string $feature): bool
     {
         // Feature de plan pagado pero el plan ya venció → bloquear.
         if ($this->planIsPaid() && !$this->planIsActive()) {

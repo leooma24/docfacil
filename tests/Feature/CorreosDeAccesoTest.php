@@ -82,7 +82,7 @@ class CorreosDeAccesoTest extends TestCase
         $aviso->url = 'https://docfacil.tu-app.co/verificar/abc123';
 
         $this->assertSame(
-            'Confirma tu correo para entrar a DocFácil',
+            'Su consultorio en DocFácil: confirme su correo',
             $aviso->toMail($this->doctor)->subject
         );
     }

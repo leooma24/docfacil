@@ -79,13 +79,13 @@ class PlanLimitsTest extends TestCase
         $response->assertSee('Actualizar Plan');
     }
 
-    public function test_new_doctor_redirects_to_onboarding(): void
+    // La configuración inicial ya no es obligatoria (11-oct-2026, KISS).
+    public function test_new_doctor_is_not_forced_into_onboarding(): void
     {
         $user = $this->createDoctor([
             'onboarding_status' => 'pending',
         ]);
 
-        $response = $this->actingAs($user)->get('/doctor');
-        $response->assertRedirect(route('filament.doctor.pages.configuracion'));
+        $this->actingAs($user)->get('/doctor')->assertOk();
     }
 }

@@ -70,27 +70,11 @@ class SetupChecklistWidget extends Widget
         $appointmentsCount = Appointment::where('clinic_id', $clinicId)->count();
         $paymentsCount = Payment::where('clinic_id', $clinicId)->count();
 
+        $cedula = \App\Models\Doctor::where('clinic_id', $clinicId)->whereNotNull('license_number')->where('license_number', '!=', '')->exists();
+
         $items = [
-            [
-                'key' => 'logo',
-                'title' => 'Suba el logo de su consultorio',
-                'desc' => 'Aparece en recetas y portal público.',
-                'done' => ! empty($logo),
-                'cta' => 'Subir logo',
-                'url' => \App\Filament\Doctor\Pages\ClinicSettings::getUrl(),
-                'icon' => 'building-office-2',
-            ],
-            [
-                'key' => 'services',
-                'title' => 'Configure al menos 5 servicios',
-                'desc' => $servicesCount > 0
-                    ? "Tiene {$servicesCount} de 5 mínimos sugeridos."
-                    : 'Limpieza, consulta, extracciones, etc. Cada uno con su precio.',
-                'done' => $servicesCount >= 5,
-                'cta' => $servicesCount > 0 ? 'Agregar más' : 'Agregar servicios',
-                'url' => \App\Filament\Doctor\Resources\ServiceResource::getUrl('index'),
-                'icon' => 'clipboard-document-list',
-            ],
+            // Los servicios ya los pone el registro y el logo es opcional
+            // (11-oct-2026): queda lo que sí hace falta para trabajar.
             // Lo primero que se ofrece es subir el Excel, no capturar uno por
             // uno: el dentista que ya tiene 300 pacientes en una hoja no va a
             // empezar tecleando el primero. `?action=import` abre directo la
@@ -135,6 +119,15 @@ class SetupChecklistWidget extends Widget
                 'cta' => $paymentsCount > 0 ? 'Ver cobros' : 'Registrar cobro',
                 'url' => \App\Filament\Doctor\Resources\PaymentResource::getUrl('index'),
                 'icon' => 'banknotes',
+            ],
+            [
+                'key' => 'cedula',
+                'title' => 'Ponga su cédula profesional',
+                'desc' => $cedula ? 'Ya sale en sus recetas.' : 'Para que salga en sus recetas.',
+                'done' => $cedula,
+                'cta' => $cedula ? 'Ver mi perfil' : 'Poner mi cédula',
+                'url' => \App\Filament\Doctor\Pages\PerfilProfesional::getUrl(),
+                'icon' => 'identification',
             ],
         ];
 

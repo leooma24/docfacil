@@ -67,7 +67,7 @@ class Onboarding extends Page implements HasForms
      * Se carga al entrar a step 3 si el dentista aun no agrego servicios.
      * El doctor puede editar/eliminar antes de continuar.
      */
-    private const SERVICE_SUGGESTIONS = [
+    public const SERVICE_SUGGESTIONS = [
         'general' => [
             ['name' => 'Limpieza dental', 'price' => 400, 'duration' => 30, 'recall_months' => 6],
             ['name' => 'Resina (obturación)', 'price' => 600, 'duration' => 45],
@@ -176,7 +176,18 @@ class Onboarding extends Page implements HasForms
      */
     protected function loadServiceSuggestions(): void
     {
-        $spec = strtolower($this->specialty ?? '');
+        $this->quick_services = self::serviciosSugeridos($this->specialty);
+        $this->suggestions_loaded = true;
+    }
+
+    /**
+     * Los servicios de su especialidad, con precio y duración. Desde el
+     * 11-oct-2026 también los pone el registro: el consultorio nuevo ya
+     * puede agendar sin pasar por esta configuración.
+     */
+    public static function serviciosSugeridos(?string $specialty): array
+    {
+        $spec = mb_strtolower($specialty ?? '');
         $key = match (true) {
             str_contains($spec, 'orto')                      => 'ortodoncia',
             str_contains($spec, 'pediat') || str_contains($spec, 'niños') => 'odontopediatria',
@@ -188,8 +199,7 @@ class Onboarding extends Page implements HasForms
             default                                          => 'general',
         };
 
-        $this->quick_services = array_values(self::SERVICE_SUGGESTIONS[$key]);
-        $this->suggestions_loaded = true;
+        return array_values(self::SERVICE_SUGGESTIONS[$key]);
     }
 
     public function addService(): void
@@ -273,7 +283,9 @@ class Onboarding extends Page implements HasForms
         }
 
         foreach ($this->quick_services as $svc) {
-            if (!empty($svc['name']) && !empty($svc['price'])) {
+            // El registro ya puso los sugeridos: no se duplican.
+            if (!empty($svc['name']) && !empty($svc['price'])
+                && ! Service::where('clinic_id', $clinic->id)->where('name', $svc['name'])->exists()) {
                 Service::create([
                     'clinic_id' => $clinic->id,
                     'name' => $svc['name'],

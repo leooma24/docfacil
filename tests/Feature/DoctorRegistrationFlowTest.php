@@ -32,7 +32,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dr. Juan Pérez',
                 'email' => 'juan@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Consultorio Dental Sonrisas',
                 'terms_accepted' => true,
             ])
@@ -74,21 +73,22 @@ class DoctorRegistrationFlowTest extends TestCase
         );
     }
 
-    public function test_welcome_email_is_sent_after_registration(): void
+    // Un solo correo desde el 11-oct-2026: el de confirmar su correo trae la
+    // bienvenida (RegistroSencilloTest::test_le_llega_un_solo_correo).
+    public function test_welcome_email_is_no_longer_sent_separately(): void
     {
         Livewire::test(Register::class)
             ->fillForm([
                 'name' => 'Dra. Ana López',
                 'email' => 'ana@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Clínica Dental Ana',
                 'terms_accepted' => true,
             ])
             ->call('register')
             ->assertHasNoFormErrors();
 
-        Mail::assertSent(WelcomeOnboardingMail::class, fn ($mail) => $mail->hasTo('ana@test.com'));
+        Mail::assertNotSent(WelcomeOnboardingMail::class);
     }
 
     public function test_honeypot_blocks_bot_registration(): void
@@ -102,8 +102,7 @@ class DoctorRegistrationFlowTest extends TestCase
                     'name' => 'Bot Spam',
                     'email' => 'bot@spam.com',
                     'password' => 'Secreta123!',
-                    'passwordConfirmation' => 'Secreta123!',
-                    'clinic_name' => 'Bot Clinic',
+                        'clinic_name' => 'Bot Clinic',
                     'website_url_backup' => 'http://spam.com',
                     'terms_accepted' => true,
                 ])
@@ -124,7 +123,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dr. Sin Términos',
                 'email' => 'noterms@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Test Clinic',
                 'terms_accepted' => false,
             ])
@@ -164,7 +162,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dr. Vendido',
                 'email' => 'vendido@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Clínica Vendida',
                 'terms_accepted' => true,
             ])
@@ -211,7 +208,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dra. Atribuida',
                 'email' => 'atribuida@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Consultorio Atribuido',
                 'terms_accepted' => true,
             ])
@@ -236,7 +232,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dr. Sin Vendedor',
                 'email' => 'sinvendedor@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Consultorio Sin Vendedor',
                 'terms_accepted' => true,
             ])
@@ -260,7 +255,6 @@ class DoctorRegistrationFlowTest extends TestCase
                 'name' => 'Dr. Pipeline',
                 'email' => 'pipeline@test.com',
                 'password' => 'Secreta123!',
-                'passwordConfirmation' => 'Secreta123!',
                 'clinic_name' => 'Consultorio Pipeline',
                 'terms_accepted' => true,
             ])
