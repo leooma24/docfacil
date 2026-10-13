@@ -96,7 +96,13 @@ class WhatsAppWebhookController extends Controller
                     continue;
                 }
 
-                $bot->handleIncoming($from, $text);
+                // Se le pasa a su consultorio (12-oct-2026). El bot con IA
+                // solo contesta si está prendido; si no, el mensaje se perdía.
+                if (\App\Services\AI::enabled()) {
+                    $bot->handleIncoming($from, $text);
+                } else {
+                    \App\Support\MensajeDelPaciente::recibir($from, $text);
+                }
             }
         } catch (\Throwable $e) {
             Log::error('WhatsApp webhook error', ['error' => $e->getMessage()]);
